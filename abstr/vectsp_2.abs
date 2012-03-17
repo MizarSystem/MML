@@ -30,12 +30,43 @@ definition
    holds x*(1_ IT) = x & (1_ IT)*x = x;
 end;
 
-definition
+
+registration
  cluster well-unital -> left_unital right_unital (non empty multLoopStr);
+ coherence
+  proof let F be non empty multLoopStr;
+   assume
+A1:   F is well-unital;
+   hence for x being Element of F
+     holds (1_ F)*x = x by Def2;
+   thus for x being Element of F
+     holds x*(1_ F) = x by A1,Def2;
+  end;
  cluster left_unital right_unital -> well-unital (non empty multLoopStr);
+ coherence
+  proof let F be non empty multLoopStr;
+   assume F is left_unital right_unital;
+   hence for x being Element of F
+     holds x*(1_ F) = x & (1_ F)*x = x by VECTSP_1:def 13,def 19;
+  end;
  cluster strict Abelian add-associative right_zeroed right_complementable
     well-unital distributive (non empty doubleLoopStr);
+  existence
+   proof
+    consider F being strict Field;
+      for x,y,z being Scalar of F holds
+     x+y = y+x &
+     (x+y)+z = x+(y+z) &
+     x+(0.F) = x &
+     x+(-x) = 0.F &
+     x*(1_ F) = x & (1_ F)*x = x &
+     x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x
+ by RLVECT_1:10,def 6,def 10,VECTSP_1:def 18,def 19;
+     then F is well-unital distributive by Def2;
+    hence thesis;
+   end;
 end;
+
 
 theorem :: VECTSP_2:1
    (for x,y,z being Scalar of FS holds
@@ -50,23 +81,48 @@ theorem :: VECTSP_2:1
 
 :: 3. RING
 
-definition
+registration
  cluster strict Ring;
+  existence
+   proof
+     consider F being strict Field;
+     reconsider F as Ring;
+       F is associative;
+    hence thesis;
+   end;
 end;
+
 
 :: 5. COMMUTATIVE RING
 
-definition
+registration
  cluster commutative Ring;
+ existence
+  proof
+   consider F;
+   reconsider F as Ring;
+     F is commutative;
+   hence thesis;
+  end;
 end;
+
 
 definition
  mode comRing is commutative Ring;
 end;
 
-definition
+
+registration
  cluster strict comRing;
+  existence
+  proof
+     consider F being strict Field;
+     reconsider F as Ring;
+       F is comRing;
+    hence thesis;
+   end;
 end;
+
 
 definition let IT be non empty multLoopStr_0;
  canceled 2;
@@ -77,30 +133,58 @@ definition let IT be non empty multLoopStr_0;
     implies x = 0.IT or y = 0.IT;
 end;
 
-definition
+
+registration
  cluster strict non degenerated domRing-like comRing;
+  existence
+   proof
+     consider F being strict Field;
+     reconsider F as comRing;
+       0.F <> 1_ F &
+     for x,y being Scalar of F holds x*y = 0.F
+      implies x = 0.F or y = 0.F by VECTSP_1:44,def 21;
+     then F is domRing-like by Def5;
+    hence thesis;
+   end;
 end;
+
 
 definition
  mode domRing is domRing-like non degenerated comRing;
 end;
+
 
 canceled 11;
 
 theorem :: VECTSP_2:13
    F is domRing;
 
-definition
+registration
  cluster non degenerated Field-like Ring;
+ existence
+  proof
+   consider F;
+     F is Ring;
+   hence thesis;
+  end;
 end;
+
 
 definition
  mode Skew-Field is non degenerated Field-like Ring;
 end;
 
-definition
+
+registration
  cluster strict Skew-Field;
+  existence
+   proof
+     consider F being strict Field;
+       F is Ring;
+    hence thesis;
+   end;
 end;
+
 
  reserve R for Ring;
 
@@ -119,10 +203,31 @@ canceled 2;
 theorem :: VECTSP_2:19
    F is Skew-Field;
 
-definition
+registration
  cluster commutative left_unital -> well-unital (non empty multLoopStr);
+ coherence
+  proof let F be non empty multLoopStr;
+   assume
+A1:  F is commutative left_unital;
+   let x be Scalar of F;
+     for F be commutative (non empty HGrStr),
+    x,y being Element of F holds x*y = y*x;
+    then x*(1_ F) = (1_ F)*x by A1;
+   hence x*(1_ F) = x & (1_ F)*x = x by A1,VECTSP_1:def 19;
+  end;
  cluster commutative right_unital -> well-unital (non empty multLoopStr);
+ coherence
+  proof let F be non empty multLoopStr;
+   assume
+A2:  F is commutative right_unital;
+   let x be Scalar of F;
+     for F be commutative (non empty HGrStr),
+    x,y being Element of F holds x*y = y*x;
+    then x*(1_ F) = (1_ F)*x by A2;
+   hence x*(1_ F) = x & (1_ F)*x = x by A2,VECTSP_1:def 13;
+  end;
 end;
+
 
 :: 11. SOME PROPERTIES OF RING
 
@@ -192,12 +297,14 @@ definition let SF be non degenerated Field-like associative
 x * it = 1_ SF;
 end;
 
+
 definition let SF,x,y;
   func x/y -> Scalar of SF
     equals
 :: VECTSP_2:def 8
 x * y";
 end;
+
 
 theorem :: VECTSP_2:43
    x<>0.SF implies x * x" =1_ SF & x" * x =1_ SF;
@@ -252,20 +359,34 @@ definition let FS be 1-sorted;
       rmult -> Function of [: the carrier, the carrier of FS:], the carrier #);
 end;
 
-definition let FS be 1-sorted;
+
+registration let FS be 1-sorted;
  cluster non empty RightModStr over FS;
+ existence
+  proof
+    consider A being non empty set,
+             a being BinOp of A,
+             Z being Element of A,
+             r being Function of [:A,the carrier of FS:],A;
+   take RightModStr(#A,a,Z,r#);
+   thus the carrier of RightModStr(#A,a,Z,r#) is non empty;
+  end;
 end;
 
-definition let FS be 1-sorted;
+
+registration let FS be 1-sorted;
  let A be non empty set, a be BinOp of A,
      Z be Element of A, r be Function of [:A,the carrier of FS:],A;
  cluster RightModStr(#A,a,Z,r#) -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
+
 
 definition let FS; let RMS be non empty RightModStr over FS;
  mode Scalar of RMS is Element of FS;
  mode Vector of RMS is Element of RMS;
 end;
+
 
 definition let FS1,FS2 be 1-sorted;
  struct (VectSpStr over FS1, RightModStr over FS2) BiModStr over FS1,FS2
@@ -276,16 +397,30 @@ definition let FS1,FS2 be 1-sorted;
     rmult -> Function of [:the carrier, the carrier of FS2:], the carrier #);
 end;
 
-definition let FS1,FS2 be 1-sorted;
+
+registration let FS1,FS2 be 1-sorted;
  cluster non empty BiModStr over FS1,FS2;
+ existence
+  proof
+    consider A being non empty set,
+             a being BinOp of A,
+             Z being Element of A,
+             l being Function of [:the carrier of FS1,A:],A,
+             r being Function of [:A,the carrier of FS2:],A;
+   take BiModStr(#A,a,Z,l,r#);
+   thus the carrier of BiModStr(#A,a,Z,l,r#) is non empty;
+  end;
 end;
 
-definition let FS1,FS2 be 1-sorted;
+
+registration let FS1,FS2 be 1-sorted;
  let A be non empty set, a be BinOp of A,
      Z be Element of A, l be Function of [:the carrier of FS1,A:],A,
      r be Function of [:A,the carrier of FS2:],A;
  cluster BiModStr(#A,a,Z,l,r#) -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
+
 
 :: 14. PREDE LEFT-MODULE OF RING
 
@@ -298,10 +433,17 @@ definition let R be Abelian add-associative right_zeroed
   LoopStr (#the carrier of R, the add of R, the Zero of R#);
  end;
 
-definition let R;
+registration let R;
  cluster Abelian add-associative right_zeroed right_complementable
    strict (non empty VectSpStr over R);
+existence
+proof
+   LEFTMODULE(R) is Abelian add-associative right_zeroed right_complementable
+ by Lm3;
+ hence thesis;
 end;
+end;
+
 
 definition let R;
  canceled;
@@ -313,10 +455,17 @@ definition let R;
                            the Zero of R, the mult of R #);
 end;
 
-definition let R;
+registration let R;
  cluster Abelian add-associative right_zeroed right_complementable
    strict (non empty RightModStr over R);
+existence
+proof
+   RIGHTMODULE(R) is Abelian add-associative right_zeroed right_complementable
+ by Lm4;
+ hence thesis;
 end;
+end;
+
 
 definition let R;
  canceled 2;
@@ -328,6 +477,7 @@ definition let R;
                          the Zero of R, the mult of R #);
 end;
 
+
 definition let R be non empty 1-sorted, V be non empty RightModStr over R;
   let x be Element of R;
   let v be Element of V;
@@ -335,6 +485,7 @@ definition let R be non empty 1-sorted, V be non empty RightModStr over R;
 :: VECTSP_2:def 15
    (the rmult of V).(v,x);
 end;
+
 
 definition
  canceled;
@@ -348,10 +499,17 @@ not contradiction;
 not contradiction;
 end;
 
-definition let R1,R2;
+registration let R1,R2;
  cluster Abelian add-associative right_zeroed right_complementable
    strict (non empty BiModStr over R1,R2);
+existence
+proof
+   BIMODULE(R1,R2) is Abelian add-associative right_zeroed right_complementable
+ by Lm5;
+ hence thesis;
 end;
+end;
+
 
 definition let R1,R2;
  canceled 2;
@@ -363,6 +521,7 @@ definition let R1,R2;
    pr1 ({{}},the carrier of R2) #);
 end;
 
+
 canceled 13;
 
 theorem :: VECTSP_2:71
@@ -373,20 +532,34 @@ theorem :: VECTSP_2:71
                (x*y)*v = x*(y*v) &
                (1_ R)*v = v;
 
-definition let R;
+registration let R;
  cluster VectSp-like Abelian add-associative right_zeroed right_complementable
    strict (non empty VectSpStr over R);
+  existence
+   proof
+     take LeftModule R;
+     thus for x,y being Scalar of R
+     for v,w being Vector of LeftModule R holds
+       x*(v+w) = x*v+x*w &
+       (x+y)*v = x*v+y*v &
+       (x*y)*v = x*(y*v) &
+       (1_ R)*v = v by Th71;
+    thus thesis;
+   end;
 end;
+
 
 definition let R;
  mode LeftMod of R is Abelian add-associative right_zeroed right_complementable
   VectSp-like (non empty VectSpStr over R);
 end;
 
-definition let R;
+registration let R;
  cluster LeftModule R -> Abelian add-associative right_zeroed
      right_complementable strict VectSp-like;
+ coherence by Lm6;
 end;
+
 
 :: 18. AXIOMS OF LEFT MODULE OF RING
 
@@ -414,19 +587,35 @@ definition let R be non empty doubleLoopStr;
                       v*(1_ R) = v;
 end;
 
-definition let R;
+
+registration let R;
  cluster Abelian add-associative right_zeroed right_complementable
    RightMod-like strict (non empty RightModStr over R);
+  existence
+   proof
+     take RightModule R;
+     thus RightModule R
+       is Abelian add-associative right_zeroed right_complementable;
+     thus for x,y being Scalar of R
+     for v,w being Vector of RightModule R holds
+             (v+w)*x = v*x+w*x &
+             v*(x+y) = v*x+v*y &
+             v*(y*x) = (v*y)*x &
+             v*(1_ R) = v by Th77;
+    thus thesis;
+   end;
 end;
+
 
 definition let R;
  mode RightMod of R is Abelian add-associative right_zeroed
    right_complementable RightMod-like (non empty RightModStr over R);
 end;
 
-definition let R;
+registration let R;
  cluster RightModule R -> Abelian add-associative right_zeroed
    right_complementable RightMod-like;
+ coherence by Lm7;
 end;
 
 definition let R1,R2;
@@ -438,16 +627,37 @@ definition let R1,R2;
                x*(v*p) = (x*v)*p;
 end;
 
-definition let R1,R2;
+
+registration let R1,R2;
  cluster Abelian add-associative right_zeroed right_complementable
    RightMod-like VectSp-like BiMod-like strict (non empty BiModStr over R1,R2);
+  existence
+   proof
+    take BiModule (R1,R2);
+    thus BiModule (R1,R2)
+     is Abelian add-associative right_zeroed right_complementable;
+      for x,y being Scalar of R1 for p,q being Scalar of R2
+       for v,w being Vector of BiModule(R1,R2) holds
+         x*(v+w) = x*v+x*w &
+         (x+y)*v = x*v+y*v &
+         (x*y)*v = x*(y*v) &
+         (1_ R1)*v = v &
+         (v+w)*p = v*p+w*p &
+         v*(p+q) = v*p+v*q &
+         v*(q*p) = (v*q)*p &
+         v*(1_ R2) = v &
+         x*(v*p) = (x*v)*p by Lm8;
+    hence thesis by Def23,Def24,VECTSP_1:def 26;
+   end;
 end;
+
 
 definition let R1,R2;
  mode BiMod of R1,R2 is Abelian add-associative right_zeroed
   right_complementable
     RightMod-like VectSp-like BiMod-like (non empty BiModStr over R1,R2);
 end;
+
 
 canceled 5;
 
@@ -469,7 +679,9 @@ theorem :: VECTSP_2:83
 theorem :: VECTSP_2:84
  BiModule(R1,R2) is BiMod of R1,R2;
 
-definition let R1,R2;
+registration let R1,R2;
  cluster BiModule(R1,R2) -> Abelian add-associative right_zeroed
    right_complementable RightMod-like VectSp-like BiMod-like;
+ coherence by Th84;
 end;
+

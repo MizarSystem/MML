@@ -36,6 +36,7 @@ definition let n,m be Nat;
 redefine func min(n,m)->Nat;
 end;
 
+
 definition let r be real number;
 func max+ (r) -> Real equals
 :: RFUNCT_3:def 1
@@ -44,6 +45,7 @@ func max- (r) -> Real equals
 :: RFUNCT_3:def 2
  max(-r,0);
 end;
+
 
 theorem :: RFUNCT_3:1
 for r be real number holds r = max+(r) - max-(r);
@@ -109,13 +111,25 @@ mode PartFunc-set of X,Y means
 for x being Element of it holds x is PartFunc of X,Y;
 end;
 
-definition let X,Y be set;
+
+registration let X,Y be set;
  cluster non empty PartFunc-set of X,Y;
+ existence
+  proof
+   reconsider h={} as PartFunc of X,Y by PARTFUN1:56;
+      {h} is PartFunc-set of X,Y
+     proof let x be Element of {h};
+      thus thesis by TARSKI:def 1;
+     end;
+   hence thesis;
+  end;
 end;
+
 
 definition let X,Y be set;
  mode PFUNC_DOMAIN of X,Y is non empty PartFunc-set of X,Y;
 end;
+
 
 definition let X,Y be set;
 redefine func PFuncs(X,Y) -> PartFunc-set of X,Y;
@@ -123,11 +137,13 @@ redefine func PFuncs(X,Y) -> PartFunc-set of X,Y;
   mode Element of P -> PartFunc of X,Y;
 end;
 
+
 definition let D,C be non empty set,
                X be Subset of D,
                c be Element of C;
 redefine func X --> c -> Element of PFuncs(D,C);
 end;
+
 
 definition let D be non empty set,
                F1,F2 be Element of PFuncs(D,REAL);
@@ -137,6 +153,7 @@ redefine func F1+F2 -> Element of PFuncs(D,REAL);
  func F1/F2 -> Element of PFuncs(D,REAL);
 end;
 
+
 definition let D be non empty set,
                F be Element of PFuncs(D,REAL);
 redefine func abs(F) -> Element of PFuncs(D,REAL);
@@ -144,17 +161,20 @@ redefine func abs(F) -> Element of PFuncs(D,REAL);
  func F^ -> Element of PFuncs(D,REAL);
 end;
 
+
 definition let D be non empty set,
                F be Element of PFuncs(D,REAL),
                r be real number;
 redefine func r(#)F -> Element of PFuncs(D,REAL);
 end;
 
+
 definition let D be non empty set;
 func addpfunc(D) -> BinOp of PFuncs(D,REAL) means
 :: RFUNCT_3:def 4
 for F1,F2 be Element of PFuncs(D,REAL) holds it.(F1,F2) = F1 + F2;
 end;
+
 
 theorem :: RFUNCT_3:16
 for D be non empty set holds addpfunc(D) is commutative;
@@ -179,6 +199,7 @@ func Sum(f) -> Element of PFuncs(D,REAL) equals
 :: RFUNCT_3:def 5
  (addpfunc(D)) $$ f;
 end;
+
 
 theorem :: RFUNCT_3:21
 for D be non empty set holds Sum(<*> PFuncs(D,REAL) ) = [#](D)-->(0 qua Real);
@@ -217,6 +238,7 @@ func CHI(f,D) -> FinSequence of PFuncs(D,REAL) means
 len it = len f & for n st n in dom it holds it.n = chi(f.n,D);
 end;
 
+
 definition let D be non empty set,
                f be FinSequence of PFuncs(D,REAL),
                R be FinSequence of REAL;
@@ -227,6 +249,7 @@ for n st n in dom it
  for F be PartFunc of D,REAL, r st r = R.n & F = f.n holds it.n = r(#)F;
 end;
 
+
 definition let D be non empty set,
                f be FinSequence of PFuncs(D,REAL),
                d be Element of D;
@@ -236,6 +259,7 @@ len it = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
                           n in dom it & f.n = G holds it.n = G.d;
 end;
 
+
 definition let D,C be non empty set,
                f be FinSequence of PFuncs(D,C),
                d be Element of D;
@@ -244,6 +268,7 @@ pred d is_common_for_dom f means
 for G be Element of PFuncs(D,C), n be Nat
   st n in dom f & f.n = G holds d in dom G;
 end;
+
 
 theorem :: RFUNCT_3:29
 for D,C be non empty set, f be FinSequence of PFuncs(D,C), d be Element of D,
@@ -288,6 +313,7 @@ func max-(F) -> PartFunc of D,REAL means
 dom it = dom F & for d be Element of D st d in dom it holds it.d = max-(F.d);
 end;
 
+
 theorem :: RFUNCT_3:37
   for D be non empty set, F be PartFunc of D,REAL holds
   F = max+(F) - max-(F) & abs(F) = max+(F) + max-(F) & 2 (#)
@@ -327,15 +353,34 @@ theorem :: RFUNCT_3:45
   st F,G are_fiberwise_equipotent holds
     max-(F), max-(G) are_fiberwise_equipotent;
 
-definition let A,B be set;
+registration let A,B be set;
  cluster finite PartFunc of A,B;
+ existence
+  proof
+     {} is finite & {} is PartFunc of A,B by PARTFUN1:56;
+   hence thesis;
+  end;
 end;
 
-definition let D be non empty set,
+
+registration let D be non empty set,
                F be finite PartFunc of D,REAL;
  cluster max+(F) -> finite;
+  coherence
+   proof
+       dom F is finite;
+     then dom(max+(F)) is finite by Def10;
+    hence thesis by AMI_1:21;
+   end;
  cluster max-(F) -> finite;
+  coherence
+   proof
+       dom F is finite;
+     then dom(max-(F)) is finite by Def11;
+    hence thesis by AMI_1:21;
+   end;
 end;
+
 
 theorem :: RFUNCT_3:46
   for D,C be non empty set,
@@ -369,6 +414,7 @@ dom it = dom F &
 for d be Element of D st d in dom it holds it.d = F.d - r;
 end;
 
+
 theorem :: RFUNCT_3:51
 for D be non empty set, F be PartFunc of D,REAL holds F - 0 = F;
 
@@ -394,6 +440,7 @@ pred F is_convex_on X means
   for r,s be Real st r in X & s in X & p*r + (1-p)*s in X holds
      F.(p*r + (1-p)*s) <= p*F.r + (1-p)*F.s;
 end;
+
 
 theorem :: RFUNCT_3:55
 for a,b be Real, F be PartFunc of REAL,REAL holds
@@ -452,6 +499,7 @@ func FinS(F,X) -> non-increasing FinSequence of REAL means
   F|X, it are_fiberwise_equipotent;
 end;
 
+
 theorem :: RFUNCT_3:66
 for D be non empty set, F be PartFunc of D,REAL, X be set st
  dom(F|X) is finite holds FinS(F,dom(F|X)) = FinS(F,X);
@@ -464,6 +512,7 @@ definition let D be non empty set;
  let F be PartFunc of D,REAL; let X be finite set;
  redefine func F|X -> finite PartFunc of D,REAL;
 end;
+
 
 theorem :: RFUNCT_3:68
 for D be non empty set, d be Element of D, X be set, F be PartFunc of D,REAL
@@ -532,6 +581,7 @@ func Sum(F,X) -> Real equals
 :: RFUNCT_3:def 15
   Sum(FinS(F,X));
 end;
+
 
 theorem :: RFUNCT_3:80
 for D be non empty set, F be PartFunc of D,REAL, X be set, r be Real

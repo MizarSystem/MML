@@ -24,14 +24,6 @@ YELLOW_0
 WAYBEL_0
 YELLOW_3
 #
-FraenkelA2
-ExtensionalityR
-Inf_Union
-Inf_of_Infs
-Sup_Union
-Sup_of_Sups
-Kappa2DS
-#
 M1 W1 ;;M1 ;;
 êËM2 F1 ;;M2 F1 ;;;F2 B1 B2 ;P1 B1 B2 ;M2 K10 F1 ;;;ùM2 F1 ;;ùM2 F1 ;;R2 F2 B1 B2 ;F1 ;;;
 #
@@ -39,13 +31,13 @@ M1 V2 ;;M1 V2 ;;;
 R1 F1 ;F2 ;;ùM1 ;ùM1 ;&™&R2 K4 B1 B2 ;F1 ;;™P1 B1 B2 ;;™&P1 B1 B2 ;™R2 K4 B1 B2 ;F1 ;;;;ùM1 ;ùM1 ;&™&R2 K4 B1 B2 ;F2 ;;™P1 B1 B2 ;;™&P1 B1 B2 ;™R2 K4 B1 B2 ;F2 ;;;;;
 #
 G6 W11 ;V44 ;V48 ;;;
-R25 F1 ;K159 F1 ;K3 ËM2 K10 U1 F1 ;;;;;B1 P1 B1 ;;;K159 F1 ;ËM2 K10 U1 F1 ;;;;;K159 F1 ;B1 ;P1 B1 ;;;;
+R26 F1 ;K159 F1 ;K3 ËM2 K10 U1 F1 ;;;;;B1 P1 B1 ;;;K159 F1 ;ËM2 K10 U1 F1 ;;;;;K159 F1 ;B1 ;P1 B1 ;;;;
 #
 G6 V42 ;V43 ;V44 ;V46 ;V47 ;V48 ;;;
 R1 K159 F1 ;ËM2 K10 U1 F1 ;;;;;K159 F1 ;B1 ;P1 B1 ;;K159 F1 ;K3 ËM2 K10 U1 F1 ;;;;;B1 P1 B1 ;;;;;
 #
 G6 W11 ;V44 ;V48 ;;;
-R25 F1 ;K158 F1 ;ËM2 K10 U1 F1 ;;;;;K158 F1 ;B1 ;P1 B1 ;;K158 F1 ;K3 ËM2 K10 U1 F1 ;;;;;B1 P1 B1 ;;;;;
+R26 F1 ;K158 F1 ;ËM2 K10 U1 F1 ;;;;;K158 F1 ;B1 ;P1 B1 ;;K158 F1 ;K3 ËM2 K10 U1 F1 ;;;;;B1 P1 B1 ;;;;;
 #
 G6 V42 ;V43 ;V44 ;V46 ;V47 ;V48 ;;;
 R1 K158 F1 ;ËM2 K10 U1 F1 ;;;;;K158 F1 ;B1 ;P1 B1 ;;K158 F1 ;K3 ËM2 K10 U1 F1 ;;;;;B1 P1 B1 ;;;;;

@@ -37,6 +37,7 @@ definition let X,Y be non empty RLSStruct;
    it.(z1,z2) = [(the add of X).[x1,x2],(the add of Y).[y1,y2]];
 end;
 
+
 definition let X,Y be non empty RLSStruct;
  func Mult_in_Prod_of_RLS(X,Y) ->
       Function of [:REAL, [:the carrier of X, the carrier of Y:]:],
@@ -51,6 +52,7 @@ definition let X,Y be non empty RLSStruct;
    it.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
 end;
 
+
 definition let X,Y be non empty RLSStruct;
  func Prod_of_RLS(X,Y) -> RLSStruct equals
 :: CONVFUN1:def 3
@@ -60,9 +62,18 @@ definition let X,Y be non empty RLSStruct;
              Mult_in_Prod_of_RLS(X,Y) #);
 end;
 
-definition let X,Y be non empty RLSStruct;
+
+registration let X,Y be non empty RLSStruct;
  cluster Prod_of_RLS(X,Y) -> non empty;
+ coherence
+ proof
+  Prod_of_RLS(X,Y) =  RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: CONVFUN1:1
  for X,Y being non empty RLSStruct,
@@ -80,30 +91,244 @@ theorem :: CONVFUN1:2
      u1 = [x1,y1] & u2 = [x2,y2] holds
      u1+u2 = [x1+x2,y1+y2];
 
-definition
+registration
  let X,Y be Abelian (non empty RLSStruct);
  cluster Prod_of_RLS(X,Y) -> Abelian;
+ coherence
+  proof
+   for u1,u2 being Element of Prod_of_RLS(X,Y) holds
+    u1+u2 = u2+u1
+    proof
+     let u1,u2 be Element of Prod_of_RLS(X,Y);
+     u1 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x1,y1 being set such that
+     A1: x1 in the carrier of X & y1 in the carrier of Y and
+     A2: u1=[x1,y1] by ZFMISC_1:def 2;
+     reconsider x1 as VECTOR of X by A1;
+     reconsider y1 as VECTOR of Y by A1;
+     u2 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x2,y2 being set such that
+     A3: x2 in the carrier of X & y2 in the carrier of Y and
+     A4: u2=[x2,y2] by ZFMISC_1:def 2;
+     reconsider x2 as VECTOR of X by A3;
+     reconsider y2 as VECTOR of Y by A3;
+     u1+u2 = [x2+x1,y2+y1] by A2,A4,Th2;
+     hence thesis by A2,A4,Th2;
+    end;
+   hence thesis by RLVECT_1:def 5;
+  end;
 end;
 
-definition
+
+registration
  let X,Y be add-associative (non empty RLSStruct);
  cluster Prod_of_RLS(X,Y) -> add-associative;
+ coherence
+  proof
+   for u1,u2,u3 being Element of Prod_of_RLS(X,Y)
+    holds (u1+u2)+u3 = u1+(u2+u3)
+    proof
+     let u1,u2,u3 be Element of Prod_of_RLS(X,Y);
+     u1 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x1,y1 being set such that
+     A1: x1 in the carrier of X & y1 in the carrier of Y and
+     A2: u1=[x1,y1] by ZFMISC_1:def 2;
+     reconsider x1 as VECTOR of X by A1;
+     reconsider y1 as VECTOR of Y by A1;
+     u2 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x2,y2 being set such that
+     A3: x2 in the carrier of X & y2 in the carrier of Y and
+     A4: u2=[x2,y2] by ZFMISC_1:def 2;
+     reconsider x2 as VECTOR of X by A3;
+     reconsider y2 as VECTOR of Y by A3;
+     u3 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x3,y3 being set such that
+     A5: x3 in the carrier of X & y3 in the carrier of Y and
+     A6: u3=[x3,y3] by ZFMISC_1:def 2;
+     reconsider x3 as VECTOR of X by A5;
+     reconsider y3 as VECTOR of Y by A5;
+     u1+u2 = [x1+x2,y1+y2] & u2+u3 = [x2+x3,y2+y3] by A2,A4,A6,Th2; then
+     A7: (u1+u2)+u3 = [x1+x2+x3,y1+y2+y3] &
+         u1+(u2+u3) = [x1+(x2+x3),y1+(y2+y3)] by A2,A6,Th2;
+     (x1+x2)+x3 = x1+(x2+x3) & (y1+y2)+y3 = y1+(y2+y3) by RLVECT_1:def 6;
+     hence thesis by A7;
+    end;
+   hence thesis by RLVECT_1:def 6;
+  end;
 end;
 
-definition
+
+registration
  let X,Y be right_zeroed (non empty RLSStruct);
  cluster Prod_of_RLS(X,Y) -> right_zeroed;
+ coherence
+  proof
+   for u being Element of Prod_of_RLS(X,Y) holds
+    u+0.Prod_of_RLS(X,Y) = u
+    proof
+     let u be Element of Prod_of_RLS(X,Y);
+     u is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x,y being set such that
+     A1: x in the carrier of X & y in the carrier of Y and
+     A2: u=[x,y] by ZFMISC_1:def 2;
+     reconsider x as VECTOR of X by A1;
+     reconsider y as VECTOR of Y by A1;
+     A3: x+0.X = x & y+0.Y = y by RLVECT_1:def 7;
+     0.Prod_of_RLS(X,Y) = [0.X,0.Y] by Lm1;
+     hence thesis by A2,A3,Th2;
+    end;
+   hence thesis by RLVECT_1:def 7;
+  end;
 end;
 
-definition
+
+registration
  let X,Y be right_complementable (non empty RLSStruct);
  cluster Prod_of_RLS(X,Y) -> right_complementable;
+ coherence
+  proof
+   for u being Element of Prod_of_RLS(X,Y)
+    ex u1 being Element of Prod_of_RLS(X,Y) st
+    u+u1 = 0.Prod_of_RLS(X,Y)
+    proof
+     let u be Element of Prod_of_RLS(X,Y);
+     u is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x,y being set such that
+     A1: x in the carrier of X & y in the carrier of Y and
+     A2: u=[x,y] by ZFMISC_1:def 2;
+     reconsider x as VECTOR of X by A1;
+     reconsider y as VECTOR of Y by A1;
+     consider x1 being VECTOR of X such that
+     A3: x+x1=0.X by RLVECT_1:def 8;
+     consider y1 being VECTOR of Y such that
+     A4: y+y1=0.Y by RLVECT_1:def 8;
+     set u1=[x1,y1];
+     u1 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #); then
+     reconsider u1 as Element of Prod_of_RLS(X,Y) by Def3;
+     take u1;
+     u+u1 = [x+x1,y+y1] by A2,Th2;
+     hence thesis by A3,A4,Lm1;
+    end;
+   hence thesis by RLVECT_1:def 8;
+  end;
 end;
 
-definition
+
+registration
  let X,Y be RealLinearSpace-like (non empty RLSStruct);
  cluster Prod_of_RLS(X,Y) -> RealLinearSpace-like;
+ coherence
+  proof
+  A1: for a being Real for u1,u2 being VECTOR of Prod_of_RLS(X,Y) holds
+   a*(u1+u2)=a*u1+a*u2
+   proof
+    let a be Real;
+    let u1,u2 be VECTOR of Prod_of_RLS(X,Y);
+    u1 is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x1,y1 being set such that
+    A2: x1 in the carrier of X & y1 in the carrier of Y and
+    A3: u1=[x1,y1] by ZFMISC_1:def 2;
+    reconsider x1 as VECTOR of X by A2;
+    reconsider y1 as VECTOR of Y by A2;
+    u2 is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x2,y2 being set such that
+    A4: x2 in the carrier of X & y2 in the carrier of Y and
+    A5: u2=[x2,y2] by ZFMISC_1:def 2;
+    reconsider x2 as VECTOR of X by A4;
+    reconsider y2 as VECTOR of Y by A4;
+    u1+u2=[x1+x2,y1+y2] by A3,A5,Th2; then
+    A6: a*(u1+u2) = [a*(x1+x2),a*(y1+y2)] by Th1;
+    A7: a*u1 = [a*x1,a*y1] & a*u2 = [a*x2,a*y2] by A3,A5,Th1;
+    a*(x1+x2)=a*x1+a*x2 & a*(y1+y2)=a*y1+a*y2 by RLVECT_1:def 9;
+    hence thesis by A6,A7,Th2;
+   end;
+  A8: for a,b being Real for u being VECTOR of Prod_of_RLS(X,Y) holds
+   (a+b)*u = a*u+b*u
+   proof
+    let a,b be Real;
+    let u be VECTOR of Prod_of_RLS(X,Y);
+    u is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x,y being set such that
+    A9: x in the carrier of X & y in the carrier of Y and
+    A10: u=[x,y] by ZFMISC_1:def 2;
+    reconsider x as VECTOR of X by A9;
+    reconsider y as VECTOR of Y by A9;
+    a*u = [a*x,a*y] & b*u = [b*x,b*y] by A10,Th1; then
+    A11: a*u+b*u = [a*x+b*x,a*y+b*y] by Th2;
+    (a+b)*x = a*x+b*x & (a+b)*y = a*y+b*y by RLVECT_1:def 9;
+    hence thesis by A10,A11,Th1;
+   end;
+  A12: for a,b being Real for u being VECTOR of Prod_of_RLS(X,Y) holds
+   (a*b)*u = a*(b*u)
+   proof
+    let a,b be Real;
+    let u be VECTOR of Prod_of_RLS(X,Y);
+    u is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x,y being set such that
+    A13: x in the carrier of X & y in the carrier of Y and
+    A14: u=[x,y] by ZFMISC_1:def 2;
+    reconsider x as VECTOR of X by A13;
+    reconsider y as VECTOR of Y by A13;
+    b*u = [b*x,b*y] by A14,Th1; then
+    A15: a*(b*u) = [a*(b*x),a*(b*y)] by Th1;
+    (a*b)*x = a*(b*x) & (a*b)*y = a*(b*y) by RLVECT_1:def 9;
+    hence thesis by A14,A15,Th1;
+   end;
+  for u being VECTOR of Prod_of_RLS(X,Y) holds 1*u = u
+   proof
+    let u be VECTOR of Prod_of_RLS(X,Y);
+    u is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x,y being set such that
+    A16: x in the carrier of X & y in the carrier of Y and
+    A17: u=[x,y] by ZFMISC_1:def 2;
+    reconsider x as VECTOR of X by A16;
+    reconsider y as VECTOR of Y by A16;
+    1*x = x & 1*y = y by RLVECT_1:def 9;
+    hence thesis by A17,Th1;
+   end;
+  hence thesis by A1,A8,A12,RLVECT_1:def 9;
+  end;
 end;
+
 
 theorem :: CONVFUN1:3
 for X,Y being RealLinearSpace, n being Nat,
@@ -122,9 +347,94 @@ definition
  RLSStruct(# REAL,0,addreal,multreal #);
 end;
 
-definition
+registration
  cluster RLS_Real -> Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like;
+ coherence
+  proof
+   A1: for v,w being VECTOR of RLS_Real holds v+w = w+v
+   proof
+    let v,w be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    reconsider wr=w as Real by Def4;
+    thus v+w = vr+wr by Lm3
+            .= w+v by Lm3;
+   end;
+   A2: for u,v,w being VECTOR of RLS_Real holds (u+v)+w = u+(v+w)
+   proof
+    let u,v,w be VECTOR of RLS_Real;
+    reconsider ur=u as Real by Def4;
+    reconsider vr=v as Real by Def4;
+    reconsider wr=w as Real by Def4;
+    u+v = ur+vr by Lm3; then
+    A3: (u+v)+w = (ur+vr)+wr by Lm3;
+    v+w = vr+wr by Lm3; then
+    u+(v+w) = ur+(vr+wr) by Lm3;
+    hence thesis by A3,XCMPLX_1:1;
+   end;
+   A4: for v being VECTOR of RLS_Real holds v+0.RLS_Real = v
+   proof
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    0.RLS_Real = 0 by Def4,RLVECT_1:def 2;
+    hence v+0.RLS_Real = vr+0 by Lm3
+                      .= v;
+   end;
+   A5: for v being VECTOR of RLS_Real
+    ex w being VECTOR of RLS_Real st v+w = 0.RLS_Real
+   proof
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    reconsider w=-vr as VECTOR of RLS_Real by Def4;
+    take w;
+    thus v+w = vr+(-vr) by Lm3
+            .= 0 by XCMPLX_0:def 6
+            .= 0.RLS_Real by Def4,RLVECT_1:def 2;
+   end;
+   A6: for a being Real for v,w being VECTOR of RLS_Real holds
+    a*(v+w) = a*v+a*w
+   proof
+    let a be Real;
+    let v,w be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    reconsider wr=w as Real by Def4;
+    A7: a*v = a*vr & a*w = a*wr by Lm2;
+    v+w = vr+wr by Lm3;
+    hence a*(v+w) = a*(vr+wr) by Lm2
+                 .= a*vr+a*wr by XCMPLX_1:8
+                 .= a*v+a*w by A7,Lm3;
+   end;
+   A8: for a,b being Real for v being VECTOR of RLS_Real holds
+    (a+b)*v = a*v+b*v
+   proof
+    let a,b be Real;
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    a*v = a*vr & b*v = b*vr by Lm2;
+    hence a*v+b*v = a*vr+b*vr by Lm3
+                 .= (a+b)*vr by XCMPLX_1:8
+                 .= (a+b)*v by Lm2;
+   end;
+   A9: for a,b being Real for v being VECTOR of RLS_Real holds
+    (a*b)*v = a*(b*v)
+   proof
+    let a,b be Real;
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    b*v = b*vr by Lm2;
+    hence a*(b*v) = a*(b*vr) by Lm2
+                 .= (a*b)*vr by XCMPLX_1:4
+                 .= (a*b)*v by Lm2;
+   end;
+   A10: for v being VECTOR of RLS_Real holds 1*v = v
+   proof
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    thus 1*v = 1*vr by Lm2
+            .= v;
+   end;
+   thus thesis by A1,A2,A4,A5,A6,A8,A9,A10,RLVECT_1:7;
+  end;
 end;
 
 begin :: Sum of Finite Sequence of Extended Real Numbers
@@ -137,6 +447,7 @@ definition
   it = f.(len F) & f.0 = 0. &
     for i being Nat st i < len F holds f.(i+1)=f.i+F.(i+1);
 end;
+
 
 theorem :: CONVFUN1:4
  Sum(<*> ExtREAL) = 0.;
@@ -165,6 +476,7 @@ let X be non empty RLSStruct, f be Function of the carrier of X,ExtREAL;
   {[x,y] where x is Element of X, y is Element of REAL:
    f.x <=' R_EAL(y)};
 end;
+
 
 definition
 let X be non empty RLSStruct, f be Function of the carrier of X,ExtREAL;

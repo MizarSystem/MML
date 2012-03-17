@@ -26,10 +26,30 @@ environ
 
 begin
 
-definition
+registration
   let R be non empty Poset;
   cluster Relation-yielding OrderSortedSet of R;
+  existence
+  proof
+    set I = the carrier of R;
+   consider R1 be Relation;
+   deffunc F(set) = R1;
+   consider f be Function such that
+   A1: dom f = I & for x be set st x in I holds f.x = F(x)
+          from FUNCT_1:sch 3;
+   reconsider f as ManySortedSet of I by A1,PBOOLE:def 3;
+     f is order-sorted
+   proof let s1,s2 be Element of R such that s1 <= s2;
+       f.s1 = R1 & f.s2 = R1 by A1;
+     hence f.s1 c= f.s2;
+   end;
+   then reconsider f as OrderSortedSet of R;
+   take f;
+     for x be set st x in dom f holds f.x is Relation by A1;
+   hence thesis by MSUALG_4:def 1;
+  end;
 end;
+
 
 :: this is a stronger condition for relation than just being order-sorted
 definition
@@ -43,11 +63,44 @@ definition
   [x,y] in IT.s1 iff [x,y] in IT.s2;
 end;
 
-definition
+
+registration
   let R be non empty Poset;
   let A,B be ManySortedSet of the carrier of R;
   cluster os-compatible ManySortedRelation of A,B;
+  existence
+  proof
+    set I = the carrier of R;
+   consider R1 be Relation such that A1: R1 = {};
+   deffunc F(set) = R1;
+   consider f be Function such that
+   A2: dom f = I & for x be set st x in I holds f.x = F(x)
+          from FUNCT_1:sch 3;
+   reconsider f as ManySortedSet of R by A2,PBOOLE:def 3;
+   take f;
+   set f1 = f;
+   A3: for s1,s2 being Element of R st s1 <= s2
+   for x,y being set st x in A.s1 & y in B.s1 holds
+   [x,y] in f1.s1 iff [x,y] in f1.s2
+   proof
+     let s1,s2 be Element of R such that s1 <= s2;
+     A4: f1.s1 = R1 by A2 .= f1.s2 by A2;
+     let x,y be set such that x in A.s1 & y in B.s1;
+     thus [x,y] in f1.s1 iff [x,y] in f1.s2 by A4;
+   end;
+     for i be set st i in I holds f.i is Relation of A.i,B.i
+    proof
+     let i be set;
+     assume i in I;
+     then f.i = {} by A1,A2;
+     hence thesis by RELSET_1:25;
+    end;
+    then reconsider f2 = f1 as ManySortedRelation of A,B by MSUALG_4:def 2;
+      f2 is os-compatible by A3,Def1;
+    hence thesis;
+  end;
 end;
+
 
 definition
   let R be non empty Poset;
@@ -56,23 +109,27 @@ definition
   canceled;
 end;
 
+
 theorem :: OSALG_4:1
     for R being non empty Poset,
       A,B being ManySortedSet of the carrier of R,
       OR being ManySortedRelation of A,B holds
       OR is os-compatible implies OR is OrderSortedSet of R;
 
-definition
+registration
   let R be non empty Poset;
   let A,B be ManySortedSet of R;
   cluster os-compatible -> order-sorted ManySortedRelation of A,B;
+  coherence by Bze;
 end;
+
 
 definition
   let R be non empty Poset;
   let A be ManySortedSet of the carrier of R;
   mode OrderSortedRelation of A is OrderSortedRelation of A,A;
 end;
+
 
 definition
  let S be OrderSortedSign,
@@ -82,23 +139,189 @@ definition
  it is os-compatible;
 end;
 
+
 :: REVISE: the definition of ManySorted diagonal from MSUALG_6
 :: should be moved to MSUALG_4; the "compatible" attr from MSUALG_6
 :: should replace the MSCongruence-like
 
-definition
+registration
  let S be OrderSortedSign,
      U1 be OSAlgebra of S;
  cluster MSEquivalence-like OrderSortedRelation of U1;
+ existence
+  proof
+   deffunc F(Element of S) =
+     id ((the Sorts of U1).$1);
+   consider f be Function such that A1: dom f = the carrier of S &
+    for d be Element of S holds
+    f.d = F(d) from MSUALG_2:sch 1;
+    reconsider f as ManySortedSet of the carrier of S
+       by A1,PBOOLE:def 3;
+      for x be set st x in dom f holds f.x is Relation
+     proof
+      let x be set;
+      assume x in dom f;
+      then f.x = id ((the Sorts of U1).x) by A1;
+      hence thesis;
+     end;
+    then reconsider f as ManySortedRelation of the carrier of S
+        by MSUALG_4:def 1;
+      for i be set st i in the carrier of S holds f.i is
+     Relation of (the Sorts of U1).i,(the Sorts of U1).i
+     proof
+      let i be set;
+      assume i in the carrier of S;
+      then f.i = id ((the Sorts of U1).i) by A1;
+      hence thesis;
+     end;
+    then reconsider f as
+    ManySortedRelation of the Sorts of U1,the Sorts of U1
+         by MSUALG_4:def 2;
+    reconsider f as ManySortedRelation of U1;
+      for i be set, R be Relation of (the Sorts of U1).i st
+     i in the carrier of S & f.i = R holds
+      R is Equivalence_Relation of (the Sorts of U1).i
+      proof
+       let i be set,
+           R be Relation of (the Sorts of U1).i;
+       assume i in the carrier of S & f.i = R;
+       then R = id ((the Sorts of U1).i) by A1;
+       hence thesis;
+      end;
+     then A2: f is MSEquivalence_Relation-like by MSUALG_4:def 3;
+     take f;
+     set f1 = f;
+       f1 is os-compatible
+     proof let s1,s2 be Element of S such that
+       A3: s1 <= s2;
+       reconsider s3 = s1, s4 = s2 as Element of S;
+       reconsider X = the Sorts of U1 as OrderSortedSet of S by OSALG_1:17;
+         X.s3 c= X.s4 by A3,OSALG_1:def 18;
+       then A4: id(X.s1) c= id(X.s2) by SYSREL:33;
+       A5: f1.s1 = id(X.s1) & f1.s2 = id(X.s2) by A1;
+       let x,y be set such that A6: x in (the Sorts of U1).s1
+       & y in (the Sorts of U1).s1;
+       thus [x,y] in f1.s1 implies [x,y] in f1.s2 by A4,A5;
+       assume [x,y] in f1.s2;
+       then x = y by A5,RELAT_1:def 10;
+       hence [x,y] in f1.s1 by A5,A6,RELAT_1:def 10;
+     end;
+   hence thesis by A2,Def3,MSUALG_4:def 5;
+  end;
 end;
+
 
 :: REVISE: we need the fact that id has the type,
 :: the original prf can be simplified
-definition
+registration
   let S be OrderSortedSign,
   U1 be non-empty OSAlgebra of S;
   cluster MSCongruence-like (MSEquivalence-like OrderSortedRelation of U1);
+  existence
+  proof
+   deffunc F(Element of S) = id ((the Sorts of U1).$1);
+   consider f be Function such that A1: dom f = the carrier of S &
+    for d be Element of S holds
+    f.d = F(d) from MSUALG_2:sch 1;
+   reconsider f as ManySortedSet of the carrier of S
+       by A1,PBOOLE:def 3;
+     for x be set st x in dom f holds f.x is Relation
+    proof
+     let x be set;
+     assume x in dom f;
+     then f.x = id ((the Sorts of U1).x) by A1;
+     hence thesis;
+    end;
+   then reconsider f as ManySortedRelation of the carrier of S
+       by MSUALG_4:def 1;
+     for i be set st i in the carrier of S holds f.i is
+    Relation of (the Sorts of U1).i,(the Sorts of U1).i
+    proof
+     let i be set;
+     assume i in the carrier of S;
+     then f.i = id ((the Sorts of U1).i) by A1;
+     hence thesis;
+    end;
+   then reconsider f as
+   ManySortedRelation of the Sorts of U1,the Sorts of U1
+        by MSUALG_4:def 2;
+   reconsider f as ManySortedRelation of U1;
+     for i be set, R be Relation of (the Sorts of U1).i st
+    i in the carrier of S & f.i = R holds
+     R is Equivalence_Relation of (the Sorts of U1).i
+     proof
+      let i be set,
+          R be Relation of (the Sorts of U1).i;
+      assume i in the carrier of S & f.i = R;
+      then R = id ((the Sorts of U1).i) by A1;
+      hence thesis;
+     end;
+    then f is MSEquivalence_Relation-like by MSUALG_4:def 3;
+   then reconsider f as MSEquivalence-like ManySortedRelation of U1
+          by MSUALG_4:def 5;
+   set f1 = f;
+     f1 is os-compatible
+   proof let s1,s2 be Element of S such that
+     A2: s1 <= s2;
+     reconsider s3 = s1, s4 = s2 as Element of S;
+     reconsider X = the Sorts of U1 as OrderSortedSet of S by OSALG_1:17;
+       X.s3 c= X.s4 by A2,OSALG_1:def 18;
+     then A3: id(X.s1) c= id(X.s2) by SYSREL:33;
+     A4: f1.s1 = id(X.s1) & f1.s2 = id(X.s2) by A1;
+     let x,y be set such that A5: x in (the Sorts of U1).s1
+     & y in (the Sorts of U1).s1;
+     thus [x,y] in f1.s1 implies [x,y] in f1.s2 by A3,A4;
+     assume [x,y] in f1.s2;
+     then x = y by A4,RELAT_1:def 10;
+     hence [x,y] in f1.s1 by A4,A5,RELAT_1:def 10;
+   end;
+   then reconsider f = f1 as MSEquivalence-like OrderSortedRelation of U1
+   by Def3;
+   take f;
+     for o be Element of the OperSymbols of S
+   for x,y be Element of Args(o,U1) st
+    (for n be Nat st n in dom x holds
+      [x.n,y.n] in f.((the_arity_of o)/.n))
+    holds [Den(o,U1).x,Den(o,U1).y] in f.(the_result_sort_of o)
+    proof
+     let o be Element of the OperSymbols of S;
+     let x,y be Element of Args(o,U1);
+     assume A6: for n be Nat st n in dom x holds
+            [x.n,y.n] in f.((the_arity_of o)/.n);
+     A7: dom x = dom (the_arity_of o) &
+       dom y = dom (the_arity_of o) by MSUALG_3:6;
+       for a be set st a in dom (the_arity_of o) holds x.a = y.a
+      proof
+       let a be set;
+       assume A8: a in dom (the_arity_of o);
+       then reconsider n = a as Nat;
+       A9: (the_arity_of o)/.n = (the_arity_of o).n
+             by A8,FINSEQ_4:def 4;
+       set ao = the_arity_of o;
+         ao.n in rng ao by A8,FUNCT_1:def 5;
+       then A10: f.(ao.n) = id ((the Sorts of U1).(ao.n)) by A1;
+         [x.n,y.n] in f.(ao.n) by A6,A7,A8,A9; hence thesis by A10,RELAT_1:def
+10;
+      end;
+     then A11: Den(o,U1).x = Den(o,U1).y by A7,FUNCT_1:9;
+     set r = the_result_sort_of o;
+     A12: f.r = id ((the Sorts of U1).r) by A1;
+     A13: dom (the ResultSort of S) = the OperSymbols of S &
+     rng (the ResultSort of S) c= the carrier of S
+            by FUNCT_2:def 1;
+     then A14: dom ((the Sorts of U1)*(the ResultSort of S))
+       = dom (the ResultSort of S) by PBOOLE:def 3;
+       Result(o,U1) = ((the Sorts of U1) * the ResultSort of S).o
+        by MSUALG_1:def 10
+        .= (the Sorts of U1).((the ResultSort of S).o)
+               by A13,A14,FUNCT_1:22
+        .= (the Sorts of U1).r by MSUALG_1:def 7;
+        hence thesis by A11,A12,RELAT_1:def 10;
+    end;
+    hence thesis by MSUALG_4:def 6;
+  end;
 end;
+
 
 definition
   let S be OrderSortedSign,
@@ -106,6 +329,7 @@ definition
   mode OSCongruence of U1 is
   MSCongruence-like (MSEquivalence-like OrderSortedRelation of U1);
 end;
+
 
 :: TODO: a smooth transition between Relations and Graphs would
 :: be useful here, the FinSequence approach seemed to me faster than
@@ -131,6 +355,7 @@ definition
         [p.(n-1),p.n] in the InternalRel of R;
 end;
 
+
 theorem :: OSALG_4:2
   for R being non empty Poset, s1,s2 being Element of R
   st s1 <= s2 holds [s1,s2] in Path_Rel R;
@@ -146,6 +371,7 @@ definition
   symmetry;
 end;
 
+
 theorem :: OSALG_4:3
     for R being non empty Poset,
       s1,s2,s3 being Element of R holds
@@ -159,16 +385,28 @@ definition
   Class Path_Rel R;
 end;
 
-definition
+
+registration
   let R be non empty Poset;
   cluster -> non empty Element of Components R;
+  coherence
+  proof let X be Element of Components R;
+      X in Components R;
+    then X in Class Path_Rel R by Def6;
+    then consider x being set such that
+      A1: x in the carrier of R &
+           X = Class(Path_Rel R,x) by EQREL_1:def 5;
+    thus thesis by A1,EQREL_1:28;
+  end;
 end;
+
 
 definition
   let R be non empty Poset;
   mode Component of R is Element of Components R;
   canceled;
 end;
+
 
 definition
   let R be non empty Poset;
@@ -177,6 +415,7 @@ definition
 :: OSALG_4:def 8
   Class(Path_Rel R,s1);
 end;
+
 
 theorem :: OSALG_4:4
   for R being non empty Poset,
@@ -197,6 +436,7 @@ definition
   union {A.s where s is Element of R: s in C};
 end;
 
+
 theorem :: OSALG_4:6
   for R being non empty Poset,
       A being ManySortedSet of the carrier of R,
@@ -210,6 +450,7 @@ definition
 :: OSALG_4:def 10
    for C being Component of R holds C is directed;
 end;
+
 
 theorem :: OSALG_4:7
   for R being discrete non empty Poset holds
@@ -226,22 +467,38 @@ theorem :: OSALG_4:9
   for R being discrete non empty Poset holds R is locally_directed;
 
 :: the system could generate this one from the following
-definition
+registration
   cluster locally_directed (non empty Poset);
+  existence
+  proof consider R being discrete non empty Poset;
+    take R;
+    thus thesis by Th9;
+  end;
 end;
 
-definition
+
+registration
   cluster locally_directed OrderSortedSign;
+  existence
+  proof consider R being discrete OrderSortedSign;
+    take R;
+    thus thesis by Th9;
+  end;
 end;
 
-definition
+
+registration
   cluster discrete -> locally_directed (non empty Poset);
+  coherence by Th9;
 end;
 
-definition
+
+registration
   let S be locally_directed (non empty Poset);
   cluster -> directed Component of S;
+  coherence by Def10;
 end;
+
 
 theorem :: OSALG_4:10
   {} is Equivalence_Relation of {};
@@ -265,6 +522,7 @@ definition
   st s1 in C & [x,y] in E.s1;
 end;
 
+
 :: we could give a name to Class CompClass(E,C)
 :: restriction of Class CompClass(E,C) to A.s1
 definition
@@ -280,13 +538,22 @@ definition
   z = Class( CompClass(E,CComp(s1)), x);
 end;
 
-definition
+
+registration
   let S be locally_directed OrderSortedSign;
   let A be non-empty OSAlgebra of S;
   let E be MSEquivalence-like OrderSortedRelation of A;
   let s1 be Element of S;
   cluster OSClass(E,s1) -> non empty;
+  coherence
+  proof
+    consider x being set such that A1: x in (the Sorts of A).s1
+    by XBOOLE_0:def 1;
+      Class( CompClass(E,CComp(s1)), x) in OSClass(E,s1) by A1,Def12;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: OSALG_4:11
   for S being locally_directed OrderSortedSign,
@@ -308,12 +575,25 @@ definition
   it.s1 = OSClass(E,s1);
 end;
 
-definition
+
+registration
   let S be locally_directed OrderSortedSign;
   let A be non-empty OSAlgebra of S;
   let E be MSEquivalence-like OrderSortedRelation of A;
   cluster OSClass E -> non-empty;
+  coherence
+  proof
+      for i being set st i in the carrier of S
+    holds (OSClass E).i is non empty
+    proof let i be set such that A1: i in the carrier of S;
+      reconsider s = i as Element of S by A1;
+        (OSClass E).s = OSClass( E,s) by Def13;
+      hence (OSClass E).i is non empty;
+    end;
+    hence thesis by PBOOLE:def 16;
+  end;
 end;
+
 
 :: order-sorted equiv of Class(R,x)
 definition
@@ -326,6 +606,7 @@ definition
 :: OSALG_4:def 14
     Class( CompClass(E, CComp(s)), x);
 end;
+
 
 theorem :: OSALG_4:12
     for R being locally_directed (non empty Poset),
@@ -374,6 +655,7 @@ func R #_os x -> Element of product ((OSClass R) * (the_arity_of o)) means
      st y = x.n & it.n = OSClass(R, y);
 end;
 
+
 :: the quotient will be different for order-sorted;
 :: this def seems ok for order-sorted
 definition let S,o;
@@ -393,6 +675,7 @@ Function of ((the Sorts of A)# * the Arity of S).o,
   for x be Element of Args(o,A) holds it.x = R #_os x;
 end;
 
+
 definition let S;
   let A be non-empty OSAlgebra of S;
   let R be OSCongruence of A;
@@ -408,6 +691,7 @@ definition let S;
 :: OSALG_4:def 19
     for o be OperSymbol of S holds it.o = OSQuotArgs(R,o);
 end;
+
 
 theorem :: OSALG_4:15
 for A be non-empty OSAlgebra of S,
@@ -427,6 +711,7 @@ definition let S,o;
     holds it.(R #_os a) = ((OSQuotRes(R,o)) * (Den(o,A))).a;
 end;
 
+
 definition let S;
   let A be non-empty OSAlgebra of S;
   let R be OSCongruence of A;
@@ -437,6 +722,7 @@ definition let S;
       for o be OperSymbol of S holds it.o = OSQuotCharact(R,o);
 end;
 
+
 definition let S;
   let U1 be non-empty OSAlgebra of S;
   let R be OSCongruence of U1;
@@ -445,12 +731,19 @@ definition let S;
     MSAlgebra(# OSClass R, OSQuotCharact R #);
 end;
 
+
 :: we could note that for discrete the QuotOSAlg and QuotMsAlg are equal
 
-definition let S; let U1 be non-empty OSAlgebra of S;
+registration let S; let U1 be non-empty OSAlgebra of S;
  let R be OSCongruence of U1;
  cluster QuotOSAlg (U1,R) -> strict non-empty;
+ coherence
+  proof
+     QuotOSAlg (U1,R) = MSAlgebra(# OSClass R, OSQuotCharact R #) by Def22;
+   hence thesis by MSUALG_1:def 8;
+  end;
 end;
+
 
 definition let S; let U1 be non-empty OSAlgebra of S;
            let R be OSCongruence of U1;
@@ -462,6 +755,7 @@ definition let S; let U1 be non-empty OSAlgebra of S;
     it.x = OSClass(R,x);
 end;
 
+
 definition let S; let U1 be non-empty OSAlgebra of S;
            let R be OSCongruence of U1;
  func OSNat_Hom(U1,R) ->
@@ -469,6 +763,7 @@ definition let S; let U1 be non-empty OSAlgebra of S;
 :: OSALG_4:def 24
   for s be Element of S holds it.s = OSNat_Hom(U1,R,s);
 end;
+
 
 theorem :: OSALG_4:16
     for U1 be non-empty OSAlgebra of S,
@@ -491,6 +786,7 @@ definition let S; let U1,U2 be non-empty OSAlgebra of S;
   MSCng(F);
 end;
 
+
 definition let S; let U1,U2 be non-empty OSAlgebra of S;
            let F be ManySortedFunction of U1,U2;
            let s be Element of S;
@@ -502,6 +798,7 @@ func OSHomQuot(F,s) -> Function of
   it.(OSClass(OSCng(F),x)) = (F.s).x;
 end;
 
+
 :: this seems a bit too permissive, but same as the original
 :: we should assume F order-sorted probably
 definition let S; let U1,U2 be non-empty OSAlgebra of S;
@@ -511,6 +808,7 @@ func OSHomQuot(F) ->
 :: OSALG_4:def 27
  for s be Element of S holds it.s = OSHomQuot(F,s);
 end;
+
 
 theorem :: OSALG_4:18
 for U1,U2 be non-empty OSAlgebra of S,
@@ -554,6 +852,7 @@ definition
   holds [Den(o1,U1).x1,Den(o2,U1).x2] in R.(the_result_sort_of o2);
 end;
 
+
 theorem :: OSALG_4:21
   for S being OrderSortedSign,
       U1 being non-empty OSAlgebra of S holds
@@ -566,17 +865,30 @@ theorem :: OSALG_4:22
       R = [| (the Sorts of U1), (the Sorts of U1) |] holds
       R is monotone;
 
-definition
+registration
   let S be OrderSortedSign,
       U1 be non-empty OSAlgebra of S;
 cluster monotone OSCongruence of U1;
+existence
+proof reconsider R = [| the Sorts of U1, the Sorts of U1 |] as
+  OSCongruence of U1 by Th21;
+  take R;
+  thus thesis by Th22;
+end;
 end;
 
-definition
+
+registration
  let S be OrderSortedSign,
      U1 be non-empty OSAlgebra of S;
 cluster monotone (MSEquivalence-like OrderSortedRelation of U1);
+existence
+proof consider R being monotone OSCongruence of U1;
+  take R;
+  thus thesis;
 end;
+end;
+
 
 theorem :: OSALG_4:23
   for S being OrderSortedSign,
@@ -584,12 +896,14 @@ theorem :: OSALG_4:23
       R being monotone (MSEquivalence-like OrderSortedRelation of U1)
   holds R is MSCongruence-like;
 
-definition
+registration
  let S be OrderSortedSign,
      U1 be non-empty OSAlgebra of S;
 cluster monotone -> MSCongruence-like
                    (MSEquivalence-like OrderSortedRelation of U1);
+coherence by Th23;
 end;
+
 
 theorem :: OSALG_4:24
   for S being OrderSortedSign,
@@ -597,18 +911,117 @@ theorem :: OSALG_4:24
       R being OSCongruence of U1 holds
       R is monotone;
 
-definition
+registration
   let S be OrderSortedSign,
       U1 be monotone non-empty OSAlgebra of S;
 cluster -> monotone OSCongruence of U1;
+coherence by Th24;
 end;
 
+
 :: monotonicity of quotient by monotone oscongruence
-definition let S;
+registration let S;
   let U1 be non-empty OSAlgebra of S;
   let R be monotone OSCongruence of U1;
 cluster QuotOSAlg(U1,R) -> monotone;
+coherence
+proof
+  set A = QuotOSAlg(U1,R);
+  A1: A = MSAlgebra(# OSClass R, OSQuotCharact R #) by Def22;
+  reconsider O1 = the Sorts of U1 as OrderSortedSet of S by OSALG_1:17;
+  let o1,o2 be OperSymbol of S such that A2:  o1 <= o2;
+  A3:  o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2) &
+  the_result_sort_of o1 <= the_result_sort_of o2 by A2,OSALG_1:def 22;
+  A4: dom Den(o2,A) = Args(o2,A) &
+       dom Den(o1,A) = Args(o1,A) by FUNCT_2:def 1;
+  A5: Args(o1,A) c= Args(o2,A) &
+       Result(o1,A) c= Result(o2,A) by A2,OSALG_1:26;
+  then A6: dom Den(o1,A) = (dom Den(o2,A)) /\ Args(o1,A) by A4,XBOOLE_1:28;
+    Den(o1,A) = (OSQuotCharact R).o1 &
+       Den(o2,A) = (OSQuotCharact R).o2 by A1,MSUALG_1:def 11;
+  then A7: Den(o1,A) = OSQuotCharact( R,o1) &
+       Den(o2,A) = OSQuotCharact( R,o2) by Def21;
+  A8: O1.(the_result_sort_of o1) c= O1.(the_result_sort_of o2)
+  by A3,OSALG_1:def 19;
+    o1 in the OperSymbols of S &
+  o2 in the OperSymbols of S;
+  then A9: o1 in dom (the ResultSort of S) &
+        o2 in dom (the ResultSort of S) by FUNCT_2:def 1;
+    len (the_arity_of o1) = len (the_arity_of o2) by A3,OSALG_1:def 7;
+  then A10: dom (the_arity_of o1) = dom (the_arity_of o2) by FINSEQ_3:31;
+    for x being set st x in dom Den(o1,A) holds Den(o1,A).x = Den(o2,A).x
+  proof
+    let x be set such that A11: x in dom Den(o1,A);
+    A12: x in Args(o1,A) by A11;
+    then x in Args(o2,A) by A5;
+    then A13: x in ((OSClass R)# * the Arity of S).o1 &
+    x in ((OSClass R)# * the Arity of S).o2 by A1,A12,MSUALG_1:def 9;
+    then consider a1 being Element of Args(o1,U1) such that
+    A14: x = R #_os a1 by Th15;
+    consider a2 being Element of Args(o2,U1) such that
+    A15: x = R #_os a2 by A13,Th15;
+      for y being Nat st y in dom a1 holds
+        [a1.y,a2.y] in R.((the_arity_of o2)/.y)
+    proof
+      let y be Nat such that A16: y in dom a1;
+      A17: y in dom (the_arity_of o1) &
+      y in dom (the_arity_of o2) by A10,A16,MSUALG_6:2;
+      then consider z1 being Element of (the Sorts of U1).((the_arity_of o1)/.y
+)
+      such that A18: z1 = a1.y & (R #_os a1).y = OSClass(R, z1) by Def15;
+      consider z2 being
+      Element of (the Sorts of U1).((the_arity_of o2)/.y) such that
+      A19: z2 = a2.y & (R #_os a2).y = OSClass(R, z2) by A17,Def15;
+      A20: (the_arity_of o1)/.y = (the_arity_of o1).y &
+       (the_arity_of o2)/.y = (the_arity_of o2).y by A17,FINSEQ_4:def 4;
+      reconsider s1 = (the_arity_of o1).y,
+      s2 = (the_arity_of o2).y as SortSymbol of S by A17,PARTFUN1:27;
+      A21: s1 <= s2 by A3,A17,OSALG_1:def 7;
+      then (the Sorts of U1).((the_arity_of o1)/.y) c=
+      (the Sorts of U1).((the_arity_of o2)/.y) by A20,OSALG_1:def 19;
+      then reconsider z12 = z1 as
+      Element of (the Sorts of U1).((the_arity_of o2)/.y) by TARSKI:def 3;
+        OSClass(R, z2) = OSClass(R, z12) by A14,A15,A18,A19,A20,A21,Th14;
+      hence [a1.y,a2.y] in R.((the_arity_of o2)/.y) by A18,A19,Th13;
+    end;
+    then A22: [Den(o1,U1).a1,Den(o2,U1).a2] in R.(the_result_sort_of o2)
+    by A2,Def28;
+    A23: OSQuotCharact(R,o1).(R #_os a1) =
+    ((OSQuotRes(R,o1)) * (Den(o1,U1))).a1 &
+    OSQuotCharact(R,o2).(R #_os a2) =
+    ((OSQuotRes(R,o2)) * (Den(o2,U1))).a2 by A13,A14,A15,Def20;
+      Result(o1,U1) =
+    ((the Sorts of U1) * the ResultSort of S).o1 by MSUALG_1:def 10
+    .= (the Sorts of U1).((the ResultSort of S).o1) by A9,FUNCT_1:23
+    .= (the Sorts of U1).(the_result_sort_of o1) by MSUALG_1:def 7;
+    then reconsider da1 = Den(o1,U1).a1 as
+    Element of (the Sorts of U1).(the_result_sort_of o1);
+      a1 in Args(o1,U1);
+    then a1 in dom Den(o1,U1) by FUNCT_2:def 1;
+    then A24: ((OSQuotRes(R,o1)) * (Den(o1,U1))).a1 = OSQuotRes(R,o1).da1 by
+FUNCT_1:23
+    .= OSClass(R,da1) by Def16;
+      Result(o2,U1) =
+    ((the Sorts of U1) * the ResultSort of S).o2 by MSUALG_1:def 10
+    .= (the Sorts of U1).((the ResultSort of S).o2) by A9,FUNCT_1:23
+    .= (the Sorts of U1).(the_result_sort_of o2) by MSUALG_1:def 7;
+    then reconsider da2 = Den(o2,U1).a2 as
+    Element of (the Sorts of U1).(the_result_sort_of o2);
+      a2 in Args(o2,U1);
+    then a2 in dom Den(o2,U1) by FUNCT_2:def 1;
+    then A25: ((OSQuotRes(R,o2)) * (Den(o2,U1))).a2 = OSQuotRes(R,o2).da2 by
+FUNCT_1:23
+    .= OSClass(R,da2) by Def16;
+    reconsider da12 = da1 as
+    Element of (the Sorts of U1).(the_result_sort_of o2) by A8,TARSKI:def 3;
+      OSClass(R,da1) = OSClass(R,da12) by A3,Th14
+    .= OSClass(R,da2) by A22,Th13;
+    hence Den(o1,A).x = Den(o2,A).x by A7,A14,A15,A23,A24,A25;
+  end;
+  hence Den(o2,A)|Args(o1,A) = Den(o1,A) by A6,FUNCT_1:68;
+  end;
 end;
+
 
 theorem :: OSALG_4:25
   for S ::being locally_directed OrderSortedSign,
@@ -639,6 +1052,7 @@ func OSHomQuot(F,R,s) -> Function of
   it.(OSClass(R,x)) = (F.s).x;
 end;
 
+
 :: this seems a bit too permissive, but same as the original
 :: we should assume F order-sorted probably
 definition let S; let U1,U2 be non-empty OSAlgebra of S;
@@ -649,6 +1063,7 @@ func OSHomQuot(F,R) ->
 :: OSALG_4:def 30
  for s be Element of S holds it.s = OSHomQuot(F,R,s);
 end;
+
 
 theorem :: OSALG_4:27
   for U1,U2 be non-empty OSAlgebra of S,

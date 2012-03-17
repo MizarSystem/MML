@@ -16,9 +16,6 @@ PRE_TOPC
 XREAL_0
 SEQ_1
 #
-NonUniqExRF
-LambdaRF
-#
 G3 W21 ;;;
 ªM6 V4 ;V16 U1 F1 ;;K52 ;;U1 F1 ;;K52 ;;ªM3 U1 F1 ;;;P1 B2 K101 U1 F1 ;;B1 B2 ;;M1 ;ª&R2 B1 U1 F1 ;;;M3 K52 ;;ªP1 B1 B2 ;;;
 #

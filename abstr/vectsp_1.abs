@@ -32,19 +32,68 @@ definition
     for x being Element of REAL holds it.x = -x;
 end;
 
+
 definition
  func G_Real -> strict LoopStr equals
 :: VECTSP_1:def 6
    LoopStr (# REAL,addreal,0 #);
 end;
 
-definition
+
+registration
  cluster G_Real -> non empty;
+ coherence
+  proof
+    thus the carrier of G_Real is non empty by Def6;
+  end;
 end;
 
-definition
+
+registration
  cluster G_Real -> Abelian add-associative right_zeroed right_complementable;
+ coherence
+  proof
+   hereby
+    let x,y be Element of G_Real;
+     reconsider x'=x ,y'=y as Element of REAL by Def6;
+    thus x+y = (the add of G_Real).(x,y) by RLVECT_1:5
+               .= y'+x' by Def4,Def6
+               .= addreal.(y',x') by Def4
+               .= y+x by Def6,RLVECT_1:5;
+   end;
+   hereby
+    let x,y,z be Element of G_Real;
+     reconsider x'=x ,y'=y , z'=z as Element of REAL by Def6;
+    thus (x+y)+z = (the add of G_Real).(x+y,z) by RLVECT_1:5
+               .= (the add of G_Real).((the add of G_Real).(x,y),z)
+                  by RLVECT_1:5
+               .= addreal.((x'+y'),z') by Def4,Def6
+               .= (x'+y')+z' by Def4
+               .= x'+(y'+z') by XCMPLX_1:1
+               .= addreal.(x',(y'+z')) by Def4
+               .= addreal.(x',addreal.(y',z')) by Def4
+               .= (the add of G_Real).(x,y+z) by Def6,RLVECT_1:5
+               .= x+(y+z) by RLVECT_1:5;
+   end;
+   hereby
+    let x be Element of G_Real;
+     reconsider x'=x as Element of REAL by Def6;
+    thus x+0.G_Real = (the add of G_Real).(x,0.G_Real) by RLVECT_1:5
+         .= (the add of G_Real).(x,(the Zero of G_Real)) by RLVECT_1:def 2
+         .= x'+0 by Def4,Def6
+         .= x;
+   end;
+   let x be Element of G_Real;
+   reconsider x'=x as Element of REAL by Def6;
+   reconsider y = -x' as Element of G_Real by Def6;
+   take y;
+   thus x+ y = (the add of G_Real).(x,y) by RLVECT_1:5
+              .= x'+ -x' by Def4,Def6
+              .= 0 by XCMPLX_0:def 6
+              .= 0.G_Real by Def6,RLVECT_1:def 2;
+  end;
 end;
+
 
 canceled 5;
 
@@ -55,15 +104,18 @@ theorem :: VECTSP_1:6
             x+(0.G_Real) = x &
             x+(-x) = 0.G_Real;
 
-definition
+registration
  cluster strict add-associative right_zeroed right_complementable
    Abelian (non empty LoopStr);
+  existence proof take G_Real; thus thesis; end;
 end;
+
 
 definition
  mode AbGroup is add-associative right_zeroed right_complementable
    Abelian (non empty LoopStr);
 end;
+
 
 theorem :: VECTSP_1:7
 (for x,y,z being Element of GS holds
@@ -82,9 +134,18 @@ definition
                                 mult -> BinOp of the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty strict HGrStr;
+  existence
+   proof
+     consider A being non empty set, m being BinOp of A;
+    take HGrStr(#A,m#);
+    thus the carrier of HGrStr(#A,m#) is non empty;
+    thus thesis;
+   end;
 end;
+
 
 definition
  struct(HGrStr) multLoopStr (# carrier -> set,
@@ -92,9 +153,18 @@ definition
                         unity -> Element of the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty strict multLoopStr;
+  existence
+   proof
+     consider A being non empty set, m being BinOp of A, u being Element of A;
+    take multLoopStr(#A,m,u#);
+    thus the carrier of multLoopStr(#A,m,u#) is non empty;
+    thus thesis;
+   end;
 end;
+
 
 definition let FS be multLoopStr;
  canceled 2;
@@ -104,6 +174,7 @@ definition let FS be multLoopStr;
       the unity of FS;
 end;
 
+
 definition
  struct(multLoopStr,ZeroStr) multLoopStr_0 (# carrier -> set,
                         mult -> BinOp of the carrier,
@@ -111,9 +182,19 @@ definition
                         Zero -> Element of the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty strict multLoopStr_0;
+ existence
+  proof
+    consider A being non empty set,
+             m being BinOp of A, u,Z being Element of A;
+   take multLoopStr_0(#A,m,u,Z#);
+   thus the carrier of multLoopStr_0(#A,m,u,Z#) is non empty;
+   thus thesis;
+  end;
 end;
+
 
 definition
  struct(LoopStr,multLoopStr_0) doubleLoopStr (# carrier -> set,
@@ -121,9 +202,19 @@ definition
                          unity, Zero -> Element of the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty strict doubleLoopStr;
+ existence
+  proof
+    consider A being non empty set,
+             m,a being BinOp of A, u,Z being Element of A;
+   take doubleLoopStr(#A,m,a,u,Z#);
+   thus the carrier of doubleLoopStr(#A,m,a,u,Z#) is non empty;
+   thus thesis;
+  end;
 end;
+
 
 definition let FS be non empty HGrStr;
    let x,y be Element of FS;
@@ -131,6 +222,7 @@ definition let FS be non empty HGrStr;
 :: VECTSP_1:def 10
        (the mult of FS).(x,y);
 end;
+
 
 definition let IT be non empty doubleLoopStr;
  attr IT is right-distributive means
@@ -151,11 +243,13 @@ end;
  for x,y be Element of REAL holds it.(x,y) = x*y;
 end;
 
+
 definition
  func F_Real -> strict doubleLoopStr equals
 :: VECTSP_1:def 15
   doubleLoopStr (# REAL,addreal,multreal,1,0 #);
 end;
+
 
 definition let IT be non empty HGrStr;
  attr IT is associative means
@@ -167,6 +261,7 @@ definition let IT be non empty HGrStr;
   for x,y being Element of IT holds x*y = y*x;
 end;
 
+
 definition let IT be non empty doubleLoopStr;
  attr IT is distributive means
 :: VECTSP_1:def 18
@@ -174,11 +269,13 @@ definition let IT be non empty doubleLoopStr;
            x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x;
 end;
 
+
 definition let IT be non empty multLoopStr;
  attr IT is left_unital means
 :: VECTSP_1:def 19
   for x being Element of IT holds (1_ IT) * x = x;
 end;
+
 
 definition let IT be non empty multLoopStr_0;
  attr IT is Field-like means
@@ -187,44 +284,184 @@ definition let IT be non empty multLoopStr_0;
      ex y be Element of IT st x*y = 1_ IT;
 end;
 
+
 definition let IT be multLoopStr_0;
  attr IT is degenerated means
 :: VECTSP_1:def 21
    0.IT = 1_ IT;
 end;
 
-definition
+
+registration
  cluster F_Real -> non empty;
+ coherence
+  proof
+    thus the carrier of F_Real is non empty by Def15;
+  end;
 end;
 
-definition
+
+registration
  cluster F_Real -> add-associative right_zeroed right_complementable Abelian
    commutative associative left_unital right_unital distributive Field-like
    non degenerated;
+ coherence
+  proof
+A1:  0.F_Real = 0 by Def15,RLVECT_1:def 2;
+A2:  1_ F_Real = 1 by Def9,Def15;
+   hereby let x,y,z be Element of F_Real;
+     reconsider x'=x ,y'=y , z'=z as Element of REAL by Def15;
+    thus (x+y)+z = (the add of F_Real).(x+y,z) by RLVECT_1:5
+               .= (the add of F_Real).((the add of F_Real).(x,y),z)
+                  by RLVECT_1:5
+               .= addreal.((x'+y'),z') by Def4,Def15
+               .= (x'+y')+z' by Def4
+               .= x'+(y'+z') by XCMPLX_1:1
+               .= addreal.(x',(y'+z')) by Def4
+               .= addreal.(x',addreal.(y',z')) by Def4
+               .= (the add of F_Real).(x,y+z) by Def15,RLVECT_1:5
+               .= x+(y+z) by RLVECT_1:5;
+   end;
+   hereby let x be Element of F_Real;
+     reconsider x'=x as Element of REAL by Def15;
+   thus x+0.F_Real = (the add of F_Real).(x,0.F_Real) by RLVECT_1:5
+        .= (the add of F_Real).(x,(the Zero of F_Real)) by RLVECT_1:def 2
+               .= x'+0 by Def4,Def15
+               .= x;
+   end;
+   hereby let x be Element of F_Real;
+     reconsider x'=x as Element of REAL by Def15;
+     reconsider y=-x' as Element of F_Real by Def15;
+     take y' = y;
+    thus x+ y' = addreal.(x',y') by Def15,RLVECT_1:5
+               .= x'+ -x' by Def4
+               .= 0 by XCMPLX_0:def 6
+               .= 0.F_Real by Def15,RLVECT_1:def 2;
+   end;
+   hereby let x,y be Element of F_Real;
+     reconsider x'=x ,y'=y as Element of REAL by Def15;
+    thus x+y = (the add of F_Real).(x,y) by RLVECT_1:5
+             .= y'+x' by Def4,Def15
+             .= addreal.(y',x') by Def4
+             .= y+x by Def15,RLVECT_1:5;
+   end;
+   hereby let x,y be Element of F_Real;
+     reconsider x'=x ,y'=y as Element of REAL by Def15;
+    thus x*y = (the mult of F_Real).(x,y) by Def10
+               .= y'*x' by Def14,Def15
+               .= multreal.(y',x') by Def14
+               .= y*x by Def10,Def15;
+   end;
+   hereby let x,y,z be Element of F_Real;
+     reconsider x'=x ,y'=y , z'=z as Element of REAL by Def15;
+    thus (x*y)*z = (the mult of F_Real).(x*y,z) by Def10
+               .= (the mult of F_Real).((the mult of F_Real).(x,y),z)
+                  by Def10
+               .= multreal.((x'*y'),z') by Def14,Def15
+               .= (x'*y')*z' by Def14
+               .= x'*(y'*z') by XCMPLX_1:4
+               .= multreal.(x',(y'*z')) by Def14
+               .= multreal.(x',multreal.(y',z')) by Def14
+               .= (the mult of F_Real).(x,y*z) by Def10,Def15
+               .= x*(y*z) by Def10;
+   end;
+   hereby let x be Element of F_Real;
+     reconsider x'=x as Element of REAL by Def15;
+    thus (1_ F_Real)*x = (the mult of F_Real).((1_ F_Real),x) by Def10
+               .= (the mult of F_Real).((the unity of F_Real),x) by Def9
+               .= 1*x' by Def14,Def15
+               .= x;
+   end;
+   hereby let x be Element of F_Real;
+     reconsider x'=x as Element of REAL by Def15;
+    thus x*(1_ F_Real) = (the mult of F_Real).(x,(1_ F_Real)) by Def10
+               .= (the mult of F_Real).(x,(the unity of F_Real)) by Def9
+               .= 1*x' by Def14,Def15
+               .= x;
+   end;
+   hereby let x,y,z be Element of F_Real;
+     reconsider x'=x ,y'=y , z'=z as Element of REAL by Def15;
+    thus x*(y+z) = (the mult of F_Real).(x,(y+z)) by Def10
+               .= (the mult of F_Real).(x,(the add of F_Real).(y,z))
+                  by RLVECT_1:5
+               .= multreal.(x',(y'+z')) by Def4,Def15
+               .= x'*(y'+z') by Def14
+               .= x'*y'+x'*z' by XCMPLX_1:8
+               .= addreal.(x'*y',x'*z') by Def4
+               .= addreal.(multreal.(x',y'),x'*z') by Def14
+               .= addreal.(multreal.(x',y'),multreal.(x',z'))
+                  by Def14
+               .= (the add of F_Real).((x*y),(the mult of F_Real).(x,z))
+                  by Def10,Def15
+               .= (the add of F_Real).((x*y),(x*z)) by Def10
+               .= x*y+x*z by RLVECT_1:5;
+    thus (y+z)*x = (the mult of F_Real).(y+z,x) by Def10
+               .= (the mult of F_Real).((the add of F_Real).(y,z),x)
+                  by RLVECT_1:5
+               .= multreal.((y'+z'),x') by Def4,Def15
+               .= (y'+z')*x' by Def14
+               .= y'*x'+z'*x' by XCMPLX_1:8
+               .= addreal.(y'*x',z'*x') by Def4
+               .= addreal.(multreal.(y',x'),z'*x') by Def14
+               .= addreal.(multreal.(y',x'),multreal.(z',x'))
+                  by Def14
+               .= (the add of F_Real).((y*x),(the mult of F_Real).(z,x))
+                  by Def10,Def15
+               .= (the add of F_Real).((y*x),(z*x)) by Def10
+               .= y*x+z*x by RLVECT_1:5;
+   end;
+   hereby let x be Element of F_Real;
+     reconsider x'=x as Element of REAL by Def15;
+    assume x<>0.F_Real;
+    then A3: x'*(x')" =1 by A1,XCMPLX_0:def 7;
+    reconsider y = (x')" as Element of F_Real by Def15;
+    take y;
+    thus x*y = (the mult of F_Real).(x,y) by Def10
+            .= 1_ F_Real by A2,A3,Def14,Def15;
+   end;
+   thus 0.F_Real <> 1_ F_Real by A2,Def15,RLVECT_1:def 2;
+  end;
 end;
 
-definition
+registration
   cluster distributive -> left-distributive right-distributive
     (non empty doubleLoopStr);
+  coherence by Lm3;
   cluster left-distributive right-distributive -> distributive
     (non empty doubleLoopStr);
+  coherence
+  proof
+    let D be non empty doubleLoopStr;
+    assume (for a,b,c being Element of D
+            holds (b+c)*a = b*a + c*a) &
+           for a,b,c being Element of D
+            holds a*(b+c) = a*b+ a*c;
+    hence for x,y,z be Element of D holds
+       x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x;
+  end;
 end;
 
-definition
+
+registration
  cluster add-associative right_zeroed right_complementable Abelian
    commutative associative left_unital right_unital distributive Field-like
    non degenerated strict (non empty doubleLoopStr);
+  existence proof take F_Real; thus thesis; end;
 end;
 
-definition
+
+registration
  cluster commutative associative (non empty HGrStr);
+  existence proof take F_Real; thus thesis; end;
 end;
+
 
 definition
  mode Field is add-associative right_zeroed right_complementable
     Abelian commutative associative left_unital distributive
       Field-like non degenerated (non empty doubleLoopStr);
 end;
+
 
 canceled 13;
 
@@ -259,6 +496,7 @@ definition let FS be commutative (non empty HGrStr);
  commutativity;
 end;
 
+
 canceled 10;
 
 theorem :: VECTSP_1:33
@@ -276,6 +514,7 @@ definition let F be associative commutative left_unital distributive
    x*it = 1_ F;
 end;
 
+
 definition let F be associative commutative left_unital distributive
     Field-like (non empty doubleLoopStr),
    x,y be Element of F;
@@ -283,6 +522,7 @@ definition let F be associative commutative left_unital distributive
 :: VECTSP_1:def 23
     x*y";
 end;
+
 
 canceled 2;
 
@@ -349,26 +589,45 @@ definition let F be 1-sorted;
                                       the carrier #);
 end;
 
-definition let F be 1-sorted;
+
+registration let F be 1-sorted;
  cluster non empty strict VectSpStr over F;
+  existence
+   proof
+     consider A being non empty set,
+              a being BinOp of A,
+              Z being Element of A,
+              l being Function of [:the carrier of F,A:], A;
+    take VectSpStr(#A,a,Z,l#);
+    thus the carrier of VectSpStr(#A,a,Z,l#) is non empty;
+    thus thesis;
+   end;
 end;
 
-definition let F be 1-sorted;
+
+registration let F be 1-sorted;
   let A be non empty set,
       a be BinOp of A, Z be Element of A,
       l be Function of [:the carrier of F,A:], A;
  cluster VectSpStr(#A,a,Z,l#) -> non empty;
+  coherence
+   proof
+    thus the carrier of VectSpStr(#A,a,Z,l#) is non empty;
+   end;
 end;
+
 
 definition let F be 1-sorted;
  mode Scalar of F is Element of F;
 end;
+
 
 definition let F be 1-sorted;
            let VS be VectSpStr over F;
  mode Scalar of VS is Scalar of F;
  mode Vector of VS is Element of VS;
 end;
+
 
 definition let F be non empty 1-sorted, V be non empty VectSpStr over F;
   let x be Element of F;
@@ -377,6 +636,7 @@ definition let F be non empty 1-sorted, V be non empty VectSpStr over F;
 :: VECTSP_1:def 24
   (the lmult of V).(x,v);
 end;
+
 
 definition let F be non empty LoopStr;
  func comp F -> UnOp of the carrier of F means
@@ -396,11 +656,25 @@ definition let F be non empty doubleLoopStr;
                (1_ F)*v = v;
 end;
 
-definition let F be add-associative right_zeroed right_complementable Abelian
+
+registration let F be add-associative right_zeroed right_complementable Abelian
    associative left_unital distributive (non empty doubleLoopStr);
  cluster VectSp-like add-associative right_zeroed right_complementable Abelian
    strict (non empty VectSpStr over F);
+  existence
+  proof
+    take V = VectSpStr (# the carrier of F,the add of F,
+                         the Zero of F,the mult of F#);
+    thus for x,y being Element of F
+    for v,w being Element of V holds
+     x*(v+w) = x*v+x*w &
+     (x+y)*v = x*v+y*v &
+     (x*y)*v = x*(y*v) &
+     (1_ F)*v = v by Lm5;
+   thus thesis by Lm4;
+  end;
 end;
+
 
 definition let F be add-associative right_zeroed right_complementable Abelian
    associative left_unital distributive (non empty doubleLoopStr);
@@ -408,6 +682,7 @@ definition let F be add-associative right_zeroed right_complementable Abelian
   add-associative right_zeroed right_complementable Abelian
    (non empty VectSpStr over F);
 end;
+
 
  reserve F for Field,
          x for Element of F,
@@ -472,9 +747,20 @@ theorem :: VECTSP_1:68
      v,w being Element of V holds
   -x*v=(-x)*v & w-x*v=w+(-x)*v;
 
-definition
+registration
   cluster commutative left_unital -> right_unital (non empty multLoopStr);
+  coherence
+  proof let F be non empty multLoopStr;
+   assume
+A1:  F is commutative left_unital;
+   let x be Scalar of F;
+     for F be commutative (non empty HGrStr),
+    x,y being Element of F holds x*y = y*x;
+    then x*(1_ F) = (1_ F)*x by A1;
+   hence x*(1_ F) = x by A1,Def19;
+  end;
 end;
+
 
 theorem :: VECTSP_1:69
  for F be add-associative right_zeroed right_complementable Abelian
@@ -525,9 +811,20 @@ definition
    holds a = 0.IT;
 end;
 
-definition
+
+registration
  cluster Fanoian (non empty LoopStr);
+ existence
+  proof
+   take F = F_Real;
+   let a be Element of F such that
+A1: a + a = 0.F;
+      a = 1_ F * a by Def19;
+    then a + a = (1_ F + 1_ F) * a by Def18;
+   hence a = 0.F by A1,Th44,Th78;
+  end;
 end;
+
 
 definition let F be add-associative right_zeroed right_complementable
              commutative associative left_unital Field-like
@@ -537,9 +834,16 @@ definition let F be add-associative right_zeroed right_complementable
   1_ F+1_ F<>0.F;
 end;
 
-definition
+
+registration
  cluster strict Fanoian Field;
+  existence
+   proof
+      F_Real is Fanoian by Def29,Th78;
+    hence thesis;
+   end;
 end;
+
 
 canceled 2;
 

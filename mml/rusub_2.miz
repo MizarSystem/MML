@@ -71,6 +71,7 @@ end;
 uniqueness by RUSUB_1:24;
 end;
 
+
 definition
 let V be RealUnitarySpace, W1,W2 be Subspace of V;
 func W1 /\ W2 -> strict Subspace of V means
@@ -95,6 +96,7 @@ end;
 
 uniqueness by RUSUB_1:24;
 end;
+
 
 begin :: Theorems of sum and intersection of subspaces.
 
@@ -140,10 +142,12 @@ A2:  v in W1;
        v = v + 0.V & 0.V in W2 by RLVECT_1:10,RUSUB_1:11;
      hence thesis by A2,Th1;
 
+     end;
      suppose
 A3:  v in W2;
        v = 0.V + v & 0.V in W1 by RLVECT_1:10,RUSUB_1:11;
      hence thesis by A3,Th1;
+   end;
    end;
    hence thesis;
 end;
@@ -906,12 +910,13 @@ proof
      ex W being strict Subspace of V st $1 = the carrier of W;
    consider B being set such that
 A1:for x being set holds x in B iff x in bool(the carrier of V) & P[x]
-       from Separation;
+       from XBOOLE_0:sch 1;
    defpred P[set,set] means
      (ex W being strict Subspace of V st $2 = W & $1 = the carrier of W);
 A2:for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2 by RUSUB_1:24;
    consider f being Function such that
-A3:for x,y being set holds [x,y] in f iff x in B & P[x,y] from GraphFunc(A2);
+A3:for x,y being set holds [x,y] in f iff x in B & P[x,y] from FUNCT_1:sch 1
+(A2);
      for x being set holds x in B iff ex y being set st [x,y] in f
    proof let x be set;
      thus x in B implies ex y being set st [x,y] in f
@@ -975,7 +980,8 @@ A11:for x being set holds x in D2 iff x is strict Subspace of V;
 end;
 end;
 
-definition let V be RealUnitarySpace;
+
+registration let V be RealUnitarySpace;
 cluster Subspaces(V) -> non empty;
 coherence
 proof
@@ -984,6 +990,7 @@ proof
    hence thesis;
 end;
 end;
+
 
 theorem
    for V being strict RealUnitarySpace holds
@@ -1002,6 +1009,7 @@ let W1,W2 be Subspace of V;
  pred V is_the_direct_sum_of W1,W2 means
   :Def4: the UNITSTR of V = W1 + W2 & W1 /\ W2 = (0).V;
 end;
+
 
 Lm12:
 for V being RealUnitarySpace, W being strict Subspace of V st
@@ -1062,7 +1070,7 @@ proof
       ex W1 being strict Subspace of V st $1 = W1 & W /\ W1 = (0).V;
    consider X being set such that
 A1:for x being set holds x in X iff (x in Subspaces(V) & P[x])
-     from Separation;
+     from XBOOLE_0:sch 1;
      W /\ (0).V = (0).V & (0).V in Subspaces(V) by Def3,Th18;
    then reconsider X as non empty set by A1;
 A2:now
@@ -1074,7 +1082,7 @@ A2:now
      ex W1,W2 being strict Subspace of V st
      $1 = W1 & $2 = W2 & W1 is Subspace of W2;
    consider R being Relation of X such that
-A3:for x,y being Element of X holds [x,y] in R iff P[x,y]  from Rel_On_Dom_Ex;
+A3:for x,y being Element of X holds [x,y] in R iff P[x,y]  from RELSET_1:sch 2;
    defpred Q[set,set] means [$1,$2] in R;
 A4:now
      let x be Element of X;
@@ -1125,6 +1133,7 @@ A17:   Y = {};
        assume x in Y;
        hence [x,y'] in R by A17;
 
+       end;
        suppose
 A18:   Y <> {};
        defpred P[set,set] means
@@ -1144,7 +1153,7 @@ A21:     x = W1 and W /\ W1 = (0).V by A1,A15;
        end;
        consider f being Function such that
 A22:   dom f = Y and
-A23:   for x being set st x in Y holds P[x,f.x] from FuncEx(A19,A20);
+A23:   for x being set st x in Y holds P[x,f.x] from FUNCT_1:sch 2(A19,A20);
        set Z = union(rng f);
          now
          let x be set;
@@ -1213,6 +1222,7 @@ then A49:         v1 + v2 in the carrier of W2 by RLVECT_1:def 1;
                f.y2 in rng f by A43,FUNCT_1:def 5;
              hence v1 + v2 in Z by A48,A49,TARSKI:def 4;
 
+             end;
              suppose [y2,y1] in R;
              then ex W3,W4 being strict Subspace of V
                st y2 = W3 & y1 = W4 & W3 is Subspace of W4 by A3;
@@ -1224,6 +1234,7 @@ then A49:         v1 + v2 in the carrier of W2 by RLVECT_1:def 1;
 then A50:         v1 + v2 in the carrier of W1 by RLVECT_1:def 1;
                f.y1 in rng f by A41,FUNCT_1:def 5;
              hence v1 + v2 in Z by A46,A50,TARSKI:def 4;
+           end;
            end;
            hence v1 + v2 in Z;
          end;
@@ -1293,11 +1304,13 @@ A65:                u in W1 & u in W by A58,A59,A62,A64,Th3,RLVECT_1:def 1;
            then W1 is strict Subspace of E by RUSUB_1:23;
         hence [x,y] in R by A3,A68;
        end;
+       end;
       hence thesis;
      end;
   consider x being Element of X such that
    A71: for y being Element of X st x <> y holds not Q[x,y]
-                                                from Zorn_Max(A4,A5,A9,A14);
+                                                from ORDERS_2:sch 1
+(A4,A5,A9,A14);
   consider L being strict Subspace of V such that A72: x = L and
    A73: W /\ L = (0).V by A1;
  take L;
@@ -1418,7 +1431,8 @@ proof
 end;
 end;
 
-definition
+
+registration
 let V be RealUnitarySpace; let W be Subspace of V;
 cluster strict Linear_Compl of W;
 existence
@@ -1429,6 +1443,7 @@ A1:V is_the_direct_sum_of C,W by Lm14;
    hence thesis;
 end;
 end;
+
 
 Lm15:
 for V being RealUnitarySpace, W1,W2 being Subspace of V st
@@ -1829,6 +1844,7 @@ proof
 end;
 end;
 
+
 theorem Th47:
 for V being RealUnitarySpace, v being VECTOR of V,
  W1,W2 being Subspace of V st V is_the_direct_sum_of W1,W2 holds
@@ -1946,7 +1962,7 @@ A1:for A1,A2 being Element of Subspaces(V)
    end;
    consider o being BinOp of Subspaces(V) such that
 A2:     for a,b being Element of Subspaces(V) holds P[a,b,o.(a,b)]
-      from  BinOpEx(A1);
+      from  BINOP_1:sch 1(A1);
    thus thesis by A2;
 end;
 
@@ -1974,6 +1990,7 @@ A5:  x in Subspaces(V) & y in Subspaces(V);
 end;
 end;
 
+
  definition let V be RealUnitarySpace;
 func SubMeet(V) -> BinOp of Subspaces(V) means
 :Def8:
@@ -1998,7 +2015,7 @@ A1:for A1,A2 being Element of Subspaces(V)
    end;
    consider o being BinOp of Subspaces(V) such that
 A2:     for a,b being Element of Subspaces(V) holds P[a,b,o.(a,b)]
-      from  BinOpEx(A1);
+      from  BINOP_1:sch 1(A1);
    thus thesis by A2;
 end;
 
@@ -2027,6 +2044,7 @@ A5:  x in Subspaces(V) & y in Subspaces(V);
    hence thesis by FUNCT_2:118;
 end;
 end;
+
 
 begin :: Theorems of functions SubJoin, SubMeet
 
@@ -2122,10 +2140,11 @@ A5:for A,B,C being Element of S
    hence thesis by LATTICES:def 10;
 end;
 
-definition let V be RealUnitarySpace;
+registration let V be RealUnitarySpace;
   cluster LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) -> Lattice-like;
   coherence by Th54;
 end;
+
 
 theorem Th55:
 for V being RealUnitarySpace holds
@@ -2259,11 +2278,12 @@ A3:  B "\/" A = SubJoin(V).(B,A) by LATTICES:def 1
    hence thesis by LATTICES:def 19;
 end;
 
-definition let V be RealUnitarySpace;
+registration let V be RealUnitarySpace;
   cluster LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) ->
     lower-bounded upper-bounded modular complemented;
   coherence by Th55,Th56,Th58,Th59;
 end;
+
 
 theorem
   for V being RealUnitarySpace,

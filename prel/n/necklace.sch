@@ -5,8 +5,6 @@ ZFMISC_1
 SUBSET_1
 TARSKI
 #
-Convers
-#
 M1 W3 ;;M1 V1 ;;M1 ;M1 ;;
 R1 K4 F2 ;;ËM2 F1 ;;;K31 F3 B1 ;F4 B1 ;;P1 B1 ;;R1 F2 ;ËM2 F1 ;;;K31 F4 B1 ;F3 B1 ;;P1 B1 ;;;
 #

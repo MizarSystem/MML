@@ -32,7 +32,8 @@ definition
                  norm -> Function of the carrier, REAL #);
 end;
 
-definition
+
+registration
  cluster non empty NORMSTR;
  existence
   proof
@@ -43,6 +44,7 @@ definition
    thus the carrier of NORMSTR(#A,Z,a,M,n#) is non empty;
   end;
 end;
+
 
  reserve X for non empty NORMSTR;
  reserve a, b for Real;
@@ -55,12 +57,13 @@ definition let X, x;
 :Def1:   ( the norm of X ).x;
 coherence;
 end;
+
      consider V being RealLinearSpace;
 Lm1:   the carrier of (0).V = {0.V} by RLSUB_1:def 3;
   deffunc F(set) = 0;
      consider nil_to_nil being Function
      of the carrier of (0).V , REAL such that
-Lm2: for u being VECTOR of (0).V holds nil_to_nil.u = F(u) from LambdaD;
+Lm2: for u being VECTOR of (0).V holds nil_to_nil.u = F(u) from FUNCT_2:sch 4;
 
 Lm3:
 nil_to_nil.(0.V) = 0
@@ -127,7 +130,8 @@ definition let IT be non empty NORMSTR;
           ||.x + y.|| <= ||.x.|| + ||.y.||;
 end;
 
-definition
+
+registration
  cluster RealNormSpace-like RealLinearSpace-like Abelian
     add-associative right_zeroed right_complementable strict
       (non empty NORMSTR);
@@ -220,11 +224,13 @@ A8:   b * v' = b * v by A1;
    end;
 end;
 
+
 definition
  mode RealNormSpace is RealNormSpace-like RealLinearSpace-like
       Abelian add-associative right_zeroed right_complementable
           (non empty NORMSTR);
 end;
+
 
  reserve RNS for RealNormSpace;
  reserve x, y, z, g, g1, g2 for Point of RNS;
@@ -336,15 +342,18 @@ existence
          end;
 end;
 
-definition let RNS be 1-sorted;
+
+registration let RNS be 1-sorted;
  cluster -> Function-like Relation-like sequence of RNS;
  coherence by Def3;
 end;
+
 
 definition let RNS be non empty 1-sorted;
  redefine mode sequence of RNS -> Function of NAT, the carrier of RNS;
  coherence by Def3;
 end;
+
 
 reserve S, S1, S2 for sequence of RNS;
 reserve k, n, m, m1, m2 for Nat;
@@ -494,7 +503,7 @@ proof
              S.(n+k) = S.(n+k+1) by A1;
            hence P[k+1] by A4,XCMPLX_1:1;
       end;
-    thus for k holds P[k] from Ind(A2,A3);
+    thus for k holds P[k] from NAT_1:sch 1(A2,A3);
 end;
 
 theorem Th23:
@@ -563,6 +572,7 @@ A4:  n1 in dom S & n2 in dom S;
   end;
 end;
 
+
 canceled;
 
 theorem
@@ -602,9 +612,10 @@ redefine func S.n -> Element of RNS;
 coherence by Lm7;
 end;
 
+
 scheme ExRNSSeq{RNS()->RealNormSpace, F(Nat) -> ( Point of RNS() ) } :
        ex S be sequence of RNS() st for n holds S.n = F(n)
-       proof
+proof
        defpred P[set,set] means ex n st n =$1 & $2 = F(n);
     A1: for d st d in NAT ex s st P[d,s]
        proof
@@ -618,7 +629,7 @@ scheme ExRNSSeq{RNS()->RealNormSpace, F(Nat) -> ( Point of RNS() ) } :
     A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
        consider f such that
     A4: dom f = NAT and
-    A5: for d st d in NAT holds P[d,f.d] from FuncEx(A3,A1);
+    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
          for d st d in NAT holds f.d is Point of RNS()
        proof
             let d; assume d in NAT;
@@ -637,7 +648,7 @@ end;
 scheme ExRLSSeq{RNS()->RealLinearSpace,
                 F(Nat) -> Element of RNS() } :
        ex S be sequence of RNS() st for n holds S.n = F(n)
-       proof
+proof
        defpred P[set,set] means ex n st ( n =$1 & $2 = F(n));
     A1: for d st d in NAT ex s st P[d,s]
        proof
@@ -651,7 +662,7 @@ scheme ExRLSSeq{RNS()->RealLinearSpace,
     A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
        consider f such that
     A4: dom f = NAT and
-    A5: for d st d in NAT holds P[d,f.d] from FuncEx(A3,A1);
+    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
          for d st d in NAT holds f.d is Element of RNS()
        proof
             let d; assume d in NAT;
@@ -691,6 +702,7 @@ uniqueness
           end;
 end;
 
+
 definition let RNS be RealLinearSpace;
           let S1 , S2 be sequence of RNS;
           func S1 - S2 -> sequence of RNS means
@@ -714,6 +726,7 @@ uniqueness
               hence thesis by FUNCT_2:113;
           end;
 end;
+
 
 definition let RNS be RealLinearSpace;
           let S be sequence of RNS;
@@ -740,6 +753,7 @@ uniqueness
           end;
 end;
 
+
 definition let RNS be RealLinearSpace;
           let S be sequence of RNS;
           let a;
@@ -765,12 +779,14 @@ uniqueness
           end;
 end;
 
+
 definition let RNS;
           let S;
           attr S is convergent means
 :Def9:    ex g st for r st 0 < r ex m st for n st m <= n holds
           ||.(S.n) - g.|| < r;
 end;
+
 
 canceled 6;
 
@@ -946,7 +962,7 @@ existence
          proof
            deffunc F(Nat) = ||.(S.$1).||;
               consider s being Real_Sequence such that A1:
-              for n holds s.n = F(n) from ExRealSeq;
+              for n holds s.n = F(n) from SEQ_1:sch 1;
               take s;
               thus thesis by A1;
          end;
@@ -963,6 +979,7 @@ uniqueness
                     hence thesis by FUNCT_2:113;
          end;
 end;
+
 
 canceled;
 
@@ -1045,6 +1062,7 @@ then A14: ||.(S.m1) - x.|| + ||.(S.m1) - y.|| <= ||.x - y.||/2 by XCMPLX_1:72;
 hence thesis;
 end;
 end;
+
 
 canceled;
 

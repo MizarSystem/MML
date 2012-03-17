@@ -38,10 +38,19 @@ definition let R be non empty Poset,
   it is OrderSortedSet of R;
 end;
 
-definition let R be non empty Poset,
+
+registration let R be non empty Poset,
                M be non-empty OrderSortedSet of R;
 cluster non-empty OrderSortedSubset of M;
+ existence
+  proof
+   reconsider N= M as ManySortedSubset of M by MSUALG_2:def 1;
+   reconsider N1 = N as OrderSortedSubset of M by Def1;
+   take N1;
+   thus thesis;
+  end;
 end;
+
 
 begin
 ::
@@ -55,24 +64,49 @@ definition let S be OrderSortedSign,
   it is OrderSortedSet of S;
 end;
 
+
 :: very strange, the cluster in OSALG_1 should take care of this one
-definition let S be OrderSortedSign;
+registration let S be OrderSortedSign;
   cluster monotone strict non-empty OSAlgebra of S;
+  existence
+   proof
+    consider z being non empty set;
+    consider z1 being Element of z;
+    take TrivialOSA(S,z,z1);
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   let S be OrderSortedSign,
       U0 be non-empty OSAlgebra of S;
 cluster non-empty OSSubset of U0;
+ existence
+  proof
+    A1: the Sorts of U0 is OrderSortedSet of S by OSALG_1:17;
+    reconsider N= the Sorts of U0 as MSSubset of U0 by MSUALG_2:def 1;
+    reconsider M = N as OSSubset of U0 by A1,Def2;
+    take M;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: OSALG_2:3
   for S0 being non void all-with_const_op strict (non empty ManySortedSign)
   holds OSSign S0 is all-with_const_op;
 
-definition
+registration
   cluster all-with_const_op strict OrderSortedSign;
+  existence
+  proof consider S0 being
+    non void all-with_const_op strict (non empty ManySortedSign);
+    take OSSign S0;
+    thus thesis by Th3;
+  end;
 end;
+
 
 begin
 ::
@@ -84,25 +118,51 @@ theorem :: OSALG_2:4
      U0 being OSAlgebra of S holds
  MSAlgebra (#the Sorts of U0,the Charact of U0#) is order-sorted;
 
-definition let S be OrderSortedSign,
+registration let S be OrderSortedSign,
                U0 be OSAlgebra of S; :: can't for ms!
   cluster order-sorted MSSubAlgebra of U0;
+  existence
+  proof
+    reconsider U1 = MSAlgebra (#the Sorts of U0,the Charact of U0#)
+    as strict MSSubAlgebra of U0 by MSUALG_2:38;
+    take U1;
+    thus thesis by Th4;
+  end;
 end;
+
 
 definition let S be OrderSortedSign,
                U0 be OSAlgebra of S;
  mode OSSubAlgebra of U0 is order-sorted MSSubAlgebra of U0;
 end;
 
-definition let S be OrderSortedSign,
+
+registration let S be OrderSortedSign,
                U0 be OSAlgebra of S;
 cluster strict OSSubAlgebra of U0;
+ existence
+ proof
+   reconsider U1 = MSAlgebra (#the Sorts of U0,the Charact of U0#)
+    as order-sorted MSSubAlgebra of U0 by Th4,MSUALG_2:38;
+    take U1;
+    thus thesis;
+  end;
 end;
 
-definition let S be OrderSortedSign,
+
+registration let S be OrderSortedSign,
                U0 be non-empty OSAlgebra of S;
 cluster non-empty strict OSSubAlgebra of U0;
+ existence
+ proof
+   set U1 = MSAlgebra (#the Sorts of U0,the Charact of U0#);
+     the Sorts of U0 is OrderSortedSet of S by OSALG_1:17;
+   then reconsider U1 as strict OSSubAlgebra of U0 by MSUALG_2:38,OSALG_1:17;
+   take U1;
+   thus thesis;
+ end;
 end;
+
 
 :: the equivalent def, maybe not needed
 theorem :: OSALG_2:5
@@ -124,6 +184,7 @@ definition let S1,OU0,s;
    union {Constants(OU0,s2) : s2 <= s};
 end;
 
+
 :: maybe
 :: theorem S1 is discrete implies OSConstants(OU0,s) = Constants(OU0,s);
 
@@ -138,6 +199,7 @@ definition let S1;
 :: OSALG_2:def 4
   for s be SortSymbol of S1 holds it.s = union { M.s1: s1 <= s};
 end;
+
 
 theorem :: OSALG_2:12
   for M being ManySortedSet of the carrier of S1 holds
@@ -159,6 +221,7 @@ func OSConstants (OU0) -> OSSubset of OU0 means
 :: OSALG_2:def 5
  for s be SortSymbol of S1 holds it.s = OSConstants(OU0,s);
 end;
+
 
 theorem :: OSALG_2:15
   Constants(OU0) c= OSConstants(OU0);
@@ -202,6 +265,7 @@ definition let R be non empty Poset,
     for x being set holds x in it iff x is OrderSortedSubset of M;
 end;
 
+
 definition let S be OrderSortedSign,
                U0 be OSAlgebra of S,
                A be OSSubset of U0;
@@ -210,16 +274,19 @@ func OSSubSort(A) -> set equals
  { x where x is Element of SubSort(A): x is OrderSortedSet of S};
 end;
 
+
 theorem :: OSALG_2:21
   for A being OSSubset of OU0 holds OSSubSort(A) c= SubSort(A);
 
 theorem :: OSALG_2:22
   for A being OSSubset of OU0 holds the Sorts of OU0 in OSSubSort(A);
 
-definition let S1,OU0;
+registration let S1,OU0;
            let A be OSSubset of OU0;
   cluster OSSubSort(A) -> non empty;
+  coherence by Th22;
 end;
+
 
 definition let S1,OU0;
   func OSSubSort(OU0) -> set equals
@@ -227,12 +294,21 @@ definition let S1,OU0;
 { x where x is Element of SubSort(OU0): x is OrderSortedSet of S1};
 end;
 
+
 theorem :: OSALG_2:23
   for A being OSSubset of OU0 holds OSSubSort(A) c= OSSubSort(OU0);
 
-definition let S1,OU0;
+registration let S1,OU0;
   cluster OSSubSort(OU0) -> non empty;
+  coherence
+  proof
+    consider A being OSSubset of OU0;
+      the Sorts of OU0 in OSSubSort(A) &
+    OSSubSort(A) c= OSSubSort(OU0) by Th22,Th23;
+    hence thesis;
+  end;
 end;
+
 
 :: new-def for order-sorted
 definition let S1,OU0;
@@ -241,6 +317,7 @@ func @e -> OSSubset of OU0 equals
 :: OSALG_2:def 9
  e;
 end;
+
 
 :: maybe do another definition of ossort, saying that it contains
 :: Elements of subsort which are order-sorted (or ossubsets)
@@ -262,6 +339,7 @@ for x be set holds
  x in it iff ex B be OSSubset of OU0 st B in OSSubSort(A) & x = B.s;
 end;
 
+
 theorem :: OSALG_2:26
   for A being OSSubset of OU0,
       s1,s2 being SortSymbol of S1 holds
@@ -275,11 +353,13 @@ theorem :: OSALG_2:28
   for A being OSSubset of OU0, s being SortSymbol of S1 holds
   (the Sorts of OU0).s in OSSubSort(A,s);
 
-definition let S1,OU0;
+registration let S1,OU0;
   let A be OSSubset of OU0,
       s be SortSymbol of S1;
   cluster OSSubSort(A,s) -> non empty;
+  coherence by Th28;
 end;
+
 
 definition let S1,OU0;
            let A be OSSubset of OU0;
@@ -288,10 +368,26 @@ definition let S1,OU0;
   for s be SortSymbol of S1 holds it.s = meet (OSSubSort(A,s));
 end;
 
-definition let S1,OU0;
-  canceled;
+
+registration let S1,OU0;
   cluster opers_closed OSSubset of OU0;
+  existence
+  proof
+    consider x being Element of OSSubSort(OU0);
+    x in OSSubSort(OU0);
+    then x in
+    { y where y is Element of SubSort(OU0): y is OrderSortedSet of S1}
+    by Def8;
+    then consider x1 being Element of SubSort(OU0) such that A1:
+    x = x1 & x1 is OrderSortedSet of S1;
+    reconsider x2 = x1 as MSSubset of OU0 by MSUALG_2:def 12;
+    A2: x2 is opers_closed by MSUALG_2:def 12;
+    reconsider x3 = x2 as OSSubset of OU0 by A1,Def2;
+    take x3;
+    thus thesis by A2;
+  end;
 end;
+
 
 theorem :: OSALG_2:29
 for A be OSSubset of OU0 holds OSConstants(OU0) \/ A c= OSMSubSort(A);
@@ -323,34 +419,57 @@ theorem :: OSALG_2:34
 for A be OSSubset of OU0 holds
 OSMSubSort(A) is opers_closed & A c= OSMSubSort(A);
 
-definition
+registration
   let S1,OU0;
   let A be OSSubset of OU0;
   cluster OSMSubSort(A) -> opers_closed;
+  coherence by Th34;
 end;
+
 
 begin :: Operations on Subalgebras of an Order Sorted Algebra.
 
-definition let S1,OU0;
+registration let S1,OU0;
   let A be opers_closed OSSubset of OU0;
   cluster OU0|A -> order-sorted;
+  coherence
+  proof
+    set M = MSAlgebra (#A, Opers(OU0,A) qua ManySortedFunction of
+                      (A# * the Arity of S1),(A * the ResultSort of S1)#);
+    A1: OU0|A = M by MSUALG_2:def 16;
+      A is OrderSortedSet of S1 by Def2;
+    hence thesis by A1,OSALG_1:17;
+  end;
 end;
 
-definition let S1,OU0;
+
+registration let S1,OU0;
            let OU1,OU2 be OSSubAlgebra of OU0;
 cluster OU1 /\ OU2 -> order-sorted;
+coherence
+proof
+  reconsider M1 = (the Sorts of OU1),
+  M2 = (the Sorts of OU2) as OrderSortedSet of S1 by OSALG_1:17;
+    M1 /\ M2 is OrderSortedSet of S1
+  by Th1;
+  then the Sorts of (OU1 /\ OU2) is OrderSortedSet of S1 by MSUALG_2:def 17;
+  hence OU1 /\ OU2 is order-sorted by OSALG_1:17;
 end;
+end;
+
 
 :: generally, GenOSAlg can differ from GenMSAlg, example should be given
 definition
   let S1,OU0;
   let A be OSSubset of OU0;
+  canceled;
 func GenOSAlg(A) -> strict OSSubAlgebra of OU0 means
 :: OSALG_2:def 13
  A is OSSubset of it &
  for OU1 be OSSubAlgebra of OU0 st A is OSSubset of OU1 holds
        it is OSSubAlgebra of OU1;
 end;
+
 
 :: this should rather be a definition, but I want to keep
 :: compatibility of the definition with MSUALG_2
@@ -399,6 +518,7 @@ func U1 "\/"_os U2 -> strict OSSubAlgebra of U0 means
   A = (the Sorts of U1) \/ (the Sorts of U2) holds it = GenOSAlg(A);
 end;
 
+
 theorem :: OSALG_2:42
   for U0 be non-empty OSAlgebra of S1,
   U1 be OSSubAlgebra of U0, A,B be OSSubset of U0
@@ -435,17 +555,26 @@ func OSSub(OU0) -> set means
 for x holds x in it iff x is strict OSSubAlgebra of OU0;
 end;
 
+
 theorem :: OSALG_2:47
   OSSub(OU0) c= MSSub(OU0);
 
-definition let S be OrderSortedSign,
+registration let S be OrderSortedSign,
                U0 be OSAlgebra of S;
 cluster OSSub(U0) -> non empty;
+ coherence
+  proof
+    consider x being strict OSSubAlgebra of U0;
+      x in OSSub U0 by Def15;
+    hence thesis;
+  end;
 end;
+
 
 definition let S1,OU0;
   redefine func OSSub(OU0) -> Subset of MSSub(OU0);
 end;
+
 
 :: maybe show that e.g. for TrivialOSA(S,z,z1), OSSub(U0) is
 :: proper subset of MSSub(U0), to have some counterexamples
@@ -458,6 +587,7 @@ for x,y be Element of OSSub(U0) holds
   it.(x,y) = U1 "\/"_os U2;
 end;
 
+
 definition let S1;
            let U0 be non-empty OSAlgebra of S1;
 func OSAlg_meet(U0) -> BinOp of (OSSub(U0)) means
@@ -466,6 +596,7 @@ for x,y be Element of OSSub(U0) holds
   for U1,U2 be strict OSSubAlgebra of U0 st x = U1 & y = U2 holds
   it.(x,y) = U1 /\ U2;
 end;
+
 
 theorem :: OSALG_2:48
   for U0 being non-empty OSAlgebra of S1
@@ -493,13 +624,16 @@ func OSSubAlLattice(U0) -> strict Lattice equals
   LattStr (# OSSub(U0), OSAlg_join(U0), OSAlg_meet(U0) #);
 end;
 
+
 theorem :: OSALG_2:53
   for U0 be non-empty OSAlgebra of S1 holds OSSubAlLattice(U0) is bounded;
 
-definition let S1;
+registration let S1;
            let U0 be non-empty OSAlgebra of S1;
 cluster OSSubAlLattice(U0) -> bounded;
+ coherence by Th53;
 end;
+
 
 theorem :: OSALG_2:54
     for U0 be non-empty OSAlgebra of S1

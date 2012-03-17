@@ -25,9 +25,25 @@ begin :: Preliminaries
  reserve V, C, x, a, b for set;
  reserve A, B for Element of SubstitutionSet (V, C);
 
-definition let a, b be set;
+registration let a, b be set;
   cluster {[a, b]} -> Function-like Relation-like;
+ coherence
+ proof
+  set X = {[a, b]};
+A1:[:{a},{b}:] = X by ZFMISC_1:35;
+    for x,y1,y2 be set st [x,y1] in X & [x,y2] in X holds y1 = y2
+  proof
+   let x,y1,y2 be set such that
+A2:    [x,y1] in X and
+A3:    [x,y2] in X;
+     y1 = b & y2 = b by A1,A2,A3,ZFMISC_1:34;
+   hence thesis;
+  end;
+  hence X is Function-like by FUNCT_1:def 1;
+  thus X is Relation-like by RELAT_1:4;
+ end;
 end;
+
 
 theorem :: HEYTING2:1
    for V, C being non empty set ex f be Element of PFuncs (V, C) st f <> {};
@@ -46,9 +62,18 @@ theorem :: HEYTING2:4
 theorem :: HEYTING2:5
   V is finite & C is finite implies PFuncs (V, C) is finite;
 
-definition
+registration
   cluster functional finite non empty set;
+  existence
+  proof
+    consider A, B be finite non empty set;
+    take P = PFuncs(A,B);
+    thus P is functional;
+    thus P is finite by Th5;
+    thus thesis;
+  end;
 end;
+
 
 begin :: Some properties of sets of substitutions
 
@@ -72,6 +97,7 @@ definition let V be set, C be finite set;
 :: HEYTING2:def 1
     x in it iff ex f being finite Function st f in A & x in dom f;
 end;
+
 
  reserve C for finite set;
 
@@ -98,6 +124,7 @@ definition let V be set, C be finite set;
     { f where f is Element of PFuncs (Involved A, C) :
       for g be Element of PFuncs (V, C) st g in A holds not f tolerates g };
 end;
+
 
 theorem :: HEYTING2:14
   A ^ -A = {};
@@ -133,6 +160,7 @@ definition let V be set, C be finite set;
      { union {f.i \ i where i is Element of PFuncs (V, C) : i in A}
         where f is Element of PFuncs (A, B) : dom f = A };
 end;
+
 
 theorem :: HEYTING2:20
   for A, B being Element of Fin PFuncs (V, C), s being set st
@@ -223,9 +251,11 @@ theorem :: HEYTING2:31
 theorem :: HEYTING2:32
   u "/\" StrongImpl(V, C).(u, v) [= v;
 
-definition let V, C;
+registration let V, C;
   cluster SubstLatt (V, C) -> implicative;
+  coherence by Lm11;
 end;
+
 
 theorem :: HEYTING2:33
    u => v = FinJoin(SUB u,

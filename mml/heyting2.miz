@@ -29,7 +29,7 @@ begin :: Preliminaries
  reserve V, C, x, a, b for set;
  reserve A, B for Element of SubstitutionSet (V, C);
 
-definition let a, b be set;
+registration let a, b be set;
   cluster {[a, b]} -> Function-like Relation-like;
  coherence
  proof
@@ -47,6 +47,7 @@ A3:    [x,y2] in X;
   thus X is Relation-like by RELAT_1:4;
  end;
 end;
+
 
 theorem
    for V, C being non empty set ex f be Element of PFuncs (V, C) st f <> {}
@@ -129,7 +130,7 @@ proof
   hence PFuncs(V,C) is finite by A1,FINSET_1:13;
 end;
 
-definition
+registration
   cluster functional finite non empty set;
   existence
   proof
@@ -140,6 +141,7 @@ definition
     thus thesis;
   end;
 end;
+
 
 begin :: Some properties of sets of substitutions
 
@@ -245,7 +247,7 @@ definition let V be set, C be finite set;
   proof
     defpred P[set] means ex f being finite Function st f in A & $1 in dom f;
     consider X be set such that
-A1:   x in X iff x in V & P[x] from Separation;
+A1:   x in X iff x in V & P[x] from XBOOLE_0:sch 1;
       take X;
       let x be set;
       thus x in X implies
@@ -263,13 +265,14 @@ A3:      f = f1 & dom f1 c= V & rng f1 c= C by A2,PARTFUN1:def 5;
      ex f being finite Function st f in A & $1 in dom f;
 A4:   for X1,X2 being set st
     (for x being set holds x in X1 iff P[x]) &
-    (for x being set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+    (for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
      let r,s be set such that
 A5:   x in r iff ex f being finite Function st f in A & x in dom f and
 A6:   x in s iff ex f being finite Function st f in A & x in dom f;
      thus r=s by A4,A5,A6;
    end;
 end;
+
 
  reserve C for finite set;
 
@@ -302,10 +305,10 @@ defpred Q[set] means $1 in A;
       set X = { F(f) where f is Element of PFuncs(V, C) : P[f]};
 A1:  for g being Element of PFuncs(V, C) holds P[g] implies Q[g];
 A2: X c= { F(f) where f is Element of PFuncs(V, C) : Q[f]}
-    from Fraenkel5'(A1);
+    from FRAENKEL:sch 1(A1);
 A3: A is finite;
 A4:  { F(f) where f is Element of PFuncs(V, C) : f in A } is finite
-    from FraenkelFin(A3);
+    from FRAENKEL:sch 21(A3);
        x in Involved A iff ex Y be set st x in Y & Y in X
      proof
        hereby assume x in Involved A;
@@ -358,8 +361,10 @@ proof
   per cases;
   suppose A is non empty;
   hence thesis by Lm2;
+  end;
   suppose A is empty;
   hence thesis by Th11;
+end;
 end;
 
 theorem
@@ -389,7 +394,7 @@ definition let V be set, C be finite set;
    deffunc F(set)=$1;
 A2: { F(f) where f is Element of PFuncs (Involved A, C) : P[f] } c=
     { F(f) where f is Element of PFuncs (Involved A, C) : Q[f] }
-       from Fraenkel5'(A1);
+       from FRAENKEL:sch 1(A1);
      Involved A is finite by Th12;
 then A3: PFuncs (Involved A, C) is finite by Th5;
      { f where f is Element of PFuncs (Involved A, C) : not contradiction } c=
@@ -420,6 +425,7 @@ then A7:  PFuncs (Involved A, C) c= PFuncs (V, C) by PARTFUN1:125;
   end;
 end;
 
+
 theorem Th14:
   A ^ -A = {}
 proof
@@ -448,7 +454,7 @@ A2:-A = { f where f is Element of PFuncs (Involved A, C) :
     defpred P[Element of PFuncs (Involved A, C)] means
     for g be Element of PFuncs (V, C) st g in A holds not $1 tolerates g;
     { xx where xx is Element of PFuncs (Involved A, C) : P[xx]}
-       c= PFuncs (Involved A, C) from Fr_Set0;
+       c= PFuncs (Involved A, C) from FRAENKEL:sch 10;
   then -A c= PFuncs ({}, C) by A1,A2,Th11;
 then A3:  -A c= { {} } by PARTFUN1:122;
     {} in -A
@@ -553,12 +559,12 @@ A9:    a' = a & dom a' c= V & rng a' c= C by PARTFUN1:def 5;
      end;
     consider g be Element of Funcs (PFuncs (V, C), [V]) such that
 A10:   for s be Element of PFuncs (V, C) st s in A holds
-        P[s,g.s] from FuncsChoice(A5);
+        P[s,g.s] from FRAENKEL:sch 27(A5);
     deffunc G(set)=g.$1;
     defpred P[set] means not contradiction;
     reconsider AA = A as finite non empty set by A3;
       { G(b) where b is Element of AA : P[b] } is finite
-      from FraenkelFinIm;
+      from PRE_CIRC:sch 1;
     then reconsider UKA = { g.b where b is Element of [A] : not contradiction }
       as finite set by A4;
     set f = a|UKA;
@@ -606,11 +612,13 @@ then A20:     z in dom f by RELAT_1:90;
     for g be Element of PFuncs (V, C) st g in A holds not f1 tolerates g };
     then f in -A by Def2;
   hence thesis by A12,A13;
+  end;
   suppose A is empty;
 then A21:  -A = {{}} by Th15;
   reconsider K = {} as finite set;
   take K;
   thus thesis by A21,TARSKI:def 1,XBOOLE_1:2;
+end;
 end;
 
 definition let V be set, C be finite set;
@@ -659,11 +667,12 @@ A4:         z = union {f1.i \ i where i is Element of PFuncs (V, C) : i in A}
         union {$1.i \ i where i is Element of PFuncs (V, C) : i in A};
         defpred P[Element of PF] means $1 in PFuncs(A,B) & dom $1 = A;
        { F(f) where f is Element of PF : P[f]}
-        is finite from FraenkelFinIm;
+        is finite from PRE_CIRC:sch 1;
      then K is finite by A2,FINSET_1:15;
      hence thesis by A1,FINSUB_1:def 5;
    end;
 end;
+
 
 theorem Th20:
   for A, B being Element of Fin PFuncs (V, C), s being set st
@@ -741,7 +750,7 @@ then A4:  for v being Element of PFuncs (A, A) st P[v] holds F(v) = G(v)
      by ZFMISC_1:2;
 A5:{ F(f) where f is Element of PFuncs (A, A) : P[f]}
   = { G(f) where f is Element of PFuncs (A, A) : P[f] }
-       from FraenkelF'R (A4);
+       from FRAENKEL:sch 6 (A4);
 A6:  ex a being Element of PFuncs (A, A) st P[a]
     proof
       reconsider e = id A as Element of PFuncs (A, A) by PARTFUN1:119;
@@ -749,7 +758,7 @@ A6:  ex a being Element of PFuncs (A, A) st P[a]
       thus thesis by RELAT_1:71;
     end;
 A7:  { {} where f is Element of PFuncs (A, A) : P[f] } = {{}}
-          from SingleFraenkel (A6);
+          from LATTICE3:sch 1 (A6);
         {} is PartFunc of V,C by PARTFUN1:56;
       then {} in PFuncs (V,C) by PARTFUN1:119;
 then A8:  {{}} c= PFuncs (V,C) by ZFMISC_1:37;
@@ -802,7 +811,7 @@ definition let V, C;
      consider IT being Function of SubstitutionSet (V, C),
            SubstitutionSet (V, C) such that
 A1:       for u being Element of SubstitutionSet (V, C) holds
-          IT.u = F(u) from LambdaD;
+          IT.u = F(u) from FUNCT_2:sch 4;
        SubstitutionSet (V, C) = the carrier of SubstLatt (V, C)
        by SUBSTLAT:def 4;
      then reconsider IT as UnOp of the carrier of SubstLatt (V, C);
@@ -848,7 +857,7 @@ A4: for x,y being Element of ZA ex z being Element of ZA st P[x,y,z]
     end;
  consider o being BinOp of the carrier of SubstLatt (V, C) such that
 A5:  for a,b being Element of SubstLatt (V, C) holds
-    P[a,b,o.(a,b)] from BinOpEx(A4);
+    P[a,b,o.(a,b)] from BINOP_1:sch 1(A4);
     take o;
     let u,v;
     let u', v' be Element of SubstitutionSet (V, C);
@@ -899,7 +908,7 @@ then A9:   u in SubstitutionSet (V, C) by SUBSTLAT:def 4;
      consider IT being Function such that
 A10:   dom IT = the carrier of SubstLatt (V, C) &
      for v be set st v in
-       the carrier of SubstLatt (V, C) holds IT.v = F(v) from Lambda;
+       the carrier of SubstLatt (V, C) holds IT.v = F(v) from FUNCT_1:sch 3;
        for x be set st x in the carrier of SubstLatt (V, C) holds
        IT.x in Fin PFuncs (V, C)
       proof
@@ -936,6 +945,7 @@ A13:  IT'.v = u \ v;
    end;
 end;
 
+
 Lm5: v in SUB u implies v "\/" (diff u).v = u
    proof
     assume v in SUB u;
@@ -962,7 +972,7 @@ proof
        deffunc F(set)=$1;
        set M = { F(s) where s is Element of PFuncs (V, C):
            F(s) in u & P[s] };
-A2:    M c= u from FrSet_1;
+A2:    M c= u from FRAENKEL:sch 17;
        then reconsider v = M as Element of SubstLatt (V, C)
          by Th22;
        reconsider v as Element of SubstitutionSet (V,C) by SUBSTLAT:def 4;
@@ -977,7 +987,7 @@ $2 = a  & $1 in M & $1 tolerates $2;
 A3: P[s,t] iff Q[s,t] by TARSKI:def 1;
 A4: { F(s,t): P[s,t] } =
       { F(s',t') where s', t' is Element of PFuncs (V, C) :
-         Q[s',t'] } from Fraenkel6''(A3);
+         Q[s',t'] } from FRAENKEL:sch 4(A3);
 defpred P[Element of PFuncs (V, C)] means
 $1 in M & $1 tolerates a;
 defpred Q[Element of PFuncs (V, C)] means
@@ -1000,11 +1010,11 @@ $1 in M & $1 tolerates $2;
 A7:  { F1(s,t) where t is Element of PFuncs (V, C)
      : t = a & P1[s,t]} =
      { F1(s',a) where s' is Element of PFuncs (V, C) : P1[s',a]}
-       from FrEqua2;
+       from FRAENKEL:sch 20;
 deffunc F(Element of PFuncs (V, C))=$1 \/ a;
    { F(s') where s' is Element of PFuncs (V, C) : P[s']} =
         { F(s): Q[s]}
-        from Fraenkel6'(A6);
+        from FRAENKEL:sch 3(A6);
 then A8:  v ^ K = { s \/ a: not s tolerates a & s in u & s tolerates a }
         by A1,A4,A7,SUBSTLAT:def 3;
       thus v ^ K = {}
@@ -1037,7 +1047,7 @@ A1: the carrier of SubstLatt (V, C) = SubstitutionSet (V, C)
     deffunc F(Element of PFuncs (V, C))= mi {$1};
     consider f be Function of PFuncs (V, C), SubstitutionSet (V, C)
      such that
-A2:    for a be Element of PFuncs (V, C) holds f.a = F(a) from LambdaD;
+A2:    for a be Element of PFuncs (V, C) holds f.a = F(a) from FUNCT_2:sch 4;
 A3: now let x be set;
      assume x in PFuncs (V, C);
       then reconsider a = x as Element of PFuncs (V, C);
@@ -1061,6 +1071,7 @@ A4: (for a holds IT1.a = mi { a }) & for a holds IT2.a = mi { a };
    hence thesis by FUNCT_2:113;
   end;
 end;
+
 
 Lm7:
   for a be Element of PFuncs (V, C) st a is finite holds Atom (V, C).a = {a}
@@ -1100,7 +1111,8 @@ A4: the L_join of SubstLatt (V, C) has_a_unity by LATTICE2:67;
   deffunc F(Element of Fin PFuncs (V, C))= mi $1;
   consider g being Function of Fin PFuncs (V, C), SubstitutionSet (V,C)
     such that
-A5:    for B be Element of Fin PFuncs (V, C) holds g.B = F(B) from LambdaD;
+A5:    for B be Element of Fin PFuncs (V, C) holds g.B = F(B) from
+FUNCT_2:sch 4;
       the carrier of SubstLatt (V, C) = SubstitutionSet (V,C) by SUBSTLAT:def 4
 ;
     then reconsider g as Function of Fin PFuncs (V, C),
@@ -1290,7 +1302,7 @@ A3:       c in v & c c= b \/ a by A1;
         thus P[b,x] by A3;
       end;
       consider f' be Element of Funcs(PFuncs (V, C), PFuncs (V, C)) such that
-A4:    b in u implies P[b,f'.b] from FuncsChoice(A2);
+A4:    b in u implies P[b,f'.b] from FRAENKEL:sch 27(A2);
        consider f2 be Function such that
 A5:    f' = f2 & dom f2 = PFuncs (V, C) & rng f2 c= PFuncs (V, C)
          by FUNCT_2:def 2;
@@ -1515,10 +1527,11 @@ Lm11:  SubstLatt (V, C) is implicative
       p "/\" r1 [= q holds r1 [= r by Lm10;
  end;
 
-definition let V, C;
+registration let V, C;
   cluster SubstLatt (V, C) -> implicative;
   coherence by Lm11;
 end;
+
 
 theorem
    u => v = FinJoin(SUB u,

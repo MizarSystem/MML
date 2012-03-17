@@ -42,6 +42,7 @@ A2: dom id dom f = dom f by RELAT_1:71;
  suppose not x in dom f;
    then id dom f = g1 by A2,FUNCT_7:def 3;
   hence f.a = (f*((id dom f)+*(x,y))).a by RELAT_1:78;
+ end;
  suppose
  A3: x in dom f;
  then A4: g1.x = y by A2,FUNCT_7:33;
@@ -55,12 +56,15 @@ A2: dom id dom f = dom f by RELAT_1:71;
         hence thesis by A5,A6,FUNCT_1:23;
        end;
     hence thesis by A1,A3,A4,A5,FUNCT_1:23;
+   end;
    suppose
    A7: not a in dom f; dom (f*g1) c= dom g1 by RELAT_1:44;
        then not a in dom (f*g1) by A5,A7;
        then (f*g1).a = {} & f.a = {} by A7,FUNCT_1:def 4;
     hence thesis;
   end;
+  end;
+end;
 end;
 
 theorem Th2:
@@ -77,6 +81,7 @@ A2: dom id dom f = dom f by RELAT_1:71;
   suppose not x in dom f;
     then id dom f = g1 by A2,FUNCT_7:def 3;
    hence f = f*g1 by RELAT_1:78;
+  end;
   suppose A3: x in dom f;
 A4: dom g1 = dom f by A2,FUNCT_7:32;
      now
@@ -86,9 +91,11 @@ A4: dom g1 = dom f by A2,FUNCT_7:32;
       per cases;
       suppose a = x;
        hence b in dom f by A1,A2,A3,A5,FUNCT_7:33;
+      end;
       suppose a <> x;
        then (id dom f).a = g1.a by FUNCT_7:34;
        hence b in dom f by A4,A5,FUNCT_1:35;
+    end;
     end;
     hence dom f = dom g by A4,RELAT_1:46;
     let a be set; assume a in dom f;
@@ -96,8 +103,9 @@ A4: dom g1 = dom f by A2,FUNCT_7:32;
    end;
   hence f = f*((id dom f)+*(x,y)) by FUNCT_1:9;
 end;
+end;
 
-definition
+registration
  let A be finite set, B be set;
  cluster -> finite Function of A, B;
  coherence proof
@@ -107,7 +115,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let A be finite set, B be set, f be Function of A, Fin B;
  cluster Union f -> finite;
  coherence proof
@@ -127,15 +136,18 @@ end;
 
 
 
-definition
+
+registration
  cluster Int-Locations -> non empty;
  coherence by SCMFSA_2:9;
 end;
 
-definition
+
+registration
  cluster FinSeq-Locations -> non empty;
  coherence by SCMFSA_2:10;
 end;
+
 
 begin :: Uniqueness of instruction components
 
@@ -401,14 +413,19 @@ Int-Location
     per cases by A5,A6,A7,A8,A9,A10,SCMFSA_2:42;
     suppose i = (a1 := b1) & i = (a2 := b2); then a1 = a2 & b1 = b2 by Th5;
      hence it1 = it2 by A5,A6;
+    end;
     suppose i = AddTo(a1, b1) & i = AddTo(a2, b2);
       then a1 = a2 & b1 = b2 by Th6; hence it1 = it2 by A5,A6;
+    end;
     suppose i = SubFrom(a1, b1) & i = SubFrom(a2, b2);
       then a1 = a2 & b1 = b2 by Th7; hence it1 = it2 by A5,A6;
+    end;
     suppose i = MultBy(a1, b1) & i = MultBy(a2, b2);
       then a1 = a2 & b1 = b2 by Th8; hence it1 = it2 by A5,A6;
+    end;
     suppose i = Divide(a1, b1) & i = Divide(a2, b2);
       then a1 = a2 & b1 = b2 by Th9; hence it1 = it2 by A5,A6;
+  end;
   end;
   hereby assume InsCode i = 7 or InsCode i = 8;
      given a1 being Int-Location, l1 being Instruction-Location of SCM+FSA
@@ -422,8 +439,10 @@ Int-Location
      per cases by A11,A12,A13,SCMFSA_2:48;
      suppose i = a1=0_goto l1 & i = a2=0_goto l2; hence it1 = it2 by A11,A12,
 Th11;
+     end;
      suppose i = a1>0_goto l1 & i = a2>0_goto l2; hence it1 = it2 by A11,A12,
 Th12;
+  end;
   end;
   hereby assume InsCode i = 9 or InsCode i = 10;
      given a1, b1 being Int-Location, f1 being FinSeq-Location such that
@@ -435,8 +454,10 @@ Th12;
      per cases by A14,A15,A16,SCMFSA_2:50;
      suppose i = b1 := (f1, a1) & i = b2 := (f2, a2);
       then a1 = a2 & b1 = b2 by Th13; hence it1 = it2 by A14,A15;
+     end;
      suppose i = (f1, a1) := b1 & i = (f2, a2) := b2;
       then a1 = a2 & b1 = b2 by Th14; hence it1 = it2 by A14,A15;
+  end;
   end;
   hereby assume InsCode i = 11 or InsCode i = 12;
      given a1 being Int-Location, f1 being FinSeq-Location such that
@@ -448,13 +469,16 @@ Th12;
      per cases by A17,A18,A19,SCMFSA_2:52;
      suppose i = a1 :=len f1 & i = a2 :=len f2; hence it1 = it2 by A17,A18,Th15
 ;
+     end;
      suppose i = f1 :=<0,...,0>a1 & i = f2 :=<0,...,0>a2; hence it1 = it2 by
 A17,A18,Th16;
+  end;
   end;
   thus thesis;
  end;
  consistency by ENUMSET1:23;
 end;
+
 
 theorem Th17:
  UsedIntLoc halt SCM+FSA = {}
@@ -547,7 +571,7 @@ A1:
   consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
     such that
 A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i]
-     from FuncExD(A1);
+     from FUNCT_2:sch 3(A1);
    set IT = Union (UIL * p);
    reconsider dp = dom p as finite set by AMI_1:21;
      rng p c= the Instructions of SCM+FSA by SCMFSA_4:1;
@@ -590,7 +614,8 @@ A7: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
  end;
 end;
 
-definition
+
+registration
  let p be programmed FinPartState of SCM+FSA;
  cluster UsedIntLoc p -> finite;
  coherence proof
@@ -607,6 +632,7 @@ FUNCT_2:4;
   hence thesis by A1;
  end;
 end;
+
 
 reserve p, r for programmed FinPartState of SCM+FSA,
         I, J for Macro-Instruction,
@@ -783,47 +809,60 @@ A4: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
   per cases by A1,A2,A3,A4,CQC_THE1:9,NAT_1:26;
   suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
    hence UsedIntLoc IncAddr(i, k) = UsedIntLoc i by SCMFSA_4:8;
+  end;
   suppose InsCode i = 1; then consider a, b such that
   A5: i = a:=b by SCMFSA_2:54;
    thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A5,SCMFSA_4:9;
+  end;
   suppose InsCode i = 2; then consider a, b such that
   A6: i = AddTo(a,b) by SCMFSA_2:55;
    thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A6,SCMFSA_4:10;
+  end;
   suppose InsCode i = 3; then consider a, b such that
   A7: i = SubFrom(a, b) by SCMFSA_2:56;
    thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A7,SCMFSA_4:11;
+  end;
   suppose InsCode i = 4; then consider a, b such that
   A8: i = MultBy(a, b) by SCMFSA_2:57;
    thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A8,SCMFSA_4:12;
+  end;
   suppose InsCode i = 5; then consider a, b such that
   A9: i = Divide(a, b) by SCMFSA_2:58;
    thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A9,SCMFSA_4:13;
+  end;
   suppose InsCode i = 6; then consider l such that
   A10: i = goto l by SCMFSA_2:59; IncAddr(i, k) = goto (l+k) by A10,SCMFSA_4:14
 ;
    hence UsedIntLoc IncAddr(i, k) = {} by Th19 .= UsedIntLoc i by A10,Th19;
+  end;
   suppose InsCode i = 7; then consider l, a such that
   A11: i = a=0_goto l by SCMFSA_2:60;
        IncAddr(i, k) = a=0_goto (l+k) by A11,SCMFSA_4:15;
    hence UsedIntLoc IncAddr(i, k) = {a} by Th20
           .= UsedIntLoc i by A11,Th20;
+  end;
   suppose InsCode i = 8; then consider l, a such that
   A12: i = a>0_goto l by SCMFSA_2:61;
        IncAddr(i, k) = a>0_goto (l+k) by A12,SCMFSA_4:16;
    hence UsedIntLoc IncAddr(i, k) = {a} by Th20
           .= UsedIntLoc i by A12,Th20;
+  end;
   suppose InsCode i = 9; then consider a, b, f such that
   A13: i = b:=(f,a) by SCMFSA_2:62;
    thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A13,SCMFSA_4:17;
+  end;
   suppose InsCode i = 10; then consider a, b, f such that
   A14: i = (f,a):=b by SCMFSA_2:63;
    thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A14,SCMFSA_4:18;
+  end;
   suppose InsCode i = 11; then consider a, f such that
   A15: i = a:=len f by SCMFSA_2:64;
    thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A15,SCMFSA_4:19;
+  end;
   suppose InsCode i = 12; then consider a,f such that
   A16: i = f:=<0,...,0>a by SCMFSA_2:65;
    thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A16,SCMFSA_4:20;
+end;
 end;
 
 theorem Th28:
@@ -1032,8 +1071,10 @@ definition
      per cases by A3,A4,A5,SCMFSA_2:50;
      suppose i = b1 := (f1, a1) & i = b2 := (f2, a2); hence it1 = it2 by A3,A4,
 Th13;
+     end;
      suppose i = (f1, a1) := b1 & i = (f2, a2) := b2; hence it1 = it2 by A3,A4,
 Th14;
+  end;
   end;
   hereby assume InsCode i = 11 or InsCode i = 12;
      given a1 being Int-Location, f1 being FinSeq-Location such that
@@ -1045,13 +1086,16 @@ Th14;
      per cases by A6,A7,A8,SCMFSA_2:52;
      suppose i = a1 :=len f1 & i = a2 :=len f2; hence it1 = it2 by A6,A7,Th15
 ;
+     end;
      suppose i = f1 :=<0,...,0>a1 & i = f2 :=<0,...,0>a2; hence it1 = it2 by A6
 ,A7,Th16;
+  end;
   end;
   thus thesis;
  end;
  consistency;
 end;
+
 
 theorem Th36:
    i = halt SCM+FSA or i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
@@ -1116,7 +1160,7 @@ A1:
   Fin FinSeq-Locations
     such that
 A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i]
-     from FuncExD(A1);
+     from FUNCT_2:sch 3(A1);
    set IT = Union (UIL * p);
    reconsider dp = dom p as finite set by AMI_1:21;
      rng p c= the Instructions of SCM+FSA by SCMFSA_4:1;
@@ -1159,7 +1203,8 @@ A7: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
  end;
 end;
 
-definition
+
+registration
  let p be programmed FinPartState of SCM+FSA;
  cluster UsedInt*Loc p -> finite;
  coherence proof
@@ -1176,6 +1221,7 @@ FUNCT_2:4;
   hence thesis by A1;
  end;
 end;
+
 
 theorem Th39:
   i in rng p implies UsedInt*Loc i c= UsedInt*Loc p
@@ -1349,48 +1395,61 @@ A4: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
   per cases by A1,A2,A3,A4,CQC_THE1:9,NAT_1:26;
   suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
    hence UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by SCMFSA_4:8;
+  end;
   suppose InsCode i = 1; then consider a, b such that
   A5: i = a:=b by SCMFSA_2:54;
    thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A5,SCMFSA_4:9;
+  end;
   suppose InsCode i = 2; then consider a, b such that
   A6: i = AddTo(a,b) by SCMFSA_2:55;
    thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A6,SCMFSA_4:10;
+  end;
   suppose InsCode i = 3; then consider a, b such that
   A7: i = SubFrom(a, b) by SCMFSA_2:56;
    thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A7,SCMFSA_4:11;
+  end;
   suppose InsCode i = 4; then consider a, b such that
   A8: i = MultBy(a, b) by SCMFSA_2:57;
    thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A8,SCMFSA_4:12;
+  end;
   suppose InsCode i = 5; then consider a, b such that
   A9: i = Divide(a, b) by SCMFSA_2:58;
    thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A9,SCMFSA_4:13;
+  end;
   suppose InsCode i = 6; then consider l such that
   A10: i = goto l by SCMFSA_2:59; IncAddr(i, k) = goto (l+k) by A10,SCMFSA_4:14
 ;
    hence UsedInt*Loc IncAddr(i, k) = {} by Th36
          .= UsedInt*Loc i by A10,Th36;
+  end;
   suppose InsCode i = 7; then consider l, a such that
   A11: i = a=0_goto l by SCMFSA_2:60;
        IncAddr(i, k) = a=0_goto (l+k) by A11,SCMFSA_4:15;
    hence UsedInt*Loc IncAddr(i, k) = {} by Th36
           .= UsedInt*Loc i by A11,Th36;
+  end;
   suppose InsCode i = 8; then consider l, a such that
   A12: i = a>0_goto l by SCMFSA_2:61;
        IncAddr(i, k) = a>0_goto (l+k) by A12,SCMFSA_4:16;
    hence UsedInt*Loc IncAddr(i, k) = {} by Th36
           .= UsedInt*Loc i by A12,Th36;
+  end;
   suppose InsCode i = 9; then consider a, b, f such that
   A13: i = b:=(f,a) by SCMFSA_2:62;
    thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A13,SCMFSA_4:17;
+  end;
   suppose InsCode i = 10; then consider a, b, f such that
   A14: i = (f,a):=b by SCMFSA_2:63;
    thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A14,SCMFSA_4:18;
+  end;
   suppose InsCode i = 11; then consider a, f such that
   A15: i = a:=len f by SCMFSA_2:64;
    thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A15,SCMFSA_4:19;
+  end;
   suppose InsCode i = 12; then consider a,f such that
   A16: i = f:=<0,...,0>a by SCMFSA_2:65;
    thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A16,SCMFSA_4:20;
+end;
 end;
 
 theorem Th44:
@@ -1559,19 +1618,23 @@ begin :: Choosing integer location not used in a macro instruction
 definition let IT be Int-Location;
  attr IT is read-only means
 :Def5: IT = intloc 0;
- antonym IT is read-write;
-end;
+ end;
+notation let IT be Int-Location;
+ antonym IT is read-write for IT is read-only ; end;
 
-definition
+
+registration
  cluster intloc 0 -> read-only;
  coherence by Def5;
 end;
 
-definition
+
+registration
  cluster read-write Int-Location;
  existence proof take intloc 1; intloc 0 <> intloc 1 by SCMFSA_2:16;
   hence thesis by Def5; end;
 end;
+
 
 reserve L for finite Subset of Int-Locations;
 
@@ -1584,7 +1647,7 @@ definition
  existence proof
     defpred X[Nat] means not intloc $1 in L;
     set sn = {k where k is Nat : X[k]};
- A1: sn is Subset of NAT from SubsetD;
+ A1: sn is Subset of NAT from DOMAIN_1:sch 7;
       not Int-Locations c= L by SCMFSA_2:22,XBOOLE_0:def 10;
     then consider x being set such that
  A2: x in Int-Locations & not x in L by TARSKI:def 3;
@@ -1597,6 +1660,7 @@ definition
  end;
  uniqueness;
 end;
+
 
 theorem Th52:
   not FirstNotIn L in L
@@ -1640,7 +1704,8 @@ definition
  uniqueness;
 end;
 
-definition
+
+registration
  let p be programmed FinPartState of SCM+FSA;
  cluster FirstNotUsed p -> read-write;
  coherence proof
@@ -1652,6 +1717,7 @@ A1: sil = UsedIntLoc p \/ {intloc 0} & FirstNotUsed p = FirstNotIn sil by Def7;
  hence thesis by A1,Def5;
  end;
 end;
+
 
 theorem Th54:
   not FirstNotUsed p in UsedIntLoc p
@@ -1728,7 +1794,7 @@ definition
  existence proof
     defpred X[Nat] means not fsloc $1 in L;
     set sn = {k where k is Nat : X[k]};
- A1: sn is Subset of NAT from SubsetD;
+ A1: sn is Subset of NAT from DOMAIN_1:sch 7;
       not FinSeq-Locations c= L by SCMFSA_2:23,XBOOLE_0:def 10;
     then consider x being set such that
  A2: x in FinSeq-Locations & not x in L by TARSKI:def 3;
@@ -1741,6 +1807,7 @@ definition
  end;
  uniqueness;
 end;
+
 
 theorem Th59:
   not First*NotIn L in L
@@ -1779,6 +1846,7 @@ definition
  end;
  uniqueness;
 end;
+
 
 theorem Th61:
   not First*NotUsed p in UsedInt*Loc p
@@ -1869,56 +1937,69 @@ A5: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
   per cases by A2,A3,A4,A5,CQC_THE1:9,NAT_1:26;
   suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
    hence Exec(i, s).c = s.c by AMI_1:def 8;
+  end;
   suppose InsCode i = 1; then consider a, b such that
   A6: i = a:=b by SCMFSA_2:54;
        UsedIntLoc i = {a, b} by A6,Th18;
      then c <> a by A1,TARSKI:def 2;
    hence Exec(i, s).c = s.c by A6,SCMFSA_2:89;
+  end;
   suppose InsCode i = 2; then consider a, b such that
   A7: i = AddTo(a,b) by SCMFSA_2:55;
        UsedIntLoc i = {a, b} by A7,Th18;
      then c <> a by A1,TARSKI:def 2;
    hence Exec(i, s).c = s.c by A7,SCMFSA_2:90;
+  end;
   suppose InsCode i = 3; then consider a, b such that
   A8: i = SubFrom(a, b) by SCMFSA_2:56;
        UsedIntLoc i = {a, b} by A8,Th18;
      then c <> a by A1,TARSKI:def 2;
    hence Exec(i, s).c = s.c by A8,SCMFSA_2:91;
+  end;
   suppose InsCode i = 4; then consider a, b such that
   A9: i = MultBy(a, b) by SCMFSA_2:57;
        UsedIntLoc i = {a, b} by A9,Th18;
      then c <> a by A1,TARSKI:def 2;
    hence Exec(i, s).c = s.c by A9,SCMFSA_2:92;
+  end;
   suppose InsCode i = 5; then consider a, b such that
   A10: i = Divide(a, b) by SCMFSA_2:58;
        UsedIntLoc i = {a, b} by A10,Th18;
      then c <> a & c <> b by A1,TARSKI:def 2;
    hence Exec(i, s).c = s.c by A10,SCMFSA_2:93;
+  end;
   suppose InsCode i = 6; then consider l such that
   A11: i = goto l by SCMFSA_2:59;
    thus Exec(i, s).c = s.c by A11,SCMFSA_2:95;
+  end;
   suppose InsCode i = 7; then consider l, a such that
   A12: i = a=0_goto l by SCMFSA_2:60;
    thus Exec(i, s).c = s.c by A12,SCMFSA_2:96;
+  end;
   suppose InsCode i = 8; then consider l, a such that
   A13: i = a>0_goto l by SCMFSA_2:61;
    thus Exec(i, s).c = s.c by A13,SCMFSA_2:97;
+  end;
   suppose InsCode i = 9; then consider a, b, f such that
   A14: i = b:=(f,a) by SCMFSA_2:62;
        UsedIntLoc i = {a, b} by A14,Th21;
      then c <> b by A1,TARSKI:def 2;
    hence Exec(i, s).c = s.c by A14,SCMFSA_2:98;
+  end;
   suppose InsCode i = 10; then consider a, b, f such that
   A15: i = (f,a):=b by SCMFSA_2:63;
    thus Exec(i, s).c = s.c by A15,SCMFSA_2:99;
+  end;
   suppose InsCode i = 11; then consider a, f such that
   A16: i = a:=len f by SCMFSA_2:64;
        UsedIntLoc i = {a} by A16,Th22;
      then c <> a by A1,TARSKI:def 1;
    hence Exec(i, s).c = s.c by A16,SCMFSA_2:100;
+  end;
   suppose InsCode i = 12; then consider a,f such that
   A17: i = f:=<0,...,0>a by SCMFSA_2:65;
    thus Exec(i, s).c = s.c by A17,SCMFSA_2:101;
+end;
 end;
 
 theorem :: UIOneS:
@@ -1953,7 +2034,7 @@ A3: for m st X[m] holds X[m+1]
      .= (Exec(sm.IC sm, sm)).a by AMI_1:def 17
      .= s.a by A4,A5,A8,Th68,NAT_1:38;
     end;
-     for m holds X[m] from Ind(A2, A3);
+     for m holds X[m] from NAT_1:sch 1(A2, A3);
   hence (Computation s).n.a = s.a;
 end;
 
@@ -1968,46 +2049,59 @@ A5: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
   per cases by A2,A3,A4,A5,CQC_THE1:9,NAT_1:26;
   suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
    hence Exec(i, s).f = s.f by AMI_1:def 8;
+  end;
   suppose InsCode i = 1; then consider a, b such that
   A6: i = a:=b by SCMFSA_2:54;
    thus Exec(i, s).f = s.f by A6,SCMFSA_2:89;
+  end;
   suppose InsCode i = 2; then consider a, b such that
   A7: i = AddTo(a,b) by SCMFSA_2:55;
    thus Exec(i, s).f = s.f by A7,SCMFSA_2:90;
+  end;
   suppose InsCode i = 3; then consider a, b such that
   A8: i = SubFrom(a, b) by SCMFSA_2:56;
    thus Exec(i, s).f = s.f by A8,SCMFSA_2:91;
+  end;
   suppose InsCode i = 4; then consider a, b such that
   A9: i = MultBy(a, b) by SCMFSA_2:57;
    thus Exec(i, s).f = s.f by A9,SCMFSA_2:92;
+  end;
   suppose InsCode i = 5; then consider a, b such that
   A10: i = Divide(a, b) by SCMFSA_2:58;
    thus Exec(i, s).f = s.f by A10,SCMFSA_2:93;
+  end;
   suppose InsCode i = 6; then consider l such that
   A11: i = goto l by SCMFSA_2:59;
    thus Exec(i, s).f = s.f by A11,SCMFSA_2:95;
+  end;
   suppose InsCode i = 7; then consider l, a such that
   A12: i = a=0_goto l by SCMFSA_2:60;
    thus Exec(i, s).f = s.f by A12,SCMFSA_2:96;
+  end;
   suppose InsCode i = 8; then consider l, a such that
   A13: i = a>0_goto l by SCMFSA_2:61;
    thus Exec(i, s).f = s.f by A13,SCMFSA_2:97;
+  end;
   suppose InsCode i = 9; then consider a, b, g such that
   A14: i = b:=(g,a) by SCMFSA_2:62;
    thus Exec(i, s).f = s.f by A14,SCMFSA_2:98;
+  end;
   suppose InsCode i = 10; then consider a, b, g such that
   A15: i = (g,a):=b by SCMFSA_2:63;
        UsedInt*Loc i = {g} by A15,Th37;
      then f <> g by A1,TARSKI:def 1;
    hence Exec(i, s).f = s.f by A15,SCMFSA_2:99;
+  end;
   suppose InsCode i = 11; then consider a, g such that
   A16: i = a:=len g by SCMFSA_2:64;
    thus Exec(i, s).f = s.f by A16,SCMFSA_2:100;
+  end;
   suppose InsCode i = 12; then consider a,g such that
   A17: i = g:=<0,...,0>a by SCMFSA_2:65;
        UsedInt*Loc i = {g} by A17,Th38;
      then f <> g by A1,TARSKI:def 1;
    hence Exec(i, s).f = s.f by A17,SCMFSA_2:101;
+end;
 end;
 
 theorem :: UIFOneS:
@@ -2042,7 +2136,7 @@ A3: for m st X[m] holds X[m+1]
      .= (Exec(sm.IC sm, sm)).f by AMI_1:def 17
      .= s.f by A4,A5,A8,Th70,NAT_1:38;
     end;
-     for m holds X[m] from Ind(A2, A3);
+     for m holds X[m] from NAT_1:sch 1(A2, A3);
   hence (Computation s).n.f = s.f;
 end;
 
@@ -2070,6 +2164,7 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
    hence IC Exec(i, s) = IC Exec(i, t) &
          Exec(i, s) | UsedIntLoc i = Exec(i, t) | UsedIntLoc i &
          Exec(i, s) | UsedInt*Loc i = Exec(i, t) | UsedInt*Loc i by A1;
+  end;
   suppose InsCode i = 1; then consider a, b such that
   A7: i = a:=b by SCMFSA_2:54;
    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
@@ -2084,6 +2179,7 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
      then Es.a = s.b & Es.b = s.b & Et.a = t.b & Et.b = t.b by A7,SCMFSA_2:89;
    hence Es | Ui = Et | Ui by A2,A8,A10,AMI_3:25;
    thus Es | UFi = {} by A8,RELAT_1:110 .= Et | UFi by A8,RELAT_1:110;
+  end;
   suppose InsCode i = 2; then consider a, b such that
   A11: i = AddTo(a,b) by SCMFSA_2:55;
     thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
@@ -2098,10 +2194,13 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
        now
       per cases;
       case a = b; hence Es.b = s.a + s.b & Et.b = t.a + t.b by A11,SCMFSA_2:90;
+      end;
       case a<> b; hence Es.b = s.b & Et.b = t.b by A11,SCMFSA_2:90;
+     end;
      end;
    hence Es | Ui = Et | Ui by A2,A12,A14,A15,AMI_3:25;
    thus Es | UFi = {} by A12,RELAT_1:110 .= Et | UFi by A12,RELAT_1:110;
+  end;
   suppose InsCode i = 3; then consider a, b such that
   A16: i = SubFrom(a, b) by SCMFSA_2:56;
     thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
@@ -2116,10 +2215,13 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
        now
       per cases;
       case a = b; hence Es.b = s.a - s.b & Et.b = t.a - t.b by A16,SCMFSA_2:91;
+      end;
       case a<> b; hence Es.b = s.b & Et.b = t.b by A16,SCMFSA_2:91;
+     end;
      end;
    hence Es | Ui = Et | Ui by A2,A17,A19,A20,AMI_3:25;
    thus Es | UFi = {} by A17,RELAT_1:110 .= Et | UFi by A17,RELAT_1:110;
+  end;
   suppose InsCode i = 4; then consider a, b such that
   A21: i = MultBy(a, b) by SCMFSA_2:57;
     thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
@@ -2134,10 +2236,13 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
        now
       per cases;
       case a = b; hence Es.b = s.a * s.b & Et.b = t.a * t.b by A21,SCMFSA_2:92;
+      end;
       case a<> b; hence Es.b = s.b & Et.b = t.b by A21,SCMFSA_2:92;
+     end;
      end;
    hence Es | Ui = Et | Ui by A2,A22,A24,A25,AMI_3:25;
    thus Es | UFi = {} by A22,RELAT_1:110 .= Et | UFi by A22,RELAT_1:110;
+   end;
    suppose InsCode i = 5; then consider a, b such that
   A26: i = Divide(a, b) by SCMFSA_2:58;
   A27: Ui = {a, b} & UFi = {} by A26,Th18,Th36;
@@ -2154,6 +2259,7 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
      Es.a = s.a mod s.a & Et.a = t.a mod t.b by A26,A30,SCMFSA_2:94;
    hence Es | Ui = Et | Ui by A2,A27,A29,A30,AMI_3:25;
    thus Es | UFi = {} by A27,RELAT_1:110 .= Et | UFi by A27,RELAT_1:110;
+   end;
    suppose A31: a <> b;
     thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
              .= Next IC t by A1,A26,SCMFSA_2:93
@@ -2164,6 +2270,8 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
    hence Es | Ui = Et | Ui by A2,A27,A29,AMI_3:25;
    thus Es | UFi = {} by A27,RELAT_1:110 .= Et | UFi by A27,RELAT_1:110;
   end;
+  end;
+  end;
   suppose InsCode i = 6; then consider l such that
   A32: i = goto l by SCMFSA_2:59;
    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
@@ -2173,6 +2281,7 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
   A33: Ui = {} & UFi = {} by A32,Th19,Th36;
    hence Es | Ui = {} by RELAT_1:110 .= Et | Ui by A33,RELAT_1:110;
    thus Es | UFi = {} by A33,RELAT_1:110 .= Et | UFi by A33,RELAT_1:110;
+  end;
   suppose InsCode i = 7; then consider l, a such that
   A34: i = a=0_goto l by SCMFSA_2:60;
   A35: Ui = {a} & UFi = {} by A34,Th20,Th36;
@@ -2186,15 +2295,18 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
              .= l by A34,A38,SCMFSA_2:96
              .= Et.IC SCM+FSA by A34,A37,A38,SCMFSA_2:96
              .= IC Et by AMI_1:def 15;
+   end;
    suppose A39: s.a <> 0;
    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
              .= Next IC s by A34,A39,SCMFSA_2:96
              .= Et.IC SCM+FSA by A1,A34,A37,A39,SCMFSA_2:96
              .= IC Et by AMI_1:def 15;
    end;
+   end;
       Es.a = s.a & Et.a = t.a by A34,SCMFSA_2:96;
    hence Es | Ui = Et | Ui by A2,A35,A37,AMI_3:24;
    thus Es | UFi = {} by A35,RELAT_1:110 .= Et | UFi by A35,RELAT_1:110;
+  end;
   suppose InsCode i = 8; then consider l, a such that
   A40: i = a>0_goto l by SCMFSA_2:61;
   A41: Ui = {a} & UFi = {} by A40,Th20,Th36;
@@ -2208,15 +2320,18 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
              .= l by A40,A44,SCMFSA_2:97
              .= Et.IC SCM+FSA by A40,A43,A44,SCMFSA_2:97
              .= IC Et by AMI_1:def 15;
+   end;
    suppose A45: s.a <= 0;
    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
              .= Next IC s by A40,A45,SCMFSA_2:97
              .= Et.IC SCM+FSA by A1,A40,A43,A45,SCMFSA_2:97
              .= IC Et by AMI_1:def 15;
    end;
+   end;
       Es.a = s.a & Et.a = t.a by A40,SCMFSA_2:97;
    hence Es | Ui = Et | Ui by A2,A41,A43,AMI_3:24;
    thus Es | UFi = {} by A41,RELAT_1:110 .= Et | UFi by A41,RELAT_1:110;
+  end;
   suppose InsCode i = 9; then consider a, b, f such that
   A46: i = b:=(f,a) by SCMFSA_2:62;
    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
@@ -2236,10 +2351,13 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
        now
      per cases;
      case a = b; thus Es.b = Et.b by A49,A50,A51;
+     end;
      case a <> b; hence Es.a = s.a & Et.a = t.a by A46,SCMFSA_2:98;
+     end;
      end;
    hence Es | Ui = Et | Ui by A2,A47,A49,A50,A51,AMI_3:25;
    thus Es | UFi = Et | UFi by A2,A47,A49,A52,AMI_3:24;
+  end;
   suppose InsCode i = 10; then consider a, b, f such that
   A53: i = (f,a):=b by SCMFSA_2:63;
    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
@@ -2258,6 +2376,7 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
      Es.a = s.a & Es.b = s.b & Et.a = t.a & Et.b = t.b by A53,SCMFSA_2:99;
    hence Es | Ui = Et | Ui by A2,A54,A56,AMI_3:25;
    thus Es | UFi = Et | UFi by A2,A54,A56,A57,A58,AMI_3:24;
+  end;
   suppose InsCode i = 11; then consider a, f such that
   A59: i = a:=len f by SCMFSA_2:64;
    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
@@ -2272,6 +2391,7 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
                                                 by A59,SCMFSA_2:100;
    hence Es | Ui = Et | Ui by A2,A60,A62,AMI_3:24;
    thus Es | UFi = Et | UFi by A2,A60,A62,A63,AMI_3:24;
+  end;
   suppose InsCode i = 12; then consider a,f such that
   A64: i = f:=<0,...,0>a by SCMFSA_2:65;
    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
@@ -2289,6 +2409,7 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
        Es.a = s.a & Et.a = t.a by A64,SCMFSA_2:101;
    hence Es | Ui = Et | Ui by A2,A65,A67,AMI_3:24;
    thus Es | UFi = Et | UFi by A2,A65,A67,A68,A69,AMI_3:24;
+end;
 end;
 
 theorem :: UITwoS:
@@ -2406,10 +2527,12 @@ A10: now let m; assume
      suppose A29: a in UsedIntLoc i;
       hence Cs.m1.a = (Exec(i, Cs.m) | UsedIntLoc i).a by A14,FUNCT_1:72
                    .= Ct.m1.a by A15,A18,A27,A29,FUNCT_1:72;
+     end;
      suppose A30: not a in UsedIntLoc i;
       hence Cs.m1.a = Cs.m.a by A14,Th68
                    .= Ct.m.a by A11,A12,A28,NAT_1:38
                    .= Ct.m1.a by A15,A18,A30,Th68;
+    end;
     end;
     let f; assume
     A31: f in UsedInt*Loc I;
@@ -2417,13 +2540,15 @@ A10: now let m; assume
      suppose A32: f in UsedInt*Loc i;
       hence Cs.m1.f = (Exec(i, Cs.m) | UsedInt*Loc i).f by A14,FUNCT_1:72
                    .= Ct.m1.f by A15,A18,A27,A32,FUNCT_1:72;
+     end;
      suppose A33: not f in UsedInt*Loc i;
       hence Cs.m1.f = Cs.m.f by A14,Th70
                    .= Ct.m.f by A11,A12,A31,NAT_1:38
                    .= Ct.m1.f by A15,A18,A33,Th70;
      end;
+     end;
     end;
-A34: for m holds P[m] from Ind(A4, A10);
+A34: for m holds P[m] from NAT_1:sch 1(A4, A10);
  hence for m st m < n holds IC Ct.m in dom I;
  let m; assume
 A35: m <= n;
@@ -2443,6 +2568,7 @@ A35: m <= n;
    thus (Computation s).m.f = s.f by A36,AMI_1:def 19
      .= (s | UsedInt*Loc I).f by A39,FUNCT_1:72 .= t.f by A2,A39,FUNCT_1:72
      .= (Computation t).m.f by A36,AMI_1:def 19;
+  end;
   suppose ex p being Nat st m = p+1; then consider p being Nat such that
   A40: m = p+1; set p1 = p+1;
   A41: p < n by A35,A40,NAT_1:38;
@@ -2507,10 +2633,12 @@ A35: m <= n;
      suppose A59: a in UsedIntLoc i;
       hence Cs.m.a = (Exec(i, Cs.p) | UsedIntLoc i).a by A40,A42,FUNCT_1:72
                    .= Ct.m.a by A40,A43,A47,A57,A59,FUNCT_1:72;
+     end;
      suppose A60: not a in UsedIntLoc i;
       hence Cs.m.a = Cs.p.a by A40,A42,Th68
                    .= Ct.p.a by A34,A41,A58
                    .= Ct.m.a by A40,A43,A47,A60,Th68;
+    end;
     end;
     hereby let f; assume
     A61: f in UsedInt*Loc I;
@@ -2518,10 +2646,13 @@ A35: m <= n;
      suppose A62: f in UsedInt*Loc i;
       hence Cs.m.f = (Exec(i, Cs.p) | UsedInt*Loc i).f by A40,A42,FUNCT_1:72
                    .= Ct.m.f by A40,A43,A47,A57,A62,FUNCT_1:72;
+     end;
      suppose A63: not f in UsedInt*Loc i;
       hence Cs.m.f = Cs.p.f by A40,A42,Th70
                    .= Ct.p.f by A34,A41,A61
                    .= Ct.m.f by A40,A43,A47,A63,Th70;
     end;
+    end;
+end;
 end;
 

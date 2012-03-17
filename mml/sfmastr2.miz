@@ -209,8 +209,12 @@ definition
 :Def1:
      aux := a ';' while>0 ( aux, I ';' SubFrom(aux, intloc 0) );
  correctness;
- synonym a times I;
-end;
+ end;
+notation
+ let a be Int-Location, I be Macro-Instruction;
+
+   synonym a times I for times(a, I) ; end;
+
 
 theorem Th8: :: timesUsed:
  {b} \/ UsedIntLoc I c= UsedIntLoc times(b, I)
@@ -257,7 +261,7 @@ thus UsedInt*Loc times(a,I)
 .= UsedInt*Loc I;
 end;
 
-definition
+registration
  let I be good Macro-Instruction, a be Int-Location;
  cluster times(a, I) -> good;
  coherence proof
@@ -267,6 +271,7 @@ definition
   hence thesis;
  end;
 end;
+
 
 definition
  let s be State of SCM+FSA, I be Macro-Instruction, a be Int-Location;
@@ -278,6 +283,7 @@ definition
   StepWhile>0(aux, I ';' SubFrom(aux, intloc 0), Exec(aux := a, Initialize s));
  correctness;
 end;
+
 
 theorem Th10: :: ST0i0:
  StepTimes(a, J, s).0.intloc 0 = 1
@@ -342,6 +348,7 @@ A7,SFMASTR1:3;
   per cases;
   suppose SW.k.au <= 0; then SW.(k+1) | D = ST.k | D by A4,SCMFSA9A:37;
    hence StepTimes(a, I, s).(k+1).intloc 0 = 1 by A1,A4,SCMFSA6A:38;
+  end;
   suppose SW.k.au > 0;
     then SW.(k+1) | D = IExec(I ';' SubFrom(au, intloc 0), ST.k) | D
      by A1,A4,A9,A10,SCMFSA9A:38;
@@ -352,6 +359,7 @@ A7,SFMASTR1:3;
                  by A5,A6,SFMASTR1:12
       .= IExec(I, ST.k).intloc 0 by SCMFSA_2:91
       .= 1 by A5,A6,SCMFSA8C:96;
+ end;
  end;
       not au in {a} \/ UsedIntLoc I by SFMASTR1:21;
 then A11: not au in UsedIntLoc I by XBOOLE_0:def 2;
@@ -409,6 +417,7 @@ definition
           I is_halting_on StepTimes(a,I,s).k;
 end;
 
+
 theorem Th15: :: timespara:
  I is parahalting implies ProperTimesBody a, I, s
 proof assume
@@ -447,7 +456,7 @@ A4: for k being Nat st X[k] holds X[k+1]
       then I is_closed_on ST.k & I is_halting_on ST.k by A1,Def3;
       hence ST.(k+1).intloc 0 = 1 by A5,A7,Th12;
     end;
- thus for k holds X[k] from Ind(A3, A4);
+ thus for k holds X[k] from NAT_1:sch 1(A3, A4);
 end;
 
 theorem Th17: :: AU0:
@@ -506,7 +515,7 @@ A6: for k being Nat st X[k] holds X[k+1]
       hence ST.(k+1).au+(k+1)
        = s.a by A7,A9,XCMPLX_1:28;
     end;
- thus for k holds X[k] from Ind(A5, A6);
+ thus for k holds X[k] from NAT_1:sch 1(A5, A6);
 end;
 
 theorem Th18: :: STAU:
@@ -539,13 +548,15 @@ A7: for k st X[k] holds X[k+1]
            then ST.(k+1).au+(k+1) = s.a by A1,A3,Th17;
       hence ST.(k+1).au = 0 by A10,XCMPLX_1:3;
       thus ST.(k+1).intloc 0 = 1 by A1,A10,Th16;
+     end;
      suppose A11: k+1 > sa;
      then A12: SW.(k+1) | D = SW.k | D by A4,A8,NAT_1:38,SCMFSA9A:37;
       hence ST.(k+1).au = 0 by A4,A8,A11,NAT_1:38,SCMFSA6A:38;
       thus ST.(k+1).intloc 0 = 1 by A4,A8,A11,A12,NAT_1:38,SCMFSA6A:38;
     end;
+    end;
  thus
-   for k holds X[k] from Ind(A5, A7);
+   for k holds X[k] from NAT_1:sch 1(A5, A7);
 end;
 
 theorem Th19: :: ST0_D:
@@ -758,7 +769,7 @@ A24: WithVariantWhile>0 au, ISu, Is1 proof
         consider f being Function of product the Object-Kind of SCM+FSA,NAT
           such that
    A25: for x being Element of product the Object-Kind of SCM+FSA
-         holds f.x = U(x) from LambdaD;
+         holds f.x = U(x) from FUNCT_2:sch 4;
       take f;
        reconsider sa = s.a as Nat by A1;
       let k be Nat;
@@ -784,9 +795,11 @@ A24: WithVariantWhile>0 au, ISu, Is1 proof
          f.(ISW.k) = abs( ISW.k.au ) by A25
            .= SW.k.au by A6,A26,A36,A37,ABSVALUE:def 1;
         hence f.(ISW.(k+1)) < f.(ISW.k) or ISW.k.au <= 0 by A32,A35,NAT_1:38;
+       end;
        suppose k >= s.a;
         hence f.(ISW.(k+1)) < f.(ISW.k) or ISW.k.au <= 0
            by A2,A3,A4,A6,A26,Th18;
+     end;
      end;
 then A38: WH is_closed_on Is1 by A20,SCMFSA9A:33;
 then A39: WH is_closed_on s1 by A7,SCMFSA8B:6;
@@ -864,6 +877,7 @@ A15:  taI is_closed_on Initialize s by A6,A7,A8,A9,A13,SFMASTR1:3;
  hence times(a, I) is_closed_on s by A1,Th4;
        taI is_halting_on Initialize s by A6,A7,A8,A9,A13,A14,SFMASTR1:4;
  hence times(a, I) is_halting_on s by A1,A15,Th5;
+ end;
  suppose
  A16: 0 <= s.a;
 A17: ProperBodyWhile>0 au, ISu, s1 proof
@@ -902,7 +916,7 @@ A33: WithVariantWhile>0 au, ISu, Is1 proof
         consider f being Function of product the Object-Kind of SCM+FSA,NAT
           such that
    A34: for x being Element of product the Object-Kind of SCM+FSA
-         holds f.x = U(x) from LambdaD;
+         holds f.x = U(x) from FUNCT_2:sch 4;
       take f;
        reconsider sa = s.a as Nat by A16,INT_1:16;
       let k be Nat;
@@ -928,9 +942,11 @@ A33: WithVariantWhile>0 au, ISu, Is1 proof
          f.(ISW.k) = abs( ISW.k.au ) by A34
            .= SW.k.au by A4,A35,A45,A46,ABSVALUE:def 1;
         hence f.(ISW.(k+1)) < f.(ISW.k) or ISW.k.au <= 0 by A41,A44,NAT_1:38;
+       end;
        suppose k >= s.a;
         hence f.(ISW.(k+1)) < f.(ISW.k) or ISW.k.au <= 0
            by A1,A2,A4,A16,A35,Th18;
+     end;
      end;
 then A47: WH is_closed_on Is1 by A29,SCMFSA9A:33;
 then A48: WH is_closed_on s1 by A5,SCMFSA8B:6;
@@ -942,6 +958,7 @@ then A51:  taI is_closed_on Initialize s by A6,A7,A8,A48,SFMASTR1:3;
        taI is_halting_on Initialize s by A6,A7,A8,A48,A49,A50,SFMASTR1:4;
  hence times(a, I) is_halting_on s by A1,A51,Th5;
 end;
+end;
 
 begin :: A trivial example
 
@@ -951,6 +968,7 @@ definition
 :Def4: times( d, while=0(d, Macro(d := d)) ';' SubFrom(d, intloc 0) );
  correctness;
 end;
+
 
 theorem  :: SA0:
     s.d <= 0 implies IExec(triv-times(d), s).d = s.d
@@ -1085,7 +1103,7 @@ A16: for k st X[k] holds X[k+1]
     hence ST.(k+1).au = ST.(k+1).a by A19,A40,A41,A42,AXIOMS:22,XCMPLX_1:2;
    end;
 
-A43: for k holds X[k] from Ind(A5, A16);
+A43: for k holds X[k] from NAT_1:sch 1(A5, A16);
 
 A44: ProperTimesBody a, I, s proof let k; thus thesis by A43; end;
    reconsider k = s.a as Nat by A1,INT_1:16;
@@ -1118,6 +1136,7 @@ definition
    (N := N_save);
  correctness;
 end;
+
 
 theorem  :: Fib, new times
   for N, result being read-write Int-Location
@@ -1231,7 +1250,7 @@ A22: now let k be Nat such that
        .= Fib ((k+1)+1) by A23,A24,A25,AXIOMS:22,PRE_FF:1;
       end;
     end;
-A27: for n being Nat holds P[n] from Ind(A20, A22);
+A27: for n being Nat holds P[n] from NAT_1:sch 1(A20, A22);
  let n be Nat; assume
 A28: n = s.N;
 then A29: IExec(I3, s1) | D = ST.n | D by A19,Th23;

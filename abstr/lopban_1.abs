@@ -1,6 +1,6 @@
 :: Banach Space of Bounded Linear Operators
 ::  by Yasunari Shidama
-:: 
+::
 :: Received December 22, 2003
 :: Copyright (c) 2003 Association of Mizar Users
 
@@ -60,6 +60,7 @@ definition
     it.(f,g) = (the add of Y).:(f,g);
 end;
 
+
 definition
   let X be non empty set;
   let Y be RealLinearSpace;
@@ -72,6 +73,7 @@ definition
       (it.[a,f]).x = a*(f.x);
 end;
 
+
 definition
   let X be set;
   let Y be non empty ZeroStr;
@@ -79,6 +81,7 @@ definition
 :: LOPBAN_1:def 3
    X --> 0.Y;
 end;
+
 
  reserve X,A,B for non empty set;
  reserve Y for RealLinearSpace;
@@ -141,11 +144,20 @@ definition
               (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#);
 end;
 
-definition
+
+registration
   let X be non empty set;
   let Y be RealLinearSpace;
   cluster RealVectSpace(X,Y) -> strict;
+  coherence
+proof
+  RealVectSpace(X,Y) =
+   RLSStruct(#Funcs(X,the carrier of Y),
+              (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#) by Def7;
+   hence thesis;
+ end;
 end;
+
 
 theorem :: LOPBAN_1:14
      for X be non empty set
@@ -180,6 +192,7 @@ definition
   for x,y being VECTOR of X holds IT.(x+y) = IT.x+IT.y;
 end;
 
+
 definition
   let X, Y be non empty RLSStruct;
   let IT be Function of X,Y;
@@ -188,16 +201,36 @@ definition
    for x being VECTOR of X, r being Real holds IT.(r*x) = r*IT.x;
 end;
 
-definition
+
+registration
   let X be non empty RLSStruct;
   let Y be RealLinearSpace;
   cluster additive homogeneous Function of X,Y;
+  existence
+  proof
+    set f = (the carrier of X) --> 0.Y;
+     reconsider f as Function of X,Y by FUNCOP_1:58;
+     take f;
+     hereby let x,y be VECTOR of X;
+      thus f.(x+y) = 0.Y by FUNCOP_1:13
+                     .= 0.Y+0.Y by RLVECT_1:10
+                     .= f.x+0.Y by FUNCOP_1:13
+                     .= f.x+f.y by FUNCOP_1:13;
+      end;
+     hereby let x be VECTOR of X, r be Real;
+     thus f.(r*x) =0.Y by FUNCOP_1:13
+                    .=r*0.Y by RLVECT_1:23
+        .= r*f.x by FUNCOP_1:13;
+     end;
+    end;
 end;
+
 
 definition
   let X, Y be RealLinearSpace;
   mode LinearOperator of X,Y is additive homogeneous Function of X,Y;
 end;
+
 
 definition
   let X, Y be RealLinearSpace;
@@ -209,10 +242,33 @@ definition
    x is LinearOperator of X,Y;
 end;
 
-definition
+
+registration
   let X, Y be RealLinearSpace;
   cluster LinearOperators(X,Y)  -> non empty;
+  coherence
+   proof
+    set f = (the carrier of X) --> 0.Y;
+        reconsider f as Function of X,Y by FUNCOP_1:58;
+    AS3:  f is additive
+     proof
+       let x,y be VECTOR of X;
+       thus f.(x+y) = 0.Y by FUNCOP_1:13
+                            .=0.Y+0.Y by RLVECT_1:10
+                            .= f.x+0.Y by FUNCOP_1:13
+                     .= f.x+f.y by FUNCOP_1:13;
+     end;
+     f is homogeneous
+     proof
+        let x be VECTOR of X, r be Real;
+        thus f.(r*x) =0.Y by FUNCOP_1:13
+                    .=r*0.Y by RLVECT_1:23
+        .= r*f.x by FUNCOP_1:13;
+      end;
+  hence thesis by Def12,AS3;
 end;
+end;
+
 
 theorem :: LOPBAN_1:17
   for X, Y be RealLinearSpace holds LinearOperators(X,Y) is lineary-closed;
@@ -225,7 +281,7 @@ RLSStruct (# LinearOperators(X,Y),
         Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #)
 is Subspace of RealVectSpace(the carrier of X,Y);
 
-definition
+registration
   let X, Y be RealLinearSpace;
   cluster RLSStruct (# LinearOperators(X,Y),
         Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
@@ -233,7 +289,9 @@ definition
         Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #)
  -> Abelian add-associative right_zeroed right_complementable
         RealLinearSpace-like;
+  coherence by Th42;
 end;
+
 
 theorem :: LOPBAN_1:19
   for X, Y be RealLinearSpace holds
@@ -253,10 +311,22 @@ definition
            Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #);
 end;
 
-definition
+
+registration
   let X, Y be RealLinearSpace;
   cluster R_VectorSpace_of_LinearOperators(X,Y) -> strict;
+  coherence
+proof
+  R_VectorSpace_of_LinearOperators(X,Y) =
+  RLSStruct (# LinearOperators(X,Y),
+             Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
+           Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
+           Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #)
+       by Def15;
+   hence thesis;
+ end;
 end;
+
 
 theorem :: LOPBAN_1:20
      for X, Y be RealLinearSpace
@@ -301,16 +371,26 @@ definition
        ||. IT.x .|| <= K*||. x .||;
 end;
 
+
 theorem :: LOPBAN_1:25
   for X, Y be RealNormSpace holds
       for f be LinearOperator of X,Y
          st (for x be VECTOR of X holds f.x=0.Y)
         holds f is bounded;
 
-definition
+registration
   let X, Y be RealNormSpace;
   cluster bounded LinearOperator of X,Y;
+existence
+proof
+  set f=(the carrier of X) --> 0.Y;
+  reconsider f as LinearOperator of X,Y by LM20;
+  take f;
+  for x be VECTOR of X holds f.x =0.Y by FUNCOP_1:13;
+  hence thesis by LM21;
+ end;
 end;
+
 
 definition
   let X, Y be RealNormSpace;
@@ -322,10 +402,23 @@ definition
    x is bounded LinearOperator of X,Y;
 end;
 
-definition
+
+registration
   let X, Y be RealNormSpace;
   cluster BoundedLinearOperators(X,Y) -> non empty;
+  coherence
+   proof
+     set f=(the carrier of X) --> 0.Y;
+     reconsider f as LinearOperator of X,Y by LM20;
+     f is bounded
+     proof
+       for x be VECTOR of X holds f.x =0.Y by FUNCOP_1:13;
+       hence thesis by LM21;
+     end;
+     hence thesis by Def17;
+   end;
 end;
+
 
 theorem :: LOPBAN_1:26
   for X, Y be RealNormSpace holds
@@ -342,7 +435,7 @@ RLSStruct (# BoundedLinearOperators(X,Y),
         R_VectorSpace_of_LinearOperators(X,Y)) #)
 is Subspace of R_VectorSpace_of_LinearOperators(X,Y);
 
-definition
+registration
   let X, Y be RealNormSpace;
   cluster RLSStruct (# BoundedLinearOperators(X,Y),
         Zero_(BoundedLinearOperators(X,Y),
@@ -353,7 +446,9 @@ definition
         R_VectorSpace_of_LinearOperators(X,Y)) #)
  -> Abelian add-associative right_zeroed right_complementable
         RealLinearSpace-like;
+  coherence by Th52;
 end;
+
 
 theorem :: LOPBAN_1:28
   for X, Y be RealNormSpace holds
@@ -380,10 +475,24 @@ definition
         R_VectorSpace_of_LinearOperators(X,Y)) #);
 end;
 
-definition
+
+registration
   let X, Y be RealNormSpace;
   cluster R_VectorSpace_of_BoundedLinearOperators(X,Y) -> strict;
+  coherence
+proof
+  R_VectorSpace_of_BoundedLinearOperators(X,Y) =
+  RLSStruct (# BoundedLinearOperators(X,Y),
+        Zero_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)),
+         Add_(BoundedLinearOperators(X,Y),
+         R_VectorSpace_of_LinearOperators(X,Y)),
+          Mult_(BoundedLinearOperators(X,Y),
+          R_VectorSpace_of_LinearOperators(X,Y)) #) by Def20;
+   hence thesis;
+ end;
 end;
+
 
 theorem :: LOPBAN_1:29
      for X, Y be RealNormSpace
@@ -414,6 +523,7 @@ definition
     f;
 end;
 
+
 definition
    let X, Y be RealNormSpace;
    let u be LinearOperator of X,Y;
@@ -421,6 +531,7 @@ definition
 :: LOPBAN_1:def 13
   {||.u.t.|| where t is VECTOR of X : ||.t.|| <= 1 };
 end;
+
 
 theorem :: LOPBAN_1:32
     for X, Y be RealNormSpace
@@ -447,6 +558,7 @@ definition
     it.x = sup PreNorms(modetrans(x,X,Y));
 end;
 
+
 theorem :: LOPBAN_1:35
    for X, Y be RealNormSpace
    for f be bounded LinearOperator of X,Y holds modetrans(f,X,Y)=f;
@@ -468,6 +580,7 @@ definition let X, Y be RealNormSpace;
           R_VectorSpace_of_LinearOperators(X,Y)),
           BoundedLinearOperatorsNorm(X,Y) #);
 end;
+
 
 theorem :: LOPBAN_1:37
     for X, Y be RealNormSpace
@@ -528,12 +641,14 @@ theorem :: LOPBAN_1:45
   for X, Y be RealNormSpace holds
     R_NormSpace_of_BoundedLinearOperators(X,Y) is RealNormSpace;
 
-definition
+registration
    let X, Y be RealNormSpace;
    cluster R_NormSpace_of_BoundedLinearOperators(X,Y) ->
                RealNormSpace-like RealLinearSpace-like
                Abelian add-associative right_zeroed right_complementable;
+   coherence by LM62;
 end;
+
 
 theorem :: LOPBAN_1:46
      for X, Y be RealNormSpace
@@ -552,9 +667,16 @@ definition let X be RealNormSpace;
     seq is Cauchy_sequence_by_Norm implies seq is convergent;
 end;
 
-definition
+
+registration
   cluster complete RealNormSpace;
+  existence
+  proof
+    take l1_Space;
+    thus thesis by Def40,RSSPACE3:11;
+  end;
 end;
+
 
 definition
   mode RealBanachSpace is complete RealNormSpace;
@@ -577,9 +699,11 @@ theorem :: LOPBAN_1:49
   for Y be RealBanachSpace holds
      R_NormSpace_of_BoundedLinearOperators(X,Y) is RealBanachSpace;
 
-definition
+registration
   let X be RealNormSpace;
   let Y be RealBanachSpace;
   cluster R_NormSpace_of_BoundedLinearOperators (X,Y) -> complete;
+  coherence by LM64;
 end;
+
 

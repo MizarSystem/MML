@@ -39,6 +39,7 @@ definition
      for x being set holds x in [:A,A:] implies F.x in A;
 end;
 
+
 definition
    let X be set;
    let F be BinOp of X;
@@ -46,6 +47,7 @@ definition
 :: REALSET1:def 2
 for x being set holds x in [:it,it:] implies F.x in it;
 end;
+
 
 canceled 2;
 
@@ -80,6 +82,7 @@ definition ::group
                       (the add of IT).[b,a] = the Zero of IT;
 end;
 
+
 definition let L be non empty LoopStr;
  redefine attr L is add-associative means
 :: REALSET1:def 7
@@ -93,19 +96,43 @@ definition let L be non empty LoopStr;
         (the add of L).[a,b] = (the add of L).[b,a];
 end;
 
-definition let X be non empty set, a be BinOp of X, Z be Element of X;
+
+registration let X be non empty set, a be BinOp of X, Z be Element of X;
  cluster LoopStr(#X,a,Z#) -> non empty;
+ coherence
+  proof
+   thus the carrier of LoopStr(#X,a,Z#) is non empty;
+  end;
 end;
 
-definition
+
+registration
  cluster strict Abelian add-associative zeroed
                         complementable (non empty LoopStr);
+  existence
+   proof
+     consider A being non empty set, og being BinOp of A, ng being Element of A
+      such that
+A1:       (for a,b,c being Element of A holds
+                 og.[og.[a,b],c] = og.[a,og.[b,c]]) &
+            (for a being Element of A holds
+                 og.[a,ng] = a & og.[ng,a] = a) &
+            (for a being Element of A ex b being Element of A st
+                 og.[a,b] = ng & og.[b,a] = ng) &
+            (for a,b being Element of A holds
+                 og.[a,b] = og.[b,a]) by Lm1;
+       LoopStr(#A,og,ng#) is Abelian add-associative zeroed complementable
+      by A1,Def5,Def6,Def7,Def8;
+    hence thesis;
+   end;
 end;
+
 
 definition ::group
    mode Group is Abelian add-associative zeroed complementable
     (non empty LoopStr);
 end;
+
 
 definition
  let IT be set;
@@ -116,11 +143,27 @@ definition
   IT is empty or ex x being set st IT = {x};
 end;
 
-definition
+
+registration
  cluster trivial non empty set;
+  existence
+ proof take {0};
+  thus thesis by Def12;
+ end;
  cluster non trivial non empty set;
+  existence
+ proof take {0,1};
+     not ex x being set st {0,1} = {x} by ZFMISC_1:9;
+  hence thesis by Def12;
+ end;
  cluster non trivial -> non empty set;
+ coherence
+  proof let IT be set;
+   assume not(IT is empty or ex x being set st IT = {x});
+   hence thesis;
+  end;
 end;
+
 
 canceled 17;
 
@@ -144,18 +187,40 @@ definition
     the carrier of IT is trivial;
 end;
 
-definition
+registration
  cluster trivial 1-sorted;
+ existence
+  proof
+   take O = 1-sorted(#{0}#);
+     now
+     let x,y be Element of O;
+     thus x = 0 by TARSKI:def 1 .= y by TARSKI:def 1;
+   end;
+   hence thesis by Lm3;
+  end;
 end;
+
 
 theorem :: REALSET1:35
       for A being non empty set st
     (for x being Element of A holds A\{x} is non empty set) holds
     A is non trivial set;
 
-definition
+registration
  cluster non trivial strict doubleLoopStr;
+ existence
+  proof
+   consider A be non trivial set,
+            od,om be BinOp of A,
+            nd be Element of A,
+            nm be Element of A\{nd};
+     A\{nd} is non empty set by Th32;
+   then reconsider nm0=nm as Element of A by XBOOLE_0:def 4;
+   take doubleLoopStr(#A,od,om,nm0,nd#);
+   thus thesis by Lm4;
+  end;
 end;
+
 
 definition ::field operator
    let A be non trivial set;
@@ -171,6 +236,7 @@ definition ::field operator
         nm = the unity of it;
 end;
 
+
 definition
    let X be non trivial set;
    let F be BinOp of X;
@@ -180,6 +246,7 @@ definition
        (X\{x} is Preserv of F) &
           F|[:X\{x},X\{x}:] is BinOp of X\{x};
 end;
+
 
 canceled 3;
 
@@ -196,6 +263,7 @@ definition
 :: REALSET1:def 16
 for x being set holds x in [:A,A:] implies it.x in A;
 end;
+
 
 canceled;
 
@@ -214,6 +282,7 @@ definition
     F | [:A,A:];
 end;
 
+
 canceled;
 
 theorem :: REALSET1:43
@@ -229,6 +298,7 @@ definition
 :: REALSET1:def 18
  for y being set holds y in [:A\{x},A\{x}:] implies it.y in A\{x};
 end;
+
 
 canceled;
 
@@ -247,10 +317,12 @@ func F!(A,x) -> BinOp of A\{x} equals
    F | [:A\{x},A\{x}:];
 end;
 
+
 definition
  let IT be 1-sorted;
  redefine attr IT is trivial means
 :: REALSET1:def 20
     for x,y being Element of IT holds x = y;
 end;
+
 

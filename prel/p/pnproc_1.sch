@@ -16,8 +16,6 @@ FINSEQ_1
 FINSEQ_2
 PNPROC_1
 #
-MarkingLambda
-#
 M1 ;M4 K66 ;K70 ;;;
 ªM11 F1 ;;ªM1 ;ª&R2 B2 F1 ;;ªR1 K105 F1 ;B1 B2 ;F2 B2 ;;;;
 #

@@ -44,10 +44,12 @@ definition let X1,X2,x1,x2;
  redefine func [x1,x2] -> Element of [:X1,X2:];
 end;
 
+
 definition let X1,X2; let x be Element of [:X1,X2:];
  redefine func x`1 -> Element of X1;
  redefine func x`2 -> Element of X2;
 end;
+
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
@@ -73,6 +75,7 @@ theorem :: DOMAIN_1:17
 definition let X1,X2,X3,x1,x2,x3;
   redefine func [x1,x2,x3] -> Element of [:X1,X2,X3:];
 end;
+
 
 canceled 6;
 
@@ -109,6 +112,7 @@ definition let X1,X2,X3,X4,x1,x2,x3,x4;
   redefine func [x1,x2,x3,x4] -> Element of [:X1,X2,X3,X4:];
 end;
 
+
 canceled 6;
 
 theorem :: DOMAIN_1:40
@@ -133,29 +137,96 @@ theorem :: DOMAIN_1:45
          A3 for Subset of X3,
          A4 for Subset of X4;
 
-scheme Fraenkel1 {P[set]}:
- for X1 holds { x1 : P[x1] } is Subset of X1;
+scheme :: DOMAIN_1:sch 1
+ Fraenkel1 {P[set]}:
+ for X1 holds { x1 : P[x1] } is Subset of X1
+proof  let X1;
+     { x1 : P[x1] } c= X1
+    proof let a; assume a in { x1 : P[x1] };
+      then ex x1 st a = x1 & P[x1];
+     hence thesis;
+    end;
+  hence thesis;
+ end;
 
-scheme Fraenkel2 {P[set,set]}:
- for X1,X2 holds { [x1,x2] : P[x1,x2] } is Subset of [:X1,X2:];
+scheme :: DOMAIN_1:sch 2
+ Fraenkel2 {P[set,set]}:
+ for X1,X2 holds { [x1,x2] : P[x1,x2] } is Subset of [:X1,X2:]
+proof  let X1,X2;
+     { [x1,x2] : P[x1,x2] } c= [:X1,X2:]
+    proof let a; assume a in { [x1,x2] : P[x1,x2] };
+      then ex x1,x2 st a = [x1,x2] & P[x1,x2];
+     hence thesis;
+    end;
+  hence thesis;
+ end;
 
-scheme Fraenkel3 {P[set,set,set]}:
- for X1,X2,X3 holds { [x1,x2,x3] : P[x1,x2,x3] } is Subset of [:X1,X2,X3:];
+scheme :: DOMAIN_1:sch 3
+ Fraenkel3 {P[set,set,set]}:
+ for X1,X2,X3 holds { [x1,x2,x3] : P[x1,x2,x3] } is Subset of [:X1,X2,X3:]
+proof  let X1,X2,X3;
+     { [x1,x2,x3] : P[x1,x2,x3] } c= [:X1,X2,X3:]
+    proof let a; assume a in { [x1,x2,x3] : P[x1,x2,x3] };
+      then ex x1,x2,x3 st a = [x1,x2,x3] & P[x1,x2,x3];
+     hence thesis;
+    end;
+  hence thesis;
+ end;
 
-scheme Fraenkel4 {P[set,set,set,set]}:
+scheme :: DOMAIN_1:sch 4
+ Fraenkel4 {P[set,set,set,set]}:
  for X1,X2,X3,X4 holds
-   { [x1,x2,x3,x4] : P[x1,x2,x3,x4] } is Subset of [:X1,X2,X3,X4:];
+   { [x1,x2,x3,x4] : P[x1,x2,x3,x4] } is Subset of [:X1,X2,X3,X4:]
+proof   let X1,X2,X3,X4;
+     { [x1,x2,x3,x4] : P[x1,x2,x3,x4] } c= [:X1,X2,X3,X4:]
+    proof let a; assume a in { [x1,x2,x3,x4] : P[x1,x2,x3,x4] };
+      then ex x1,x2,x3,x4 st a = [x1,x2,x3,x4] & P[x1,x2,x3,x4];
+     hence thesis;
+    end;
+  hence thesis;
+ end;
 
-scheme Fraenkel5 {P[set],Q[set]}:
+scheme :: DOMAIN_1:sch 5
+ Fraenkel5 {P[set],Q[set]}:
  for X1 st for x1 holds P[x1] implies Q[x1]
-  holds { y1 : P[y1] } c= { z1 : Q[z1] };
+  holds { y1 : P[y1] } c= { z1 : Q[z1] }
+proof  let X1 such that
+A1:  P[x1] implies Q[x1];
+  let a; assume a in { x1 : P[x1] };
+   then consider x1 such that
+A2:  a = x1 and
+A3:  P[x1];
+     Q[x1] by A1,A3;
+  hence thesis by A2;
+ end;
 
-scheme Fraenkel6 {P[set],Q[set]}:
+scheme :: DOMAIN_1:sch 6
+ Fraenkel6 {P[set],Q[set]}:
  for X1 st for x1 holds P[x1] iff Q[x1]
-  holds { y1 : P[y1] } = { z1 : Q[z1] };
+  holds { y1 : P[y1] } = { z1 : Q[z1] }
+proof
+   defpred p[set] means P[$1];
+   defpred q[set] means Q[$1];
+A1:  for X1 st for x1 holds p[x1] implies q[x1]
+   holds { y1 : p[y1] } c= { z1 : q[z1] } from Fraenkel5;
+A2:  for X1 st for x1 holds q[x1] implies p[x1]
+   holds { y1 : q[y1] } c= { z1 : p[z1] } from Fraenkel5;
+  let X1; assume
+A3:  P[x1] iff Q[x1];
+  hence { y1 : P[y1] } c= { z1 : Q[z1] } by A1;
+  thus { y1 : Q[y1] } c= { z1 : P[z1] } by A2,A3;
+ end;
 
-scheme SubsetD{D() -> non empty set,P[set]}:
- {d where d is Element of D() : P[d]} is Subset of D();
+scheme :: DOMAIN_1:sch 7
+ SubsetD{D() -> non empty set,P[set]}:
+ {d where d is Element of D() : P[d]} is Subset of D()
+proof
+   defpred R[set] means P[$1];
+   for D being non empty set holds
+         {d where d is Element of D : R[d]} is Subset of D
+           from Fraenkel1;
+   hence thesis;
+  end;
 
 canceled 2;
 
@@ -229,4 +300,5 @@ definition let D be non empty set;
  let x8 be Element of D;
   redefine func {x1,x2,x3,x4,x5,x6,x7,x8} -> Subset of D;
 end;
+
 

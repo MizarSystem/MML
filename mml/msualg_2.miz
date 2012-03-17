@@ -31,17 +31,18 @@ reserve x,y for set;
 
 scheme LambdaB {D()->non empty set, F(set)->set}:
 ex f be Function st dom f = D() & for d be Element of D() holds f.d = F(d)
- proof
+proof
   deffunc G(set)=F($1);
   consider f be Function such that
-  A1: dom f = D() & for d be set st d in D() holds f.d = G(d) from Lambda;
+  A1: dom f = D() & for d be set st d in D() holds f.d = G(d) from
+FUNCT_1:sch 3;
   take f;
   thus dom f = D() by A1;
   let d be Element of D();
   thus thesis by A1;
  end;
 
-definition
+registration
   let I be set, X be ManySortedSet of I, Y be non-empty ManySortedSet of I;
   cluster X \/ Y -> non-empty;
   coherence
@@ -66,6 +67,7 @@ definition
    hence (Y \/ X).i is non empty by A5,A6,PBOOLE:def 7;
    end;
 end;
+
 
 canceled;
 
@@ -133,7 +135,8 @@ mode ManySortedSubset of M -> ManySortedSet of I means :Def1:
   existence;
 end;
 
-definition let I be set,
+
+registration let I be set,
                M be non-empty ManySortedSet of I;
 cluster non-empty ManySortedSubset of M;
  existence
@@ -143,6 +146,7 @@ cluster non-empty ManySortedSubset of M;
    thus thesis;
   end;
 end;
+
 
 begin
 ::
@@ -158,6 +162,7 @@ definition let S be non empty ManySortedSign,
 mode MSSubset of U0 is ManySortedSubset of the Sorts of U0;
 end;
 
+
 definition let S be non empty ManySortedSign;
  let IT be SortSymbol of S;
 attr IT is with_const_op means :Def2:
@@ -165,18 +170,21 @@ attr IT is with_const_op means :Def2:
  (the Arity of S).o = {} & (the ResultSort of S).o = IT;
 end;
 
+
 definition let IT be non empty ManySortedSign;
 attr IT is all-with_const_op means :Def3:
  for s be SortSymbol of IT holds s is with_const_op;
 end;
 
-definition let A be non empty set, B be set,
+
+registration let A be non empty set, B be set,
  a be Function of B,A*, r be Function of B,A;
  cluster ManySortedSign(#A,B,a,r#) -> non empty;
  coherence by STRUCT_0:def 1;
 end;
 
-definition
+
+registration
 cluster non void all-with_const_op strict (non empty ManySortedSign);
  existence
   proof
@@ -211,6 +219,7 @@ cluster non void all-with_const_op strict (non empty ManySortedSign);
    thus thesis;
   end;
 end;
+
 
 definition let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S,
@@ -251,6 +260,7 @@ func Constants(U0,s) -> Subset of (the Sorts of U0).s means :Def4:
  correctness;
 end;
 
+
 definition let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S;
 func Constants (U0) -> MSSubset of U0 means :Def5:
@@ -287,7 +297,8 @@ func Constants (U0) -> MSSubset of U0 means :Def5:
   end;
 end;
 
-definition let S be all-with_const_op non void (non empty ManySortedSign),
+
+registration let S be all-with_const_op non void (non empty ManySortedSign),
                U0 be non-empty MSAlgebra over S,
                s be SortSymbol of S;
 cluster Constants(U0,s) -> non empty;
@@ -340,7 +351,8 @@ cluster Constants(U0,s) -> non empty;
   end;
 end;
 
-definition let S be non void all-with_const_op (non empty ManySortedSign),
+
+registration let S be non void all-with_const_op (non empty ManySortedSign),
                U0 be non-empty MSAlgebra over S;
 cluster Constants(U0) -> non-empty;
  coherence
@@ -355,6 +367,7 @@ cluster Constants(U0) -> non-empty;
   end;
 end;
 
+
 begin
 ::
 ::   Subalgebras of a Many Sorted Algebra.
@@ -368,12 +381,14 @@ pred A is_closed_on o means :Def6:
  rng ((Den(o,U0))|((A# * the Arity of S).o)) c= (A * the ResultSort of S).o;
 end;
 
+
 definition let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S,
                A be MSSubset of U0;
 attr A is opers_closed means :Def7:
  for o be OperSymbol of S holds A is_closed_on o;
 end;
+
 
 theorem Th3:
 for S be non void non empty ManySortedSign, o be OperSymbol of S,
@@ -432,11 +447,14 @@ A4:  (A * the ResultSort of S).o = {};
       suppose
        (A# * the Arity of S).o = {};
         hence thesis by A5,FUNCT_2:55,RELAT_1:60;
+      end;
       suppose
        (A# * the Arity of S).o <> {};
         hence thesis by A4,A5,FUNCT_2:def 1,RELSET_1:25;
      end;
+     end;
     hence thesis;
+   end;
    suppose (A * the ResultSort of S).o <> {};
     then A6:   A.((the ResultSort of S).o) <> {} by A2,A3,FUNCT_1:23;
 A7:  (the ResultSort of S).o in the carrier of S by A3,FUNCT_2:7;
@@ -457,7 +475,9 @@ FUNCT_1:68
       rng f c= (A * the ResultSort of S).o by A1,Def6;
    hence thesis by A12,FUNCT_2:4;
   end;
+  end;
 end;
+
 
 definition let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S,
@@ -479,7 +499,7 @@ func Opers(U0,A) -> ManySortedFunction of
     end;
    consider f be Function such that
    A3: dom f = the OperSymbols of S &
-   for x st x in the OperSymbols of S holds P[x,f.x] from NonUniqFuncEx(A2);
+   for x st x in the OperSymbols of S holds P[x,f.x] from ZFREFLE1:sch 1(A2);
    reconsider f as ManySortedSet of the OperSymbols of S by A3,PBOOLE:def 3;
      for x st x in dom f holds f.x is Function
     proof let x;
@@ -520,6 +540,7 @@ func Opers(U0,A) -> ManySortedFunction of
    end;
 end;
 
+
 theorem Th4:
 for U0 being MSAlgebra over S
 for B being MSSubset of U0 st B=the Sorts of U0 holds
@@ -536,13 +557,16 @@ A2:  B is opers_closed
          now per cases;
         suppose Args(o,U0) = {};
          hence Den(o,U0) = {} by PARTFUN1:57;
+        end;
         suppose Args(o,U0) <> {};
          hence Den(o,U0) = {} by A3,FUNCT_2:def 1;
+       end;
        end;
        then rng ((Den(o,U0))|((B# * the Arity of S).o)) = {} by RELAT_1:60,111
 ;
       hence rng ((Den(o,U0))|((B# * the Arity of S).o))
           c= (B * the ResultSort of S).o by XBOOLE_1:2;
+     end;
      suppose (B * the ResultSort of S).o <> {};
       then Result(o,U0) <> {} by A1,MSUALG_1:def 10;
 then A4:   dom Den(o,U0) = Args(o,U0) & rng Den(o,U0) c= Result(o,U0)
@@ -551,6 +575,7 @@ A5:   Args(o,U0) = (B# * the Arity of S).o by A1,MSUALG_1:def 9;
         Result (o,U0) = (B* the ResultSort of S).o by A1,MSUALG_1:def 10;
     hence rng ((Den(o,U0))|((B# * the Arity of S).o))
        c= (B * the ResultSort of S).o by A4,A5,RELAT_1:97;
+    end;
     end;
    let o;
        B is_closed_on o by A2,Def7;
@@ -561,16 +586,20 @@ then A6:  o/.B = (Den(o,U0))|((B# * the Arity of S).o) by Def8;
        now per cases;
       suppose Args(o,U0) = {};
        hence Den(o,U0) = {} by PARTFUN1:57;
+      end;
       suppose Args(o,U0) <> {};
        hence Den(o,U0) = {} by A7,FUNCT_2:def 1;
      end;
+     end;
       hence o/.B = Den(o,U0) by A6,RELAT_1:111;
+    end;
     suppose (B * the ResultSort of S).o <> {};
      then Result(o,U0) <> {} by A1,MSUALG_1:def 10;
 then A8:  dom Den(o,U0) = Args(o,U0) & rng Den(o,U0) c= Result(o,U0)
                                       by FUNCT_2:def 1,RELSET_1:12;
        Args(o,U0) = (B# * the Arity of S).o by A1,MSUALG_1:def 9;
   hence thesis by A6,A8,RELAT_1:97;
+ end;
  end;
 
 theorem Th5:
@@ -615,6 +644,7 @@ mode MSSubAlgebra of U0 -> MSAlgebra over S means :Def10:
  end;
 end;
 
+
 Lm1: for S being non void non empty ManySortedSign,
  U0 being MSAlgebra over S holds
  MSAlgebra (#the Sorts of U0,the Charact of U0#) is MSSubAlgebra of U0
@@ -642,7 +672,7 @@ proof
    hence thesis by Def10;
 end;
 
-definition let S be non void non empty ManySortedSign,
+registration let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S;
 cluster strict MSSubAlgebra of U0;
  existence
@@ -653,6 +683,7 @@ cluster strict MSSubAlgebra of U0;
   end;
 end;
 
+
 Lm2: for S being non void non empty ManySortedSign,
   U0 being non-empty MSAlgebra over S holds
   MSAlgebra (#the Sorts of U0,the Charact of U0#) is non-empty
@@ -662,13 +693,14 @@ proof
   thus thesis by MSUALG_1:def 8;
 end;
 
-definition let S be non void non empty ManySortedSign,
+registration let S be non void non empty ManySortedSign,
                U0 be non-empty MSAlgebra over S;
   cluster MSAlgebra (#the Sorts of U0,the Charact of U0#) -> non-empty;
   coherence by Lm2;
 end;
 
-definition let S be non void non empty ManySortedSign,
+
+registration let S be non void non empty ManySortedSign,
                U0 be non-empty MSAlgebra over S;
 cluster non-empty strict MSSubAlgebra of U0;
  existence
@@ -678,6 +710,7 @@ cluster non-empty strict MSSubAlgebra of U0;
    hence thesis;
   end;
 end;
+
 
 theorem
   U0 is MSSubAlgebra of U0
@@ -879,6 +912,7 @@ A1:     (the Sorts of U0).s = {};
           (Constants(U0)).s = Constants(U0,s) by Def5
            .= {} by A1,Def4;
        hence thesis;
+      end;
       suppose
 A2:     (the Sorts of U0).s <> {};
       assume A3: y in (Constants(U0)).x;
@@ -932,6 +966,7 @@ A4:   (Constants(U0)).x = Constants(U0,s) by Def5;
       rng(the ResultSort of S) c= the carrier of S
                     by FUNCT_2:def 1,RELSET_1:12;
       hence thesis by A5,A6,A8,A13,FUNCT_1:23;
+     end;
      end;
    end;
   hence thesis by Def1;
@@ -990,7 +1025,7 @@ func SubSort(A) -> set means :Def11:
    B = $1 holds B is opers_closed & Constants(U0) c= B & A c= B;
    consider X be set such that A1:for x be set holds
    x in X iff x in Funcs(the carrier of S, bool (Union (the Sorts of U0))) &
-     P[x] from Separation;
+     P[x] from XBOOLE_0:sch 1;
    take X;
    thus thesis by A1;
   end;
@@ -1002,10 +1037,11 @@ func SubSort(A) -> set means :Def11:
      B = $1 holds B is opers_closed & Constants(U0) c= B & A c= B;
      for X1,X2 being set st
       (for x be set holds x in X1 iff P[x]) &
-      (for x be set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+      (for x be set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
      hence thesis;
    end;
 end;
+
 
 Lm3:
   for S being non void non empty ManySortedSign,
@@ -1027,12 +1063,13 @@ proof
   hence thesis by A2,A3,Def11;
 end;
 
-definition let S be non void non empty ManySortedSign,
+registration let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S,
                A be MSSubset of U0;
   cluster SubSort(A) -> non empty;
   coherence by Lm3;
 end;
+
 
 definition let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S;
@@ -1047,7 +1084,7 @@ func SubSort(U0) -> set means :Def12:
    B = $1 holds B is opers_closed;
    consider X be set such that A1:for x be set holds
    x in X iff x in Funcs(the carrier of S, bool Union the Sorts of U0) &
-    P[x]  from Separation;
+    P[x]  from XBOOLE_0:sch 1;
    take X;
    thus thesis by A1;
   end;
@@ -1059,12 +1096,14 @@ func SubSort(U0) -> set means :Def12:
     B = $1 holds B is opers_closed;
    for X1,X2 being set st
       (for x being set holds x in X1 iff P[x]) &
-      (for x being set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+      (for x being set holds x in X2 iff P[x]) holds X1 = X2 from
+XBOOLE_0:sch 3;
     hence thesis;
   end;
 end;
 
-definition let S be non void non empty ManySortedSign,
+
+registration let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S;
 cluster SubSort(U0) -> non empty;
  coherence
@@ -1073,7 +1112,7 @@ cluster SubSort(U0) -> non empty;
    B = $1 holds B is opers_closed;
    consider X be set such that A1:for x be set holds
    x in X iff x in Funcs(the carrier of S, bool (Union (the Sorts of U0))) &
-    P[x] from Separation;
+    P[x] from XBOOLE_0:sch 1;
    set f = Funcs(the carrier of S, bool (Union (the Sorts of U0)));
    A2: dom (the Sorts of U0) = the carrier of S by PBOOLE:def 3;
      (Union (the Sorts of U0)) = union rng(the Sorts of U0) by PROB_1:def 3;
@@ -1088,6 +1127,7 @@ cluster SubSort(U0) -> non empty;
   end;
 end;
 
+
 definition let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S,
                e be Element of SubSort(U0);
@@ -1095,6 +1135,7 @@ func @e -> MSSubset of U0 equals :Def13:
  e;
  coherence by Def12;
 end;
+
 
 theorem Th14:
 for A,B be MSSubset of U0 holds
@@ -1167,7 +1208,7 @@ for x be set holds
    B in SubSort(A) & $1 = B.s;
    consider X be set such that
    A1: for x be set holds
-   x in X iff x in C & P[x] from Separation;
+   x in X iff x in C & P[x] from XBOOLE_0:sch 1;
    A2: C = bool union( rng(the Sorts of U0)) by PROB_1:def 3;
    A3: for x be set holds
    x in X iff ex B be MSSubset of U0 st B in SubSort(A) & x = B.s
@@ -1194,13 +1235,15 @@ for x be set holds
     defpred P[set] means ex B be MSSubset of U0 st B in SubSort(A) & $1 = B.s;
    for X1,X2 being set st
      (for x being set holds x in X1 iff P[x]) &
-     (for x being set holds x in X2 iff P[x]) holds X1 = X2  from SetEq;
+     (for x being set holds x in X2 iff P[x]) holds X1 = X2  from
+XBOOLE_0:sch 3;
 
     hence thesis;
   end;
 end;
 
-definition let S be non void non empty ManySortedSign,
+
+registration let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S,
                A be MSSubset of U0,
                s be SortSymbol of S;
@@ -1212,7 +1255,7 @@ cluster SubSort(A,s) -> non empty;
    B in SubSort(A) & $1 = B.s;
    consider X be set such that
    A1: for x be set holds
-   x in X iff x in C & P[x] from Separation;
+   x in X iff x in C & P[x] from XBOOLE_0:sch 1;
    A2: C = bool union( rng(the Sorts of U0)) by PROB_1:def 3;
    A3: for x be set holds
    x in X iff ex B be MSSubset of U0 st B in SubSort(A) & x = B.s
@@ -1240,6 +1283,7 @@ cluster SubSort(A,s) -> non empty;
    hence thesis;
   end;
 end;
+
 
 definition let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S,
@@ -1281,6 +1325,7 @@ for s be SortSymbol of S holds it.s = meet (SubSort(A,s));
    hence thesis by PBOOLE:3;
   end;
 end;
+
 
 theorem Th16:
 for A be MSSubset of U0 holds Constants(U0) \/ A c= MSSubSort(A)
@@ -1429,6 +1474,7 @@ func U0|A -> strict MSSubAlgebra of U0 equals :Def16:
   end;
 end;
 
+
 definition let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S,
                U1,U2 be MSSubAlgebra of U0;
@@ -1533,6 +1579,7 @@ A7: dom (u1 * the ResultSort of S) = the OperSymbols of S &
  uniqueness by Th10;
 end;
 
+
 definition let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S,
                A be MSSubset of U0;
@@ -1581,7 +1628,8 @@ func GenMSAlg(A) -> strict MSSubAlgebra of U0 means :Def18:
  end;
 end;
 
-definition let S be non void non empty ManySortedSign,
+
+registration let S be non void non empty ManySortedSign,
                U0 be non-empty MSAlgebra over S,
                A be non-empty MSSubset of U0;
  cluster GenMSAlg(A) -> non-empty;
@@ -1618,6 +1666,7 @@ definition let S be non void non empty ManySortedSign,
     hence thesis by Def18;
   end;
 end;
+
 
 theorem Th22:
 for S be non void non empty ManySortedSign,
@@ -1710,6 +1759,7 @@ func U1 "\/" U2 -> strict MSSubAlgebra of U0 means :Def19:
    hence thesis;
   end;
 end;
+
 
 theorem Th25:
 for S be non void non empty ManySortedSign,U0 be non-empty MSAlgebra over S,
@@ -1875,12 +1925,14 @@ for x holds x in it iff x is strict MSSubAlgebra of U0;
      defpred P[set] means $1 is strict MSSubAlgebra of U0;
      for X1,X2 being set st
        (for x being set holds x in X1 iff P[x]) &
-       (for x being set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+       (for x being set holds x in X2 iff P[x]) holds X1 = X2 from
+XBOOLE_0:sch 3;
      hence thesis;
    end;
 end;
 
-definition let S be non void non empty ManySortedSign,
+
+registration let S be non void non empty ManySortedSign,
                U0 be MSAlgebra over S;
 cluster MSSub(U0) -> non empty;
  coherence
@@ -1890,6 +1942,7 @@ cluster MSSub(U0) -> non empty;
     hence thesis;
   end;
 end;
+
 
 definition let S be non void non empty ManySortedSign,
                 U0 be non-empty MSAlgebra over S;
@@ -1912,7 +1965,8 @@ for x,y be Element of MSSub(U0) holds
       thus thesis;
      end;
     consider o be BinOp of MSSub(U0) such that
-    A2:for a,b be Element of MSSub(U0) holds P[a,b,o.(a,b)] from BinOpEx(A1);
+    A2:for a,b be Element of MSSub(U0) holds P[a,b,o.(a,b)] from BINOP_1:sch 1
+(A1);
     take o;
     thus thesis by A2;
    end;
@@ -1935,6 +1989,7 @@ for x,y be Element of MSSub(U0) holds
    end;
 end;
 
+
 definition let S be non void non empty ManySortedSign,
                U0 be non-empty MSAlgebra over S;
 func MSAlg_meet(U0) -> BinOp of (MSSub(U0)) means :Def22:
@@ -1956,7 +2011,8 @@ for x,y be Element of MSSub(U0) holds
       thus thesis;
      end;
     consider o be BinOp of MSSub(U0) such that
-    A2:for a,b be Element of MSSub(U0) holds P[a,b,o.(a,b)] from BinOpEx(A1);
+    A2:for a,b be Element of MSSub(U0) holds P[a,b,o.(a,b)] from BINOP_1:sch 1
+(A1);
     take o;
     thus thesis by A2;
    end;
@@ -1978,6 +2034,7 @@ for x,y be Element of MSSub(U0) holds
     hence thesis by BINOP_1:2;
    end;
 end;
+
 
 reserve U0 for non-empty MSAlgebra over S;
 
@@ -2171,6 +2228,7 @@ def 3
   end;
 end;
 
+
 theorem Th34:
 for S be non void non empty ManySortedSign,
     U0 be non-empty MSAlgebra over S
@@ -2209,11 +2267,12 @@ holds MSSubAlLattice(U0) is bounded
    end;
  end;
 
-definition let S be non void non empty ManySortedSign,
+registration let S be non void non empty ManySortedSign,
                U0 be non-empty MSAlgebra over S;
 cluster MSSubAlLattice(U0) -> bounded;
  coherence by Th34;
 end;
+
 
 theorem
   for S be non void non empty ManySortedSign,

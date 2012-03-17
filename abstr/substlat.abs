@@ -34,22 +34,33 @@ theorem :: SUBSTLAT:1
 theorem :: SUBSTLAT:2
   { {} } in SubstitutionSet (V, C);
 
-definition let V, C;
+registration let V, C;
   cluster SubstitutionSet (V, C) -> non empty;
+  coherence by Th2;
 end;
+
 
 definition let V, C;
   let A, B be Element of SubstitutionSet (V, C);
   redefine func A \/ B -> Element of Fin PFuncs (V, C);
 end;
 
-definition let V, C;
+
+registration let V, C;
   cluster non empty Element of SubstitutionSet (V, C);
+  existence
+  proof
+     { {} } in SubstitutionSet (V, C) by Th2;
+   hence thesis;
+  end;
 end;
 
-definition let V, C;
+
+registration let V, C;
   cluster -> finite Element of SubstitutionSet (V, C);
+  coherence by FINSUB_1:def 5;
 end;
+
 
 definition let V, C;
   let A be Element of Fin PFuncs (V, C);
@@ -60,14 +71,33 @@ definition let V, C;
      ( s in A & s c= t iff s = t ) };
 end;
 
-definition let V, C;
+
+registration let V, C;
  let A be non empty Element of SubstitutionSet (V, C);
  cluster -> Function-like Relation-like Element of A;
+ coherence
+ proof
+  let X be Element of A;
+A1:  X in A;
+    A c= PFuncs (V,C) by FINSUB_1:def 5;
+  then consider f being Function such that
+A2:    X = f & dom f c= V & rng f c= C by A1,PARTFUN1:def 5;
+  thus thesis by A2;
+ end;
 end;
 
-definition let V, C;
+
+registration let V, C;
  cluster -> Function-like Relation-like Element of PFuncs (V, C);
+ coherence
+proof
+ let a be Element of PFuncs (V, C);
+ consider f be Function such that
+A1:    a = f & dom f c= V & rng f c= C by PARTFUN1:def 5;
+ thus thesis by A1;
 end;
+end;
+
 
 definition let V, C;
   let A, B be Element of Fin PFuncs (V, C);
@@ -76,6 +106,7 @@ definition let V, C;
     { s \/ t where s,t is Element of PFuncs (V,C) :
       s in A & t in B & s tolerates t };
 end;
+
 
 reserve A, B, D for Element of Fin PFuncs (V, C);
 
@@ -96,9 +127,17 @@ theorem :: SUBSTLAT:6
 
 reserve s for Element of PFuncs (V,C);
 
-definition let V, C;
+registration let V, C;
   cluster finite Element of PFuncs (V,C);
+  existence
+  proof
+      {} is PartFunc of V,C by PARTFUN1:56;
+    then reconsider e = {} as Element of PFuncs (V,C) by PARTFUN1:119;
+    take e;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: SUBSTLAT:7
  for a be finite set holds a in B & (for b be finite set st
@@ -175,19 +214,92 @@ definition let V, C;
      (the L_meet of it).(A,B) = mi (A^B);
 end;
 
-definition let V, C;
+
+registration let V, C;
   cluster SubstLatt (V, C) -> non empty;
+  coherence
+  proof
+     the carrier of SubstLatt (V, C) = SubstitutionSet (V, C) by Def4;
+   hence thesis by STRUCT_0:def 1;
+  end;
 end;
 
 reserve K, L, M for Element of SubstitutionSet (V,C);
 
-definition let V, C;
+registration let V, C;
   cluster SubstLatt (V, C) -> Lattice-like;
+  coherence
+proof
+  set G = SubstLatt (V, C);
+   thus for u,v being Element of G holds u"\/"v = v"\/"u by Lm6
+;
+   thus for u,v,w being Element of G holds
+     u"\/"(v"\/"w) = (u"\/"v)"\/"w by Lm7;
+   thus for u,v being Element of G holds (u"/\"v)"\/"
+v = v by Lm9;
+   thus for u,v being Element of G holds u"/\"v = v"/\"
+u by Lm10;
+   thus for u,v,w being Element of G holds
+    u"/\"(v"/\"w) = (u"/\"v)"/\"w by Lm11;
+   let u,v be Element of G;
+   thus u"/\"(u"\/"v) = u by Lm13;
+ end;
 end;
 
-definition let V, C;
+
+registration let V, C;
   cluster SubstLatt (V, C) -> distributive bounded;
+  coherence
+  proof
+   thus SubstLatt (V, C) is distributive
+   proof
+    let u,v,w be Element of SubstLatt (V, C);
+    reconsider K = u, L = v, M = w as Element of SubstitutionSet (V,C) by Def4;
+A1: u "/\" w = (the L_meet of SubstLatt (V, C)).(K,M) by LATTICES:def 2;
+  thus u "/\" (v "\/" w) =
+  (the L_meet of SubstLatt (V, C)).(K,v "\/" w) by LATTICES:def 2
+.= (the L_meet of SubstLatt (V, C)).(K,(the L_join of SubstLatt (V, C)).
+       (L,M)) by LATTICES:def 1
+.= (the L_join of SubstLatt (V, C)).((the L_meet of SubstLatt (V, C)).(K,L),
+   (the L_meet of SubstLatt (V, C)).(K,M)) by Lm12
+   .= (the L_join of SubstLatt (V, C)).(u "/\" v, u "/\"
+ w) by A1,LATTICES:def 2
+   .= (u "/\" v) "\/" (u "/\" w) by LATTICES:def 1;
+  end;
+   thus SubstLatt (V, C) is bounded
+  proof
+   thus SubstLatt (V, C) is lower-bounded
+   proof
+   set L = SubstLatt (V, C);
+   reconsider E = {} as Element of SubstitutionSet (V,C) by Th1;
+   reconsider e = E as Element of L by Def4;
+   take e; let u be Element of L;
+   reconsider K = u as Element of SubstitutionSet (V,C) by Def4;
+     e "\/" u = (the L_join of L).(E,K) by LATTICES:def 1
+       .= mi (E \/ K) by Def4
+       .= u by Th11;
+   then e "/\" u = e & u "/\" e = e by LATTICES:def 9;
+   hence thesis;
+  end;
+   thus SubstLatt (V, C) is upper-bounded
+   proof
+   set L = SubstLatt (V, C);
+   reconsider E = { {} } as Element of SubstitutionSet (V,C) by Th2;
+   reconsider e = E as Element of L by Def4;
+   take e; let u be Element of L;
+   reconsider K = u as Element of SubstitutionSet (V,C) by Def4;
+      e "/\" u = (the L_meet of SubstLatt (V,C)).(e,u) by LATTICES:def 2
+            .= mi (E ^ K) by Def4
+            .= mi (K ^ E) by Th3
+            .= mi K by Th4
+            .= u by Th11;
+   then e "\/" u = e & u "\/" e = e by LATTICES:def 8;
+   hence thesis;
+   end;
+  end;
+  end;
 end;
+
 
 theorem :: SUBSTLAT:26
    Bottom SubstLatt (V,C) = {};

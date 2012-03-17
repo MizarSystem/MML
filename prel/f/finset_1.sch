@@ -6,9 +6,6 @@ FUNCT_1
 ORDINAL1
 FINSET_1
 #
-OLambdaC
-Finite
-#
 M1 ;M1 ;M1 ;;
 ªM1 V2 ;V4 ;;ª&R1 K10 B1 ;F1 ;;M1 V8 ;;ª&R2 B2 F1 ;;ª&ª&P1 B2 ;ªR1 K20 B1 B2 ;F2 B2 ;;;ª&ªP1 B2 ;ªR1 K20 B1 B2 ;F3 B2 ;;;;;;;
 #

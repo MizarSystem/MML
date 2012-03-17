@@ -48,7 +48,7 @@ proof deffunc _F(set) = F($1); defpred _P[Nat] means not contradiction;
     end; then
 A2: S = S1 by TARSKI:2;
 A3: F(m()) in S by A1;
-A4: S is finite from FinSegRng;
+A4: S is finite from GRAPH_2:sch 1;
     S c= X() proof let x; assume x in S; then consider n1 being Nat such that
    A5: x = F(n1) and n1 >= m() & n1 <= n();
     thus x in X() by A5;
@@ -108,7 +108,8 @@ definition let c be real number;
 :Def3: c > 0 & c <> 1;
 end;
 
-definition
+
+registration
  cluster positive Real;
   existence proof take 1; 1 > 0; hence thesis; end;
  cluster negative Real;
@@ -126,6 +127,7 @@ definition
   existence proof take 1; thus thesis by Def3; end;
 end;
 
+
 definition let f be Real_Sequence;
  attr f is eventually-nonnegative means :Def4:
   ex N st for n st n >= N holds f.n >= 0;
@@ -139,13 +141,14 @@ definition let f be Real_Sequence;
   ex N st for n st n >= N holds f.n <= f.(n+1);
 end;
 
-definition
+
+registration
  cluster eventually-nonnegative eventually-nonzero positive eventually-positive
          eventually-nondecreasing Real_Sequence;
   existence proof
      deffunc _F(set) = 1;
      consider f being Function of NAT, REAL such that
-  A1: for x being Nat holds f.x = _F(x) from LambdaD;
+  A1: for x being Nat holds f.x = _F(x) from FUNCT_2:sch 4;
    take f;
    thus f is eventually-nonnegative proof
     take 0; let n; assume n >= 0; f.n = 1 by A1; hence f.n >= 0;
@@ -167,7 +170,8 @@ definition
   end;
 end;
 
-definition
+
+registration
  cluster positive -> eventually-positive Real_Sequence;
   coherence proof
    let f be Real_Sequence; assume
@@ -206,7 +210,8 @@ definition
   end;
 end;
 
-definition let f,g be eventually-nonnegative Real_Sequence;
+
+registration let f,g be eventually-nonnegative Real_Sequence;
  cluster f+g -> eventually-nonnegative;
   coherence proof
      consider N such that
@@ -225,6 +230,7 @@ definition let f,g be eventually-nonnegative Real_Sequence;
   end;
 end;
 
+
 definition let f be Real_Sequence, c be real number;
  func c+f -> Real_Sequence means :Def9:
   for n holds it.n = c + f.n;
@@ -232,7 +238,7 @@ definition let f be Real_Sequence, c be real number;
     reconsider c as Real by XREAL_0:def 1;
     deffunc _F(Nat) = c+f.$1;
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = _F(n) from LambdaD;
+ A1: for n being Nat holds h.n = _F(n) from FUNCT_2:sch 4;
   take h; let n; thus thesis by A1;
  end;
  uniqueness proof let j,k be Real_Sequence such that
@@ -241,10 +247,12 @@ definition let f be Real_Sequence, c be real number;
     now let n; thus j.n = c + f.n by A2 .= k.n by A3; end;
   hence j = k by FUNCT_2:113;
  end;
- synonym f+c;
-end;
+ end;
+notation let f be Real_Sequence, c be real number;
+ synonym f+c for c+f ; end;
 
-definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
+
+registration let f be eventually-nonnegative Real_Sequence, c be positive Real;
  cluster c(#)f -> eventually-nonnegative;
   coherence proof
      consider N such that
@@ -256,7 +264,8 @@ definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
   end;
 end;
 
-definition let f be eventually-nonnegative Real_Sequence,
+
+registration let f be eventually-nonnegative Real_Sequence,
                c be non negative Real;
  cluster c+f -> eventually-nonnegative;
   coherence proof
@@ -269,7 +278,8 @@ definition let f be eventually-nonnegative Real_Sequence,
   end;
 end;
 
-definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
+
+registration let f be eventually-nonnegative Real_Sequence, c be positive Real;
  cluster c+f -> eventually-positive;
   coherence proof
      consider N such that
@@ -280,13 +290,14 @@ definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
   end;
 end;
 
+
 definition let f,g be Real_Sequence;
  func max(f, g) -> Real_Sequence means :Def10:
   for n holds it.n = max( f.n, g.n );
  existence proof
     deffunc _F(Nat) = max(f.$1, g.$1);
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = _F(n) from LambdaD;
+ A1: for n being Nat holds h.n = _F(n) from FUNCT_2:sch 4;
    take h; let n; thus h.n = max(f.n, g.n) by A1;
  end;
  uniqueness proof let j, k be Real_Sequence such that
@@ -298,7 +309,8 @@ definition let f,g be Real_Sequence;
  commutativity;
 end;
 
-definition let f be Real_Sequence, g be eventually-nonnegative Real_Sequence;
+
+registration let f be Real_Sequence, g be eventually-nonnegative Real_Sequence;
  cluster max(f, g) -> eventually-nonnegative;
   coherence proof
      consider N such that
@@ -310,7 +322,8 @@ definition let f be Real_Sequence, g be eventually-nonnegative Real_Sequence;
   end;
 end;
 
-definition let f be Real_Sequence, g be eventually-positive Real_Sequence;
+
+registration let f be Real_Sequence, g be eventually-positive Real_Sequence;
  cluster max(f, g) -> eventually-positive;
   coherence proof
      consider N such that
@@ -322,10 +335,12 @@ definition let f be Real_Sequence, g be eventually-positive Real_Sequence;
   end;
 end;
 
+
 definition let f,g be Real_Sequence;
  pred g majorizes f means :Def11:
   ex N st for n st n >= N holds f.n <= g.n;
 end;
+
 
 Lm1:
  for f,g being Real_Sequence, n being Nat holds (f/"g).n = f.n/g.n
@@ -352,7 +367,7 @@ A4: for m st m >= n & _P[m] holds _P[m+1] proof
     then f.m <= f.(m+1) by A1;
     hence f.n <= f.(m+1) by A5,AXIOMS:22;
    end;
-     for m st m >= n holds _P[m] from Ind1(A3,A4);
+     for m st m >= n holds _P[m] from INT_2:sch 1(A3,A4);
   hence thesis;
 end;
 
@@ -538,6 +553,7 @@ A3: now
       then (f.n)" > 0 by REAL_1:72;
    hence abs((g/"f).n-0)<p by A13,A14,A15,A16,ABSVALUE:def 1,REAL_1:70;
 
+  end;
   suppose
   A17: g.n < 0;
       then 1*g.n > (p*f.n)*(g.n)"*g.n by A11,REAL_1:71;
@@ -554,6 +570,7 @@ A3: now
        hence contradiction;
       end;
    hence abs((g/"f).n-0)<p by A13,A14,A17,A18,ABSVALUE:def 1,REAL_1:71;
+  end;
   end;
  hence g/"f is convergent by SEQ_2:def 6;
  hence lim(g/"f)=0 by A3,SEQ_2:def 7;
@@ -591,6 +608,7 @@ definition :: Defining O(f) (page 80)
   hence thesis by FRAENKEL:def 2;
  end;
 end;
+
 
 theorem Th6:
  for x being set, f being eventually-nonnegative Real_Sequence
@@ -635,6 +653,7 @@ proof
    A6: N = 0;
     take c; thus c > 0 by A4; let n; n >= 0 by NAT_1:18;
     hence t.n <= c*f.n by A2,A5,A6;
+   end;
    suppose
    A7: N > 0;
        deffunc _F(Nat) = t.$1 / f.$1;
@@ -664,9 +683,12 @@ proof
              f.n > 0 by Def5;
            then t.n <= b*f.n & b*f.n <= c*f.n by A8,A11,A12,AXIOMS:25;
        hence thesis by AXIOMS:22;
+      end;
       suppose n >= N;
        hence thesis by A2,A5;
      end;
+     end;
+    end;
     suppose
     A13: b > c;
       reconsider b as Element of REAL by XREAL_0:def 1;
@@ -677,13 +699,17 @@ proof
       per cases;
       suppose n < N;
        hence thesis by A8;
+      end;
       suppose
       A14: n >= N;
              f.n > 0 by Def5;
            then t.n <= c*f.n & c*f.n <= b*f.n by A2,A5,A13,A14,AXIOMS:25;
        hence thesis by AXIOMS:22;
      end;
+     end;
    end;
+   end;
+  end;
   end;
   given c such that
   A15: c > 0 & for n holds t.n <= c*f.n;
@@ -745,6 +771,7 @@ A15: f.n <> 0 by A2,A13;
  then A16: t.n <= c2*f.n by A6;
       c2*f.n <= c*f.n by A12,A14,AXIOMS:25;
   hence t.n <= c*f.n by A16,AXIOMS:22;
+ end;
  suppose
  A17: N <= M;
   thus t.n <= c*f.n proof
@@ -771,12 +798,15 @@ A15: f.n <> 0 by A2,A13;
    then A24: t.n <= c1*f.n by A15,XCMPLX_1:88;
         c1*f.n <= c*f.n by A12,A14,AXIOMS:25;
     hence thesis by A24,AXIOMS:22;
+   end;
    suppose
       n >= M;
    then A25: t.n <= c2*f.n by A6;
         c2*f.n <= c*f.n by A12,A14,AXIOMS:25;
     hence thesis by A25,AXIOMS:22;
   end;
+  end;
+end;
 end;
 
 theorem :: Maximum Rule (page 81)
@@ -1131,7 +1161,7 @@ A16: Big_Oh(f) = { t where t is Element of Funcs(NAT, REAL) :
    A21: a >= N & a >= N2 by SQUARE_1:46;
         deffunc _F(Real) = 1/c;
        consider q being Real_Sequence such that
-   A22: for n holds q.n = _F(n) from ExRealSeq;
+   A22: for n holds q.n = _F(n) from SEQ_1:sch 1;
       now take a; let n; assume
        n >= a;
     then A23: n >= N & n >= N2 by A21,AXIOMS:22;
@@ -1217,6 +1247,7 @@ coherence proof
   hence thesis by FRAENKEL:def 2;
  end;
 end;
+
 
 theorem
    for x being set, f being eventually-nonnegative Real_Sequence
@@ -1414,6 +1445,7 @@ A1: Big_Omega(f) = { s where s is Element of Funcs(NAT, REAL) :
    A6: N = 0;
     take d; thus d > 0 by A4; let n; n >= 0 by NAT_1:18;
     hence d*f.n <= t.n by A2,A5,A6;
+   end;
    suppose
    A7: N > 0;
        deffunc _F(Nat) = t.$1 / f.$1;
@@ -1448,12 +1480,15 @@ A1: Big_Omega(f) = { s where s is Element of Funcs(NAT, REAL) :
       per cases;
       suppose n < N;
        hence thesis by A8;
+      end;
       suppose n >= N;
       then A14: d*f.n <= t.n by A2,A5;
            f.n > 0 by Def5;
          then b*f.n <= d*f.n by A11,AXIOMS:25;
        hence thesis by A14,AXIOMS:22;
      end;
+     end;
+    end;
     suppose
     A15: b > d;
      take d;
@@ -1466,10 +1501,14 @@ A1: Big_Omega(f) = { s where s is Element of Funcs(NAT, REAL) :
            f.n > 0 by Def5;
          then d*f.n <= b*f.n by A15,AXIOMS:25;
        hence thesis by A16,AXIOMS:22;
+      end;
       suppose n >= N;
        hence thesis by A2,A5;
      end;
+     end;
    end;
+   end;
+ end;
  end;
    given d such that
  A17: d > 0 and
@@ -1517,9 +1556,11 @@ A4: for n st n >= N2 holds g.n >= 0 by Def4;
        suppose max(f,g).n = f.n;
           then max(f,g).n + 0 <= f.n + g.n by A14,REAL_1:55;
         hence thesis by SEQ_1:11;
+       end;
        suppose max(f,g).n = g.n;
           then max(f,g).n + 0 <= g.n + f.n by A13,REAL_1:55;
         hence thesis by SEQ_1:11;
+      end;
       end;
    A16: d*(f+g).n <= t.n by A8,A11;
         d*max(f,g).n <= d*(f+g).n by A7,A15,AXIOMS:25;
@@ -1587,6 +1628,7 @@ then A3: Big_Oh(f) /\ Big_Omega(f) is functional by FRAENKEL:def 1;
                                                        by A2,A3,FRAENKEL:def 2;
  end;
 end;
+
 
 theorem Th27: :: Alternate Definition for Big_Theta (page 87)
  for f being eventually-nonnegative Real_Sequence holds
@@ -1728,6 +1770,7 @@ A1: Big_Theta(f) = { s where s is Element of Funcs(NAT, REAL) :
    A7: N = 0;
     take c,d; thus c > 0 by A4; thus d > 0 by A5; let n; n >= 0 by NAT_1:18;
     hence d*f.n <= t.n & t.n <= c*f.n by A2,A6,A7;
+   end;
    suppose
    A8: N > 0;
       deffunc _F(Nat) = t.$1 / f.$1;
@@ -1787,6 +1830,7 @@ A1: Big_Theta(f) = { s where s is Element of Funcs(NAT, REAL) :
       A24: t.n <= b*f.n by A9,A22;
          b*f.n <= C*f.n by A15,A21,AXIOMS:25;
        hence t.n <= C*f.n by A24,AXIOMS:22;
+      end;
       suppose
            n >= N;
       then A25: d*f.n <= t.n & t.n <= c*f.n by A2,A6;
@@ -1795,7 +1839,9 @@ A1: Big_Theta(f) = { s where s is Element of Funcs(NAT, REAL) :
          c*f.n <= C*f.n by A15,A21,AXIOMS:25;
        hence t.n <= C*f.n by A25,AXIOMS:22;
     end;
+    end;
 
+  end;
   end;
   given c,d such that
   A26: c > 0 & d > 0 & for n holds d*f.n <= t.n & t.n <= c*f.n;
@@ -1854,9 +1900,11 @@ A4: for n st n >= N2 holds g.n >= 0 by Def4;
          suppose max(f,g).n = f.n;
             then max(f,g).n + 0 <= f.n + g.n by A20,REAL_1:55;
           hence thesis by SEQ_1:11;
+         end;
          suppose max(f,g).n = g.n;
             then max(f,g).n + 0 <= g.n + f.n by A19,REAL_1:55;
           hence thesis by SEQ_1:11;
+       end;
        end;
        then d*max(f,g).n <= d*(f+g).n by A8,AXIOMS:25;
      hence d*max(f,g).n <= t.n & t.n <= (2*c)*max(f,g).n by A14,A18,A21,AXIOMS:
@@ -1991,6 +2039,7 @@ definition :: page 89
  end;
 end;
 
+
 definition :: page 89
  let f be eventually-nonnegative Real_Sequence, X be set;
  func Big_Omega(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals :Def16:
@@ -2026,6 +2075,7 @@ coherence proof
  end;
 end;
 
+
 definition :: page 89
  let f be eventually-nonnegative Real_Sequence, X be set;
  func Big_Theta(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals :Def17:
@@ -2058,6 +2108,7 @@ definition :: page 89
   hence thesis by FRAENKEL:def 2;
  end;
 end;
+
 
 theorem Th36: :: Alternate definition for Big_Theta_Cond
  for f being eventually-nonnegative Real_Sequence, X being set holds
@@ -2146,7 +2197,7 @@ definition :: Definition of f(bn) (page 89)
  existence proof
     deffunc _F(Nat) = f.(b*$1);
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = _F(n) from LambdaD;
+ A1: for n being Nat holds h.n = _F(n) from FUNCT_2:sch 4;
   take h; let n; thus h.n = f.(b*n) by A1;
  end;
  uniqueness proof let j,k be Real_Sequence such that
@@ -2157,17 +2208,20 @@ definition :: Definition of f(bn) (page 89)
  end;
 end;
 
+
 definition :: (page 89)
  let f be eventually-nonnegative Real_Sequence, b be Nat;
  pred f is_smooth_wrt b means :Def19:
   f is eventually-nondecreasing & f taken_every b in Big_Oh(f);
 end;
 
+
 definition :: (page 89)
  let f be eventually-nonnegative Real_Sequence;
  attr f is smooth means :Def20:
   for b being Nat st b >= 2 holds f is_smooth_wrt b;
 end;
+
 
 theorem :: b-smooth implies smooth (page 90)
    for f being eventually-nonnegative Real_Sequence
@@ -2253,11 +2307,13 @@ A10: N >= N2 & N >= N3 by SQUARE_1:46;
                     .= 1*n by POWER:29
                     .= n;
             hence thesis by A10,A20,AXIOMS:22;
+           end;
            suppose k > 0;
               then b to_power k > 1 by A13,POWER:40;
               then b|^k > 1 by A15,POWER:48;
               then b|^k*n >= 1*n by A24,AXIOMS:25;
             hence thesis by A21,AXIOMS:22;
+          end;
           end;
           then (f taken_every b).m <= c*f.m by A5,A8;
       then A32: f.(b*m) <= c*f.m by Def18;
@@ -2269,7 +2325,7 @@ A10: N >= N2 & N >= N3 by SQUARE_1:46;
           then c*f.m <= c|^(k+1)*f.n by A7,POWER:48;
        hence thesis by A31,A32,AXIOMS:22;
      end;
-       for k holds _P[k] from Ind( A28, A29 );
+       for k holds _P[k] from NAT_1:sch 1( A28, A29 );
      then f.(b|^i*n) <= c|^i*f.n;
      then (f taken_every i1).n <= c|^i*f.n by Def18;
    hence (f taken_every a).n <= c|^i*f.n by A27,AXIOMS:22;
@@ -2593,7 +2649,7 @@ definition :: Definition of operators on sets (page 91)
        defpred P[Element of X,Real] means $2 = f.$1 + g.$1;
     A4:for x being Element of X ex y being Element of REAL st P[x,y];
        consider t being Function of X,REAL such that
-    A5:for x being Element of X holds P[x,t.x] from FuncExD(A4);
+    A5:for x being Element of X holds P[x,t.x] from FUNCT_2:sch 3(A4);
        reconsider t as Element of Funcs(X, REAL) by FUNCT_2:11;
          t in IT by A2,A3,A5;
      hence IT is non empty;
@@ -2610,6 +2666,7 @@ definition :: Definition of operators on sets (page 91)
   hence IT is FUNCTION_DOMAIN of X,REAL by FRAENKEL:def 2;
  end;
 end;
+
 
 definition :: (page 91)
  let X be non empty set, F,G be FUNCTION_DOMAIN of X,REAL;
@@ -2641,7 +2698,7 @@ definition :: (page 91)
        defpred P[Element of X,Real] means $2 = max(f.$1, g.$1);
     A4:for x being Element of X ex y being Element of REAL st P[x,y];
        consider t being Function of X,REAL such that
-    A5:for x being Element of X holds P[x,t.x] from FuncExD(A4);
+    A5:for x being Element of X holds P[x,t.x] from FUNCT_2:sch 3(A4);
        reconsider t as Element of Funcs(X, REAL) by FUNCT_2:11;
          t in IT by A2,A3,A5;
      hence IT is non empty;
@@ -2658,6 +2715,7 @@ definition :: (page 91)
   hence IT is FUNCTION_DOMAIN of X,REAL by FRAENKEL:def 2;
  end;
 end;
+
 
 theorem :: Properties, Part 1 (page 91; Problem 3.33)
    for f,g being eventually-nonnegative Real_Sequence holds
@@ -2747,20 +2805,24 @@ A4: Big_Oh(f) + Big_Oh(g) = { t where t is Element of Funcs(NAT,REAL) :
  A28:for x being Element of NAT ex y being Element of REAL st P[x,y] proof
      let n; per cases;
      suppose t.n <= c*f.n; hence thesis;
+     end;
      suppose c*f.n < t.n; hence thesis;
     end;
+    end;
     consider f' being Function of NAT,REAL such that
- A29:for x being Element of NAT holds P[x,f'.x] from FuncExD(A28);
+ A29:for x being Element of NAT holds P[x,f'.x] from FUNCT_2:sch 3(A28);
     defpred Q[Nat,Real] means
      (t.$1 <=
  c*f.$1 implies $2 = 0) & (c*f.$1 < t.$1 implies $2 = t.$1-c*f.$1);
  A30:for x being Element of NAT ex y being Element of REAL st Q[x,y] proof
      let n; per cases;
      suppose t.n <= c*f.n; hence thesis;
+     end;
      suppose c*f.n < t.n; hence thesis;
     end;
+    end;
     consider g' being Function of NAT,REAL such that
- A31:for x being Element of NAT holds Q[x,g'.x] from FuncExD(A30);
+ A31:for x being Element of NAT holds Q[x,g'.x] from FUNCT_2:sch 3(A30);
  A32: f' is Element of Funcs(NAT,REAL) & g' is Element of Funcs(NAT,REAL)
      by FUNCT_2:11;
       now let n; assume n >= N; then n >= N3 & n >= N1 by A27,AXIOMS:22;
@@ -2769,8 +2831,10 @@ A4: Big_Oh(f) + Big_Oh(g) = { t where t is Element of Funcs(NAT,REAL) :
      per cases;
      suppose t.n <= c*f.n;
       hence f'.n <= c*f.n & f'.n >= 0 by A29,A33;
+     end;
      suppose t.n > c*f.n;
       hence f'.n <= c*f.n & f'.n >= 0 by A29,A34;
+    end;
     end;
  then A35:f' in Big_Oh(f) by A2,A23,A32;
       now let n; assume n >= N; then n >= N3 & n >= N2 by A27,AXIOMS:22;
@@ -2779,6 +2843,7 @@ A4: Big_Oh(f) + Big_Oh(g) = { t where t is Element of Funcs(NAT,REAL) :
      per cases;
      suppose t.n <= c*f.n;
       hence g'.n <= c*g.n & g'.n >= 0 by A31,A37;
+     end;
      suppose
      A38: t.n > c*f.n; then t.n > 0 + c*f.n;
      then A39: t.n - c*f.n >= 0 by REAL_1:84;
@@ -2787,16 +2852,19 @@ A4: Big_Oh(f) + Big_Oh(g) = { t where t is Element of Funcs(NAT,REAL) :
         then t.n - c*f.n <= c*g.n by REAL_1:86;
       hence g'.n <= c*g.n & g'.n >= 0 by A31,A38,A39;
     end;
+    end;
  then A40:g' in Big_Oh(g) by A3,A23,A32;
       now let n be Element of NAT;
      per cases;
      suppose t.n <= c*f.n;
        then f'.n = t.n & g'.n = 0 by A29,A31;
       hence t.n = f'.n + g'.n;
+     end;
      suppose c*f.n < t.n;
        then f'.n = c*f.n & g'.n = t.n - c*f.n by A29,A31;
       hence f'.n + g'.n = t.n + c*f.n - c*f.n by XCMPLX_1:29
                        .= t.n by XCMPLX_1:26;
+    end;
     end;
   hence x in Big_Oh(f) + Big_Oh(g) by A4,A21,A32,A35,A40;
  end;
@@ -2892,13 +2960,17 @@ A4: max(Big_Oh(f), Big_Oh(g)) = { t where t is Element of Funcs(NAT,REAL) :
  A30:for x being Element of NAT ex y being Element of REAL st P[x,y] proof
      let n; per cases;
      suppose f.n >= g.n; hence thesis;
+     end;
      suppose A31: f.n < g.n; thus thesis proof per cases;
       suppose n < N; hence thesis;
+      end;
       suppose n >= N; hence thesis by A31;
      end;
+     end;
+    end;
     end;
     consider f' being Function of NAT,REAL such that
- A32:for x being Element of NAT holds P[x,f'.x] from FuncExD(A30);
+ A32:for x being Element of NAT holds P[x,f'.x] from FUNCT_2:sch 3(A30);
     defpred Q[Nat,Real] means
       (f.$1 >= g.$1 & $1 >= N implies $2 = 0) &
       (f.$1 < g.$1 or $1 < N implies $2 = t.$1);
@@ -2906,12 +2978,16 @@ A4: max(Big_Oh(f), Big_Oh(g)) = { t where t is Element of Funcs(NAT,REAL) :
      let n; per cases;
      suppose A34: f.n >= g.n; thus thesis proof per cases;
       suppose n < N; hence thesis;
+      end;
       suppose n >= N; hence thesis by A34;
+     end;
+     end;
      end;
      suppose f.n < g.n; hence thesis;
     end;
+    end;
     consider g' being Function of NAT,REAL such that
- A35:for x being Element of NAT holds Q[x,g'.x] from FuncExD(A33);
+ A35:for x being Element of NAT holds Q[x,g'.x] from FUNCT_2:sch 3(A33);
  A36: f' is Element of Funcs(NAT,REAL) & g' is Element of Funcs(NAT,REAL)
       by FUNCT_2:11;
       now let n; assume
@@ -2925,8 +3001,10 @@ A4: max(Big_Oh(f), Big_Oh(g)) = { t where t is Element of Funcs(NAT,REAL) :
         then max(f.n,g.n) = f.n by SQUARE_1:def 2;
         then max(f,g).n = f.n by Def10;
       hence f'.n <= c*f.n & f'.n >= 0 by A32,A38,A40;
+     end;
      suppose f.n < g.n;
       hence f'.n <= c*f.n & f'.n >= 0 by A32,A37,A39;
+    end;
     end;
  then A41:f' in Big_Oh(f) by A2,A24,A36;
       now let n; assume
@@ -2937,11 +3015,13 @@ A4: max(Big_Oh(f), Big_Oh(g)) = { t where t is Element of Funcs(NAT,REAL) :
      per cases;
      suppose f.n >= g.n;
       hence g'.n <= c*g.n & g'.n >= 0 by A35,A42,A44;
+     end;
      suppose
      A45: f.n < g.n;
         then max(f.n,g.n) = g.n by SQUARE_1:def 2;
         then max(f,g).n = g.n by Def10;
       hence g'.n <= c*g.n & g'.n >= 0 by A35,A43,A45;
+    end;
     end;
  then A46:g' in Big_Oh(g) by A3,A24,A36;
       now let n be Element of NAT;
@@ -2949,6 +3029,7 @@ A4: max(Big_Oh(f), Big_Oh(g)) = { t where t is Element of Funcs(NAT,REAL) :
      suppose n < N;
        then f'.n = t.n & g'.n = t.n by A32,A35;
       hence t.n = max(f'.n, g'.n);
+     end;
      suppose
      A47: n >= N;
      then A48: n >= N3 by A28,AXIOMS:22;
@@ -2957,10 +3038,13 @@ A4: max(Big_Oh(f), Big_Oh(g)) = { t where t is Element of Funcs(NAT,REAL) :
        suppose f.n >= g.n;
          then f'.n = t.n & g'.n = 0 & t.n >= 0 by A25,A32,A35,A47,A48;
         hence t.n = max(f'.n, g'.n) by SQUARE_1:def 2;
+       end;
        suppose f.n < g.n;
          then f'.n = 0 & g'.n = t.n & t.n >= 0 by A25,A32,A35,A47,A48;
         hence t.n = max(f'.n, g'.n) by SQUARE_1:def 2;
       end;
+      end;
+    end;
     end;
   hence x in max(Big_Oh(f), Big_Oh(g)) by A4,A22,A36,A41,A46;
  end;
@@ -3002,7 +3086,7 @@ definition :: Definition of operators on sets (page 92)
        defpred P[Element of NAT,Real] means $2 = (f.$1) to_power (g.$1);
     A4:for x being Element of NAT ex y being Element of REAL st P[x,y];
        consider t being Function of NAT,REAL such that
-    A5:for x being Element of NAT holds P[x,t.x] from FuncExD(A4);
+    A5:for x being Element of NAT holds P[x,t.x] from FUNCT_2:sch 3(A4);
        reconsider t as Element of Funcs(NAT, REAL) by FUNCT_2:11;
          for x being Element of NAT st x >= 0
         holds t.x = (f.x) to_power (g.x) by A5;
@@ -3022,3 +3106,4 @@ definition :: Definition of operators on sets (page 92)
   hence IT is FUNCTION_DOMAIN of NAT,REAL by FRAENKEL:def 2;
  end;
 end;
+

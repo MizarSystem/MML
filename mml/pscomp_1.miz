@@ -34,22 +34,26 @@ environ
 
 begin :: Preliminaries
 
+notation let X be set;
+ synonym X is without_zero for X is with_non-empty_elements ;
+ antonym X is with_zero for X is with_non-empty_elements ;
+end;
 definition let X be set;
- redefine attr X is with_non-empty_elements means
+ redefine attr X is without_zero means
 :Def1: not 0 in X;
  compatibility by AMI_1:def 1;
- synonym X is without_zero;
- antonym X is with_zero;
-end;
+ end;
 
-definition
+
+registration
  cluster REAL -> with_zero;
  coherence by Def1;
  cluster NAT -> with_zero;
  coherence by Def1;
 end;
 
-definition
+
+registration
  cluster non empty without_zero set;
  existence proof set s = {1};
   take s;
@@ -60,7 +64,8 @@ definition
  existence by Def1;
 end;
 
-definition
+
+registration
  cluster non empty without_zero Subset of REAL;
  existence proof set s = {1 qua Real};
   take s;
@@ -70,6 +75,7 @@ definition
  cluster non empty with_zero Subset of REAL;
  existence by Def1;
 end;
+
 
 theorem Th1:
  for F being set st F is non empty with_non-empty_elements c=-linear
@@ -99,6 +105,7 @@ A8: now let x, B be set; assume that
       thus x' in B \/ {x} by A12,TARSKI:def 1;
       let y be set;
       thus y in B \/ {x} implies x' c= y by A12,TARSKI:def 1;
+     end;
      suppose B is non empty; then consider z being set such that
      A13: z in B and
      A14: for y being set st y in B holds z c= y by A11;
@@ -119,9 +126,12 @@ A8: now let x, B be set; assume that
       per cases by A17,XBOOLE_0:def 2;
       suppose y in B; then z c= y by A14;
        hence thesis by A16,XBOOLE_1:1;
+      end;
       suppose y in {x};
        hence thesis by TARSKI:def 1;
       end;
+      end;
+     end;
      suppose A18: z c= x;
       take x' = z;
       thus x' in B \/ {x} by A13,XBOOLE_0:def 2;
@@ -131,13 +141,17 @@ A8: now let x, B be set; assume that
       per cases by A19,XBOOLE_0:def 2;
       suppose y in B;
        hence thesis by A14;
+      end;
       suppose y in {x};
        hence thesis by A18,TARSKI:def 1;
       end;
+      end;
+     end;
+     end;
      end;
      end;
     end;
-    P[G] from Finite(A6, A7, A8);
+    P[G] from FINSET_1:sch 2(A6, A7, A8);
   then consider x being set such that
 A20: x in G and
 A21: for y being set st y in G holds x c= y by A4;
@@ -150,18 +164,20 @@ A22: xe in x by XBOOLE_0:def 1;
  hence meet G <> {} by A4,SETFAM_1:def 1;
 end;
 
-definition let F be set;
+registration let F be set;
  cluster non empty with_non-empty_elements c=-linear
           -> centered Subset-Family of F;
   coherence by Th1;
 end;
+
 
 definition let A, B be set, f be Function of A, B;
  redefine func rng f -> Subset of B;
  coherence by RELSET_1:12;
 end;
 
-definition let X, Y be non empty set, f be Function of X, Y;
+
+registration let X, Y be non empty set, f be Function of X, Y;
    :: see WAYBEL_2
  cluster f.:X -> non empty;
 coherence proof
@@ -172,6 +188,7 @@ A1: dom f = X by FUNCT_2:def 1;
   end;
 end;
 
+
 definition let X, Y be set, f be Function of X, Y;
  func "f -> Function of bool Y, bool X means
 :Def2: :: see FUNCT_3:def 2
@@ -180,16 +197,18 @@ definition let X, Y be set, f be Function of X, Y;
  proof
   deffunc F(Subset of Y) = f"$1;
   thus ex T be Function of bool Y, bool X st for y be Subset of Y holds
-   T.y = F(y) from LambdaD;
+   T.y = F(y) from FUNCT_2:sch 4;
  end;
  uniqueness
  proof
   deffunc F(Subset of Y) = f"$1;
   thus for T1,T2 be Function of bool Y, bool X st
    (for y being Subset of Y holds T1.y = F(y)) &
-   (for y being Subset of Y holds T2.y = F(y)) holds T1 = T2 from FuncDefUniq;
+   (for y being Subset of Y holds T2.y = F(y)) holds T1 = T2 from
+COMPLSP1:sch 1;
  end;
 end;
+
 
 theorem Th2:
 for X, Y, x being set, S being Subset of bool Y, f being Function of X, Y
@@ -232,11 +251,13 @@ A1: r < s & s < t;
       0 <= abs(t) by ABSVALUE:5;
     then -s+0 < -r+abs(t) by A4,REAL_1:67;
   hence abs(s) < abs(r)+abs(t) by A3;
+ end;
  suppose A5: 0<=s; then 0<t by A1;
  then A6: s = abs(s) & t = abs(t) by A5,ABSVALUE:def 1;
       0 <= abs(r) by ABSVALUE:5;
     then s+0 < t+abs(r) by A1,REAL_1:67;
  hence abs(s) < abs(r)+abs(t) by A6;
+end;
 end;
 
 theorem Th5:
@@ -338,10 +359,9 @@ A7: dom seq = NAT by FUNCT_2:def 1;
   hence r<=t by A5,A7;
 end;
 
-definition let X be real-membered set;
- redefine func upper_bound X; synonym sup X;
- redefine func lower_bound X; synonym inf X;
-end;
+notation let X be real-membered set;
+ synonym sup X for upper_bound X; synonym inf X for lower_bound X; end;
+
 
 definition let X be Subset of REAL;
  redefine func sup X -> Element of REAL;
@@ -349,6 +369,7 @@ coherence by XREAL_0:def 1;
  redefine func inf X -> Element of REAL;
 coherence by XREAL_0:def 1;
 end;
+
 
 theorem Th8:
  for X being non empty real-membered set
@@ -449,7 +470,8 @@ definition let X be real-membered set;
 :Def4: X is bounded_below & inf X in X;
 end;
 
-definition
+
+registration
  cluster non empty closed bounded Subset of REAL;
  existence proof
    reconsider 0r = 0 as Real;
@@ -460,12 +482,14 @@ definition
  end;
 end;
 
+
 definition let R be Subset-Family of REAL;
   attr R is open means
 :Def5: for X being Subset of REAL st X in R holds X is open;
   attr R is closed means
 :Def6: for X being Subset of REAL st X in R holds X is closed;
 end;
+
 
  reserve p, q, r3, r1, r2, q3, p3 for Real;
 
@@ -476,7 +500,7 @@ definition let X be Subset of REAL;
  proof
   defpred P[set] means $1 in X;
   deffunc F(Real) = -$1;
-  thus { F(r3) : P[r3]} is Subset of REAL from SubsetFD;
+  thus { F(r3) : P[r3]} is Subset of REAL from COMPLSP1:sch 3;
  end;
  involutiveness
   proof
@@ -502,6 +526,7 @@ A5:  r0 in IT;
   end;
 end;
 
+
 theorem Th14:
 r in X iff -r in -X
 proof
@@ -513,13 +538,14 @@ A1: -X = { -p : p in X } by Def7;
  hence r in X by A2;
 end;
 
-definition let X be non empty Subset of REAL;
+registration let X be non empty Subset of REAL;
  cluster -X -> non empty;
  coherence proof
      ex x being Real st x in X by SUBSET_1:10;
   hence thesis by Th14;
  end;
 end;
+
 
 Lm1:
 for X being Subset of REAL
@@ -640,9 +666,10 @@ definition let X be Subset of REAL, p be Real;
  proof
   defpred P[set] means $1 in X;
   deffunc F(Real) = p+$1;
-  thus { F(r3) : P[r3]} is Subset of REAL from SubsetFD;
+  thus { F(r3) : P[r3]} is Subset of REAL from COMPLSP1:sch 3;
  end;
 end;
+
 
 theorem Th20:
 r in X iff q3+r in q3+X
@@ -653,12 +680,13 @@ A1: q3+X = { q3+p : p in X } by Def8;
  hence r in X by XCMPLX_1:2;
 end;
 
-definition let X be non empty Subset of REAL, s be Real;
+registration let X be non empty Subset of REAL, s be Real;
  cluster s+X -> non empty;
  coherence proof ex x being Real st x in X by SUBSET_1:10;
   hence thesis by Th20;
  end;
 end;
+
 
 theorem Th21:
 X = 0+X
@@ -829,9 +857,10 @@ definition let X be Subset of REAL;
  proof
   defpred P[set] means $1 in X;
   deffunc F(Real) = 1/$1;
-  thus { F(r3) : P[r3]} is Subset of REAL from SubsetFD;
+  thus { F(r3) : P[r3]} is Subset of REAL from COMPLSP1:sch 3;
  end;
 end;
+
 
 theorem Th28:
 for X being without_zero Subset of REAL holds r in X iff 1/r in Inv X
@@ -843,7 +872,7 @@ A1: Inv X = { 1/p : p in X } by Def9;
  thus r in X by A2,XCMPLX_1:59;
 end;
 
-definition let X be non empty without_zero Subset of REAL;
+registration let X be non empty without_zero Subset of REAL;
  cluster Inv X -> non empty without_zero;
  coherence proof consider x being Real such that
  A1: x in X by SUBSET_1:10;
@@ -859,7 +888,8 @@ definition let X be non empty without_zero Subset of REAL;
  end;
 end;
 
-definition let X be without_zero Subset of REAL;
+
+registration let X be without_zero Subset of REAL;
  cluster Inv X -> without_zero;
  coherence proof
  A1: not 0 in X by Def1;
@@ -872,6 +902,7 @@ definition let X be without_zero Subset of REAL;
   hence thesis by Def1;
  end;
 end;
+
 
 theorem Th29:
 for X being without_zero Subset of REAL holds Inv Inv X = X
@@ -957,6 +988,7 @@ A3: seq is convergent;
  per cases;
  suppose Z = {}; then mZ = {} by SETFAM_1:def 1;
   hence lim seq in mZ by A2,XBOOLE_1:3;
+ end;
  suppose A4: Z <> {};
      now let X be set; assume
    A5: X in Z;
@@ -969,6 +1001,7 @@ A3: seq is convergent;
    end;
   hence lim seq in mZ by A4,SETFAM_1:def 1;
 end;
+end;
 
 definition let X be Subset of REAL;
  func Cl X -> Subset of REAL equals
@@ -977,7 +1010,7 @@ definition let X be Subset of REAL;
    defpred P[Element of bool REAL] means X c= $1 & $1 is closed;
    deffunc F(Element of bool REAL) = $1;
    reconsider Z = { F(A) where A is Element of bool REAL : P[A] }
-    as Subset of bool REAL from SubsetFD;
+    as Subset of bool REAL from COMPLSP1:sch 3;
    reconsider Z as Subset-Family of REAL by SETFAM_1:def 7;
      meet Z is Subset of REAL;
   hence thesis;
@@ -1041,13 +1074,14 @@ A11:       A is closed;
   end;
 end;
 
-definition let X be Subset of REAL;
+
+registration let X be Subset of REAL;
  cluster Cl X -> closed;
  coherence proof
    defpred P[Element of bool REAL] means X c= $1 & $1 is closed;
    deffunc F(Element of bool REAL) = $1;
    reconsider Z = { F(A) where A is Element of bool REAL : P[A] }
-   as Subset of bool REAL from SubsetFD;
+   as Subset of bool REAL from COMPLSP1:sch 3;
    reconsider Z as Subset-Family of REAL by SETFAM_1:def 7;
 A1: Z is closed proof let Y be Subset of REAL; assume Y in Z;
      then ex A being Element of bool REAL st Y = A & X c= A & A is closed;
@@ -1057,6 +1091,7 @@ A1: Z is closed proof let Y be Subset of REAL; assume Y in Z;
   hence thesis by A1,Th31;
  end;
 end;
+
 
 theorem Th32:
  for Y being closed Subset of REAL st X c= Y holds Cl X c= Y
@@ -1173,7 +1208,7 @@ A2: now let x be set; assume x in NAT;
  consider seq being Function such that
 A4: dom seq = NAT and
 A5: rng seq c= REAL and
-A6: for x being set st x in NAT holds P[x,seq.x] from NonUniqBoundFuncEx(A2);
+A6: for x being set st x in NAT holds P[x,seq.x] from COMPTS_1:sch 1(A2);
  reconsider seq as Real_Sequence by A4,A5,FUNCT_2:def 1,RELSET_1:11;
  take seq;
  thus rng seq c= X proof let y be set; assume y in rng seq;
@@ -1300,14 +1335,15 @@ A11:  for r being real number st r in f.:X holds p>=r;
    end;
 end;
 
+
 definition let X be set, f be Function of X, REAL;
  canceled;
-
  attr f is with_max means
 :Def14: f.:X is with_max;
  attr f is with_min means
 :Def15: f.:X is with_min;
 end;
+
 
 definition let X be set, f be Function of X, REAL;
  func -f -> Function of X, REAL means
@@ -1316,7 +1352,7 @@ definition let X be set, f be Function of X, REAL;
   deffunc F(set) = -(f.$1);
 A1: for x being set st x in X holds F(x) in REAL;
   thus ex g be Function of X, REAL st for x be set st x in X holds g.x = F(x)
-   from Lambda1(A1);
+   from FUNCT_2:sch 2(A1);
  end;
  uniqueness proof let g1, g2 be Function of X, REAL such that
 A2:  for p being set st p in X holds g1.p = -(f.p) and
@@ -1338,6 +1374,7 @@ A6:  p in X;
       .= -(IT.p) by A5,A6;
   end;
 end;
+
 
 theorem Th40:
  for X, A being set, f being Function of X, REAL holds (-f).:A = -(f.:A)
@@ -1431,7 +1468,7 @@ definition let X be set, r be Real, f be Function of X, REAL;
   deffunc F(set) = r+f.$1;
 A1: for x being set st x in X holds F(x) in REAL;
   thus ex g be Function of X, REAL st for x be set st x in X holds g.x = F(x)
-   from Lambda1(A1);
+   from FUNCT_2:sch 2(A1);
  end;
  uniqueness proof let g1, g2 be Function of X, REAL such that
 A2:  for p being set st p in X holds g1.p = r+f.p and
@@ -1444,6 +1481,7 @@ A4:   p in X;
    hence thesis by FUNCT_2:18;
   end;
 end;
+
 
 theorem
    for X, A being set, f being Function of X, REAL, s being Real
@@ -1498,7 +1536,7 @@ definition let X be set, f be Function of X, REAL;
   deffunc F(set) = 1/(f.$1);
 A1: for x being set st x in X holds F(x) in REAL;
   thus ex g be Function of X, REAL st for x be set st x in X holds g.x = F(x)
-   from Lambda1(A1);
+   from FUNCT_2:sch 2(A1);
  end;
  uniqueness proof let g1, g2 be Function of X, REAL such that
 A2:  for p being set st p in X holds g1.p = 1/f.p and
@@ -1523,6 +1561,7 @@ A6:  p in X;
          .= 1/(IT.p) by A5,A6;
   end;
 end;
+
 
 theorem Th46:
 for X being set, A being without_zero Subset of REAL,
@@ -1553,7 +1592,8 @@ definition let T be 1-sorted;
  canceled;
 end;
 
-definition let T be non empty 1-sorted;
+
+registration let T be non empty 1-sorted;
  cluster bounded RealMap of T;
  existence proof set c = (the carrier of T);
   reconsider f = c --> (0 qua Real) as RealMap of T;
@@ -1566,6 +1606,7 @@ then A2: f.:c is bounded by SEQ_4:15;
   thus f.:c is bounded_below by A2,SEQ_4:def 3;
  end;
 end;
+
 
 scheme NonUniqExRF{X() -> non empty TopStruct, P[set,set]}:
   ex f being RealMap of X() st
@@ -1583,7 +1624,7 @@ A2: for x being set st x in the carrier of X()
    end;
   consider f being Function of the carrier of X(),REAL such that
 A3: for x being set st x in the carrier of X() holds Q[x,f.x]
-   from FuncEx1(A2);
+   from FUNCT_2:sch 1(A2);
   reconsider f as RealMap of X();
   take f;
   thus thesis by A3;
@@ -1606,6 +1647,7 @@ definition let T be 1-sorted, f be RealMap of T, P be set;
  end;
 end;
 
+
 definition let T be 1-sorted, f be RealMap of T;
  func inf f -> Real equals
 :Def20: inf (f.:the carrier of T);
@@ -1614,6 +1656,7 @@ definition let T be 1-sorted, f be RealMap of T;
 :Def21: sup (f.:the carrier of T);
  coherence;
 end;
+
 
 theorem Th47:
 for T being non empty TopSpace, f being bounded_below RealMap of T
@@ -1744,16 +1787,16 @@ proof let T be non empty 1-sorted, f be bounded RealMap of T;
  hence inf f <= sup f by Def21;
 end;
 
-definition
- canceled 3;
-end;
+
 
 definition let T be TopStruct, f be RealMap of T;
+ canceled 3;
  attr f is continuous means
 :Def25: for Y being Subset of REAL st Y is closed holds f"Y is closed;
 end;
 
-definition let T be non empty TopSpace;
+
+registration let T be non empty TopSpace;
  cluster continuous RealMap of T;
  existence proof set c = (the carrier of T);
   reconsider f = c --> (0 qua Real) as RealMap of T;
@@ -1769,6 +1812,7 @@ A2: rng f = {0 qua Real} by FUNCOP_1:14;
          .= c by A1,RELAT_1:169
          .= [#]T by PRE_TOPC:12;
    hence f"Y is closed;
+  end;
   suppose not 0 in Y;
 then A4:    rng f misses Y by A2,ZFMISC_1:56;
         f"Y = f"(rng f /\ Y) by RELAT_1:168
@@ -1776,9 +1820,11 @@ then A4:    rng f misses Y by A2,ZFMISC_1:56;
          .= {}T by RELAT_1:171;
    hence f"Y is closed by TOPS_1:22;
  end;
+ end;
 end;
 
-definition let T be non empty TopSpace, S be non empty SubSpace of T;
+
+registration let T be non empty TopSpace, S be non empty SubSpace of T;
  cluster continuous RealMap of S;
  existence proof set c = (the carrier of S);
   reconsider f = c --> (0 qua Real) as RealMap of S;
@@ -1794,6 +1840,7 @@ A2: rng f = {0 qua Real} by FUNCOP_1:14;
          .= c by A1,RELAT_1:169
          .= [#]S by PRE_TOPC:12;
    hence f"Y is closed;
+  end;
   suppose not 0 in Y;
 then A4:    rng f misses Y by A2,ZFMISC_1:56;
         f"Y = f"(rng f /\ Y) by RELAT_1:168
@@ -1801,7 +1848,9 @@ then A4:    rng f misses Y by A2,ZFMISC_1:56;
          .= {}S by RELAT_1:171;
    hence f"Y is closed by TOPS_1:22;
  end;
+ end;
 end;
+
 
  reserve T for TopStruct,
          f for RealMap of T;
@@ -1952,6 +2001,7 @@ definition let X, Y be set, f be Function of bool X, bool Y;
   end;
 end;
 
+
 theorem
   for R being Subset-Family of REAL
  st f is continuous & R is open holds ("f).:R is open
@@ -1997,7 +2047,8 @@ definition let T be non empty TopStruct, X be Subset of T,
  end;
 end;
 
-definition let T be non empty TopSpace;
+
+registration let T be non empty TopSpace;
  cluster compact non empty Subset of T;
  existence proof
   consider x being Point of T;
@@ -2006,7 +2057,8 @@ definition let T be non empty TopSpace;
  end;
 end;
 
-definition let T be non empty TopSpace, f be continuous RealMap of T,
+
+registration let T be non empty TopSpace, f be continuous RealMap of T,
                X be Subset of T;
  cluster f||X -> continuous;
  coherence proof
@@ -2021,10 +2073,12 @@ definition let T be non empty TopSpace, f be continuous RealMap of T,
  end;
 end;
 
-definition let T be non empty TopSpace, P be compact non empty Subset of T;
+
+registration let T be non empty TopSpace, P be compact non empty Subset of T;
  cluster T|P -> compact;
  coherence by COMPTS_1:12;
 end;
+
 
 begin :: Pseudocompact spaces
 
@@ -2103,10 +2157,12 @@ A7: now assume 0 in rng bf; then consider x being set such that
       thus 1' > 0;
       let r be real number; assume r in gcT; then r <= p by A12;
       hence r <= 1' by A13,AXIOMS:22;
+     end;
      suppose A14: p > 0;
       take p;
       thus p>0 by A14;
       thus for r be real number st r in gcT holds r <= p by A12;
+    end;
     end;
     then consider p be real number such that
  A15: p > 0 and
@@ -2152,7 +2208,8 @@ definition let T be TopStruct;
  for f being RealMap of T st f is continuous holds f is bounded;
 end;
 
-definition
+
+registration
  cluster compact -> pseudocompact (non empty TopSpace);
  coherence proof let T be non empty TopSpace;
   assume that
@@ -2168,7 +2225,7 @@ A3: for s be real number ex r be real number
     defpred P[Real] means $1 >= f.p;
     deffunc F(Real) = right_closed_halfline($1);
     set R = {F(r3) : P[r3]};
-A4: R is Subset of bool REAL from SubsetFD;
+A4: R is Subset of bool REAL from COMPLSP1:sch 3;
 A5: right_closed_halfline(f.p) in R;
     then reconsider R as non empty Subset-Family of REAL by A4,SETFAM_1:def 7;
     reconsider F = ("f).:R as Subset-Family of T;
@@ -2250,7 +2307,7 @@ A36: for s be real number ex r3 be real number st
     defpred P[Real] means $1 <= f.p;
     deffunc F(Real) = left_closed_halfline($1);
     set R = {F(r3): P[r3]};
-A37: R is Subset of bool REAL from SubsetFD;
+A37: R is Subset of bool REAL from COMPLSP1:sch 3;
 A38: left_closed_halfline(f.p) in R;
     then reconsider R as non empty Subset-Family of REAL by A37,SETFAM_1:def 7;
     reconsider F = ("f).:R as Subset-Family of T;
@@ -2327,7 +2384,8 @@ then A68:  f.x in left_closed_halfline(fx') by A62,SETFAM_1:def 1;
  end;
 end;
 
-definition
+
+registration
  cluster compact non empty TopSpace;
  existence proof
   take 1TopSp {{}};
@@ -2335,7 +2393,8 @@ definition
  end;
 end;
 
-definition let T be pseudocompact non empty TopSpace;
+
+registration let T be pseudocompact non empty TopSpace;
  cluster continuous -> bounded with_max with_min RealMap of T;
  coherence proof let f be RealMap of T; assume
 A1: f is continuous;
@@ -2347,6 +2406,7 @@ Th61;
   thus f is with_min by A1,A3,Th60;
  end;
 end;
+
 
 theorem Th62:
 for T being non empty TopSpace, X being non empty Subset of T,
@@ -2395,10 +2455,11 @@ end;
 
 begin :: Bounding boxes of compact sets in TOP-REAL 2
 
-definition let n be Nat; let p1, p2 be Point of TOP-REAL n;
+registration let n be Nat; let p1, p2 be Point of TOP-REAL n;
  cluster LSeg(p1,p2) -> compact;
  coherence by SPPOL_1:28;
 end;
+
 
 theorem Th64:
 for n being Nat, X, Y being compact Subset of TOP-REAL n
@@ -2448,6 +2509,7 @@ definition
  end;
 end;
 
+
 theorem Th65:
 proj1"].r,s.[ = {|[ r1, r2 ]| : r < r1 & r1 < s}
 proof set Q = proj1"].r,s.[; set QQ = {|[ r1,r2 ]|: r < r1 & r1 < s};
@@ -2479,9 +2541,9 @@ deffunc F(Real,Real) = |[ $1,$2 ]|;
 defpred P1[Real,Real] means r3 < $1;
 defpred P2[Real,Real] means $1 < q3;
 A2:{F(r1,r2) : P1[r1,r2]} is Subset of TOP-REAL 2
-     from SubsetFD2;
+     from COMPLSP1:sch 4;
     {F(r1,r2) : P2[r1,r2]} is Subset of TOP-REAL 2
-     from SubsetFD2;
+     from COMPLSP1:sch 4;
    then reconsider Q1 = {|[ r1,r2 ]|: r3 < r1}, Q2 = {|[ r1,r2 ]|: r1 < q3}
            as Subset of TOP-REAL 2 by A2;
 A3: Q1 is open by JORDAN1:25;
@@ -2537,9 +2599,9 @@ deffunc F(Real,Real) = |[ $1,$2 ]|;
 defpred P1[Real,Real] means r3 < $2;
 defpred P2[Real,Real] means $2 < q3;
 A2:{F(r1,r2) : P1[r1,r2]}
-           is Subset of TOP-REAL 2 from SubsetFD2;
+           is Subset of TOP-REAL 2 from COMPLSP1:sch 4;
     {F(r1,r2) : P2[r1,r2]}
-           is Subset of TOP-REAL 2 from SubsetFD2;
+           is Subset of TOP-REAL 2 from COMPLSP1:sch 4;
    then reconsider Q1 = {|[ r1,r2 ]|: r3 < r2}, Q2 = {|[ r1,r2 ]|: r2 < q3}
            as Subset of TOP-REAL 2 by A2;
 A3: Q1 is open by JORDAN1:27;
@@ -2564,7 +2626,7 @@ A4: Q2 is open by JORDAN1:28;
  hence P is open by A3,A4,TOPS_1:38;
 end;
 
-definition
+registration
  cluster proj1 -> continuous;
  coherence proof
    now let Y be Subset of REAL; assume
@@ -2632,6 +2694,7 @@ definition
  end;
 end;
 
+
 theorem Th69:
  for X being Subset of TOP-REAL 2, p being Point of TOP-REAL 2
   st p in X holds (proj1||X).p = p`1
@@ -2681,6 +2744,7 @@ definition let X be Subset of TOP-REAL 2;
  coherence;
 end;
 
+
 theorem Th71:
 p in X implies W-bound X <= p`1 & p`1 <= E-bound X &
                  S-bound X <= p`2 & p`2 <= N-bound X
@@ -2705,6 +2769,7 @@ definition let X be Subset of TOP-REAL 2;
 :Def37: |[E-bound X, S-bound X]|;
  coherence;
 end;
+
 
 :: Corners
 
@@ -2805,7 +2870,8 @@ definition let X be Subset of TOP-REAL 2;
  coherence;
 end;
 
-definition let X be non empty compact Subset of TOP-REAL 2;
+
+registration let X be non empty compact Subset of TOP-REAL 2;
  cluster W-most X -> non empty compact;
  coherence proof
 A1: W-most X = LSeg(SW-corner X, NW-corner X)/\X by Def38;
@@ -2896,6 +2962,7 @@ A28: p2X.p = p`2 by A25,A27,Th70;
  end;
 end;
 
+
 definition let X be Subset of TOP-REAL 2;
  func W-min X -> Point of TOP-REAL 2 equals
 :Def42: |[W-bound X, inf (proj2||W-most X)]|;
@@ -2922,6 +2989,7 @@ definition let X be Subset of TOP-REAL 2;
 :Def49: |[inf (proj1||S-most X), S-bound X]|;
  coherence;
 end;
+
 
 theorem Th84:
 (W-min P)`1 = W-bound P &

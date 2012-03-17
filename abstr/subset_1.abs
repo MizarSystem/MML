@@ -17,15 +17,20 @@ begin
 
 reserve E,X,x,y for set;
 
-definition let X be set;
+registration let X be set;
  cluster bool X -> non empty;
+  coherence by ZFMISC_1:def 1;
 end;
 
-definition let x;
+
+registration let x;
  cluster { x } -> non empty;
+  coherence by TARSKI:def 1;
   let y;
  cluster { x, y } -> non empty;
+  coherence by TARSKI:def 2;
 end;
+
 
 definition let X;
  canceled;
@@ -36,33 +41,80 @@ definition let X;
    otherwise it is empty;
 end;
 
+
 definition let X;
  mode Subset of X is Element of bool X;
 end;
 
-definition let X be non empty set;
+
+registration let X be non empty set;
   cluster non empty Subset of X;
+ existence
+  proof
+      X in bool X by ZFMISC_1:def 1;
+    then X is Subset of X by Def2;
+   hence thesis;
+  end;
 end;
 
-definition let X1,X2 be non empty set;
+
+registration let X1,X2 be non empty set;
   cluster [: X1,X2 :] -> non empty;
+ coherence
+  proof
+   consider x1 being set such that
+A1: x1 in X1 by XBOOLE_0:def 1;
+   consider x2 being set such that
+A2: x2 in X2 by XBOOLE_0:def 1;
+     [x1,x2] in [:X1,X2:] by A1,A2,ZFMISC_1:def 2;
+   hence thesis;
+  end;
 end;
 
-definition let X1,X2,X3 be non empty set;
+
+registration let X1,X2,X3 be non empty set;
   cluster [: X1,X2,X3 :] -> non empty;
+ coherence
+  proof
+   consider x12 being set such that
+A1: x12 in [:X1,X2:] by XBOOLE_0:def 1;
+   consider x3 being set such that
+A2: x3 in X3 by XBOOLE_0:def 1;
+     [x12,x3] in [:[:X1,X2:],X3:] by A1,A2,ZFMISC_1:def 2;
+   hence thesis by ZFMISC_1:def 3;
+  end;
 end;
 
-definition let X1,X2,X3,X4 be non empty set;
+
+registration let X1,X2,X3,X4 be non empty set;
   cluster [: X1,X2,X3,X4 :] -> non empty;
+ coherence
+  proof
+   consider x123 being set such that
+A1: x123 in [:X1,X2,X3:] by XBOOLE_0:def 1;
+   consider x4 being set such that
+A2: x4 in X4 by XBOOLE_0:def 1;
+     [x123,x4] in [:[:X1,X2,X3:],X4:] by A1,A2,ZFMISC_1:def 2;
+   hence thesis by ZFMISC_1:def 4;
+  end;
 end;
+
 
 definition let D be non empty set, X be non empty Subset of D;
  redefine mode Element of X -> Element of D;
 end;
 
-definition let E;
+registration let E;
    cluster empty Subset of E;
+   existence
+     proof
+         {} c= E by XBOOLE_1:2;
+       then {} in bool E by ZFMISC_1:def 1;
+       then {} is Subset of E by Def2;
+      hence thesis;
+     end;
  end;
+
 
 definition let E;
   func {} E -> empty Subset of E equals
@@ -72,6 +124,7 @@ definition let E;
 :: SUBSET_1:def 4
 E;
   end;
+
 
 canceled 3;
 
@@ -104,6 +157,7 @@ E \ A;
   func A \ B -> Subset of E;
   func A \+\ B -> Subset of E;
  end;
+
 
 canceled 4;
 
@@ -256,20 +310,62 @@ theorem :: SUBSET_1:62
 theorem :: SUBSET_1:63
     x in X implies {x} is Subset of X;
 
- scheme Subset_Ex { A()-> set, P[set] } :
-   ex X being Subset of A() st for x holds x in X iff x in A() & P[x];
+ scheme :: SUBSET_1:sch 1
+ Subset_Ex { A()-> set, P[set] } :
+   ex X being Subset of A() st for x holds x in X iff x in A() & P[x]
+proof
+     defpred X[set] means P[$1];
+     consider X being set such that
+A1:   for x holds
+        x in X iff x in A() & X[x] from XBOOLE_0:sch 1;
+        X c= A()
+       proof
+        let x;
+        thus thesis by A1;
+       end;
+      then X in bool A() by ZFMISC_1:def 1;
+      then reconsider X as Subset of A() by Def2;
+     take X;
+     thus thesis by A1;
+    end;
 
-scheme Subset_Eq {X() -> set, P[set]}:
+scheme :: SUBSET_1:sch 2
+ Subset_Eq {X() -> set, P[set]}:
  for X1,X2 being Subset of X() st
    (for y being Element of X() holds y in X1 iff P[y]) &
    (for y being Element of X() holds y in X2 iff P[y]) holds
-  X1 = X2;
+  X1 = X2
+proof
+ let X1,X2 be Subset of X() such that
+A1:for y being Element of X() holds y in X1 iff P[y] and
+A2:for y being Element of X() holds y in X2 iff P[y];
+    for x being Element of X() holds x in X1 iff x in X2
+  proof
+    let x be Element of X();
+    hereby assume x in X1;
+      then P[x] by A1;
+      hence x in X2 by A2;
+    end;
+    assume x in X2;
+    then P[x] by A2;
+    hence thesis by A1;
+  end;
+  hence thesis by Th8;
+end;
+
+notation let X, Y be non empty set;
+ antonym X meets Y for X misses Y;
+ end;
 
 definition let X, Y be non empty set;
  redefine pred X misses Y;
  irreflexivity;
- antonym X meets Y;
-end;
+ end;
+
+definition let X, Y be non empty set;
+ redefine pred X meets Y;
+ reflexivity;
+ end;
 
 definition
    let S be set; assume
@@ -278,5 +374,6 @@ definition
 :: SUBSET_1:def 6
     not contradiction;
 end;
+
       
 

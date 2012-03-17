@@ -39,6 +39,35 @@ theorem :: MEASURE5:9
      inf{a1,a2} <=' a1 & inf{a1,a2} <=' a2 &
    a1 <=' sup{a1,a2} & a2 <=' sup{a1,a2};
 
+:: PROPERTIES OF THE INTERVALS
+
+scheme :: MEASURE5:sch 1
+ RSetEq {P[set]} : for X1,X2 being Subset of REAL st
+ (for x being R_eal holds x in X1 iff P[x]) &
+ (for x being R_eal holds x in X2 iff P[x]) holds X1 = X2
+proof
+   let A1,A2 be Subset of REAL such that
+A1:for x being R_eal holds x in A1 iff P[x] and
+A2:for x being R_eal holds x in A2 iff P[x];
+   thus A1 c= A2
+   proof
+      let x be set;
+      assume
+   A3:x in A1;
+      then x in REAL;
+      then reconsider x as R_eal;
+        P[x] by A1,A3;
+      hence thesis by A2;
+   end;
+   let x be set;
+   assume
+A4:x in A2;
+   then x in REAL;
+   then reconsider x as R_eal;
+     P[x] by A2,A4;
+   hence thesis by A1;
+end;
+
 definition let a,b be R_eal;
   func [.a,b.] -> Subset of REAL means
 :: MEASURE5:def 1
@@ -61,6 +90,7 @@ for x being R_eal holds
       x in it iff (a <=' x & x <' b & x in REAL);
 end;
 
+
 definition let IT be Subset of REAL;
   attr IT is open_interval means
 :: MEASURE5:def 5
@@ -70,29 +100,64 @@ definition let IT be Subset of REAL;
 ex a,b being R_eal st a <=' b & IT = [.a,b.];
 end;
 
-definition
+
+registration
   cluster open_interval Subset of REAL;
-  cluster closed_interval Subset of REAL;
+existence
+proof
+   consider a,b being R_eal such that
+A1:a = -infty & b = +infty;
+   take ].a,b.[, a,b;
+   thus thesis by A1,SUPINF_1:20;
 end;
+  cluster closed_interval Subset of REAL;
+existence
+proof
+   consider a,b being R_eal such that
+A2:a = -infty & b = +infty;
+   take [.a,b.],a,b;
+   thus thesis by A2,SUPINF_1:20;
+end;
+end;
+
 
 definition let IT be Subset of REAL;
   attr IT is right_open_interval means
 :: MEASURE5:def 7
   ex a,b being R_eal st a <=' b & IT = [.a,b.[;
-  synonym IT is left_closed_interval;
-end;
+  end;
+notation let IT be Subset of REAL;
+  synonym IT is left_closed_interval for IT is right_open_interval ; end;
+
 
 definition let IT be Subset of REAL;
   attr IT is left_open_interval means
 :: MEASURE5:def 8
 ex a,b being R_eal st a <=' b & IT = ].a,b.];
- synonym IT is right_closed_interval;
+ end;
+notation let IT be Subset of REAL;
+  synonym IT is right_closed_interval for IT is left_open_interval ; end;
+
+
+registration
+  cluster right_open_interval Subset of REAL;
+existence
+proof
+   consider a,b being R_eal such that
+A1:a = -infty & b = +infty;
+   take [.a,b.[,a,b;
+   thus thesis by A1,SUPINF_1:20;
+end;
+  cluster left_open_interval Subset of REAL;
+existence
+proof
+   consider a,b being R_eal such that
+A2:a = -infty & b = +infty;
+   take ].a,b.],a,b;
+   thus thesis by A2,SUPINF_1:20;
+end;
 end;
 
-definition
-  cluster right_open_interval Subset of REAL;
-  cluster left_open_interval Subset of REAL;
-end;
 
 definition let IT be Subset of REAL;
   attr IT is interval means
@@ -101,22 +166,37 @@ IT is open_interval or IT is closed_interval or
       IT is right_open_interval or IT is left_open_interval;
 end;
 
-definition
+
+registration
   cluster interval Subset of REAL;
+existence
+proof
+   consider I being open_interval Subset of REAL;
+   take I;
+   thus I is open_interval or I is closed_interval
+     or I is right_open_interval or I is left_open_interval;
 end;
+end;
+
 
 definition
   mode Interval is interval Subset of REAL;
 end;
 
+
  reserve A,B for Interval;
 
-definition
+registration
   cluster open_interval -> interval Subset of REAL;
+coherence by Def9;
   cluster closed_interval -> interval Subset of REAL;
+coherence by Def9;
   cluster right_open_interval -> interval Subset of REAL;
+coherence by Def9;
   cluster left_open_interval -> interval Subset of REAL;
+coherence by Def9;
 end;
+
 
 canceled;
 
@@ -334,6 +414,7 @@ ex a,b being R_eal st
        (b <=' a implies it = 0.));
 end;
 
+
 theorem :: MEASURE5:53
      for A being open_interval Subset of REAL holds
    for a,b being R_eal holds
@@ -375,13 +456,31 @@ theorem :: MEASURE5:58
    (A = ].a,b.[ or A = [.a,b.] or A = [.a,b.[ or A = ].a,b.]))
    implies vol(A) = +infty;
 
-definition
+registration
   cluster empty Interval;
+  existence
+ proof
+     {} is open_interval Subset of REAL
+   proof
+         ex a,b being R_eal st a <=' b & {} = ].a,b.[
+       proof
+          consider c being R_eal;
+          consider a,b being R_eal such that
+       A1:a = c & b = c;
+          take a,b;
+          thus thesis by A1,Th13;
+       end;
+       hence thesis by Def5;
+   end;
+   hence thesis;
+ end;
 end;
+
 
 definition
   redefine func {} -> empty Interval;
 end;
+
 
 canceled;
 

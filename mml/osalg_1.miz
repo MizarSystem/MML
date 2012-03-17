@@ -27,7 +27,7 @@ begin :: Preliminaries
 :: TODO: constant ManySortedSet, constant OrderSortedSet,
 :: constant -> order-sorted ManySortedSet of R
 
-definition
+registration
   let I be set,
       f be ManySortedSet of I,
       p be FinSequence of I;
@@ -40,6 +40,7 @@ definition
     hence thesis by FINSEQ_1:def 2;
   end;
 end;
+
 
 Lm1:
 for I being set, f being ManySortedSet of I, p being FinSequence of I
@@ -57,9 +58,11 @@ definition let S be non empty ManySortedSign;
  mode SortSymbol of S is Element of S;
 end;
 
+
 definition let S be non empty ManySortedSign;
   mode OperSymbol of S is Element of the OperSymbols of S;
 end;
+
 
 definition let S be non void non empty ManySortedSign;
   let o be OperSymbol of S;
@@ -67,6 +70,7 @@ definition let S be non void non empty ManySortedSign;
   redefine func the_result_sort_of o -> Element of S;
   coherence;
 end;
+
 
 :::::::::::::: Some structures :::::::::::::::::::
 :: overloaded MSALGEBRA is modelled using an Equivalence_Relation
@@ -83,6 +87,7 @@ definition
        #);
 end;
 
+
 :: Order Sorted Signatures
 definition
  struct(ManySortedSign,RelStr) RelSortedSign
@@ -94,6 +99,7 @@ definition
        #);
 end;
 
+
 definition
  struct(OverloadedMSSign,RelSortedSign) OverloadedRSSign
        (# carrier -> set,
@@ -104,6 +110,7 @@ definition
          ResultSort -> Function of the OperSymbols, the carrier
        #);
 end;
+
 
 :: The inheritance for structures should be much improved, much of the
 :: following is very bad hacking
@@ -134,11 +141,12 @@ proof
     by MSUALG_1:def 5,ORDERS_1:def 4,def 5,def 6,STRUCT_0:def 1;
 end;
 
-definition let A,R,O,Ol,f,g;
+registration let A,R,O,Ol,f,g;
   cluster OverloadedRSSign(#A,R,O,Ol,f,g #) ->
   strict non empty reflexive transitive antisymmetric;
   coherence by Th1;
 end;
+
 
 begin
 :::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -153,7 +161,8 @@ definition let S;
   S is reflexive transitive antisymmetric;
 end;
 
-definition
+
+registration
   cluster order-sorted ->
           reflexive transitive antisymmetric OverloadedRSSign;
   coherence by Def2;
@@ -165,7 +174,8 @@ definition
   end;
 end;
 
-definition
+
+registration
   cluster non empty non void OverloadedMSSign;
   existence
   proof consider X being non empty non void OverloadedRSSign;
@@ -173,6 +183,7 @@ definition
      thus thesis;
   end;
 end;
+
 
 definition let S be non empty non void OverloadedMSSign;
   let x,y be OperSymbol of S;
@@ -197,6 +208,7 @@ definition let S be non empty non void OverloadedMSSign;
     thus thesis by A2,RELAT_2:def 1;
    end;
 end;
+
 
 :: remove when transitivity implemented
 theorem Th2:
@@ -227,6 +239,7 @@ definition let S be non empty non void OverloadedMSSign;
   attr S is op-discrete means :Def5:
   the Overloading of S = id (the OperSymbols of S);
 end;
+
 
 theorem Th3:
   for S being non empty non void OverloadedMSSign holds
@@ -310,6 +323,7 @@ definition let S0;
   uniqueness;
 end;
 
+
 theorem Th5:
   OSSign S0 is discrete op-discrete
 proof
@@ -329,7 +343,7 @@ proof
   hence thesis by Th3;
 end;
 
-definition
+registration
   cluster discrete op-discrete discernable
     (strict non empty non void order-sorted OverloadedRSSign);
   existence
@@ -341,22 +355,26 @@ proof
 end;
 end;
 
-definition
+
+registration
   cluster op-discrete -> discernable
     (non empty non void OverloadedRSSign);
   coherence by Th4;
 end;
 
+
 ::FIXME: the order of this and the previous clusters cannot be exchanged!!
-definition let S0;
+registration let S0;
   cluster OSSign S0 -> discrete op-discrete;
   coherence by Th5;
 end;
+
 
 definition
   mode OrderSortedSign is discernable (non empty non void
      order-sorted OverloadedRSSign);
 end;
+
 
 ::::::::::::::::::::::::::::::::::::::::::::
 :: monotonicity of OrderSortedSign
@@ -383,6 +401,7 @@ definition let S;
   holds s1 <= s2;
   reflexivity;
 end;
+
 
 Lm2:
   for w1 being Element of (the carrier of S)*
@@ -462,10 +481,12 @@ definition let S; let o;
     the_result_sort_of o <= the_result_sort_of o2;
 end;
 
+
 definition let S;
   attr S is monotone means :Def9:
   for o being OperSymbol of S holds o is monotone;
 end;
+
 
 theorem Th9:
   S is op-discrete implies S is monotone
@@ -480,7 +501,7 @@ proof
   hence the_result_sort_of o <= the_result_sort_of o2 by A1,RELAT_1:def 10;
 end;
 
-definition
+registration
   cluster monotone OrderSortedSign;
   existence
   proof consider S being op-discrete OrderSortedSign;
@@ -489,7 +510,8 @@ definition
   end;
 end;
 
-definition
+
+registration
   let S be monotone OrderSortedSign;
   cluster monotone OperSymbol of S;
   existence
@@ -500,16 +522,19 @@ definition
   end;
 end;
 
-definition
+
+registration
   let S be monotone OrderSortedSign;
   cluster -> monotone OperSymbol of S;
   coherence by Def9;
 end;
 
-definition
+
+registration
   cluster op-discrete -> monotone OrderSortedSign;
   coherence by Th9;
 end;
+
 
 :: constants not overloaded if monotone
 theorem
@@ -544,10 +569,12 @@ definition let S,o,o1,w1;
         the_result_sort_of o1 <= the_result_sort_of o2;
 end;
 
+
 definition let S,o,o1,w1;
   pred o1 has_least_rank_for o,w1 means :Def12:
     o1 has_least_args_for o,w1 & o1 has_least_sort_for o,w1;
 end;
+
 
 definition let S,o;
   attr o is regular means :Def13:
@@ -556,10 +583,12 @@ definition let S,o;
     ex o1 st o1 has_least_args_for o,w1;
 end;
 
+
 definition let SM be monotone OrderSortedSign;
   attr SM is regular means :Def14:
   for om being OperSymbol of SM holds om is regular;
 end;
+
 
 reserve SM for monotone OrderSortedSign,
         o,o1,o2 for OperSymbol of SM,
@@ -620,7 +649,7 @@ proof
   hence thesis;
 end;
 
-definition
+registration
   cluster regular (monotone OrderSortedSign);
   existence
   proof
@@ -630,15 +659,18 @@ definition
   end;
 end;
 
-definition
+
+registration
   cluster op-discrete -> regular (monotone OrderSortedSign);
   coherence by Th12;
 end;
 
-definition let SR be regular (monotone OrderSortedSign);
+
+registration let SR be regular (monotone OrderSortedSign);
   cluster -> regular OperSymbol of SR;
   coherence by Def14;
 end;
+
 
 reserve SR for regular (monotone OrderSortedSign),
         o,o1,o2,o3,o4 for OperSymbol of SR,
@@ -677,6 +709,7 @@ definition let SR,o,w1;
   uniqueness by A1,Th13;
 end;
 
+
 theorem Th14:
   for w1 st w1 <= the_arity_of o holds
   LBound(o,w1) has_least_rank_for o,w1
@@ -706,6 +739,7 @@ definition let R,z;
   end;
 end;
 
+
 theorem Th15:
   ConstOSSet(R,z) is non-empty &
   for s1,s2 being Element of R st s1 <= s2
@@ -734,6 +768,7 @@ definition let R;
     st s1 <= s2 holds M.s1 c= M.s2;
 end;
 
+
 theorem Th16:
   ConstOSSet(R,z) is order-sorted
 proof
@@ -743,7 +778,7 @@ proof
   hence thesis by Def18;
 end;
 
-definition let R;
+registration let R;
   cluster order-sorted ManySortedSet of R;
   existence
 proof
@@ -753,18 +788,21 @@ proof
 end;
 end;
 
+
 ::FIXME: functor clusters for redefined funcs do not work,
 definition let R,z;
   redefine func ConstOSSet(R,z) -> order-sorted ManySortedSet of R;
   coherence by Th16;
 end;
 
+
 :: OrderSortedSet respects the ordering
 definition let R be non empty Poset;
   mode OrderSortedSet of R is order-sorted ManySortedSet of R;
 end;
 
-definition let R be non empty Poset;
+
+registration let R be non empty Poset;
   cluster non-empty OrderSortedSet of R;
   existence
   proof
@@ -772,6 +810,7 @@ definition let R be non empty Poset;
      thus thesis by Th15;
   end;
 end;
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: order-sorted MSAlgebra, OSAlgebra, ConstOSA, OSAlg of a MSAlgebra
@@ -786,6 +825,7 @@ definition let S; let M be MSAlgebra over S;
   :Def19: for s1,s2 st s1 <= s2 holds
   (the Sorts of M).s1 c= (the Sorts of M).s2;
 end;
+
 
 theorem Th17:
   for M being MSAlgebra over S holds
@@ -833,13 +873,14 @@ definition let S,z,CH;
   uniqueness;
 end;
 
+
 theorem Th18:
   ConstOSA(S,z,CH) is order-sorted
 proof the Sorts of ConstOSA(S,z,CH) = ConstOSSet(S,z) by Def20;
   hence thesis by Th17;
 end;
 
-definition let S;
+registration let S;
   cluster strict non-empty order-sorted MSAlgebra over S;
   existence
   proof consider z,CH;
@@ -848,14 +889,17 @@ definition let S;
   end;
 end;
 
-definition let S,z,CH;
+
+registration let S,z,CH;
   cluster ConstOSA(S,z,CH) -> order-sorted;
   coherence by Th18;
 end;
 
+
 definition let S;
   mode OSAlgebra of S is order-sorted MSAlgebra over S;
 end;
+
 
 theorem Th19:
   for S being discrete OrderSortedSign,
@@ -869,10 +913,11 @@ proof
   hence (the Sorts of M).s1 c= (the Sorts of M).s2 by ORDERS_3:1;
 end;
 
-definition let S be discrete OrderSortedSign;
+registration let S be discrete OrderSortedSign;
   cluster -> order-sorted MSAlgebra over S;
   coherence by Th19;
 end;
+
 
 reserve A for OSAlgebra of S;
 
@@ -934,6 +979,7 @@ definition let S0,M;
   end;
 end;
 
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: monotone OSAlgebra
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -972,6 +1018,7 @@ pred o1 <= o2 means
             & the_result_sort_of o1 <= the_result_sort_of o2;
 reflexivity;
 end;
+
 
 theorem
     o1 <= o2 & o2 <= o1 implies o1 = o2
@@ -1052,6 +1099,7 @@ definition let S,A;
   for o1,o2 st o1 <= o2 holds Den(o2,A)|Args(o1,A) = Den(o1,A);
 end;
 
+
 :: REVISE:: WELLFND1:1 should be generalised to Relation and moved to RELAT_1
 theorem Th27:
   for A being non-empty OSAlgebra of S holds
@@ -1085,8 +1133,10 @@ proof
     per cases by A1;
     suppose S is discrete;
     hence thesis by A2,Th8;
+    end;
     suppose S is op-discrete;
     hence thesis by A2,Th3;
+  end;
   end;
   hence thesis by FUNCT_2:40;
 end;
@@ -1107,7 +1157,7 @@ definition let S,z; let z1 be Element of z;
     consider ch2 being Function such that A1:
       dom ch2 = the OperSymbols of S &
       for x being Element of (the OperSymbols of S) holds
-      ch2.x = ch1(x) from LambdaB;
+      ch2.x = ch1(x) from MSUALG_2:sch 1;
     reconsider ch4 = ch2
     as ManySortedSet of (the OperSymbols of S) by A1,PBOOLE:def 3;
       for i being set st i in (the OperSymbols of S) holds ch4.i
@@ -1158,6 +1208,7 @@ definition let S,z; let z1 be Element of z;
   end;
 end;
 
+
 theorem Th29:
   for z1 being Element of z holds
   TrivialOSA(S,z,z1) is non-empty & TrivialOSA(S,z,z1) is monotone
@@ -1193,7 +1244,7 @@ proof
   hence thesis by Th27;
 end;
 
-definition let S;
+registration let S;
   cluster monotone strict non-empty OSAlgebra of S;
   existence
   proof
@@ -1204,11 +1255,13 @@ definition let S;
   end;
 end;
 
-definition
+
+registration
   let S,z; let z1 be Element of z;
   cluster TrivialOSA(S,z,z1) -> monotone non-empty;
   coherence by Th29;
 end;
+
 
 :::::::::::::::::::::::::::::
 :: OperNames, OperName, Name
@@ -1223,7 +1276,8 @@ definition let S;
   coherence;
 end;
 
-definition let S;
+
+registration let S;
   cluster -> non empty Element of OperNames S;
   coherence
   proof let X be Element of OperNames S;
@@ -1236,9 +1290,11 @@ definition let S;
   end;
 end;
 
+
 definition let S;
   mode OperName of S is Element of OperNames S;
 end;
+
 
 definition let S,op1;
   func Name op1 -> OperName of S equals :Def26:
@@ -1250,6 +1306,7 @@ definition let S,op1;
     hence thesis by Def25;
   end;
 end;
+
 
 theorem Th30:
   op1 ~= op2 iff op2 in Class(the Overloading of S,op1)
@@ -1299,6 +1356,7 @@ definition let S; let o be OperName of S;
     thus thesis;
   end;
 end;
+
 
 theorem Th33:
   for on being OperName of S, op being OperSymbol of S
@@ -1399,6 +1457,7 @@ proof
   hence thesis;
 end;
 end;
+
 
 theorem
     for S being regular (monotone OrderSortedSign),

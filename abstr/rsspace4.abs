@@ -38,9 +38,57 @@ definition
     (x in the_set_of_RealSequences & seq_id x is bounded);
 end;
 
-definition
+registration
   cluster the_set_of_BoundedRealSequences -> non empty;
+  coherence
+   proof
+     seq_id Zeroseq is bounded
+     proof
+       reconsider rseq=seq_id Zeroseq as Real_Sequence;
+       for n being Nat holds rseq.n = 0 by RSSPACE:def 6;
+       then rseq is constant by SEQM_3:def 6;
+       hence thesis by SEQM_3:73;
+     end;
+     hence thesis by Def_seq1;
+  end;
   cluster the_set_of_BoundedRealSequences -> lineary-closed;
+  coherence
+proof
+  set W = the_set_of_BoundedRealSequences;
+A1:for v,u be VECTOR of Linear_Space_of_RealSequences st
+    v in the_set_of_BoundedRealSequences &
+    u in the_set_of_BoundedRealSequences
+        holds v + u in the_set_of_BoundedRealSequences
+   proof
+     let v,u be VECTOR of Linear_Space_of_RealSequences such that
+    A2: v in W & u in W;
+     seq_id(v+u) is bounded
+        proof
+          A4:  seq_id v is bounded by A2,Def_seq1;
+          A5:  seq_id u is bounded by A2,Def_seq1;
+          seq_id(v+u)=seq_id(seq_id v+seq_id u) by RSSPACE:4,def 7
+                                 .=seq_id v+seq_id u by RSSPACE:3;
+          hence thesis by A4,A5,SEQM_3:71;
+         end;
+      hence v+u in W by Def_seq1,RSSPACE:def 7;
+    end;
+    for a be Real for v be VECTOR of Linear_Space_of_RealSequences
+    st v in W holds a * v in W
+    proof
+     let a be Real;
+     let v be VECTOR of Linear_Space_of_RealSequences such that
+     A12: v in W;
+     seq_id(a*v) is bounded
+     proof
+       A13: seq_id v is bounded by A12,Def_seq1;
+       seq_id(a*v) =seq_id(a(#)seq_id(v)) by RSSPACE:5,def 7
+                  .=a(#)seq_id(v) by RSSPACE:3;
+       hence thesis by A13,SEQM_3:70;
+     end;
+     hence a*v in W by Def_seq1,RSSPACE:def 7;
+   end;
+   hence thesis by A1,RLSUB_1:def 1;
+end;
 end;
 
 theorem :: RSSPACE4:1
@@ -50,13 +98,14 @@ RLSStruct (# the_set_of_BoundedRealSequences,
         Mult_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences) #)
 is Subspace of Linear_Space_of_RealSequences;
 
-definition
+registration
   cluster RLSStruct (# the_set_of_BoundedRealSequences,
         Zero_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
         Add_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
         Mult_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences) #)
    -> Abelian add-associative right_zeroed right_complementable
         RealLinearSpace-like;
+  coherence by RSSPACE:13;
 end;
 
 definition
@@ -72,13 +121,14 @@ theorem :: RSSPACE4:2
      ( rseq is bounded & sup rng abs rseq = 0 ) iff
     for n be Nat holds rseq.n = 0;
 
-definition
+registration
   cluster NORMSTR (# the_set_of_BoundedRealSequences,
         Zero_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
          Add_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
         Mult_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
         linfty_norm #) -> Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like;
+  coherence by Th_seq3,RSSPACE3:4;
 end;
 
 definition
@@ -113,9 +163,10 @@ for x, y being Point of linfty_Space, a be Real holds
   ||.x+y.|| <= ||.x.|| + ||.y.|| &
   ||. a*x .|| = abs(a) * ||.x.||;
 
-definition
+registration
   cluster linfty_Space -> RealNormSpace-like RealLinearSpace-like
        Abelian add-associative right_zeroed right_complementable;
+  coherence by Def_seq3,Th_seq9,NORMSP_1:def 2;
 end;
 
  reserve NRM for non empty RealNormSpace;
@@ -145,10 +196,18 @@ theorem :: RSSPACE4:6
          st (for x be Element of X holds f.x=0.Y)
         holds f is bounded;
 
-definition
+registration
   let X be non empty set;
   let Y be RealNormSpace;
   cluster bounded Function of X,the carrier of Y;
+existence
+proof
+  set f=X --> 0.Y;
+  reconsider f as Function of X,the carrier of Y by FUNCOP_1:58;
+  take f;
+  for x be Element of X holds f.x =0.Y by FUNCOP_1:13;
+  hence thesis by LM_func21;
+ end;
 end;
 
 definition
@@ -162,10 +221,22 @@ definition
    x is bounded Function of X,the carrier of Y;
 end;
 
-definition
+registration
   let X be non empty set;
   let Y be RealNormSpace;
   cluster BoundedFunctions(X,Y) -> non empty;
+  coherence
+   proof
+     set f=X --> 0.Y;
+     reconsider f as  Function of X,the carrier of Y
+     by FUNCOP_1:58;
+     f is bounded
+     proof
+       for x be Element of X holds f.x =0.Y by FUNCOP_1:13;
+       hence thesis by LM_func21;
+     end;
+     hence thesis by Def_func02;
+   end;
 end;
 
 theorem :: RSSPACE4:7
@@ -183,7 +254,7 @@ RLSStruct (# BoundedFunctions(X,Y),
         RealVectSpace(X,Y)) #)
 is Subspace of RealVectSpace(X,Y);
 
-definition
+registration
   let X be non empty set;
   let Y be RealNormSpace;
   cluster RLSStruct (# BoundedFunctions(X,Y),
@@ -195,6 +266,7 @@ definition
         RealVectSpace(X,Y)) #)
  -> Abelian add-associative right_zeroed right_complementable
         RealLinearSpace-like;
+  coherence by Th_func52;
 end;
 
 theorem :: RSSPACE4:9
@@ -223,9 +295,21 @@ RLSStruct (# BoundedFunctions(X,Y),
         RealVectSpace(X,Y)) #);
 end;
 
-definition
+registration
   let X be non empty set; let Y be RealNormSpace;
   cluster R_VectorSpace_of_BoundedFunctions(X,Y) -> strict;
+  coherence
+proof
+  R_VectorSpace_of_BoundedFunctions(X,Y)=
+  RLSStruct (# BoundedFunctions(X,Y),
+        Zero_(BoundedFunctions(X,Y),
+        RealVectSpace(X,Y)),
+         Add_(BoundedFunctions(X,Y),
+         RealVectSpace(X,Y)),
+        Mult_(BoundedFunctions(X,Y),
+        RealVectSpace(X,Y)) #) by Def_func07;
+   hence thesis;
+ end;
 end;
 
 theorem :: RSSPACE4:10
@@ -372,11 +456,12 @@ theorem :: RSSPACE4:26
   for X be non empty set for Y be RealNormSpace holds
     R_NormSpace_of_BoundedFunctions(X,Y) is RealNormSpace;
 
-definition
+registration
    let X be non empty set; let Y be RealNormSpace;
    cluster R_NormSpace_of_BoundedFunctions(X,Y) ->
                RealNormSpace-like RealLinearSpace-like
                Abelian add-associative right_zeroed right_complementable;
+   coherence by LM_func62;
 end;
 
 theorem :: RSSPACE4:27
@@ -398,8 +483,9 @@ theorem :: RSSPACE4:29
   for Y be RealBanachSpace holds
      R_NormSpace_of_BoundedFunctions(X,Y) is RealBanachSpace;
 
-definition
+registration
   let X be non empty set;
   let Y be RealBanachSpace;
   cluster R_NormSpace_of_BoundedFunctions (X,Y) -> complete;
+  coherence by LM_func64;
 end;

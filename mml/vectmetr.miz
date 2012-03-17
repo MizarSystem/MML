@@ -46,6 +46,7 @@ begin  :: Convex and Internal Metric Spaces
      dist(x,z) = r * dist(x,y) & dist(z,y) = (1 - r) * dist(x,y);
   end;
 
+
   definition
    let V be non empty MetrStruct;
    attr V is internal means
@@ -59,6 +60,7 @@ begin  :: Convex and Internal Metric Spaces
       for i be Nat st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1))
      holds abs(dist(x,y) - Sum F) < q;
   end;
+
 
   theorem Th1:
    for V be non empty MetrSpace st V is convex
@@ -111,7 +113,7 @@ begin  :: Convex and Internal Metric Spaces
      A11: dom D = {0,1}* and
      A12: D.{} = [x,y] and
      A13: for z be Node of D holds P[D.z, D.(z ^ <* 0 *>), D.(z ^ <*1*>)]
-                                                 from DecoratedBinTreeEx(A3);
+                                                 from BINTREE2:sch 1(A3);
     reconsider dD = dom D as full Tree by A11,BINTREE2:def 2;
     per cases;
      suppose dist(x,y) >= p;
@@ -136,11 +138,11 @@ begin  :: Convex and Internal Metric Spaces
      deffunc G(Nat) = D.(FSL/.$1);
      consider g be FinSequence of [:A,A:] such that
       A16: len g = N and
-      A17: for k be Nat st k in Seg N holds g.k = G(k) from SeqLambdaD;
+      A17: for k be Nat st k in Seg N holds g.k = G(k) from FINSEQ_2:sch 1;
      deffunc F(Nat) = (g/.$1)`1;
      consider h be FinSequence of the carrier of V such that
       A18: len h = N and
-      A19: for k be Nat st k in Seg N holds h.k = F(k) from SeqLambdaD;
+      A19: for k be Nat st k in Seg N holds h.k = F(k) from FINSEQ_2:sch 1;
      take f = h^<*y*>;
      defpred P[Nat] means (D.(0*$1))`1 = x;
       (D.(0*0))`1 = (D.(0 |-> (0 qua Real)))`1 by EUCLID:def 4
@@ -165,7 +167,7 @@ begin  :: Convex and Internal Metric Spaces
          .= a1 by A25,MCART_1:7
          .= x by A24,A26,MCART_1:7;
      end;
-     A27: for j be Nat holds P[j] from Ind(A20,A21);
+     A27: for j be Nat holds P[j] from NAT_1:sch 1(A20,A21);
      defpred Q[Nat] means
       for t be Tuple of $1,BOOLEAN st t = 0*$1 holds (D.'not' t)`2 = y;
      A28: Q[1]
@@ -219,7 +221,7 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
       thus (D.'not' t)`2 = b1 by A35,A39,MCART_1:7
          .= y by A38,A40,MCART_1:7;
      end;
-     A41: for j be non empty Nat holds Q[j] from Ind_from_1(A28,A30);
+     A41: for j be non empty Nat holds Q[j] from BINARITH:sch 1(A28,A30);
      A42: len f = len h + len <*y*> by FINSEQ_1:35
               .= len h + 1 by FINSEQ_1:56;
      A43: 1 <= N by RLVECT_1:99;
@@ -382,6 +384,7 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
               .= (D.(F^<* 0 *>))`2 by A88,MCART_1:7
               .= (D.(F^<*(i+1) mod 2*>))`2 by A92,A94,A95,NAT_2:20
               .= (D.(FinSeqLevel(n+1,dD).i))`2 by A71,A75,BINTREE2:24;
+          end;
           suppose i is even;
            then A97: i mod 2 = 0 by NAT_2:23;
            then A98: 1 = (i -' 1) mod 2 by A71,NAT_2:20
@@ -420,11 +423,13 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
               .= (D.(F^<* 1 *>))`2 by A89,A105,MCART_1:7
               .= (D.(FinSeqLevel(n+1,dD).i))`2 by A71,A75,A98,BINTREE2:24;
          end;
+         end;
          hence (D.(FinSeqLevel(n+1,dD).(i+1)))`1 =
           (D.(FinSeqLevel(n+1,dD).i))`2;
         end;
         A106: for n be non empty Nat holds R[n]
-                                                      from Ind_from_1(A61,A67);
+                                                      from BINARITH:sch 1
+(A61,A67);
         A107: 1 <= 1 + i by NAT_1:29;
         then A108: i + 1 in Seg len h by A59,FINSEQ_1:3;
         then i + 1 in dom h by FINSEQ_1:def 3;
@@ -435,11 +440,13 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
            .= (D.(FSL/.(i+1)))`1 by A17,A18,A108
            .= (D.(FinSeqLevel(n,dD).(i+1)))`1 by A18,A52,A59,A107,FINSEQ_4:24
            .= (D.(FinSeqLevel(n,dD).i))`2 by A50,A60,A106;
+       end;
        suppose A109: i = len f - 1;
         then A110: i = 2 to_power n by A18,A42,XCMPLX_1:26;
         thus f/.(i+1) = y by A48,A109,XCMPLX_1:27
            .= (D.'not' ze)`2 by A41
            .= (D.(FinSeqLevel(n,dD).i))`2 by A110,BINTREE2:16;
+      end;
       end;
         i >= 0 + 1 by A50;
       then A111: i > 0 by NAT_1:38;
@@ -479,6 +486,7 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
          thus dist(DF1,DF2) = (2 / 1) * (dist(DF1,DF2) / 2) by XCMPLX_1:88
             .= (2 * dist(DF1,DF2)) / (1 * 2) by XCMPLX_1:77
             .= dist(x,y) / 2 by A122,A123;
+        end;
         suppose A124: j = 2;
          A125: D.(pusty ^ <* 1 *>) = D.(<* 1 *>) by FINSEQ_1:47
             .= D.FSL1j by A124,BINTREE2:23
@@ -492,6 +500,7 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
          thus dist(DF1,DF2) = (2 / 1) * (dist(DF1,DF2) / 2) by XCMPLX_1:88
             .= (2 * dist(DF1,DF2)) / (1 * 2) by XCMPLX_1:77
             .= dist(x,y) / 2 by A127,A128;
+       end;
        end;
        hence dist(DF1,DF2) = dist(x,y) / 2 to_power 1 by POWER:30;
       end;
@@ -566,6 +575,7 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
            .= dist(x,y) / ((2 to_power l) * 2) by XCMPLX_1:79
            .= dist(x,y) / ((2 to_power l) * (2 to_power 1)) by POWER:30
            .= dist(x,y) / (2 to_power (l+1)) by POWER:32;
+        end;
         suppose d = 1;
          then DF1 = b & DF2 = y1 by A138,A139,A144,ZFMISC_1:33;
          then 2 * dist(DF1,DF2) = (dist(x,y) / 2 to_power l) / 2 * 2
@@ -575,9 +585,10 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
            .= dist(x,y) / ((2 to_power l) * (2 to_power 1)) by POWER:30
            .= dist(x,y) / (2 to_power (l+1)) by POWER:32;
        end;
+       end;
        hence dist(DF1,DF2) = dist(x,y) / 2 to_power (l+1);
       end;
-        for l be non empty Nat holds S[l] from Ind_from_1(A112,A129);
+        for l be non empty Nat holds S[l] from BINARITH:sch 1(A112,A129);
       hence dist(f/.i,f/.(i+1)) = r by A18,A53,A55,A58,A111;
      end;
      hence for i be Nat st 1 <= i & i <= len f - 1 holds
@@ -622,6 +633,7 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
            .= len F |-> r by FINSEQ_2:def 2;
      hence Sum F = (N + 1 - 1) * r by A18,A42,A149,RVSUM_1:110
              .= dist(x,y) by A46,XCMPLX_1:26;
+    end;
     suppose A160: dist(x,y) < p;
      take f = <*x,y*>;
      thus A161: f/.1 = x by FINSEQ_4:26;
@@ -650,8 +662,9 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
      then F = <*dist(x,y)*> by A162,A165,FINSEQ_5:15;
      hence dist(x,y) = Sum F by RVSUM_1:103;
    end;
+   end;
 
-  definition
+  registration
    cluster convex -> internal (non empty MetrSpace);
    coherence
    proof
@@ -683,14 +696,15 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
    end;
   end;
 
-  definition
+
+  registration
    cluster convex (non empty MetrSpace);
    existence
    proof
     reconsider ZS = {0} as non empty set;
     deffunc T((Element of ZS), Element of ZS) = 0;
     consider F be Function of [:ZS,ZS:],REAL such that
-     A1: for x,y be Element of ZS holds F.[x,y] = T(x,y) from Lambda2D;
+     A1: for x,y be Element of ZS holds F.[x,y] = T(x,y) from FUNCT_2:sch 8;
    reconsider V = MetrStruct (# ZS,F #) as non empty MetrStruct
                                                           by STRUCT_0:def 1;
    A2: now let a,b be Element of V;
@@ -734,10 +748,12 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
    end;
   end;
 
+
   definition
    mode Geometry is Reflexive discerning symmetric triangle internal
         (non empty MetrStruct);
   end;
+
 
 begin  :: Isometric Functions
 
@@ -748,6 +764,7 @@ begin  :: Isometric Functions
     rng f = the carrier of V &
     for x,y be Element of V holds dist(x,y) = dist(f.x,f.y);
   end;
+
 
   definition
    let V be non empty MetrStruct;
@@ -760,7 +777,8 @@ begin  :: Isometric Functions
       ex f be map of V,V st f = $1 & f is isometric;
     consider X be set such that
      A1: for x be set holds x in X iff
-      x in Funcs(the carrier of V,the carrier of V) & Sep[x] from Separation;
+      x in Funcs(the carrier of V,the carrier of V) & Sep[x] from
+XBOOLE_0:sch 1;
     take X;
     let x be set;
     thus x in X implies ex f be map of V,V st f = x & f is isometric by A1;
@@ -779,9 +797,11 @@ begin  :: Isometric Functions
        ex f be map of V,V st f = $1 & f is isometric;
       thus for X1,X2 being set st
       (for x being set holds x in X1 iff P[x]) &
-      (for x being set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+      (for x being set holds x in X2 iff P[x]) holds X1 = X2 from
+XBOOLE_0:sch 3;
     end;
   end;
+
 
   definition
    let V be non empty MetrStruct;
@@ -799,6 +819,7 @@ begin  :: Isometric Functions
                                                             by TARSKI:def 3;
    end;
   end;
+
 
   theorem Th2:
    for V be discerning Reflexive (non empty MetrStruct)
@@ -822,13 +843,14 @@ begin  :: Isometric Functions
     hence f is one-to-one by FUNCT_1:def 8;
    end;
 
-  definition
+  registration
    let V be discerning Reflexive (non empty MetrStruct);
    cluster isometric -> one-to-one map of V,V;
    coherence by Th2;
   end;
 
-  definition
+
+  registration
    let V be non empty MetrStruct;
    cluster isometric map of V,V;
    existence
@@ -841,6 +863,7 @@ begin  :: Isometric Functions
                   .= dist(f.x,f.y) by FUNCT_1:35;
    end;
   end;
+
 
   theorem Th3:
    for V be discerning Reflexive (non empty MetrStruct)
@@ -898,7 +921,7 @@ begin  :: Isometric Functions
                   .= dist(id(V).x,id(V).y) by GRCAT_1:11;
    end;
 
-  definition
+  registration
    let V be non empty MetrStruct;
    cluster ISOM V -> non empty;
    coherence
@@ -907,6 +930,7 @@ begin  :: Isometric Functions
     hence ISOM V is non empty by Def4;
    end;
   end;
+
 
 begin  :: Real Linear-Metric Spaces
 
@@ -918,7 +942,8 @@ definition
           Mult -> Function of [:REAL, the carrier:],the carrier #);
 end;
 
-  definition
+
+  registration
    cluster non empty strict RLSMetrStruct;
    existence
    proof
@@ -933,7 +958,8 @@ end;
    end;
   end;
 
-  definition
+
+  registration
    let X be non empty set;
    let F be Function of [:X,X:],REAL;
    let O be Element of X;
@@ -943,6 +969,7 @@ end;
    coherence by STRUCT_0:def 1;
   end;
 
+
   definition
    let V be non empty RLSMetrStruct;
    attr V is homogeneous means :Def5:
@@ -951,12 +978,14 @@ end;
      dist(r*v,r*w) = abs(r) * dist(v,w);
   end;
 
+
   definition
    let V be non empty RLSMetrStruct;
    attr V is translatible means :Def6:
     for u,w,v be Element of V holds
      dist(v,w) = dist(v+u,w+u);
   end;
+
 
   definition
    let V be non empty RLSMetrStruct;
@@ -966,7 +995,8 @@ end;
    coherence;
   end;
 
-  definition
+
+  registration
    cluster strict Abelian add-associative right_zeroed
            right_complementable RealLinearSpace-like
            Reflexive discerning symmetric triangle
@@ -977,14 +1007,14 @@ end;
     reconsider O = 0 as Element of ZS by TARSKI:def 1;
     deffunc T((Element of ZS), Element of ZS) = 0;
     consider FF be Function of [:ZS,ZS:],REAL such that
-     A1: for x,y be Element of ZS holds FF.[x,y] = T(x,y) from Lambda2D;
+     A1: for x,y be Element of ZS holds FF.[x,y] = T(x,y) from FUNCT_2:sch 8;
     deffunc A((Element of ZS), Element of ZS) = O;
     consider F be BinOp of ZS such that
-     A2: for x,y be Element of ZS holds F.(x,y) = A(x,y) from BinOpLambda;
+     A2: for x,y be Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 2;
     deffunc M((Element of REAL), Element of ZS) = O;
     consider G be Function of [:REAL,ZS:],ZS such that
      A3: for a be Element of REAL for x be Element of ZS holds
-            G.[a,x qua set] = M(a,x) from Lambda2D;
+            G.[a,x qua set] = M(a,x) from FUNCT_2:sch 8;
     set W = RLSMetrStruct (# ZS,FF,O,F,G #);
     A4: for x,y be VECTOR of W holds x + y = y + x
     proof
@@ -1132,12 +1162,14 @@ end;
    end;
   end;
 
+
   definition
    mode RealLinearMetrSpace is
     Abelian add-associative right_zeroed right_complementable
     RealLinearSpace-like Reflexive discerning symmetric triangle
     homogeneous translatible (non empty RLSMetrStruct);
   end;
+
 
   theorem
      for V be homogeneous Abelian add-associative right_zeroed
@@ -1204,11 +1236,12 @@ end;
    proof
      deffunc F(Element of REAL n, Element of REAL n) = $1+$2;
     consider f be BinOp of REAL n such that
-     A1: for x,y be Element of REAL n holds f.(x,y) = F(x,y) from BinOpLambda;
+     A1: for x,y be Element of REAL n holds f.(x,y) = F(x,y) from BINOP_1:sch 2
+;
      deffunc G(Element of REAL, Element of REAL n) = $1*$2;
     consider g be Function of [:REAL, REAL n:],REAL n such that
      A2: for r be Element of REAL,
-             x be Element of REAL n holds g.[r,x] = G(r,x) from Lambda2D;
+             x be Element of REAL n holds g.[r,x] = G(r,x) from FUNCT_2:sch 8;
     A3: now let r be Element of REAL,
             x be Element of REAL n;
      thus g.(r,x) = g.[r,x] by BINOP_1:def 1
@@ -1420,6 +1453,7 @@ METRIC_1:1,2,3,4;
    end;
   end;
 
+
   theorem
      for n be Nat
    for f be isometric map of RLMSpace n,RLMSpace n holds
@@ -1461,7 +1495,7 @@ begin  :: Groups of Isometric Functions
     end;
     consider o be BinOp of ISOM RLMSpace n such that
      A6: for a,b be Element of ISOM RLMSpace n holds P[a,b, o.(a,b)]
-       from BinOpEx(A1);
+       from BINOP_1:sch 1(A1);
     take G = HGrStr(#ISOM RLMSpace n,o#);
       for f,g be Function st f in ISOM RLMSpace n &
      g in ISOM RLMSpace n holds (the mult of G).(f,g) = f*g
@@ -1502,7 +1536,8 @@ begin  :: Groups of Isometric Functions
    end;
   end;
 
-  definition
+
+  registration
    let n be Nat;
    cluster IsomGroup n -> non empty;
    coherence
@@ -1512,7 +1547,8 @@ begin  :: Groups of Isometric Functions
    end;
   end;
 
-  definition
+
+  registration
    let n be Nat;
    cluster IsomGroup n -> associative Group-like;
    coherence
@@ -1598,6 +1634,7 @@ begin  :: Groups of Isometric Functions
    end;
   end;
 
+
   theorem Th10:
    for n be Nat holds
     1.(IsomGroup n) = id (RLMSpace n)
@@ -1678,7 +1715,7 @@ begin  :: Groups of Isometric Functions
      the carrier of RLMSpace n,the carrier of RLMSpace n such that
       A1: for x,y be set holds [x,y] in R iff
        x in the carrier of RLMSpace n & y in the carrier of RLMSpace n & P[x,y]
-         from Rel_On_Set_Ex;
+         from RELSET_1:sch 1;
     take R;
     let A,B be Element of RLMSpace n;
     thus thesis by A1;
@@ -1713,7 +1750,8 @@ begin  :: Groups of Isometric Functions
    end;
   end;
 
-  definition
+
+  registration
    let n be Nat;
    let G be Subgroup of IsomGroup n;
    cluster SubIsomGroupRel G -> total symmetric transitive;
@@ -1810,3 +1848,4 @@ A2:   dom S = X & field S = X by ORDERS_1:98;
     hence S is transitive by A2,RELAT_2:def 16;
    end;
   end;
+

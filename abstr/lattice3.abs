@@ -28,12 +28,19 @@ definition let X be set;
    (the L_join of it).(Y,Z) = Y \/ Z & (the L_meet of it).(Y,Z) = Y /\ Z;
 end;
 
+
 reserve X for set,
         x,y,z for Element of BooleLatt X, s for set;
 
-definition let X be set;
+registration let X be set;
  cluster BooleLatt X -> non empty;
+ coherence
+  proof
+     the carrier of BooleLatt X = bool X by Def1;
+   hence the carrier of BooleLatt X is non empty;
+  end;
 end;
+
 
 theorem :: LATTICE3:1
  x "\/" y = x \/ y & x "/\" y = x /\ y;
@@ -41,9 +48,41 @@ theorem :: LATTICE3:1
 theorem :: LATTICE3:2
  x [= y iff x c= y;
 
-definition let X;
+registration let X;
  cluster BooleLatt X -> Lattice-like;
+  coherence
+   proof
+A1:  now let x,y;
+      thus x"\/"y = y \/ x by Th1 .= y"\/"x by Th1;
+     end;
+A2:  now let x,y,z;
+      thus x"\/"(y"\/"z) = x \/ (y"\/"z) by Th1 .= x \/ (y \/ z) by Th1
+              .= x \/ y \/ z by XBOOLE_1:4 .= (x"\/"y) \/ z by Th1
+              .= (x"\/"y)"\/"z by Th1;
+     end;
+A3:  now let x,y;
+      thus (x"/\"y)"\/"y = (x"/\"y) \/ y by Th1 .= (x /\ y) \/ y by Th1
+              .= y by XBOOLE_1:22;
+     end;
+A4:  now let x,y;
+      thus x"/\"y = y /\ x by Th1 .= y"/\"x by Th1;
+     end;
+A5:  now let x,y,z;
+      thus x"/\"(y"/\"z) = x /\ (y"/\"z) by Th1 .= x /\ (y /\ z) by Th1
+              .= x /\ y /\ z by XBOOLE_1:16 .= (x"/\"y) /\ z by Th1
+              .= (x"/\"y)"/\"z by Th1;
+     end;
+       now let x,y;
+      thus x"/\"(x"\/"y) = x /\ (x"\/"y) by Th1 .= x /\ (x \/ y) by Th1
+              .= x by XBOOLE_1:21;
+     end;
+    then BooleLatt X is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+    by A1,A2,A3,A4,A5,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+    hence thesis by LATTICES:def 10;
+   end;
 end;
+
 
 reserve y for Element of BooleLatt X;
 
@@ -53,9 +92,36 @@ theorem :: LATTICE3:3
 theorem :: LATTICE3:4
  BooleLatt X is upper-bounded & Top BooleLatt X = X;
 
-definition let X;
+registration let X;
  cluster BooleLatt X -> Boolean Lattice-like;
+  coherence
+   proof set B = BooleLatt X;
+       B is 0_Lattice & B is 1_Lattice by Th3,Th4;
+    then reconsider B as 01_Lattice by LATTICES:def 15;
+A1:   B is complemented
+      proof let x be Element of B;
+A2:      (X \ x) c= X & carr(B) = bool X by Def1,XBOOLE_1:36;
+       then reconsider y = X \ x as Element of B;
+       take y;
+       thus y"\/"x = y \/ x by Th1 .= X \/ x by XBOOLE_1:39 .= X by A2,XBOOLE_1
+:12
+                .= Top B by Th4;
+       hence x"\/"y = Top B;
+A3:     y misses x by XBOOLE_1:79;
+       thus y"/\"x = y /\ x by Th1 .= {} by A3,XBOOLE_0:def 7
+ .= Bottom B by Th3;
+       hence thesis;
+      end;
+       B is distributive
+      proof let x,y,z be Element of B;
+       thus x"/\"(y"\/"z) = x /\ (y"\/"z) by Th1 .= x /\ (y \/ z) by Th1
+               .= x/\y \/ x/\z by XBOOLE_1:23 .= (x"/\"y)\/(x/\z) by Th1
+               .= (x"/\"y)\/(x"/\"z) by Th1 .= (x"/\"y)"\/"(x"/\"z) by Th1;
+      end;
+    hence thesis by A1,LATTICES:def 20;
+   end;
 end;
+
 
 theorem :: LATTICE3:5
    for x being Element of BooleLatt X holds x` = X \ x;
@@ -66,15 +132,23 @@ definition let L be Lattice;
  redefine func LattRel L -> Order of the carrier of L;
 end;
 
+
 definition let L be Lattice;
  func LattPOSet L -> strict Poset equals
 :: LATTICE3:def 2
     RelStr(#the carrier of L, LattRel L#);
 end;
 
-definition let L be Lattice;
+
+registration let L be Lattice;
   cluster LattPOSet L -> non empty;
+  coherence
+  proof
+     LattPOSet L = RelStr(#the carrier of L, LattRel L#) by Def2;
+   hence the carrier of LattPOSet L is non empty;
+  end;
 end;
+
 
 theorem :: LATTICE3:6
  for L1,L2 being Lattice st LattPOSet L1 = LattPOSet L2 holds
@@ -86,11 +160,13 @@ definition let L be Lattice, p be Element of L;
    p;
 end;
 
+
 definition let L be Lattice, p be Element of LattPOSet L;
  func %p -> Element of L equals
 :: LATTICE3:def 4
    p;
 end;
+
 
 reserve L for Lattice, p,q for Element of L;
 
@@ -101,6 +177,7 @@ theorem :: LATTICE3:7
   redefine func O~ -> Order of X;
  end;
 
+
 definition let A be RelStr;
  func A~ -> strict RelStr equals
 :: LATTICE3:def 5
@@ -108,13 +185,24 @@ definition let A be RelStr;
    RelStr(#the carrier of A, (the InternalRel of A)~#);
 end;
 
-definition let A be Poset;
+
+registration let A be Poset;
  cluster A~ -> reflexive transitive antisymmetric;
+ coherence
+  proof A~ = RelStr(#the carrier of A, (the InternalRel of A)~#) by Def5;
+   hence thesis;
+  end;
 end;
 
-definition let A be non empty RelStr;
+
+registration let A be non empty RelStr;
  cluster A~ -> non empty;
+ coherence
+ proof A~ = RelStr(#the carrier of A, (the InternalRel of A)~#) by Def5;
+  hence the carrier of A~ is non empty;
+ end;
 end;
+
 
 reserve A for RelStr, a,b,c for Element of A;
 
@@ -127,11 +215,13 @@ definition let A be RelStr, a be Element of A;
     a;
 end;
 
+
 definition let A be RelStr, a be Element of A~;
  func ~a -> Element of A equals
 :: LATTICE3:def 7
     a;
 end;
+
 
 theorem :: LATTICE3:9
  a <= b iff b~ <= a~;
@@ -141,13 +231,15 @@ definition let A be RelStr, X be set, a be Element of A;
 :: LATTICE3:def 8
 for b being Element of A st b in X
    holds a <= b;
-  synonym X is_>=_than a;
- pred X is_<=_than a means
+  pred X is_<=_than a means
 :: LATTICE3:def 9
 
   for b being Element of A st b in X holds b <= a;
-  synonym a is_>=_than X;
-end;
+  end;
+notation let A be RelStr, X be set, a be Element of A;
+ synonym X is_>=_than a for a is_<=_than X ; synonym a is_>=_than X for
+ X is_<=_than a ; end;
+
 
 definition let IT be RelStr;
  attr IT is with_suprema means
@@ -164,10 +256,40 @@ definition let IT be RelStr;
     for z' being Element of IT st z' <= x & z' <= y holds z' <= z;
 end;
 
-definition
+
+registration
  cluster with_suprema -> non empty RelStr;
+ coherence
+  proof let A be RelStr such that
+A1:  for x,y being Element of A
+     ex z being Element of A st x <= z & y <= z &
+      for z' being Element of A st x <= z' & y <= z' holds z <= z';
+   consider x,y being Element of A;
+   consider z being Element of A such that
+A2:  x <= z & y <= z and
+      for z' being Element of A st x <= z' & y <= z' holds z <= z'
+      by A1;
+      [x,z] in the InternalRel of A by A2,ORDERS_1:def 9;
+    then x in the carrier of A by ZFMISC_1:106;
+   hence thesis by STRUCT_0:def 1;
+  end;
  cluster with_infima -> non empty RelStr;
+ coherence
+  proof let A be RelStr such that
+A3:  for x,y being Element of A
+     ex z being Element of A st x >= z & y >= z &
+      for z' being Element of A st x >= z' & y >= z' holds z >= z';
+   consider x,y being Element of A;
+   consider z being Element of A such that
+A4:  x >= z & y >= z and
+      for z' being Element of A st x >= z' & y >= z' holds z >= z'
+      by A3;
+      [z,x] in the InternalRel of A by A4,ORDERS_1:def 9;
+    then x in the carrier of A by ZFMISC_1:106;
+   hence thesis by STRUCT_0:def 1;
+  end;
 end;
+
 
 theorem :: LATTICE3:10
    A is with_suprema iff A~ is with_infima;
@@ -183,18 +305,43 @@ definition let IT be RelStr;
    for b being Element of IT st X is_<=_than b holds a <= b;
 end;
 
-definition
+
+registration
  cluster strict complete non empty Poset;
+  existence
+   proof consider s; set D = {s}; consider R being Order of D;
+    take A = RelStr(#D, R#);
+    thus A is strict;
+   hereby
+    let X be set;
+      s is Element of A by TARSKI:def 1;
+    then reconsider s as Element of A;
+    take s;
+    thus X is_<=_than s
+      proof let a be Element of A such that a in
+ X; thus a <= s by TARSKI:def 1;
+      end;
+    let b be Element of A such that X is_<=_than b; thus s <= b by TARSKI:def 1
+;
+   end;
+thus thesis;
 end;
+end;
+
 
 reserve A for non empty RelStr, a,b,c,c' for Element of A;
 
 theorem :: LATTICE3:12
  A is complete implies A is with_suprema with_infima;
 
-definition
+registration
  cluster complete with_suprema with_infima strict non empty Poset;
+  existence
+    proof consider A being complete strict non empty Poset;
+     take A; thus thesis by Th12;
+    end;
 end;
+
 
 definition let A be RelStr such that
  A is antisymmetric;
@@ -243,11 +390,13 @@ definition let L be with_infima antisymmetric RelStr,
  commutativity;
 end;
 
+
 definition let L be with_suprema antisymmetric RelStr,
                x, y be Element of L;
  redefine func x "\/" y;
 commutativity;
 end;
+
 
 theorem :: LATTICE3:17
  (k1 "/\" k2) "\/" k2 = k2;
@@ -267,6 +416,7 @@ definition let A be RelStr such that
   the RelStr of A = LattPOSet it;
 end;
 
+
 theorem :: LATTICE3:20
    (LattRel L)~ = LattRel (L.:) & (LattPOSet L)~ = LattPOSet (L.:);
 
@@ -277,13 +427,15 @@ definition
  pred p is_less_than X means
 :: LATTICE3:def 16
    for q being Element of L st q in X holds p [= q;
-  synonym X is_great_than p;
-
- pred X is_less_than p means
+  pred X is_less_than p means
 :: LATTICE3:def 17
    for q being Element of L st q in X holds q [= p;
-  synonym p is_great_than X;
-end;
+  end;
+notation
+ let L be non empty LattStr, p be Element of L, X be set;
+ synonym X is_great_than p for p is_less_than X ; synonym p is_great_than X for
+ X is_less_than p ; end;
+
 
 theorem :: LATTICE3:21
    for L being Lattice, p,q,r being Element of L holds
@@ -322,6 +474,7 @@ definition let IT be non empty LattStr;
    holds c [= b"\/"a;
 end;
 
+
 theorem :: LATTICE3:23
    for B being B_Lattice, a being Element of B holds
    X is_less_than a iff {b` where b is Element of B: b in X}
@@ -341,9 +494,17 @@ theorem :: LATTICE3:26
 theorem :: LATTICE3:27
  BooleLatt X is /\-distributive;
 
-definition
+registration
  cluster complete \/-distributive /\-distributive strict Lattice;
+  existence
+   proof consider X;
+       BooleLatt X is complete \/-distributive /\-distributive by Th25,Th26,
+Th27
+;
+    hence thesis;
+   end;
 end;
+
 
 reserve p',q' for Element of LattPOSet L;
 
@@ -359,9 +520,49 @@ theorem :: LATTICE3:30
 theorem :: LATTICE3:31
  X is_<=_than p' iff X is_less_than %p';
 
- definition let A be complete (non empty Poset);
+ registration let A be complete (non empty Poset);
   cluster latt A -> complete;
+   coherence
+    proof A is with_suprema with_infima by Th12;
+then A1:    the RelStr of A = LattPOSet latt A by Def15; set B = LattPOSet latt
+A;
+        latt A is complete
+       proof let X; consider a being Element of A such that
+A2:       X is_<=_than a &
+         for b being Element of A st X is_<=_than b
+          holds a <= b by Def12;
+        reconsider a' = a as Element of B by A1;
+        take p = %a';
+A3:       p% = p & p = a by Def3,Def4;
+        thus X is_less_than p
+          proof let q be Element of latt A;
+A4:          q% = q by Def3;
+           then reconsider b = q as Element of A by A1;
+           assume q in X; then b <= a by A2,Def9;
+            then [b,a] in the InternalRel of A by ORDERS_1:def 9;
+            then q% <= a' by A1,A4,ORDERS_1:def 9;
+           hence q [= p by A3,Th7;
+          end;
+        let q be Element of latt A; assume X is_less_than q;
+        then A5:       X is_<=_than q% by Th30;
+        reconsider b = q% as Element of A by A1;
+           X is_<=_than b
+          proof let c be Element of A;
+           reconsider c' = c as Element of B by A1;
+           assume c in X; then c' <= q% by A5,Def9;
+            then [c,b] in the InternalRel of the RelStr of A by A1,ORDERS_1:def
+9;
+           hence c <= b by ORDERS_1:def 9;
+          end;
+         then a <= b by A2;
+         then [a,b] in the InternalRel of A by ORDERS_1:def 9;
+         then a' <= q% by A1,ORDERS_1:def 9;
+        hence thesis by A3,Th7;
+       end;
+     hence thesis;
+    end;
  end;
+
 
 definition let L be non empty LattStr such that
  L is complete Lattice;
@@ -373,15 +574,17 @@ definition let L be non empty LattStr such that
    for r being Element of L st X is_less_than r holds it [= r;
 end;
 
+
 definition let L be non empty LattStr, X be set;
  func "/\"(X,L) -> Element of L equals
 :: LATTICE3:def 22
    "\/"({p where p is Element of L: p is_less_than X},L);
 end;
 
-definition let L be non empty LattStr, X be Subset of L;
- redefine func "\/"(X,L); synonym "\/" X; func "/\"(X,L); synonym "/\" X;
-end;
+
+notation let L be non empty LattStr, X be Subset of L;
+ synonym "\/" X for "\/"(X,L); synonym "/\" X for "/\"(X,L); end;
+
 
 reserve C for complete Lattice,
         a,a',b,b',c,d for Element of C, X,Y for set;
@@ -475,17 +678,50 @@ theorem :: LATTICE3:55
 a where b2 is Element of D: b2 in
  X}, D);
 
-scheme SingleFraenkel{A()->set, B()->non empty set, P[set]}:
+scheme :: LATTICE3:sch 1
+ SingleFraenkel{A()->set, B()->non empty set, P[set]}:
   {A() where a is Element of B(): P[a]} = {A()}
   provided
- ex a being Element of B() st P[a];
+ ex a being Element of B() st P[a]
+proof
+   thus {A() where a is Element of B(): P[a]} c= {A()}
+     proof let x be set; assume
+         x in {A() where a is Element of B(): P[a]};
+       then ex a being Element of B() st x = A() & P[a];
+      hence thesis by TARSKI:def 1;
+     end;
+   let x be set; assume x in {A()};
+    then x = A() by TARSKI:def 1;
+   hence thesis by A1;
+  end;
 
-scheme FuncFraenkel{B()->non empty set, C()->non empty set,
+scheme :: LATTICE3:sch 2
+ FuncFraenkel{B()->non empty set, C()->non empty set,
         A(set)->Element of C(),f()->Function, P[set]}:
   f().:{A(x) where x is Element of B(): P[x]} =
    {f().A(x) where x is Element of B(): P[x]}
   provided
-  C() c= dom f();
+  C() c= dom f()
+proof   set f = f();
+   thus f.:{A(x) where x is Element of B(): P[x]} c=
+      {f.A(x) where x is Element of B(): P[x]}
+     proof let y be set; assume
+         y in f.:{A(x) where x is Element of B(): P[x]};
+      then consider z being set such that
+A2:     z in dom f & z in {A(x) where x is Element of B(): P[x]}
+       & y = f.z
+        by FUNCT_1:def 12;
+         ex x being Element of B() st z = A(x) & P[x] by A2;
+      hence thesis by A2;
+     end;
+   let y be set;
+   assume y in {f.A(x) where x is Element of B(): P[x]};
+   then consider x being Element of B() such that
+A3:  y = f.A(x) & P[x];
+      A(x) in dom f & A(x) in {A(z) where z is Element of B(): P[z]}
+     by A1,A3,TARSKI:def 3;
+   hence thesis by A3,FUNCT_1:def 12;
+  end;
 
 theorem :: LATTICE3:56
    for D being non empty set, f being Function of bool D, D st

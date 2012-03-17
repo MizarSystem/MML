@@ -35,6 +35,7 @@ definition
     holds [x,y] in the InternalRel of R iff x <= y;
 end;
 
+
 definition
   let R be RelStr;
   attr R is interval means
@@ -43,32 +44,71 @@ definition
    R is real & ex a,b being real number st a <= b & the carrier of R = [.a,b.];
 end;
 
-definition
+
+registration
   cluster interval -> real non empty RelStr;
+  coherence
+  proof
+   let R being RelStr;
+   assume
+A1:R is real;
+   given a,b being real number such that
+A2:a <= b & the carrier of R = [.a,b.];
+   thus R is real by A1;
+   thus the carrier of R is non empty by A2,RCOMP_1:15;
+  end;
 end;
 
-definition
+
+registration
   cluster empty -> real RelStr;
+  coherence
+  proof
+   let R being RelStr;
+   assume
+A1:the carrier of R is empty;
+   hence the carrier of R c= REAL by XBOOLE_1:2;
+   thus thesis by A1;
+  end;
 end;
+
 
 theorem :: LFUZZY_0:1
   for X being Subset of REAL
   ex R being strict RelStr st
    the carrier of R = X & R is real;
 
-definition
+registration
   cluster interval strict RelStr;
+  existence
+   proof
+    set X = [. 0,1 qua real number .];
+    consider R being strict RelStr such that
+A1:  the carrier of R = X & R is real by Th1;
+    take R;
+    thus thesis by A1,Def2;
+   end;
 end;
+
 
 theorem :: LFUZZY_0:2
   for R1,R2 being real RelStr
    st the carrier of R1 = the carrier of R2
    holds the RelStr of R1 = the RelStr of R2;
 
-definition
+registration
   let R be non empty real RelStr;
   cluster -> real Element of R;
+  coherence
+    proof
+     let x be Element of R;
+A1:  the carrier of R c= REAL by Def1;
+     x in the carrier of R;then
+     x is Element of REAL by A1;
+     hence x is real;
+    end;
 end;
+
 
 definition
  let X be Subset of REAL;
@@ -78,36 +118,91 @@ definition
   the carrier of it = X;
 end;
 
-definition
+
+registration
   let X be non empty Subset of REAL;
   cluster RealPoset X -> non empty;
+  coherence
+  proof
+    thus the carrier of RealPoset X is non empty by Def3;
+  end;
 end;
 
-definition
+
+notation
   let R be RelStr;
   let x,y be Element of R;
-  redefine pred x <= y;
-   synonym x <<= y; synonym y >>= x; antonym x ~<= y; antonym y ~>= x;
-end;
+  synonym x <<= y for x <= y;
+   synonym y >>= x for x <= y;
+   antonym x ~<= y for x <= y;
+   antonym y ~>= x for x <= y;
+   end;
 
-definition
+
+notation
   let x,y be real number;
-  redefine pred x <= y;
-   synonym x <R= y; antonym y <R x; synonym y >R= x; antonym x >R y;
-end;
+  synonym x <R= y for x <= y;
+   antonym y <R x for x <= y;
+   synonym y >R= x for x <= y;
+   antonym x >R y for x <= y;
+   end;
+
 
 theorem :: LFUZZY_0:3
  for R being non empty real RelStr
  for x,y being Element of R
   holds x <R= y iff x <<= y;
 
-definition
+registration
   cluster real -> reflexive antisymmetric transitive RelStr;
+  coherence
+   proof
+     let R be RelStr such that
+A1:   R is real;
+     per cases;
+      suppose R is empty; then
+        R is empty RelStr;
+        hence thesis;
+      end;
+      suppose R is non empty; then
+        reconsider R' = R as non empty real RelStr by A1;
+A2:     R' is reflexive
+         proof
+           let x be Element of R';
+           thus thesis by Th3;
+         end;
+A3:     R' is antisymmetric
+         proof
+           let x,y be Element of R';
+           assume x <<= y & x >>= y; then
+           x <R= y & x >R= y by Th3;
+           hence x = y by AXIOMS:21;
+         end;
+        R' is transitive
+         proof
+           let x,y,z be Element of R';
+           assume x <<= y & y <<= z; then
+           x <R= y & y <R= z by Th3; then
+           x <R= z by AXIOMS:22;
+           hence thesis by Th3;
+         end;
+        hence thesis by A2,A3;
+   end;
+   end;
 end;
 
-definition
+
+registration
   cluster -> connected (real non empty RelStr);
+  coherence
+  proof
+    let R be non empty real RelStr;
+    let x,y be Element of R;
+    x <R= y or x >R= y;
+    hence thesis by Th3;
+  end;
 end;
+
 
 definition
  let R be non empty real RelStr;
@@ -115,15 +210,19 @@ definition
  redefine func max(x,y) -> Element of R;
 end;
 
+
 definition
  let R be non empty real RelStr;
  let x,y be Element of R;
  redefine func min(x,y) -> Element of R;
 end;
 
-definition
+
+registration
   cluster -> with_suprema with_infima (real non empty RelStr);
+  coherence;
 end;
+
 
 reserve X for non empty Subset of REAL,
    x,y,z,w for real number,
@@ -144,33 +243,224 @@ theorem :: LFUZZY_0:7
   (ex x st x in the carrier of R & for y st y in the carrier of R holds x >= y)
     iff R is upper-bounded;
 
-definition
+registration
   cluster interval -> bounded (non empty RelStr);
+  coherence
+   proof
+     let R being non empty RelStr;
+     assume
+A1:  R is real;
+     given x,y being real number such that
+A2:  x <= y & the carrier of R = [.x,y.];
+     ex x st x in the carrier of R
+     & for y st y in the carrier of R holds x >= y
+       proof
+        take y;
+        thus y in the carrier of R by A2,RCOMP_1:15;
+        let z;
+        assume z in the carrier of R;
+        hence thesis by A2,TOPREAL5:1;
+       end;
+     then
+A3:  R is upper-bounded by A1,Th7;
+     ex x st x in the carrier of R &
+     for y st y in the carrier of R holds x <= y
+       proof
+        take x;
+        thus x in the carrier of R by A2,RCOMP_1:15;
+        let z;
+        assume z in the carrier of R;
+        hence thesis by A2,TOPREAL5:1;
+       end;
+     then
+     R is lower-bounded by A1,Th6;
+     hence R is bounded by A3,YELLOW_0:def 6;
+   end;
 end;
+
 
 theorem :: LFUZZY_0:8
 for R being interval non empty RelStr, X being set holds
 ex_sup_of X,R;
 
-definition
+registration
   cluster -> complete (interval non empty RelStr);
+  coherence
+  proof let R be interval non empty RelStr;
+    for X being Subset of R holds ex_sup_of X,R by Th8;
+    hence thesis by YELLOW_0:53;
+  end;
 end;
 
-definition
+
+registration
   cluster -> distributive Chain;
+  coherence
+   proof
+     let C be Chain;
+     for x,y,z being Element of C holds
+     x "/\" (y "\/" z) = (x "/\" y) "\/" (x "/\" z)
+     proof
+       let x,y,z be Element of C;
+A1:    x <= x;
+       per cases by WAYBEL_0:def 29;
+      suppose A2:x <= y & x <= z & y <= z;
+A3:    x "/\" (y "\/" z) = x "/\" z                    by A2,YELLOW_0:24
+       .= x                                            by A2,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) = x  "\/" (x "/\" z) by A2,YELLOW_0:25
+       .= x  "\/" x                                    by A2,YELLOW_0:25
+       .= x                                            by A1,YELLOW_0:24;
+       hence  thesis by A3;
+      end;
+      suppose A4:x <= y & x <= z & y >= z;
+A5:    x "/\" (y "\/" z) = x "/\" y                    by A4,YELLOW_0:24
+       .= x                                            by A4,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) = x  "\/" (x "/\" z) by A4,YELLOW_0:25
+       .= x  "\/" x                                    by A4,YELLOW_0:25
+       .= x                                            by A1,YELLOW_0:24;
+       hence  thesis by A5;
+      end;
+      suppose A6:x <= y & x >= z & y <= z;then
+       z <= y by YELLOW_0:def 2;then
+A7:    z = y by A6,YELLOW_0:def 3;
+A8:    x "/\" (y "\/" z) = x "/\" z                    by A6,YELLOW_0:24
+       .= z                                            by A6,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) = x  "\/" (x "/\" z) by A6,YELLOW_0:25
+       .= x  "\/" z                                    by A6,YELLOW_0:25
+       .= x                                            by A6,YELLOW_0:24;
+       hence  thesis by A6,A7,A8,YELLOW_0:def 3;
+      end;
+      suppose A9:x <= y & x >= z & y >= z;
+A10:    x "/\" (y "\/" z) = x "/\" y                    by A9,YELLOW_0:24
+       .= x                                            by A9,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) = x  "\/" (x "/\" z) by A9,YELLOW_0:25
+       .= x  "\/" z                                    by A9,YELLOW_0:25
+       .= x                                            by A9,YELLOW_0:24;
+       hence  thesis by A10;
+      end;
+      suppose A11:x >= y & x <= z & y <= z;
+A12:    x "/\" (y "\/" z) = x "/\" z                    by A11,YELLOW_0:24
+              .= x                                     by A11,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) =  y "\/" (x "/\" z) by A11,YELLOW_0:25
+              .= y  "\/" x                             by A11,YELLOW_0:25
+              .= x                                     by A11,YELLOW_0:24;
+       hence  thesis by A12;
+      end;
+      suppose A13:x >= y & x <= z & y >= z;then
+       z >= y by YELLOW_0:def 2;then
+A14:     z = y by A13,YELLOW_0:def 3;
+A15:    x "/\" (y "\/" z) = x "/\" y                    by A13,YELLOW_0:24
+                        .= y                           by A13,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) =  y "\/" (x "/\" z) by A13,YELLOW_0:25
+                                 .= y  "\/" x          by A13,YELLOW_0:25
+                                            .= x       by A13,YELLOW_0:24;
+       hence  thesis by A13,A14,A15,YELLOW_0:def 3;
+      end;
+      suppose A16:x >= y & x >= z & y <= z;
+A17:    x "/\" (y "\/" z) = x "/\" z                    by A16,YELLOW_0:24
+                        .= z                           by A16,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) =  y "\/" (x "/\" z) by A16,YELLOW_0:25
+                                 .= y  "\/" z          by A16,YELLOW_0:25
+                                            .= z       by A16,YELLOW_0:24;
+       hence  thesis by A17;
+      end;
+      suppose A18:x >= y & x >= z & y >= z;
+A19:    x "/\" (y "\/" z) = x "/\" y                    by A18,YELLOW_0:24
+                        .= y                           by A18,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) =  y "\/" (x "/\" z) by A18,YELLOW_0:25
+                                 .= y  "\/" z          by A18,YELLOW_0:25
+                                            .= y       by A18,YELLOW_0:24;
+       hence  thesis by A19;
+     end;
+     end;
+     hence thesis by WAYBEL_1:def 3;
+   end;
 end;
 
-definition
+
+registration
   cluster -> Heyting (interval non empty RelStr);
+  coherence
+   proof let R be interval non empty RelStr;
+     thus R is LATTICE;
+     let x be Element of R;
+     set f = x "/\";
+     f is sups-preserving
+     proof
+       let X be Subset of R;
+       assume ex_sup_of X,R;
+       thus ex_sup_of f.:X,R by Th8;
+A1:    f.sup X is_>=_than f.:X
+       proof
+         let a be Element of R; assume a in f.:X; then
+         consider y being set such that
+A2:      y in the carrier of R & y in X & a = f.y by FUNCT_2:115;
+         reconsider y as Element of R by A2;
+         y <<= sup X & a = x "/\" y & f.sup X = x "/\" sup X & x <<= x
+          by A2,WAYBEL_1:def 18,YELLOW_0:def 1,YELLOW_2:24;
+         hence thesis by YELLOW_3:2;
+       end;
+       now let b being Element of R such that
+A3:      b is_>=_than f.:X;
+         per cases;
+         suppose
+A4:      x is_>=_than X; then
+         x >>= sup X by YELLOW_0:32; then
+A5:      x "/\" sup X = sup X by YELLOW_0:25;
+         b is_>=_than X
+          proof
+           let a be Element of R;
+           assume
+A6:       a in X;       then
+           x >>= a by A4,LATTICE3:def 9;then
+           x "/\" a = a by YELLOW_0:25;then
+A7:        a = f.a by WAYBEL_1:def 18;
+           f.a in f.:X by A6,FUNCT_2:43;
+           hence thesis by A3,A7,LATTICE3:def 9;
+          end; then
+         b >>= sup X by YELLOW_0:32;
+         hence f.sup X <<= b by A5,WAYBEL_1:def 18;
+         end;
+         suppose not x is_>=_than X; then
+         consider a being Element of R such that
+A8:      a in X & not x >>= a by LATTICE3:def 9;
+A9:      x <<= a by A8,WAYBEL_0:def 29;
+A10:      x = x "/\" a by A9,YELLOW_0:25
+          .= f.a by WAYBEL_1:def 18;
+         a <<= sup X by A8,YELLOW_2:24;then
+         x <<= sup X by A9,ORDERS_1:26;then
+         x = x "/\"sup X by YELLOW_0:25;then
+A11:     x = f.sup X by WAYBEL_1:def 18;
+         f.a in f.:X by A8,FUNCT_2:43;
+         hence f.sup X <<= b by A3,A10,A11,LATTICE3:def 9;
+       end;
+       end;
+       hence sup (f.:X) = f.sup X by A1,YELLOW_0:30;
+     end;
+     hence thesis by WAYBEL_1:18;
+   end;
 end;
 
-definition
+
+registration
   cluster [.0,1 .] -> non empty;
+  coherence
+   proof
+    [. 0,1 .] is closed-interval by INTEGRA1:def 1;
+    hence thesis by INTEGRA1:2;
+   end;
 end;
 
-definition
+
+registration
   cluster RealPoset [.0,1 .] -> interval;
+  coherence
+   proof
+    the carrier of RealPoset [. 0,1 .] =  [. 0,1 .] by Def3;
+    hence thesis by Def2;
+   end;
 end;
+
 
 begin :: Product of Heyting Lattices
 
@@ -206,11 +496,19 @@ theorem :: LFUZZY_0:13
    st for i being Element of I holds J.i is Heyting complete LATTICE
    holds product J is complete Heyting;
 
-definition
+registration
    let A be non empty set;
    let R be complete Heyting LATTICE;
    cluster R |^ A -> Heyting;
+   coherence
+    proof
+     for i being Element of A holds (A --> R).i is complete Heyting LATTICE
+       by FUNCOP_1:13; then
+     product (A --> R) is complete Heyting by Th13;
+     hence thesis by YELLOW_1:def 5;
+   end;
 end;
+
 
 begin :: Lattice of Fuzzy Sets
 
@@ -222,14 +520,17 @@ definition
    (RealPoset [. 0,1 .]) |^ A;
 end;
 
+
 theorem :: LFUZZY_0:14
   for A being non empty set holds
     the carrier of FuzzyLattice A = Funcs(A, [. 0, 1 .]);
 
-definition
+registration
    let A be non empty set;
    cluster FuzzyLattice A -> constituted-Functions;
+   coherence by Lm1;
 end;
+
 
 theorem :: LFUZZY_0:15
 for R being complete Heyting LATTICE,
@@ -253,6 +554,7 @@ definition
 f;
 end;
 
+
 definition
   let X be non empty set;
   let f be Membership_Func of X;
@@ -260,12 +562,14 @@ definition
   redefine func f.x -> Element of RealPoset [. 0,1 .];
 end;
 
+
 definition
   let X be non empty set;
   let f be Element of FuzzyLattice X;
   let x be Element of X;
   redefine func f.x -> Element of RealPoset [. 0,1 .];
 end;
+
 
 reserve C for non empty set, c for Element of C,
    f,g for Membership_Func of C,
@@ -291,29 +595,302 @@ theorem :: LFUZZY_0:21
 
 begin :: Associativity of composition of fuzzy relations
 
-scheme SupDistributivity { L() -> complete LATTICE,
+scheme :: LFUZZY_0:sch 1
+ SupDistributivity { L() -> complete LATTICE,
   X, Y() -> non empty set,  F(set,set) -> Element of L(), P,Q[set]}:
   "\/"({ "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
          where x is Element of X(): P[x] }, L())
   = "\/"({F(x,y) where x is Element of X(), y is Element of Y():
-   P[x] & Q[y]}, L());
+   P[x] & Q[y]}, L())
+proof
+    defpred R[set] means
+      ex x being Element of X() st P[x] &
+      for a being set holds a in $1 iff
+        ex y being Element of Y() st a = F(x,y) & Q[y];
+A1: "\/" ({ "\/"(A,L()) where A is Subset of L(): R[A] },L())
+      = "\/" (union {A where A is Subset of L(): R[A]}, L()) from
+YELLOW_3:sch 6;
+A2: union {A where A is Subset of L(): R[A]} =
+      {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+     proof
+      thus union {A where A is Subset of L(): R[A]} c=
+      {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+       proof
+        let a be set;
+        assume
+        a in union {A where A is Subset of L(): R[A]};then
+        consider A1 be set such that
+A3:     a in A1 & A1 in {A where A is Subset of L(): R[A]} by TARSKI:def 4;
+        consider A2 being Subset of L() such that
+A4:     A1 = A2 & R[A2] by A3;
+        consider x being Element of X() such that
+A5:     P[x] and
+A6:     for a being set holds a in A2 iff ex  y being Element of Y()
+        st a = F(x,y) & Q[y] by A4;
+        ex y being Element of Y() st a = F(x,y) & Q[y]
+         by A3,A4,A6;
+        hence thesis by A5;
+       end;
+      thus {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+      c=
+      union {A where A is Subset of L(): R[A]}
+       proof
+        let a be set;
+        assume
+        a in {F(x,y) where x is Element of X(), y is Element of Y()
+              : P[x] & Q[y]};
+        then
+        consider x being Element of X(), y being Element of Y() such that
+A7:     a = F(x,y) & P[x] & Q[y];
+        set A1 = {F(x,y') where y' is Element of Y(): Q[y']};
+        A1 c= the carrier of L()
+         proof
+          let b be set;
+          assume b in A1;then
+          ex y' being Element of Y() st b = F(x,y') & Q[y'];
+          hence thesis;
+         end;
+        then
+        reconsider A1 as Subset of L();
+A8:     a in A1 by A7;
+        R[A1]
+         proof
+          take x;
+          thus P[x] by A7;
+          let a be set;
+          thus thesis;
+         end;
+        then
+        A1 in {A where A is Subset of L(): R[A]};
+        hence thesis by A8,TARSKI:def 4;
+       end;
+     end;
+    { "\/"(A,L()) where A is Subset of L(): R[A] } =
+      { "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
+      where x is Element of X(): P[x] }
+      proof
+      thus { "\/"(A,L()) where A is Subset of L(): R[A] } c=
+            {  "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
+             where x is Element of X(): P[x] }
+       proof
+        let a be set;
+        assume a in { "\/"(A,L()) where A is Subset of L(): R[A] };then
+        consider A1 being Subset of L() such that
+A9:     a = "\/"(A1,L()) & R[A1];
+        consider x being Element of X() such that
+A10:     P[x] & for a being set holds a in A1 iff
+        ex y being Element of Y() st a = F(x,y) & Q[y] by A9;
+        now let a be set;
+          a in {F(x,y) where y is Element of Y(): Q[y]} iff
+          ex y being Element of Y() st a = F(x,y) & Q[y];
+          hence
+          a in A1 iff
+          a in {F(x,y) where y is Element of Y(): Q[y]} by A10;
+        end; then
+        A1 = {F(x,y) where y is Element of Y(): Q[y]} by TARSKI:2;
+        hence thesis by A9,A10;
+       end;
+      thus { "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
+             where x is Element of X(): P[x] } c=
+           { "\/"(A,L()) where A is Subset of L(): R[A] }
+       proof
+        let a be set;
+        assume a in { "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
+                         where x is Element of X(): P[x] };
+        then
+        consider x being Element of X() such that
+A11:     a = "\/"({F(x,y) where y is Element of Y(): Q[y]}, L()) &     P[x];
+        ex A1 being Subset of L() st a = "\/"(A1,L()) & R[A1]
+         proof
+          consider A1 being Subset of L();
+          set A2 = {F(x,y) where y is Element of Y(): Q[y]};
+          A2 c= the carrier of L()
+           proof
+            let b be set;    assume b in A2;then
+            ex y being Element of Y() st b = F(x,y) & Q[y];
+            hence thesis;
+           end;
+          then
+          reconsider A1 = A2 as Subset of L();
+          R[A1]
+           proof
+            take x;
+            thus  P[x] by A11;
+            thus for a being set holds a in A1
+            iff ex y being Element of Y() st a = F(x,y) & Q[y];
+           end;
+          hence thesis by A11;
+         end;
+        hence thesis;
+       end;
+      end;
+    hence thesis by A1,A2;
+  end;
 
-scheme SupDistributivity' { L() -> complete LATTICE,
+scheme :: LFUZZY_0:sch 2
+ SupDistributivity' { L() -> complete LATTICE,
   X, Y() -> non empty set, F(set,set) -> Element of L(), P,Q[set]}:
   "\/"({ "\/"({F(x,y) where x is Element of X(): P[x]},L())
          where y is Element of Y(): Q[y] }, L())
   = "\/"({F(x,y) where x is Element of X(), y is Element of Y():
-        P[x] & Q[y]}, L());
+        P[x] & Q[y]}, L())
+proof
+    defpred R[set] means
+      ex y being Element of Y() st Q[y] &
+      for a being set holds a in $1 iff
+        ex x being Element of X() st  a = F(x,y) & P[x];
+A1: "\/" ({ "\/"(A,L()) where A is Subset of L(): R[A] },L())
+      = "\/" (union {A where A is Subset of L(): R[A]}, L()) from
+YELLOW_3:sch 6;
+A2: union {A where A is Subset of L(): R[A]} =
+      {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+     proof
+      thus union {A where A is Subset of L(): R[A]} c=
+      {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+       proof
+        let a be set;
+        assume
+        a in union {A where A is Subset of L(): R[A]};then
+        consider A1 be set such that
+A3:     a in A1 & A1 in {A where A is Subset of L(): R[A]} by TARSKI:def 4;
+        consider A2 being Subset of L() such that
+A4:     A1 = A2 & R[A2] by A3;
+        consider y being Element of Y() such that
+A5:     Q[y] and
+A6:     for a being set holds a in A2 iff ex x being Element of X()
+        st a = F(x,y) & P[x] by A4;
+        ex x being Element of X() st a = F(x,y) & P[x] by A3,A4,A6;
+        hence thesis by A5;
+       end;
+      thus {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+      c=
+      union {A where A is Subset of L(): R[A]}
+       proof
+        let a be set;
+        assume
+        a in {F(x,y) where x is Element of X(), y is Element of Y()
+              : P[x] & Q[y]};
+        then
+        consider x being Element of X(), y being Element of Y() such that
+A7:     a = F(x,y) & P[x] & Q[y];
+        set A1 = {F(x',y) where x' is Element of X(): P[x']};
+        A1 c= the carrier of L()
+         proof
+          let b be set;
+          assume b in A1;then
+          ex x' being Element of X() st b = F(x',y) & P[x'];
+          hence thesis;
+         end;
+        then
+        reconsider A1 as Subset of L();
+A8:     a in A1 by A7;
+        R[A1]
+         proof
+          take y;
+          thus Q[y] by A7;
+          let a be set;
+          thus thesis;
+         end;
+        then
+        A1 in {A where A is Subset of L(): R[A]};
+        hence thesis by A8,TARSKI:def 4;
+       end;
+     end;
+    { "\/"(A,L()) where A is Subset of L(): R[A] } =
+      { "\/"({F(x,y) where x is Element of X(): P[x]}, L())
+      where y is Element of Y(): Q[y] }
+      proof
+       thus { "\/"(A,L()) where A is Subset of L(): R[A] } c=
+            {  "\/"({F(x,y) where x is Element of X(): P[x]}, L())
+             where y is Element of Y(): Q[y] }
+       proof
+        let a be set;
+        assume a in { "\/"(A,L()) where A is Subset of L(): R[A] };then
+        consider A1 being Subset of L() such that
+A9:     a = "\/"(A1,L()) & R[A1];
+        consider y being Element of Y() such that
+A10:     Q[y] & for a being set holds a in A1 iff
+        ex x being Element of X() st a = F(x,y) & P[x] by A9;
+        now let a be set;
+          a in {F(x,y) where x is Element of X(): P[x]} iff
+          ex x being Element of X() st a = F(x,y) & P[x];
+          hence
+          a in A1 iff
+          a in {F(x,y) where x is Element of X(): P[x]} by A10;
+        end; then
+        A1 = {F(x,y) where x is Element of X(): P[x]} by TARSKI:2;
+        hence thesis by A9,A10;
+       end;
+      thus { "\/"({F(x,y) where x is Element of X(): P[x]}, L())
+             where y is Element of Y(): Q[y] } c=
+           { "\/"(A,L()) where A is Subset of L(): R[A] }
+       proof
+        let a be set;
+        assume a in { "\/"({F(x,y) where x is Element of X(): P[x]}, L())
+                         where y is Element of Y(): Q[y] };
+        then
+        consider y being Element of Y() such that
+A11:     a = "\/"({F(x,y) where x is Element of X(): P[x]}, L()) & Q[y];
+        ex A1 being Subset of L() st a = "\/"(A1,L()) & R[A1]
+         proof
+          consider A1 being Subset of L();
+          set A2 = {F(x,y) where x is Element of X(): P[x]};
+          A2 c= the carrier of L()
+           proof
+            let b be set;    assume b in A2;then
+            ex x being Element of X() st b = F(x,y) & P[x];
+            hence thesis;
+           end;
+          then
+          reconsider A1 = A2 as Subset of L();
+          R[A1]
+           proof
+            take y;
+            thus Q[y] by A11;
+            thus for a being set holds a in A1
+            iff ex x being Element of X() st a = F(x,y) & P[x];
+           end;
+          hence thesis by A11;
+         end;
+        hence thesis;
+       end;
+      end;
+    hence thesis by A1,A2;
+   end;
 
-scheme FraenkelF'R'{ A() -> non empty set,B() -> non empty set,
+scheme :: LFUZZY_0:sch 3
+ FraenkelF'R'{ A() -> non empty set,B() -> non empty set,
 F1, F2(set,set) -> set, P[set,set]  } :
     { F1(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] }
   = { F2(u2,v2) where u2 is (Element of A()), v2 is Element of B() : P[u2,v2] }
  provided
 for u being (Element of A()), v being Element of B()
-      st P[u,v] holds F1(u,v) = F2(u,v);
+      st P[u,v] holds F1(u,v) = F2(u,v)
+proof
+   set A =
+   { F1(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] },
+   C =
+   { F2(u3,v3) where u3 is (Element of A()), v3 is Element of B() : P[u3,v3] };
+   for a be set holds a in A iff a in C
+    proof
+     let a be set;
+      hereby assume a in A;then
+       consider u being (Element of A()), v being Element of B() such that
+A2:    a =  F1(u,v) & P[u,v];
+       a = F2(u,v) by A1,A2;
+       hence a in C by A2;
+      end;
+      assume a in C; then
+      consider u being (Element of A()), v being Element of B() such that
+A3:    a =  F2(u,v) & P[u,v];
+       a = F1(u,v) by A1,A3;
+       hence a in A by A3;
+    end;
+    hence thesis by TARSKI:2;
+   end;
 
-scheme FraenkelF6''R
+scheme :: LFUZZY_0:sch 4
+ FraenkelF6''R
  { A() -> non empty set, B() -> non empty set,
    F1, F2(set,set) -> set, P[set,set], Q[set,set] } :
     { F1(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] }
@@ -323,9 +900,29 @@ for u being (Element of A()), v being Element of B()
       holds P[u,v] iff Q[u,v]
   and
 for u being (Element of A()), v being Element of B()
-     st P[u,v] holds F1(u,v) = F2(u,v);
+     st P[u,v] holds F1(u,v) = F2(u,v)
+proof
+    deffunc U(set,set) = F1($1,$2);
+    deffunc V(set,set) = F2($1,$2);
+    defpred X[set,set] means P[$1,$2];
+    defpred Y[set,set] means Q[$1,$2];
+A3:for u being (Element of A()), v being Element of B()
+      holds X[u,v] iff Y[u,v] by A1;
+A4:for u being (Element of A()), v being Element of B()
+     st X[u,v] holds U(u,v) = V(u,v) by A2;
+   set A =
+   { U(u1,v1) where u1 is (Element of A()), v1 is Element of B() : X[u1,v1] },
+   B =
+   { V(u2,v2) where u2 is (Element of A()), v2 is Element of B() : Y[u2,v2] },
+   C =
+   { V(u3,v3) where u3 is (Element of A()), v3 is Element of B() : X[u3,v3] };
+A5:C = B from FRAENKEL:sch 4(A3);
+   A = C from FraenkelF'R'(A4);
+   hence thesis by A5;
+  end;
 
-scheme SupCommutativity { L() -> complete LATTICE, X, Y() -> non empty set,
+scheme :: LFUZZY_0:sch 5
+ SupCommutativity { L() -> complete LATTICE, X, Y() -> non empty set,
   F1, F2(set,set) -> Element of L(), P,Q[set]}:
     "\/"({ "\/"({F1(x,y) where y is Element of Y(): Q[y]}, L())
            where x is Element of X(): P[x] }, L())
@@ -333,7 +930,33 @@ scheme SupCommutativity { L() -> complete LATTICE, X, Y() -> non empty set,
            where y' is Element of Y(): Q[y'] }, L())
   provided
   for x being Element of X(), y being Element of Y() st P[x] & Q[y]
-   holds F1(x,y) = F2(x,y);
+   holds F1(x,y) = F2(x,y)
+proof
+    deffunc U(set,set) = F1($1,$2);
+    deffunc V(set,set) = F2($1,$2);
+    defpred X[set,set] means P[$1] & Q[$2];
+    defpred Y[set,set] means P[$1] & Q[$2];
+A2:  for x being Element of X(), y being Element of Y() st X[x,y]
+   holds U(x,y) = V(x,y) by A1;
+A3: for x being Element of X(), y being Element of Y() holds
+        X[x,y] iff Y[x,y];
+A4: {U(x',y') where x' is Element of X(), y' is Element of Y(): X[x',y']}
+    = {V(x,y) where x is Element of X(), y is Element of Y(): Y[x,y]}
+       from FraenkelF6''R(A3,A2);
+    defpred P'[set] means P[$1];
+    defpred Q'[set] means Q[$1];
+A5:   "\/"({ "\/"({U(x,y) where y is Element of Y(): Q'[y]}, L())
+           where x is Element of X(): P'[x] }, L())
+     ="\/"({U(x,y) where x is Element of X(), y is Element of Y():
+         P'[x] & Q'[y]}, L()) from SupDistributivity;
+    "\/"({ "\/"({V(x',y') where x' is Element of X(): P'[x']}, L())
+           where y' is Element of Y(): Q'[y'] }, L())
+    ="\/"({V(x',y') where x' is Element of X(), y' is Element of Y():
+         P'[x'] & Q'[y']}, L()) from SupDistributivity'
+    .="\/"({U(x',y') where x' is Element of X(), y' is Element of Y():
+         P'[x'] & Q'[y']}, L()) by A4;
+   hence thesis by A5;
+  end;
 
 theorem :: LFUZZY_0:22
   for X,Y,Z being non empty set

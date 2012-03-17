@@ -24,11 +24,13 @@ environ
 
 begin
 
-definition let I be non empty set;
+registration let I be non empty set;
  let X be non-empty ManySortedSet of I;
  let i be Element of I;
  cluster X.i -> non empty;
+  coherence;
 end;
+
 
 reserve S for non void non empty ManySortedSign,
         V for non-empty ManySortedSet of the carrier of S;
@@ -39,13 +41,21 @@ definition let S; let V be ManySortedSet of the carrier of S;
   TS DTConMSA V;
 end;
 
-definition let S, V;
+
+registration let S, V;
  cluster S-Terms V -> non empty;
+ correctness
+ proof
+    S-Terms V = TS DTConMSA V by Def1;
+  hence thesis;
+ end;
 end;
+
 
 definition let S, V;
  mode Term of S,V is Element of S-Terms V;
 end;
+
 
 reserve A for MSAlgebra over S,
         t for Term of S,V;
@@ -55,18 +65,21 @@ definition let S, V;
  redefine func Sym(o, V) -> NonTerminal of DTConMSA V;
 end;
 
+
 definition let S, V; let sy be NonTerminal of DTConMSA V;
  mode ArgumentSeq of sy -> FinSequence of S-Terms V means
 :: MSATERM:def 2
   it is SubtreeSeq of sy;
 end;
 
+
 theorem :: MSATERM:1
  for o being OperSymbol of S, a being FinSequence holds
    [o,the carrier of S]-tree a in S-Terms V & a is DTree-yielding
       iff a is ArgumentSeq of Sym(o,V);
 
-scheme TermInd
+scheme :: MSATERM:sch 1
+ TermInd
  { S() -> non void non empty ManySortedSign,
    V() -> non-empty ManySortedSet of the carrier of S(),
    P[set]
@@ -79,18 +92,61 @@ provided
   for o being OperSymbol of S(),
       p being ArgumentSeq of Sym(o,V()) st
        for t being Term of S(),V() st t in rng p holds P[t]
-    holds P[[o,the carrier of S()]-tree p];
+    holds P[[o,the carrier of S()]-tree p]
+proof   set X = V(), G = DTConMSA X;
+A3:  S()-Terms X = TS G by Def1;
+     defpred Q[DecoratedTree of the carrier of G] means P[$1];
+A4: for s being Symbol of G st s in Terminals G holds Q[root-tree s]
+     proof let x be Symbol of G; assume x in Terminals G;
+       then ex s being SortSymbol of S(), v being Element of V().s st x = [v,s
+]
+        by Lm3;
+      hence thesis by A1;
+     end;
+A5: for nt being Symbol of G,
+       ts being FinSequence of TS G st nt ==> roots ts &
+            for t being DecoratedTree of the carrier of G st t in rng ts
+            holds Q[t]
+    holds Q[nt-tree ts]
+     proof let nt be Symbol of G, ts be FinSequence of TS G such that
+A6:     nt ==> roots ts and
+A7:     for t being DecoratedTree of the carrier of G st t in rng ts
+       holds P[t];
+         nt in {s where s is Symbol of G: ex n being FinSequence st s ==> n} &
+       NonTerminals G =
+          {s where s is Symbol of G: ex n being FinSequence st s ==> n}
+        by A6,LANG1:def 3;
+      then reconsider sy = nt as NonTerminal of G;
+        sy in [:the OperSymbols of S(),{the carrier of S()}:] by Lm5;
+      then consider o being OperSymbol of S(),
+                    x2 being Element of {the carrier of S()} such that
+A8:     sy = [o,x2] by DOMAIN_1:9;
+A9:     x2 = the carrier of S() by TARSKI:def 1;
+      reconsider p = ts as FinSequence of S()-Terms X by Def1;
+         [o,the carrier of S()] = Sym(o,X) by MSAFREE:def 11;
+       then ts is SubtreeSeq of Sym(o,X) by A6,A8,A9,DTCONSTR:def 9;
+      then reconsider p as ArgumentSeq of Sym(o,V()) by Def2;
+         for t be Term of S(),V() st t in rng p holds P[t] by A7;
+      hence thesis by A2,A8,A9;
+     end;
+      for t being DecoratedTree of the carrier of G
+       st t in TS G holds Q[t] from DTCONSTR:sch 8(A4,A5);
+   hence thesis by A3;
+  end;
 
 definition let S, A, V;
  mode c-Term of A,V is Term of S, (the Sorts of A) \/ V;
 end;
+
 
 definition let S, A, V;
  let o be OperSymbol of S;
  mode ArgumentSeq of o,A,V is ArgumentSeq of Sym(o,(the Sorts of A) \/ V);
 end;
 
-scheme CTermInd
+
+scheme :: MSATERM:sch 2
+ CTermInd
  { S() -> non void non empty ManySortedSign,
    A() -> non-empty MSAlgebra over S(),
    V() -> non-empty ManySortedSet of the carrier of S(),
@@ -107,15 +163,61 @@ provided
   for o being OperSymbol of S(),
       p being ArgumentSeq of o,A(),V() st
        for t being c-Term of A(),V() st t in rng p holds P[t]
-    holds P[Sym(o,(the Sorts of A()) \/ V())-tree p];
+    holds P[Sym(o,(the Sorts of A()) \/ V())-tree p]
+proof   set X = (the Sorts of A()) \/ V(), G = DTConMSA X;
+A4:  S()-Terms X = TS G by Def1;
+     defpred Q[DecoratedTree of the carrier of G] means P[$1];
+A5: for s being Symbol of G st s in Terminals G holds Q[root-tree s]
+     proof let x be Symbol of G; assume x in Terminals G;
+       then (ex s being SortSymbol of S(), a being set st
+         a in (the Sorts of A()).s & x = [a,s]) or
+       ex s being SortSymbol of S(), v being Element of V().s st x = [v,s]
+        by Lm4;
+      hence thesis by A1,A2;
+     end;
+A6: for nt being Symbol of G,
+       ts being FinSequence of TS G st nt ==> roots ts &
+            for t being DecoratedTree of the carrier of G st t in rng ts
+            holds Q[t]
+    holds Q[nt-tree ts]
+     proof let nt be Symbol of G, ts be FinSequence of TS G such that
+A7:     nt ==> roots ts and
+A8:     for t being DecoratedTree of the carrier of G st t in rng ts
+       holds P[t];
+         nt in {s where s is Symbol of G: ex n being FinSequence st s ==> n} &
+       NonTerminals G =
+          {s where s is Symbol of G: ex n being FinSequence st s ==> n}
+        by A7,LANG1:def 3;
+      then reconsider sy = nt as NonTerminal of G;
+        sy in [:the OperSymbols of S(),{the carrier of S()}:] by Lm5;
+      then consider o being OperSymbol of S(),
+                    x2 being Element of {the carrier of S()} such that
+A9:     sy = [o,x2] by DOMAIN_1:9;
+A10:     x2 = the carrier of S() by TARSKI:def 1;
+      reconsider p = ts as FinSequence of S()-Terms X by Def1;
+A11:     [o,the carrier of S()] = Sym(o,X) by MSAFREE:def 11;
+       then ts is SubtreeSeq of Sym(o,X) by A7,A9,A10,DTCONSTR:def 9;
+      then reconsider p as ArgumentSeq of Sym(o,(the Sorts of A()) \/ V()) by
+Def2;
+         for t be c-Term of A(),V() st
+        t in rng p holds P[t] by A8;
+      hence thesis by A3,A9,A10,A11;
+     end;
+
+      for t being DecoratedTree of the carrier of G
+       st t in TS G holds Q[t] from DTCONSTR:sch 8(A5,A6);
+   hence thesis by A4;
+  end;
 
 definition let S, V, t;
  let p be Node of t;
  redefine func t.p -> Symbol of DTConMSA V;
 end;
 
-definition let S, V;
+
+registration let S, V;
  cluster -> finite Term of S,V;
+  coherence;
 end;
 
 theorem :: MSATERM:2
@@ -172,6 +274,7 @@ definition let S;
    root-tree [x,s];
 end;
 
+
 definition let S, A, V;
  let s be SortSymbol of S;
  let v be Element of V.s;
@@ -180,13 +283,16 @@ definition let S, A, V;
    root-tree [v,s];
 end;
 
+
 definition let S, V;
  let sy be NonTerminal of DTConMSA V;
  let p be ArgumentSeq of sy;
  redefine func sy-tree p -> Term of S,V;
 end;
 
-scheme TermInd2
+
+scheme :: MSATERM:sch 3
+ TermInd2
  { S() -> non void non empty ManySortedSign,
    A() -> non-empty MSAlgebra over S(),
    V() -> non-empty ManySortedSet of the carrier of S(),
@@ -204,7 +310,24 @@ provided
   for o being OperSymbol of S(),
       p being ArgumentSeq of Sym(o,(the Sorts of A()) \/ V()) st
        for t being c-Term of A(),V() st t in rng p holds P[t]
-    holds P[Sym(o,(the Sorts of A()) \/ V())-tree p];
+    holds P[Sym(o,(the Sorts of A()) \/ V())-tree p]
+proof
+    defpred Q[set] means P[$1];
+A4:  for o being OperSymbol of S(),
+      p being ArgumentSeq of Sym(o,(the Sorts of A()) \/ V()) st
+       for t being c-Term of A(),V() st t in rng p holds Q[t]
+    holds Q[Sym(o,(the Sorts of A()) \/ V())-tree p] by A3;
+A5: now let s be SortSymbol of S(), x be Element of (the Sorts of A()).s;
+        Q[x-term (A(), V())] by A1;
+     hence Q[root-tree [x,s]] by Def3;
+    end;
+A6: now let s be SortSymbol of S(), v be Element of V().s;
+        Q[v-term A()] by A2;
+     hence Q[root-tree [v,s]] by Def4;
+    end;
+   for t being c-Term of A(),V() holds Q[t] from CTermInd(A5,A6,A4);
+   hence thesis;
+  end;
 
 begin :: Sort of a term
 
@@ -222,6 +345,7 @@ definition let S, V, t;
 :: MSATERM:def 5
    t in FreeSort (V, it);
 end;
+
 
 theorem :: MSATERM:14
  for s being SortSymbol of S, v be Element of V.s st
@@ -312,6 +436,7 @@ definition
     it.{} in [:the OperSymbols of S, {the carrier of S}:];
 end;
 
+
 definition
  let S be non void non empty ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
@@ -319,6 +444,7 @@ definition
 :: MSATERM:def 7
     ex t being CompoundTerm of S,V st t in it;
 end;
+
 
 theorem :: MSATERM:28
    t is not root implies t is CompoundTerm of S,V;
@@ -334,6 +460,7 @@ definition
  redefine func t|p -> Term of S,V;
 end;
 
+
 begin :: Evaluation of terms
 
 definition
@@ -344,6 +471,7 @@ definition
 
   it misses the Sorts of A;
 end;
+
 
 theorem :: MSATERM:30
  for V being Variables of A
@@ -369,6 +497,7 @@ definition
    (for o being OperSymbol of S st t.p = [o,the carrier of S] holds
      vt.p = Den(o, A).succ(vt,p));
 end;
+
 
 reserve S for non void non empty ManySortedSign,
  A for non-empty MSAlgebra over S,
@@ -433,6 +562,7 @@ definition
   ex vt being finite DecoratedTree st
     vt is_an_evaluation_of t,f & it = vt.{};
 end;
+
 
 reserve t for c-Term of A,V;
 

@@ -152,6 +152,7 @@ A3: now let k be Nat;
           by FUNCT_1:68;
         then p|(Seg n) = p by A15,A20,FUNCT_1:9;
         hence Sum(p|n) = Sum p by TOPREAL1:def 1;
+      end;
       case A21: n <= k;
         A22: now let l be Nat;
              assume A23: l in dom q & l > n;
@@ -169,11 +170,12 @@ A3: now let k be Nat;
                   .= Sum(q|n) by A4,A8,A22
                   .= Sum(p|n) by A13,A21,Th2;
         end;
+        end;
       hence Sum p = Sum(p|n);
       end;
     hence P[k+1];
     end;
-A26: for k being Nat holds P[k] from Ind(A2,A3);
+A26: for k being Nat holds P[k] from NAT_1:sch 1(A2,A3);
 consider k being Nat such that A27: len p = k;
 thus thesis by A1,A26,A27;
 end;
@@ -190,12 +192,14 @@ let L be add-associative right_zeroed Abelian (non empty LoopStr),
 per cases;
 suppose not(1 <= i & i <= len f & 1 <= j & j <= len f);
   hence thesis by FINSEQ_7:def 2;
+end;
 suppose A1: 1 <= i & i <= len f & 1 <= j & j <= len f;
   then i in Seg(len f) & j in Seg(len f) by FINSEQ_1:3;
   then A2: i in dom f & j in dom f by FINSEQ_1:def 3;
    now per cases by REAL_1:def 5;
   case i = j;
     hence thesis by FINSEQ_7:21;
+  end;
   case A3: i < j;
     then Swap(f, i, j) =
        (f|(i-'1))^<*f/.j*>^(f/^i)|(j-'i-'1)^<*f/.i*>^(f/^j) by A1,FINSEQ_7:29;
@@ -229,6 +233,7 @@ suppose A1: 1 <= i & i <= len f & 1 <= j & j <= len f;
           by A2,FINSEQ_4:def 4
       .= f by A1,A3,FINSEQ_7:1;
       hence thesis by A4;
+  end;
   case A5: i > j;
     then Swap(f, j, i) =
        (f|(j-'1))^<*f/.i*>^(f/^j)|(i-'j-'1)^<*f/.j*>^(f/^i) by A1,FINSEQ_7:29;
@@ -263,7 +268,9 @@ suppose A1: 1 <= i & i <= len f & 1 <= j & j <= len f;
       .= f by A1,A5,FINSEQ_7:1;
      hence thesis by A6,FINSEQ_7:23;
   end;
+  end;
 hence thesis;
+end;
 end;
 
 theorem
@@ -302,6 +309,7 @@ uniqueness
  end;
 end;
 
+
 definition
 ::: exercise 5.45, p. 211
 let X be set,
@@ -316,7 +324,7 @@ existence
  A2: for x being set st x in X ex y being set st Q[x,y];
  consider b being Function such that
  A3: dom b = X & for x being set st x in X holds Q[x,b.x]
-     from FuncEx(A1,A2);
+     from FUNCT_1:sch 2(A1,A2);
  reconsider b as ManySortedSet of X by A3,PBOOLE:def 3;
   now let u be set;
      assume u in rng b;
@@ -349,9 +357,11 @@ existence
     now per cases;
    case k in dom b;
      hence b.k = max(b1.k,b2.k) by A3;
+   end;
    case A12: not(k in dom b);
      then b1.k = 0 & b2.k = 0 by A10,A11,FUNCT_1:def 4;
      hence b.k = max(b1.k,b2.k) by A12,FUNCT_1:def 4;
+     end;
      end;
    hence b.k = max(b1.k,b2.k);
    end;
@@ -371,16 +381,25 @@ uniqueness
  end;
 commutativity;
 idempotence;
-synonym b1 lcm b2;
 end;
+notation
+::: exercise 5.45, p. 211
+let X be set,
+    b1,b2 be bag of X;
+synonym b1 lcm b2 for lcm(b1,b2) ; end;
+
 
 definition
 let X be set,
     b1,b2 be bag of X;
 pred b1,b2 are_disjoint means :Def3:
   for i being set holds b1.i = 0 or b2.i = 0;
-antonym b1,b2 are_non_disjoint;
 end;
+notation
+let X be set,
+    b1,b2 be bag of X;
+antonym b1,b2 are_non_disjoint for b1,b2 are_disjoint ; end;
+
 
 theorem Th7:
 ::: exercise 5.45, p. 211
@@ -417,8 +436,10 @@ assume A1: b1 divides b3 & b2 divides b3;
    now per cases by SQUARE_1:49;
     case max(b1.k,b2.k) = b1.k;
       hence max(b1.k,b2.k) <= b3.k by A1,POLYNOM1:def 13;
+    end;
     case max(b1.k,b2.k) = b2.k;
       hence max(b1.k,b2.k) <= b3.k by A1,POLYNOM1:def 13;
+      end;
       end;
   hence lcm(b1,b2).k <= b3.k by Def2;
   end;
@@ -441,9 +462,11 @@ A1: now assume A2: b1,b2 are_disjoint;
      case A4: b1.k = 0;
        hence (b1+b2).k = 0 + b2.k by POLYNOM1:def 5
                      .= max(b1.k,b2.k) by A3,A4,SQUARE_1:def 2;
+     end;
      case A5: b2.k = 0;
        hence (b1+b2).k = b1.k + 0 by POLYNOM1:def 5
                      .= max(b1.k,b2.k) by A3,A5,SQUARE_1:def 2;
+       end;
        end;
      hence (b1+b2).k = max(b1.k,b2.k);
      end;
@@ -456,9 +479,11 @@ A1: now assume A2: b1,b2 are_disjoint;
     case (b1 + b2).k = b1.k;
       then b1.k + b2.k = b1.k + 0 by POLYNOM1:def 5;
       hence b2.k = 0 by XCMPLX_1:2;
+    end;
     case (b1 + b2).k = b2.k;
       then b1.k + b2.k = 0 + b2.k by POLYNOM1:def 5;
       hence b1.k = 0 by XCMPLX_1:2;
+      end;
       end;
     hence b1.k = 0 or b2.k = 0;
     end;
@@ -591,17 +616,19 @@ A2: T is_connected_in field T by RELAT_2:def 14;
    now per cases;
   case b' = b;
      hence b <= b',T by TERMORD:6;
+  end;
   case A5: b' <> b;
     then not([b',b] in T) by A1,A3,WAYBEL_4:def 26;
     then [b,b'] in T by A2,A4,A5,RELAT_2:def 6;
     hence b <= b',T by TERMORD:def 2;
+    end;
     end;
   hence b <= b',T;
   end;
 hence thesis by A1;
 end;
 
-definition
+registration
 let L be add-associative right_zeroed right_complementable
          (non trivial LoopStr),
     a be non-zero Element of L;
@@ -617,7 +644,8 @@ coherence
  end;
 end;
 
-definition
+
+registration
 let X be set,
     L be left_zeroed right_zeroed add-cancelable
          distributive (non empty doubleLoopStr),
@@ -639,6 +667,7 @@ coherence
      hence contradiction by A2,POLYNOM1:def 9;
      end;
    hence thesis by POLYNOM7:6;
+ end;
  case ex b being bag of X st Support m = {b};
    then consider b being bag of X such that
    A3: Support m = {b};
@@ -654,6 +683,7 @@ coherence
        hence contradiction by A5,POLYNOM1:def 9;
        end;
      hence Support p = {};
+   end;
    case a <> 0.L;
      A6: now let b' be Element of Bags X;
          assume b' <> b;
@@ -673,6 +703,7 @@ coherence
          hence contradiction by A8,A10,POLYNOM7:def 10;
          end;
        hence Support p = {};
+     end;
      case A11: a * m.b <> 0.L;
         A12: now let u be set;
             assume u in {b};
@@ -689,15 +720,19 @@ coherence
           end;
         hence Support p = {b} by A12,TARSKI:2;
         end;
+        end;
      hence thesis by POLYNOM7:6;
      end;
+     end;
    hence thesis by POLYNOM7:6;
+   end;
    end;
  hence thesis;
  end;
 end;
 
-definition
+
+registration
 let n be Ordinal,
     L be left_zeroed right_zeroed add-cancelable
          distributive domRing-like (non trivial doubleLoopStr),
@@ -721,6 +756,7 @@ coherence
  hence thesis by POLYNOM7:def 2;
  end;
 end;
+
 
 theorem Th16:
 for n being Ordinal,
@@ -747,12 +783,14 @@ A1: dom q1 = Bags n by FUNCT_2:def 1 .= dom q2 by FUNCT_2:def 1;
                 .= (b*'p1).u + p2.(u -' b) by A2,POLYRED:def 1
                 .= (b*'p1).u + (b*'p2).u by A2,POLYRED:def 1
                 .= q2.u by POLYNOM1:def 21;
+    end;
     case A3: not(b divides u);
       hence q1.u = 0.L by POLYRED:def 1
                 .= 0.L + 0.L by RLVECT_1:def 7
                 .= (b*'p1).u + 0.L by A3,POLYRED:def 1
                 .= (b*'p1).u + (b*'p2).u by A3,POLYRED:def 1
                 .= q2.u by POLYNOM1:def 21;
+    end;
     end;
   hence q1.x = q2.x;
   end;
@@ -785,11 +823,13 @@ A1: dom q1 = Bags n by FUNCT_2:def 1 .= dom q2 by FUNCT_2:def 1;
       thus q1.u = (-p).(u-'b) by A2,POLYRED:def 1
                .= -(p.(u-'b)) by POLYNOM1:def 22
                .= (-(b*'p)).u by A3,POLYNOM1:def 22;
+    end;
     case A4: not(b divides u);
       then A5: (b*'p).u = 0.L by POLYRED:def 1;
       thus q1.u = 0.L by A4,POLYRED:def 1
                .= -0.L by RLVECT_1:25
                .= q2.u by A5,POLYNOM1:def 22;
+    end;
     end;
   hence q1.x = q2.x;
   end;
@@ -824,11 +864,13 @@ A1: dom q1 = Bags n by FUNCT_2:def 1 .= dom q2 by FUNCT_2:def 1;
               .= a * p.(u-'b) by POLYNOM7:def 10
               .= a * (b*'p).u by A2,POLYRED:def 1
               .= q2.u by POLYNOM7:def 10;
+  end;
   case A3: not(b divides u);
     hence q1.u = 0.L by POLYRED:def 1
               .= a * 0.L by BINOM:2
               .= a * (b*'p).u by A3,POLYRED:def 1
               .= q2.u by POLYNOM7:def 10;
+    end;
     end;
   hence q1.x = q2.x;
   end;
@@ -884,10 +926,12 @@ A1: dom(- (a _(n,L))) = Bags n by FUNCT_2:def 1
   case A2: u' = EmptyBag n;
     hence -((a _(n,L)).u') = - a by POLYNOM7:18
                           .= ((-a) _(n,L)).u' by A2,POLYNOM7:18;
+  end;
   case A3: u' <> EmptyBag n;
      -0.L = 0.L by RLVECT_1:25;
     hence -((a _(n,L)).u') = 0.L by A3,POLYNOM7:18
                           .= ((-a) _(n,L)).u' by A3,POLYNOM7:18;
+    end;
     end;
   hence ((-a) _(n,L)).u = (- (a _(n,L))).u by POLYNOM1:def 22;
   end;
@@ -930,6 +974,7 @@ set h = p.l;
 per cases;
 suppose len p = 1;
   hence thesis by A1;
+end;
 suppose len p <> 1;
   then 1 < len p by A2,REAL_1:def 5;
   then 1 + -1 < len p + -1 by REAL_1:67;
@@ -945,6 +990,7 @@ suppose len p <> 1;
       g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
    g = [h',g']`2 by A5,MCART_1:def 2 .= g' by MCART_1:def 2;
   hence g is Polynomial of n,L by A5,POLYNOM1:def 27;
+end;
 end;
 
 begin :: S-Polynomials
@@ -1023,10 +1069,12 @@ set R = PolyRedRel(P,T);
   then f1 = f - 0_(n,L) by A17,POLYRED:5 .= f by POLYRED:4;
   then R reduces b,c & R reduces c,c by A2,A6,A7,A9,REWRITE1:13,16;
   hence b,c are_convergent_wrt R by REWRITE1:def 7;
+  end;
   case m2 = 0_(n,L);
   then f2 = f - 0_(n,L) by A18,POLYRED:5 .= f by POLYRED:4;
   then R reduces c,b & R reduces b,b by A2,A6,A8,A9,REWRITE1:13,16;
   hence b,c are_convergent_wrt R by REWRITE1:def 7;
+  end;
   case m1 <> 0_(n,L) & m2 <> 0_(n,L);
   then reconsider m1,m2 as non-zero Monomial of n,L by POLYNOM7:def 2;
    HT(m1,T) + HT(g1,T) in Support mg1 &
@@ -1049,6 +1097,7 @@ set R = PolyRedRel(P,T);
      now per cases;
     case mg1 - mg2 = 0_(n,L);
       hence thesis by A21,REWRITE1:13;
+    end;
     case A22: mg1 - mg2 <> 0_(n,L);
        now per cases;
       case g1 = g2;
@@ -1056,6 +1105,7 @@ set R = PolyRedRel(P,T);
                     .= g1 *' m1 + (-m2) *' g1 by POLYRED:6
                     .= (m1 + -m2) *' g1 by POLYNOM1:85;
         hence thesis by A11,POLYRED:45;
+      end;
       case A23: g1 <> g2;
          now per cases;
           case A24: HT(mg1,T) <> HT(mg2,T);
@@ -1109,6 +1159,7 @@ set R = PolyRedRel(P,T);
                R reduces (-m2)*'g2,0_(n,L) by A14,POLYRED:45;
               then R reduces -mg2,0_(n,L) by POLYRED:6;
               hence thesis by A21,A29,REWRITE1:17;
+            end;
             case not(HT(mg2,T) < HT(mg1,T),T);
               then HT(mg1,T) <= HT(mg2,T),T by TERMORD:5;
               then HT(mg1,T) < HT(mg2,T),T by A24,TERMORD:def 3;
@@ -1194,7 +1245,9 @@ set R = PolyRedRel(P,T);
                .= mg1 - mg2 by POLYNOM1:def 23;
               hence thesis by A21,A38,POLYNOM1:87;
               end;
+              end;
             hence thesis;
+          end;
           case A39: HT(mg1,T) = HT(mg2,T);
              (f-mg1).HT(mg1,T) = 0.L by A17,POLYNOM1:def 9;
             then (f+-mg1).HT(mg1,T) = 0.L by POLYNOM1:def 23;
@@ -1214,14 +1267,18 @@ set R = PolyRedRel(P,T);
                           .= HM(mg2,T) by TERMORD:def 8;
             hence thesis by A1,A11,A14,A21,A23;
             end;
+            end;
         hence thesis;
         end;
+        end;
         hence thesis;
+        end;
         end;
     hence thesis;
     end;
   then f2,f1 are_convergent_wrt R by POLYRED:50;
   hence b,c are_convergent_wrt R by A7,A8,REWRITE1:41;
+  end;
   end;
   hence b,c are_convergent_wrt R;
   end;
@@ -1242,6 +1299,7 @@ func S-Poly(p1,p2,T) -> Polynomial of n,L equals :Def4:
   HC(p1,T) * (lcm(HT(p1,T),HT(p2,T))/HT(p2,T)) *' p2;
 coherence;
 end;
+
 
 Lm2:
 for L being add-associative left_zeroed right_zeroed add-cancelable
@@ -1401,6 +1459,7 @@ suppose A1: m1 = 0_(n,L);
    .= 0_(n,L) - 0_(n,L) *' m2 by A2,TERMORD:17
    .= 0_(n,L) - 0_(n,L) by POLYRED:5
    .= 0_(n,L) by POLYNOM1:83;
+end;
 suppose A3: m2 = 0_(n,L);
   A4: HC(Monom(HC(0_(n,L),T),(lcm(HT(m1,T),HT(m2,T))/HT(m1,T))),T)
         = coefficient(Monom(HC(0_(n,L),T),(lcm(HT(m1,T),HT(m2,T))/HT(m1,T))))
@@ -1420,6 +1479,7 @@ suppose A3: m2 = 0_(n,L);
    .= 0_(n,L) *' m1 - 0_(n,L) by A4,TERMORD:17
    .= 0_(n,L) - 0_(n,L) by POLYRED:5
    .= 0_(n,L) by POLYNOM1:83;
+end;
 suppose m1 <> 0_(n,L) & m2 <> 0_(n,L);
 then HC(m1,T) <> 0.L & HC(m2,T) <> 0.L by TERMORD:17;
 then A5: HC(m1,T) is non-zero & HC(m2,T) is non-zero by RLVECT_1:def 13;
@@ -1449,6 +1509,7 @@ thus S-Poly(m1,m2,T)
   = HC(m2,T) * (lcm(HT(m1,T),HT(m2,T))/HT(m1,T)) *' m1 -
     HC(m1,T) * (lcm(HT(m1,T),HT(m2,T))/HT(m2,T)) *' m2 by Def4
  .= 0_(n,L) by A9,A11,POLYNOM1:83;
+end;
 end;
 
 theorem Th25:
@@ -1521,6 +1582,7 @@ set sp = S-Poly(p1,p2,T),
 per cases;
 suppose p1 = 0_(n,L) or p2 = 0_(n,L);
 hence thesis by A1,Th25;
+end;
 suppose A2: p1 <> 0_(n,L) & p2 <> 0_(n,L);
 then A3: HC(p1,T) <> 0.L & HC(p2,T) <> 0.L by TERMORD:17;
 then A4: HC(p1,T) is non-zero & HC(p2,T) is non-zero by RLVECT_1:def 13;
@@ -1596,6 +1658,7 @@ then not(lcm(HT(p1,T),HT(p2,T)) in Support sp) by POLYNOM1:def 9;
 hence HT(S-Poly(p1,p2,T),T) < lcm(HT(p1,T),HT(p2,T)),T by A14,A17,TERMORD:def 3
 ;
 end;
+end;
 
 theorem
 ::: exercise 5.47 (iii), p. 211
@@ -1667,6 +1730,7 @@ set R = PolyRedRel(G,T);
 per cases;
 suppose G = {};
 hence thesis;
+end;
 suppose G <> {};
 then reconsider G as non empty Subset of Polynom-Ring(n,L);
  R is locally-confluent by A1,GROEB_1:def 3;
@@ -1698,6 +1762,7 @@ then A3: R is with_Church-Rosser_property by GROEB_1:14;
   hence h = 0_(n,L) by A2,A6,A10,REWRITE1:def 19;
   end;
 hence thesis;
+end;
 end;
 
 theorem
@@ -1731,8 +1796,10 @@ set R = PolyRedRel(G,T);
    now per cases;
   case S-Poly(g1,g2,T) in field R;
     hence S-Poly(g1,g2,T) has_a_normal_form_wrt R by REWRITE1:def 14;
+  end;
   case not(S-Poly(g1,g2,T) in field R);
     hence S-Poly(g1,g2,T) has_a_normal_form_wrt R by REWRITE1:47;
+    end;
     end;
   then consider q being set such that
   A3: q is_a_normal_form_of S-Poly(g1,g2,T),R by REWRITE1:def 11;
@@ -1793,6 +1860,7 @@ assume A2: for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
         then m2 *' g2 = 0_(n,L) by TERMORD:17;
         then m1 *' g1 - m2 *' g2 = 0_(n,L) by A8,POLYRED:4;
         hence thesis by REWRITE1:13;
+      end;
       case b2 = 0.L;
         then HC(m2,T) = 0.L by TERMORD:23;
         then m2 = 0_(n,L) by TERMORD:17;
@@ -1802,7 +1870,9 @@ assume A2: for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
         then m1 *' g1 - m2 *' g2 = 0_(n,L) by A9,POLYRED:4;
         hence thesis by REWRITE1:13;
         end;
+        end;
       hence thesis;
+    end;
     case A10: b1 <> 0.L & b2 <> 0.L;
       then reconsider b1,b2 as non-zero Element of L by RLVECT_1:def 13;
        HC(m1,T) <> 0.L & HC(m2,T) <> 0.L by A10,TERMORD:23;
@@ -1891,6 +1961,7 @@ assume A2: for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
        PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A2,A3;
       hence thesis by A24,POLYRED:48;
       end;
+      end;
     hence thesis;
     end;
   end;
@@ -1922,7 +1993,8 @@ coherence
  end;
 end;
 
-definition
+
+registration
 let n be Ordinal,
     T be connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
@@ -1953,7 +2025,7 @@ coherence
        end;
  consider f being Function such that
  A4: dom f = [:P,P:] & for x being set st x in [:P,P:] holds P[x,f.x]
-     from FuncEx(A1,A2);
+     from FUNCT_1:sch 2(A1,A2);
  A5: now let v be set;
      assume v in rng f;
      then consider u being set such that
@@ -1982,6 +2054,7 @@ coherence
  hence thesis by A4,FINSET_1:26;
  end;
 end;
+
 
 theorem
 ::: corollary 5.49, p. 212
@@ -2078,12 +2151,14 @@ case A1: j <= len A;
           st C/.i = u * a by A3,A6;
     end;
   hence thesis by IDEAL_1:def 10;
+end;
 case not(j <= len A);
   then C = <*>(the carrier of L) by RFINSEQ:def 2;
   then for i being set st i in dom C
     ex u being Element of L, a being Element of P
           st C/.i = u * a by FINSEQ_1:26;
   hence thesis by IDEAL_1:def 10;
+  end;
   end;
 hence thesis;
 end;
@@ -2124,6 +2199,7 @@ coherence
  end;
 end;
 
+
 definition
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
@@ -2137,6 +2213,7 @@ pred A is_MonomialRepresentation_of f means :Def6:
   ex m being Monomial of n,L,
      p being Polynomial of n,L st p in P & A/.i = m *' p;
 end;
+
 
 theorem
  for n being Ordinal,
@@ -2247,6 +2324,7 @@ A4: now let k be Nat;
           hence u in union {Support(m*'p) where m is Monomial of n,L,
                                            p is Polynomial of n,L :
               ex i being Nat st i in dom A & A/.i = m*'p} by A18,TARSKI:def 4;
+        end;
         case A21: u in Support ep;
           A22: A.(len A) = e by A8,A9,FINSEQ_1:59;
           A23: dom A = Seg(len A) by FINSEQ_1:def 3;
@@ -2266,6 +2344,7 @@ A4: now let k be Nat;
               ex i being Nat st i in dom A & A/.i = m*'p}
             by A21,TARSKI:def 4;
           end;
+          end;
         hence x in union {Support(m*'p) where m is Monomial of n,L,
                                               p is Polynomial of n,L :
                                    ex i being Nat st i in dom A & A/.i = m*'p};
@@ -2274,7 +2353,7 @@ A4: now let k be Nat;
       end;
     hence P[k+1];
     end;
-A28: for k being Nat holds P[k] from Ind(A2,A4);
+A28: for k being Nat holds P[k] from NAT_1:sch 1(A2,A4);
 consider n being Nat such that A29: len A = n;
 thus thesis by A1,A28,A29;
 end;
@@ -2315,6 +2394,7 @@ A2: Sum(A^B) = Sum A + Sum B by RLVECT_1:58
     hence ex m being Monomial of n,L,
              p being Polynomial of n,L st p in P & (A^B)/.i = m *' p
           by A1,A4,Def6;
+  end;
   case ex k being Nat st k in dom B & i = len A + k;
     then consider k being Nat such that
     A5: k in dom B & i = len A + k;
@@ -2325,6 +2405,7 @@ A2: Sum(A^B) = Sum A + Sum B by RLVECT_1:58
     hence ex m being Monomial of n,L,
              p being Polynomial of n,L st p in P & (A^B)/.i = m *' p
           by A1,A5,Def6;
+    end;
     end;
   hence ex m being Monomial of n,L,
            p being Polynomial of n,L st p in P & (A^B)/.i = m *' p;
@@ -2448,7 +2529,7 @@ A6: now let k be Nat;
      end;
     hence P[k+1];
     end;
-A24: for k being Nat holds P[k] from Ind(A4,A6);
+A24: for k being Nat holds P[k] from NAT_1:sch 1(A4,A6);
 consider n being Nat such that A25: n = len A;
 thus thesis by A1,A2,A3,A24,A25;
 end;
@@ -2469,6 +2550,7 @@ pred A is_Standard_Representation_of f,P,b,T means :Def7:
   st p in P & A/.i = m *' p & HT(m*'p,T) <= b,T;
 end;
 
+
 definition
 let n be Ordinal,
     T be connected TermOrder of n,
@@ -2480,6 +2562,7 @@ let n be Ordinal,
 pred A is_Standard_Representation_of f,P,T means :Def8:
   A is_Standard_Representation_of f,P,HT(f,T),T;
 end;
+
 
 definition
 let n be Ordinal,
@@ -2494,6 +2577,7 @@ pred f has_a_Standard_Representation_of P,b,T means
   st A is_Standard_Representation_of f,P,b,T;
 end;
 
+
 definition
 let n be Ordinal,
     T be connected TermOrder of n,
@@ -2505,6 +2589,7 @@ pred f has_a_Standard_Representation_of P,T means :Def10:
   ex A being LeftLinearCombination of P
   st A is_Standard_Representation_of f,P,T;
 end;
+
 
 theorem Th37:
 for n being Ordinal,
@@ -2679,6 +2764,7 @@ A7: now let k be Nat;
         now per cases;
        case u' = g';
        hence thesis by A32;
+       end;
        case A33: u' <> g';
         h' reduces_to g2,P,T by A24,A25,POLYRED:def 13;
        then consider p' being Polynomial of n,L such that
@@ -2732,6 +2818,7 @@ A7: now let k be Nat;
            then mp = B.j by FINSEQ_1:59 .= B/.j by A42,FINSEQ_4:def 4;
            hence ex u being Element of Polynom-Ring(n,L),
                     a being Element of P st B/.i = u*a by A37;
+         end;
          case j <> len A' + 1;
            then j < len A' + 1 by A43,REAL_1:def 5;
            then j <= len A' by NAT_1:38;
@@ -2750,6 +2837,7 @@ A7: now let k be Nat;
                   .= B/.j by A44,A45,A46,FINSEQ_1:def 7;
            hence ex u being Element of Polynom-Ring(n,L),
                     a being Element of P st B/.i = u*a;
+           end;
            end;
          hence ex u being Element of Polynom-Ring(n,L),
                   a being Element of P st B/.i = u*a;
@@ -2773,6 +2861,7 @@ A7: now let k be Nat;
            hence ex m being non-zero Monomial of n,L,
                     p being non-zero Polynomial of n,L
                  st p in P & B.i = m*'p & HT(m*'p,T) <= HT(f,T),T by A34,A40;
+         end;
          case i <> len A' + 1;
            then i < len A' + 1 by A48,REAL_1:def 5;
            then i <= len A' by NAT_1:38;
@@ -2786,18 +2875,20 @@ A7: now let k be Nat;
                     p being non-zero Polynomial of n,L
                  st p in P & B.i = m*'p & HT(m*'p,T) <= HT(f,T),T by A50;
            end;
+           end;
          hence ex m being non-zero Monomial of n,L,
                   p being non-zero Polynomial of n,L
                   st p in P & B.i = m*'p & HT(m*'p,T) <= HT(f,T),T;
          end;
        hence thesis by A10,A11,A36,A47;
        end;
+       end;
       hence thesis;
       end;
       hence thesis;
       end;
     end;
-A51: for k being Nat st 1 <= k holds P[k] from Ind2(A3,A7);
+A51: for k being Nat st 1 <= k holds P[k] from BINOM:sch 1(A3,A7);
 consider R being RedSequence of PolyRedRel(P,T) such that
 A52: R.1 = f & R.len R = g by A2,REWRITE1:def 3;
  len R > 0 by REWRITE1:def 2;
@@ -2844,6 +2935,7 @@ then A2: f + g = Sum A + Sum B by POLYNOM1:def 27
     hence ex m being non-zero Monomial of n,L,
              p being non-zero Polynomial of n,L
           st p in P & (A^B)/.i = m *' p & HT(m*'p,T) <= b,T by A5;
+  end;
   case ex k being Nat st k in dom B & i = len A + k;
     then consider k being Nat such that
     A6: k in dom B & i = len A + k;
@@ -2856,6 +2948,7 @@ then A2: f + g = Sum A + Sum B by POLYNOM1:def 27
     hence ex m being non-zero Monomial of n,L,
              p being non-zero Polynomial of n,L
           st p in P & (A^B)/.i = m *' p & HT(m*'p,T) <= b,T by A7;
+    end;
     end;
   hence ex m being non-zero Monomial of n,L,
            p being non-zero Polynomial of n,L

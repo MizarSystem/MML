@@ -21,9 +21,7 @@ NORMSP_1
 XREAL_0
 ALGSEQ_1
 #
-AlgSeqLambdaF
-#
 G2 W33 ;;M4 K52 ;K56 ;;M3 U1 F1 ;;;;
-ªM13 V49 F1 ;;F1 ;;ª&R15 K134 F1 ;B1 ;F2 ;;M4 K52 ;K56 ;;ª&ªR15 F2 ;B2 ;ªR1 K125 F1 ;B1 B2 ;F3 B2 ;;;;;
+ªM13 V49 F1 ;;F1 ;;ª&R16 K134 F1 ;B1 ;F2 ;;M4 K52 ;K56 ;;ª&ªR16 F2 ;B2 ;ªR1 K125 F1 ;B1 B2 ;F3 B2 ;;;;;
 #
 !

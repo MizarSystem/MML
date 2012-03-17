@@ -22,12 +22,14 @@ definition let D be set;
     <*0*> in D;
 end;
 
+
 definition let D be set;
   attr D is with_implication means
 :: HILBERT1:def 2
      for p, q being FinSequence st
          p in D & q in D holds <*1*>^p^q in D;
 end;
+
 
 definition let D be set;
   attr D is with_conjunction means
@@ -36,11 +38,13 @@ definition let D be set;
          p in D & q in D holds <*2*>^p^q in D;
 end;
 
+
 definition let D be set;
   attr D is with_propositional_variables means
 :: HILBERT1:def 4
      for n being Nat holds <*3+n*> in D;
 end;
+
 
 definition let D be set;
   attr D is HP-closed means
@@ -50,13 +54,16 @@ definition let D be set;
      with_propositional_variables;
 end;
 
-definition
+registration
   cluster HP-closed -> with_VERUM with_implication
      with_conjunction with_propositional_variables non empty set;
+  coherence by Def5,Lm1;
   cluster with_VERUM with_implication
      with_conjunction with_propositional_variables -> HP-closed Subset of NAT*
 ;
+  coherence by Def5;
 end;
+
 
 definition
   func HP-WFF -> set means
@@ -65,25 +72,47 @@ definition
    for D being set st D is HP-closed holds it c= D;
 end;
 
-definition
+
+registration
   cluster HP-WFF -> HP-closed;
+  coherence by Def6;
 end;
 
-definition
+
+registration
   cluster HP-closed non empty set;
+  existence
+  proof
+    take HP-WFF;
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   cluster -> Relation-like Function-like Element of HP-WFF;
+coherence
+   proof let p be Element of HP-WFF;
+       HP-WFF c= NAT* & p in HP-WFF by Def5;
+     hence thesis by FINSEQ_1:def 11;
+   end;
 end;
 
-definition
+
+registration
   cluster -> FinSequence-like Element of HP-WFF;
+coherence
+   proof let p be Element of HP-WFF;
+       HP-WFF c= NAT* & p in HP-WFF by Def5;
+     hence thesis by FINSEQ_1:def 11;
+   end;
 end;
+
 
 definition
   mode HP-formula is Element of HP-WFF;
 end;
+
 
 definition
   func VERUM -> HP-formula equals
@@ -100,6 +129,7 @@ definition
     <*2*>^p^q;
 end;
 
+
  reserve T, X, Y for Subset of HP-WFF;
  reserve p, q, r, s for Element of HP-WFF;
 
@@ -115,17 +145,20 @@ definition let T be Subset of HP-WFF;
     (p in T & p => q in T implies q in T);
 end;
 
+
 definition let X;
   func CnPos X -> Subset of HP-WFF means
 :: HILBERT1:def 11
     r in it iff for T st T is Hilbert_theory & X c= T holds r in T;
 end;
 
+
 definition
   func HP_TAUT -> Subset of HP-WFF equals
 :: HILBERT1:def 12
     CnPos({}(HP-WFF));
 end;
+
 
 theorem :: HILBERT1:1
   VERUM in CnPos (X);
@@ -160,9 +193,11 @@ theorem :: HILBERT1:10
 theorem :: HILBERT1:11
     CnPos(CnPos(X)) = CnPos(X);
 
-definition let X be Subset of HP-WFF;
+registration let X be Subset of HP-WFF;
   cluster CnPos(X) -> Hilbert_theory;
+  coherence by Lm3;
 end;
+
 
 theorem :: HILBERT1:12
   T is Hilbert_theory iff CnPos(T) = T;
@@ -170,9 +205,11 @@ theorem :: HILBERT1:12
 theorem :: HILBERT1:13
     T is Hilbert_theory implies HP_TAUT c= T;
 
-definition
+registration
   cluster HP_TAUT -> Hilbert_theory;
+  coherence by Def12;
 end;
+
 
 begin  :: The tautologies of the Hilbert calculus - implicational part
 

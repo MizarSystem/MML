@@ -36,9 +36,11 @@ begin :: Preliminaries
 :: of the article.
 ::-------------------------------------------------------------------
 
-definition let L be non empty RelStr;
+registration let L be non empty RelStr;
  cluster id L -> monotone;
+coherence by YELLOW_2:13;
 end;
+
 
 definition let S, T be non empty RelStr,
                f be map of S,T;
@@ -46,6 +48,7 @@ definition let S, T be non empty RelStr,
 :: WAYBEL_9:def 1
   for x, y being Element of S st x <= y holds f.x >= f.y;
 end;
+
 
 theorem :: WAYBEL_9:1
 for S, T being RelStr, K, L being non empty RelStr
@@ -88,17 +91,21 @@ theorem :: WAYBEL_9:8
 for T being non empty 1-sorted, N being non empty NetStr over T
  holds N is_eventually_in rng the mapping of N;
 
-definition let L be non empty reflexive RelStr,
+registration let L be non empty reflexive RelStr,
                D be non empty directed Subset of L,
                n be Function of D, the carrier of L;
  cluster NetStr (#D,(the InternalRel of L)|_2 D,n#) -> directed;
+coherence by WAYBEL_2:19;
 end;
 
-definition let L be non empty reflexive transitive RelStr,
+
+registration let L be non empty reflexive transitive RelStr,
                D be non empty directed Subset of L,
                n be Function of D, the carrier of L;
  cluster NetStr (#D,(the InternalRel of L)|_2 D,n#) -> transitive;
+coherence by Lm3;
 end;
+
 
 :: cf WAYBEL_2:42
 theorem :: WAYBEL_9:9
@@ -117,29 +124,72 @@ definition let L be non empty RelStr,
  redefine func x "/\" N -> strict net of L;
 end;
 
-definition let L be non empty RelStr,
+
+registration let L be non empty RelStr,
                x be Element of L,
                N be non empty reflexive NetStr over L;
  cluster x "/\" N -> reflexive;
+coherence
+  proof
+      the RelStr of N = the RelStr of x "/\" N by WAYBEL_2:def 3;
+    then the InternalRel of x "/\" N is_reflexive_in the carrier of x "/\" N
+      by ORDERS_1:def 4;
+    hence thesis by ORDERS_1:def 4;
+  end;
 end;
 
-definition let L be non empty RelStr,
+
+registration let L be non empty RelStr,
                x be Element of L,
                N be non empty antisymmetric NetStr over L;
  cluster x "/\" N -> antisymmetric;
+coherence
+  proof
+      the RelStr of N = the RelStr of x "/\" N by WAYBEL_2:def 3;
+    then the InternalRel of x "/\" N is_antisymmetric_in the carrier of x "/\"
+N
+      by ORDERS_1:def 6;
+    hence thesis by ORDERS_1:def 6;
+  end;
 end;
 
-definition let L be non empty RelStr,
+
+registration let L be non empty RelStr,
                x be Element of L,
                N be non empty transitive NetStr over L;
  cluster x "/\" N -> transitive;
+coherence
+  proof
+      the RelStr of N = the RelStr of x "/\" N by WAYBEL_2:def 3;
+    then the InternalRel of x "/\" N is_transitive_in the carrier of x "/\" N
+      by ORDERS_1:def 5;
+    hence thesis by ORDERS_1:def 5;
+  end;
 end;
 
-definition let L be non empty RelStr,
+
+registration let L be non empty RelStr,
                J be set,
                f be Function of J,the carrier of L;
  cluster FinSups f -> transitive;
+coherence
+  proof
+    let x, y, z be Element of FinSups f such that
+A1:   x <= y & y <= z;
+    consider g being Function of Fin J, the carrier of L such that
+A2:  for x being Element of Fin J holds g.x = sup (f.:x) &
+      FinSups f = NetStr (# Fin J, RelIncl Fin J, g #) by WAYBEL_2:def 2;
+A3: InclPoset Fin J = RelStr(#Fin J, RelIncl Fin J#) by YELLOW_1:def 1;
+    then reconsider x1 = x, y1 = y, z1 = z as Element of InclPoset Fin J
+      by A2;
+      x1 <= y1 & y1 <= z1 by A1,A2,A3,YELLOW_0:1;
+    then x1 c= y1 & y1 c= z1 by YELLOW_1:3;
+    then x1 c= z1 by XBOOLE_1:1;
+    then x1 <= z1 by YELLOW_1:3;
+    hence x <= z by A2,A3,YELLOW_0:1;
+  end;
 end;
+
 
 
 begin :: The Operations Defined on Nets
@@ -151,6 +201,7 @@ definition let L be non empty RelStr,
    Inf the mapping of N;
 end;
 
+
 definition let L be RelStr,
                N be NetStr over L;
  pred ex_sup_of N means
@@ -161,6 +212,7 @@ definition let L be RelStr,
   ex_inf_of rng the mapping of N,L;
 end;
 
+
 definition let L be RelStr;
  func L+id -> strict NetStr over L means
 :: WAYBEL_9:def 5
@@ -168,33 +220,109 @@ definition let L be RelStr;
   the mapping of it = id L;
 end;
 
-definition let L be non empty RelStr;
+
+registration let L be non empty RelStr;
  cluster L+id -> non empty;
+coherence
+  proof
+      the RelStr of L = the RelStr of L+id by Def5;
+    hence thesis by STRUCT_0:def 1;
+  end;
 end;
 
-definition let L be reflexive RelStr;
+
+registration let L be reflexive RelStr;
  cluster L+id -> reflexive;
+coherence
+  proof
+      the RelStr of L = the RelStr of L+id by Def5;
+    then the InternalRel of L+id is_reflexive_in the carrier of L+id
+      by ORDERS_1:def 4;
+    hence thesis by ORDERS_1:def 4;
+  end;
 end;
 
-definition let L be antisymmetric RelStr;
+
+registration let L be antisymmetric RelStr;
  cluster L+id -> antisymmetric;
+coherence
+  proof
+      the RelStr of L = the RelStr of L+id by Def5;
+    then the InternalRel of L+id is_antisymmetric_in the carrier of L+id
+      by ORDERS_1:def 6;
+    hence thesis by ORDERS_1:def 6;
+  end;
 end;
 
-definition let L be transitive RelStr;
+
+registration let L be transitive RelStr;
  cluster L+id -> transitive;
+coherence
+  proof
+      the RelStr of L = the RelStr of L+id by Def5;
+    then the InternalRel of L+id is_transitive_in the carrier of L+id
+      by ORDERS_1:def 5;
+    hence thesis by ORDERS_1:def 5;
+  end;
 end;
 
-definition let L be with_suprema RelStr;
+
+registration let L be with_suprema RelStr;
  cluster L+id -> directed;
+coherence
+  proof
+A1: the RelStr of L = the RelStr of L+id by Def5;
+      [#]L = the carrier of L by PRE_TOPC:12
+      .= [#](L+id) by A1,PRE_TOPC:12;
+    hence [#](L+id) is directed by A1,WAYBEL_0:3;
+  end;
 end;
 
-definition let L be directed RelStr;
+
+registration let L be directed RelStr;
  cluster L+id -> directed;
+coherence
+  proof
+A1: [#]L is directed by WAYBEL_0:def 6;
+A2: the RelStr of L = the RelStr of L+id by Def5;
+      [#]L = the carrier of L by PRE_TOPC:12
+      .= [#](L+id) by A2,PRE_TOPC:12;
+    hence [#](L+id) is directed by A1,A2,WAYBEL_0:3;
+  end;
 end;
 
-definition let L be non empty RelStr;
+
+registration let L be non empty RelStr;
  cluster L+id -> monotone eventually-directed;
+coherence
+  proof
+    set N = L+id;
+    thus N is monotone
+    proof
+A1:   netmap(N,L)
+         = the mapping of N by WAYBEL_0:def 7
+        .= id L by Def5;
+    the RelStr of N = the RelStr of L by Def5;
+      hence netmap(L+id,L) is monotone by A1,Th1;
+    end;
+      for i being Element of N ex j being Element of N st
+     for k being Element of N st j <= k holds N.i <= N.k
+    proof
+      let i be Element of N;
+      take j = i;
+      let k be Element of N such that
+A2:     j <= k;
+A3:   the RelStr of N = the RelStr of L by Def5;
+        the mapping of N = id L by Def5;
+      then (the mapping of N).i = i & (the mapping of N).k = k by A3,TMAP_1:91
+;
+        then N.i = i & N.k = k by WAYBEL_0:def 8;
+      hence N.i <= N.k by A2,A3,YELLOW_0:1;
+    end;
+    hence thesis by WAYBEL_0:11;
+  end;
 end;
+
 
 definition let L be RelStr;
  func L opp+id -> strict NetStr over L means
@@ -204,32 +332,120 @@ definition let L be RelStr;
   the mapping of it = id L;
 end;
 
+
 theorem :: WAYBEL_9:11
 for L being RelStr holds the RelStr of L~ = the RelStr of L opp+id;
 
-definition let L be non empty RelStr;
+registration let L be non empty RelStr;
  cluster L opp+id -> non empty;
+coherence
+  proof
+      the RelStr of L~ = the RelStr of L opp+id by Th11;
+    hence thesis by STRUCT_0:def 1;
+  end;
 end;
 
-definition let L be reflexive RelStr;
+
+registration let L be reflexive RelStr;
  cluster L opp+id -> reflexive;
+coherence
+  proof
+      the InternalRel of L is_reflexive_in the carrier of L by ORDERS_1:def 4;
+      then A1: (the InternalRel of L)~ is_reflexive_in the carrier of L by
+ORDERS_2:91;
+      the InternalRel of L opp+id = (the InternalRel of L)~ by Def6;
+    hence the InternalRel of L opp+id is_reflexive_in the carrier
+     of L opp+id by A1,Def6;
+  end;
 end;
 
-definition let L be antisymmetric RelStr;
+
+registration let L be antisymmetric RelStr;
  cluster L opp+id -> antisymmetric;
+coherence
+  proof
+      the InternalRel of L is_antisymmetric_in the carrier of L
+      by ORDERS_1:def 6;
+then A1: (the InternalRel of L)~ is_antisymmetric_in the carrier of L
+      by ORDERS_2:93;
+      the InternalRel of L opp+id = (the InternalRel of L)~ by Def6;
+    then the InternalRel of L opp+id is_antisymmetric_in
+      the carrier of L opp+id by A1,Def6;
+    hence thesis by ORDERS_1:def 6;
+  end;
 end;
 
-definition let L be transitive RelStr;
+
+registration let L be transitive RelStr;
  cluster L opp+id -> transitive;
+coherence
+  proof
+      the InternalRel of L is_transitive_in the carrier of L
+      by ORDERS_1:def 5;
+then A1: (the InternalRel of L)~ is_transitive_in the carrier of L
+      by ORDERS_2:92;
+      the InternalRel of L opp+id = (the InternalRel of L)~ by Def6;
+    then the InternalRel of L opp+id is_transitive_in
+      the carrier of L opp+id by A1,Def6;
+    hence thesis by ORDERS_1:def 5;
+  end;
 end;
 
-definition let L be with_infima RelStr;
+
+registration let L be with_infima RelStr;
  cluster L opp+id -> directed;
+coherence
+  proof
+A1: the RelStr of L~ = the RelStr of L opp+id by Th11;
+    reconsider A = L~ as with_suprema RelStr by YELLOW_7:16;
+      [#]A = the carrier of A by PRE_TOPC:12
+      .= the carrier of L by YELLOW_6:12
+      .= the carrier of L opp+id by Def6
+      .= [#](L opp+id) by PRE_TOPC:12;
+    hence [#](L opp+id) is directed by A1,WAYBEL_0:3;
+  end;
 end;
 
-definition let L be non empty RelStr;
+
+registration let L be non empty RelStr;
  cluster L opp+id -> antitone eventually-filtered;
+coherence
+  proof
+    set N = L opp+id;
+    thus N is antitone
+    proof
+A1:   netmap(N,L)
+         = the mapping of N by WAYBEL_0:def 7
+        .= id L by Def6;
+A2:   the RelStr of L opp+id = the RelStr of L~ by Th11;
+      reconsider f = id L as map of L~, L by YELLOW_7:39;
+      reconsider g = f as map of L, L~ by YELLOW_7:39;
+A3:   the RelStr of L = the RelStr of L;
+        g is antitone by YELLOW_7:40;
+      then f is antitone by YELLOW_7:41;
+      hence netmap(N,L) is antitone by A1,A2,A3,Th2;
+    end;
+      for i being Element of N ex j being Element of N st
+     for k being Element of N st j <= k holds N.i >= N.k
+    proof
+      let i be Element of N;
+      take j = i;
+      let k be Element of N such that
+A4:     j <= k;
+      reconsider i1 = i, k1 = k as Element of L
+        by Def6;
+A5:   (id L).i1 = i1 & (id L).k1 = k1 by TMAP_1:91;
+        the mapping of N = id L by Def6;
+then A6:   N.i = i & N.k = k by A5,WAYBEL_0:def 8;
+      A7: the InternalRel of N = (the InternalRel of L)~ by Def6;
+        [i,k] in the InternalRel of N by A4,ORDERS_1:def 9;
+      then [k,i] in (the InternalRel of N)~ by RELAT_1:def 7;
+      hence N.k <= N.i by A6,A7,ORDERS_1:def 9;
+    end;
+    hence thesis by WAYBEL_0:12;
+  end;
 end;
+
 
 definition let L be non empty 1-sorted,
                N be non empty NetStr over L,
@@ -241,6 +457,7 @@ definition let L be non empty 1-sorted,
   the InternalRel of it = (the InternalRel of N)|_2 the carrier of it &
   the mapping of it = (the mapping of N)|the carrier of it;
 end;
+
 
 theorem :: WAYBEL_9:12
   for L being non empty 1-sorted, N being non empty NetStr over L
@@ -255,41 +472,150 @@ theorem :: WAYBEL_9:14
 for L being non empty 1-sorted, N being non empty NetStr over L
  for i being Element of N holds N|i is full SubNetStr of N;
 
-definition let L be non empty 1-sorted,
+registration let L be non empty 1-sorted,
                N be non empty reflexive NetStr over L,
                i be Element of N;
  cluster N|i -> non empty reflexive;
+coherence
+  proof
+    thus N|i is non empty
+    proof
+        i <= i;
+      then i in the carrier of N|i by Def7;
+      hence thesis by STRUCT_0:def 1;
+    end;
+    then reconsider A = N|i as strict non empty NetStr over L;
+      A is reflexive
+    proof
+      let x be Element of A;
+      consider y being Element of N such that
+A1:     y = x and i <= y by Def7;
+A2:   N|i is full SubNetStr of N by Th14;
+        y <= y;
+      hence x <= x by A1,A2,YELLOW_6:21;
+    end;
+    hence thesis;
+  end;
 end;
 
-definition let L be non empty 1-sorted,
+
+registration let L be non empty 1-sorted,
                N be non empty directed NetStr over L,
                i be Element of N;
  cluster N|i -> non empty;
+coherence
+  proof
+    consider z1 being Element of N such that
+A1:   i <= z1 & i <= z1 by YELLOW_6:def 5;
+      z1 in the carrier of N|i by A1,Def7;
+    hence thesis by STRUCT_0:def 1;
+  end;
 end;
 
-definition let L be non empty 1-sorted,
+
+registration let L be non empty 1-sorted,
                N be non empty reflexive antisymmetric NetStr over L,
                i be Element of N;
  cluster N|i -> antisymmetric;
+coherence
+  proof
+    let x, y be Element of N|i such that
+A1:   x <= y & y <= x;
+A2: N|i is SubNetStr of N by Th14;
+    consider x1 being Element of N such that
+A3:   x1 = x and i <= x1 by Def7;
+    consider y1 being Element of N such that
+A4:   y1 = y and i <= y1 by Def7;
+      x1 <= y1 & y1 <= x1 by A1,A2,A3,A4,YELLOW_6:20;
+    hence x = y by A3,A4,YELLOW_0:def 3;
+  end;
 end;
 
-definition let L be non empty 1-sorted,
+
+registration let L be non empty 1-sorted,
                N be non empty directed antisymmetric NetStr over L,
                i be Element of N;
  cluster N|i -> antisymmetric;
+coherence
+  proof
+    let x, y be Element of N|i such that
+A1:   x <= y & y <= x;
+A2: N|i is SubNetStr of N by Th14;
+    consider x1 being Element of N such that
+A3:   x1 = x and i <= x1 by Def7;
+    consider y1 being Element of N such that
+A4:   y1 = y and i <= y1 by Def7;
+      x1 <= y1 & y1 <= x1 by A1,A2,A3,A4,YELLOW_6:20;
+    hence x = y by A3,A4,YELLOW_0:def 3;
+  end;
 end;
 
-definition let L be non empty 1-sorted,
+
+registration let L be non empty 1-sorted,
                N be non empty reflexive transitive NetStr over L,
                i be Element of N;
  cluster N|i -> transitive;
+coherence
+  proof
+    let x, y, z be Element of N|i such that
+A1:   x <= y & y <= z;
+A2: N|i is full SubNetStr of N by Th14;
+    consider x1 being Element of N such that
+A3:   x1 = x and i <= x1 by Def7;
+    consider y1 being Element of N such that
+A4:   y1 = y and i <= y1 by Def7;
+    consider z1 being Element of N such that
+A5:   z1 = z and i <= z1 by Def7;
+      x1 <= y1 & y1 <= z1 by A1,A2,A3,A4,A5,YELLOW_6:20;
+    then x1 <= z1 by YELLOW_0:def 2;
+    hence x <= z by A2,A3,A5,YELLOW_6:21;
+  end;
 end;
 
-definition let L be non empty 1-sorted,
+
+registration let L be non empty 1-sorted,
                N be net of L,
                i be Element of N;
  cluster N|i -> transitive directed;
+coherence
+  proof
+    thus N|i is transitive
+    proof
+      let x, y, z be Element of N|i such that
+A1:     x <= y & y <= z;
+A2:   N|i is full SubNetStr of N by Th14;
+      consider x1 being Element of N such that
+A3:     x1 = x and i <= x1 by Def7;
+      consider y1 being Element of N such that
+A4:     y1 = y and i <= y1 by Def7;
+      consider z1 being Element of N such that
+A5:     z1 = z and i <= z1 by Def7;
+        x1 <= y1 & y1 <= z1 by A1,A2,A3,A4,A5,YELLOW_6:20;
+      then x1 <= z1 by YELLOW_0:def 2;
+      hence x <= z by A2,A3,A5,YELLOW_6:21;
+    end;
+      for x, y being Element of N|i ex z being Element of N|i st x <= z & y <=
+z
+    proof
+      let x, y be Element of N|i;
+      consider x1 being Element of N such that
+A6:     x1 = x and
+A7:     i <= x1 by Def7;
+      consider y1 being Element of N such that
+A8:     y1 = y and i <= y1 by Def7;
+      consider z1 being Element of N such that
+A9:     x1 <= z1 & y1 <= z1 by YELLOW_6:def 5;
+        i <= z1 by A7,A9,YELLOW_0:def 2;
+      then z1 in the carrier of N|i by Def7;
+      then reconsider z = z1 as Element of N|i;
+      take z;
+        N|i is full SubNetStr of N by Th14;
+      hence x <= z & y <= z by A6,A8,A9,YELLOW_6:21;
+    end;
+    hence thesis by YELLOW_6:def 5;
+  end;
 end;
+
 
 theorem :: WAYBEL_9:15
   for L being non empty 1-sorted, N being non empty reflexive NetStr over L
@@ -305,16 +631,47 @@ theorem :: WAYBEL_9:17
 for L being non empty 1-sorted, N being net of L, i being Element of N
  holds N|i is subnet of N;
 
-definition let T be non empty 1-sorted,
+registration let T be non empty 1-sorted,
                N be net of T;
  cluster strict subnet of N;
+existence
+  proof
+    set A = NetStr (#the carrier of N,the InternalRel of N,the mapping of N#);
+A1: the RelStr of A = the RelStr of N;
+  A is directed
+    proof
+A2:   [#]N is directed by WAYBEL_0:def 6;
+        [#]N = the carrier of N by PRE_TOPC:12
+        .= [#]A by PRE_TOPC:12;
+      hence [#]A is directed by A1,A2,WAYBEL_0:3;
+    end;
+    then reconsider A as net of T by A1,WAYBEL_8:13;
+      A is subnet of N
+    proof
+      reconsider f = id N as map of A, N;
+      take f;
+      thus the mapping of A = (the mapping of N)*f by TMAP_1:93;
+      let m be Element of N;
+      reconsider n = m as Element of A;
+      take n;
+      let p be Element of A such that
+A3:     n <= p;
+        p = f.p by TMAP_1:91;
+      hence m <= f.p by A1,A3,YELLOW_0:1;
+    end;
+    then reconsider A as subnet of N;
+    take A;
+    thus thesis;
+  end;
 end;
+
 
 definition let L be non empty 1-sorted,
                N be net of L,
                i be Element of N;
  redefine func N|i -> strict subnet of N;
 end;
+
 
 definition let S be non empty 1-sorted,
                T be 1-sorted,
@@ -326,40 +683,82 @@ definition let S be non empty 1-sorted,
   the mapping of it = f * the mapping of N;
 end;
 
-definition let S be non empty 1-sorted,
+
+registration let S be non empty 1-sorted,
                T be 1-sorted,
                f be map of S, T,
                N be non empty NetStr over S;
  cluster f * N -> non empty;
+coherence
+  proof
+      the RelStr of N = the RelStr of f * N by Def8;
+    hence thesis by STRUCT_0:def 1;
+  end;
 end;
 
-definition let S be non empty 1-sorted,
+
+registration let S be non empty 1-sorted,
                T be 1-sorted,
                f be map of S, T,
                N be reflexive NetStr over S;
  cluster f * N -> reflexive;
+coherence
+  proof
+      the RelStr of N = the RelStr of f * N by Def8;
+    hence the InternalRel of f*N is_reflexive_in the carrier of f*N
+      by ORDERS_1:def 4;
+  end;
 end;
 
-definition let S be non empty 1-sorted,
+
+registration let S be non empty 1-sorted,
                T be 1-sorted,
                f be map of S, T,
                N be antisymmetric NetStr over S;
  cluster f * N -> antisymmetric;
+coherence
+  proof
+      the RelStr of N = the RelStr of f * N by Def8;
+    then the InternalRel of f*N is_antisymmetric_in the carrier of f*N
+      by ORDERS_1:def 6;
+    hence thesis by ORDERS_1:def 6;
+  end;
 end;
 
-definition let S be non empty 1-sorted,
+
+registration let S be non empty 1-sorted,
                T be 1-sorted,
                f be map of S, T,
                N be transitive NetStr over S;
  cluster f * N -> transitive;
+coherence
+  proof
+      the RelStr of N = the RelStr of f * N by Def8;
+    then the InternalRel of f*N is_transitive_in the carrier of f*N
+      by ORDERS_1:def 5;
+    hence thesis by ORDERS_1:def 5;
+  end;
 end;
 
-definition let S be non empty 1-sorted,
+
+registration let S be non empty 1-sorted,
                T be 1-sorted,
                f be map of S, T,
                N be directed NetStr over S;
  cluster f * N -> directed;
+coherence
+  proof
+A1: the RelStr of N = the RelStr of f * N by Def8;
+    thus [#](f*N) is directed
+    proof
+A2:   [#]N is directed by WAYBEL_0:def 6;
+        [#](f*N) = the carrier of f*N by PRE_TOPC:12
+            .= [#]N by A1,PRE_TOPC:12;
+      hence thesis by A1,A2,WAYBEL_0:3;
+    end;
+  end;
 end;
+
 
 theorem :: WAYBEL_9:18
 for L being non empty RelStr, N being non empty NetStr over L
@@ -387,41 +786,117 @@ definition
              topology -> Subset-Family of the carrier #);
 end;
 
-definition let A be non empty set,
+
+registration let A be non empty set,
                R be Relation of A,A,
                T be Subset-Family of A;
  cluster TopRelStr (#A,R,T#) -> non empty;
+coherence
+  proof
+    thus the carrier of TopRelStr (#A,R,T#) is non empty;
+  end;
 end;
 
-definition let x be set,
+
+registration let x be set,
                R be Relation of {x};
            let T be Subset-Family of {x};
  cluster TopRelStr (#{x}, R, T#) -> trivial;
+coherence
+  proof
+    let a, b be Element of TopRelStr (#{x},R,T#);
+      a = x & b = x by TARSKI:def 1;
+    hence thesis;
+  end;
 end;
 
-definition let X be set,
+
+registration let X be set,
                O be Order of X,
                T be Subset-Family of X;
  cluster TopRelStr (#X, O, T#) -> reflexive transitive antisymmetric;
+coherence
+  proof
+    set A = TopRelStr(#X,O,T#);
+  field the InternalRel of A = the carrier of A by ORDERS_1:97;
+  then
+      the InternalRel of A is_reflexive_in the carrier of A &
+    the InternalRel of A is_transitive_in the carrier of A &
+    the InternalRel of A is_antisymmetric_in the carrier of A
+                        by RELAT_2:def 9,def 12,def 16;
+    hence thesis by ORDERS_1:def 4,def 5,def 6;
+  end;
 end;
 
-definition
+registration
  cluster trivial reflexive non empty discrete strict finite TopRelStr;
+existence
+  proof
+      {{},{0}} = bool {0} & bool {0} c= bool {0} by ZFMISC_1:30;
+    then reconsider tau = {{},{0}} as Subset-Family of {0};
+      0 in {0} by TARSKI:def 1;
+    then reconsider r = {[0,0]} as Relation of {0} by RELSET_1:8;
+    take TopRelStr (#{0},r,tau#);
+    thus thesis by Lm4;
+  end;
 end;
+
 
 definition
  mode TopLattice is with_infima with_suprema
   reflexive transitive antisymmetric TopSpace-like TopRelStr;
 end;
 
-definition
+
+registration
  cluster strict non empty trivial discrete finite compact Hausdorff
          TopLattice;
+existence
+  proof
+A1: {{},{0}} = bool {0} & bool {0} c= bool {0} by ZFMISC_1:30;
+      0 in {0} by TARSKI:def 1;
+    then reconsider r = {[0,0]} as Relation of {0} by RELSET_1:8;
+A2: 1TopSp {0} = TopStruct (# {0}, bool {0}#) by PCOMPS_1:def 1;
+    reconsider C = bool {0} as Subset-Family of {0};
+    reconsider A = TopRelStr (#{0}, r, C#)
+    as trivial reflexive non empty discrete finite TopRelStr by A1,Lm4;
+    reconsider A as TopLattice;
+    take A;
+    thus A is strict non empty trivial discrete finite;
+    thus A is compact
+    proof
+      let F be Subset-Family of A such that
+A3:     F is_a_cover_of A and
+A4:     F is open;
+      reconsider F1 = F as Subset-Family of 1TopSp {0} by A2;
+A5:   F1 is_a_cover_of 1TopSp {0} by A2,A3,Th3;
+A6:   F1 is open by A2,A4,Th19;
+        1TopSp {0} is compact by PCOMPS_1:9;
+      then consider G1 being Subset-Family of 1TopSp {0} such that
+A7:     G1 c= F1 and
+A8:     G1 is_a_cover_of 1TopSp {0} and
+A9:     G1 is finite by A5,A6,COMPTS_1:def 3;
+      reconsider G = G1 as Subset-Family of A by A2;
+      take G;
+      thus G c= F by A7;
+      thus G is_a_cover_of A by A2,A8,Th3;
+      thus G is finite by A9;
+    end;
+    let p, q be Point of A such that
+A10:   not p = q;
+    assume not ex W, V being Subset of A
+      st W is open & V is open & p in W & q in V & W misses V;
+      p = 0 & q = 0 by TARSKI:def 1;
+    hence contradiction by A10;
+  end;
 end;
 
-definition let T be Hausdorff (non empty TopSpace);
+
+registration let T be Hausdorff (non empty TopSpace);
  cluster -> Hausdorff (non empty SubSpace of T);
+coherence by TOPMETR:3;
 end;
+
 
 theorem :: WAYBEL_9:21
 for T being non empty TopSpace, p being Point of T
@@ -471,6 +946,7 @@ definition let T be non empty TopSpace,
 :: WAYBEL_9:def 9
   for O being a_neighborhood of p holds N is_often_in O;
 end;
+
 
 theorem :: WAYBEL_9:29
   for L being non empty TopSpace, N being net of L

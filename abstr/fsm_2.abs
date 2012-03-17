@@ -32,14 +32,19 @@ reserve
         S for non empty FSM over I,
         q, q1 for State of S;
 
-definition let I, S, q, w;
- redefine func (q,w)-admissible;
- synonym GEN(w,q);
+notation let I, S, q, w;
+ synonym GEN(w,q) for (q,w)-admissible;
+ end;
+
+
+registration let I, S, q, w;
+ cluster GEN(w, q) -> non empty;
+ coherence
+  proof len GEN(w, q) = len w + 1 by FSM_1:def 2;
+   hence thesis by FINSEQ_1:25;
+  end;
 end;
 
-definition let I, S, q, w;
- cluster GEN(w, q) -> non empty;
-end;
 
 theorem :: FSM_2:1
     GEN(<*s*>, q) = <*q, (the Tran of S).[q, s]*>;
@@ -63,6 +68,7 @@ definition
     j <= len(w2)+1 holds
   GEN(w1, the InitS of S).j = GEN(w2, the InitS of S).j;
 end;
+
 
 theorem :: FSM_2:4
   S is calculating_type implies
@@ -93,6 +99,7 @@ definition
      the InitS of S,<*s*>^w-leads_to q;
 end;
 
+
 definition
  let I, S, q;
  attr q is accessible means
@@ -100,6 +107,7 @@ definition
 
    ex w be FinSequence of I st the InitS of S,w-leads_to q;
 end;
+
 
 theorem :: FSM_2:8
     q is_accessible_via s implies q is accessible;
@@ -124,6 +132,7 @@ definition
 
   for q being State of S holds q is accessible;
 end;
+
 
 theorem :: FSM_2:12
     (for s1,s2,q holds
@@ -165,9 +174,20 @@ definition let I be set;
      FinalS -> Subset of the carrier #);
 end;
 
-definition let I be set;
+
+registration let I be set;
   cluster non empty SM_Final over I;
+  existence
+  proof
+    consider A being non empty set,
+             T being Function of [: A, I :], A,
+             I being Element of A,
+             F being Subset of A;
+    take S = SM_Final (# A, T, I, F#);
+    thus the carrier of S is non empty;
+  end;
 end;
+
 
 definition
  let I, s;
@@ -178,6 +198,7 @@ definition
  ex q being State of S st q is_accessible_via s & q in the FinalS of S;
 end;
 
+
 definition
  let I;
  let S be non empty SM_Final over I;
@@ -186,6 +207,7 @@ definition
 
   s leads_to_final_state_of S;
 end;
+
 
 definition let I be set, O be non empty set;
  struct (SM_Final over I, Moore-FSM over I, O)
@@ -198,9 +220,22 @@ definition let I be set, O be non empty set;
       FinalS -> Subset of the carrier #);
 end;
 
-definition let I be set, O be non empty set;
+
+registration let I be set, O be non empty set;
   cluster non empty strict Moore-SM_Final over I, O;
+  existence
+  proof
+    consider A being non empty set,
+             T being Function of [: A, I :], A,
+             o being Function of A, O,
+             I being Element of A,
+             F being Subset of A;
+    take S = Moore-SM_Final (# A, T, o, I, F #);
+    thus the carrier of S is non empty;
+    thus thesis;
+  end;
 end;
+
 
 definition
  let I, O;
@@ -216,24 +251,68 @@ definition
    the FinalS of it = {f};
 end;
 
+
 theorem :: FSM_2:17
  for i,f being set, o being Function of {i,f}, O
  for j st 1 < j & j <= len w+1 holds
    GEN(w, the InitS of I-TwoStatesMooreSM(i,f,o)).j = f;
 
-definition
+registration
  let I, O;
  let i,f be set;
  let o be Function of {i,f}, O;
  cluster I-TwoStatesMooreSM(i,f,o) -> calculating_type;
+ coherence
+ proof
+   set M = I-TwoStatesMooreSM(i,f,o);
+     for w1,w2 st w1.1 = w2.1 & len w1 = len w2 holds
+    GEN(w1, the InitS of M) = GEN(w2, the InitS of M)
+   proof
+     let w1,w2; assume
+A1:   w1.1 = w2.1 & len w1 = len w2;
+     reconsider p = GEN(w1, the InitS of M),
+                q = GEN(w2, the InitS of M) as FinSequence;
+A2:  p.1 = the InitS of M by FSM_1:def 2
+      .= q.1 by FSM_1:def 2;
+A3:  len p = len w1 + 1 & len q = len w1 + 1 by A1,FSM_1:def 2;
+       now let j be Nat; assume
+A4:   1 <= j;
+       then A5: j <> 0;
+         j = 1 or j > 1 by A4,AXIOMS:21;
+       then p.j = q.j or (j <= len p implies p.j = f & q.j = f)
+        by A1,A2,A3,A5,Th17;
+      hence j <= len p implies p.j = q.j;
+     end;
+     hence thesis by A3,FINSEQ_1:18;
+    end;
+   hence thesis by Th7;
+ end;
 end;
 
-definition
+
+registration
  let I, O;
  let i,f be set;
  let o be Function of {i,f}, O;
  cluster I-TwoStatesMooreSM(i,f,o) -> halting;
+ coherence
+  proof let s;
+      {i,f} = the carrier of I-TwoStatesMooreSM(i,f,o) by Def7;
+   then reconsider q = f as State of I-TwoStatesMooreSM(i,f,o) by TARSKI:def 2;
+   take q;
+   thus q is_accessible_via s
+     proof take w = <*> I;
+        <*s*>^w = <*s*> by FINSEQ_1:47;
+      then len (<*s*>^w) = 1 & 1 <= 1 by FINSEQ_1:56;
+      hence GEN(<*s*>^w,
+       the InitS of I-TwoStatesMooreSM(i,f,o)).(len (<*s*>^w)+1) = q
+        by Th17;
+     end;
+      the FinalS of I-TwoStatesMooreSM(i,f,o) = {f} by Def7;
+   hence thesis by TARSKI:def 1;
+  end;
 end;
+
 
 reserve n, m, o, p for non empty Nat,
         M for non empty Moore-SM_Final over I, O,
@@ -264,6 +343,7 @@ definition let I, O, M, s;
         for n st n < m & n <= len w+1 holds
          not GEN(w, the InitS of M).n in the FinalS of M;
 end;
+
 
 theorem :: FSM_2:19
  the InitS of M in the FinalS of M
@@ -343,15 +423,28 @@ theorem :: FSM_2:26
     (for x,y st x<0 & y<0 holds (the Tran of M).[the InitS of M, [x,y]] = -1)
  for x,y being Element of REAL holds max(sgn x,sgn y) is_result_of [x,y], M;
 
-definition
+registration
  let I, O;
  cluster calculating_type halting (non empty Moore-SM_Final over I, O);
+ existence
+  proof consider f being Function of {0, 1}, O;
+   take I-TwoStatesMooreSM(0,1,f);
+   thus thesis;
+  end;
 end;
 
-definition
+
+registration
  let I;
  cluster calculating_type halting (non empty SM_Final over I);
+ existence
+  proof consider O;
+   consider M being
+     calculating_type halting (non empty Moore-SM_Final over I, O);
+   take M; thus thesis;
+  end;
 end;
+
 
 definition
  let I, O;
@@ -363,6 +456,7 @@ definition
 
  it is_result_of s, M;
 end;
+
 
 theorem :: FSM_2:27
    for f being Function of {0, 1}, O holds

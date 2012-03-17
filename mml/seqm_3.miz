@@ -56,7 +56,7 @@ Lm1:n<m implies ex k st m=n+1+k
       then seq.n<seq.(n+1+k+1) by A4,AXIOMS:22;
       hence X[k+1] by XCMPLX_1:1;
      end;
-    thus for k holds X[k] from Ind(A2,A3);
+    thus for k holds X[k] from NAT_1:sch 1(A2,A3);
    end;
   thus (for n,k holds seq.n<seq.(n+1+k)) implies
                      for n,m st n<m holds seq.n<seq.m
@@ -91,7 +91,7 @@ Lm1:n<m implies ex k st m=n+1+k
         then seq.(n+1+k+1)<seq.n by A4,AXIOMS:22;
         hence X[k+1] by XCMPLX_1:1;
        end;
-      thus for k holds X[k] from Ind(A2,A3);
+      thus for k holds X[k] from NAT_1:sch 1(A2,A3);
      end;
     thus ((for n,k holds seq.(n+1+k)<seq.n) implies
                   for n,m st n<m holds seq.m<seq.n)
@@ -126,7 +126,7 @@ Lm1:n<m implies ex k st m=n+1+k
         then seq.n<=seq.(n+k+1) by A4,AXIOMS:22;
         hence X[k+1] by XCMPLX_1:1;
        end;
-      thus for k holds X[k] from Ind(A2,A3);
+      thus for k holds X[k] from NAT_1:sch 1(A2,A3);
      end;
     thus (for n,k holds seq.n<=seq.(n+k)) implies
                   for n,m st n<=m holds seq.n<=seq.m
@@ -161,7 +161,7 @@ Lm1:n<m implies ex k st m=n+1+k
         then seq.(n+k+1)<=seq.n by A4,AXIOMS:22;
         hence X[k+1] by XCMPLX_1:1;
        end;
-      thus for k holds X[k] from Ind(A2,A3);
+      thus for k holds X[k] from NAT_1:sch 1(A2,A3);
      end;
     thus ((for n,k holds seq.(n+k)<=seq.n) implies
                   for n,m st n<=m holds seq.m<=seq.n)
@@ -191,6 +191,7 @@ definition let f be PartFunc of NAT, REAL;
   attr f is non-increasing means :Def4:
    for m,n st m in dom f & n in dom f & m < n holds f.m >= f.n;
 end;
+
 
 Lm6: f is increasing iff for n being Nat holds f.n < f.(n+1)
   proof
@@ -265,6 +266,7 @@ definition let f be Function;
 :Def5: for n1,n2 being set st n1 in dom f & n2 in dom f holds f.n1=f.n2;
 end;
 
+
 definition let seq;
   redefine attr seq is constant means :Def6: ex r st for n holds seq.n=r;
  compatibility
@@ -287,10 +289,12 @@ A4:  n1 in dom seq & n2 in dom seq;
   end;
 end;
 
+
 definition let seq;
   attr seq is monotone means :Def7:
    seq is non-decreasing or seq is non-increasing;
 end;
+
 
 canceled 6;
 
@@ -464,7 +468,7 @@ theorem
          seq.(n+k)=seq.(n+k+1) by A8;
        hence X[k+1] by A11,XCMPLX_1:1;
       end;
-     thus for k holds X[k] from Ind(A9,A10);
+     thus for k holds X[k] from NAT_1:sch 1(A9,A10);
     end;
    thus (for n,k holds seq.n=seq.(n+k)) implies
                for n,m holds seq.n=seq.m
@@ -629,11 +633,12 @@ definition let IT be Relation;
   rng IT c= NAT;
 end;
 
-definition
+
+registration
   cluster increasing natural-yielding Real_Sequence;
 existence
  proof deffunc U(Nat) = $1;
-  consider seq such that A1:for n holds seq.n=U(n) from ExRealSeq;
+  consider seq such that A1:for n holds seq.n=U(n) from SEQ_1:sch 1;
   take seq;
      now let y; assume y in rng seq;
     then consider x such that A2:x in dom seq and
@@ -650,9 +655,11 @@ existence
  end;
 end;
 
+
 definition
   mode Seq_of_Nat is natural-yielding Real_Sequence;
 end;
+
 
 definition
  let seq,k;
@@ -661,7 +668,7 @@ func seq ^\k ->Real_Sequence means :Def9:
 existence
  proof deffunc U(Nat) = seq.($1+k);
   thus ex f being Real_Sequence st
-   for n holds f.n=U(n) from ExRealSeq;
+   for n holds f.n=U(n) from SEQ_1:sch 1;
  end;
 uniqueness
  proof
@@ -675,6 +682,7 @@ uniqueness
   hence seq1=seq2 by FUNCT_2:113;
  end;
 end;
+
 
 reserve Nseq,Nseq1,Nseq2 for increasing Seq_of_Nat;
 
@@ -730,6 +738,7 @@ definition let Nseq,n;
 coherence by Th29;
 end;
 
+
 definition let Nseq,seq;
   redefine func seq*Nseq -> Real_Sequence;
  coherence
@@ -744,6 +753,7 @@ definition let Nseq,seq;
    hence thesis by A3,FUNCT_2:def 1,RELSET_1:11;
   end;
 end;
+
 
 definition let Nseq,Nseq1;
   redefine func Nseq1*Nseq -> increasing Seq_of_Nat;
@@ -762,7 +772,8 @@ definition let Nseq,Nseq1;
   end;
 end;
 
-definition let Nseq,k;
+
+registration let Nseq,k;
   cluster Nseq ^\k -> increasing natural-yielding;
  coherence
   proof
@@ -781,6 +792,7 @@ definition let Nseq,k;
  end;
 end;
 
+
 ::
 :: DEFINITION OF SUBSEQUENCE
 ::
@@ -789,6 +801,7 @@ definition let seq,seq1;
   pred seq is_subsequence_of seq1 means :Def10:
    ex Nseq st seq=seq1*Nseq;
 end;
+
 
 definition let f be Real_Sequence;
   redefine attr f is increasing means
@@ -805,6 +818,7 @@ definition let f be Real_Sequence;
   compatibility by Lm9;
 end;
 
+
 canceled;
 
 theorem
@@ -817,7 +831,7 @@ theorem
      then k<Nseq.(k+1) by A3,AXIOMS:22;
      hence X[k+1] by NAT_1:38;
     end;
-   thus for k holds X[k] from Ind(A1,A2);
+   thus for k holds X[k] from NAT_1:sch 1(A1,A2);
   end;
 
 theorem
@@ -961,7 +975,7 @@ theorem
 theorem
    seq is_subsequence_of seq
   proof deffunc U(Nat) = $1;
-   consider seq1 such that A1:for n holds seq1.n=U(n) from ExRealSeq;
+   consider seq1 such that A1:for n holds seq1.n=U(n) from SEQ_1:sch 1;
       now let n;
        seq1.n=n & seq1.(n+1)=n+1 by A1;
      hence seq1.n<seq1.(n+1) by NAT_1:38;
@@ -980,7 +994,7 @@ theorem
 theorem
    seq ^\k is_subsequence_of seq
   proof deffunc U(Nat) = $1+k;
-   consider seq1 such that A1:for n holds seq1.n=U(n) from ExRealSeq;
+   consider seq1 such that A1:for n holds seq1.n=U(n) from SEQ_1:sch 1;
       now let n;
      A2:seq1.n=n+k & seq1.(n+1)=n+1+k by A1;
        n+k<n+k+1 by NAT_1:38;
@@ -1523,12 +1537,15 @@ theorem Th70:
      then A4:r(#)seq is bounded_above by A2,Th68;
      r(#)seq is bounded_below by A2,A3,Th69;
      hence r(#)seq is bounded by A4,SEQ_2:def 5;
+     end;
      suppose 0=r;
      hence r(#)seq is bounded by Th68;
+     end;
      suppose A5:r<0;
      then A6:r(#)seq is bounded_above by A2,Th69;
      r(#)seq is bounded_below by A2,A5,Th68;
      hence r(#)seq is bounded by A6,SEQ_2:def 5;
+    end;
     end;
    hereby assume A1:seq is bounded;
      then (-1)(#)seq is bounded by A0;
@@ -1780,8 +1797,9 @@ A2:  x in dom(X --> a) & y in dom(X --> a);
   hence (X --> a).x = a by A1,FUNCOP_1:13 .= (X --> a).y by A1,A2,FUNCOP_1:13;
  end;
 
-definition let X,x be set;
+registration let X,x be set;
  cluster X --> x -> constant;
  coherence by Th79;
 end;
+
 

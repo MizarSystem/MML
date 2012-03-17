@@ -40,14 +40,28 @@ theorem :: GRCAT_1:4
 
 ::  0b. Auxiliary schemes: partial functions
 
-scheme PartLambda2{X,Y,Z()->set,F(set,set)->set,P[set,set]}:
+scheme :: GRCAT_1:sch 1
+ PartLambda2{X,Y,Z()->set,F(set,set)->set,P[set,set]}:
  ex f being PartFunc of [:X(),Y():],Z()
   st (for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y])
    & (for x,y st [x,y] in dom f holds f.[x,y] = F(x,y))
 provided
- for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z();
+ for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z()
+proof
+  defpred R[set,set] means $1 in X() & $2 in Y() & P[$1,$2];
+  deffunc G(set,set) = F($1,$2);
+A2: for x,y st R[x,y] holds G(x,y) in Z() by A1;
+  consider f being PartFunc of [:X(),Y():],Z() such that
+  A3: (for x,y holds [x,y] in dom f iff x in X() & y in Y() & R[x,y]) and
+  A4: (for x,y st [x,y] in dom f holds f.[x,y] = G(x,y)) from PARTFUN1:sch 5
+(A2);
+  take f;
+  thus for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y] by A3;
+  thus for x,y st [x,y] in dom f holds f.[x,y] = F(x,y) by A4;
+end;
 
-scheme PartLambda2D{X,Y()->non empty set,Z()->set,F(set,set)->set,
+scheme :: GRCAT_1:sch 2
+ PartLambda2D{X,Y()->non empty set,Z()->set,F(set,set)->set,
  P[set,set]}: ex f being PartFunc of [:X(),Y():],Z()
   st (for x being Element of X(), y being Element of Y() holds
        [x,y] in dom f iff P[x,y])
@@ -55,7 +69,20 @@ scheme PartLambda2D{X,Y()->non empty set,Z()->set,F(set,set)->set,
  dom f holds f.[x,y] = F(x,y))
 provided
  for x being Element of X(), y being Element of Y() st P[x,y] holds
-     F(x,y) in Z();
+     F(x,y) in Z()
+proof
+  defpred R[set,set] means P[$1,$2];
+  deffunc G(set,set) = F($1,$2);
+A2: for x,y st x in X() & y in Y() & R[x,y] holds G(x,y) in Z() by A1;
+  consider f being PartFunc of [:X(),Y():],Z() such that
+A3: for x,y holds [x,y] in dom f iff x in X() & y in Y() & R[x,y] and
+A4: for x,y st [x,y] in dom f holds f.[x,y] = G(x,y) from PartLambda2(A2);
+  take f;
+  thus for x being Element of X(), y being Element of Y() holds
+       [x,y] in dom f iff P[x,y] by A3;
+  thus for x being Element of X(), y being Element of Y() st [x,y] in dom f
+       holds f.[x,y] = F(x,y) by A4;
+end;
 
 ::  0c. Auxiliary theorems: Trivial Group
 
@@ -69,9 +96,11 @@ theorem :: GRCAT_1:6
 theorem :: GRCAT_1:7
  LoopStr (# {{}},op2,Extract {} #) is midpoint_operator;
 
-definition
+registration
  cluster L_Trivial -> midpoint_operator;
+ coherence by Th7,ALGSTR_1:def 4;
 end;
+
 
 theorem :: GRCAT_1:8
      (for x being Element of L_Trivial holds x = {})
@@ -92,9 +121,17 @@ definition let C,O;
   union{Hom(a,b) where a is Object of C,b is Object of C : a in O & b in O};
 end;
 
-definition let C,O;
+
+registration let C,O;
  cluster Morphs(O) -> non empty;
+ coherence
+   proof
+    union{Hom(a,b) where a is Object of C,b is Object of C : a in O & b in O}
+  = Morphs O by Def5;
+    hence thesis by CAT_2:28;
+   end;
 end;
+
 
 definition let C,O;
  func dom(O) -> Function of Morphs(O),O equals
@@ -111,6 +148,7 @@ definition let C,O;
    (the Id of C)|O;
 end;
 
+
 theorem :: GRCAT_1:9
  CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#)
   is_full_subcategory_of C;
@@ -121,9 +159,16 @@ definition let C,O;
    CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#);
 end;
 
-definition let C,O;
+
+registration let C,O;
  cluster cat(O) -> strict;
+ coherence
+  proof
+      CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#) = cat O by Def10;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: GRCAT_1:10
  the Objects of cat(O) = O;
@@ -135,6 +180,7 @@ definition let G be 1-sorted;
 :: GRCAT_1:def 11
    id the carrier of G;
 end;
+
 
 theorem :: GRCAT_1:11
  for G being non empty 1-sorted,
@@ -150,11 +196,13 @@ definition let G,H be non empty ZeroStr;
    (the carrier of G) --> 0.H;
 end;
 
+
 definition let G,H be non empty LoopStr; let f be map of G,H;
  attr f is additive means
 :: GRCAT_1:def 13
   for x,y being Element of G holds f.(x+y) = f.x+f.y;
 end;
+
 
 theorem :: GRCAT_1:13
   comp L_Trivial = op1;
@@ -182,6 +230,7 @@ definition
                           Fun -> map of the Dom, the Cod #);
 end;
 
+
 definition let f be GroupMorphismStr;
  func dom(f) -> AddGroup equals
 :: GRCAT_1:def 14
@@ -191,11 +240,13 @@ definition let f be GroupMorphismStr;
    the Cod of f;
 end;
 
+
 definition let f be GroupMorphismStr;
  func fun(f) -> map of dom(f),cod(f) equals
 :: GRCAT_1:def 16
    the Fun of f;
 end;
+
 
 theorem :: GRCAT_1:17
   for f being GroupMorphismStr,
@@ -209,8 +260,14 @@ definition let G,H;
    GroupMorphismStr(# G,H,ZeroMap(G,H)#);
 end;
 
-definition let G,H;
+
+registration let G,H;
  cluster ZERO(G,H) -> strict;
+  coherence
+  proof
+      ZERO(G,H) = GroupMorphismStr(# G,H,ZeroMap(G,H)#) by Def17;
+    hence thesis;
+  end;
 end;
 
 definition let IT be GroupMorphismStr;
@@ -219,20 +276,40 @@ definition let IT be GroupMorphismStr;
   fun(IT) is additive;
 end;
 
-definition
+
+registration
  cluster strict GroupMorphism-like GroupMorphismStr;
+ existence
+  proof
+    consider G,H;
+    set z = ZERO(G,H);
+      dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H) by Lm1;
+    then fun(z) is additive by Th16;
+    then z is GroupMorphism-like by Def18;
+   hence thesis;
+  end;
 end;
+
 
 definition
  mode GroupMorphism is GroupMorphism-like GroupMorphismStr;
 end;
 
+
 theorem :: GRCAT_1:18
  for F being GroupMorphism holds the Fun of F is additive;
 
-definition let G,H;
+registration let G,H;
  cluster ZERO(G,H) -> GroupMorphism-like;
+ coherence
+  proof
+    set z = ZERO(G,H);
+      dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H) by Lm1;
+    then fun(z) is additive by Th16;
+    hence thesis by Def18;
+  end;
 end;
+
 
 definition let G,H;
  mode Morphism of G,H -> GroupMorphism means
@@ -240,9 +317,17 @@ definition let G,H;
   dom(it) = G & cod(it) = H;
 end;
 
-definition let G,H;
+
+registration let G,H;
  cluster strict Morphism of G,H;
+  existence
+   proof
+       dom(ZERO(G,H)) = G & cod(ZERO(G,H)) = H by Lm1;
+     then ZERO(G,H) is Morphism of G,H by Def19;
+    hence thesis;
+   end;
 end;
+
 
 theorem :: GRCAT_1:19
  for f being strict GroupMorphismStr
@@ -262,13 +347,21 @@ definition let G;
    GroupMorphismStr(# G,G,id G#);
 end;
 
-definition let G;
+
+registration let G;
  cluster ID G -> strict;
+  coherence
+   proof
+       ID G = GroupMorphismStr(# G,G,id G#) by Def20;
+     hence thesis;
+   end;
 end;
+
 
 definition let G,H;
  redefine func ZERO(G,H) -> strict Morphism of G,H;
 end;
+
 
 theorem :: GRCAT_1:22
  for F being Morphism of G,H ex f being map of G,H
@@ -304,6 +397,7 @@ definition let G,F be GroupMorphism;
        holds it = GroupMorphismStr(# G1,G3,g*f#);
 end;
 
+
 canceled;
 
 theorem :: GRCAT_1:28
@@ -317,6 +411,7 @@ definition let G1,G2,G3 be AddGroup,
                F be Morphism of G1,G2;
  redefine func G*F -> strict Morphism of G1,G3;
 end;
+
 
 theorem :: GRCAT_1:29
  for G1,G2,G3 being AddGroup,
@@ -362,13 +457,23 @@ definition let IT be set;
   for x being set st x in IT holds x is strict AddGroup;
 end;
 
-definition
+
+registration
  cluster Group_DOMAIN-like non empty set;
+ existence
+  proof
+    set D = {L_Trivial};
+A1: for x be set st x in D holds x is strict AddGroup by TARSKI:def 1;
+    take D;
+    thus thesis by A1,Def22;
+  end;
 end;
+
 
 definition
  mode Group_DOMAIN is Group_DOMAIN-like non empty set;
 end;
+
 
 reserve V for Group_DOMAIN;
 
@@ -376,9 +481,16 @@ definition let V;
  redefine mode Element of V -> AddGroup;
 end;
 
-definition let V;
+
+registration let V;
  cluster strict Element of V;
+  existence
+   proof consider v being Element of V;
+       v is strict AddGroup by Def22;
+    hence thesis;
+   end;
 end;
+
 
 ::  3. Domains of morphisms
 
@@ -388,21 +500,39 @@ definition let IT be set;
    for x being set st x in IT holds x is strict GroupMorphism;
 end;
 
-definition
+
+registration
  cluster GroupMorphism_DOMAIN-like non empty set;
+   existence
+    proof
+      consider G;
+      take {ID G};
+        for x being set st x in {ID G} holds x is strict GroupMorphism
+ by TARSKI:def 1;
+      hence thesis by Def23;
+    end;
 end;
+
 
 definition
  mode GroupMorphism_DOMAIN is GroupMorphism_DOMAIN-like non empty set;
 end;
 
+
 definition let M be GroupMorphism_DOMAIN;
  redefine mode Element of M -> GroupMorphism;
 end;
 
-definition let M be GroupMorphism_DOMAIN;
+
+registration let M be GroupMorphism_DOMAIN;
  cluster strict Element of M;
+  existence
+   proof consider m being Element of M;
+       m is strict GroupMorphism by Def23;
+    hence thesis;
+   end;
 end;
+
 
 canceled 2;
 
@@ -414,6 +544,7 @@ definition let G,H;
 :: GRCAT_1:def 24
   for x being Element of it holds x is strict Morphism of G,H;
 end;
+
 
 theorem :: GRCAT_1:38
  D is GroupMorphism_DOMAIN of G,H
@@ -428,24 +559,37 @@ definition let G,H be 1-sorted;
  for x being set st x in it holds x is map of G,H;
 end;
 
+
 definition let G,H be 1-sorted;
  func Maps(G,H) -> MapsSet of G,H equals
 :: GRCAT_1:def 26
   Funcs(the carrier of G, the carrier of H);
 end;
 
-definition let G be 1-sorted, H be non empty 1-sorted;
+
+registration let G be 1-sorted, H be non empty 1-sorted;
  cluster Maps(G,H) -> non empty;
+ coherence
+  proof Maps(G,H) = Funcs(the carrier of G, the carrier of H) by Def26;
+   hence thesis;
+  end;
 end;
 
-definition let G be 1-sorted, H be non empty 1-sorted;
+
+registration let G be 1-sorted, H be non empty 1-sorted;
  cluster non empty MapsSet of G,H;
+ existence
+  proof Maps(G,H) is non empty;
+   hence thesis;
+  end;
 end;
+
 
 definition let G be 1-sorted, H be non empty 1-sorted;
            let M be non empty MapsSet of G,H;
  redefine mode Element of M -> map of G,H;
 end;
+
 
 definition let G,H;
  func Morphs(G,H) -> GroupMorphism_DOMAIN of G,H means
@@ -453,13 +597,21 @@ definition let G,H;
   x in it iff x is strict Morphism of G,H;
 end;
 
+
 definition let G,H; let M be GroupMorphism_DOMAIN of G,H;
  redefine mode Element of M -> Morphism of G,H;
 end;
 
-definition let G,H; let M be GroupMorphism_DOMAIN of G,H;
+
+registration let G,H; let M be GroupMorphism_DOMAIN of G,H;
  cluster strict Element of M;
+  existence
+   proof consider m being Element of M;
+       m is strict Morphism of G,H by Def24;
+    hence thesis;
+   end;
 end;
+
 
 ::  4a. Category of groups - objects
 
@@ -475,6 +627,7 @@ definition let x,y;
     & x4 = the Zero of G;
 end;
 
+
 theorem :: GRCAT_1:40
  for x,y1,y2 being set st GO x,y1 & GO x,y2 holds y1 = y2;
 
@@ -487,19 +640,29 @@ definition let UN;
   for y holds y in it iff ex x st x in UN & GO x,y;
 end;
 
+
 theorem :: GRCAT_1:42
  L_Trivial in GroupObjects(UN);
 
-definition let UN;
+registration let UN;
  cluster GroupObjects(UN) -> non empty;
+ coherence by Th42;
 end;
+
 
 theorem :: GRCAT_1:43
  for x being Element of GroupObjects(UN) holds x is strict AddGroup;
 
-definition let UN;
+registration let UN;
   cluster GroupObjects(UN) -> Group_DOMAIN-like;
+   coherence
+    proof
+        for x being set st x in GroupObjects(UN) holds x is strict AddGroup
+ by Th43;
+      hence thesis by Def22;
+    end;
 end;
+
 
 ::  4b. Category of groups - morphisms
 
@@ -510,6 +673,7 @@ definition let V;
   st x is strict Morphism of G,H;
 end;
 
+
       ::
       ::  4c. Category of groups - dom,cod,id
       ::
@@ -519,11 +683,13 @@ redefine func dom(F) -> strict Element of V;
  func cod(F) -> strict Element of V;
 end;
 
+
 definition let V; let G be Element of V;
  func ID(G) -> strict Element of Morphs(V) equals
 :: GRCAT_1:def 31
    ID(G);
 end;
+
 
 definition let V;
  func dom(V) -> Function of Morphs(V),V means
@@ -536,6 +702,7 @@ definition let V;
 :: GRCAT_1:def 34
   for G being Element of V holds it.G = ID(G);
  end;
+
 
       ::
       ::  4d. Category of groups - superposition
@@ -559,6 +726,7 @@ definition let V;
     holds it.[g,f] = g*f);
 end;
 
+
       ::
       ::  4e. Definition of Category of groups
       ::
@@ -571,9 +739,18 @@ definition let UN;
                    comp(GroupObjects(UN)),ID(GroupObjects(UN))#);
 end;
 
-definition let UN;
+
+registration let UN;
  cluster GroupCat(UN) -> strict;
+ coherence
+ proof
+    GroupCat UN = CatStr(# GroupObjects(UN),Morphs(GroupObjects(UN)),
+   dom(GroupObjects(UN)),cod(GroupObjects(UN)),
+   comp(GroupObjects(UN)),ID(GroupObjects(UN))#) by Def36;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: GRCAT_1:46
   for f,g being Morphism of GroupCat(UN) holds
@@ -611,9 +788,26 @@ theorem :: GRCAT_1:48
            & (dom f = dom g iff dom f' = dom g')
            & (cod f = cod g iff cod f' = cod g');
 
-definition let UN;
+registration let UN;
  cluster GroupCat(UN) -> Category-like;
+ coherence
+  proof
+         ( for f,g being Morphism of GroupCat(UN)
+          holds [g,f] in dom(the Comp of GroupCat(UN)) iff dom g = cod f )
+     & ( for f,g being Morphism of GroupCat(UN) st dom g = cod f
+          holds dom(g*f) = dom f & cod (g*f) = cod g )
+     & ( for f,g,h being Morphism of GroupCat(UN)
+          st dom h = cod g & dom g = cod f holds h*(g*f) = (h*g)*f )
+     & ( for b being Object of GroupCat(UN)
+          holds dom id b = b & cod id b = b &
+           (for f being Morphism of GroupCat(UN)
+             st cod f = b holds (id b)*f = f) &
+           (for g being Morphism of GroupCat(UN)
+             st dom g = b holds g*(id b) = g) ) by Lm2,Lm3,Lm4,Th46;
+   hence thesis by CAT_1:29;
+  end;
 end;
+
 
 definition let UN;
  func AbGroupObjects(UN) -> Subset of the Objects of GroupCat(UN) equals
@@ -622,12 +816,15 @@ definition let UN;
                  : ex H being AbGroup st G = H};
 end;
 
+
 theorem :: GRCAT_1:51
  L_Trivial in AbGroupObjects(UN);
 
-definition let UN;
+registration let UN;
  cluster AbGroupObjects(UN) -> non empty;
+ coherence by Th51;
 end;
+
 
 definition let UN;
  func AbGroupCat(UN) -> Subcategory of GroupCat(UN) equals
@@ -635,9 +832,16 @@ definition let UN;
    cat(AbGroupObjects(UN));
 end;
 
-definition let UN;
+
+registration let UN;
  cluster AbGroupCat(UN) -> strict;
+ coherence
+ proof
+    AbGroupCat(UN) = cat(AbGroupObjects(UN)) by Def38;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: GRCAT_1:52
  the Objects of AbGroupCat(UN) = AbGroupObjects(UN);
@@ -651,9 +855,29 @@ definition let UN;
                  : ex H being midpoint_operator AbGroup st G = H};
 end;
 
-definition let UN;
+
+registration let UN;
  cluster MidOpGroupObjects(UN) -> non empty;
+ coherence
+  proof
+    set D2 = the Objects of AbGroupCat(UN);
+    set D1 = {G where G is Element of D2
+               : ex H being midpoint_operator AbGroup st G = H};
+    set T = L_Trivial;
+      D2 = AbGroupObjects(UN) by Th52;
+    then T in D2 by Th51;
+    then T in D1;
+    then reconsider D1 as non empty set;
+      now
+      let x be set;
+      assume x in D1;
+      then ex G being Element of D2 st
+ x = G & ex H being midpoint_operator AbGroup st G = H;
+      hence x in D2;end;
+    hence thesis by Def39;
+  end;
 end;
+
 
 definition let UN;
  func MidOpGroupCat(UN) -> Subcategory of AbGroupCat(UN) equals
@@ -661,9 +885,16 @@ definition let UN;
   cat(MidOpGroupObjects(UN));
 end;
 
-definition let UN;
+
+registration let UN;
  cluster MidOpGroupCat(UN) -> strict;
+ coherence
+ proof
+     MidOpGroupCat(UN) = cat(MidOpGroupObjects(UN)) by Def40;
+   hence thesis;
+ end;
 end;
+
 
 theorem :: GRCAT_1:53
   the Objects of MidOpGroupCat(UN) = MidOpGroupObjects(UN);

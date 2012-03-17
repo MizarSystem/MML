@@ -40,24 +40,45 @@ theorem :: FINSEQ_5:5
     st f is one-to-one & y1 in rng f & y2 in rng f & f"{y1} = f"{y2}
    holds y1 = y2;
 
-definition let x be set;
+registration let x be set;
  cluster <*x*> -> non empty;
+  coherence
+ proof <*x*> = { [1,x] } by FINSEQ_1:52; hence thesis; end;
 end;
 
-definition
+
+registration
  cluster empty -> trivial set;
+  coherence by REALSET1:def 12;
 end;
 
-definition let x be set;
+
+registration let x be set;
  cluster <*x*> -> trivial;
+  coherence
+ proof len <*x*> = 1 by FINSEQ_1:56;
+  hence thesis by SPPOL_1:2;
+ end;
 
  let y be set;
  cluster <*x,y*> -> non trivial;
+  coherence
+ proof len <*x,y*> = 2 by FINSEQ_1:61;
+  hence thesis by SPPOL_1:2;
+ end;
 end;
 
-definition
+
+registration
  cluster one-to-one non empty FinSequence;
+  existence
+ proof consider x being set;
+  set f = <*x*>;
+    f is non empty & f is one-to-one by FINSEQ_3:102;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: FINSEQ_5:6
    for f being non empty FinSequence holds 1 in dom f & len f in dom f;
@@ -68,8 +89,21 @@ theorem :: FINSEQ_5:7
 theorem :: FINSEQ_5:8
   for x being set, f being FinSequence holds len(<*x*>^f) = 1 + len f;
 
-scheme domSeqLambda{A()->Nat,F(set) -> set}:
-   ex p being FinSequence st len p = A() & for k st k in dom p holds p.k=F(k);
+scheme :: FINSEQ_5:sch 1
+ domSeqLambda{A()->Nat,F(set) -> set}:
+   ex p being FinSequence st len p = A() & for k st k in dom p holds p.k=F(k)
+proof
+  deffunc G(Nat) = F($1);
+  consider p being FinSequence such that
+A1:   len p = A() and
+A2:   for k st k in Seg A() holds p.k=G(k) from FINSEQ_1:sch 2;
+  take p;
+  thus len p = A() by A1;
+  let k;
+  assume k in dom p;
+  then k in Seg A() by A1,FINSEQ_1:def 3;
+  hence thesis by A2;
+ end;
 
 canceled;
 
@@ -87,9 +121,16 @@ theorem :: FINSEQ_5:12
 
 reserve D for non empty set, p for Element of D, f,g for FinSequence of D;
 
-definition let D be non empty set;
+registration let D be non empty set;
  cluster one-to-one non empty FinSequence of D;
+  existence
+ proof consider x being Element of D;
+  set f = <*x*>;
+    f is non empty & f is one-to-one by FINSEQ_3:102;
+  hence thesis;
+ end;
 end;
+
 
 :: FINSEQ_1:17
 
@@ -136,9 +177,11 @@ theorem :: FINSEQ_5:23
 theorem :: FINSEQ_5:24
      i+1 = len f implies f = (f|i)^<*f/.len f*>;
 
-definition let i,D; let f be one-to-one FinSequence of D;
+registration let i,D; let f be one-to-one FinSequence of D;
  cluster f|i -> one-to-one;
+   coherence by Lm2;
 end;
+
 
 theorem :: FINSEQ_5:25
  for D being set, f, g being FinSequence of D holds
@@ -180,9 +223,11 @@ theorem :: FINSEQ_5:35
 theorem :: FINSEQ_5:36
    rng(f/^n) c= rng f;
 
-definition let i,D; let f be one-to-one FinSequence of D;
+registration let i,D; let f be one-to-one FinSequence of D;
  cluster f/^i -> one-to-one;
+  coherence by Lm3;
 end;
+
 
 theorem :: FINSEQ_5:37
    f is one-to-one implies rng(f|n) misses rng(f/^n);
@@ -214,6 +259,7 @@ definition let D, f; let p be set;
   f|(p..f);
 end;
 
+
 theorem :: FINSEQ_5:45
    p in rng f implies len(f-:p) = p..f;
 
@@ -236,15 +282,21 @@ theorem :: FINSEQ_5:50
 theorem :: FINSEQ_5:51
      rng(f-:p) c= rng f;
 
-definition let D,p; let f be one-to-one FinSequence of D;
+registration let D,p; let f be one-to-one FinSequence of D;
  cluster f-:p -> one-to-one;
+  coherence
+ proof f-:p = f|(p..f) by Def1;
+  hence thesis;
+ end;
 end;
+
 
 definition let D, f, p;
  func f:-p -> FinSequence of D equals
 :: FINSEQ_5:def 2
   <*p*>^(f/^p..f);
 end;
+
 
 theorem :: FINSEQ_5:52
   p in rng f implies ex i st i+1 = p..f & f:-p = f/^i;
@@ -255,9 +307,11 @@ theorem :: FINSEQ_5:53
 theorem :: FINSEQ_5:54
   p in rng f & j+1 in dom(f:-p) implies j+p..f in dom f;
 
-definition let D,p,f;
+registration let D,p,f;
  cluster f:-p -> non empty;
+  coherence by Lm4;
 end;
+
 
 theorem :: FINSEQ_5:55
    p in rng f & j+1 in dom(f:-p) implies (f:-p)/.(j+1) = f/.(j+p..f);
@@ -280,6 +334,7 @@ definition let f be FinSequence;
  len it = len f & for i st i in dom it holds it.i = f.(len f - i + 1);
 end;
 
+
 theorem :: FINSEQ_5:60
    for f being FinSequence holds dom f = dom Rev f & rng f = rng Rev f;
 
@@ -291,9 +346,15 @@ theorem :: FINSEQ_5:62
     st i in dom f & i+j = len f + 1
   holds j in dom Rev f;
 
-definition let f be empty FinSequence;
+registration let f be empty FinSequence;
  cluster Rev f -> empty;
+  coherence
+ proof len {} = 0 by FINSEQ_1:25;
+  then len (Rev {}) = 0 by Def3;
+  hence thesis by FINSEQ_1:25;
+ end;
 end;
+
 
 theorem :: FINSEQ_5:63
      for x being set holds Rev <*x*> = <*x*>;
@@ -305,9 +366,29 @@ theorem :: FINSEQ_5:65
   for f being FinSequence
    holds f.1 = (Rev f).(len f) & f.(len f) = (Rev f).1;
 
-definition let f be one-to-one FinSequence;
+registration let f be one-to-one FinSequence;
  cluster Rev f -> one-to-one;
+  coherence
+ proof
+  set g = Rev f;
+  let x1,x2 be set such that
+A1:  x1 in dom g & x2 in dom g and
+A2:  g.x1 = g.x2;
+  reconsider i1 = x1, i2 = x2 as Nat by A1;
+A3:  dom g = Seg len g by FINSEQ_1:def 3;
+A4:  len g = len f by Def3;
+  then i1 <= len f & i2 <= len f by A1,FINSEQ_3:27;
+  then reconsider i1' = len f - i1 + 1, i2' = len f - i2 + 1 as Nat by Th1;
+    dom f = Seg len f by FINSEQ_1:def 3;
+then A5:  i1' in dom f & i2' in dom f by A1,A3,A4,Th2;
+    f.i1' = g.x1 by A1,Def3
+            .= f.i2' by A1,A2,Def3;
+  then i1' = i2' by A5,FUNCT_1:def 8;
+  then len f - i1 = len f - i2 by XCMPLX_1:2;
+  hence x1 = x2 by XCMPLX_1:20;
+ end;
 end;
+
 
 theorem :: FINSEQ_5:66
   for f being FinSequence, x being set holds Rev(f^<*x*>) = <*x*>^(Rev f);
@@ -318,6 +399,7 @@ theorem :: FINSEQ_5:67
 definition let D,f;
  redefine func Rev f -> FinSequence of D;
 end;
+
 
 theorem :: FINSEQ_5:68
      f is non empty implies f/.1 = (Rev f)/.len f & f/.len f = (Rev f)/.1;
@@ -331,6 +413,7 @@ definition let D,f,p,n;
   (f|n)^<*p*>^(f/^n);
 end;
 
+
 theorem :: FINSEQ_5:70
      Ins(f,0,p) = <*p*>^f;
 
@@ -343,9 +426,15 @@ theorem :: FINSEQ_5:72
 theorem :: FINSEQ_5:73
    rng Ins(f,n,p) = {p} \/ rng f;
 
-definition let D,f,n,p;
+registration let D,f,n,p;
  cluster Ins(f,n,p) -> non empty;
+  coherence
+ proof
+    len(Ins(f,n,p)) = len f + 1 by Th72;
+  hence thesis by FINSEQ_1:25;
+ end;
 end;
+
 
 theorem :: FINSEQ_5:74
      p in rng Ins(f,n,p);

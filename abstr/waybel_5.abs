@@ -65,10 +65,12 @@ definition
   mode DoubleIndexedSet of K, D is ManySortedFunction of K, (J --> D);
 end;
 
+
 definition
   let J be set, K be ManySortedSet of J, S be 1-sorted;
   mode DoubleIndexedSet of K, S is DoubleIndexedSet of K, the carrier of S;
 end;
+
 
 theorem :: WAYBEL_5:6
   for J, D being set, K being ManySortedSet of J
@@ -84,18 +86,43 @@ definition
   redefine func F.j -> Function of K.j, D;
 end;
 
-definition
+
+registration
   let J, D be non empty set, K be non-empty ManySortedSet of J;
   let F be DoubleIndexedSet of K, D;
   let j be Element of J;
   cluster rng(F.j) -> non empty;
+  correctness
+  proof
+      dom(F.j) = K.j by FUNCT_2:def 1;
+    hence rng(F.j) is non empty by RELAT_1:65;
+  end;
 end;
 
-definition
+
+registration
   let J be set, D be non empty set;
   let K be non-empty ManySortedSet of J;
   cluster -> non-empty DoubleIndexedSet of K, D;
+  correctness
+  proof
+    let F be DoubleIndexedSet of K, D;
+      for j being set st j in dom F holds F.j is non empty
+    proof
+      let j be set;
+      assume j in dom F;
+    then A1: j in J by PBOOLE:def 3;
+    then A2: K.j is non empty by PBOOLE:def 16;
+      consider k being Element of K.j;
+        F.j is Function of K.j, D by A1,Th6;
+      then dom(F.j) = K.j by FUNCT_2:def 1;
+      then [k, (F.j).k] in F.j by A2,FUNCT_1:def 4;
+      hence thesis;
+    end;
+    hence thesis by UNIALG_1:def 6;
+  end;
 end;
+
 
 theorem :: WAYBEL_5:7
   for F being Function-yielding Function
@@ -124,16 +151,35 @@ theorem :: WAYBEL_5:10
     holds
    (Frege F).f is Function of J, D;
 
-definition
+registration
   let f be non-empty Function;
   cluster doms f -> non-empty;
+  correctness
+  proof
+      for j being set st j in dom doms f holds (doms f).j is non empty
+    proof
+      let j be set;
+      assume that
+    A1: j in dom doms f and
+    A2: (doms f).j is empty;
+      A3: j in f"SubFuncs rng f by A1,FUNCT_6:def 2;
+    then A4: j in dom f & f.j is Function by FUNCT_6:28;
+      reconsider fj = f.j as Function by A3,FUNCT_6:28;
+        {} = dom fj by A2,A4,FUNCT_6:31;
+      then f.j = {} by RELAT_1:64;
+      hence contradiction by A4,UNIALG_1:def 6;
+    end;
+    hence thesis by UNIALG_1:def 6;
+  end;
 end;
+
 
 definition
   let J, D be set, K be ManySortedSet of J;
   let F be DoubleIndexedSet of K, D;
   redefine func Frege F -> DoubleIndexedSet of (product doms F --> J), D;
 end;
+
 
 definition
   let J, D be non empty set, K be non-empty ManySortedSet of J;
@@ -142,6 +188,7 @@ definition
   let f be Element of product doms F;
   redefine func G.f -> Function of J, D;
 end;
+
 
 definition
   let L be non empty RelStr;
@@ -157,25 +204,22 @@ definition
   for x st x in dom F holds it.x = //\(F.x, L);
 end;
 
-definition
+
+notation
   let J be set, K be ManySortedSet of J, L be non empty RelStr;
   let F be DoubleIndexedSet of K, L;
-  redefine func \//(F, L);
-  synonym Sups F;
+  synonym Sups F for \//(F, L);
+  synonym Infs F for /\\(F, L);
+  end;
 
-  redefine func /\\(F, L);
-  synonym Infs F;
-end;
 
-definition
+notation
   let I, J be set, L be non empty RelStr;
   let F be DoubleIndexedSet of (I --> J), L;
-  redefine func \//(F, L);
-  synonym Sups F;
+  synonym Sups F for \//(F, L);
+  synonym Infs F for /\\(F, L);
+  end;
 
-  redefine func /\\(F, L);
-  synonym Infs F;
-end;
 
 theorem :: WAYBEL_5:11
   for L being non empty RelStr
@@ -206,13 +250,26 @@ theorem :: WAYBEL_5:14
    (x in rng Sups F iff ex j being Element of J st x = Sup(F.j)) &
    (x in rng Infs F iff ex j being Element of J st x = Inf(F.j));
 
-definition
+registration
   let J be non empty set, K be ManySortedSet of J, L be non empty RelStr;
   let F be DoubleIndexedSet of K, L;
   cluster rng Sups F -> non empty;
+  correctness
+  proof
+    consider j being Element of J;
+      Sup(F.j) in rng Sups F by Th14;
+    hence thesis;
+  end;
 
   cluster rng Infs F -> non empty;
+  correctness
+  proof
+    consider j being Element of J;
+      Inf(F.j) in rng Infs F by Th14;
+    hence thesis;
+  end;
 end;
+
 
 reserve L for complete LATTICE,
         a, b, c for Element of L,
@@ -256,6 +313,7 @@ definition
   let F be Function of [:J, K:], D;
   redefine func curry F -> DoubleIndexedSet of (J --> K), D;
 end;
+
 
 reserve J, K, D for non empty set,
         j for Element of J,
@@ -307,25 +365,92 @@ definition ::Definition 2.4
      Inf Sups F = Sup Infs Frege F;
 end;
 
+
 reserve J for non empty set,
 
         K for non-empty ManySortedSet of J;
 
 
-definition
+registration
   cluster trivial -> completely-distributive (non empty Poset);
+  coherence
+  proof
+    let L be non empty Poset;
+    assume
+  A1: L is trivial;
+    consider x being Element of L;
+
+    thus L is complete
+    proof
+      let X be set;
+      take x;
+      thus X is_<=_than x
+      proof
+        let y be Element of L;
+        thus y in X implies y <= x by A1,REALSET1:def 20;
+      end;
+      let y be Element of L;
+        y = x by A1,REALSET1:def 20;
+      hence thesis by ORDERS_1:24;
+    end;
+    then L is complete (non empty Poset);
+    then reconsider L'= L as complete LATTICE;
+
+      for x being Element of L' holds x = sup waybelow x
+       by A1,REALSET1:def 20;
+  then A2: L' is satisfying_axiom_of_approximation by WAYBEL_3:def 5;
+      for x being Element of L' holds waybelow x is non empty directed;
+    then reconsider L' as continuous LATTICE by A2,WAYBEL_3:def 6;
+
+      for J being non empty set, K being non-empty ManySortedSet of J
+    for F being DoubleIndexedSet of K, L'
+      holds
+     Inf Sups F = Sup Infs(Frege F)
+    proof
+      let J be non empty set, K be non-empty ManySortedSet of J;
+      let F be DoubleIndexedSet of K, L';
+
+        for j being Element of J holds rng(F.j) is directed
+      proof
+        let j be Element of J;
+          for x, y being Element of L st x in rng(F.j) & y in rng(F.j)
+          ex z being Element of L st z in rng(F.j) & x <= z & y <= z
+        proof
+          let x, y be Element of L;
+          assume x in rng(F.j) & y in rng(F.j);
+          consider z being Element of rng(F.j);
+          reconsider z as Element of L;
+          take z;
+          thus thesis by A1,REALSET1:def 20;
+        end;
+        hence rng(F.j) is directed by WAYBEL_0:def 1;
+      end;
+      hence Inf Sups F = Sup Infs(Frege F) by Lm8;
+    end;
+    hence thesis;
+  end;
 end;
 
-definition
+
+registration
   cluster completely-distributive LATTICE;
+  existence
+  proof
+    consider x being set, R be Order of {x};
+      RelStr(#{x},R#) is trivial non empty RelStr;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL_5:24  ::Corollary 2.5
   for L being completely-distributive LATTICE holds L is continuous;
 
-definition
+registration
   cluster completely-distributive -> complete continuous LATTICE;
+  correctness by Def3,Th24;
 end;
+
 
 theorem :: WAYBEL_5:25
   for L being non empty antisymmetric transitive with_infima RelStr
@@ -342,9 +467,24 @@ theorem :: WAYBEL_5:26
     holds
    x "/\" sup X = "\/"({x"/\"y where y is Element of L: y in X}, L);
 
-definition
+registration
   cluster completely-distributive -> Heyting LATTICE;
+  correctness
+  proof
+    let L be LATTICE;
+    assume L is completely-distributive;
+    then reconsider L as completely-distributive LATTICE;
+      for X being Subset of L
+    for x being Element of L
+      holds
+     x"/\" sup X = "\/"({x"/\"
+y where y is Element of L: y in X}, L) by Th26;
+     then for x being Element of L holds x "/\" has_an_upper_adjoint by
+WAYBEL_1:67;
+     hence thesis by WAYBEL_1:def 19;
+  end;
 end;
+
 
 :: For distributivity confer WAYBEL_1.
 
@@ -356,6 +496,7 @@ definition ::Definition 2.6
   mode CLSubFrame of L is infs-inheriting directed-sups-inheriting
     (non empty full SubRelStr of L);
 end;
+
 
 theorem :: WAYBEL_5:27
   for F being DoubleIndexedSet of K, L st
@@ -373,23 +514,27 @@ theorem :: WAYBEL_5:29
       holds
      S is complete LATTICE;
 
-definition
+notation
   let J be set, y be set;
-  redefine func J --> y;
-  synonym J => y;
+  synonym J => y for J --> y;
+  end;
+
+
+notation
+  let J be set, y be set;
+  synonym J => y for J --> y ;
 end;
 
 definition
   let J be set, y be set;
-  redefine func J --> y -> ManySortedSet of J;
-
-  synonym J => y;
-end;
+  redefine func J => y -> ManySortedSet of J;
+  end;
 
 definition
   let A, B, J be set, f be Function of A, B;
   redefine func J => f -> ManySortedFunction of (J --> A), (J --> B);
 end;
+
 
 theorem :: WAYBEL_5:30
   for A, B being set

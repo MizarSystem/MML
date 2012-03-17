@@ -25,14 +25,37 @@ definition let r be number;
     r in REAL;
 end;
 
-definition
+
+registration
   cluster natural -> real number;
+coherence
+  proof
+    let x be number;
+    assume x is natural;
+    then x in NAT by ORDINAL2:def 21;
+    hence x in REAL;
+  end;
   cluster real -> complex number;
+coherence
+  proof
+    let x be number;
+    assume x is real;
+    then x in REAL by Def1;
+    hence x in COMPLEX by NUMBERS:def 2,XBOOLE_0:def 2;
+  end;
 end;
 
-definition
+
+registration
   cluster real number;
+existence
+ proof
+   consider r being Element of REAL;
+   take r;
+   thus r in REAL;
+ end;
 end;
+
 
 definition let x,y be real number;
   pred x <= y means
@@ -44,10 +67,11 @@ definition let x,y be real number;
   otherwise y in REAL+ & x in [:{0},REAL+:];
   reflexivity;
   connectedness;
-  synonym y >= x;
-  antonym y < x;
-  antonym x > y;
-end;
+  end;
+notation let x,y be real number;
+  synonym y >= x for x <= y ; antonym y < x for x <= y ; antonym x > y for
+ x <= y ; end;
+
 
 definition let x be real number;
   attr x is positive means
@@ -58,122 +82,421 @@ definition let x be real number;
      x < 0;
 end;
 
-definition let x be real number;
+registration let x be real number;
   cluster -x -> real;
+ coherence
+  proof
+      x + -x = 0 by XCMPLX_0:def 6;
+   then consider x1,x2,y1,y2 being Element of REAL such that
+A1:  x = [*x1,x2*] and
+A2:  -x = [*y1,y2*] and
+A3:  0 = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+A4:   +(x2,y2) = 0 by A3,Lm1;
+      x2 = 0 by A1,Lm1;
+    then y2 = 0 by A4,ARYTM_0:13;
+    then -x = y1 by A2,ARYTM_0:def 7;
+   hence thesis by Def1;
+  end;
   cluster x" -> real;
+coherence
+  proof
+A5:one = succ 0 by ORDINAL2:def 4 .= 1;
+   per cases;
+   suppose x = 0;
+    hence thesis by XCMPLX_0:def 7;
+   end;
+   suppose
+A6:   x <> 0;
+    then x * x" = one by A5,XCMPLX_0:def 7;
+    then consider x1,x2,y1,y2 being Element of REAL such that
+A7:  x = [*x1,x2*] and
+A8:  x" = [*y1,y2*] and
+A9:  one = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+          by XCMPLX_0:def 5;
+A10:    +(*(x1,y2),*(x2,y1)) = 0 by A9,Lm1;
+      x2 = 0 by A7,Lm1;
+    then *(x2,y1) = 0 by ARYTM_0:14;
+    then 0 = *(x1,y2) by A10,ARYTM_0:13;
+    then x1 = 0 or y2 = 0 by ARYTM_0:23;
+    then x" = y1 by A6,A7,A8,Lm1,ARYTM_0:def 7;
+   hence thesis by Def1;
+  end;
+  end;
   let y be real number;
   cluster x + y -> real;
+coherence
+  proof
+   consider x1,x2,y1,y2 being Element of REAL such that
+A11:  x = [*x1,x2*] and
+A12:  y = [*y1,y2*] and
+A13:  x+y = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+      x2 = 0 & y2 = 0 by A11,A12,Lm1;
+    then +(x2,y2) = 0 by ARYTM_0:13;
+    then x + y = +(x1,y1) by A13,ARYTM_0:def 7;
+   hence thesis by Def1;
+  end;
   cluster x * y -> real;
+coherence
+  proof
+   consider x1,x2,y1,y2 being Element of REAL such that
+A14:  x = [*x1,x2*] and
+A15:  y = [*y1,y2*] and
+A16:  x*y = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+          by XCMPLX_0:def 5;
+A17:  x2 = 0 & y2 = 0 by A14,A15,Lm1;
+    then *(x2,y1) = 0 & *(x1,y2) = 0 by ARYTM_0:14;
+    then A18:   +(*(x1,y2),*(x2,y1)) = 0 by ARYTM_0:13;
+      *(opp x2,y2) = 0 by A17,ARYTM_0:14;
+    then opp*(x2,y2) = 0 by ARYTM_0:17;
+    then x * y = +(*(x1,y1),0) by A16,A18,ARYTM_0:def 7
+        .= *(x1,y1) by ARYTM_0:13;
+   hence thesis by Def1;
+  end;
 end;
 
-definition let x,y be real number;
+
+registration let x,y be real number;
   cluster x-y -> real;
+ coherence proof x-y = x+-y by XCMPLX_0:def 8; hence thesis; end;
   cluster x/y -> real;
+ coherence proof x/y = x*y" by XCMPLX_0:def 9; hence thesis; end;
 end;
+
 
 begin
 
  reserve r,s,t for real number;
 
-definition
+registration
  cluster positive -> non negative non zero (real number);
+ coherence
+  proof let r be real number;
+   assume r > 0;
+   hence r >= 0 & r <> 0;
+  end;
  cluster non negative non zero -> positive (real number);
+ coherence
+  proof let r be real number;
+   assume r >= 0 & r <> 0;
+   hence r > 0 by Lm4;
+  end;
  cluster negative -> non positive non zero (real number);
+ coherence
+  proof let r be real number;
+   assume r < 0;
+   hence r <= 0 & r <> 0;
+  end;
  cluster non positive non zero -> negative (real number);
+ coherence
+  proof let r be real number;
+   assume r <= 0 & r <> 0;
+   hence r < 0 by Lm4;
+  end;
  cluster zero -> non negative non positive (real number);
+ coherence
+  proof let r be real number;
+   assume r = 0;
+   hence r >= 0 & 0 >= r;
+  end;
  cluster non negative non positive -> zero (real number);
+ coherence
+  proof let r be real number;
+   assume r >= 0 & 0 >= r;
+   hence r = 0 by Lm4;
+  end;
 end;
 
-definition
+
+registration
  cluster positive (real number);
+ existence
+  proof take r = 1;
+   thus 0 < r by Lm4,Lm8;
+  end;
  cluster negative (real number);
+ existence
+  proof take r = -1;
+   thus 0 > r by Def2,Lm7,Lm15;
+  end;
  cluster zero (real number);
+ existence
+  proof take 0;
+   thus thesis;
+  end;
 end;
 
-definition let r,s be non negative (real number);
+
+registration let r,s be non negative (real number);
  cluster r + s -> non negative;
+ coherence
+  proof
+A1:  r >= 0 & s >= 0 by Def4;
+   per cases by A1,Lm4;
+   suppose r = 0;
+   hence r + s >= 0 by Def4;
+   end;
+   suppose r > 0;
+   hence r+s >= 0 by A1,Lm16;
+  end;
+  end;
 end;
 
-definition let r,s be non positive (real number);
+
+registration let r,s be non positive (real number);
  cluster r + s -> non positive;
+ coherence
+  proof
+A1:  r <= 0 & s <= 0 by Def3;
+   per cases by A1,Lm4;
+   suppose r = 0;
+   hence r + s <= 0 by Def3;
+   end;
+   suppose r < 0;
+   hence r + s <= 0 by A1,Lm17;
+  end;
+  end;
 end;
 
-definition let r be positive (real number);
+
+registration let r be positive (real number);
  let s be non negative (real number);
  cluster r + s -> positive;
+ coherence
+  proof
+     r > 0 & s >= 0 by Def3,Def4;
+    hence r+s > 0 by Lm16;
+  end;
  cluster s + r -> positive;
+ coherence
+  proof
+     r > 0 & s >= 0 by Def3,Def4;
+    hence s+r > 0 by Lm16;
+  end;
 end;
 
-definition let r be negative (real number);
+
+registration let r be negative (real number);
  let s be non positive (real number);
  cluster r + s -> negative;
+ coherence
+  proof
+     r < 0 & s <= 0 by Def3,Def4;
+   hence r+s < 0 by Lm17;
+  end;
  cluster s + r -> negative;
+ coherence
+  proof
+     r < 0 & s <= 0 by Def3,Def4;
+    hence s+r < 0 by Lm17;
+  end;
 end;
 
-definition let r be non positive (real number);
+
+registration let r be non positive (real number);
  cluster -r -> non negative;
+ coherence
+  proof
+A1:  --r <= 0 by Def3;
+   assume -r < 0;
+    then -r+--r < 0 by A1,Lm17;
+   hence contradiction by XCMPLX_0:def 6;
+  end;
 end;
 
-definition let r be non negative (real number);
+
+registration let r be non negative (real number);
  cluster -r -> non positive;
+ coherence
+  proof
+A1:  --r >= 0 by Def4;
+   assume -r > 0;
+   then -r+--r > 0 by A1,Lm16;
+   hence contradiction by XCMPLX_0:def 6;
+  end;
 end;
 
-definition
+
+registration
  let r be non negative (real number),
      s be non positive (real number);
  cluster r - s -> non negative;
+ coherence
+  proof r - s = r + -s by XCMPLX_0:def 8;
+   hence thesis;
+  end;
  cluster s - r -> non positive;
+ coherence
+  proof s - r = s + -r by XCMPLX_0:def 8;
+   hence thesis;
+  end;
 end;
 
-definition let r be positive (real number);
+
+registration let r be positive (real number);
  let s be non positive (real number);
  cluster r - s -> positive;
+ coherence
+  proof r - s = r + -s by XCMPLX_0:def 8;
+   hence thesis;
+  end;
  cluster s - r -> negative;
+ coherence
+  proof
+    s - r = s + -r by XCMPLX_0:def 8;
+   hence thesis;
+  end;
 end;
 
-definition let r be negative (real number);
+
+registration let r be negative (real number);
  let s be non negative (real number);
  cluster r - s -> negative;
+ coherence
+  proof r - s = r + -s by XCMPLX_0:def 8;
+   hence thesis;
+  end;
  cluster s - r -> positive;
+ coherence
+  proof s - r = s + -r by XCMPLX_0:def 8;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let r be non positive (real number),
      s be non negative (real number);
  cluster r*s -> non positive;
+ coherence
+  proof
+     r <= 0 & s >= 0 by Def3,Def4;
+   hence r*s <= 0 by Lm27;
+  end;
  cluster s*r -> non positive;
+ coherence
+  proof
+     r <= 0 & s >= 0 by Def3,Def4;
+   hence s*r <= 0 by Lm27;
+  end;
 end;
 
-definition
+registration
  let r,s be non positive (real number);
  cluster r*s -> non negative;
+ coherence
+  proof
+A1:  r <= 0 & s <= 0 by Def3;
+   per cases by A1,Lm4;
+   suppose r = 0 or s = 0;
+   hence r * s >= 0;
+   end;
+   suppose
+A2:  --r < --0 & s < 0;
+then 0<-r by Lm26;
+then A3: s*(-r)<=0*(-r) by A2,Lm18;
+     s*1 <> 0*((-r)*(-r)") by A2;
+    then s*((-r)*(-r)") <> 0*(-r)*(-r)" by A2,XCMPLX_0:def 7;
+    then s*(-r)<>0*(-r) by Lm19;
+    then s*(-r)<0*(-r) by A3,Lm4;
+    then -(s*r)<0*(-r) by Lm29;
+    then --0*r<--s*r by Lm26;
+   hence r * s >= 0;
+  end;
+  end;
 end;
 
-definition let r,s be non negative (real number);
+
+registration let r,s be non negative (real number);
  cluster r*s -> non negative;
+ coherence
+  proof
+A1:  r >= 0 & s >= 0 by Def4;
+   per cases by A1,Lm4;
+   suppose r = 0 or s = 0;
+   hence r * s >= 0;
+   end;
+   suppose r > 0 & s > 0;
+   hence r * s >= 0 by Lm21;
+  end;
+  end;
 end;
 
-definition let r be non positive (real number);
+registration let r be non positive (real number);
  cluster r" -> non positive;
+ coherence
+  proof
+A1: r"" <= 0 by Def3;
+   assume that
+A2:  r" > 0;
+   per cases by A1,Lm4;
+   suppose r"" = 0;
+   hence contradiction by A2,Lm30;
+   end;
+   suppose
+A3:  r"" < 0;
+     r"*r"" = 1 by A2,XCMPLX_0:def 7;
+   hence contradiction by A2,A3,Lm8,Lm22;
+  end;
+  end;
 end;
 
-definition let r be non negative (real number);
+
+registration let r be non negative (real number);
  cluster r" -> non negative;
+ coherence
+  proof
+A1: r"" >= 0 by Def4;
+   assume that
+A2:  r" < 0;
+   per cases by A1,Lm4;
+   suppose r"" = 0;
+   hence contradiction by A2,Lm30;
+   end;
+   suppose
+A3:  r"" > 0;
+     r"*r"" = 1 by A2,XCMPLX_0:def 7;
+   hence contradiction by A2,A3,Lm8,Lm22;
+  end;
+  end;
 end;
 
-definition
+
+registration
  let r be non negative (real number),
      s be non positive (real number);
  cluster r/s -> non positive;
+ coherence
+  proof
+     r/s = r*s" by XCMPLX_0:def 9;
+   hence thesis;
+  end;
  cluster s/r -> non positive;
+ coherence
+  proof
+     s/r = s*r" by XCMPLX_0:def 9;
+   hence thesis;
+  end;
 end;
 
-definition let r,s be non negative (real number);
+
+registration let r,s be non negative (real number);
  cluster r/s -> non negative;
+ coherence
+  proof
+     r/s = r*s" by XCMPLX_0:def 9;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let r,s be non positive (real number);
  cluster r/s -> non negative;
+ coherence
+  proof
+     r/s = r*s" by XCMPLX_0:def 9;
+   hence thesis;
+  end;
 end;
+
 

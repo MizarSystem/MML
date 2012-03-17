@@ -37,7 +37,7 @@ proof
   defpred P[set] means seq_id($1) is absolutely_summable;
    consider IT being set such that
 A1:for x being set holds x in IT
-    iff x in the_set_of_RealSequences & P[x] from Separation;
+    iff x in the_set_of_RealSequences & P[x] from XBOOLE_0:sch 1;
   IT is Subset of the_set_of_RealSequences
    proof
      for x be set st x in IT holds x in the_set_of_RealSequences by A1;
@@ -76,6 +76,7 @@ A4: X1 c= X2 by TARSKI:def 3;
   end;
 end;
 
+
 theorem Lm4:
 for c be Real, seq be Real_Sequence st seq is convergent
 for rseq be Real_Sequence st
@@ -89,7 +90,7 @@ A1:seq is convergent;
 A2:for i be Nat holds rseq .i = abs(seq.i-c);
    deffunc F(set) = c;
    consider cseq be Real_Sequence such that
-A3:for n be Nat holds cseq.n=F(n) from ExRealSeq;
+A3:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
 A4:now let i be Nat;
      thus rseq.i=abs(seq.i-c) by A2
         .=abs(seq.i-(cseq.i))by A3
@@ -111,7 +112,7 @@ A9:abs(seq -cseq) is convergent by SEQ_4:26;
    hence thesis by A5,A9,SEQ_1:8;
 end;
 
-definition
+registration
   cluster the_set_of_l1RealSequences -> non empty;
   coherence
    proof
@@ -125,7 +126,8 @@ definition
   end;
 end;
 
-definition
+
+registration
   cluster the_set_of_l1RealSequences -> lineary-closed;
   coherence
 proof
@@ -210,6 +212,7 @@ let v be VECTOR of Linear_Space_of_RealSequences
 end;
 end;
 
+
 theorem Th2:
 RLSStruct (# the_set_of_l1RealSequences,
         Zero_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
@@ -217,7 +220,7 @@ RLSStruct (# the_set_of_l1RealSequences,
         Mult_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences) #)
 is Subspace of Linear_Space_of_RealSequences by RSSPACE:13;
 
-definition
+registration
   cluster RLSStruct (# the_set_of_l1RealSequences,
         Zero_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
         Add_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
@@ -226,6 +229,7 @@ definition
         RealLinearSpace-like;
   coherence by RSSPACE:13;
 end;
+
 
 theorem Th3:
 RLSStruct (# the_set_of_l1RealSequences,
@@ -243,7 +247,7 @@ proof
 A1:for z be set st z in the_set_of_l1RealSequences holds F(z) in REAL;
    ex f being Function of the_set_of_l1RealSequences,REAL st
      for x being set st x in the_set_of_l1RealSequences holds
-       f.x = F(x) from Lambda1(A1);
+       f.x = F(x) from FUNCT_2:sch 2(A1);
    hence thesis;
 end;
 
@@ -272,13 +276,15 @@ A4:  z in the_set_of_l1RealSequences;
 end;
 end;
 
-definition let X be non empty set,
+
+registration let X be non empty set,
                Z be Element of X, A be BinOp of X,
                M be Function of [:REAL, X:], X,
                N be Function of X, REAL;
   cluster NORMSTR (# X, Z, A, M, N #) -> non empty;
   coherence by STRUCT_0:def 1;
 end;
+
 
 theorem Th4:
 for l be NORMSTR st RLSStruct (# the carrier of l, the Zero of l,
@@ -432,7 +438,7 @@ A7:      (abs rseq).k = (Partial_Sums (abs rseq)).k;
              .= (abs rseq).k + (abs rseq).(k+1) by A2
              .= (Partial_Sums abs rseq).(k+1) by A7,SERIES_1:def 1;
        end;
-       for n be Nat holds P[n] from Ind(A5,A6);
+       for n be Nat holds P[n] from NAT_1:sch 1(A5,A6);
        hence (Partial_Sums abs rseq).m = (abs rseq).m .= 0 by A2;
      end;
 
@@ -501,6 +507,7 @@ definition
         l_norm #);
   coherence;
 end;
+
 
 begin :: l1_Space is Banach
 
@@ -720,11 +727,12 @@ A23:abs seq_id x is summable by SERIES_1:def 5;
    hence thesis by A1,A6,A9,A10,A11,A12,A13,A18,A21,SERIES_1:10,21;
 end;
 
-definition
+registration
   cluster l1_Space -> RealNormSpace-like RealLinearSpace-like
        Abelian add-associative right_zeroed right_complementable;
   coherence by Def3,Th3,Th4,Th9,NORMSP_1:def 2;
 end;
+
 
 Lm5:
 for c be Real, seq,seq1 be Real_Sequence st
@@ -741,7 +749,7 @@ A2:seq1 is convergent;
 A3:for i be Nat holds rseq .i = abs(seq.i-c)+seq1.i;
    deffunc F(set) = c;
    consider cseq be Real_Sequence such that
-A4:for n be Nat holds cseq.n=F(n) from ExRealSeq;
+A4:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
 
 A5:now
      let i be Nat;
@@ -775,6 +783,7 @@ definition let X be non empty NORMSTR, x, y be Point of X;
   coherence;
 end;
 
+
 definition
  let NRM be non empty NORMSTR;
  let seqt be sequence of NRM;
@@ -782,8 +791,12 @@ definition
  for r1 be Real st r1 > 0 ex k1 be Nat st
   for n1, m1 be Nat st n1 >= k1 & m1 >= k1 holds
    dist(seqt.n1, seqt.m1) < r1;
-  synonym seqt is Cauchy_sequence_by_Norm;
-end;
+  end;
+notation
+ let NRM be non empty NORMSTR;
+ let seqt be sequence of NRM;
+ synonym seqt is Cauchy_sequence_by_Norm for seqt is CCauchy ; end;
+
 
  reserve NRM for non empty RealNormSpace;
  reserve seq for sequence of NRM;
@@ -866,7 +879,7 @@ A3: x in NAT;
      reconsider i=x as Nat by A3;
      deffunc F(Nat) = (seq_id(vseq.$1)).i;
      consider rseqi be Real_Sequence such that
-A4:  for n be Nat holds rseqi.n= F(n) from  ExRealSeq;
+A4:  for n be Nat holds rseqi.n= F(n) from  SEQ_1:sch 1;
 A5:  rseqi is convergent
      proof
        now
@@ -919,7 +932,7 @@ A15:         seq_id((vseq.m) - (vseq.k))
      thus thesis by A4,A5;
    end;
    consider f be Function of NAT,REAL such that
-A16:for x be set st x in NAT holds P[x,f.x] from FuncEx1(A2);
+A16:for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
    reconsider tseq=f as Real_Sequence;
 A17:now
      let i be Nat;
@@ -1049,7 +1062,7 @@ A35:     ( for m be Nat holds
              rseq.m = Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).(i+1) );
            deffunc F(Nat) = Partial_Sums(abs(seq_id((vseq.$1) - (vseq.n)))).i;
            consider rseqb be Real_Sequence such that
-A36:       for m be Nat holds rseqb.m = F(m) from ExRealSeq;
+A36:       for m be Nat holds rseqb.m = F(m) from SEQ_1:sch 1;
 A37:       rseqb is convergent &
            lim rseqb = Partial_Sums(abs((seq_id tseq - seq_id(vseq.n)))).i
              by A34,A36;
@@ -1105,7 +1118,7 @@ A39:       now
        end;
        hence thesis;
      end;
-       for i be Nat holds P[i] from Ind(A29,A33);
+       for i be Nat holds P[i] from NAT_1:sch 1(A29,A33);
        hence thesis;
      end;
      for n be Nat st n >= k holds
@@ -1120,7 +1133,7 @@ A41:   for i be Nat st 0 <= i holds
          let i be Nat such that 0 <=i;
          deffunc F(Nat)= Partial_Sums(abs(seq_id((vseq.$1) - (vseq.n)))).i;
          consider rseq be Real_Sequence such that
-A42:      for m be Nat holds rseq.m = F(m) from ExRealSeq;
+A42:      for m be Nat holds rseq.m = F(m) from SEQ_1:sch 1;
 A43:     rseq is convergent by A27,A42;
 A44:     lim rseq = Partial_Sums(abs(seq_id tseq-seq_id(vseq.n))).i by A27,A42
 ;

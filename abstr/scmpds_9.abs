@@ -66,9 +66,15 @@ definition
   redefine func (la,lb) --> (a,b) -> FinPartState of SCMPDS;
 end;
 
-definition
+
+registration
   cluster SCMPDS -> with-non-trivial-Instruction-Locations;
+coherence
+  proof
+    thus the Instruction-Locations of SCMPDS is non trivial by SCMPDS_2:def 1;
+  end;
 end;
+
 
 definition
   let l be Instruction-Location of SCMPDS;
@@ -77,10 +83,12 @@ definition
    il.it = l;
 end;
 
+
 definition
   let l be Instruction-Location of SCMPDS;
   redefine func locnum l -> Nat;
 end;
+
 
 theorem :: SCMPDS_9:8
   l = 2*locnum l + 2;
@@ -152,58 +160,137 @@ theorem :: SCMPDS_9:26
 theorem :: SCMPDS_9:27
   NIC((a,k1)>=0_goto k2,l) = { Next l, abs( 2*(k2+locnum l) ) + 2 };
 
-definition
+registration
   let k;
   cluster JUMP (goto k) -> empty;
+coherence by Lm3;
 end;
+
 
 theorem :: SCMPDS_9:28
   JUMP (return a) = {2*k where k is Nat: k > 1};
 
-definition
+registration
   let a;
   cluster JUMP (return a) -> infinite;
+coherence by Th5,Th28;
 end;
 
-definition
+
+registration
   let a,k1;
   cluster JUMP (saveIC(a,k1)) -> empty;
+coherence
+  proof
+    for l being Instruction-Location of SCMPDS holds
+     NIC(saveIC(a,k1),l)={Next l} by Th16;
+    hence thesis by Th13;
+  end;
 end;
 
-definition
+
+registration
   let a,k1;
   cluster JUMP (a:=k1) -> empty;
+coherence
+  proof
+    for l being Instruction-Location of SCMPDS holds NIC(a:=k1,l)={Next l}
+     by Th17;
+    hence thesis by Th13;
+  end;
 end;
 
-definition
+
+registration
   let a,k1,k2;
   cluster JUMP ((a,k1):=k2) -> empty;
+coherence
+  proof
+    for l being Instruction-Location of SCMPDS holds NIC((a,k1):=k2,l)={Next l}
+     by Th18;
+    hence thesis by Th13;
+  end;
 end;
 
-definition
+
+registration
   let a,b,k1,k2;
   cluster JUMP ((a,k1):=(b,k2)) -> empty;
+coherence
+  proof
+    for l being Instruction-Location of SCMPDS holds
+     NIC((a,k1):=(b,k2),l)={Next l} by Th19;
+    hence thesis by Th13;
+  end;
 end;
 
-definition
+
+registration
   let a,k1,k2;
   cluster JUMP (AddTo(a,k1,k2)) -> empty;
+coherence
+  proof
+    for l being Instruction-Location of SCMPDS holds
+     NIC(AddTo(a,k1,k2),l)={Next l} by Th20;
+    hence thesis by Th13;
+  end;
 end;
 
-definition
+
+registration
   let a,b,k1,k2;
   cluster JUMP (AddTo(a,k1,b,k2)) -> empty;
+coherence
+  proof
+    for l being Instruction-Location of SCMPDS holds
+     NIC(AddTo(a,k1,b,k2),l)={Next l} by Th21;
+    hence thesis by Th13;
+  end;
   cluster JUMP (SubFrom(a,k1,b,k2)) -> empty;
+coherence
+  proof
+    for l being Instruction-Location of SCMPDS holds
+     NIC(SubFrom(a,k1,b,k2),l)={Next l} by Th22;
+    hence thesis by Th13;
+  end;
   cluster JUMP (MultBy(a,k1,b,k2)) -> empty;
+coherence
+  proof
+    for l being Instruction-Location of SCMPDS holds
+     NIC(MultBy(a,k1,b,k2),l)={Next l} by Th23;
+    hence thesis by Th13;
+  end;
   cluster JUMP (Divide(a,k1,b,k2)) -> empty;
+coherence
+  proof
+    for l being Instruction-Location of SCMPDS holds
+     NIC(Divide(a,k1,b,k2),l)={Next l} by Th24;
+    hence thesis by Th13;
+  end;
 end;
 
-definition
+registration
   let a,k1,k2;
   cluster JUMP ((a,k1)<>0_goto k2) -> empty;
+coherence
+  proof
+    k2 = 5 or k2 <> 5;
+    hence thesis by Lm18,Lm19;
+  end;
   cluster JUMP ((a,k1)<=0_goto k2) -> empty;
+coherence
+  proof
+    k2 = 5 or k2 <> 5;
+    hence thesis by Lm20,Lm21;
+  end;
   cluster JUMP ((a,k1)>=0_goto k2) -> empty;
+coherence
+  proof
+    k2 = 5 or k2 <> 5;
+    hence thesis by Lm22,Lm23;
+  end;
 end;
+
 
 theorem :: SCMPDS_9:29
   SUCC(l) = the Instruction-Locations of SCMPDS;
@@ -215,10 +302,23 @@ theorem :: SCMPDS_9:30
     st SUCC(l1) = the Instruction-Locations of S
    holds l1 <= l2;
 
-definition
+registration
   cluster SCMPDS -> non InsLoc-antisymmetric;
+  coherence
+  proof
+    assume
+A1:   SCMPDS is InsLoc-antisymmetric;
+    SUCC(inspos(1)) = the Instruction-Locations of SCMPDS &
+    SUCC(inspos(2)) = the Instruction-Locations of SCMPDS by Th29;
+    then inspos(1) <= inspos(2) & inspos(2) <= inspos(1) by Th30;
+    then inspos(1) = inspos(2) by A1,AMISTD_1:def 9;
+    hence thesis by SCMPDS_3:31;
+  end;
 end;
 
-definition
+
+registration
   cluster SCMPDS -> non standard;
+  coherence by AMISTD_1:30;
 end;
+

@@ -33,7 +33,7 @@ reserve m for Nat;
 set A = the Instruction-Locations of SCM+FSA;
 set D = Int-Locations \/ FinSeq-Locations;
 
-definition
+registration
  cluster pseudo-paraclosed Macro-Instruction;
  existence
 proof
@@ -42,6 +42,7 @@ proof
   thus thesis;
 end;
 end;
+
 
 canceled;
 
@@ -108,52 +109,65 @@ A4: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
    suppose InsCode i = 0;
     then i = halt SCM+FSA by SCMFSA_2:122;
     hence IncAddr(i,0) = i by SCMFSA_4:8;
+   end;
    suppose InsCode i = 1;
     then ex a,b being Int-Location st i = a:=b by SCMFSA_2:54;
     hence IncAddr(i,0) = i by SCMFSA_4:9;
+   end;
    suppose InsCode i = 2;
     then ex a,b being Int-Location st i = AddTo(a,b) by SCMFSA_2:55;
     hence IncAddr(i,0) = i by SCMFSA_4:10;
+   end;
    suppose InsCode i = 3;
     then ex a,b being Int-Location st i = SubFrom(a,b) by SCMFSA_2:56;
     hence IncAddr(i,0) = i by SCMFSA_4:11;
+   end;
    suppose InsCode i = 4;
     then ex a,b being Int-Location st i = MultBy(a,b) by SCMFSA_2:57;
     hence IncAddr(i,0) = i by SCMFSA_4:12;
+   end;
    suppose InsCode i = 5;
     then ex a,b being Int-Location st i = Divide(a,b) by SCMFSA_2:58;
     hence IncAddr(i,0) = i by SCMFSA_4:13;
+   end;
    suppose InsCode i = 6;
     then consider l being Instruction-Location of SCM+FSA
     such that A5: i = goto l by SCMFSA_2:59;
     thus IncAddr(i,0) = goto (l + 0) by A5,SCMFSA_4:14
     .= i by A5,Th7;
+   end;
    suppose InsCode i = 7;
     then consider l being Instruction-Location of SCM+FSA,a being Int-Location
     such that A6: i = a =0_goto l by SCMFSA_2:60;
     thus IncAddr(i,0) = a =0_goto (l + 0) by A6,SCMFSA_4:15
     .= i by A6,Th7;
+   end;
    suppose InsCode i = 8;
     then consider l being Instruction-Location of SCM+FSA,a being Int-Location
     such that A7: i = a >0_goto l by SCMFSA_2:61;
     thus IncAddr(i,0) = a >0_goto (l + 0) by A7,SCMFSA_4:16
     .= i by A7,Th7;
+   end;
    suppose InsCode i = 9;
     then ex a,b being Int-Location,f being FinSeq-Location
     st i = b:=(f,a) by SCMFSA_2:62;
     hence IncAddr(i,0) = i by SCMFSA_4:17;
+   end;
    suppose InsCode i = 10;
     then ex a,b being Int-Location,f being FinSeq-Location
     st i = (f,a):=b by SCMFSA_2:63;
     hence IncAddr(i,0) = i by SCMFSA_4:18;
+   end;
    suppose InsCode i = 11;
     then ex a being Int-Location,f being FinSeq-Location
     st i = a:=len f by SCMFSA_2:64;
     hence IncAddr(i,0) = i by SCMFSA_4:19;
+   end;
    suppose InsCode i = 12;
     then ex a being Int-Location,f being FinSeq-Location
     st i = f:=<0,...,0>a by SCMFSA_2:65;
     hence IncAddr(i,0) = i by SCMFSA_4:20;
+ end;
  end;
 
 theorem Th9: ::TMP13
@@ -645,22 +659,26 @@ theorem Th32: ::T30408
       suppose InsCode i = 0;
        then i = halt SCM+FSA by SCMFSA_2:122;
        hence Exec(i,s).a = s.a & Exec(i,s).f = s.f by AMI_1:def 8;
+      end;
       suppose InsCode i = 6;
        then consider lb being Instruction-Location of SCM+FSA such that
     A2: i = goto lb by SCMFSA_2:59;
        thus Exec(i,s).a = s.a & Exec(i,s).f = s.f by A2,SCMFSA_2:95;
+      end;
       suppose InsCode i = 7;
        then consider lb being Instruction-Location of SCM+FSA, b being
 Int-Location
        such that
     A3: i = b=0_goto lb by SCMFSA_2:60;
        thus Exec(i,s).a = s.a & Exec(i,s).f = s.f by A3,SCMFSA_2:96;
+      end;
       suppose InsCode i = 8;
        then consider lb being Instruction-Location of SCM+FSA, b being
 Int-Location
        such that
     A4: i = b>0_goto lb by SCMFSA_2:61;
        thus Exec(i,s).a = s.a & Exec(i,s).f = s.f by A4,SCMFSA_2:97;
+     end;
      end;
    hence thesis by SCMFSA6A:38;
 end;
@@ -693,22 +711,28 @@ A4: dom (s1 | D) = dom s1 /\ D by RELAT_1:90
        thus (s1 | D).x = s1.x by A5,FUNCT_1:70
        .= s2.x by A2,A9
        .= (s2 | D).x by A4,A5,FUNCT_1:70;
+       end;
        suppose A10: not x is read-write Int-Location;
        reconsider a = x as Int-Location by A8;
       a = intloc 0 by A10,SF_MASTR:def 5;
        hence (s1 | D).x = s2.a by A1,A5,FUNCT_1:70
        .= (s2 | D).x by A4,A5,FUNCT_1:70;
        end;
+       end;
+      end;
       suppose A11: x is FinSeq-Location;
        thus (s1 | D).x = s1.x by A5,FUNCT_1:70
        .= s2.x by A3,A11
        .= (s2 | D).x by A4,A5,FUNCT_1:70;
+      end;
       suppose A12: x = IC SCM+FSA;
        assume not (s1 | D).x = (s2 | D).x;
        thus contradiction by A6,A12,SCMFSA6A:37,XBOOLE_0:def 3;
+      end;
       suppose A13: x is Instruction-Location of SCM+FSA;
        assume not (s1 | D).x = (s2 | D).x;
        thus contradiction by A7,A13,SCMFSA6A:37;
+     end;
      end;
    then s1 | D c= s2 | D by A4,GRFUNC_1:8;
    hence s1 | D = s2 | D by A4,GRFUNC_1:9;
@@ -812,12 +836,14 @@ then A6: IExec(SCM+FSA-Stop,s) | D = s1 | D by Th37
        then not x in dom Start-At insloc 0 by A8,TARSKI:def 1;
        hence IExec(SCM+FSA-Stop,s).x
         = (Initialize s +* Start-At insloc 0).x by A11,FUNCT_4:12;
+      end;
       suppose A12: x is FinSeq-Location;
   then A13:  IExec(SCM+FSA-Stop,s).x = (Initialize s).x by A6,SCMFSA6A:38;
          x <> IC SCM+FSA by A12,SCMFSA_2:82;
        then not x in dom Start-At insloc 0 by A8,TARSKI:def 1;
        hence IExec(SCM+FSA-Stop,s).x
         = (Initialize s +* Start-At insloc 0).x by A13,FUNCT_4:12;
+      end;
       suppose A14: x = IC SCM+FSA;
        then x in {IC SCM+FSA} by TARSKI:def 1;
     then A15: x in dom Start-At insloc 0 by AMI_3:34;
@@ -830,6 +856,7 @@ then A6: IExec(SCM+FSA-Stop,s) | D = s1 | D by Th37
            by FUNCT_4:15
        .= (Start-At insloc 0).IC SCM+FSA by A14,A15,FUNCT_4:14
        .= (Initialize s +* Start-At insloc 0).x by A14,A15,FUNCT_4:14;
+      end;
       suppose A16: x is Instruction-Location of SCM+FSA;
          IExec(SCM+FSA-Stop,s) | A = s | A by A4,SCMFSA6A:40
        .= (Initialize s) | A by Th36;
@@ -838,6 +865,7 @@ then A6: IExec(SCM+FSA-Stop,s) | D = s1 | D by Th37
        then not x in dom Start-At insloc 0 by A8,TARSKI:def 1;
        hence IExec(SCM+FSA-Stop,s).x = (Initialize s +* Start-At insloc 0).x
            by A17,FUNCT_4:12;
+      end;
       end;
       hence thesis by A7,FUNCT_1:9;
      end;
@@ -857,8 +885,10 @@ A3: insloc n in dom I by A1,A2,SCMFSA7B:def 7;
    per cases by NAT_1:19;
    suppose n = 0;
     hence insloc 0 in dom I by A1,A2,SCMFSA7B:def 7;
+   end;
    suppose 0 < n;
     hence insloc 0 in dom I by A3,SCMFSA_4:def 4;
+ end;
  end;
 
 theorem
@@ -993,7 +1023,7 @@ then A21: dom J c= dom JAt by GRFUNC_1:8;
        = C2.(k + 1) | (Int-Locations \/
  FinSeq-Locations) by A16,A17,A18,SCMFSA6A:41;
      end;
-     for k being Nat holds P[k] from Ind(A7,A15);
+     for k being Nat holds P[k] from NAT_1:sch 1(A7,A15);
    hence thesis;
  end;
 
@@ -1161,7 +1191,7 @@ then A10: s21 is halting by AMI_1:def 20;
    .= IExec(I,s2) | (Int-Locations \/ FinSeq-Locations) by SCMFSA8B:35;
  end;
 
-definition
+registration
  let I be Macro-Instruction;
  cluster Initialized I -> initial;
  correctness
@@ -1178,6 +1208,7 @@ definition
    hence thesis by SCMFSA_4:def 4;
   end;
 end;
+
 
 Lm1:
  now
@@ -1400,7 +1431,7 @@ then A27: dom I c= dom (I +* Start-At insloc 0) by GRFUNC_1:8;
        = C2.(k + 1) | (Int-Locations \/ FinSeq-Locations) by A20,A21,A22,A23,
 A24,AXIOMS:22,SCMFSA6A:41;
      end;
-     for k being Nat holds P[k] from Ind(A9,A19);
+     for k being Nat holds P[k] from NAT_1:sch 1(A9,A19);
    hence IncAddr(CurInstr ((Computation s1).i),n) =
        CurInstr ((Computation s2).i) by A7;
    end;
@@ -1445,7 +1476,7 @@ A35: for k being Nat st P[k] holds P[k + 1]
           by A36,A38,A40,REAL_1:53,SCMFSA6A:41
       .= C2.(k + 1) | (Int-Locations \/ FinSeq-Locations) by A6,A39,A41;
      end;
-     for k being Nat holds P[k] from Ind(A33,A35);
+     for k being Nat holds P[k] from NAT_1:sch 1(A33,A35);
    hence thesis by A32;
  end;
 
@@ -1800,6 +1831,7 @@ A20: for n being Nat st P[n] holds P[n + 1]
        .= insloc card ProgramPart I0 by A1,A10,SCMFSA8A:def 5
        .= insloc card I0 by AMI_5:72
        .= insloc card I by SCMFSA8A:34;
+      end;
       suppose A24: k <= n;
         (Computation s10).(n + 1) = Following (Computation s10).n by AMI_1:def
 19
@@ -1808,20 +1840,23 @@ A20: for n being Nat st P[n] holds P[n + 1]
        hence IC (Computation s10).(n + 1) = insloc card I by A21,A24,AMI_1:def
 8;
       end;
+      end;
       thus CurInstr (Computation s10).(n + 1)
        = (Computation s10).(n + 1).IC (Computation s10).(n + 1)
           by AMI_1:def 17
       .= halt SCM+FSA by A6,A23,AMI_1:54;
      end;
-A25: for n being Nat holds P[n] from Ind(A18,A20);
+A25: for n being Nat holds P[n] from NAT_1:sch 1(A18,A20);
      now let n be Nat;
       per cases;
       suppose A26: n < k;
        then IC (Computation s00).n = IC (Computation s10).n by A16;
        then IC (Computation s10).n in dom I0 by A1,A10,A26,SCMFSA8A:def 5;
        hence IC (Computation s10).n in dom I1 by A3;
+      end;
       suppose k <= n;
        hence IC (Computation s10).n in dom I1 by A4,A25;
+     end;
      end;
    hence I1 is_closed_on s by SCMFSA7B:def 7;
      P[k] by A25;
@@ -1942,7 +1977,7 @@ def 17
       hence (Computation s1).(n + 1) | D = (Computation s10).(n + 1) | D
           by SCMFSA6A:38;
      end;
-A53: for n being Nat holds P[n] from Ind(A35,A38);
+A53: for n being Nat holds P[n] from NAT_1:sch 1(A35,A38);
    hence for n be Nat st n < pseudo-LifeSpan(s,I0) holds
       IC (Computation s1).n = IC (Computation s10).n;
    let n be Nat;
@@ -1950,6 +1985,7 @@ A53: for n being Nat holds P[n] from Ind(A35,A38);
    per cases by A54,REAL_1:def 5;
    suppose n < pseudo-LifeSpan(s,I0);
     hence (Computation s1).n | D = (Computation s10).n | D by A53;
+   end;
    suppose A55: n = pseudo-LifeSpan(s,I0);
     hereby per cases by NAT_1:22;
     suppose A56: n = 0;
@@ -1957,6 +1993,7 @@ A53: for n being Nat holds P[n] from Ind(A35,A38);
      .= s | D by SCMFSA8A:11
      .= s10 | D by SCMFSA8A:11
      .= (Computation s10).n | D by A56,AMI_1:def 19;
+    end;
     suppose ex m st n = m + 1;
      then consider m being Nat such that A57: n = m + 1;
  A58: (Computation s1).n = Following (Computation s1).m by A57,AMI_1:def 19
@@ -1989,12 +2026,16 @@ l0
        = (Computation s1).m | D by A58,A65,AMI_1:def 8
       .= (Computation s10).m | D by A53,A60
       .= (Computation s10).n | D by A59,A66,Th32;
+     end;
      suppose i <> halt SCM+FSA;
       then CurInstr (Computation s10).m = i by A61,A63,A64,SCMFSA8A:30;
       hence (Computation s1).n | D = (Computation s10).n | D
           by A58,A59,A61,SCMFSA6C:5;
      end;
+     end;
     end;
+    end;
+ end;
  end;
 
 theorem Th59: ::T29502'
@@ -2352,6 +2393,7 @@ then A26: s3 is halting by AMI_1:def 20;
         then (Computation s3).k = s3 by AMI_1:def 19;
         then IC (Computation s3).k = insloc 0 by Th31;
         hence IC (Computation s3).k in dom if=0(a,I,J) by Th54;
+       end;
        suppose A27: 0 < k & k < pseudo-LifeSpan(s00,I0) + 1;
         then 0 + 1 <= k by INT_1:20;
         then consider k1 being Nat such that A28: 1 + k1 = k by NAT_1:28;
@@ -2373,8 +2415,10 @@ then A26: s3 is halting by AMI_1:def 20;
         then insloc (n + (card J + 3)) in dom if=0(a,I,J) by SCMFSA6A:15;
         hence IC (Computation s3).k in
  dom if=0(a,I,J) by A31,A32,SCMFSA_4:def 1;
+       end;
        suppose 0 < k & pseudo-LifeSpan(s00,I0) + 1 <= k;
        hence IC (Computation s3).k in dom if=0(a,I,J) by A23,A24,A25,AMI_1:52;
+     end;
      end;
    hence if=0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
      now let k be Nat;
@@ -2763,6 +2807,7 @@ then A26: s3 is halting by AMI_1:def 20;
         then (Computation s3).k = s3 by AMI_1:def 19;
         then IC (Computation s3).k = insloc 0 by Th31;
         hence IC (Computation s3).k in dom if>0(a,I,J) by Th54;
+       end;
        suppose A27: 0 < k & k < pseudo-LifeSpan(s00,I0) + 1;
         then 0 + 1 <= k by INT_1:20;
         then consider k1 being Nat such that A28: 1 + k1 = k by NAT_1:28;
@@ -2785,8 +2830,10 @@ then A26: s3 is halting by AMI_1:def 20;
         hence IC (Computation s3).k in
  dom if>0(a,I,J) by A31,A32,SCMFSA_4:def 1
 ;
+       end;
        suppose 0 < k & pseudo-LifeSpan(s00,I0) + 1 <= k;
        hence IC (Computation s3).k in dom if>0(a,I,J) by A23,A24,A25,AMI_1:52;
+     end;
      end;
    hence if>0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
      now let k be Nat;
@@ -3210,8 +3257,10 @@ A38: s3 is halting by A36,AMI_1:def 20;
         then (Computation s3).k = s3 by AMI_1:def 19;
         then IC (Computation s3).k = insloc 0 by Th31;
         hence IC (Computation s3).k in dom if=0(a,I,J) by Th54;
+       end;
        suppose 0 < k & k = 1;
         hence IC (Computation s3).k in dom if=0(a,I,J) by A13,Th54;
+       end;
        suppose A39: 0 < k & k <> 1 & k < pseudo-LifeSpan(s00,J0) + 2;
         then 0 + 1 <= k by INT_1:20;
         then 1 < k by A39,REAL_1:def 5;
@@ -3237,15 +3286,19 @@ A38: s3 is halting by A36,AMI_1:def 20;
         hence IC (Computation s3).k in
  dom if=0(a,I,J) by A43,A44,SCMFSA_4:def 1
 ;
+       end;
        suppose A46: 0 < k & k <> 1 & pseudo-LifeSpan(s00,J0) + 2 <= k;
        hereby per cases by A46,REAL_1:def 5;
        suppose pseudo-LifeSpan(s00,J0) + 2 = k;
         hence IC (Computation s3).k in dom if=0(a,I,J) by A29,A31,SCMFSA6A:15;
+       end;
        suppose pseudo-LifeSpan(s00,J0) + 2 < k;
         then pseudo-LifeSpan(s00,J0) + 2 + 1 <= k by INT_1:20;
         hence IC (Computation s3).k in dom if=0(a,I,J) by A34,A35,A36,AMI_1:52
 ;
        end;
+       end;
+     end;
      end;
    hence if=0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
      now let k be Nat;
@@ -3284,6 +3337,7 @@ A38: s3 is halting by A36,AMI_1:def 20;
          .= card J + 2 + 1 + card I by XCMPLX_1:1;
          then card J + 2 + 1 <= card I + card J + 3 by NAT_1:29;
          hence n + 2 < card I + card J + 3 by A57,NAT_1:38;
+        end;
         suppose k2 < pseudo-LifeSpan(s,J0);
          then insloc n in dom J0 by A3,A53,SCMFSA8A:31;
          then n < card J0 by SCMFSA6A:15;
@@ -3294,6 +3348,7 @@ A38: s3 is halting by A36,AMI_1:def 20;
          .= card J + 2 + (card I + 1) by XCMPLX_1:1;
          then card J + 2 <= card I + card J + 3 by NAT_1:29;
          hence n + 2 < card I + card J + 3 by A58,AXIOMS:22;
+        end;
         end;
   then A59: insloc (n + 2) in dom if=0(a,I,J) &
           if=0(a,I,J).insloc (n + 2) <> halt SCM+FSA by Th56;
@@ -3494,6 +3549,7 @@ A37: s3 is halting by A35,AMI_1:def 20;
          .= card J + 2 + 1 + card I by XCMPLX_1:1;
          then card J + 2 + 1 <= card I + card J + 3 by NAT_1:29;
          hence n + 2 < card I + card J + 3 by A48,NAT_1:38;
+        end;
         suppose k2 < pseudo-LifeSpan(s,J0);
          then insloc n in dom J0 by A4,A44,SCMFSA8A:31;
          then n < card J0 by SCMFSA6A:15;
@@ -3504,6 +3560,7 @@ A37: s3 is halting by A35,AMI_1:def 20;
          .= card J + 2 + (card I + 1) by XCMPLX_1:1;
          then card J + 2 <= card I + card J + 3 by NAT_1:29;
          hence n + 2 < card I + card J + 3 by A49,AXIOMS:22;
+        end;
         end;
   then A50: insloc (n + 2) in dom if=0(a,I,J) &
           if=0(a,I,J).insloc (n + 2) <> halt SCM+FSA by Th56;
@@ -3705,8 +3762,10 @@ A38: s3 is halting by A36,AMI_1:def 20;
         then (Computation s3).k = s3 by AMI_1:def 19;
         then IC (Computation s3).k = insloc 0 by Th31;
         hence IC (Computation s3).k in dom if>0(a,I,J) by Th54;
+       end;
        suppose 0 < k & k = 1;
         hence IC (Computation s3).k in dom if>0(a,I,J) by A13,Th54;
+       end;
        suppose A39: 0 < k & k <> 1 & k < pseudo-LifeSpan(s00,J0) + 2;
         then 0 + 1 <= k by INT_1:20;
         then 1 < k by A39,REAL_1:def 5;
@@ -3731,15 +3790,19 @@ A38: s3 is halting by A36,AMI_1:def 20;
         then insloc (n + 2) in dom if>0(a,I,J) by SCMFSA6A:15;
        hence IC (Computation s3).k in
  dom if>0(a,I,J) by A43,A44,SCMFSA_4:def 1;
+       end;
        suppose A46: 0 < k & k <> 1 & pseudo-LifeSpan(s00,J0) + 2 <= k;
        hereby per cases by A46,REAL_1:def 5;
        suppose pseudo-LifeSpan(s00,J0) + 2 = k;
         hence IC (Computation s3).k in dom if>0(a,I,J) by A29,A31,SCMFSA6A:15;
+       end;
        suppose pseudo-LifeSpan(s00,J0) + 2 < k;
         then pseudo-LifeSpan(s00,J0) + 2 + 1 <= k by INT_1:20;
         hence IC (Computation s3).k in dom if>0(a,I,J) by A34,A35,A36,AMI_1:52
 ;
        end;
+       end;
+     end;
      end;
    hence if>0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
      now let k be Nat;
@@ -3778,6 +3841,7 @@ A38: s3 is halting by A36,AMI_1:def 20;
          .= card J + 2 + 1 + card I by XCMPLX_1:1;
          then card J + 2 + 1 <= card I + card J + 3 by NAT_1:29;
          hence n + 2 < card I + card J + 3 by A57,NAT_1:38;
+        end;
         suppose k2 < pseudo-LifeSpan(s,J0);
          then insloc n in dom J0 by A3,A53,SCMFSA8A:31;
          then n < card J0 by SCMFSA6A:15;
@@ -3788,6 +3852,7 @@ A38: s3 is halting by A36,AMI_1:def 20;
          .= card J + 2 + (card I + 1) by XCMPLX_1:1;
          then card J + 2 <= card I + card J + 3 by NAT_1:29;
          hence n + 2 < card I + card J + 3 by A58,AXIOMS:22;
+        end;
         end;
   then A59: insloc (n + 2) in dom if>0(a,I,J) &
           if>0(a,I,J).insloc (n + 2) <> halt SCM+FSA by Th57;
@@ -3988,6 +4053,7 @@ A37: s3 is halting by A35,AMI_1:def 20;
          .= card J + 2 + 1 + card I by XCMPLX_1:1;
          then card J + 2 + 1 <= card I + card J + 3 by NAT_1:29;
          hence n + 2 < card I + card J + 3 by A48,NAT_1:38;
+        end;
         suppose k2 < pseudo-LifeSpan(s,J0);
          then insloc n in dom J0 by A4,A44,SCMFSA8A:31;
          then n < card J0 by SCMFSA6A:15;
@@ -3998,6 +4064,7 @@ A37: s3 is halting by A35,AMI_1:def 20;
          .= card J + 2 + (card I + 1) by XCMPLX_1:1;
          then card J + 2 <= card I + card J + 3 by NAT_1:29;
          hence n + 2 < card I + card J + 3 by A49,AXIOMS:22;
+        end;
         end;
   then A50: insloc (n + 2) in dom if>0(a,I,J) &
           if>0(a,I,J).insloc (n + 2) <> halt SCM+FSA by Th57;
@@ -4064,9 +4131,11 @@ theorem
     suppose A3: s.a = 0;
       hence if=0(a,I,J) is_closed_on s by A1,Th66;
       thus if=0(a,I,J) is_halting_on s by A1,A3,Th66;
+    end;
     suppose A4: s.a <> 0;
       hence if=0(a,I,J) is_closed_on s by A2,Th70;
       thus if=0(a,I,J) is_halting_on s by A2,A4,Th70;
+     end;
      end;
  end;
 
@@ -4086,9 +4155,11 @@ theorem
     suppose A3: s.a > 0;
       hence if>0(a,I,J) is_closed_on s by A1,Th68;
       thus if>0(a,I,J) is_halting_on s by A1,A3,Th68;
+    end;
     suppose A4: s.a <= 0;
       hence if>0(a,I,J) is_closed_on s by A2,Th72;
       thus if>0(a,I,J) is_halting_on s by A2,A4,Th72;
+     end;
      end;
  end;
 
@@ -4479,7 +4550,7 @@ A5: for k being Nat st P[k] holds P[k + 1]
        then IC (Computation s1).k in dom I by A2;
        hence (Computation s1).(k + 1).a = s.a by A1,A6,A7,A8,Th93,AXIOMS:22;
       end;
-     for k being Nat holds P[k] from Ind(A4,A5);
+     for k being Nat holds P[k] from NAT_1:sch 1(A4,A5);
    hence (Computation (s +* (I +* Start-At insloc 0))).n.a = s.a by A3;
  end;
 
@@ -4538,7 +4609,7 @@ A5: for k being Nat st P[k] holds P[k + 1]
 ,SCMFSA7B:def 7;
       hence (Computation s1).n.intloc 0 = s0.intloc 0 by A6,Th95;
      end;
-A7: for k being Nat holds P[k] from Ind(A3,A5);
+A7: for k being Nat holds P[k] from NAT_1:sch 1(A3,A5);
 A8: now let k be Nat;
       thus (Computation s1).k.intloc 0 = s0.intloc 0 by A7
       .= 1 by SCMFSA6C:3;
@@ -4745,7 +4816,7 @@ A16: CurInstr (Computation s1).k = halt SCM+FSA by A12,AMI_1:def 20;
 
 begin :: loop
 
-definition
+registration
  let I be Macro-Instruction, k be Nat;
  cluster IncAddr(I,k) -> initial programmed;
  correctness
@@ -4760,6 +4831,7 @@ definition
   end;
 end;
 
+
 definition
  let I be Macro-Instruction;
  canceled 3;
@@ -4773,6 +4845,7 @@ definition
    hence thesis by SCMFSA8A:def 1;
   end;
 end;
+
 
 theorem Th104: ::T1
  for I being Macro-Instruction holds
@@ -4795,7 +4868,7 @@ theorem
    hence thesis by A1,SCMFSA8A:27;
  end;
 
-definition
+registration
  let I be good Macro-Instruction;
  cluster loop I -> good;
  correctness
@@ -4804,6 +4877,7 @@ definition
    hence thesis;
   end;
 end;
+
 
 theorem Th106: ::SCMFSA6A'14
  for I being Macro-Instruction holds
@@ -4909,7 +4983,7 @@ A11:    C2.(m + 1) = Following C2.m by AMI_1:def 19
       hence C1.(m + 1),C2.(m + 1) equal_outside A by A7,A8,A10,A11,NAT_1:38,
 SCMFSA6A:32;
      end;
-   thus for m being Nat holds X[m] from Ind(A3,A6);
+   thus for m being Nat holds X[m] from NAT_1:sch 1(A3,A6);
  end;
 
 theorem Th110: ::TMP25
@@ -5005,8 +5079,10 @@ A12: now thus CurInstr C2.LifeSpan s1 = C2.k.IC C1.k by A4,AMI_1:def 17
    suppose A14: m < LifeSpan s1;
     then CurInstr C1.m <> halt SCM+FSA by A2,SCM_1:def 2;
     hence CurInstr C2.m <> halt SCM+FSA by A1,A14,Th110;
+   end;
    suppose m = LifeSpan s1;
     hence CurInstr C2.m <> halt SCM+FSA by A12,SCMFSA_2:47,124;
+ end;
  end;
 
 theorem
@@ -5073,7 +5149,7 @@ A15:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m) by AMI_1:def 17
      equal_outside the Instruction-Locations of SCM+FSA by A5,A6,A8,A9,NAT_1:38
 ,SCMFSA6A:32;
    end;
- thus for m being Nat holds X[m] from Ind(A3,A4);
+ thus for m being Nat holds X[m] from NAT_1:sch 1(A3,A4);
  end;
 
 theorem
@@ -5136,9 +5212,11 @@ A12: CurInstr (Computation s2).m
        .= (loop I).lk by A15,A17,FUNCT_4:14;
          (loop I).lk in rng loop I by A15,A17,FUNCT_1:def 5;
        hence contradiction by A18,A19,Th107;
+      end;
       suppose A20: k = LifeSpan s;
        assume CurInstr (Computation (s +* loop I)).k = halt SCM+FSA;
        hence contradiction by A12,A20,SCMFSA_2:47,124;
+     end;
      end;
  end;
 
@@ -5153,6 +5231,7 @@ definition
      SCM+FSA-Stop);
  correctness;
 end;
+
 
 theorem Th115: ::T211147 *** n.t
  for I being good Macro-Instruction, a being read-write Int-Location holds
@@ -5434,11 +5513,15 @@ A5: for k being Nat holds P[k] implies P[k + 1]
         then A37: IC C2.n = IC C1.n by SCMFSA8A:6;
              IC C1.n in dom P by A36,SCMFSA7B:def 7;
            hence IC C2.n in dom loop P by A37,Th106;
+          end;
           suppose n = LifeSpan s1 + 1;
            hence IC C2.n in dom loop P by A13,A16;
+          end;
           suppose n = LifeSpan s1 + 1 + 1;
            hence IC C2.n in dom loop P by A16,A31;
          end;
+         end;
+      end;
       suppose A38: k > 0;
        consider Is3 being State of SCM+FSA such that A39: Is3 = Initialize s3;
    A40: Is3.intloc 0 = 1 by A39,SCMFSA6C:3;
@@ -5484,6 +5567,7 @@ A5: for k being Nat holds P[k] implies P[k + 1]
         then A51: IC C2.n = IC C1.n by SCMFSA8A:6;
              IC C1.n in dom P by A50,SCMFSA7B:def 7;
            hence IC C2.n in dom loop P by A51,Th106;
+          end;
           suppose A52: LifeSpan s1 + 1 <= n;
            consider mm being Nat such that
        A53: mm = n -' (LifeSpan s1 + 1);
@@ -5495,10 +5579,12 @@ A5: for k being Nat holds P[k] implies P[k + 1]
            then mm < m0 by A49,REAL_1:54;
            hence IC C2.n in dom loop P by A39,A42,A43,A54;
          end;
+         end;
+       end;
        end;
      end;
    reconsider sa = s.a as Nat by A3,INT_1:16;
-     for k being Nat holds P[k] from Ind(A4,A5);
+     for k being Nat holds P[k] from NAT_1:sch 1(A4,A5);
    then P[sa];
    then ex k being Nat st
      IC (Computation (s +* (loop P +* Start-At insloc 0))).k =
@@ -5550,11 +5636,13 @@ A3: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
         is_pseudo-closed_on s by A1,A2,A4,Th117;
     hence Times(a,I) is_closed_on s & Times(a,I) is_halting_on s
         by A3,A4,Th68;
+   end;
    suppose A5: s.a <= 0;
       SCM+FSA-Stop is_closed_on s & SCM+FSA-Stop is_halting_on s
         by SCMFSA7B:24,25;
     hence Times(a,I) is_closed_on s & Times(a,I) is_halting_on s
         by A3,A5,SCMFSA8B:24;
+ end;
  end;
 
 theorem
@@ -5578,6 +5666,7 @@ A2: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
            is_pseudo-closed_on Initialize s by A1,A3,Th117;
        then Times(a,I) is_halting_on Initialize s by A2,A3,Th68;
        hence Initialized Times(a,I) is_halting_on s by Th22;
+      end;
       suppose s.a <= 0;
     then A4: (Initialize s).a <= 0 by SCMFSA6C:3;
          SCM+FSA-Stop is_closed_on Initialize s &
@@ -5585,6 +5674,7 @@ A2: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
 ;
        then Times(a,I) is_halting_on Initialize s by A2,A4,SCMFSA8B:24;
        hence Initialized Times(a,I) is_halting_on s by Th22;
+    end;
     end;
    hence Initialized Times(a,I) is halting by Th24;
  end;
@@ -5744,6 +5834,7 @@ SCMFSA6A:31
     then A20: IC C2.n = IC C1.n by SCMFSA8A:6;
          IC C1.n in dom P by A19,SCMFSA7B:def 7;
        hence IC (Computation s2).n in dom loop P by A20,Th106;
+      end;
       suppose A21: n = LifeSpan s1 + 1;
     A22: card loop P = card dom loop P by PRE_CIRC:21
        .= card dom P by Th106
@@ -5756,6 +5847,7 @@ SCMFSA6A:31
        then 0 < 2 & 2 <= card P by NAT_1:29;
        then 0 < card loop P by A22;
        hence IC (Computation s2).n in dom loop P by A6,A21,SCMFSA6A:15;
+     end;
      end;
  end;
 
@@ -5859,14 +5951,17 @@ A19: now let b be Int-Location;
       per cases;
       suppose b = intloc 0;
        hence C2.k.b = IExec(I1,s).b by A7,A17,Th96;
+      end;
       suppose b = a;
        hence C2.k.b = IExec(I1,s).b by A6,A13,SCMFSA6C:3;
+      end;
       suppose A20: b <> a & b <> intloc 0;
        then reconsider bb = b as read-write Int-Location by SF_MASTR:def 5;
        thus C2.k.b = IExec(I,s0).bb by A8,A20
        .= Exec(SubFrom(a,intloc 0),IExec(I,s0)).b by A20,SCMFSA_2:91
        .= IExec(I1,s0).b by SCMFSA6C:7
        .= IExec(I1,s).b by Th17;
+     end;
      end;
      now let f be FinSeq-Location;
       thus C2.k.f = IExec(I,s0).f by A9
@@ -5943,6 +6038,7 @@ then A42: k + 2 = pseudo-LifeSpan(s0,loop P) by A5,A22,A40,SCMFSA8A:def 5;
     .= (Result s21) | D by Th35
     .= IExec(I1,s) | D by A5,A14,A15,A21,A42,A43,Th59
     .= IExec(Times(a,I),IExec(I1,s)) | D by A18,A24,Th123;
+   end;
    suppose A44: ss.a <> 0;
       s.a >= 0 + 1 by A2,INT_1:20;
 then A45: ss.intloc 0 = 1 & ss.a > 0 by A13,A17,A44,Th96,REAL_1:84;
@@ -5958,11 +6054,13 @@ A49: now
           .= 1 by A51,SCMFSA6B:35
           .= ss0.a by A51,SCMFSA6C:3
           .= s31.a by A50,SCMFSA6A:38;
+         end;
          suppose a <> intloc 0;
        then A52: a is read-write Int-Location by SF_MASTR:def 5;
           thus (Computation s21).k.a = ss.a by A48,SCMFSA6A:38
           .= ss0.a by A52,SCMFSA6C:3
           .= s31.a by A50,SCMFSA6A:38;
+        end;
         end;
       let f be FinSeq-Location;
       thus (Computation s21).k.f = ss.f by A48,SCMFSA6A:38
@@ -5997,6 +6095,7 @@ then A54: Result s21,Result s31 equal_outside A by A53,Th103;
    .= IExec(Times(a,I),IExec(I1,s)) | D by A3,A45,A46,Th69;
    hence IExec(Times(a,I),s) | D =
        IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s)) | D by A16,Th17;
+ end;
  end;
 
 begin ::example
@@ -6064,7 +6163,7 @@ A6: for k being Nat st P[k] holds P[k + 1]
       .= s.b + s.c * s.a by XCMPLX_1:26;
       hence thesis by A12,SCMFSA6A:38;
      end;
-A13: for k being Nat holds P[k] from Ind(A3,A6);
+A13: for k being Nat holds P[k] from NAT_1:sch 1(A3,A6);
    reconsider sa = s.a as Nat by A2,INT_1:16;
      P[sa] by A13;
    hence IExec(Times(a,Macro AddTo(b,c)),s).b = s.b + s.c * s.a;

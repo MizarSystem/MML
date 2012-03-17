@@ -51,6 +51,7 @@ Initialized I is halting;
   for k being Nat holds ((Computation s).k).intloc 0 = 1;
 end;
 
+
 theorem :: SCM_HALT:1   ::TM001
 for x being set,i,m,n being Nat st
 x in dom (((intloc i) .--> m) +* Start-At insloc n) holds
@@ -65,9 +66,11 @@ theorem :: SCM_HALT:3    ::I_iS
 theorem :: SCM_HALT:4
   Macro halt SCM+FSA is InitHalting;
 
-definition
+registration
  cluster InitHalting Macro-Instruction;
+ existence by Th4;
 end;
+
 
 theorem :: SCM_HALT:5   ::TM006=HA2,HA,SCMFSA6B:19
  for I being InitHalting Macro-Instruction
@@ -80,21 +83,178 @@ theorem :: SCM_HALT:7   ::int0_1
 for I being Macro-Instruction,s being State of SCM+FSA st
     Initialized I c= s holds s.intloc 0 =1;
 
-definition
+registration
   cluster paraclosed -> InitClosed Macro-Instruction;
+  coherence proof
+     let I be Macro-Instruction;
+     assume A1: I is paraclosed;
+     set SA=Start-At insloc 0;
+A2: I +* SA c= Initialized I by Th6;
+       now
+      let s be State of SCM+FSA, n be Nat;
+      assume Initialized I c= s;
+      then I +* SA c=s by A2,XBOOLE_1:1;
+      hence IC (Computation s).n in dom I by A1,SCMFSA6B:def 2;
+     end;
+     hence thesis by Def1;
+   end;
 end;
 
-definition
+
+registration
   cluster parahalting -> InitHalting Macro-Instruction;
+  coherence proof
+     let I be Macro-Instruction;
+     assume I is parahalting;
+     then reconsider I as parahalting Macro-Instruction;
+       Initialized I is halting;
+     hence thesis by Def2;
+   end;
 end;
 
-definition
+
+registration
  cluster InitHalting -> InitClosed Macro-Instruction;
+ coherence proof
+  let I be Macro-Instruction;
+  assume A1: I is InitHalting;
+  let s be State of SCM+FSA, n be Nat;
+ assume A2: Initialized I c= s;
+  defpred X[Nat] means not IC (Computation s).$1 in dom I;
+ assume not IC (Computation s).n in dom I;
+then A3: ex n st X[n];
+  consider n such that
+A4: X[n] and
+A5: for m st X[m] holds n <= m from NAT_1:sch 5(A3);
+   set s2 = (Computation s).n,
+       s0 = s +*(IC s2, goto IC s2), s1 = s2 +*(IC s2, goto IC s2);
+   set II = Initialized I;
+A6: I c= II by SCMFSA6A:26;
+A7: II is halting by A1,Def2;
+     II | the Instruction-Locations of SCM+FSA = I by SCMFSA6A:33;
+   then dom I = dom II /\ the Instruction-Locations of SCM+FSA by RELAT_1:90;
+   then not IC s2 in dom II by A4,XBOOLE_0:def 3;
+then A8: II c= s0 by A2,SCMFSA6A:1;
+then A9: s0 is halting by A7,AMI_1:def 26;
+     s,s0 equal_outside the Instruction-Locations of SCM+FSA by SCMFSA6A:3;
+then A10: s0,s equal_outside the Instruction-Locations of SCM+FSA by FUNCT_7:28
+;
+A11: I c= s0 by A6,A8,XBOOLE_1:1;
+A12: I c= s by A2,A6,XBOOLE_1:1;
+   for m st m < n holds IC((Computation s).m) in dom I by A5;
+then A13: (Computation s0).n,s2 equal_outside
+    the Instruction-Locations of SCM+FSA by A10,A11,A12,SCMFSA6B:21;
+     s2,s1 equal_outside the Instruction-Locations of SCM+FSA by SCMFSA6A:3;
+   then A14: (Computation s0).n,s1 equal_outside
+    the Instruction-Locations of SCM+FSA by A13,FUNCT_7:29;
+A15:  s|the Instruction-Locations of SCM+FSA
+     = s2|the Instruction-Locations of SCM+FSA by SCMFSA6B:17;
+     (Computation s0).n|the Instruction-Locations of SCM+FSA
+      = s0|the Instruction-Locations of SCM+FSA by SCMFSA6B:17
+     .= s1|the Instruction-Locations of SCM+FSA by A15,SCMFSA6A:5;
+   then A16: (Computation s0).n = s1 by A14,SCMFSA6A:2;
+    s1 is not halting by SCMFSA6B:20;
+  hence contradiction by A9,A16,SCM_1:27;
+ end;
 
  cluster keepInt0_1 -> InitClosed Macro-Instruction;
+ coherence proof
+  let I be Macro-Instruction;
+  assume A17: I is keepInt0_1;
+  let s be State of SCM+FSA, n be Nat;
+  assume A18: Initialized I c= s;
+ A19: dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+  defpred X[Nat] means not IC (Computation s).$1 in dom I;
+     assume not IC (Computation s).n in dom I;
+ then A20: ex n st X[n];
+    consider n such that
+ A21: X[n] and
+ A22: for m st X[m] holds n <= m from NAT_1:sch 5(A20);
+    set FI = FirstNotUsed(I);
+    set s2 = (Computation s).n,
+       s00 = s +*(IC s2, intloc 0 := FI);
+   set s0 = s00+* (FI, (s.intloc 0)+1);
+   reconsider s00 as State of SCM+FSA;
+   reconsider s0 as State of SCM+FSA;
+     not I is keepInt0_1
+   proof take s0;
+   set IS = Initialized I;
+   set iIC={intloc 0} \/ {IC SCM+FSA};
+ A23: dom IS = dom I \/ {intloc 0} \/ {IC SCM+FSA} by SCMFSA6A:43
+     .= dom I \/ iIC by XBOOLE_1:4;
+       IC s2 <> IC SCM+FSA by AMI_1:48;
+ then A24:  not IC s2 in {IC SCM+FSA} by TARSKI:def 1;
+        IC s2 <> intloc 0 by SCMFSA_2:84;
+      then not IC s2 in {intloc 0} by TARSKI:def 1;
+      then not IC s2 in iIC by A24,XBOOLE_0:def 2;
+      then not IC s2 in dom IS by A21,A23,XBOOLE_0:def 2;
+then A25:  IS c= s00 by A18,SCMFSA6A:1;
+A26:  not FI in dom I by A19,SCMFSA_2:84;
+         FI <> IC SCM+FSA by SCMFSA_2:81;
+then A27:   not FI in {IC SCM+FSA} by TARSKI:def 1;
+         not FI in {intloc 0} by TARSKI:def 1;
+       then not FI in iIC by A27,XBOOLE_0:def 2;
+       then not FI in dom IS by A23,A26,XBOOLE_0:def 2;
+       hence Initialized I c= s0 by A25,SCMFSA6A:1;
+then A28:  I +*Start-At insloc 0 c= s0 by SCMFSA6B:8;
+A29:  I +*Start-At insloc 0 c= s by A18,SCMFSA6B:8;
+       take k = n+1;
+       set s02 = (Computation s0).n;
+A30:  (for m st m < n holds IC (Computation s).m in dom I) by A22;
+A31:  not FI in UsedIntLoc I by SF_MASTR:54;
+A32:  not IC s2 in UsedIntLoc I
+      proof assume not thesis;
+         then IC s2 is Int-Location by SCMFSA_2:11;
+         hence contradiction by SCMFSA_2:84;
+      end;
+A33:  s0 | UsedIntLoc I = s00 | UsedIntLoc I by A31,SCMFSA6A:4
+                        .= s | UsedIntLoc I by A32,SCMFSA6A:4;
+ A34: not FI in UsedInt*Loc I proof assume not thesis; then FI is
+FinSeq-Location by SCMFSA_2:12;
+       hence contradiction by SCMFSA_2:83;
+      end;
+ A35: not IC s2 in UsedInt*Loc I proof assume not thesis; then IC s2 is
+FinSeq-Location by SCMFSA_2:12;
+      hence contradiction by SCMFSA_2:85;
+     end;
+A36:  s.intloc 0=1 by A18,Th7;
+A37:  s0 | UsedInt*Loc I = s00 | UsedInt*Loc I by A34,SCMFSA6A:4
+                         .= s | UsedInt*Loc I by A35,SCMFSA6A:4;
+then A38: (for m st m < n holds IC (Computation s0).m in dom I)
+       by A28,A29,A30,A33,SF_MASTR:73;
+A39: IC s02 = IC s2 by A28,A29,A30,A33,A37,SF_MASTR:73;
+        FI in dom s00 by SCMFSA_2:66;
+ then s0.FI = (s.intloc 0)+1 by FUNCT_7:33;
+then A40: s02.FI = 1+1 by A28,A31,A36,A38,SF_MASTR:69;
+A41: IC s2 in dom s by SCMFSA_2:5;
+       IC s2 <> FI & IC s2 in dom s00 by SCMFSA_2:5,84;
+     then s0.IC s2 = s00.IC s2 by FUNCT_7:34
+             .= intloc 0 := FI by A41,FUNCT_7:33;
+then A42: s02.IC s02 = intloc 0 := FI by A39,AMI_1:54;
+      (Computation s0).k = Following s02 by AMI_1:def 19
+      .= Exec(CurInstr s02, s02) by AMI_1:def 18
+      .= Exec(intloc 0 := FI, s02) by A42,AMI_1:def 17;
+     hence ((Computation s0).k).intloc 0 <> 1 by A40,SCMFSA_2:89;
+   end;
+   hence contradiction by A17;
+ end;
 
  cluster keeping_0 -> keepInt0_1 Macro-Instruction;
+ coherence proof
+  let I be Macro-Instruction;
+  assume A43:I is keeping_0;
+    now let s be State of SCM+FSA;
+     assume A44:Initialized I c= s;
+then A45:  s.intloc 0=1 by Th7;
+       I +* Start-At insloc 0 c= Initialized I by SCMFSA8C:19;
+     then I +* Start-At insloc 0 c= s by A44,XBOOLE_1:1;
+     hence for k being Nat holds ((Computation s).k).intloc 0 = 1
+     by A43,A45,SCMFSA6B:def 4;
+  end;
+  hence thesis by Def3;
+ end;
 end;
+
 
 theorem :: SCM_HALT:8    ::TM008=SCMFSA6B:22
    for I being InitHalting Macro-Instruction,
@@ -105,13 +265,45 @@ theorem :: SCM_HALT:9    ::TM010=SCMFSA6B:23
    for I being InitHalting Macro-Instruction,f being FinSeq-Location
   holds not f in UsedInt*Loc I implies (IExec(I, s)).f = s.f;
 
-definition let I be InitHalting Macro-Instruction;
+registration let I be InitHalting Macro-Instruction;
  cluster Initialized I -> halting;
+ coherence by Def2;
 end;
 
-definition
+
+registration
  cluster InitHalting -> non empty Macro-Instruction;
+ coherence
+  proof let I be Macro-Instruction such that
+A1: I is InitHalting and
+A2: I is empty;
+    reconsider I as InitHalting Macro-Instruction by A1;
+   deffunc U(Nat) = goto insloc 0;
+   deffunc V(Nat) = 1;
+   deffunc W(Nat) = <*>INT;
+   consider S be State of SCM+FSA such that
+A3: IC S = insloc 0 and
+A4:  for i being Nat holds
+     S.insloc i = U(i) & S.intloc i = V(i) & S.fsloc i = W(i) from
+SCMFSA6A:sch 1;
+A5:  I c= S by A2,XBOOLE_1:2;
+A6:  intloc 0 in dom S by SCMFSA_2:66;
+      S.intloc 0 = 1 by A4;
+    then (intloc 0) .--> 1 c= S by A6,SCMFSA6A:7;
+then A7:  I +* ((intloc 0) .--> 1) c= S by A5,SCMFSA6A:6;
+A8:  IC SCM+FSA in dom S by AMI_5:25;
+      S.IC SCM+FSA = insloc 0 by A3,AMI_1:def 15;
+    then IC SCM+FSA .--> insloc 0 c= S by A8,SCMFSA6A:7;
+then A9:  Start-At(insloc 0) c= S by AMI_3:def 12;
+      Initialized I = I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)
+              by SCMFSA6A:def 3;
+    then Initialized I c= S by A7,A9,SCMFSA6A:6;
+then A10:  S is halting by AMI_1:def 26;
+      S.insloc 0 = goto insloc 0 by A4;
+   hence contradiction by A3,A10,SCMFSA6B:24;
+  end;
 end;
+
 
 theorem :: SCM_HALT:10    ::TM012=SCMFSA6B:25
  for I being InitHalting Macro-Instruction holds dom I <> {};
@@ -153,13 +345,25 @@ theorem :: SCM_HALT:15   ::TM022=SCMFSA6B:29 ::T14
 theorem :: SCM_HALT:16
     Macro halt SCM+FSA is keeping_0;
 
-definition
+registration
  cluster keeping_0 InitHalting Macro-Instruction;
+ existence
+ proof
+   take Macro halt SCM+FSA;
+   thus thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster keepInt0_1 InitHalting Macro-Instruction;
+ existence
+ proof
+   take Macro halt SCM+FSA;
+   thus thesis;
+  end;
 end;
+
 
 theorem :: SCM_HALT:17   ::TM026=SCMFSA6B:35
  for I being keepInt0_1 InitHalting Macro-Instruction
@@ -231,11 +435,109 @@ theorem :: SCM_HALT:25  ::TM040=Th1:
         = LifeSpan (s +* I) + 1 + LifeSpan (Result (s +* I) +* Initialized J) &
      (J is keeping_0 implies (Result s).intloc 0 = 1);
 
-definition
+registration
  let I be keepInt0_1 InitHalting Macro-Instruction,
      J be InitHalting Macro-Instruction;
  cluster I ';' J -> InitHalting;
+ coherence
+proof
+   let s be State of SCM+FSA; assume
+A1:  Initialized (I ';' J) c= s;
+A2: Initialized (I ';' J) = (I ';' J) +* iS by Th3;
+A3: s = s +* Initialized (I ';' J) by A1,AMI_5:10;
+A4:  dom I misses dom iS by Th2;
+      iS c= (I ';' J) +* iS by FUNCT_4:26;
+then A5:   iS c= s by A1,A2,XBOOLE_1:1;
+     then s +*iS = s by AMI_5:10;
+then A6: s +* I = s +*(iS +* I) by FUNCT_4:15
+     .=s +*(I +* iS) by A4,FUNCT_4:36
+     .=s +* Initialized I by Th3;
+then A7: Initialized I c= s +* I by FUNCT_4:26;
+    then A8: s +* I is halting by Th5;
+   set JAt = Initialized J;
+   set s1 = s +* I;
+   set s3 = (Computation s1).(LifeSpan s1) +* JAt;
+   set m1 = LifeSpan s1;
+   set m3 = LifeSpan s3;
+   set D = Int-Locations \/ FinSeq-Locations;
+A9:  s3 | D = ((Computation s1).m1 | D) +* (JAt) | D by AMI_5:6;
+  A10: now let x be set;
+         assume x in dom ((JAt) | D);
+         then A11: x in dom (JAt) /\ D by FUNCT_1:68;
+      then A12: x in dom JAt & x in D by XBOOLE_0:def 3;
+        per cases by A12,SCMFSA6A:44;
+         suppose A13: x in dom J;
+            dom J c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+          hence ((JAt) | D).x = ((Computation s1).m1 | D).x by A12,A13,SCMFSA6A
+:37;
+         end;
+         suppose A14: x=intloc 0;
+          then x in Int-Locations by SCMFSA_2:9;
+       then A15: x in D by XBOOLE_0:def 2;
+       hence ((Computation s1).m1 | D).x=(Computation s1).m1.x by FUNCT_1:72
+            .=1 by A7,A14,Def3
+            .=JAt.x by A14,SCMFSA6A:46
+            .=((JAt) | D).x by A15,FUNCT_1:72;
+         end;
+         suppose x = IC SCM+FSA;
+          hence ((JAt) | D).x = ((Computation s1).m1 | D).x by A11,SCMFSA6A:37,
+XBOOLE_0:def 3;
+        end;
+        end;
+A16:  JAt c= s3 by FUNCT_4:26;
+      then dom JAt c= dom s3 by GRFUNC_1:8;
+  then A17: dom JAt c= the carrier of SCM+FSA by AMI_3:36;
+        dom ((JAt) | D) = dom JAt /\ D by RELAT_1:90;
+      then dom ((JAt) | D) c= (the carrier of SCM+FSA) /\ D
+          by A17,XBOOLE_1:26;
+      then dom ((JAt) | D) c= dom ((Computation s1).m1) /\ D
+          by AMI_3:36;
+      then dom ((JAt) | D) c= dom ((Computation s1).m1 | D)
+          by RELAT_1:90;
+      then (JAt) | D c= (Computation s1).m1 | D by A10,GRFUNC_1:8;
+then A18:   (Computation s1).m1 | D = s3 | D by A9,LATTICE2:8;
+        (Computation s1).m1, (Computation s).m1
+            equal_outside the Instruction-Locations of SCM+FSA
+              by A3,A6,A8,Th24;
+then A19: (Computation s).m1 | D = s3 | D by A18,SCMFSA6A:39;
+A20:   s3 is halting by A16,AMI_1:def 26;
+A21:   dom Directed I = dom I by SCMFSA6A:14;
+
+A22: Directed I c= I ';' J by SCMFSA6A:55;
+       dom (I ';' J) misses dom iS by Th2;
+then A23:   I ';' J c= Initialized (I ';' J) by A2,FUNCT_4:33;
+then A24:  Directed I c= Initialized (I ';' J) by A22,XBOOLE_1:1;
+        s1 +* Directed I = s +* (I +* Directed I) by FUNCT_4:15
+      .= s +* Directed I by A21,FUNCT_4:20
+      .= s +* Initialized (I ';' J) +* Directed I by A1,LATTICE2:8
+      .= s +* (Initialized (I ';' J) +* Directed I) by FUNCT_4:15
+      .= s +* Initialized (I ';' J) by A24,LATTICE2:8
+      .= s by A1,LATTICE2:8;
+then A25: Directed I c= s by FUNCT_4:26;
+then A26:    IC (Computation s).(LifeSpan (s +* I) + 1) = insloc card I
+                             by A5,A8,Th21;
+A27:  (Computation s).(m1 + 1) | D = s3 | D
+                         by A5,A8,A19,A25,Th22;
+      reconsider m = m1 + 1 + m3 as Nat;
+      set s4 = (Computation s).(m1 + 1);
+  A28: JAt c= s3 by FUNCT_4:26;
+  A29: I ';' J c= s by A1,A23,XBOOLE_1:1;
+        I ';' J = Directed I +* ProgramPart Relocated(J,card I)
+          by SCMFSA6A:def 4;
+      then ProgramPart Relocated(J,card I) c= I ';' J by FUNCT_4:26;
+      then ProgramPart Relocated(J,card I) c= s by A29,XBOOLE_1:1;
+   then A30: ProgramPart Relocated(J,card I) c= s4 by AMI_3:38;
+   take m;
+        IncAddr(CurInstr (Computation s3).m3,card I)
+          = CurInstr (Computation s4).m3 by A26,A27,A28,A30,Th12;
+      then IncAddr(CurInstr (Computation s3).m3,card I)
+          = CurInstr (Computation s).(m1 + 1 + m3) by AMI_1:51;
+   hence CurInstr((Computation s).m)
+        = IncAddr (halt SCM+FSA,card I) by A20,SCM_1:def 2
+       .= halt SCM+FSA by SCMFSA_4:8;
+  end;
 end;
+
 
 theorem :: SCM_HALT:26  ::TM042=Keep3
  for I being keepInt0_1 Macro-Instruction
@@ -271,51 +573,140 @@ theorem :: SCM_HALT:29   ::TM046
      IExec(I ';' J,s) =
          IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I);
 
-definition
+registration
  let i be parahalting Instruction of SCM+FSA;
  cluster Macro i -> InitHalting;
+ coherence;
 end;
 
 
-definition
+
+registration
  let i be parahalting Instruction of SCM+FSA,
      J be parahalting Macro-Instruction;
  cluster i ';' J -> InitHalting;
+ coherence;
 end;
 
-definition
+
+registration
  let i be keeping_0 parahalting Instruction of SCM+FSA,
      J be InitHalting Macro-Instruction;
  cluster i ';' J -> InitHalting;
+ coherence proof
+       Macro i ';' J is InitHalting;
+     hence thesis by SCMFSA6A:def 5;
+ end;
 end;
 
-definition
+
+registration
  let I, J be keepInt0_1 Macro-Instruction;
  cluster I ';' J -> keepInt0_1;
+ coherence proof
+  let s be State of SCM+FSA;
+  assume A1: Initialized (I ';' J) c= s;
+then A2: s +* Initialized (I ';' J) = s by AMI_5:10;
+A3:  Initialized(I ';' J) = (I ';' J) +* iS by Th3;
+           iS c= (I ';' J) +* iS by FUNCT_4:26;
+then A4:      iS c= s by A1,A3,XBOOLE_1:1;
+   s +*Initialized(I ';' J) = s +*(I ';' J) +* iS by A3,FUNCT_4:15
+    .= s +* iS +*(I ';' J) by Th19
+    .= s +* (I ';' J) by A4,AMI_5:10;
+then A5: s=s +* (I ';' J) by A1,AMI_5:10;
+A6: Initialized I c= s +* Initialized I by FUNCT_4:26;
+per cases;
+  suppose A7: s +* Initialized I is halting;
+    A8:  s +* Initialized I=s +* (I +* iS) by Th3
+        .= s +*I +* iS by FUNCT_4:15
+        .= s +* iS +* I by Th19
+        .= s +* I by A4,AMI_5:10;
+   let k be Nat;
+  hereby
+   per cases;
+   suppose A9: k <= LifeSpan(s +* Initialized I);
+    A10: (Computation (s +* Initialized I)).k.intloc 0 = 1 by A6,Def3;
+        (Computation (s +* Initialized I)).k,
+      (Computation (s +* Initialized (I ';' J))).k
+     equal_outside the Instruction-Locations of SCM+FSA by A7,A9,Th24;
+     hence ((Computation s).k).intloc 0 = 1 by A2,A10,SCMFSA6A:30;
+
+   end;
+   suppose A11: k > LifeSpan(s +* Initialized I);
+      set LS = LifeSpan(s +* Initialized I);
+          consider p being Nat such that
+      A12: k = LS + p & 1 <= p by A11,FSM_1:1;
+         consider r being Nat such that
+     A13: p = 1 + r by A12,NAT_1:28;
+     A14: k = LS + 1 + r by A12,A13,XCMPLX_1:1;
+      Initialized J c= Result(s +* I) +* Initialized J by FUNCT_4:26;
+  then A15: (Computation (Result(s +*I ) +* Initialized J)).r.intloc 0 = 1 by
+Def3;
+set Rr = (Computation (Result(s +* I) +* Initialized J)).r;
+set Sr = Start-At (IC ((Computation (Result(s +* I)
+                           +* Initialized J ))).r + card I);
+    dom Sr = {IC SCM+FSA} & intloc 0 <> IC SCM+FSA by AMI_3:34,SCMFSA_2:81;
+        then not intloc 0 in dom Sr by TARSKI:def 1;
+   then A16: (Rr +* Sr).intloc 0 = Rr.intloc 0 by FUNCT_4:12;
+          Rr +* Sr, (Computation (s +* (I ';' J))).(LS+1+r)
+        equal_outside the Instruction-Locations of SCM+FSA
+                     by A1,A7,A8,Th26;
+     hence ((Computation s).k).intloc 0 = 1 by A5,A14,A15,A16,SCMFSA6A:30;
+  end;
+  end;
+  end;
+  suppose A17: not s +* Initialized I is halting;
+    let k be Nat;
+      Initialized I c= s +* Initialized I by FUNCT_4:26;
+then A18:  (Computation (s +* Initialized I)).k.intloc 0 = 1 by Def3;
+      (Computation (s +* Initialized I)).k,
+     (Computation (s +* Initialized (I ';' J))).k
+       equal_outside the Instruction-Locations of SCM+FSA by A17,Th27;
+   hence ((Computation s).k).intloc 0 = 1 by A2,A18,SCMFSA6A:30;
+ end;
+ end;
 end;
 
-definition
+
+registration
  let j be keeping_0 parahalting Instruction of SCM+FSA,
      I be keepInt0_1 InitHalting Macro-Instruction;
  cluster I ';' j -> InitHalting keepInt0_1;
+ coherence proof
+       I ';' Macro j is InitHalting;
+     hence I ';' j is InitHalting by SCMFSA6A:def 6;
+        I ';' Macro j is keepInt0_1;
+     hence I ';' j is keepInt0_1 by SCMFSA6A:def 6;
+ end;
 end;
 
-definition
+
+registration
  let i be keeping_0 parahalting Instruction of SCM+FSA,
      J be keepInt0_1 InitHalting Macro-Instruction;
  cluster i ';' J -> InitHalting keepInt0_1;
+ coherence proof
+     thus i ';' J is InitHalting;
+       Macro i ';' J is keepInt0_1;
+     hence i ';' J is keepInt0_1 by SCMFSA6A:def 5;
+ end;
 end;
 
-definition
+
+registration
  let j be parahalting Instruction of SCM+FSA,
      I be parahalting Macro-Instruction;
  cluster I ';' j -> InitHalting;
+ coherence;
 end;
 
-definition
+
+registration
  let i,j be parahalting Instruction of SCM+FSA;
  cluster i ';' j -> InitHalting;
+ coherence;
 end;
+
 
 theorem :: SCM_HALT:30   ::TM048
  for I being keepInt0_1 InitHalting Macro-Instruction,
@@ -356,6 +747,7 @@ definition
  s +* Initialized I is halting;
 end;
 
+
 theorem :: SCM_HALT:35   ::TM052=TQ6
 for I being Macro-Instruction holds
  I is InitClosed iff for s being State of SCM+FSA holds I is_closed_onInit s;
@@ -369,17 +761,40 @@ for s being State of SCM+FSA, I being Macro-Instruction, a being Int-Location
  st I does_not_destroy a & I is_closed_onInit s & Initialized I c= s
 holds for k being Nat holds (Computation s).k.a = s.a;
 
-definition
+registration
  cluster InitHalting good Macro-Instruction;
+ existence
+proof
+   take SCM+FSA-Stop;
+   thus thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster InitClosed good -> keepInt0_1 Macro-Instruction;
+ correctness
+ proof
+   let I be Macro-Instruction;
+   assume A1: I is InitClosed good;
+then A2: I does_not_destroy intloc 0 by SCMFSA7B:def 5;
+     now let s be State of SCM+FSA;
+      assume A3: Initialized I c= s;
+      let k be Nat;
+        I is_closed_onInit s by A1,Th35;
+      hence (Computation s).k.intloc 0 = s.intloc 0 by A2,A3,Th37
+      .=1 by A3,Th7;
+     end;
+   hence I is keepInt0_1 by Def3;
+  end;
 end;
 
-definition
+
+registration
  cluster SCM+FSA-Stop -> InitHalting good;
+ coherence;
 end;
+
 
 theorem :: SCM_HALT:38   ::TM056=TG25
    for s being State of SCM+FSA,
@@ -532,13 +947,17 @@ theorem :: SCM_HALT:58   ::ThIFl0
      (s.a >= 0 implies IExec(if<0(a,I,J),s) =
          IExec(J,s) +* Start-At insloc (card I + card J + card J + 7)));
 
-definition
+registration
  let I,J be InitHalting Macro-Instruction;
  let a be read-write Int-Location;
  cluster if=0(a,I,J) -> InitHalting;
+ correctness by Th47;
  cluster if>0(a,I,J) -> InitHalting;
+ correctness by Th53;
  cluster if<0(a,I,J) -> InitHalting;
+ correctness by Th58;
 end;
+
 
 theorem :: SCM_HALT:59   ::TM202
  for I being Macro-Instruction holds
@@ -643,10 +1062,20 @@ theorem :: SCM_HALT:76   ::Itime
      a being read-write Int-Location st I does_not_destroy a holds
      Initialized Times(a,I) is halting;
 
-definition
+registration
  let a be read-write Int-Location,I be good Macro-Instruction;
  cluster Times(a,I) -> good;
+ coherence proof
+    set i=SubFrom(a,intloc 0);
+      i does_not_destroy intloc 0 by SCMFSA7B:14;
+    then reconsider Mi=Macro i as good Macro-Instruction by SCMFSA8C:99;
+      I ';' Mi is good;
+    then reconsider Ii=I ';' i as good Macro-Instruction by SCMFSA6A:def 6;
+      if>0(a,loop if=0(a,Goto insloc 2,Ii), SCM+FSA-Stop) is good;
+    hence thesis by SCMFSA8C:def 5;
+ end;
 end;
+
 
 theorem :: SCM_HALT:77  ::TMP22'
  for s being State of SCM+FSA, I being good InitHalting Macro-Instruction,
@@ -710,46 +1139,106 @@ definition let i be Instruction of SCM+FSA;
  i does_not_destroy intloc 0;
 end;
 
-definition
+
+registration
  cluster parahalting good Instruction of SCM+FSA;
+ existence
+ proof
+   take x=halt SCM+FSA;
+   thus x is parahalting;
+     x does_not_destroy intloc 0 by SCMFSA7B:11;
+   hence thesis by Def6;
+ end;
 end;
 
-definition
+
+registration
  let i be good Instruction of SCM+FSA,
      J be good Macro-Instruction;
  cluster i ';' J -> good;
+ coherence proof
+       i does_not_destroy intloc 0 by Def6;
+     then reconsider Mi=Macro i as good Macro-Instruction by SCMFSA8C:99;
+       Mi ';' J is good;
+     hence thesis by SCMFSA6A:def 5;
+ end;
 
  cluster J ';' i -> good;
+ coherence proof
+       i does_not_destroy intloc 0 by Def6;
+     then reconsider Mi=Macro i as good Macro-Instruction by SCMFSA8C:99;
+       J ';' Mi is good;
+     hence thesis by SCMFSA6A:def 6;
+ end;
 end;
 
-definition
+
+registration
  let i,j be good Instruction of SCM+FSA;
  cluster i ';' j -> good;
+ coherence proof
+       i does_not_destroy intloc 0 by Def6;
+     then reconsider Mi=Macro i as good Macro-Instruction by SCMFSA8C:99;
+       j does_not_destroy intloc 0 by Def6;
+     then reconsider Mj=Macro j as good Macro-Instruction by SCMFSA8C:99;
+       Mi ';' Mj is good;
+     hence thesis by SCMFSA6A:def 7;
+ end;
 end;
 
-definition
+
+registration
  let a be read-write Int-Location,b be Int-Location;
  cluster a := b -> good;
+ coherence proof
+      a := b does_not_destroy intloc 0 by SCMFSA7B:12;
+    hence thesis by Def6;
+ end;
 
  cluster SubFrom(a,b) -> good;
+ coherence proof
+      SubFrom(a,b) does_not_destroy intloc 0 by SCMFSA7B:14;
+    hence thesis by Def6;
+ end;
 end;
 
-definition
+
+registration
  let a be read-write Int-Location,b be Int-Location,f be FinSeq-Location;
  cluster a:=(f,b) -> good;
+  coherence proof
+      a:=(f,b) does_not_destroy intloc 0 by SCMFSA7B:20;
+    hence thesis by Def6;
+ end;
 end;
 
-definition
+
+registration
  let a,b be Int-Location,f be FinSeq-Location;
  cluster (f,a):=b -> good;
+  coherence proof
+      (f,a):=b does_not_destroy intloc 0 by SCMFSA7B:21;
+    hence thesis by Def6;
+ end;
 end;
 
-definition
+
+registration
  let a be read-write Int-Location,f be FinSeq-Location;
  cluster a:=len f -> good;
+ coherence proof
+      a:=len f does_not_destroy intloc 0 by SCMFSA7B:22;
+    hence thesis by Def6;
+ end;
 end;
 
-definition
+
+registration
  let n be Nat;
  cluster intloc (n+1) -> read-write;
+ coherence proof
+     intloc (n+1) <> intloc 0 by SCMFSA_2:16;
+   hence thesis by SF_MASTR:def 5;
+ end;
 end;
+

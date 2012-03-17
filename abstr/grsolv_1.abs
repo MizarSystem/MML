@@ -35,9 +35,56 @@ attr IT is solvable means
  for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative;
  end;
 
-definition
+
+registration
 cluster solvable strict Group;
+existence
+proof
+ consider G being Group;
+ take H=(1).G;
+ thus H is solvable
+ proof
+    <*H*> is FinSequence of Subgroups H
+  proof
+     rng <*H*> c=Subgroups H
+    proof
+       now let x be set;
+      assume A1:x in rng<*H*>;
+        rng <*H*> ={ H } by FINSEQ_1:56;
+      then x=H by A1,TARSKI:def 1;
+      then x is strict Subgroup of H by GROUP_2:63;
+      hence x in Subgroups H by GROUP_3:def 1;
+     end;
+      hence thesis by TARSKI:def 3;
+    end;
+   hence thesis by FINSEQ_1:def 4;
+  end;
+  then reconsider F=<*H*> as FinSequence of Subgroups H;
+  take F;
+  A2:len F=1 by FINSEQ_1:56;
+  A3:F.1=H by FINSEQ_1:57
+      .=(Omega).H by GROUP_2:def 8;
+  A4:F.(len F)=H by A2,FINSEQ_1:57
+            .=(1).H by GROUP_2:75;
+  for i st i in dom F & i+1 in dom F
+ for G1,G2 being Subgroup of H st G1=F.i & G2=F.(i+1) holds
+ G2 is normal Subgroup of G1 &
+ for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
+  proof
+    let i;
+    assume A5:i in dom F & i+1 in dom F;
+    let G1,G2 be Subgroup of H;
+    assume G1=F.i & G2=F.(i+1);
+      dom F={1} by A2,FINSEQ_1:4,def 3;
+    then i=1 & i+1=1 by A5,TARSKI:def 1;
+    hence thesis;
+  end;
+  hence thesis by A2,A3,A4;
+ end;
+thus thesis;
 end;
+end;
+
 
 theorem :: GRSOLV_1:1
 for G being strict Group for H,F1,F2 being strict Subgroup of G st
@@ -89,12 +136,14 @@ func g|A -> Homomorphism of A,H equals
   g|(the carrier of A);
 end;
 
+
 definition let G,H be strict Group;
 let g be Homomorphism of G,H;let A be Subgroup of G;
 func g.:A -> strict Subgroup of H equals
 :: GRSOLV_1:def 3
  Image (g| A);
 end;
+
 
 theorem :: GRSOLV_1:8
  for G,H being strict Group, g being Homomorphism of G,H

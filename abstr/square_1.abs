@@ -65,11 +65,43 @@ canceled;
 theorem :: SQUARE_1:29
 0 < x implies y - x < y;
 
-scheme RealContinuity { P[set], Q[set] } :
+scheme :: SQUARE_1:sch 1
+ RealContinuity { P[set], Q[set] } :
  ex z st
   for x,y st P[x] & Q[y] holds x <= z & z <= y
 provided
- for x,y st P[x] & Q[y] holds x <= y;
+ for x,y st P[x] & Q[y] holds x <= y
+proof
+ set X = { z where z is Element of REAL : P[z] };
+ set Y = { z where z is Element of REAL : Q[z] };
+A2: X c= REAL
+   proof let x be set; assume x in X;
+    then ex z being Element of REAL st z = x & P[z];
+    hence thesis;
+   end;
+    Y c= REAL
+   proof let x be set; assume x in Y;
+   then ex z being Element of REAL st z = x & Q[z];
+    hence thesis;
+   end;
+ then reconsider X, Y as Subset of REAL by A2;
+    for x,y being real number st x in X & y in Y holds x <= y
+   proof let x,y be real number;
+    assume x in X & y in Y;
+    then (ex z being Element of REAL st z = x & P[z]) &
+    ex z being Element of REAL st z = y & Q[z];
+    hence x <= y by A1;
+   end;
+  then consider z being real number such that
+A3: for x,y being real number st x in X & y in Y holds x <= z & z <= y
+  by AXIOMS:26;
+ take z; let x,y;
+ assume
+A4: P[x] & Q[y];
+    x is Element of REAL & y is Element of REAL by XREAL_0:def 1;
+ then x in X & y in Y by A4;
+ hence x <= z & z <= y by A3;
+end;
 
 definition let x,y;
  func min(x,y) -> real number equals
@@ -84,10 +116,12 @@ definition let x,y;
  idempotence;
 end;
 
+
 definition let x,y be Element of REAL;
  redefine func min(x,y) -> Element of REAL;
  redefine func max(x,y) -> Element of REAL;
 end;
+
 
 canceled 4;
 
@@ -150,9 +184,15 @@ definition let x;
  x * x;
 end;
 
-definition let x;
+
+registration let x;
   cluster x^2 -> real;
+ correctness
+  proof x^2 = x * x by Def3;
+  hence x^2 in REAL by XREAL_0:def 1;
+ end;
 end;
+
 
 definition let x be Element of REAL;
   redefine func x^2 -> Element of REAL;
@@ -227,9 +267,11 @@ definition let a;
  0 <= it & it^2 = a;
 end;
 
+
 definition let a be Element of REAL;
  redefine func sqrt a -> Element of REAL;
 end;
+
 
 canceled 3;
 

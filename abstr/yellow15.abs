@@ -27,7 +27,8 @@ environ
 
 begin  :: Preliminaries
 
-  scheme SeqLambda1C{ i() -> Nat, D() -> non empty set, C[set], F(set)->set,
+  scheme :: YELLOW15:sch 1
+ SeqLambda1C{ i() -> Nat, D() -> non empty set, C[set], F(set)->set,
                       G(set)->set } :
    ex p be FinSequence of D() st
     len p = i() &
@@ -35,7 +36,25 @@ begin  :: Preliminaries
      (C[i] implies p.i = F(i)) & (not C[i] implies p.i = G(i))
    provided
      for i be Nat st i in Seg i() holds
-     (C[i] implies F(i) in D()) & (not C[i] implies G(i) in D());
+     (C[i] implies F(i) in D()) & (not C[i] implies G(i) in D())
+proof
+     defpred c[set] means C[$1];
+     deffunc f(set) = F($1);
+     deffunc g(set) = G($1);
+    A2: for x be set st x in Seg i() holds
+     (c[x] implies f(x) in D()) & (not c[x] implies g(x) in D()) by A1;
+    consider p be Function of Seg i(),D() such that
+     A3: for x be set st x in Seg i() holds
+     (c[x] implies p.x = f(x)) & (not c[x] implies p.x = g(x))
+                                                           from FUNCT_2:sch 9
+(A2);
+    A4: dom p = Seg i() by FUNCT_2:def 1;
+    then reconsider p as FinSequence by FINSEQ_1:def 2;
+      rng p c= D() by RELSET_1:12;
+    then reconsider p as FinSequence of D() by FINSEQ_1:def 4;
+    take p;
+    thus thesis by A3,A4,FINSEQ_1:def 3;
+   end;
 
   definition
    let X be set;
@@ -43,9 +62,12 @@ begin  :: Preliminaries
    redefine func rng p -> Subset-Family of X;
   end;
 
-  definition
+
+  registration
    cluster BOOLEAN -> finite;
+   coherence by MARGREL1:def 12;
   end;
+
 
 canceled;
 
@@ -59,15 +81,23 @@ canceled;
    for S be Subset-Family of T holds
     S is finite;
 
-  definition
+  registration
    let T be finite set;
    cluster -> finite Subset-Family of T;
+   coherence by Th3;
   end;
 
-  definition
+
+  registration
    let T be finite 1-sorted;
    cluster -> finite Subset-Family of T;
+   coherence
+   proof
+      the carrier of T is finite by GROUP_1:def 13;
+    hence thesis by Th3;
+   end;
   end;
+
 
   theorem :: YELLOW15:4
    for X be non trivial set
@@ -85,6 +115,7 @@ begin  :: Components
     len it = len p &
     for i be Nat st i in dom p holds it.i = IFEQ(q.i,TRUE,p.i,X\p.i);
   end;
+
 
   theorem :: YELLOW15:5
    for X be set
@@ -167,9 +198,14 @@ begin  :: Components
     { Intersect (rng MergeSequence(p,q)) where
      q is FinSequence of BOOLEAN : len q = len p } is Subset-Family of X;
 
-definition
+registration
  cluster -> boolean-valued FinSequence of BOOLEAN;
+ coherence
+  proof let f be FinSequence of BOOLEAN;
+   thus rng f c= BOOLEAN by FINSEQ_1:def 4;
+  end;
 end;
+
 
   definition
    let X be set;
@@ -182,11 +218,39 @@ end;
       q is FinSequence of BOOLEAN : len q = len p };
   end;
 
-  definition
+
+  registration
    let X be set;
    let Y be finite Subset-Family of X;
    cluster Components(Y) -> finite;
+   coherence
+   proof
+    consider p be FinSequence of bool X such that
+       len p = card Y and
+       rng p = Y and
+     A1: Components(Y) = { Intersect (rng MergeSequence(p,q)) where
+      q is FinSequence of BOOLEAN : len q = len p } by Def2;
+    A2: len p-tuples_on BOOLEAN is finite by Th2;
+     deffunc F(Element of BOOLEAN*) = Intersect (rng MergeSequence(p,$1));
+    A3: { F(q) where q is Element of BOOLEAN* :
+     q in len p-tuples_on BOOLEAN } is finite from FRAENKEL:sch 21(A2);
+      Components(Y) c= { Intersect (rng MergeSequence(p,q))
+     where q is Element of BOOLEAN* : q in len p-tuples_on BOOLEAN }
+    proof
+     let z be set;
+     assume z in Components(Y);
+     then consider q be FinSequence of BOOLEAN such that
+      A4: z = Intersect (rng MergeSequence(p,q)) and
+      A5: len q = len p by A1;
+     A6: q is Element of BOOLEAN* by FINSEQ_1:def 11;
+       q is Element of len q-tuples_on BOOLEAN by FINSEQ_2:110;
+     hence z in { Intersect (rng MergeSequence(p,q1)) where q1 is
+      Element of BOOLEAN* : q1 in len p-tuples_on BOOLEAN } by A4,A5,A6;
+    end;
+    hence thesis by A3,FINSET_1:13;
+   end;
   end;
+
 
   theorem :: YELLOW15:17
    for X be set
@@ -217,6 +281,7 @@ end;
     not {} in Components(Y);
   end;
 
+
   theorem :: YELLOW15:21
      for X be set
    for Y,Z be finite Subset-Family of X st
@@ -243,10 +308,12 @@ begin  :: About basis of Topological Spaces
    for L be non empty RelStr holds
     [#]L is with_bottom with_top;
 
-  definition
+  registration
    let L be non empty RelStr;
    cluster [#]L -> infs-closed sups-closed with_bottom with_top;
+   coherence by Th24,Th25;
   end;
+
 
   theorem :: YELLOW15:26
      for L be continuous sup-Semilattice holds

@@ -95,13 +95,36 @@ definition let M be MetrSpace;
    (the distance of it).(x,y) = (the distance of M).(x,y);
 end;
 
-definition let M be MetrSpace;
+
+registration let M be MetrSpace;
  cluster strict SubSpace of M;
+  existence
+  proof
+     reconsider MM = MetrStruct (#the carrier of M, the distance of M#)
+      as MetrSpace by Lm2;
+       the carrier of MM c= the carrier of M &
+     for x,y being Point of MM holds
+     (the distance of MM).(x,y) = (the distance of M).(x,y);
+    then MM is SubSpace of M by Def1;
+   hence thesis;
+  end;
 end;
 
-definition let M be non empty MetrSpace;
+
+registration let M be non empty MetrSpace;
  cluster strict non empty SubSpace of M;
+  existence
+  proof
+     reconsider MM = MetrStruct (#the carrier of M, the distance of M#)
+      as MetrSpace by Lm2;
+       the carrier of MM c= the carrier of M &
+     for x,y being Point of MM holds
+     (the distance of MM).(x,y) = (the distance of M).(x,y);
+    then MM is SubSpace of M by Def1;
+   hence thesis;
+  end;
 end;
+
 
 reserve A for non empty SubSpace of M;
 
@@ -123,10 +146,16 @@ definition let M be non empty MetrSpace,
  the carrier of it = A;
 end;
 
-definition let M be non empty MetrSpace,
+
+registration let M be non empty MetrSpace,
     A be non empty Subset of M;
  cluster M|A -> non empty;
+coherence
+  proof
+   thus the carrier of (M|A) is non empty by Def2;
+  end;
 end;
+
 
 definition let a,b be real number;
 assume  a <= b;
@@ -136,6 +165,7 @@ assume  a <= b;
    for P being non empty Subset of RealSpace st
     P = [. a,b .] holds it = RealSpace | P;
 end;
+
 
 theorem :: TOPMETR:14
  a <= b implies the carrier of Closed-Interval-MSpace(a,b) = [. a,b .];
@@ -147,11 +177,13 @@ definition let M be MetrStruct, F be Subset-Family of M;
 :: TOPMETR:def 4
    for P being set holds P in F implies
    ex p being Point of M, r st P = Ball(p,r);
-  synonym F is_ball-family;
- pred F is_a_cover_of M means
+  pred F is_a_cover_of M means
 :: TOPMETR:def 5
    the carrier of M c= union F;
 end;
+notation let M be MetrStruct, F be Subset-Family of M;
+ synonym F is_ball-family for F is being_ball-family ; end;
+
 
 theorem :: TOPMETR:15
 for p,q being Point of RealSpace, x,y being real number holds
@@ -191,6 +223,7 @@ definition let M be MetrStruct;
    TopSpaceMetr(M) is compact;
 end;
 
+
 theorem :: TOPMETR:23
 M is compact iff
  for F st F is_ball-family & F is_a_cover_of M
@@ -204,22 +237,36 @@ definition
    TopSpaceMetr(RealSpace);
 end;
 
-definition
+
+registration
  cluster R^1 -> non empty;
+ coherence by Def7;
 end;
+
 
 theorem :: TOPMETR:24
 the carrier of R^1 = REAL;
 
-definition let C be set, f be PartFunc of C, the carrier of R^1, x be set;
+registration let C be set, f be PartFunc of C, the carrier of R^1, x be set;
  cluster f.x -> real;
+  coherence
+ proof per cases;
+  suppose x in dom f;
+   hence f.x in REAL by Th24,PARTFUN1:27;
+  end;
+  suppose not x in dom f;
+   hence thesis by CARD_1:51,FUNCT_1:def 4;
+ end;
+ end;
 end;
+
 
 definition let a,b be real number;
  func Closed-Interval-TSpace(a,b) -> strict non empty SubSpace of R^1 equals
 :: TOPMETR:def 8
     TopSpaceMetr(Closed-Interval-MSpace(a,b));
 end;
+
 
 theorem :: TOPMETR:25
  a <= b implies the carrier of Closed-Interval-TSpace(a,b) = [. a,b .];

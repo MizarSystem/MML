@@ -11,8 +11,6 @@ RELSET_1
 FUNCT_2
 ORDERS_1
 #
-LambdaC'
-#
 G3 W8 ;;M1 ;M1 ;;
 ªM1 V1 ;V4 ;;ª&R1 K1 B1 ;U1 F1 ;;;M2 U1 F1 ;;;&ª&P1 B2 ;ªR1 K28 B1 B2 ;F2 B2 ;;;ª&ªP1 B2 ;ªR1 K28 B1 B2 ;F3 B2 ;;;;;;
 #

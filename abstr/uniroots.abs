@@ -1,6 +1,6 @@
 :: Primitive Roots of Unity and Cyclotomic Polynomials
 ::  by Broderic Arneson and Piotr Rudnicki
-:: 
+::
 :: Received December 30, 2003
 :: Copyright (c) 2003 Association of Mizar Users
 
@@ -19,8 +19,8 @@ environ
       FINSEQ_1, RAT_1, FINSEQ_2, FINSEQ_4, FINSOP_1, PARTFUN1, TOPREAL1,
       COMPLEX1, NORMSP_1, BINARITH, RVSUM_1, ALGSEQ_1, COMPLFLD, HAHNBAN1,
       POLYNOM3, POLYNOM4, POLYNOM5, COMPTRIG, CARD_1, COMPLSP1, GROUP_2,
-      SIN_COS, PREPOWER, FINSET_1, GROUP_1, MOD_2, ENUMSET1, GRAPH_2, ORDINAL1,
-      RLVECT_2, POLYNOM1, FVSUM_1, UPROOTS;
+      SIN_COS, NEWTON, PREPOWER, FINSET_1, GROUP_1, MOD_2, ENUMSET1, GRAPH_2,
+      ORDINAL1, RLVECT_2, POLYNOM1, FVSUM_1, UPROOTS;
  constructors ARYTM_0, REAL_1, FINSOP_1, POWER, WELLORD2, INT_2, TOPREAL1,
       COMPLSP1, BINARITH, HAHNBAN1, POLYNOM4, COMPTRIG, COMPLEX1, FVSUM_1,
       SIN_COS, POLYNOM5, PREPOWER, SETWOP_2, WELLFND1, PRE_CIRC, FINSEQOP,
@@ -37,12 +37,30 @@ begin :: Preliminaries
 theorem :: UNIROOTS:1  ::Nat012:
 for n being Nat holds n = 0 or n = 1 or n >= 2;
 
-scheme Comp_Ind_NE { P[non empty Nat] } :
+scheme :: UNIROOTS:sch 1
+ Comp_Ind_NE { P[non empty Nat] } :
  for k being non empty Nat holds P[k]
 provided
  for k being non empty Nat
     st for n being non empty Nat st n < k holds P[n]
-     holds P[k];
+     holds P[k]
+proof
+ defpred R[Nat] means ex m being non empty Nat st m = $1 & P[m];
+B: now let k being Nat such that
+   A1: k>=1 and
+   B1: for n being Nat st n>=1 & n<k holds R[n];
+       reconsider m = k as non empty Nat by A1, NEN;
+       now let n be non empty Nat such that
+       A2: n < m;           n >= 1 by NEN; then R[n] by B1, A2;
+        hence P[n] ;
+       end;       then P[m] by A;
+    hence R[k];
+   end;
+C: for k being Nat st k>=1 holds R[k] from INT_2:sch 2(B);
+   let k be non empty Nat;   k >= 1 by NEN;
+    then ex m being non empty Nat st m = k & P[m] by C;
+   hence P[k];
+end;
 
 theorem :: UNIROOTS:2  ::FS1:
 for f being FinSequence st 1 <= len f holds f | Seg 1 = <*f.1*>;
@@ -117,10 +135,17 @@ for F being FinSequence of F_Complex
 theorem :: UNIROOTS:17  ::G_Th5H2:
 for a being Real st 0 <= a & a < 2*PI & cos(a) = 1 holds a = 0;
 
-definition
+registration
   cluster finite Field;
+  existence proof reconsider W=Z3 as Field by MOD_2:37;
+    take W; thus W is finite by Z3fF;
+  end;
   cluster finite Skew-Field;
+  existence proof reconsider W=Z3 as Skew-Field by MOD_2:37;
+    take W; thus W is finite by Z3fF;
+  end;
 end;
+
 
 begin :: Multiplicative group of a skew field
 
@@ -131,6 +156,7 @@ definition
     the carrier of it = (the carrier of R) \ {0.R} &
     the mult of it = (the mult of R)|[:the carrier of it, the carrier of it:];
 end;
+
 
 theorem :: UNIROOTS:18 :: MultG00:  :: WEDDWITT
 for R being Skew-Field
@@ -144,9 +170,14 @@ for R being Skew-Field,
 theorem :: UNIROOTS:20  ::MultG01:
 for R being Skew-Field  holds 1_ R = 1.(MultGroup R);
 
-definition let R be finite Skew-Field;
+registration let R be finite Skew-Field;
   cluster MultGroup R -> finite;
+  correctness proof
+      the carrier of MultGroup R = (the carrier of R) \ {0.R} by DefMultG;
+    hence thesis by GROUP_1:def 13;
+  end;
 end;
+
 
 theorem :: UNIROOTS:21 :: MultG1 WEDDWITT
 for R being finite Skew-Field
@@ -166,6 +197,7 @@ definition let n be non empty Nat;
 :: UNIROOTS:def 2
        { x where x is Element of F_Complex : x is CRoot of n,1_(F_Complex) };
 end;
+
 
 theorem :: UNIROOTS:24  ::Th1:
 for n being non empty Nat, x being Element of  F_Complex
@@ -194,10 +226,15 @@ for n being non empty Nat holds
 theorem :: UNIROOTS:30  ::CRU0:
 for n being non empty Nat holds Card (n-roots_of_1) = n;
 
-definition let n be non empty Nat;
+registration let n be non empty Nat;
   cluster n-roots_of_1 -> non empty;
+  correctness by Th2;
   cluster n-roots_of_1 -> finite;
+  correctness proof Card (n-roots_of_1) = n by CRU0;
+   hence thesis by CARD_4:1;
+  end;
 end;
+
 
 theorem :: UNIROOTS:31  ::Th8:
 for n, ni being non empty Nat
@@ -246,6 +283,7 @@ definition let n be non empty Nat;
       (the mult of F_Complex) | [: n-roots_of_1, n-roots_of_1 :];
 end;
 
+
 theorem :: UNIROOTS:40
 for n being non empty Nat
  holds n-th_roots_of_1 is Subgroup of MultGroup F_Complex;
@@ -257,6 +295,7 @@ definition let n be non empty Nat, L be left_unital (non empty doubleLoopStr);
 :: UNIROOTS:def 4
   0_.(L)+*(0,-(1_(L)))+*(n,1_(L));
 end;
+
 
 theorem :: UNIROOTS:41
 unital_poly(F_Complex,1) = <%-1_ F_Complex, 1_ F_Complex %>;
@@ -275,11 +314,17 @@ for L being non degenerated left_unital (non empty doubleLoopStr),
     n being non empty Nat
  holds len unital_poly(L,n) = n+1;
 
-definition
+registration
   let L be non degenerated left_unital (non empty doubleLoopStr),
       n be non empty Nat;
  cluster unital_poly(L,n) -> non-zero;
+ correctness proof
+   len unital_poly(L,n) = n+1 by Unit2; then len unital_poly(L,n) <> 0; then
+   len unital_poly(L,n) > 0 by NAT_1:19;
+   hence thesis by UPROOTS:18;
+ end;
 end;
+
 
 theorem :: UNIROOTS:45  ::Unit3:
 for n being non empty Nat for x being Element of F_Complex
@@ -308,6 +353,7 @@ definition let i be Integer,n be Nat;
   redefine func i |^ n -> Integer;
 end;
 
+
 theorem :: UNIROOTS:51  ::Unit6:
 for n being non empty Nat, i being Element of F_Complex
  st i is Integer holds eval(unital_poly(F_Complex, n), i) is Integer;
@@ -321,6 +367,7 @@ definition let d be non empty Nat;
     st s = { y where y is Element of MultGroup F_Complex : ord y = d } &
        it = poly_with_roots((s,1)-bag);
 end;
+
 
 theorem :: UNIROOTS:52  ::Cyclo01:
 cyclotomic_poly(1) = <%-1_ F_Complex, 1_ F_Complex %>;

@@ -40,6 +40,7 @@ definition let UA;
   for h be Function of UA, UA holds h in it iff h is_isomorphism UA, UA;
 end;
 
+
 theorem :: AUTALG_1:2
   UAAut UA c= Funcs (the carrier of UA, the carrier of UA);
 
@@ -64,14 +65,21 @@ definition
  for x, y be Element of UAAut UA holds it.(x, y) = y * x;
 end;
 
+
 definition let UA;
   func UAAutGroup UA -> Group equals
 :: AUTALG_1:def 3
   HGrStr (# UAAut UA, UAAutComp UA #);
 end;
 
-definition let UA;
+
+registration let UA;
   cluster UAAutGroup UA -> strict;
+coherence
+  proof
+      UAAutGroup UA = HGrStr (# UAAut UA, UAAutComp UA #) by Def3;
+    hence thesis;
+  end;
 end;
 
 theorem :: AUTALG_1:8
@@ -97,6 +105,7 @@ definition let I, A, B;
  for i be set st i in I holds B.i = {} implies A.i = {};
 reflexivity;
 end;
+
 
 theorem :: AUTALG_1:11
   A is_transformable_to B & B is_transformable_to C
@@ -156,6 +165,7 @@ definition let I, A, B;
  for i be set st i in I holds it.i = Funcs(A.i, B.i);
 end;
 
+
 canceled;
 
 theorem :: AUTALG_1:21
@@ -178,25 +188,57 @@ definition let I, A, B;
  for x be set st x in it holds x is ManySortedFunction of A, B;
 end;
 
-definition let I, A;
+
+registration let I, A;
   cluster MSFuncs(A, A) -> non-empty;
+coherence
+  proof
+      for i be set st i in I holds MSFuncs(A, A).i is non empty
+    proof
+      let i be set;
+      assume A1: i in I;
+      then (id A).i is Function of A.i, A.i by MSUALG_1:def 2;
+      then (id A).i in Funcs(A.i, A.i) by FUNCT_2:12;
+      hence thesis by A1,Def5;
+    end;
+    hence MSFuncs(A, A) is non-empty by PBOOLE:def 16;
+  end;
 end;
+
 
 definition let S, U1, U2;
   mode MSFunctionSet of U1, U2 is MSFunctionSet of the Sorts of U1,
        the Sorts of U2;
 end;
 
-definition let I be set;
+
+registration let I be set;
            let D be ManySortedSet of I;
   cluster non empty MSFunctionSet of D, D;
+existence
+  proof
+      not ({} in rng MSFuncs(D, D)) by MSUALG_1:1;
+    then reconsider X = product MSFuncs(D, D) as non empty set by CARD_3:37;
+      X is MSFunctionSet of D, D
+    proof
+      thus D is_transformable_to D;
+      let x be set;
+      assume x in X;
+      hence thesis by Th21;
+    end;
+    then reconsider X as MSFunctionSet of D, D;
+    take X;
+    thus thesis;
+  end;
 end;
+
 
 definition let I be set;
            let D be ManySortedSet of I;
            let A be non empty MSFunctionSet of D, D;
   redefine mode Element of A -> ManySortedFunction of D, D;
 end;
+
 
 theorem :: AUTALG_1:24
   id A is "onto";
@@ -216,6 +258,7 @@ definition let S, U1;
   for h be ManySortedFunction of U1, U1 holds
       h in it iff h is_isomorphism U1, U1;
 end;
+
 
 canceled;
 
@@ -246,15 +289,23 @@ definition let S, U1;
  for x, y be Element of MSAAut U1 holds it.(x, y) = y ** x;
 end;
 
+
 definition let S, U1;
   func MSAAutGroup U1 -> Group equals
 :: AUTALG_1:def 9
   HGrStr (# MSAAut U1, MSAAutComp U1 #);
 end;
 
-definition let S, U1;
+
+registration let S, U1;
   cluster MSAAutGroup U1 -> strict;
+coherence
+  proof
+      MSAAutGroup U1 = HGrStr (# MSAAut U1, MSAAutComp U1 #) by Def9;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: AUTALG_1:35
 for x, y be Element of MSAAutGroup U1

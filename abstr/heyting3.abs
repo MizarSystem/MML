@@ -24,14 +24,31 @@ environ
 
 begin :: Preliminaries
 
-scheme SSubsetUniq { R() -> RelStr, P[set] } :
+scheme :: HEYTING3:sch 1
+ SSubsetUniq { R() -> RelStr, P[set] } :
   for A1, A2 being Subset of R() st
   (for x being set holds x in A1 iff P[x]) &
   (for x being set holds x in A2 iff P[x]) holds
-    A1 = A2;
+    A1 = A2
+proof
+  let A1, A2 be Subset of R();
+  assume that
+A1: for x being set holds x in A1 iff P[x] and
+A2: for x being set holds x in A2 iff P[x];
+    thus A1 c= A2
+    proof
+      let x be set; assume x in A1;
+      then P[x] by A1;
+      hence thesis by A2;
+    end;
+    let x be set; assume x in A2;
+    then P[x] by A2;
+    hence thesis by A1;
+end;
 
-definition let A, x be set;
+registration let A, x be set;
   cluster [:A, {x}:] -> Function-like;
+  coherence by Lm1;
 end;
 
 theorem :: HEYTING3:1
@@ -100,12 +117,24 @@ definition let V, C be set;
     LattPOSet SubstLatt (V, C);
 end;
 
-definition let V, C be set;
+
+registration let V, C be set;
   cluster SubstPoset (V, C) -> with_suprema with_infima;
+  coherence
+  proof
+      SubstPoset (V, C) = LattPOSet SubstLatt (V, C) by Def1;
+    hence thesis;
+  end;
 end;
 
-definition let V, C be set;
+
+registration let V, C be set;
   cluster SubstPoset (V, C) -> reflexive antisymmetric transitive;
+  coherence
+  proof
+      SubstPoset (V, C) = LattPOSet SubstLatt (V, C) by Def1;
+    hence thesis;
+  end;
 end;
 
 theorem :: HEYTING3:15
@@ -124,9 +153,47 @@ definition let n, k be Nat;
      ( ex m being odd Nat st m <= 2*n & [m,k] = x ) or [2*n,k] = x;
 end;
 
-definition let n, k be Nat;
+
+registration let n, k be Nat;
   cluster PFArt (n, k) -> finite;
+  coherence
+  proof
+      PFArt (n, k) c= [:Seg (2*n) \/ {0}, {k}:]
+    proof
+      let t be set; assume A1: t in PFArt (n, k);
+      per cases by A1,Def2;
+      suppose ex m1 being odd Nat st m1 <= 2*n & [m1,k] = t;
+      then consider m1 being odd Nat such that
+A2:     m1 <= 2*n & [m1,k] = t;
+    1 <= m1 by Th1;
+      then m1 in Seg (2*n) by A2,FINSEQ_1:3;
+      then m1 in Seg (2*n) \/ {0} by XBOOLE_0:def 2;
+      hence thesis by A2,ZFMISC_1:129;
+      end;
+      suppose A3: [2*n,k] = t;
+        now per cases;
+      suppose n is non empty;
+then A4:    1 <= n by RLVECT_1:99;
+        2 > 1 & n >= 0 by NAT_1:18;
+      then n <= 2*n by REAL_2:146;
+      then 1 <= 2*n by A4,AXIOMS:22;
+      then 2*n in Seg (2*n) by FINSEQ_1:3;
+      then 2*n in Seg (2*n) \/ {0} by XBOOLE_0:def 2;
+      hence thesis by A3,ZFMISC_1:129;
+      end;
+      suppose n is empty;
+      then 2*n in {0} by TARSKI:def 1;
+      then 2*n in Seg (2*n) \/ {0} by XBOOLE_0:def 2;
+      hence thesis by A3,ZFMISC_1:129;
+      end;
+      end;
+      hence thesis;
+    end;
+    end;
+    hence thesis by FINSET_1:13;
+  end;
 end;
+
 
 definition let n, k be Nat;
   func PFCrt (n, k) -> Element of PFuncs (NAT, {k}) means
@@ -135,9 +202,25 @@ definition let n, k be Nat;
      ( ex m being odd Nat st m <= 2*n + 1 & [m,k] = x );
 end;
 
-definition let n,k be Nat;
+
+registration let n,k be Nat;
   cluster PFCrt (n,k) -> finite;
+  coherence
+  proof
+    set x = PFCrt (n,k);
+      x c= [:Seg (2*n+1), {k}:]
+    proof
+      let t be set; assume t in x;
+      then consider m being odd Nat such that
+A1:     m <= 2*n + 1 & [m,k] = t by Def3;
+        1 <= m by Th1;
+      then m in Seg (2*n+1) by A1,FINSEQ_1:3;
+      hence thesis by A1,ZFMISC_1:129;
+    end;
+    hence thesis by FINSET_1:13;
+  end;
 end;
+
 
 theorem :: HEYTING3:17
   for n, k being Nat holds [2*n+1,k] in PFCrt (n,k);
@@ -151,9 +234,15 @@ theorem :: HEYTING3:19
 theorem :: HEYTING3:20
   for n, k being Nat holds PFCrt (n,k) c< PFCrt (n+1,k);
 
-definition let n, k be Nat;
+registration let n, k be Nat;
   cluster PFArt (n, k) -> non empty;
+  coherence
+  proof
+      [2*n, k] in PFArt (n, k) by Def2;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: HEYTING3:21
   for n, m, k being Nat holds not PFArt (n, m) c= PFCrt (k, m);
@@ -171,6 +260,7 @@ definition let n, k be Nat;
     ( ex m being non empty Nat st m <= n & x = PFArt (m,k) ) or
       x = PFCrt (n,k);
 end;
+
 
 theorem :: HEYTING3:24
     for n, k being Nat,
@@ -200,15 +290,22 @@ definition let k be Nat;
       x = PFBrt (n,k);
 end;
 
+
 theorem :: HEYTING3:29
    for k being Nat holds PFBrt (1,k) = { PFArt (1,k), PFCrt (1,k) };
 
 theorem :: HEYTING3:30
   for k being Nat holds PFBrt (1,k) <> {{}};
 
-definition let k be Nat;
+registration let k be Nat;
   cluster PFBrt (1,k) -> non empty;
+  coherence
+  proof
+      PFArt (1,k) in PFBrt (1,k) by Def4;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: HEYTING3:31
   for n, k being Nat holds { PFArt (n,k) } is Element of SubstPoset (NAT, {k});
@@ -231,8 +328,18 @@ theorem :: HEYTING3:34
       X being Subset of SubstPoset (NAT, {k}) st
    a is_<=_than X & b is_<=_than X holds a "\/" b is_<=_than X;
 
-definition let k be Nat;
+registration let k be Nat;
   cluster non empty Element of SubstPoset (NAT, {k});
+  existence
+  proof
+      SubstitutionSet (NAT, {k})
+      = the carrier of SubstPoset (NAT, {k}) by Lm5;
+    then {{}} in the carrier of SubstPoset (NAT, {k}) by SUBSTLAT:2;
+    then reconsider E = {{}} as Element of SubstPoset (NAT, {k})
+     ;
+    take E;
+    thus thesis;
+  end;
 end;
 
 theorem :: HEYTING3:35
@@ -277,11 +384,22 @@ theorem :: HEYTING3:43
       a being Element of SubstPoset (NAT, {m}) st
     PFDrt m is_>=_than a holds a <> {{}};
 
-definition let m be Nat;
+registration let m be Nat;
   cluster SubstPoset (NAT, {m}) -> non complete;
+  coherence by Lm12;
 end;
 
-definition let m be Nat;
+
+registration let m be Nat;
   cluster SubstLatt (NAT, {m}) -> non complete;
+  coherence
+  proof
+    assume SubstLatt (NAT, {m}) is complete;
+    then reconsider K = SubstLatt (NAT, {m}) as complete Lattice;
+A1:  LattPOSet K is complete;
+      SubstPoset (NAT, {m}) is non complete;
+    hence thesis by A1,Def1;
+  end;
 end;
+
 

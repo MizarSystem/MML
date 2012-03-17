@@ -2,8 +2,6 @@ HIDDEN
 RELAT_1
 FUNCT_1
 #
-LambdaFS
-#
 M1 ;M1 ;;
 ªM1 V1 ;V3 ;;ª&R1 K1 B1 ;F1 ;;M1 V1 ;V3 ;;ª&R2 B2 F1 ;;ªR1 K11 B1 B2 ;F2 B2 ;;;;;
 #

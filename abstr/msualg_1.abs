@@ -27,18 +27,38 @@ reserve i,j for set,
 theorem :: MSUALG_1:1
  not ex M being non-empty ManySortedSet of I st {} in rng M;
 
-scheme MSSEx { I() -> set, P[set,set] }:
+scheme :: MSUALG_1:sch 1
+ MSSEx { I() -> set, P[set,set] }:
  ex f being ManySortedSet of I() st
   for i st i in I() holds P[i,f.i]
-  provided  for i st i in I() ex j st P[i,j];
+  provided  for i st i in I() ex j st P[i,j]
+proof
+   defpred Q[set,set] means P[$1,$2];
+   A2: for i st i in I() ex j st Q[i,j] by A1;
+   consider f being Function such that
+A3: dom f = I() and
+A4: for i st i in I() holds Q[i,f.i] from ZFREFLE1:sch 1(A2);
+   reconsider f as ManySortedSet of I() by A3,PBOOLE:def 3;
+  take f; thus thesis by A4;
+ end;
 
-scheme MSSLambda { I() -> set, F(set) -> set }:
+scheme :: MSUALG_1:sch 2
+ MSSLambda { I() -> set, F(set) -> set }:
  ex f being ManySortedSet of I() st
-  for i st i in I() holds f.i = F(i);
+  for i st i in I() holds f.i = F(i)
+proof
+   deffunc G(set)=F($1);
+   consider f being Function such that
+A1:  dom f = I() and
+A2:  for i st i in I() holds f.i = G(i) from FUNCT_1:sch 3;
+   reconsider f as ManySortedSet of I() by A1,PBOOLE:def 3;
+  take f; thus thesis by A2;
+ end;
 
 definition let I be set; let M be ManySortedSet of I;
  mode Component of M is Element of rng M;
 end;
+
 
 theorem :: MSUALG_1:2
  for I being non empty set
@@ -54,6 +74,7 @@ definition let I; let B be ManySortedSet of I;
    for i st i in I holds it.i is Element of B.i;
 end;
 
+
 begin :: Many Sorted Functions
 
 definition let I;
@@ -63,10 +84,19 @@ definition let I;
  for i st i in I holds it.i is Function of A.i, B.i;
 end;
 
-definition let I;
+
+registration let I;
  let A be ManySortedSet of I, B be ManySortedSet of I;
  cluster ->Function-yielding ManySortedFunction of A,B;
+  coherence
+   proof let f be ManySortedFunction of A,B;
+    let i;
+     assume i in dom f;
+      then i in I by PBOOLE:def 3;
+     hence f.i is Function by Def2;
+   end;
 end;
+
 
 definition let I be set; let M be ManySortedSet of I;
  func M# -> ManySortedSet of I* means
@@ -74,9 +104,25 @@ definition let I be set; let M be ManySortedSet of I;
  for i being Element of I* holds it.i = product(M*i);
 end;
 
-definition let I be set; let M be non-empty ManySortedSet of I;
+
+registration let I be set; let M be non-empty ManySortedSet of I;
  cluster M# -> non-empty;
+ coherence
+  proof
+      M# is non-empty
+    proof let i;
+     assume
+      i in I*;
+      then reconsider f = i as Element of I*;
+        not {} in rng M by Th1;
+      then not {} in rng(M*f) by FUNCT_1:25;
+      then product(M*f) <> {} by CARD_3:37;
+     hence M#.i is non empty by Def3;
+    end;
+   hence thesis;
+  end;
 end;
+
 
 definition let I; let J be non empty set;
  let O be Function of I,J;
@@ -84,17 +130,20 @@ definition let I; let J be non empty set;
  redefine func F*O -> ManySortedSet of I;
 end;
 
+
 definition let I; let J be non empty set;
  let O be Function of I,J;
  let F be non-empty ManySortedSet of J;
  redefine func F*O -> non-empty ManySortedSet of I;
 end;
 
+
 definition let a be set;
  func *-->a -> Function of NAT,{a}* means
 :: MSUALG_1:def 4
  for n being Nat holds it.n = n |-> a;
 end;
+
 
  reserve D for non empty set,
          n for Nat;
@@ -111,6 +160,7 @@ definition let I,i;
  redefine func I --> i -> Function of I,{i};
 end;
 
+
 begin :: Many Sorted Signatures
 
 definition
@@ -122,16 +172,35 @@ definition
        #);
 end;
 
+
 definition let IT be ManySortedSign;
  attr IT is void means
 :: MSUALG_1:def 5
  the OperSymbols of IT = {};
 end;
 
-definition
+
+registration
  cluster void strict non empty ManySortedSign;
+ existence
+  proof
+      {} in {{}}* by FINSEQ_1:66;
+    then reconsider f = {}-->{} as Function of {},{{}}* by FUNCOP_1:58;
+    reconsider g = {}-->{} as Function of {},{{}};
+   take ManySortedSign(#{{}},{},f,g#);
+   thus thesis by Def5,STRUCT_0:def 1;
+  end;
  cluster non void strict non empty ManySortedSign;
+  existence
+  proof
+      {} in {{}}* by FINSEQ_1:66;
+    then reconsider f = {{}}-->{} as Function of {{}},{{}}* by FUNCOP_1:58;
+    reconsider g = {{}}-->{} as Function of {{}},{{}};
+   take ManySortedSign(#{{}},{{}},f,g#);
+   thus thesis by Def5,STRUCT_0:def 1;
+  end;
 end;
+
 
 reserve S for non empty ManySortedSign;
 
@@ -139,6 +208,7 @@ definition let S;
  mode SortSymbol of S is Element of S;
  mode OperSymbol of S is Element of the OperSymbols of S;
 end;
+
 
 definition let S be non void non empty ManySortedSign;
  let o be OperSymbol of S;
@@ -150,11 +220,13 @@ definition let S be non void non empty ManySortedSign;
     (the ResultSort of S).o;
 end;
 
+
 begin :: Many Sorted Algebras
 
 definition let S be 1-sorted;
  struct many-sorted over S (# Sorts -> ManySortedSet of the carrier of S #);
 end;
+
 
 definition let S;
  struct(many-sorted over S) MSAlgebra over S (#
@@ -163,28 +235,69 @@ definition let S;
        (the Sorts)# * the Arity of S, the Sorts * the ResultSort of S#);
 end;
 
+
 definition let S be 1-sorted; let A be many-sorted over S;
  attr A is non-empty means
 :: MSUALG_1:def 8
  the Sorts of A is non-empty;
 end;
 
-definition let S;
+
+registration let S;
  cluster strict non-empty MSAlgebra over S;
+ existence
+  proof
+     dom((the carrier of S) --> {0}) = the carrier of S by FUNCOP_1:19;
+   then reconsider s = (the carrier of S) --> {0}
+            as ManySortedSet of the carrier of S by PBOOLE:def 3;
+   consider o being ManySortedFunction of
+       s# * the Arity of S, s * the ResultSort of S;
+   take MSAlgebra(#s,o#);
+   thus MSAlgebra(#s,o#) is strict;
+   let i be set;
+   assume i in the carrier of S;
+   hence thesis by FUNCOP_1:13;
+  end;
 end;
 
-definition let S be 1-sorted;
+
+registration let S be 1-sorted;
   cluster strict non-empty many-sorted over S;
+  existence
+  proof
+     dom ((the carrier of S) --> {0}) = the carrier of S by FUNCOP_1:19;
+   then reconsider s = (the carrier of S) --> {0}
+            as ManySortedSet of the carrier of S by PBOOLE:def 3;
+   take many-sorted(#s#);
+   thus many-sorted (#s#) is strict;
+   let i be set;
+   assume i in the carrier of S;
+   hence thesis by FUNCOP_1:13;
+  end;
 end;
 
-definition let S be 1-sorted; let A be non-empty many-sorted over S;
+
+registration let S be 1-sorted; let A be non-empty many-sorted over S;
  cluster the Sorts of A -> non-empty;
+  coherence by Def8;
 end;
 
-definition let S; let A be non-empty MSAlgebra over S;
+
+registration let S; let A be non-empty MSAlgebra over S;
  cluster -> non empty Component of the Sorts of A;
+  coherence
+   proof let C be Component of the Sorts of A;
+       ex i st i in the carrier of S & C = (the Sorts of A).i by Th2;
+    hence thesis by PBOOLE:def 16;
+   end;
  cluster -> non empty Component of (the Sorts of A)#;
+  coherence
+   proof let C be Component of (the Sorts of A)#;
+       ex i st i in (the carrier of S)* & C = (the Sorts of A)#.i by Th2;
+    hence thesis by PBOOLE:def 16;
+   end;
 end;
+
 
 definition let S be non void non empty ManySortedSign;
  let o be OperSymbol of S; let A be MSAlgebra over S;
@@ -196,12 +309,14 @@ definition let S be non void non empty ManySortedSign;
  ((the Sorts of A) * the ResultSort of S).o;
 end;
 
+
 definition let S be non void non empty ManySortedSign;
  let o be OperSymbol of S; let A be MSAlgebra over S;
  func Den(o,A) -> Function of Args(o,A), Result(o,A) equals
 :: MSUALG_1:def 11
   (the Charact of A).o;
 end;
+
 
 theorem :: MSUALG_1:6
  for S being non void non empty ManySortedSign, o being OperSymbol of S,
@@ -228,11 +343,13 @@ definition let A be Universal_Algebra;
  redefine func signature A -> FinSequence of NAT;
 end;
 
+
 definition let IT be ManySortedSign;
  attr IT is segmental means
 :: MSUALG_1:def 12
   ex n st the OperSymbols of IT = Seg n;
 end;
+
 
 theorem :: MSUALG_1:10
  for S being non empty ManySortedSign st S is trivial
@@ -240,9 +357,18 @@ theorem :: MSUALG_1:10
      c1,c2 being Component of the Sorts of A holds c1 = c2;
 
 
-definition
+registration
  cluster segmental trivial non void strict non empty ManySortedSign;
+ existence
+  proof consider A being Universal_Algebra;
+    reconsider f = (*-->0)*(signature A) as Function of dom signature A, {0}*
+             by Th7;
+      ManySortedSign(#{0},dom signature(A),f,dom signature(A)-->0#)
+     is segmental trivial non void strict non empty by Lm2;
+   hence thesis;
+  end;
 end;
+
 
 definition let A be Universal_Algebra;
  func MSSign A -> non void strict segmental trivial ManySortedSign means
@@ -254,15 +380,22 @@ definition let A be Universal_Algebra;
   the ResultSort of it = dom signature(A)-->0;
 end;
 
-definition let A be Universal_Algebra;
+
+registration let A be Universal_Algebra;
  cluster MSSign A -> non empty;
+ coherence
+  proof
+   thus the carrier of MSSign A is non empty by Def13;
+  end;
 end;
+
 
 definition let A be Universal_Algebra;
  func MSSorts A -> non-empty ManySortedSet of the carrier of MSSign A equals
 :: MSUALG_1:def 14
  {0}-->the carrier of A;
 end;
+
 
 definition let A be Universal_Algebra;
  func MSCharact A -> ManySortedFunction of
@@ -272,15 +405,23 @@ definition let A be Universal_Algebra;
   the charact of A;
 end;
 
+
 definition let A be Universal_Algebra;
  func MSAlg A -> strict MSAlgebra over MSSign A equals
 :: MSUALG_1:def 16
   MSAlgebra(#MSSorts A,MSCharact A#);
 end;
 
-definition let A be Universal_Algebra;
+
+registration let A be Universal_Algebra;
  cluster MSAlg A -> non-empty;
+ coherence
+  proof
+      MSAlg A = MSAlgebra(#MSSorts A,MSCharact A#) by Def16;
+   hence the Sorts of MSAlg A is non-empty;
+  end;
 end;
+
 
 :: Manysorted Algebras with 1 Sort Only
 
@@ -291,10 +432,17 @@ definition let MS be trivial non empty ManySortedSign;
  ex c being Component of the Sorts of A st it = c;
 end;
 
-definition let MS be trivial non empty ManySortedSign;
+
+registration let MS be trivial non empty ManySortedSign;
  let A be non-empty MSAlgebra over MS;
  cluster the_sort_of A -> non empty;
+ coherence
+  proof
+      ex c being Component of the Sorts of A st the_sort_of A = c by Def17;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: MSUALG_1:11
  for MS being segmental trivial non void non empty ManySortedSign,
@@ -322,6 +470,7 @@ definition let MS be segmental trivial non void non empty ManySortedSign;
  the Charact of A;
 end;
 
+
 reserve MS for segmental trivial non void non empty ManySortedSign,
         A for non-empty MSAlgebra over MS,
         h for PartFunc of (the_sort_of A)*,(the_sort_of A),
@@ -332,6 +481,7 @@ definition let MS,A;
 :: MSUALG_1:def 19
    UAStr(#the_sort_of A, the_charact_of A#);
 end;
+
 
 theorem :: MSUALG_1:15
    for A being strict Universal_Algebra holds

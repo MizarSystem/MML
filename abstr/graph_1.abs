@@ -33,13 +33,22 @@ attr IT is Graph-like means
   the Vertices of IT is non empty set;
 end;
 
-definition
+
+registration
  cluster strict Graph-like MultiGraphStruct;
+existence
+  proof
+      MultiGraphStruct(# DomEx, {}, _empty, _empty #) is Graph-like
+     by Def1;
+   hence thesis;
+  end;
 end;
+
 
 definition
   mode Graph is Graph-like MultiGraphStruct;
 end;
+
 
 reserve G, G1, G2, G3 for Graph;
 
@@ -59,6 +68,7 @@ definition let G1, G2;
              (the Target of it).v = (the Target of G2).v);
 end;
 
+
 definition let G, G1, G2 be Graph;
   pred G is_sum_of G1, G2 means
 :: GRAPH_1:def 3
@@ -66,6 +76,7 @@ definition let G, G1, G2 be Graph;
     (the Source of G1) tolerates (the Source of G2) &
     the MultiGraphStruct of G = G1 \/ G2;
 end;
+
 
 definition let IT be Graph;
   attr IT is oriented means
@@ -96,17 +107,77 @@ definition let IT be Graph;
       IT is_sum_of G1, G2;
 end;
 
+
 definition let IT be MultiGraphStruct;
   attr IT is finite means
 :: GRAPH_1:def 8
      the Vertices of IT is finite & the Edges of IT is finite;
 end;
 
-definition
+
+registration
   cluster finite MultiGraphStruct;
+existence
+  proof
+    take G = MultiGraphStruct(# DomEx, {}, _empty, _empty #);
+    thus the Vertices of G is finite;
+    thus the Edges of G is finite;
+  end;
 
   cluster finite non-multi oriented simple connected Graph;
+existence
+  proof
+    set V = {1};
+    reconsider _empty = {} as Function of {}, V by FUNCT_2:55,RELAT_1:60;
+    reconsider G = MultiGraphStruct(# V, {}, _empty, _empty #)
+       as Graph by Def1;
+    take G;
+    thus G is finite by Def8;
+      for x,y st x in the Edges of G & y in the Edges of G &
+     (((the Source of G).x = (the Source of G).y &
+     (the Target of G).x = (the Target of G).y) or
+     ((the Source of G).x = (the Target of G).y &
+     (the Source of G).y = (the Target of G).x))
+     holds x = y;
+    hence G is non-multi by Def5;
+      for x,y st x in the Edges of G & y in the Edges of G &
+     (the Source of G).x = (the Source of G).y &
+     (the Target of G).x = (the Target of G).y
+     holds x = y;
+    hence G is oriented by Def4;
+      not ex x st x in the Edges of G &
+     (the Source of G).x = (the Target of G).x;
+    hence G is simple by Def6;
+
+      not ex G1, G2 being Graph st
+      (the Vertices of G1) misses (the Vertices of G2) &
+      G is_sum_of G1, G2
+    proof
+      given G1, G2 being Graph such that A1:
+       (the Vertices of G1) misses (the Vertices of G2) &
+      G is_sum_of G1, G2;
+A2:    (the Vertices of G1) /\ (the Vertices of G2) = {} by A1,XBOOLE_0:def 7;
+        (the Source of G1) tolerates (the Source of G2) &
+      (the Target of G1) tolerates (the Target of G2) &
+      G = G1 \/ G2 by A1,Def3;
+     then A3:  (the Vertices of G1) \/ (the Vertices of G2)
+       = V by Def2;
+      consider x being Element of the Vertices of G1;
+      A4: the Vertices of G1 is non empty set by Def1;
+then A5:   x in the Vertices of G1;
+        x in V by A3,A4,XBOOLE_0:def 2;
+     then A6: 1 in the Vertices of G1 by A5,TARSKI:def 1;
+      consider y being Element of the Vertices of G2;
+      A7: the Vertices of G2 is non empty set by Def1;
+then A8:   y in the Vertices of G2;
+        y in V by A3,A7,XBOOLE_0:def 2;
+      then 1 in the Vertices of G2 by A8,TARSKI:def 1;
+     hence contradiction by A2,A6,XBOOLE_0:def 3;
+    end;
+  hence G is connected by Def7;
+  end;
 end;
+
 
 reserve x, y for Element of (the Vertices of G);
 
@@ -117,11 +188,13 @@ definition let G; let x, y; let v;
        ((the Source of G).v = y & (the Target of G).v = x);
 end;
 
+
 definition let G; let x,y be Element of (the Vertices of G);
    pred x,y are_incydent means
 :: GRAPH_1:def 10
        ex v being set st v in the Edges of G & v joins x, y;
 end;
+
 
 definition let G be Graph;
    mode Chain of G -> FinSequence means
@@ -139,6 +212,7 @@ definition let G be Graph;
  redefine mode Chain of G -> FinSequence of the Edges of G;
 end;
 
+
 definition let G be Graph;
   let IT be Chain of G;
   attr IT is oriented means
@@ -147,8 +221,18 @@ definition let G be Graph;
        (the Source of G).(IT.(n+1)) = (the Target of G).(IT.n);
 end;
 
-definition let G be Graph;
+
+registration let G be Graph;
   cluster oriented Chain of G;
+existence
+  proof
+    reconsider p = {} as Chain of G by Lm3;
+    take p;
+    let n; assume 1 <= n & n <= len p;
+     then 1 <= len p by AXIOMS:22;
+     then 1 <= 0 by FINSEQ_1:25;
+    hence thesis;
+  end;
 end;
 
 definition let G be Graph;
@@ -158,21 +242,42 @@ definition let G be Graph;
       for n, m st 1 <= n & n < m & m <= len IT holds IT.n <> IT.m;
 end;
 
-definition let G be Graph;
+
+registration let G be Graph;
   cluster one-to-one Chain of G;
+existence
+  proof
+     reconsider p = {} as Chain of G by Lm3;
+     take p;
+     let n,m; assume 1 <= n & n < m & m <= len p;
+       then 1 < m & m <= len p by AXIOMS:22;
+       then 1 < len p by AXIOMS:22;
+       then 1 < 0 by FINSEQ_1:25;
+      hence thesis;
+  end;
 end;
+
 
 definition let G be Graph;
   mode Path of G is one-to-one Chain of G;
 end;
 
-definition let G be Graph;
+
+registration let G be Graph;
   cluster one-to-one oriented Chain of G;
+existence
+   proof
+     reconsider p = {} as oriented Chain of G by Lm4;
+     take p;
+     thus thesis;
+   end;
 end;
+
 
 definition let G be Graph;
   mode OrientedPath of G is one-to-one oriented Chain of G;
 end;
+
 
 definition let G be Graph;
    let IT be Path of G;
@@ -189,17 +294,51 @@ definition let G be Graph;
        p.1 = p.(len p);
 end;
 
-definition let G be Graph;
+
+registration let G be Graph;
    cluster cyclic Path of G;
+existence
+   proof
+     reconsider p = {} as Path of G by Lm3;
+     take p;
+     consider x being Element of the Vertices of G;
+       the Vertices of G is non empty set by Def1;
+then A1:   x in the Vertices of G;
+     take <*x*>;
+     thus len <*x*> = 0 + 1 by FINSEQ_1:56 .= len p + 1 by FINSEQ_1:25;
+     thus for n st 1 <= n & n <= len <*x*> holds <*x*>.n in the Vertices of G
+       proof let n; assume 1 <= n & n <= len <*x*>;
+         then 1 <= n & n <= 1 by FINSEQ_1:56;
+          then n = 1 by AXIOMS:21;
+        hence <*x*>.n in the Vertices of G by A1,FINSEQ_1:57;
+       end;
+      thus for n st 1 <= n & n <= len p
+         ex x', y' being Element of the Vertices of G st
+           x' = <*x*>.n & y' = <*x*>.(n+1) & p.n joins x', y'
+      proof let n; assume 1 <= n & n <= len p;
+        then 1 <= len p by AXIOMS:22;
+        then 1 <= 0 by FINSEQ_1:25;
+       hence thesis;
+      end;
+     thus <*x*>.1 = <*x*>.(len <*x*>) by FINSEQ_1:56;
+   end;
 end;
+
 
 definition let G be Graph;
    mode Cycle of G is cyclic Path of G;
 end;
 
-definition let G be Graph;
+registration let G be Graph;
    cluster cyclic OrientedPath of G;
+  existence
+    proof
+      reconsider p = {} as OrientedPath of G by Lm4;
+      take p;
+      thus p is cyclic by Lm5;
+    end;
 end;
+
 
 definition let G be Graph;
    mode OrientedCycle of G is cyclic OrientedPath of G;
@@ -219,9 +358,25 @@ definition let G be Graph;
     (the Target of G).v in the Vertices of it;
 end;
 
-definition let G be Graph;
+
+registration let G be Graph;
  cluster strict Subgraph of G;
+existence
+  proof the Vertices of G is non empty set by Def1;
+    then reconsider S =
+     MultiGraphStruct(# the Vertices of G, the Edges of G,
+                        the Source of G, the Target of G #) as Graph
+      by Def1;
+     for v st v in the Edges of S holds
+     (the Source of S).v = (the Source of G).v &
+     (the Target of S).v = (the Target of G).v &
+     (the Source of G).v in the Vertices of S &
+          (the Target of G).v in the Vertices of S by Lm6;
+    then S is Subgraph of G by Def17;
+   hence thesis;
+  end;
 end;
+
 
 definition let G be finite Graph;
    func VerticesCount G -> Nat means
@@ -232,6 +387,7 @@ definition let G be finite Graph;
 :: GRAPH_1:def 19
      ex B being finite set st B = the Edges of G & it = card B;
 end;
+
 
 definition let G be finite Graph; let x be Element of the Vertices of G;
    func EdgesIn x -> Nat means
@@ -248,6 +404,7 @@ definition let G be finite Graph; let x be Element of the Vertices of G;
         z in X iff z in the Edges of G & (the Source of G).z = x)
      & it = card(X);
 end;
+
 
 definition let G be finite Graph; let x be Element of the Vertices of G;
   func Degree x -> Nat equals
@@ -269,10 +426,29 @@ definition let G be Graph;
     x in it iff x is strict Subgraph of G;
 end;
 
-scheme GraphSeparation{G() -> Graph, P[set]}:
+
+scheme :: GRAPH_1:sch 1
+ GraphSeparation{G() -> Graph, P[set]}:
   ex X being set st
     for x being set holds
-      x in X iff x is strict Subgraph of G() & P[x];
+      x in X iff x is strict Subgraph of G() & P[x]
+proof
+  defpred _P[set] means P[$1];
+  consider X being set such that A1:
+    for x being set holds
+      x in X iff x in bool G() & _P[x] from XBOOLE_0:sch 1;
+ take X;
+ let x be set;
+ thus x in X implies x is strict Subgraph of G() & P[x]
+   proof assume A2: x in X;
+     then x in bool G() by A1;
+    hence x is strict Subgraph of G() by Def24;
+    thus P[x] by A1,A2;
+   end;
+ assume A3: x is strict Subgraph of G() & P[x];
+  then x in bool G() by Def24;
+ hence thesis by A1,A3;
+end;
 
                ::::::::::::::::::::::::::
                :: Properties of graphs ::

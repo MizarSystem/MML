@@ -10,10 +10,11 @@ environ
       REWRITE1, FINSEQ_5, ARYTM_1, EQREL_1, SETFAM_1, PUA2MSS1, PARTIT1,
       METRIC_1, TOLER_1, BOOLE, SUPINF_2, FINSET_1, SQUARE_1, LATTICES, TBSP_1,
       SUBSET_1, TAXONOM1;
- notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, PARTFUN1, STRUCT_0, RELAT_1, RELAT_2, FUNCT_1, RELSET_1,
-      FUNCT_2, PARTIT1, PRE_TOPC, METRIC_1, TBSP_1, FINSET_1, EQREL_1, ALG_1,
-      REWRITE1, FINSEQ_1, PRE_CIRC, NAT_1, LANG1, FINSEQ_5;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
+      ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, PUA2MSS1,
+      PARTFUN1, STRUCT_0, RELAT_1, RELAT_2, FUNCT_1, RELSET_1,
+      FUNCT_2, TOLER_1, PARTIT1, PRE_TOPC, METRIC_1, TBSP_1, FINSET_1, EQREL_1,
+      ALG_1, REWRITE1, FINSEQ_1, PRE_CIRC, NAT_1, LANG1, FINSEQ_5;
  constructors PARTIT1, PUA2MSS1, ALG_1, REWRITE1, NAT_1, LANG1, FINSEQ_5,
       PRE_CIRC, TBSP_1, PRE_TOPC;
  clusters XREAL_0, EQREL_1, RELSET_1, ARYTM_3, STRUCT_0, SUBSET_1, FINSET_1,
@@ -35,8 +36,7 @@ reserve A,X for non empty set;
 reserve f for PartFunc of [:X,X:],REAL;
 reserve a for real number;
 
-
-definition
+registration
  cluster non negative (real number);
 existence
   proof
@@ -84,6 +84,7 @@ A7:     j in dom p;
 A8:     k in dom p;
       hence p.(k+1) = p.k by A2,A6
          .= p.j by A5,A7,A8;
+      end;
       suppose not k in dom p;
 then A9:   k = 0 by A6,Th1;
 defpred R[Nat] means
@@ -98,14 +99,17 @@ A13:       w+1 in dom p;
         per cases;
         suppose w in dom p;
         hence p.(w+1) = p.1 by A2,A12,A13;
+        end;
         suppose not w in dom p;
         then w = 0 by A13,Th1;
         hence p.(w+1) = p.1;
       end;
-        for k being Nat holds R[k] from Ind(A10,A11);
+      end;
+        for k being Nat holds R[k] from NAT_1:sch 1(A10,A11);
       hence p.(k+1) = p.j by A7,A9;
     end;
-      for k being Nat holds P[k] from Ind(A3,A4);
+    end;
+      for k being Nat holds P[k] from NAT_1:sch 1(A3,A4);
     hence p.i = p.j by A1;
 end;
 
@@ -168,9 +172,11 @@ proof
           now per cases by A2,REWRITE1:21;
           suppose [x,y] in R*;
           hence [x,y] in R*;
+          end;
           suppose A3: x = y;
             R* is_reflexive_in X by A1,Th5;
           hence [x,y] in R* by A2,A3,RELAT_2:def 1;
+        end;
         end;
        hence thesis;
 end;
@@ -374,18 +380,24 @@ A3:    Y in S;
              now per cases by A1,A3,TARSKI:def 2;
            suppose Y = {A};
            hence X is_finer_than Y or Y is_finer_than X by A4;
+           end;
            suppose Y = SmallestPartition A;
            hence X is_finer_than Y or Y is_finer_than X by A4,Th11;
          end;
+         end;
        hence X is_finer_than Y or Y is_finer_than X;
+       end;
        suppose A5:X = SmallestPartition A;
           now per cases by A1,A3,TARSKI:def 2;
            suppose Y = SmallestPartition A;
            hence X is_finer_than Y or Y is_finer_than X by A5;
+           end;
            suppose Y = {A};
            hence X is_finer_than Y or Y is_finer_than X by A5,Th11;
          end;
+         end;
        hence X is_finer_than Y or Y is_finer_than X;
+       end;
        end;
        hence thesis;
        end;
@@ -432,7 +444,7 @@ existence
     defpred X[Element of X,Element of X] means f.($1,$2) <= a;
     consider R being Relation of X,X such that
 A1: for x, y being Element of X
-    holds [x,y] in R iff X[x,y] from Rel_On_Dom_Ex;
+    holds [x,y] in R iff X[x,y] from RELSET_1:sch 2;
     take R;
     thus thesis by A1;
   end;
@@ -818,7 +830,7 @@ existence
                 st R = low_toler(f,a)* & Class(R) = $1;
      consider A be set such that
 A1:    for x being set holds
-       x in A iff x in PARTITIONS(X) & X[x] from Separation;
+       x in A iff x in PARTITIONS(X) & X[x] from XBOOLE_0:sch 1;
      A c= PARTITIONS(X)
    proof
      let a be set;
@@ -854,7 +866,7 @@ A3: (for x being set holds x in X1 iff
 A4: for X1,X2 being Element of bool PARTITIONS X st
    (for x being set holds x in X1 iff X[x]) &
   (for x being set holds x in X2 iff X[x])
-  holds X1 = X2 from ElementEq;
+  holds X1 = X2 from LMOD_7:sch 1;
   thus X1 = X2 by A3,A4;
  end;
 end;
@@ -941,6 +953,7 @@ A5: Class R2 = B by A1,Def5;
          thus x c= y by A2,A4,A6,A8,A9,Lm2;
        end;
      hence A is_finer_than B or B is_finer_than A by SETFAM_1:def 2;
+     end;
      suppose A10: a1 > a2;
          now
          let y being set such that A11:y in B;
@@ -952,6 +965,7 @@ A12:      c in X & y = Class(R2,c) by A5,A11,EQREL_1:def 5;
          thus y c= x by A2,A4,A10,A12,A13,Lm2;
        end;
      hence A is_finer_than B or B is_finer_than A by SETFAM_1:def 2;
+     end;
      end;
 hence A is_finer_than B or B is_finer_than A;
 end;
@@ -994,7 +1008,7 @@ existence
          means $1,$2 are_in_tolerance_wrt a;
    consider R being Relation of the carrier of M, the carrier of M such that
 A1: for x, y being Element of M
-    holds [x,y] in R iff X[x,y] from Rel_On_Dom_Ex;
+    holds [x,y] in R iff X[x,y] from RELSET_1:sch 2;
     reconsider R as Relation of M;
     take R;
     thus thesis by A1;
@@ -1095,7 +1109,7 @@ existence
      consider X be set such that
 A1:    for x being set holds
        x in X iff x in PARTITIONS(the carrier of M)
-           & X[x] from Separation;
+           & X[x] from XBOOLE_0:sch 1;
      X c= PARTITIONS(the carrier of M)
    proof
      let a be set;
@@ -1130,7 +1144,7 @@ A3: (for x being set holds x in X1 iff
 A4: for X1,X2 being Element of bool PARTITIONS the carrier of M st
    (for x being set holds x in X1 iff X[x]) &
   (for x being set holds x in X2 iff X[x])
-  holds X1 = X2 from ElementEq;
+  holds X1 = X2 from LMOD_7:sch 1;
   thus X1 = X2 by A3,A4;
  end;
 end;
@@ -1242,7 +1256,8 @@ proof
   hence thesis by A1,Th39;
 end;
 
-definition let M be Reflexive symmetric triangle (non empty MetrStruct),
+registration
+let M be Reflexive symmetric triangle (non empty MetrStruct),
                C be non empty bounded Subset of M;
 cluster diameter C -> non negative;
 coherence by TBSP_1:29;

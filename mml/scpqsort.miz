@@ -42,7 +42,7 @@ proof
    hence thesis;
 end;
 
-definition
+registration
    let I,J be shiftable Program-block,
    a be Int_position,k1 be Integer;
    cluster if>0(a,k1,I,J) -> shiftable;
@@ -58,6 +58,7 @@ definition
     hence thesis;
   end;
 end;
+
 
 theorem Th1:     :: see SCMPDS_6:87
  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
@@ -211,7 +212,7 @@ proof
 then A2:  ex k be Nat st X[k] by SCMPDS_6:def 2;
     consider n such that
 A3:  X[n] and
-A4:  for m be Nat st X[m] holds n <= m from Min(A2);
+A4:  for m be Nat st X[m] holds n <= m from NAT_1:sch 5(A2);
 A5:  not Next IC (Computation sI).n in dom pI by A3,SCMPDS_4:71;
    set s2 = (Computation sI).n,
        Ig = ((IC s2,Next IC s2) --> (goto 1, goto -1)),
@@ -419,12 +420,12 @@ A9: now
         end;
     end;
       (F(s)=F(s) or P[s]) & while>0(a,i,I) is_closed_on s &
-    while>0(a,i,I) is_halting_on s from WhileGHalt(A1,A7,A8,A9);
+    while>0(a,i,I) is_halting_on s from SCMPDS_8:sch 3(A1,A7,A8,A9);
     hence while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s;
    assume A16: s.b > 0;
       (F(s)=F(s) or P[s]) &
     IExec(while>0(a,i,I),s) = IExec(while>0(a,i,I),IExec(I,s))
-    from WhileGExec(A1,A16,A7,A8,A9);
+    from SCMPDS_8:sch 4(A1,A16,A7,A8,A9);
     hence thesis;
 end;
 
@@ -533,13 +534,13 @@ A9: now
         end;
     end;
       (F(s)=F(s) or P[s]) & while>0(a,i,I) is_closed_on s &
-    while>0(a,i,I) is_halting_on s from WhileGHalt(A1,A7,A8,A9);
+    while>0(a,i,I) is_halting_on s from SCMPDS_8:sch 3(A1,A7,A8,A9);
     hence while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s;
 
   assume A17: s.b > 0;
       (F(s)=F(s) or P[s]) &
     IExec(while>0(a,i,I),s) = IExec(while>0(a,i,I),IExec(I,s))
-    from WhileGExec(A1,A17,A7,A8,A9);
+    from SCMPDS_8:sch 4(A1,A17,A7,A8,A9);
     hence thesis;
 end;
 
@@ -565,15 +566,19 @@ proof
          then j+1 <= k by INT_1:20;
          then j <= k1 by A1,REAL_1:84;
          hence f.i <= f.j by A2,A6,SFMASTR3:def 4;
+       end;
        suppose A7: j = k;
          hereby
            per cases;
            suppose i=j;
               hence f.i <= f.j;
+           end;
            suppose i<>j;
               then i<j by A6,REAL_1:def 5;
             hence f.i <= f.j by A4,A6,A7;
          end;
+         end;
+       end;
        suppose A8: j > k;
         hereby
            per cases by REAL_1:def 5;
@@ -581,19 +586,25 @@ proof
            A10: f.j >= f.k by A5,A6,A8;
                  f.k >= f.i by A4,A6,A9;
             hence f.i <= f.j by A10,AXIOMS:22;
+           end;
            suppose A11: i = k;
             hereby
               per cases;
               suppose i=j;
               hence f.i <= f.j;
+              end;
               suppose i<>j;
                 then i<j by A6,REAL_1:def 5;
                 hence f.i <= f.j by A5,A6,A11;
+           end;
+           end;
            end;
            suppose i > k;
              then i >= k+1 by INT_1:20;
              hence f.i <= f.j by A3,A6,SFMASTR3:def 4;
        end;
+       end;
+   end;
    end;
    hence thesis by SFMASTR3:def 4;
 end;
@@ -883,6 +894,7 @@ A19: now let k be Nat;
              (Computation(t +*iWH)).kk.b=t.b-2 &
              (Computation(t +*iWH)).kk.a=c by A7,A21;
 
+             end;
              suppose A22: yn-y1>0;
         then A23:    yn>y1 by REAL_2:106;
                A24: t.b > 0 by A21,NAT_1:19;
@@ -1027,8 +1039,10 @@ REAL_2:106;
                     per cases;
                     suppose y1<yc;
                     hence f4.j=t2.intpos(m+j) by A55,A60,A61;
+                    end;
                     suppose y1>=yc;
                     hence f4.j=t2.intpos(m+j) by A55,A60,A62;
+                  end;
                   end;
                 hence f4.j=f3.j by A41,A60,A62,SCPISORT:def 1;
             end;
@@ -1055,8 +1069,10 @@ REAL_2:106;
                    per cases;
                    suppose y1<yc;
                     hence f4.i= t2.intpos(m+i) by A55,A70,A71;
+                   end;
                    suppose y1>=yc;
                     hence f4.i= t2.intpos(m+i) by A55,A70,A72;
+              end;
               end;
               hence f4.i=f3.i by A41,A70,A72,SCPISORT:def 1;
             end;
@@ -1068,8 +1084,10 @@ REAL_2:106;
                    per cases;
                    suppose y1<yc;
                     hence f4.i= t2.intpos(m+i) by A55,A74;
+                   end;
                    suppose y1>=yc;
                     hence f4.i= t2.intpos(m+i) by A55,A74,A75;
+              end;
               end;
               hence f4.i=f3.i by A41,A55,A74,A75,SCPISORT:def 1;
             end;
@@ -1079,8 +1097,10 @@ REAL_2:106;
                per cases;
                suppose yd<yn;
                  hence f3.ym= t1.intpos(m+ym) by A32,A41,A42;
+               end;
                suppose yd>=yn;
                  hence f3.ym= t1.intpos(m+ym) by A41,A42,A76;
+            end;
             end;
        then A78:  f4.ym=IExec(I,t).intpos(m+ym) by A27,A77,SCMPDS_4:23;
        A79: now let i be Nat;
@@ -1104,8 +1124,10 @@ REAL_2:106;
                    per cases;
                    suppose yd<yn;
                    hence f3.j= t1.intpos(m+j) by A41,A83,A84;
+                   end;
                    suppose yd>=yn;
                    hence f3.j= t1.intpos(m+j) by A41,A83,A85;
+                end;
                 end;
                 then f4.i=IExec(I,t).intpos(m+j) by A27,A82,SCMPDS_4:23;
                hence f4.i <= f4.ym by A28,A78,A86,A87;
@@ -1118,8 +1140,10 @@ REAL_2:106;
                      per cases;
                      suppose yd<yn;
                      hence f3.i= t1.intpos(m+i) by A41,A89,A90;
+                     end;
                      suppose yd>=yn;
                      hence f3.i= t1.intpos(m+i) by A41,A89,A91;
+                   end;
                    end;
                    hence f3.i=f2.i by A40,A89,A91;
               end;
@@ -1131,8 +1155,10 @@ REAL_2:106;
                      per cases;
                      suppose yd<yn;
                      hence f3.i= t1.intpos(m+i) by A41,A93;
+                     end;
                      suppose yd>=yn;
                      hence f3.i= t1.intpos(m+i) by A41,A93,A94;
+                   end;
                    end;
                    hence f3.i=f2.i by A40,A41,A93,A94;
               end;
@@ -1161,8 +1187,10 @@ REAL_2:106;
                    per cases by A101;
                    suppose 1<=j & j<y1;
                    hence thesis;
+                   end;
                    suppose yn<j & j<=n;
                     hence thesis by A45,AXIOMS:22;
+                end;
                 end;
             A103: 1<=j & j<= n
                 proof
@@ -1170,31 +1198,39 @@ REAL_2:106;
                    suppose A104:1<=j & j<y1;
                      then j<yn by A101,AXIOMS:22;
                      hence thesis by A21,A22,A104,AXIOMS:22,REAL_2:106;
+                   end;
                    suppose A105: yn<j & j<=n;
                      then y1 < j by A101,AXIOMS:22;
                     hence thesis by A21,A22,A105,AXIOMS:22,REAL_2:106;
+               end;
                end;
            A106: 1<=j & j<yd or yn<j & j<= n
                proof
                    per cases by A101;
                    suppose 1<=j & j<y1;
                    hence thesis by A33,AXIOMS:22;
+                   end;
                    suppose yn<j & j<=n;
                     hence thesis;
+             end;
              end;
          A107: now
                 per cases;
                 suppose yd<yn;
                  hence f3.j=t1.intpos(m+j) by A41,A106;
+                end;
                 suppose yd>=yn;
                  hence f3.j=t1.intpos(m+j) by A41,A103;
+             end;
              end;
                now
                 per cases;
                 suppose y1<yc;
                  hence f4.j=t2.intpos(m+j) by A55,A102;
+                end;
                 suppose y1>=yc;
                   hence f4.j=t2.intpos(m+j) by A55,A103;
+             end;
              end;
              hence f4.j=f3.j by A41,A103,SCPISORT:def 1
                    .=IExec(I,t).intpos(m+j) by A27,A107,SCMPDS_4:23
@@ -1216,9 +1252,10 @@ REAL_2:106;
                 .=t.b-2 by A21;
            thus tm.a=c by A55,A56;
          end;
+         end;
          hence P[k+1];
     end;
-A110: for k being Nat holds P[k] from Ind(A7,A19);
+A110: for k being Nat holds P[k] from NAT_1:sch 1(A7,A19);
 A111: m1=m+n+2*0+1 by A5;
   ex k be Nat,f2 be FinSequence of INT st
      (Computation(s +*iWH)).k+*iWH=(Computation(s +*iWH)).k &
@@ -1234,10 +1271,12 @@ A111: m1=m+n+2*0+1 by A5;
        per cases;
        suppose n-1<=0;
          hence thesis by A1,A2,A4,A5,A110,A111;
+       end;
        suppose n-1>0;
          then reconsider nn=n-1 as Nat by INT_1:16;
            P[nn] by A110;
          hence thesis by A1,A2,A4,A5,A111;
+     end;
      end;
      then consider k be Nat,f2 be FinSequence of INT such that
 A112:  (Computation(s +*iWH)).k+*iWH=(Computation(s +*iWH)).k &
@@ -1462,6 +1501,7 @@ definition
      coherence;
 end;
 
+
 begin :: The Construction of Quick Sort
 :: a0=global, a1=stack, a2=stack depth
 definition
@@ -1490,6 +1530,7 @@ definition
        );
        coherence;
 end;
+
   set i1= (GBP,7):=(GBP,5),
        i2= AddTo(GBP,5,-1),
        i3= (GBP,6):=(intpos 4,0),
@@ -1747,6 +1788,7 @@ A85:  now
               .=s.intpos i by A70,A91;
         end;
 
+         end;
          suppose A93: t1.DataLoc(t1.a,6) > 0;
           A94: a<>DataLoc(t5.a,7) by A84,SCMP_GCD:4,def 2;
          thus IExec(IF1,t1).a=IExec(i5 ';' i6,t1).a by A93,SCMPDS_6:87
@@ -1778,6 +1820,7 @@ A85:  now
               .=t1.intpos i by SCMPDS_5:40
               .=s.intpos i by A70,A98;
         end;
+     end;
      end;
      hence IExec(WB1,s).a=0 & IExec(WB1,s).a1=s.a1 &
         IExec(WB1,s).a2=s.a2 & IExec(WB1,s).a3=s.a3 by SCMPDS_5:39;
@@ -1886,12 +1929,14 @@ A5:    now let v be State of SCMPDS;
                  m4+v.b-1=m4+IExec(WB1,v).b by A4,A10,A11,XCMPLX_1:29;
              hence IExec(WB1,v).a4 >= m4+IExec(WB1,v).b by A6,A10,A11,REAL_1:49
 ;
+              end;
               suppose A12:v.intpos md >= v.intpos ME;
              hence IExec(WB1,v).b < v.b by A1,A2,A4,A6,A9,Lm8;
                   m4+IExec(WB1,v).b < m4+v.b by A4,A6,A10,A12,REAL_1:53;
               hence IExec(WB1,v).a4 >= m4+IExec(WB1,v).b by A6,A10,A12,AXIOMS:
 22
 ;
+          end;
           end;
           thus IExec(WB1,v).a2=v.a2 by A1,A2,A4,A6,A9,Lm8;
         end;
@@ -1939,6 +1984,7 @@ A18,A19;
              thus
                ME=0 or IExec(WH1,t).intpos md >= IExec(WH1,t).intpos (m4+ME);
 
+           end;
            suppose A21: t.intpos md >= t.intpos me;
              take ME=1;
            thus IExec(WH1,t).a7=ME by A2,A13,A15,A21;
@@ -1948,6 +1994,7 @@ A18,A19;
                  holds IExec(WH1,t).intpos md < IExec(WH1,t).intpos i by A2;
              thus ME=0 or IExec(WH1,t).intpos md >=
                IExec(WH1,t).intpos (m4+ME) by A1,A16,A18,A21;
+       end;
        end;
     end;
 then A22: P[0];
@@ -1987,11 +2034,13 @@ A31:    now let v be State of SCMPDS;
                  m4+v.b-1=m4+IExec(WB1,v).b by A29,A36,A37,XCMPLX_1:29;
              hence IExec(WB1,v).a4 >= m4+IExec(WB1,v).b by A32,A36,A37,REAL_1:
 49;
+              end;
               suppose A38:v.intpos md >= v.intpos ME;
              hence IExec(WB1,v).b < v.b by A1,A25,A29,A32,A35,Lm8;
                   m4+IExec(WB1,v).b < m4+v.b by A29,A32,A36,A38,REAL_1:53;
               hence IExec(WB1,v).a4 >= m4+IExec(WB1,v).b by A32,A36,A38,AXIOMS:
 22;
+          end;
           end;
           thus IExec(WB1,v).a2=v.a2 by A1,A25,A29,A32,A35,Lm8;
         end;
@@ -2040,6 +2089,7 @@ then A40:  DataLoc(It.a,5)=intpos(0+5) by SCMP_GCD:5;
              hence IExec(WH1,t).intpos md < IExec(WH1,t).intpos i by A1,A25,A41
 ,A46,A50;
 
+               end;
                suppose i<>t.a4;
                   then i < t.a4 by A49,REAL_1:def 5;
                   then i+1 <= t.a4 by INT_1:20;
@@ -2047,9 +2097,11 @@ then A40:  DataLoc(It.a,5)=intpos(0+5) by SCMP_GCD:5;
               hence IExec(WH1,t).intpos md < IExec(WH1,t).intpos i by A45,A48,
 A49;
            end;
+           end;
            thus mE=0 or
             IExec(WH1,t).intpos md >= IExec(WH1,t).intpos (m4+mE) by A45,A48;
 
+   end;
    suppose A51: t.intpos md >= t.intpos me;
 A52:    now let x;
            thus IExec(WH1,t).x =IExec(WH1,It).x by A25,A28,A29,A31,Lm7,Th5
@@ -2077,9 +2129,10 @@ A55:    IExec(WH1,t).intpos me=t.intpos me by A26,A53;
          thus ME=0 or IExec(WH1,t).intpos md >= IExec(WH1,t).intpos (m4+ME)
           by A1,A51,A53,A55;
      end;
+     end;
      hence P[k+1];
     end;
-A56: for k be Nat holds P[k] from Ind(A22,A23);
+A56: for k be Nat holds P[k] from NAT_1:sch 1(A22,A23);
       s.a5 >=1+0 by A1,INT_1:20;
     then s.a5-1 >= 0 by SQUARE_1:12;
     then reconsider m5=s.a5-1 as Nat by INT_1:16;
@@ -2119,11 +2172,13 @@ A2:  b=intpos (0+5) by A1,SCMP_GCD:5;
                  m4+v.b-1=m4+IExec(WB1,v).b by A2,A7,A8,XCMPLX_1:29;
              hence IExec(WB1,v).a4 >= m4+IExec(WB1,v).b by A3,A7,A8,REAL_1:49
 ;
+              end;
               suppose A9:v.intpos md >= v.intpos ME;
              hence IExec(WB1,v).b < v.b by A1,A2,A3,A6,Lm8;
                   m4+IExec(WB1,v).b < m4+v.b by A2,A3,A7,A9,REAL_1:53;
               hence IExec(WB1,v).a4 >= m4+IExec(WB1,v).b by A3,A7,A9,AXIOMS:22
 ;
+          end;
           end;
           thus IExec(WB1,v).a2=v.a2 by A1,A2,A3,A6,Lm8;
      end;
@@ -2356,6 +2411,7 @@ A85:  now
               .=s.intpos i by A70,A91;
         end;
 
+         end;
          suppose A93: t1.DataLoc(t1.a,6) > 0;
           A94: a<>DataLoc(t5.a,5) by A84,SCMP_GCD:4,def 2;
          thus IExec(IF2,t1).a=IExec(j5 ';' j6,t1).a by A93,SCMPDS_6:87
@@ -2387,6 +2443,7 @@ A85:  now
               .=t1.intpos i by SCMPDS_5:40
               .=s.intpos i by A70,A98;
         end;
+     end;
      end;
      hence IExec(WB2,s).a=0 & IExec(WB2,s).a1=s.a1 &
         IExec(WB2,s).a2=s.a2 & IExec(WB2,s).a4=s.a4 by SCMPDS_5:39;
@@ -2491,9 +2548,11 @@ A5:    now let v be State of SCMPDS;
                A10: IExec(WB2,v).a3=v.a3+1 by A1,A2,A4,A6,A9,Lm14;
                      v.a3 +1 > v.a3 by REAL_1:69;
              hence IExec(WB2,v).a3 >= 8 by A6,A10,AXIOMS:22;
+              end;
               suppose A11:v.intpos md <= v.intpos ME;
               hence IExec(WB2,v).b < v.b by A1,A2,A4,A6,Lm14;
               thus IExec(WB2,v).a3 >= 8 by A1,A2,A4,A6,A11,Lm14;
+           end;
            end;
            thus IExec(WB2,v).a2=v.a2 by A1,A2,A4,A6,A7,Lm14;
         end;
@@ -2542,6 +2601,7 @@ A17:    IExec(WH2,t).intpos me=t.intpos me by A2,A15;
              thus
                m5=0 or IExec(WH2,t).intpos md <= IExec(WH2,t).intpos mE3;
 
+           end;
            suppose A20: t.intpos md <= t.intpos me;
              take m5=1;
              take mE3=me;
@@ -2553,6 +2613,7 @@ A17:    IExec(WH2,t).intpos me=t.intpos me by A2,A15;
                  holds IExec(WH2,t).intpos md > IExec(WH2,t).intpos i;
             thus m5=0 or IExec(WH2,t).intpos md <= IExec(WH2,t).intpos mE3
                by A1,A15,A17,A20;
+       end;
        end;
     end;
 then A21: P[0];
@@ -2589,9 +2650,11 @@ A30:    now let v be State of SCMPDS;
                A35: IExec(WB2,v).a3=v.a3+1 by A1,A24,A26,A31,A34,Lm14;
                      v.a3 +1 > v.a3 by REAL_1:69;
              hence IExec(WB2,v).a3 >= 8 by A31,A35,AXIOMS:22;
+              end;
               suppose A36:v.intpos md <= v.intpos ME;
               hence IExec(WB2,v).b < v.b by A1,A24,A26,A31,Lm14;
               thus IExec(WB2,v).a3 >= 8 by A1,A24,A26,A31,A36,Lm14;
+           end;
            end;
            thus IExec(WB2,v).a2=v.a2 by A1,A24,A26,A31,A32,Lm14;
         end;
@@ -2645,15 +2708,18 @@ then A38:  DataLoc(It.a,7)=intpos(0+7) by SCMP_GCD:5;
              hence IExec(WH2,t).intpos md > IExec(WH2,t).intpos i by A1,A39,A45
 ,A49;
 
+               end;
                suppose i<>t.a3;
                   then t.a3 < i by A48,REAL_1:def 5;
                   then It.a3 <= i by A41,INT_1:20;
               hence IExec(WH2,t).intpos md > IExec(WH2,t).intpos i by A44,A47,
 A48;
            end;
+           end;
            thus m5=0 or
             IExec(WH2,t).intpos md <= IExec(WH2,t).intpos mE3 by A44,A47;
 
+   end;
    suppose A50: t.intpos md <= t.intpos me;
 A51:    now let x;
            thus IExec(WH2,t).x =IExec(WH2,It).x by A24,A26,A28,A30,Lm12,Th6
@@ -2682,9 +2748,10 @@ A54:    IExec(WH2,t).intpos me=t.intpos me by A24,A52;
        thus m5=0 or IExec(WH2,t).intpos md <= IExec(WH2,t).intpos mE3
           by A1,A50,A52,A54;
      end;
+     end;
      hence P[k+1];
     end;
-A55: for k be Nat holds P[k] from Ind(A21,A22);
+A55: for k be Nat holds P[k] from NAT_1:sch 1(A21,A22);
       s.a7 >=1+0 by A1,INT_1:20;
     then s.a7-1 >= 0 by SQUARE_1:12;
     then reconsider m7=s.a7-1 as Nat by INT_1:16;
@@ -2721,9 +2788,11 @@ then A2:  b=intpos (0+7) by SCMP_GCD:5;
                A7: IExec(WB2,v).a3=v.a3+1 by A1,A2,A3,A6,Lm14;
                      v.a3 +1 > v.a3 by REAL_1:69;
              hence IExec(WB2,v).a3 >= 8 by A3,A7,AXIOMS:22;
+              end;
               suppose A8:v.intpos md <= v.intpos ME;
               hence IExec(WB2,v).b < v.b by A1,A2,A3,Lm14;
               thus IExec(WB2,v).a3 >= 8 by A1,A2,A3,A8,Lm14;
+           end;
            end;
            thus IExec(WB2,v).a2=v.a2 by A1,A2,A3,A4,Lm14;
     end;
@@ -2897,9 +2966,11 @@ A62: now
         suppose A63: y<>DataLoc(t5.a3,0);
          thus t4.y =Exec(k7, t5).y by SCMPDS_5:46
            .=s.x by A43,A63,SCMPDS_2:59;
+        end;
         suppose A64: y=DataLoc(t5.a3,0);
          thus t4.y =Exec(k7, t5).y by SCMPDS_5:46
            .=s.x by A47,A60,A64,SCMPDS_2:59;
+      end;
       end;
 A65: now
        let i be Nat;
@@ -3157,6 +3228,7 @@ A19:    s12.a5=s2.a5 by A5,A14,SCMPDS_7:49
          hence s3.intpos md <= s3.intpos i by A4,A29,A30,A31;
      end;
 
+     end;
      suppose A32: mE > 0;
      then A33: m4 > m3+0 by REAL_1:53;
 then A34:  m4 >= m3+1 by INT_1:20;
@@ -3277,10 +3349,12 @@ A66;
                  .=s.intpos i by A1,A2,A79,Lm9
                  .=s3.intpos i by A63,A70,A79,A80;
              hence s3.intpos md >= s3.intpos i by A36,A75,A78,A80;
+          end;
           suppose i >= n1;
              then A81: i=n1 by A77,AXIOMS:21;
                s1.intpos md >= s1.intpos n2 by A4,A32;
               hence s3.intpos md >= s3.intpos i by A3,A65,A72,A76,A81;
+       end;
        end;
 
        hereby let i be Nat;
@@ -3292,13 +3366,16 @@ A66;
                    s1.intpos i=s.intpos i by A1,A2,A84,Lm9
                  .=s3.intpos i by A63,A70,A84,A85;
              hence s3.intpos md <= s3.intpos i by A4,A76,A82,A85;
+          end;
           suppose n2 >= i;
              then i=n2 by A82,AXIOMS:21;
                 then s3.intpos i=s1.intpos n1 by A1,A2,A66,A73,Lm9
                   .=s2.intpos n1 by A1,A3,A4,A7,A8,A32,A73,Lm15;
               hence s3.intpos md <= s3.intpos i by A36,A75,A83;
        end;
+       end;
 
+       end;
        suppose A86: s12.a5 <= 0;
      A87:  DataLoc(s12.a,5)=intpos(0+5) by A39,SCMP_GCD:5;
          thus IExec(WB3,s).a=IExec(IF3,s12).a by A38,SCPISORT:7
@@ -3370,6 +3447,8 @@ A66;
          hence s3.intpos md <= s3.intpos i by A4,A100,A101,A102;
      end;
    end;
+   end;
+end;
 end;
 
 Lm21:
@@ -3380,9 +3459,11 @@ proof
    per cases;
    suppose i <= -1;
     hence thesis by A1,AXIOMS:21;
+   end;
    suppose i > -1;
     then i >= -1+1 by INT_1:20;
     hence thesis by A1;
+end;
 end;
 
 Lm22:
@@ -3395,9 +3476,11 @@ proof
     suppose i1=0;
        then n2=n1+1 by A1;
      hence i <= n1 by A1,NAT_1:38;
+    end;
     suppose i1=-1;
        then n2=n1+-1+1 by A1;
      hence i <= n1 by A1,XCMPLX_1:139;
+end;
 end;
 
 Lm23:
@@ -3442,18 +3525,23 @@ proof
             thus f1.i=s1.intpos (n0+i) by A1,A2,A6,SCPISORT:def 1
               .=s.intpos (n0+i) by A3,A7,A8
               .=f.i by A1,A2,A6,SCPISORT:def 1;
+        end;
         suppose A9: not (n0+i<>n1 & n0+i<>n2);
            hereby
                 per cases by A9;
                 suppose n0+i=n1;
                 hence f1.i=s.intpos (n0+i) by A1,A2,A5,A6,SCPISORT:def 1
                  .=f.i by A1,A2,A6,SCPISORT:def 1;
+                end;
                 suppose n0+i=n2;
                 hence f1.i=s.intpos (n0+i) by A1,A2,A5,A6,SCPISORT:def 1
                  .=f.i by A1,A2,A6,SCPISORT:def 1;
            end;
+           end;
+      end;
       end;
       hence thesis by A2,FINSEQ_2:10;
+    end;
     suppose A10: n1 >= n0+1 & n2 >= n0+1 & n1 <= n0+n & n2 <= n0+n &
       s1.intpos n1=s.intpos n2 & s1.intpos n2=s.intpos n1;
 then A11:  n1-n0 >= 1 by REAL_1:84;
@@ -3482,6 +3570,7 @@ A19:  f.m2=s1.intpos n1 by A1,A10,A12,A15,A17,SCPISORT:def 1
      end;
      hence thesis by A2,A11,A12,A13,A15,A18,A19,SCPISORT:4;
 end;
+end;
 
 Lm25:
    for s,s1 be State of SCMPDS,n0,n1,n2 be Nat,c1,c2 be Integer st
@@ -3505,14 +3594,19 @@ A1:  for i be Nat st i >= n0 & i<>n1 & i<>n2 holds s1.intpos i=s.intpos i;
          per cases;
          suppose i<>n1 & i<>n2;
             hence s1.intpos i=s.intpos i by A1,A5;
+         end;
          suppose A6: not (i<>n1 & i<>n2);
            hereby
               per cases by A6;
               suppose i=n1;
                 hence s1.intpos i=s.intpos i by A4;
+              end;
               suppose i=n2;
                 hence s1.intpos i=s.intpos i by A4;
            end;
+           end;
+     end;
+     end;
      end;
      suppose A7: c1 <= n1 & n2 <= c2 &
          s1.intpos n1=s.intpos n2 & s1.intpos n2=s.intpos n1;
@@ -3523,10 +3617,13 @@ A1:  for i be Nat st i >= n0 & i<>n1 & i<>n2 holds s1.intpos i=s.intpos i;
          suppose i < c1;
       then i < n1 by A7,AXIOMS:22;
         hence s1.intpos i=s.intpos i by A1,A2,A8;
+         end;
          suppose i > c2;
       then i > n2 by A7,AXIOMS:22;
         hence s1.intpos i=s.intpos i by A1,A2,A8;
     end;
+    end;
+end;
 end;
 
 Lm26:
@@ -3649,9 +3746,11 @@ A31:  t2.intpos n1=t.intpos n1 & t2.intpos n2=t.intpos n2 or
           per cases by A23;
           suppose t1.intpos n1=t.intpos n1 & t1.intpos n2=t.intpos n2;
             hence thesis by A26;
+          end;
           suppose t.a3 <= n1 & n2 <= t.a4 &
               t1.intpos n1=t.intpos n2 & t1.intpos n2=t.intpos n1;
            hence thesis by A26;
+     end;
      end;
    t2.intpos n1=t.intpos n1 & t2.intpos n2=t.intpos n2 or
      n1 >= n0+1 & n2 >= n0+1 & n1 <= n0+n & n2 <= n0+n &
@@ -3660,11 +3759,13 @@ A31:  t2.intpos n1=t.intpos n1 & t2.intpos n2=t.intpos n2 or
           per cases by A31;
           suppose t2.intpos n1=t.intpos n1 & t2.intpos n2=t.intpos n2;
             hence thesis;
+          end;
           suppose A32:t.a3 <= n1 & n2 <= t.a4 &
               t2.intpos n1=t.intpos n2 & t2.intpos n2=t.intpos n1;
           then A33: n1 >= n0+1 by A9,AXIOMS:22;
             n2 <= n0+n by A9,A32,AXIOMS:22;
            hence thesis by A30,A32,A33,AXIOMS:22;
+     end;
      end;
      hence g,g1 are_fiberwise_equipotent by A10,A11,A12,A27,Lm24;
    t1.a4=n2-1 by A23,XCMPLX_1:26;
@@ -3789,11 +3890,13 @@ A56:  n1 <= n2 by A52,A53,Lm23;
           per cases by A53;
           suppose t1.intpos n1=t.intpos n1 & t1.intpos n2=t.intpos n2;
             hence thesis;
+          end;
           suppose A69:t.a3 <= n1 & n2 <= t.a4 &
               t1.intpos n1=t.intpos n2 & t1.intpos n2=t.intpos n1;
           then A70: n1 >= n0+1 by A39,AXIOMS:22;
             n2 <= n0+n by A39,A69,AXIOMS:22;
            hence thesis by A56,A69,A70,AXIOMS:22;
+      end;
       end;
  then A71:  g,f3 are_fiberwise_equipotent by A40,A42,A58,A59,A67,Lm24;
           now
@@ -3822,10 +3925,12 @@ A61,A62,A63,A64,A66;
               t2.intpos i = t1.intpos i by A38,A52,A53,A55,A57,A58,A59,A60,A61,
 A62,A63,A64,A66,A77,A78;
              hence t2.intpos md >= t2.intpos i by A53,A73,A75,A79;
+            end;
             suppose i >= t1.a3;
                then t3.intpos md >= t3.intpos i by A38,A52,A53,A55,A57,A58,A59,
 A60,A61,A62,A63,A64,A76;
             hence t2.intpos md >= t2.intpos i by A66;
+        end;
         end;
       end;
       hereby
@@ -3844,10 +3949,12 @@ A60,A61,A62,A63,A64,A76;
             then t2.intpos i = t1.intpos i by A38,A52,A53,A55,A57,A58,A59,A60,
 A61,A62,A63,A64,A66,A82;
              hence t2.intpos md <= t2.intpos i by A53,A73,A80,A83;
+            end;
             suppose i <= t1.a4;
                then t3.intpos md <= t3.intpos i by A38,A52,A53,A55,A57,A58,A59,
 A60,A61,A62,A63,A64,A81;
             hence t2.intpos md <= t2.intpos i by A66;
+        end;
         end;
       end;
       hereby
@@ -3861,12 +3968,15 @@ A60,A61,A62,A63,A64,A81;
       then i < t1.a3 by A52,AXIOMS:22;
            hence t2.intpos i =t.intpos i by A38,A52,A53,A55,A57,A58,A59,A60,A61
 ,A62,A63,A64,A66,A84,A85;
+          end;
           suppose i > t.a4;
       then i > t1.a4 by A52,AXIOMS:22;
            hence t2.intpos i =t.intpos i by A38,A52,A53,A55,A57,A58,A59,A60,A61
 ,A62,A63,A64,A66,A84,A85;
      end;
+     end;
 
+     end;
      suppose A86: t1.a5 <= 0;
 A87:   now let x;
         thus t2.x =IExec(WH3,t1).x by A43,A44,A45,Lm17,Th7
@@ -3892,9 +4002,11 @@ A91:  t2.intpos n1=t.intpos n1 & t2.intpos n2=t.intpos n2 or
           per cases by A53;
           suppose t1.intpos n1=t.intpos n1 & t1.intpos n2=t.intpos n2;
             hence thesis by A87;
+          end;
           suppose t.a3 <= n1 & n2 <= t.a4 &
               t1.intpos n1=t.intpos n2 & t1.intpos n2=t.intpos n1;
            hence thesis by A87;
+     end;
      end;
    t2.intpos n1=t.intpos n1 & t2.intpos n2=t.intpos n2 or
      n1 >= n0+1 & n2 >= n0+1 & n1 <= n0+n & n2 <= n0+n &
@@ -3903,11 +4015,13 @@ A91:  t2.intpos n1=t.intpos n1 & t2.intpos n2=t.intpos n2 or
           per cases by A91;
           suppose t2.intpos n1=t.intpos n1 & t2.intpos n2=t.intpos n2;
             hence thesis;
+          end;
           suppose A92:t.a3 <= n1 & n2 <= t.a4 &
               t2.intpos n1=t.intpos n2 & t2.intpos n2=t.intpos n1;
           then A93: n1 >= n0+1 by A39,AXIOMS:22;
             n2 <= n0+n by A39,A92,AXIOMS:22;
            hence thesis by A56,A92,A93,AXIOMS:22;
+     end;
      end;
       hence g,g1 are_fiberwise_equipotent by A40,A41,A42,A88,Lm24;
     t1.a4=n2-1 by A53,XCMPLX_1:26;
@@ -3932,9 +4046,10 @@ then A94:   t2.a4=n2-1 by A87;
       thus for i be Nat st i >= n0+1 & (i < t.a3 or i > t.a4) holds
          t2.intpos i = t.intpos i by A56,A88,A91,Lm25;
      end;
+     end;
      hence P[k+1];
    end;
-A97: for k be Nat holds P[k] from Ind(A8,A37);
+A97: for k be Nat holds P[k] from NAT_1:sch 1(A8,A37);
       s.a5 >=1+0 by A1,INT_1:20;
     then s.a5-1 >= 0 by SQUARE_1:12;
     then reconsider m5=s.a5-1 as Nat by INT_1:16;
@@ -4277,10 +4392,12 @@ A57:  now
          per cases;
          suppose m4=md;
        hence s1.intpos m4=s4.intpos md by A56;
+         end;
          suppose m4<>md;
      then A58:  intpos m4 <> DataLoc(t2.a2,0) by A53,SCMP_GCD:4;
          thus s1.intpos m4=Exec(j0,t2).intpos m4 by A17,Def1,SCMPDS_7:50
             .=s4.intpos md by A49,A58,SCMPDS_2:59;
+      end;
       end;
 A59: now
        let i be Nat;
@@ -4351,6 +4468,7 @@ A78: s2.a3=md+1 by A1,Lm28;
           then s4.intpos md >= s4.intpos m4 by A1,A4,A6,A7,A8,A9,A10,A11,A12,
 Lm26;
           hence s1.intpos m4 >= s1.intpos i by A56,A57,A80;
+        end;
         suppose i<>md;
        then A81: md < i by A79,REAL_1:def 5;
            then s2.a3 <= i by A1,A4,INT_1:20;
@@ -4358,6 +4476,7 @@ Lm26;
 A12,A79,Lm26;
              i >= 8 by A20,A79,AXIOMS:22;
         hence s1.intpos m4 >= s1.intpos i by A57,A59,A81,A82;
+    end;
     end;
     hereby
         let i be Nat;
@@ -4376,8 +4495,10 @@ A12,A79,Lm26;
             case A89: i < s.a2;
                 s.a2 < s2.a3 by A4,REAL_1:69;
               hence i < s2.a3 by A89,AXIOMS:22;
+            end;
             case i > s.a4;
               hence i > s2.a4 by A1,Lm28;
+         end;
          end;
            i<>md & i<>m4
          proof
@@ -4385,9 +4506,11 @@ A12,A79,Lm26;
            suppose i< s.a2;
          then i < md by A1;
              hence thesis by A13;
+           end;
            suppose i > s.a4;
          then i > m4 by A4,A13,AXIOMS:22;
              hence thesis by A13;
+         end;
          end;
         hence s1.intpos i = s4.intpos i by A59,A87
           .=s2.intpos i by A1,A4,A6,A7,A8,A9,A10,A11,A12,A86,A88,Lm26
@@ -4871,12 +4994,14 @@ A131:  m4 >= 8 by A101,A129,AXIOMS:22;
           hence j >= p0+1 & (j < t4.a2 or j > t4.a4) by A88,A91;
              md < mp by A101,A130,AXIOMS:22;
           hence j < mp by A142,AXIOMS:22;
+        end;
         suppose A143: n4<j & j <= pn;
               n4 >= md by A93,A101,AXIOMS:22;
             then j >= md by A143,AXIOMS:22;
          hence j >= p0+1 by A88,AXIOMS:22;
          thus (j < t4.a2 or j > t4.a4) by A88,A91,A143;
          thus j < mp by A113,A143,AXIOMS:22;
+       end;
        end;
     then A144: j >= 8 by A94,AXIOMS:22;
     then A145: j > 2 & j > 4 by AXIOMS:22;
@@ -4964,10 +5089,12 @@ A170;
      then IF4 is_closed_on t1 & IF4 is_halting_on t1 by A165,SCMPDS_6:82;
       hence thesis by SCPISORT:10;
 
+    end;
     suppose A171: t1.DataLoc(t1.a,2) <= 0;
            lb is_closed_on t1 & lb is_halting_on t1 by SCMPDS_6:34,35;
          then IF4 is_closed_on t1 & IF4 is_halting_on t1 by A171,SCMPDS_6:83;
          hence thesis by SCPISORT:10;
+    end;
     end;
 
 A172:  for t be State of SCMPDS,m,m1,md be Nat,n4 be Integer, f1,f2 be
@@ -5088,10 +5215,12 @@ A194:     md <= m4 & m4 <= n4 &
          per cases by A195;
          suppose p0+1<=j & j<md;
            hence p0+1<=j;
+         end;
          suppose n4<j & j <= p0+n;
            then j >= m4 by A194,AXIOMS:22;
            then j >= md by A194,AXIOMS:22;
          hence j >= p0+1 by A173,AXIOMS:22;
+      end;
       end;
    then j >= 8 by A186,AXIOMS:22;
    then A196: j > 2 by AXIOMS:22;
@@ -5185,9 +5314,11 @@ A215: now
           per cases by A216;
           case 1 <= y1 & yn <= n;
            hence p0+1 <= md by AXIOMS:24;
+          end;
           case y1 >= yn;
            then md >= t.intpos (mp+1) by A216,A217,AXIOMS:24;
            hence t.intpos (mp+1) -md <= 0 by REAL_2:106;
+        end;
         end;
     hence WB4 is_closed_on t & WB4 is_halting_on t by A5,A160,A214,A216,A218;
      consider f3 be FinSequence of INT such that
@@ -5204,6 +5335,7 @@ A224:  f4 is_FinSequence_on IExec(WB4,t),p0 by A223,SCPISORT:def 1;
          hence IExec(WB4,t).a=t.a &
            for j be Nat st 1<=j & j<mm holds
              IExec(WB4,t).intpos(pn+j)=t.intpos(pn+j) by A5,A197,A214,A216;
+        end;
         suppose A225: t.intpos (mp+1) > t.intpos mp;
       then A226:  n4-md > 0 by A218,A219,SQUARE_1:11;
              yn > y1 by A218,A219,A225,AXIOMS:24;
@@ -5211,6 +5343,7 @@ A224:  f4 is_FinSequence_on IExec(WB4,t),p0 by A223,SCPISORT:def 1;
         hence IExec(WB4,t).a=t.a & for j be Nat st 1<=j & j<mm holds
             IExec(WB4,t).intpos(pn+j)=t.intpos(pn+j)
            by A5,A172,A214,A216,A218,A219,A221,A222,A223,A224,A226;
+     end;
      end;
      hereby
         assume y1>=yn;
@@ -5291,12 +5424,14 @@ A234;
                .=f2.i by A235,A237,SCPISORT:def 1;
            end;
           hence f1,f2 are_fiberwise_equipotent by A235,FINSEQ_2:10;
+        end;
         suppose A238: t.intpos (mp+1) > t.intpos mp;
       then A239:  n4-md > 0 by A218,A219,SQUARE_1:11;
              yn > y1 by A218,A219,A238,AXIOMS:24;
            then p0+1 <= md & n4 <= pn by A216,AXIOMS:24;
        hence f1,f2 are_fiberwise_equipotent by A5,A172,A214,A216,A218,A219,A235
 ,A239;
+     end;
      end;
    end;
 A240:  s1.a=0 & s1.a1=1 & s1.intpos(pn+1)=p0+1 & s1.intpos(pn+2)=pn &

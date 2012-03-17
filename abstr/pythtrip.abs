@@ -33,12 +33,14 @@ definition
   for k st k divides m & k divides n holds k = 1;
 end;
 
+
 definition
  let m,n;
  redefine pred m,n are_relative_prime means
 :: PYTHTRIP:def 2
   for p being prime Nat holds not (p divides m & p divides n);
 end;
+
 
 begin :: squares
 
@@ -49,48 +51,109 @@ definition
   ex m st n = m^2;
 end;
 
-definition
+
+registration
  cluster square -> natural number;
+ coherence
+ proof
+  let n be number;
+  assume n is square;
+  then ex m st n = m^2 by Def3;
+  hence n is natural;
+ end;
 end;
 
-definition
+
+registration
  let n be Nat;
  cluster n^2 -> square;
+ coherence by Def3;
 end;
 
-definition
+
+registration
  cluster even square Nat;
+ existence
+ proof
+  take 0;
+    0 = 2*0;
+  hence thesis by SQUARE_1:60;
+ end;
 end;
 
-definition
+
+registration
  cluster odd square Nat;
+ existence
+ proof
+  take 1;
+    1 = 2*0 + 1;
+  hence thesis by SQUARE_1:59;
+ end;
 end;
 
-definition
+
+registration
  cluster even square number;
+ existence
+ proof
+  consider n being even square Nat;
+  take n;
+  thus thesis;
+ end;
 end;
 
-definition
+
+registration
  cluster odd square number;
+ existence
+ proof
+  consider n being odd square Nat;
+  take n;
+  thus thesis;
+ end;
 end;
 
-definition
+
+registration
  let m,n be square number;
  cluster m*n -> square;
+ coherence
+ proof
+  consider m' such that
+A1: m = m'^2 by Def3;
+  consider n' such that
+A2: n = n'^2 by Def3;
+    m*n = (m'*n')^2 by A1,A2,SQUARE_1:68;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: PYTHTRIP:1
  m*n is square & m,n are_relative_prime implies m is square & n is square;
 
-definition
+registration
  let i be even Integer;
  cluster i^2 -> even;
+ coherence
+ proof
+    i^2 = i*i by SQUARE_1:def 3;
+  hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let i be odd Integer;
  cluster i^2 -> odd;
+ coherence
+ proof
+    i^2 = i*i by SQUARE_1:def 3;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: PYTHTRIP:2
  i is even iff i^2 is even;
@@ -101,10 +164,33 @@ theorem :: PYTHTRIP:3
 theorem :: PYTHTRIP:4
  i is odd implies i^2 mod 4 = 1;
 
-definition
+registration
  let m,n be odd square number;
  cluster m + n -> non square;
+ coherence
+ proof
+  consider m' such that
+A1: m = m'^2 by Def3;
+A2: m' is odd by A1,Th2;
+  consider n' such that
+A3: n = n'^2 by Def3;
+A4: n' is odd by A3,Th2;
+  reconsider m'' = m as Nat by ORDINAL2:def 21;
+  reconsider n'' = n as Nat by ORDINAL2:def 21;
+A5: (m'' + n'') mod 4 = ((m'' mod 4) + (n'' mod 4)) mod 4 by EULER_2:8
+   .= (1 + (n'' mod 4)) mod 4 by A1,A2,Th4
+   .= (1 + 1) mod 4 by A3,A4,Th4
+   .= 2 by GR_CY_1:4;
+  hereby
+   assume m + n is square;
+   then consider mn' such that
+A6: m + n = mn'^2 by Def3;
+     mn' is even by A6,Th2;
+   hence contradiction by A5,A6,Th3;
+  end;
+ end;
 end;
+
 
 theorem :: PYTHTRIP:5
  m^2 = n^2 implies m = n;
@@ -143,11 +229,19 @@ definition
   ex a,b,c st a^2 + b^2 = c^2 & it = { a,b,c };
 end;
 
+
 reserve X for Pythagorean_triple;
 
-definition
+registration
  cluster -> finite Pythagorean_triple;
+ coherence
+ proof
+  let X;
+    ex a,b,c st a^2 + b^2 = c^2 & X = { a,b,c } by Def4;
+  hence thesis;
+ end;
 end;
+
 
 definition
  redefine mode Pythagorean_triple means
@@ -155,12 +249,14 @@ definition
   ex k,m,n st m <= n & it = { k*(n^2 - m^2), k*(2*m*n), k*(n^2 + m^2) };
 end;
 
+
 definition
  let X;
  attr X is degenerate means
 :: PYTHTRIP:def 6
   0 in X;
 end;
+
 
 theorem :: PYTHTRIP:13
    n > 2 implies ex X st X is non degenerate & n in X;
@@ -172,6 +268,7 @@ definition
   for k st for n st n in X holds k divides n holds k = 1;
 end;
 
+
 definition
  let X;
  redefine attr X is simplified means
@@ -179,12 +276,21 @@ definition
   ex m,n st m in X & n in X & m,n are_relative_prime;
 end;
 
+
 theorem :: PYTHTRIP:14
  n > 0 implies ex X st X is non degenerate & X is simplified & 4*n in X;
 
-definition
+registration
  cluster non degenerate simplified Pythagorean_triple;
+ existence
+ proof
+  consider X such that
+A1: X is non degenerate & X is simplified & 4*1 in X by Th14;
+  take X;
+  thus thesis by A1;
+ end;
 end;
+
 
 theorem :: PYTHTRIP:15
    { 3,4,5 } is non degenerate simplified Pythagorean_triple;

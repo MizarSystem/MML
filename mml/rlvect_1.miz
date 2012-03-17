@@ -29,6 +29,7 @@ definition
                     Zero -> Element of the carrier #);
 end;
 
+
 definition
  struct (LoopStr) RLSStruct (# carrier -> set,
               Zero -> Element of the carrier,
@@ -37,7 +38,8 @@ definition
             #);
 end;
 
-definition
+
+registration
  cluster non empty RLSStruct;
  existence
   proof
@@ -48,6 +50,7 @@ definition
   end;
 end;
 
+
 reserve V for non empty RLSStruct;
 reserve x,y,y1,y2 for set;
 
@@ -55,10 +58,12 @@ definition let V be RLSStruct;
   mode VECTOR of V is Element of V;
 end;
 
+
 definition let V be 1-sorted; let x;
  pred x in V means
   :Def1: x in the carrier of V;
 end;
+
 
 canceled 2;
 
@@ -81,10 +86,11 @@ theorem
   coherence;
  end;
 
+
 reserve v for VECTOR of V;
 reserve a,b for Real;
 
-definition
+registration
  cluster strict non empty LoopStr;
  existence
   proof
@@ -97,17 +103,20 @@ definition
   end;
 end;
 
+
  definition let V be non empty LoopStr, v,w be Element of V;
   func v + w -> Element of V equals
    :Def3: (the add of V).[v,w];
   coherence;
  end;
 
+
  definition let V; let v; let a;
   func a * v -> Element of V equals
    :Def4: (the Mult of V).[a,v];
   coherence;
  end;
+
 
 ::
 ::   Definitional theorems of zero element, addition, multiplication.
@@ -123,11 +132,12 @@ theorem
              .= (the add of V).(v,w) by BINOP_1:def 1;
   end;
 
-definition let ZS be non empty set, O be Element of ZS,
+registration let ZS be non empty set, O be Element of ZS,
       F be BinOp of ZS, G be Function of [:REAL,ZS:],ZS;
  cluster RLSStruct (# ZS,O,F,G #) -> non empty;
  coherence by STRUCT_0:def 1;
 end;
+
 
 Lm1: now
   take ZS = {0};
@@ -135,11 +145,11 @@ Lm1: now
   take O;
    deffunc A((Element of ZS), Element of ZS) = O;
    consider F being BinOp of ZS such that
-     A1: for x,y being Element of ZS holds F.(x,y) = A(x,y) from BinOpLambda;
+     A1: for x,y being Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 2;
    deffunc M((Element of REAL), Element of ZS) = O;
    consider G being Function of [:REAL,ZS:],ZS such that
      A2: for a being Element of REAL for x being Element of ZS
-         holds G.[a,x qua set] = M(a,x) from Lambda2D;
+         holds G.[a,x qua set] = M(a,x) from FUNCT_2:sch 8;
   take F,G;
 
   set W = RLSStruct (# ZS,O,F,G #);
@@ -239,6 +249,7 @@ definition let IT be non empty LoopStr;
          ex w being Element of IT st v + w = 0.IT;
 end;
 
+
 definition let IT be non empty RLSStruct;
   attr IT is RealLinearSpace-like means :Def9:
   (for a for v,w being VECTOR of IT holds a * (v + w) = a * v + a * w) &
@@ -247,7 +258,8 @@ definition let IT be non empty RLSStruct;
   (for v being VECTOR of IT holds 1 * v = v);
 end;
 
-definition
+
+registration
  cluster strict Abelian add-associative right_zeroed right_complementable
                 (non empty LoopStr);
   existence
@@ -257,7 +269,7 @@ definition
    deffunc A((Element of ZS), Element of ZS) = O;
    consider F being BinOp of ZS such that
 A1: for x,y being Element of ZS holds F.(x,y) = A(x,y)
-        from BinOpLambda;
+        from BINOP_1:sch 2;
    reconsider W = LoopStr (# ZS,F,O #) as non empty LoopStr by STRUCT_0:def 1;
   take W;
   thus W is strict;
@@ -297,7 +309,8 @@ A1: for x,y being Element of ZS holds F.(x,y) = A(x,y)
  end;
 end;
 
-definition
+
+registration
  cluster non empty strict Abelian add-associative right_zeroed
      right_complementable RealLinearSpace-like (non empty RLSStruct);
   existence
@@ -326,16 +339,19 @@ A1:   (for v,w being VECTOR of RLSStruct (# ZS,O,F,G #) holds v + w = w + v) &
    end;
 end;
 
+
 definition
   mode RealLinearSpace is Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like (non empty RLSStruct);
 end;
+
 
 definition let V be Abelian (non empty LoopStr),
                    v,w be Element of V;
  redefine func v + w;
  commutativity by Def5;
 end;
+
 
 canceled;
 
@@ -418,6 +434,7 @@ A2:   v + w = 0.V by Def8;
    end;
  end;
 
+
 Lm3:
  for V being add-associative right_zeroed
            right_complementable (non empty LoopStr),
@@ -438,6 +455,7 @@ definition let V be non empty LoopStr;
    :Def11: v + (- w);
   correctness;
 end;
+
 
 ::
 ::  Definitional theorems of reverse element and substraction.
@@ -529,11 +547,13 @@ theorem Th23:
                   .= v by Def9
                   .= v + 0.V by Th10;
         hence a * v = 0.V by A2,Th21;
+       end;
        suppose A3: v = 0.V;
            a * 0.V + a * 0.V = a * (0.V + 0.V) by Def9
                           .= a * 0.V by Th10
                           .= a * 0.V + 0.V by Th10;
         hence a * v = 0.V by A3,Th21;
+     end;
      end;
    hence thesis;
   end;
@@ -879,6 +899,7 @@ definition let V be non empty 1-sorted; let v,u be Element of V;
   end;
 end;
 
+
 definition let V be non empty 1-sorted;
  let v,u,w be Element of V;
  redefine func <* v,u,w *> -> FinSequence of the carrier of V;
@@ -888,6 +909,7 @@ definition let V be non empty 1-sorted;
    hence thesis;
   end;
 end;
+
 
 reserve V for non empty LoopStr;
 reserve F,G,H for FinSequence of the carrier of V;
@@ -913,7 +935,7 @@ definition let V; let F;
       deffunc G(Nat)=0.V;
        consider f being Function of NAT qua non empty set, the carrier of V
         such that A3: for j being Element of NAT qua non empty set
-        holds f.j = G(j) from LambdaD;
+        holds f.j = G(j) from FUNCT_2:sch 4;
      take u = f.(len F);
      take f' = f;
      thus u = f'.(len F) & f'.0 = 0.V by A3;
@@ -975,7 +997,7 @@ definition let V; let F;
        consider f' being Function of NAT qua non empty set, the carrier of V
         such that A16:
          for k being Element of NAT qua non empty set holds
-           P[k,f'.k] from FuncExD(A11);
+           P[k,f'.k] from FUNCT_2:sch 3(A11);
      take z = f'.(n + 1);
      take f'' = f';
      thus z = f''.(len F) by A6;
@@ -1003,7 +1025,7 @@ definition let V; let F;
     end;
     hence thesis;
     end;
-      for n holds P[n] from Ind(A1,A4);
+      for n holds P[n] from NAT_1:sch 1(A1,A4);
    then consider u such that
 A24:  ex f st u = f.(len F) & f.0 = 0.V &
       for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
@@ -1035,10 +1057,11 @@ A24:  ex f st u = f.(len F) & f.0 = 0.V &
       end;
       hence thesis;
       end;
-         for k holds P[k] from Ind(A31,A32);
+         for k holds P[k] from NAT_1:sch 1(A31,A32);
    hence v1 = v2 by A25,A28;
   end;
 end;
+
 
 Lm5: Sum(<*>(the carrier of V)) = 0.V
  proof set S = <*>(the carrier of V);
@@ -1113,7 +1136,7 @@ A19:          len p <= len G by A15,A16,A17,AXIOMS:22;
       end;
 A22:    dom G = Seg len G by FINSEQ_1:def 3;
 
-         for k holds P[k] from Ind(A10,A11);
+         for k holds P[k] from NAT_1:sch 1(A10,A11);
       then A23: f.(len G) = g.(len G) by A2,A22;
         len G < len F by A1,REAL_1:69;
     hence thesis by A1,A3,A4,A6,A7,A23;
@@ -1179,7 +1202,7 @@ A17:        dom q = Seg len q by FINSEQ_1:def 3;
       hence thesis;
       end;
 A18:   dom F = Seg len F by FINSEQ_1:def 3;
-         for n holds P[n] from Ind(A1,A3);
+         for n holds P[n] from NAT_1:sch 1(A1,A3);
      hence thesis by A18;
     end;
 
@@ -1253,12 +1276,12 @@ A17:   dom q = Seg len q by FINSEQ_1:def 3;
    hence thesis;
    end;
 A18:   dom F = Seg len F by FINSEQ_1:def 3;
-       for n holds P[n] from Ind(A1,A3);
+       for n holds P[n] from NAT_1:sch 1(A1,A3);
    hence thesis by A18;
  end;
 
 Lm7: for j being natural number holds j < 1 implies j = 0
- proof  
+ proof
   let j be natural number;
   assume j < 1;
     then j < 0 + 1;
@@ -1363,13 +1386,13 @@ A25:      dom p = Seg len p by FINSEQ_1:def 3;
                       .= Sum(F) + (Sum(p) + v) by Def6
                       .= Sum(F) + Sum(H) by A4,A8,A25,Th55;
       end;
-       for k holds P[k] from Ind(A1,A2);
+       for k holds P[k] from NAT_1:sch 1(A1,A2);
      then len G = len G implies thesis;
    hence thesis;
   end;
 
 Lm8: for k, n being natural number holds k <> 0 implies n < n + k
- proof 
+ proof
   let k, n be natural number;
   assume A1: k <> 0;
    A2: now assume n = n + k;
@@ -1430,7 +1453,7 @@ A1: Sum(S) = f.(len S) and A2: f.0 = 0.V and
   hence thesis by A1,FINSEQ_1:56;
  end;
 
-Lm11: 
+Lm11:
   for k, n being natural number holds
     k < k + n iff 1 <= n
  proof
@@ -1495,7 +1518,7 @@ Lm13: rng p = rng q & p is one-to-one & q is one-to-one implies
         j in Seg n & P[j,y1] & P[j,y2] holds y1 = y2;
        A17: for j st j in Seg n ex x st P[j,x];
       consider q2 being FinSequence such that A18: dom q2 = Seg n and
-       A19: for j st j in Seg n holds P[j,q2.j] from SeqEx(A16,A17);
+       A19: for j st j in Seg n holds P[j,q2.j] from FINSEQ_1:sch 1(A16,A17);
          k <= y by A13,NAT_1:37;
        then A20: k <= len q by A14,AXIOMS:22;
        then A21: len q1 = k by FINSEQ_1:21;
@@ -1710,7 +1733,7 @@ A58:       q1 ^ q2 is one-to-one
    end;
    hence thesis;
    end;
-     for p holds P[p] from IndSeq(A1,A3);
+     for p holds P[p] from FINSEQ_1:sch 3(A1,A3);
   hence thesis;
  end;
 
@@ -1770,7 +1793,8 @@ A5:     for H,I being FinSequence of the carrier of V
          A19: for j,y1,y2 st j in Seg m2 & P[j,y1] & P[j,y2] holds y1 = y2;
          A20: for j st j in Seg m2 ex x st P[j,x];
         consider q2 being FinSequence such that A21: dom q2 = Seg m2 and
-         A22: for k st k in Seg m2 holds P[k,q2.k] from SeqEx(A19,A20);
+         A22: for k st k in Seg m2 holds P[k,q2.k] from FINSEQ_1:sch 1
+(A19,A20);
           rng q2 c= the carrier of V
          proof let x;
            assume x in rng q2;
@@ -1971,7 +1995,7 @@ A98: for k st k in dom p holds H.k=p.k by FUNCT_1:70;
       end;
     hence thesis;
     end;
-      A100: for k holds P[k] from Ind(A1,A4);
+      A100: for k holds P[k] from NAT_1:sch 1(A1,A4);
         len F = len F;
     hence thesis by A100;
    end;
@@ -2350,6 +2374,7 @@ definition
   attr a is non-zero means
      a <> 0.R;
 end;
+
 
  reserve j, k, n for natural number; 
 

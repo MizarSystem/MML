@@ -50,6 +50,7 @@ definition let x1, x2, x3, x4, x5, x6 be set;
     x5 <> x6;
 end;
 
+
 definition let x1, x2, x3, x4, x5, x6, x7 be set;
   pred x1, x2, x3, x4, x5, x6, x7 are_mutually_different means
 :: BORSUK_5:def 2
@@ -60,6 +61,7 @@ definition let x1, x2, x3, x4, x5, x6, x7 be set;
     x5 <> x6 & x5 <> x7 &
     x6 <> x7;
 end;
+
 
 theorem :: BORSUK_5:4
   for x1, x2, x3, x4, x5, x6 being set st
@@ -102,13 +104,21 @@ theorem :: BORSUK_5:11
     (ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b) holds
      ex g being map of I[01], T st g is continuous & g.0 = b & g.1 = a;
 
-definition
+registration
   cluster R^1 -> arcwise_connected;
+  coherence by Lm1;
 end;
 
-definition
+
+registration
   cluster connected non empty TopSpace;
+  existence
+  proof
+    take R^1;
+    thus thesis;
+  end;
 end;
+
 
 begin :: Intervals
 
@@ -119,16 +129,13 @@ theorem :: BORSUK_5:12
 theorem :: BORSUK_5:13
   [#]R^1 = REAL;
 
-definition let a be real number;
-  redefine func left_closed_halfline a; :: LIMFUNC1
-  synonym ].-infty, a .];
-  redefine func left_open_halfline a;
-  synonym ].-infty, a .[;
-  redefine func right_closed_halfline a;
-  synonym [. a,+infty.[;
-  redefine func right_open_halfline a;
-  synonym ]. a,+infty.[;
-end;
+notation let a be real number;
+  synonym ].-infty, a .] for left_closed_halfline a; :: LIMFUNC1
+  synonym ].-infty, a .[ for left_open_halfline a;
+  synonym [. a,+infty.[ for right_closed_halfline a;
+  synonym ]. a,+infty.[ for right_open_halfline a;
+  end;
+
 
 theorem :: BORSUK_5:14
   for a, b being real number holds
@@ -211,13 +218,17 @@ theorem :: BORSUK_5:32
       A, B, C being Subset of T holds
     { A, B, C } is Subset-Family of T;
 
-definition
+registration
   cluster -> real Element of RAT;
+  coherence;
 end;
 
-definition
+
+registration
   cluster -> real Element of RealSpace;
+  coherence by METRIC_1:def 14,XREAL_0:def 1;
 end;
+
 
 theorem :: BORSUK_5:33
   for A being Subset of R^1,
@@ -241,15 +252,18 @@ theorem :: BORSUK_5:36
 
 begin :: Rational and Irrational Numbers
 
-definition
+registration
   cluster number_e -> irrational;
+  coherence by IRRAT_1:42;
 end;
+
 
 definition
   func IRRAT -> Subset of REAL equals
 :: BORSUK_5:def 3
     REAL \ RAT;
 end;
+
 
 definition let a, b be real number;
   func RAT (a, b) -> Subset of REAL equals
@@ -260,17 +274,22 @@ definition let a, b be real number;
     IRRAT /\ ]. a, b .[;
 end;
 
+
 theorem :: BORSUK_5:37
   for x being real number holds
     x is irrational iff x in IRRAT;
 
-definition
+registration
   cluster irrational (real number);
+  existence by IRRAT_1:42;
 end;
 
-definition
+
+registration
   cluster IRRAT -> non empty;
+  coherence by Th37,IRRAT_1:42;
 end;
+
 
 theorem :: BORSUK_5:38
   for a being rational number, b being irrational (real number) holds
@@ -295,9 +314,19 @@ theorem :: BORSUK_5:43
   for a being rational number, b being irrational (real number)
     st a <> 0 holds b / a is irrational;
 
-definition
+registration
   cluster irrational -> non zero (real number);
+  coherence
+  proof
+    let a be real number;
+    assume
+A1: a is irrational;
+    assume a is zero;
+    then a = 0 / 1;
+    hence thesis by A1;
+  end;
 end;
+
 
 theorem :: BORSUK_5:44
   for a being rational number, b being irrational (real number)
@@ -306,31 +335,53 @@ theorem :: BORSUK_5:44
 theorem :: BORSUK_5:45
   for r being irrational (real number) holds frac r is irrational;
 
-definition let r be irrational (real number);
+registration let r be irrational (real number);
   cluster frac r -> irrational;
+  coherence by Th45;
 end;
 
-definition let a be irrational (real number);
+
+registration let a be irrational (real number);
   cluster -a -> irrational;
+  coherence by Th39;
 end;
 
-definition let a be rational number, b be irrational (real number);
+
+registration let a be rational number, b be irrational (real number);
   cluster a + b -> irrational;
+  coherence by Th38;
   cluster b + a -> irrational;
+  coherence by Th38;
   cluster a - b -> irrational;
+  coherence by Th40;
   cluster b - a -> irrational;
+  coherence by Th41;
 end;
 
-definition
+
+registration
   cluster non zero (rational number);
+  existence
+  proof
+    reconsider a = 1 as rational number;
+     a <> 0;
+    hence thesis;
+  end;
 end;
 
-definition let a be non zero (rational number), b be irrational (real number);
+
+registration
+let a be non zero (rational number), b be irrational (real number);
   cluster a * b -> irrational;
+  coherence by Th42;
   cluster b * a -> irrational;
+  coherence by Th42;
   cluster a / b -> irrational;
+  coherence by Th44;
   cluster b / a -> irrational;
+  coherence by Th43;
 end;
+
 
 theorem :: BORSUK_5:46
    for r being irrational (real number) holds 0 < frac r;
@@ -447,12 +498,25 @@ theorem :: BORSUK_5:70
   for a being real number holds
     ].-infty,a .[ c= ].-infty,a .];
 
-definition let a be real number;
+registration let a be real number;
   cluster ]. a,+infty.[ -> non empty;
+  coherence
+  proof
+     a < a + 1 by REAL_1:69;
+    hence thesis by Th14;
+  end;
   cluster ].-infty,a .] -> non empty;
+  coherence by Th16;
   cluster ].-infty,a .[ -> non empty;
+  coherence
+  proof
+     a - 1 < a by INT_1:26;
+    hence thesis by Th17;
+  end;
   cluster [. a,+infty.[ -> non empty;
+  coherence by Th15;
 end;
+
 
 theorem :: BORSUK_5:71
   for a being real number holds
@@ -621,9 +685,64 @@ theorem :: BORSUK_5:106
 
 begin :: Subcontinua of a real line
 
-definition
+registration
   cluster I[01] -> arcwise_connected;
+  coherence
+  proof
+     for a, b being Point of I[01] ex f being map of I[01], I[01] st
+        f is continuous & f.0 = a & f.1 = b
+    proof
+      let a, b be Point of I[01];
+      per cases;
+      suppose
+A1:   a <= b;
+      then reconsider B = [. a, b .] as non empty Subset of I[01]
+        by BORSUK_4:49;
+       0 <= a & b <= 1 by JORDAN5A:2;
+then A2:   Closed-Interval-TSpace(a,b) = I[01]|B by A1,JGRAPH_5:7;
+then A3:   L[01]((#)(a,b),(a,b)(#)) is continuous map of
+        I[01], I[01]|B by A1,TOPMETR:27,TREAL_1:11;
+       the carrier of I[01]|B c= the carrier of I[01] by BORSUK_1:35;
+      then reconsider g = L[01]((#)(a,b),(a,b)(#)) as Function of
+        the carrier of I[01], the carrier of I[01]
+          by A2,FUNCT_2:9,TOPMETR:27;
+      reconsider g as map of I[01], I[01];
+      take g;
+      thus g is continuous by A3,TOPMETR:7;
+       0 = (#)(0,1) by TREAL_1:def 1;
+      hence g.0 = (#)(a,b) by A1,TREAL_1:12 .= a by A1,TREAL_1:def 1;
+       1 = (0,1)(#) by TREAL_1:def 2;
+      hence g.1 = (a,b)(#) by A1,TREAL_1:12 .= b by A1,TREAL_1:def 2;
+      end;
+      suppose
+A4:   b <= a;
+      then reconsider B = [. b, a .] as non empty Subset of I[01]
+        by BORSUK_4:49;
+       0 <= b & a <= 1 by JORDAN5A:2;
+then A5:   Closed-Interval-TSpace(b,a) = I[01]|B by A4,JGRAPH_5:7;
+then A6:   L[01]((#)(b,a),(b,a)(#)) is continuous map of
+       I[01], I[01]|B by A4,TOPMETR:27,TREAL_1:11;
+       the carrier of I[01]|B c= the carrier of I[01] by BORSUK_1:35;
+      then reconsider g = L[01]((#)(b,a),(b,a)(#)) as Function of
+        the carrier of I[01], the carrier of I[01]
+          by A5,FUNCT_2:9,TOPMETR:27;
+      reconsider g as map of I[01], I[01];
+A7:   g is continuous by A6,TOPMETR:7;
+       0 = (#)(0,1) by TREAL_1:def 1;
+then A8:   g.0 = (#)(b,a) by A4,TREAL_1:12 .= b by A4,TREAL_1:def 1;
+       1 = (0,1)(#) by TREAL_1:def 2;
+then A9:   g.1 = (b,a)(#) by A4,TREAL_1:12 .= a by A4,TREAL_1:def 2;
+      then reconsider P = g as Path of b, a by A7,A8,BORSUK_2:def 1;
+      take h = -P;
+       ex t being map of I[01], I[01] st
+        t is continuous & t.0 = a & t.1 = b by A7,A8,A9,Th11;
+      hence thesis by BORSUK_2:def 1;
+    end;
+    end;
+    hence thesis by BORSUK_2:def 2;
+  end;
 end;
+
 
 theorem :: BORSUK_5:107
   for X being compact Subset of R^1,
@@ -667,15 +786,25 @@ definition let TS be TopStruct; let F be Subset-Family of TS;
     not the carrier of TS in F;
 end;
 
+
 theorem :: BORSUK_5:114
    for TS being TopStruct,
       F, G being Subset-Family of TS st
     F is with_proper_subsets & G c= F holds
     G is with_proper_subsets;
 
-definition let TS be non empty TopStruct;
+registration let TS be non empty TopStruct;
   cluster with_proper_subsets Subset-Family of TS;
+  existence
+  proof
+     { {} } is Subset-Family of TS by MEASURE1:9;
+    then reconsider F = { {} } as Subset-Family of TS;
+    take F;
+    assume the carrier of TS in F;
+    hence thesis by TARSKI:def 1;
+  end;
 end;
+
 
 theorem :: BORSUK_5:115
    for TS being non empty TopStruct,
@@ -691,7 +820,26 @@ definition let T be TopStruct, F be Subset-Family of T;
       for P being Subset of T holds P in F implies P is closed;
 end;
 
-definition let T be TopSpace;
+
+registration let T be TopSpace;
   cluster open closed non empty Subset-Family of T;
+  existence
+  proof
+    reconsider F = {{}T} as Subset-Family of T by Th30;
+A1: F is open
+    proof
+      let P be Subset of T;
+      assume P in F;
+      hence thesis by TARSKI:def 1;
+    end;
+     F is closed
+    proof
+      let P be Subset of T;
+      assume P in F;
+      hence thesis by TARSKI:def 1;
+    end;
+    hence thesis by A1;
+  end;
 end;
+
 

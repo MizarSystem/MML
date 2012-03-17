@@ -4,12 +4,6 @@ RELAT_1
 FUNCT_1
 ORDINAL1
 #
-Ordinal_Min
-Transfinite_Ind
-TS_Uniq
-TS_Exist
-Func_TS
-#
 ;
 ªM1 V7 ;;ª&P1 B1 ;M1 V7 ;;ª&P1 B2 ;ªR5 B1 B2 ;;;ªM1 V7 ;;ªP1 B1 ;;
 #

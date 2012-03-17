@@ -27,6 +27,7 @@ definition
   for x being set holds x in it iff x is Real_Sequence;
 end;
 
+
 definition
   let a be set such that
   a in the_set_of_RealSequences;
@@ -35,6 +36,7 @@ definition
    a;
 end;
 
+
 definition
  let a be set such that
  a in REAL;
@@ -42,6 +44,7 @@ definition
 :: RSSPACE:def 3
   a;
 end;
+
 
 theorem :: RSSPACE:1
 ex ADD be BinOp of the_set_of_RealSequences st
@@ -61,6 +64,7 @@ definition
       it.(a,b) = seq_id(a)+seq_id(b);
 end;
 
+
 definition
  func l_mult -> Function of [: REAL, the_set_of_RealSequences :],
   the_set_of_RealSequences means
@@ -69,11 +73,13 @@ definition
       holds it.[r,x] = R_id(r)(#)seq_id(x);
 end;
 
+
 definition
  func Zeroseq -> Element of the_set_of_RealSequences means
 :: RSSPACE:def 6
  for n be Nat holds (seq_id it).n=0;
 end;
+
 
 theorem :: RSSPACE:3
 for x be Real_Sequence holds seq_id x = x;
@@ -88,9 +94,16 @@ for r being Real,
  v being VECTOR of RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #)
   holds r * v = r(#)seq_id(v);
 
-definition
+registration
   cluster RLSStruct (# the_set_of_RealSequences, Zeroseq, l_add, l_mult #) ->
     Abelian;
+  coherence
+  proof
+     let v,w being VECTOR of
+     RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+       v + w = seq_id(v)+seq_id(w) by Th4;
+     hence thesis by Th4;
+  end;
 end;
 
 theorem :: RSSPACE:6
@@ -135,6 +148,7 @@ definition
    RLSStruct (# the_set_of_RealSequences, Zeroseq, l_add, l_mult #);
 end;
 
+
 definition
 let X be RealLinearSpace;
 let X1 be Subset of X such that
@@ -143,6 +157,7 @@ func Add_(X1,X) -> BinOp of X1 equals
 :: RSSPACE:def 8
 (the add of X) | [:X1,X1:];
 end;
+
 
 definition
 let X be RealLinearSpace;
@@ -153,6 +168,7 @@ func Mult_(X1,X) -> Function of [:REAL,X1:], X1 equals
 (the Mult of X) | [:REAL,X1:];
 end;
 
+
 definition
 let X be RealLinearSpace, X1 be Subset of X such that
  X1 is lineary-closed non empty;
@@ -160,6 +176,7 @@ func Zero_(X1,X) -> Element of X1 equals
 :: RSSPACE:def 10
   0.X;
 end;
+
 
 theorem :: RSSPACE:13
 for V be RealLinearSpace, V1 be Subset of V
@@ -174,11 +191,116 @@ definition
   (x in the_set_of_RealSequences & seq_id(x)(#)seq_id(x) is summable);
 end;
 
+
 canceled;
 
-definition
+registration
   cluster the_set_of_l2RealSequences -> lineary-closed non empty;
+  coherence
+proof
+set W = the_set_of_l2RealSequences;
+A1:for v,u be VECTOR of Linear_Space_of_RealSequences st
+    v in the_set_of_l2RealSequences &
+    u in the_set_of_l2RealSequences
+        holds v + u in the_set_of_l2RealSequences
+   proof
+     let v,u be VECTOR of Linear_Space_of_RealSequences such that
+A2: v in W & u in W;
+  (seq_id(v+u))(#)(seq_id(v+u)) is summable
+     proof
+A3:  (seq_id(v))(#)(seq_id(v)) is summable by A2,Def11;
+A4:  (seq_id(u))(#)(seq_id(u)) is summable by A2,Def11;
+       set p = (seq_id(v))(#)(seq_id(v));
+       set q = (seq_id(u))(#)(seq_id(u));
+       set r = (seq_id(v+u))(#)(seq_id(v+u));
+A5:  2(#)p is summable by A3,SERIES_1:13;
+   2(#)q is summable by A4,SERIES_1:13;
+then A6:  2(#)p+2(#)q is summable by A5,SERIES_1:10;
+A7:  for n be Nat holds 0<=r.n
+       proof
+        let n be Nat;
+          r.n=(seq_id(v+u)).n * (seq_id(v+u)).n by SEQ_1:12;
+        hence thesis by REAL_1:93;
+      end;
+  for n be Nat holds r.n <=(2(#)p+2(#)q).n
+      proof
+        let n be Nat;
+        set s = seq_id v;
+        set t = seq_id u;
+        reconsider sn=s.n, tn=t.n as Real;
+A8:     seq_id(v+u)=seq_id(seq_id(v)+seq_id(u)) by Def7,Th4
+                    .=seq_id(v)+seq_id(u) by Th3;
+A9:     r.n=(seq_id(v+u)).n * (seq_id(v+u)).n by SEQ_1:12
+         .=(s.n+t.n) * (seq_id(v)+seq_id(u)).n by A8,SEQ_1:11
+         .=(s.n+t.n) * (s.n+t.n) by SEQ_1:11
+         .=((s.n)+(t.n))^2 by SQUARE_1:def 3
+         .= sn^2 + 2*sn*tn + tn^2 by SQUARE_1:63;
+      (2(#)p+2(#)q).n=(2(#)p).n +(2(#)q).n by SEQ_1:11
+                    .= 2*p.n + (2(#)q).n by SEQ_1:13
+                    .= 2*p.n + 2*q.n by SEQ_1:13
+                    .= 2*(s.n*s.n) + 2*q.n by SEQ_1:12
+                    .= 2*(s.n*s.n) + 2*(t.n*t.n) by SEQ_1:12
+                    .= 2*sn^2 + 2*(t.n*t.n) by SQUARE_1:def 3
+                    .= 2*sn^2 + 2*tn^2 by SQUARE_1:def 3;
+then A10:     (2(#)p+2(#)q).n - r.n
+          = 2*sn^2 + 2*tn^2 - (sn^2 + 2*sn*tn) - tn^2 by A9,XCMPLX_1:36
+         .= 2*sn^2 + 2*tn^2 - sn^2 - 2*sn*tn - tn^2 by XCMPLX_1:36
+         .= 2*sn^2 - sn^2 + 2*tn^2 - 2*sn*tn - tn^2 by XCMPLX_1:29
+         .= sn^2 + sn^2 - sn^2 + 2*tn^2 - 2*sn*tn - tn^2 by XCMPLX_1:11
+         .= sn^2 + 2*tn^2 - 2*sn*tn - tn^2 by XCMPLX_1:26
+         .= sn^2 - 2*sn*tn + 2*tn^2 - tn^2 by XCMPLX_1:29
+         .= sn^2 - 2*sn*tn + (2*tn^2 - tn^2) by XCMPLX_1:29
+         .= sn^2 - 2*sn*tn + (tn^2 + tn^2 - tn^2) by XCMPLX_1:11
+         .= sn^2 - 2 * sn * tn + tn^2 by XCMPLX_1:26
+         .= (sn-tn)^2 by SQUARE_1:64;
+         0 <= (sn-tn)^2 by SQUARE_1:72;
+       then 0 + r.n <= (2(#)p+2(#)q).n - r.n + r.n by A10,REAL_1:55;
+       then r.n <= (2(#)p+2(#)q).n - (r.n - r.n) by XCMPLX_1:37;
+      hence thesis by XCMPLX_1:17;
+     end;
+     hence thesis by A6,A7,SERIES_1:24;
+    end;
+    hence v+u in W by Def7,Def11;
 end;
+A2:W is non empty
+   proof
+       seq_id Zeroseq (#)seq_id Zeroseq is summable
+     proof
+       reconsider rseq=(seq_id(Zeroseq)(#)seq_id(Zeroseq)) as Real_Sequence;
+         now let n be Nat;
+         thus rseq.n =((seq_id(Zeroseq)).n ) * ((seq_id(Zeroseq)).n )
+          by SEQ_1:12
+          .=((seq_id(Zeroseq)).n ) * 0 by Def6
+          .=0;
+       end;
+       then rseq is absolutely_summable by COMSEQ_3:3;
+       hence thesis by SERIES_1:40;
+     end;
+     hence thesis by Def11;
+  end;
+  for a be Real for v be VECTOR of Linear_Space_of_RealSequences
+    st v in W holds a * v in W
+    proof
+let a be Real;
+let v be VECTOR of Linear_Space_of_RealSequences such that
+    A11: v in W;
+      (seq_id(a*v))(#)(seq_id(a*v)) is summable
+    proof
+     A12: (seq_id(v))(#)(seq_id(v)) is summable by A11,Def11;
+       seq_id(a*v)=seq_id(a(#)seq_id(v)) by Def7,Th5
+                     .=a(#)seq_id(v) by Th3;
+     then (seq_id(a*v))(#)(seq_id(a*v))
+          =a(#)((a(#)seq_id(v))(#) seq_id(v)) by SEQ_1:27
+         .=a(#)(a(#)( seq_id(v)(#)seq_id(v))) by SEQ_1:26
+         .=(a*a)(#)(seq_id(v)(#)seq_id(v)) by SEQ_1:31;
+     hence thesis by A12,SERIES_1:13;
+    end;
+    hence a*v in W by Def7,Def11;
+  end;
+  hence thesis by A1,A2,RLSUB_1:def 1;
+end;
+end;
+
 
 theorem :: RSSPACE:15
   RLSStruct(# the_set_of_l2RealSequences,
@@ -221,13 +343,16 @@ definition
      holds it.[x,y] = Sum(seq_id(x)(#)seq_id(y)));
 end;
 
-definition
+
+registration
   cluster UNITSTR (# the_set_of_l2RealSequences,
         Zero_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
          Add_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
         Mult_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
         l_scalar #) -> non empty;
+  coherence;
 end;
+
 
 definition
   func l2_Space -> non empty UNITSTR equals
@@ -238,6 +363,7 @@ definition
         Mult_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
         l_scalar #);
 end;
+
 
 theorem :: RSSPACE:19
 for l be UNITSTR st
@@ -254,7 +380,9 @@ theorem :: RSSPACE:21
    st ( (for n be Nat holds 0 <= rseq.n) & rseq is summable & Sum rseq=0)
    holds for n be Nat holds rseq.n =0;
 
-definition
+registration
   cluster l2_Space -> Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like;
+  coherence by Def13,Th16,Th19;
 end;
+

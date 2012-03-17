@@ -7,9 +7,6 @@ SUBSET_1
 RELSET_1
 FUNCT_2
 #
-NonEmpty
-DoubleChoice
-#
 M1 W1 ;;M1 ;;
 ªV1 èM2 F1 ;;;F2 B1 ;%;;
 #

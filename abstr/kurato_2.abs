@@ -46,28 +46,65 @@ theorem :: KURATO_2:4
   for A, B, C, D being set st A meets B & C meets D holds
     [: A, C :] meets [: B, D :];
 
-definition let X be 1-sorted;
+registration let X be 1-sorted;
   cluster -> non empty SetSequence of the carrier of X;
+  coherence;
 end;
 
-definition let T be non empty 1-sorted;
+
+registration let T be non empty 1-sorted;
   cluster non-empty SetSequence of the carrier of T;
+  existence
+  proof
+    consider a being Element of T;
+    set X = NAT --> {a};
+    reconsider X as SetSequence of the carrier of T;
+    take X;
+A1: rng X = {{a}} by FUNCOP_1:14;
+    not {} in rng X by A1,TARSKI:def 1;
+    hence thesis by RELAT_1:def 9;
+  end;
 end;
+
 
 definition let T be non empty 1-sorted;
   mode SetSequence of T is SetSequence of the carrier of T;
   canceled;
 end;
 
-scheme LambdaSSeq { X() -> non empty 1-sorted,
+
+scheme :: KURATO_2:sch 1
+ LambdaSSeq { X() -> non empty 1-sorted,
                     F(set) -> Subset of X() } :
   ex f being SetSequence of X() st
-    for n being Nat holds f.n = F(n);
+    for n being Nat holds f.n = F(n)
+proof
+    deffunc G(set)=F($1);
+    set Y = bool the carrier of X();
+A1: for x be set st x in NAT holds G(x) in Y;
+    ex f be Function of NAT, Y st for x be set st x in NAT holds f.x = G(x)
+      from FUNCT_2:sch 2(A1); then
+    consider f be Function of NAT, Y such that
+A2: for x be set st x in NAT holds f.x = F(x);
+    reconsider f as SetSequence of X();
+    take f;
+    thus thesis by A2;
+  end;
 
-scheme ExTopStrSeq { R() -> non empty TopSpace,
+scheme :: KURATO_2:sch 2
+ ExTopStrSeq { R() -> non empty TopSpace,
                      F(set) -> Subset of R() } :
    ex S be SetSequence of the carrier of R() st
-     for n be Nat holds S.n = F(n);
+     for n be Nat holds S.n = F(n)
+proof
+    deffunc G(set)=F($1);
+    ex f being Function of NAT, bool the carrier of R() st
+    for x being Element of NAT holds f.x = G(x) from FUNCT_2:sch 4;
+    then consider f being Function of NAT, bool the carrier of R() such that
+A1: for x being Element of NAT holds f.x = F(x);
+    take f;
+    thus thesis by A1;
+  end;
 
 theorem :: KURATO_2:5
   for X being non empty 1-sorted,
@@ -80,6 +117,7 @@ definition let X be non empty 1-sorted,
   redefine func meet F -> Subset of X;
 end;
 
+
 begin :: Lower and Upper Limit of Sequences of Subsets
 
 definition let X be non empty set;
@@ -89,6 +127,7 @@ definition let X be non empty set;
 :: KURATO_2:def 2
   for n being Nat holds it.n = S.(n + k);
 end;
+
 
 definition let X be non empty 1-sorted,
                F be SetSequence of the carrier of X;
@@ -101,6 +140,7 @@ definition let X be non empty 1-sorted,
     ex f being SetSequence of X st it = meet f &
       for n being Nat holds f.n = Union (F ^\ n);
 end;
+
 
 theorem :: KURATO_2:6
   for X being non empty 1-sorted,
@@ -204,6 +244,7 @@ definition let T be non empty 1-sorted,
     for i being Nat holds S.i c= S.(i+1);
 end;
 
+
 theorem :: KURATO_2:21
   for f being Function st (for i being Nat holds f.(i+1) c= f.i)
     for i, j being Nat st
@@ -252,6 +293,7 @@ definition let T be non empty 1-sorted,
   lim_sup S = lim_inf S;
 end;
 
+
 theorem :: KURATO_2:27
   for T being non empty 1-sorted,
       S being SetSequence of T st S is constant holds
@@ -264,13 +306,42 @@ definition let T be non empty 1-sorted,
   ex A being Subset of T st for n being Nat holds S.n = A;
 end;
 
-definition let T be non empty 1-sorted;
+
+registration let T be non empty 1-sorted;
   cluster constant -> convergent ascending descending SetSequence of T;
+  coherence
+  proof
+    let S be SetSequence of T;
+    assume S is constant; then
+    consider A being Subset of T such that
+A1: for n being Nat holds S.n = A by Def8;
+A2: lim_sup S = A by A1,Th17;
+A3: lim_inf S = A by A1,Th18;
+A4: now let n be Nat;
+      S.n = A & S.(n+1) = A by A1;
+      hence S.n c= S.(n+1);
+    end;
+    now let n be Nat;
+      S.n = A & S.(n+1) = A by A1;
+      hence S.(n+1) c= S.n;
+    end;
+    hence thesis by A2,A3,A4,Def5,Def6,Def7;
+  end;
 end;
 
-definition let T be non empty 1-sorted;
+
+registration let T be non empty 1-sorted;
   cluster constant non empty SetSequence of T;
+  existence
+  proof
+    consider A being Subset of T;
+    set E = NAT --> A;
+    reconsider E as SetSequence of T;
+    E is constant;
+    hence thesis;
+  end;
 end;
+
 
 definition let T be non empty 1-sorted,
                S be convergent SetSequence of T;
@@ -278,6 +349,7 @@ definition let T be non empty 1-sorted,
 :: KURATO_2:def 9
   it = lim_sup S & it = lim_inf S;
 end;
+
 
 theorem :: KURATO_2:28
   for X being non empty 1-sorted,
@@ -289,9 +361,11 @@ begin :: Topological Lemmas
 
  reserve n for Nat;
 
-definition let f be FinSequence of the carrier of TOP-REAL 2;
+registration let f be FinSequence of the carrier of TOP-REAL 2;
   cluster L~f -> closed;
+  coherence by SPPOL_1:49;
 end;
+
 
 theorem :: KURATO_2:29
   for r being real number,
@@ -331,13 +405,21 @@ theorem :: KURATO_2:34
    ex seq being Real_Sequence of n st
       rng seq c= X & seq is convergent & lim seq = r;
 
-definition let M be non empty MetrSpace;
+registration let M be non empty MetrSpace;
   cluster TopSpaceMetr M -> first-countable;
+  coherence by FRECHET:21;
 end;
 
-definition let n be Nat;
+
+registration let n be Nat;
   cluster TOP-REAL n -> first-countable;
+  coherence
+  proof
+    TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: KURATO_2:35
   for p being Point of Euclid n,
@@ -385,21 +467,56 @@ theorem :: KURATO_2:41
     V is a_neighborhood of [: {x}, {y} :] iff
       V is a_neighborhood of [ x, y ];
 
-scheme TSubsetEx { S() -> non empty TopStruct, P[set] } :
+scheme :: KURATO_2:sch 3
+ TSubsetEx { S() -> non empty TopStruct, P[set] } :
   ex X being Subset of S() st
-   for x being Point of S() holds x in X iff P[x];
+   for x being Point of S() holds x in X iff P[x]
+proof
+    defpred G[set] means P[$1];
+    consider A being set such that
+A1:  for x being set holds x in A iff x in the carrier of S() & G[x]
+      from XBOOLE_0:sch 1;
+    A c= the carrier of S()
+    proof
+      let x be set;
+      assume x in A;
+      hence thesis by A1;
+    end; then
+    reconsider A as Subset of S();
+    take A;
+    thus thesis by A1;
+  end;
 
-scheme TSubsetUniq { S() -> TopStruct, P[set] } :
+scheme :: KURATO_2:sch 4
+ TSubsetUniq { S() -> TopStruct, P[set] } :
   for A1, A2 being Subset of S() st
   (for x being Point of S() holds x in A1 iff P[x]) &
   (for x being Point of S() holds x in A2 iff P[x]) holds
-    A1 = A2;
+    A1 = A2
+proof
+    let A, B be Subset of S() such that
+A1:   for p being Point of S() holds p in A iff P[p] and
+A2:   for p being Point of S() holds p in B iff P[p];
+    hereby
+      let x be set;
+      assume
+A3:   x in A; then
+      P[x] by A1;
+      hence x in B by A2,A3;
+    end;
+    let x be set;
+    assume
+A4: x in B; then
+    P[x] by A2;
+    hence x in A by A1,A4;
+  end;
 
 definition let T be non empty TopStruct;
            let S be SetSequence of the carrier of T;
            let i be Nat;
  redefine func S.i -> Subset of T;
 end;
+
 
 theorem :: KURATO_2:42
   for T be non empty 1-sorted,
@@ -410,8 +527,9 @@ theorem :: KURATO_2:42
 theorem :: KURATO_2:43
   id NAT is increasing Seq_of_Nat;
 
-definition
+registration
   cluster id NAT -> real-yielding;
+  coherence by Th43;
 end;
 
 begin :: Subsequences
@@ -422,6 +540,7 @@ definition
 :: KURATO_2:def 10
     ex NS being increasing Seq_of_Nat st it = S * NS;
 end;
+
 
 theorem :: KURATO_2:44
   for T being non empty 1-sorted,
@@ -461,18 +580,123 @@ theorem :: KURATO_2:49
       n being Nat holds
     ex m being Nat st m >= n & R.n = S.m;
 
-definition let T be non empty 1-sorted,
+registration let T be non empty 1-sorted,
                X be constant SetSequence of T;
   cluster -> constant subsequence of X;
+  coherence
+  proof
+    let P be subsequence of X;
+    consider A being Subset of T such that
+A1: for n being Nat holds X.n = A by Def8;
+    ex A being Subset of T st
+      for n being Nat holds P.n = A
+    proof
+      take A;
+      let n be Nat;
+      consider m being Nat such that
+A2:   m >= n & P.n = X.m by Th49;
+      thus thesis by A1,A2;
+    end;
+    hence thesis by Def8;
+  end;
 end;
 
-scheme SubSeqChoice
+
+scheme :: KURATO_2:sch 5
+ SubSeqChoice
   { T() -> non empty TopSpace,
     S() -> SetSequence of the carrier of T(),
     P[set]} :
   ex S1 being subsequence of S() st for n being Nat holds P[S1.n]
 provided
- for n being Nat ex m being Nat st n <= m & P[S().m];
+ for n being Nat ex m being Nat st n <= m & P[S().m]
+proof
+    consider n0 being Nat such that 0 <= n0 and
+A2: P[S().n0] by A1;
+defpred P1[set,set,set] means $3 in NAT &
+      (for m,k being Nat st m = $2 & k = $3 holds m < k & P[S().k]);
+A3: for n being Nat for x being set ex y being set st P1[n,x,y]
+    proof
+      let n be Nat, x be set;
+      per cases;
+      suppose x in NAT;
+      then reconsider mx = x as Nat;
+      consider my being Nat such that
+A4:   mx + 1 <= my & P[S().my] by A1;
+      take my;
+      thus my in NAT;
+      thus for m,k being Nat st m=x & k=my holds m<k & P[S().k]
+        by A4,NAT_1:38;
+      end;
+      suppose
+A5:   not x in NAT;
+      set y = 0;
+      take 0;
+      thus y in NAT;
+      let m, k be Nat;
+      assume m = x & k = y;
+      hence m < k & P[S().k] by A5;
+    end;
+    end;
+    consider g being Function such that
+A6: dom g = NAT and
+A7:g.0 = n0 and
+A8:for n being Nat holds
+P1[n,g.n,g.(n+1)] from LATTICE5:sch 1(A3);
+A9:rng g c= NAT
+    proof
+      let y be set;
+      assume y in rng g;
+      then consider x being set such that
+A10:  x in dom g and
+A11:  g.x = y by FUNCT_1:def 5;
+      reconsider n = x as Nat by A6,A10;
+      defpred P[Nat] means g.$1 in NAT;
+A12:  P[0] by A7;
+A13:  for k being Nat holds P[k] implies P[k+1] by A8;
+      for k being Nat holds P[k] from NAT_1:sch 1(A12,A13);
+      then g.n in NAT;
+      hence y in NAT by A11;
+    end;
+    then rng g c= REAL by XBOOLE_1:1;
+    then reconsider g as Function of NAT,REAL by A6,FUNCT_2:4;
+    reconsider g as Real_Sequence;
+    for n being Nat holds g.n<g.(n+1)
+    proof
+      let n be Nat;
+      g.(n+1) in rng g by A6,FUNCT_1:def 5;
+      then reconsider k = g.(n+1) as Nat by A9;
+      g.n in rng g by A6,FUNCT_1:def 5;
+      then reconsider m = g.n as Nat by A9;
+      m < k by A8;
+      hence g.n<g.(n+1);
+    end;
+    then reconsider g as increasing Seq_of_Nat by A9,SEQM_3:def 8,def 11;
+    reconsider S1 = S() * g as SetSequence of T() by Th42;
+A14:dom S1 = NAT by FUNCT_2:def 1;
+    reconsider S1 as subsequence of S() by Def10;
+    take S1;
+    thus for n being Nat holds P[S1.n]
+    proof
+      let n be Nat;
+      per cases;
+      suppose n = 0;
+      hence P[S1.n] by A2,A7,A14,FUNCT_1:22;
+      end;
+      suppose n <> 0;
+      then n > 0 by NAT_1:19;
+      then n >= 0 + 1 by NAT_1:38;
+      then reconsider n' = n-1 as Nat by INT_1:18;
+A15:  for m,k being Nat st m = g.n' & k = g.(n'+1) holds P[S().k] by A8;
+      reconsider k = g.(n'+1) as Nat;
+A16:  P[S().k] by A15;
+      n + (-1) = n' by XCMPLX_0:def 8;
+      then n = n'-(-1) by XCMPLX_1:26;
+      then n = n'+1 by XCMPLX_1:151;
+      hence P[S1.n] by A14,A16,FUNCT_1:22;
+    end;
+    end;
+  end;
 
 begin :: Lower Topological Limit
 
@@ -486,6 +710,7 @@ definition let T be non empty TopSpace;
       ex k being Nat st
      for m being Nat st m > k holds S.m meets G;
 end;
+
 
 theorem :: KURATO_2:50
    for S being SetSequence of the carrier of TOP-REAL n,
@@ -599,6 +824,7 @@ definition let T be non empty TopSpace;
     for x being set holds
       x in it iff ex A being subsequence of S st x in Lim_inf A;
 end;
+
 
 theorem :: KURATO_2:67
   for N being Nat,

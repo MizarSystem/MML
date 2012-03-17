@@ -41,19 +41,23 @@ for x be Element of it holds
   x is homogeneous quasi_total non empty PartFunc of D*,D;
 end;
 
+
 definition
 let D be non empty set, P be PFuncsDomHQN of D;
 redefine
  mode Element of P -> homogeneous quasi_total non empty PartFunc of D*,D;
 end;
 
+
 definition let U1;
 mode PFuncsDomHQN of U1 is PFuncsDomHQN of (the carrier of U1);
 end;
 
+
 definition let U1 be UAStr;
 mode PartFunc of U1 is PartFunc of (the carrier of U1)*,the carrier of U1;
 end;
+
 
 definition let U1,U2;
  pred U1,U2 are_similar means
@@ -62,6 +66,7 @@ definition let U1,U2;
   symmetry;
   reflexivity;
 end;
+
 
 theorem :: UNIALG_2:3
   U1,U2 are_similar implies len the charact of(U1) = len the charact of(U2);
@@ -79,9 +84,11 @@ func Operations(U0) -> PFuncsDomHQN of U0 equals
   rng the charact of(U0);
 end;
 
+
 definition let U1;
   mode operation of U1 is Element of Operations(U1);
 end;
+
 
 reserve A for non empty Subset of U0,
         o for operation of U0,
@@ -99,12 +106,14 @@ pred A is_closed_on o means
  for s being FinSequence of A st len s = arity o holds o.s in A;
 end;
 
+
 definition let U0 be Universal_Algebra,
                 A be Subset of U0;
 attr A is opers_closed means
 :: UNIALG_2:def 5
 for o be operation of U0 holds A is_closed_on o;
 end;
+
 
 definition let U0,A,o;
 assume  A is_closed_on o;
@@ -113,12 +122,14 @@ func o/.A ->homogeneous quasi_total non empty PartFunc of A*,A equals
  o|((arity o)-tuples_on A);
 end;
 
+
 definition let U0,A;
 func Opers(U0,A) -> PFuncFinSequence of A means
 :: UNIALG_2:def 7
 dom it = dom the charact of(U0) &
 for n being set,o st n in dom it & o =(the charact of(U0)).n holds it.n = o/.A;
 end;
+
 
 theorem :: UNIALG_2:7
 for B being non empty Subset of U0 st B=the carrier of U0 holds
@@ -137,9 +148,34 @@ for B be non empty Subset of U0 st B=the carrier of it holds
 the charact of(it) = Opers(U0,B) & B is opers_closed;
 end;
 
-definition let U0 be Universal_Algebra;
+
+registration let U0 be Universal_Algebra;
 cluster strict SubAlgebra of U0;
+existence
+ proof
+  reconsider S = UAStr(#the carrier of U0,the charact of U0#)
+   as strict Universal_Algebra by UNIALG_1:def 7,def 8,def 9;
+  A1: the carrier of S c= the carrier of U0;
+    for B be non empty Subset of U0 st B=the carrier of S holds
+  the charact of(S) = Opers(U0,B) & B is opers_closed
+   proof let B be non empty Subset of U0; assume
+    A2: B=the carrier of S;
+    A3: dom the charact of(U0)= dom Opers(U0,B) by Def7;
+       now let n; assume
+      A4: n in dom the charact of (U0);
+      then A5: n in dom Opers(U0,B) by Def7;
+      reconsider o = (the charact of(U0)).n as operation of U0 by A4,Th6;
+      thus Opers (U0,B).n = o/.B by A5,Def7
+                         .= (the charact of(U0)).n by A2,Th7;
+     end;
+    hence thesis by A2,A3,Th7,FINSEQ_1:17;
+   end;
+  then reconsider S as SubAlgebra of U0 by A1,Def8;
+  take S;
+  thus thesis;
+ end;
 end;
+
 
 theorem :: UNIALG_2:9
 for U0,U1 be Universal_Algebra, o0 be operation of U0, o1 be operation of U1,
@@ -184,6 +220,7 @@ func UniAlgSetClosed(A) -> strict SubAlgebra of U0 equals
   UAStr (# A, Opers(U0,A) #);
 end;
 
+
 definition let U0; let U1,U2 be SubAlgebra of U0;
 assume  the carrier of U1 meets the carrier of U2;
 func U1 /\ U2 -> strict SubAlgebra of U0 means
@@ -193,6 +230,7 @@ for B be non empty Subset of U0 st B=the carrier of it holds
 the charact of(it) = Opers(U0,B) & B is opers_closed;
 end;
 
+
 definition let U0;
 func Constants(U0) -> Subset of U0 equals
 :: UNIALG_2:def 11
@@ -200,19 +238,63 @@ func Constants(U0) -> Subset of U0 equals
         ex o be operation of U0 st arity o=0 & a in rng o};
 end;
 
+
 definition let IT be Universal_Algebra;
 attr IT is with_const_op means
 :: UNIALG_2:def 12
 ex o being operation of IT st arity o=0;
 end;
 
-definition
+
+registration
 cluster with_const_op strict Universal_Algebra;
+existence
+ proof
+  consider A be non empty set;
+  consider a be Element of A;
+  reconsider w = {<*>A} --> a as Element of PFuncs(A*,A) by UNIALG_1:3;
+  set U0 = UAStr (# A, <*w*> #);
+  A1: the charact of U0 is quasi_total & the charact of U0 is homogeneous &
+   the charact of U0 is non-empty by UNIALG_1:4;
+    the charact of U0 <> {}
+   proof assume A2: the charact of U0 = {};
+      len(the charact of(U0)) = 1 by FINSEQ_1:56;
+     hence contradiction by A2,FINSEQ_1:25;
+    end;
+   then reconsider U0 as Universal_Algebra by A1,UNIALG_1:def 7,def 8,def 9;
+   take U0;
+     dom <*w*> ={1} & 1 in {1} by FINSEQ_1:4,55,TARSKI:def 1;
+   then reconsider o= (the charact of U0).1 as operation of U0 by Th6;
+      o=w by FINSEQ_1:57;
+   then A3: dom o = {<*>A} by FUNCOP_1:19;
+      now let x be FinSequence of A; assume x in dom o;
+     then x = <*>A by A3,TARSKI:def 1;
+     hence len x = 0 by FINSEQ_1:32;
+    end;
+   then arity o = 0 by UNIALG_1:def 10;
+   hence thesis by Def12;
+  end;
 end;
 
-definition let U0 be with_const_op Universal_Algebra;
+
+registration let U0 be with_const_op Universal_Algebra;
  cluster Constants(U0) -> non empty;
+coherence
+ proof
+  consider o being operation of U0 such that
+  A1: arity o=0 by Def12;
+    dom o = 0-tuples_on the carrier of U0 by A1,Th2
+       .={<*>the carrier of U0} by FINSEQ_2:112;
+  then <*>the carrier of U0 in dom o by TARSKI:def 1;
+  then A2: o.(<*>the carrier of U0) in rng o & rng o c= the carrier of U0
+    by FUNCT_1:def 5,RELSET_1:12;
+  then reconsider u = o.(<*>the carrier of U0) as Element of U0;
+    u in { a where a is Element of U0:
+        ex o be operation of U0 st arity o=0 & a in rng o} by A1,A2;
+  hence thesis by Def11;
+ end;
 end;
+
 
 theorem :: UNIALG_2:18
 for U0 be Universal_Algebra, U1 be SubAlgebra of U0 holds
@@ -235,6 +317,7 @@ for U1 be SubAlgebra of U0 st A c= the carrier of U1 holds
   it is SubAlgebra of U1;
 end;
 
+
 theorem :: UNIALG_2:21
   for U0 be strict Universal_Algebra holds GenUnivAlg([#]
 (the carrier of U0)) = U0;
@@ -251,6 +334,7 @@ func U1 "\/" U2 -> strict SubAlgebra of U0 means
  for A be non empty Subset of U0 st
   A = (the carrier of U1) \/ (the carrier of U2) holds it = GenUnivAlg(A);
 end;
+
 
 theorem :: UNIALG_2:23
 for U0 be Universal_Algebra, U1 be SubAlgebra of U0,
@@ -276,9 +360,17 @@ func Sub(U0) -> set means
 for x holds x in it iff x is strict SubAlgebra of U0;
 end;
 
-definition let U0 be Universal_Algebra;
+
+registration let U0 be Universal_Algebra;
 cluster Sub(U0) -> non empty;
+coherence
+proof
+  consider x being strict SubAlgebra of U0;
+    x in Sub U0 by Def15;
+  hence thesis;
 end;
+end;
+
 
 definition let U0 be Universal_Algebra;
 func UniAlg_join(U0) -> BinOp of Sub(U0) means
@@ -288,6 +380,7 @@ for x,y be Element of Sub(U0) holds
   it.(x,y) = U1 "\/" U2;
 end;
 
+
 definition let U0 be Universal_Algebra;
 func UniAlg_meet(U0) -> BinOp of Sub(U0) means
 :: UNIALG_2:def 17
@@ -295,6 +388,7 @@ for x,y be Element of Sub(U0) holds
   for U1,U2 be strict SubAlgebra of U0 st x = U1 & y = U2 holds
   it.(x,y) = U1 /\ U2;
 end;
+
 
 theorem :: UNIALG_2:27
 UniAlg_join(U0) is commutative;
@@ -313,3 +407,4 @@ func UnSubAlLattice(U0) -> strict Lattice equals
 :: UNIALG_2:def 18
     LattStr (# Sub(U0), UniAlg_join(U0), UniAlg_meet(U0) #);
 end;
+

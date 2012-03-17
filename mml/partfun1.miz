@@ -60,14 +60,17 @@ then A7:     (x in dom f & f.x = y1 or x in dom g & g.x = y1) &
       suppose x in dom f & x in dom g;
        then x in dom f /\ dom g by XBOOLE_0:def 3;
        hence y1 = y2 by A1,A7;
+      end;
       suppose x in dom f & not x in dom g; hence y1 = y2 by A7;
+      end;
       suppose not x in dom f & x in dom g; hence y1 = y2 by A7;
+     end;
      end;
      hence y1 = y2;
     end;
    consider h being Function such that
 A8: for x,y holds
-      [x,y] in h iff x in dom f \/ dom g & P[x,y] from GraphFunc(A2);
+      [x,y] in h iff x in dom f \/ dom g & P[x,y] from FUNCT_1:sch 1(A2);
    take h;
      f c= [:dom f,rng f:] & g c= [:dom g,rng g:] by RELAT_1:21;
 then A9: h c= [:dom h,rng h:] &
@@ -103,7 +106,7 @@ scheme LambdaC{A()->set,C[set],F(set)->set,G(set)->set}:
  ex f being Function st dom f = A() &
   for x st x in A() holds
    (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
- proof
+proof
   defpred P[set,set] means
    (C[$1] implies $2 = F($1)) & (not C[$1] implies $2 = G($1));
 A1:  for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1 = y2;
@@ -114,14 +117,14 @@ A2: for x st x in A() ex y st P[x,y]
       hence thesis;
      end;
   thus ex f being Function st dom f = A() &
-   for x st x in A() holds P[x,f.x] from FuncEx(A1,A2);
+   for x st x in A() holds P[x,f.x] from FUNCT_1:sch 2(A1,A2);
  end;
 
 ::::::::::::::::::::
 :: Empty Function ::
 ::::::::::::::::::::
 
-definition
+registration
   cluster empty Function;
  existence
   proof
@@ -129,6 +132,7 @@ definition
     hence thesis;
   end;
 end;
+
 
  Lm1:
    dom {} = {};
@@ -152,7 +156,7 @@ Lm3: for R be Relation holds R is Relation of X,Y
     thus thesis by RELSET_1:11;
    end;
 
-definition let X,Y;
+registration let X,Y;
   cluster Function-like Relation of X,Y;
   existence
    proof
@@ -164,9 +168,11 @@ A1:    dom E c= X & rng E c= Y by Lm2;
    end;
  end;
 
+
 definition let X,Y;
   mode PartFunc of X,Y is Function-like Relation of X,Y;
  end;
+
 
 canceled 13;
 
@@ -284,7 +290,7 @@ scheme PartFuncEx{X,Y()->set,P[set,set]}:
 provided
 A1: for x,y st x in X() & P[x,y] holds y in Y() and
 A2: for x,y1,y2 st x in X() & P[x,y1] & P[x,y2] holds y1 = y2
- proof
+proof
 A3: now assume
 A4:   Y() = {};
      consider f being Function such that
@@ -314,10 +320,10 @@ A9:    for x,z1,z2 st x in X() & Q[x,z1] & Q[x,z2]
        holds z1 = z2 by A2;
       consider g being Function such that
 A10:     dom g = X() and
-A11:     for x st x in X() holds Q[x,g.x] from FuncEx(A9,A8);
+A11:     for x st x in X() holds Q[x,g.x] from FUNCT_1:sch 2(A9,A8);
 defpred R[set] means ex y st P[$1,y];
       consider X being set such that
-A12:    for x holds x in X iff x in X() & R[x] from Separation;
+A12:    for x holds x in X iff x in X() & R[x] from XBOOLE_0:sch 1;
       set f=g|X;
 A13:     dom f c= X() by A10,FUNCT_1:76;
         rng f c= Y()
@@ -360,7 +366,7 @@ scheme LambdaR{X,Y()->set,F(set)->set,P[set]}:
    (for x st x in dom f holds f.x = F(x))
 provided
 A1: for x st P[x] holds F(x) in Y()
-  proof
+proof
 defpred Q[set,set] means P[$1] & $2 = F($1);
 A2:  for x,y st x in X() & Q[x,y] holds y in Y() by A1;
 A3:  for x,y1,y2 st x in X() & Q[x,y1] & Q[x,y2] holds y1 = y2;
@@ -389,7 +395,7 @@ scheme PartFuncEx2{X,Y,Z()->set,P[set,set,set]}:
 provided
 A1: for x,y,z st x in X() & y in Y() & P[x,y,z] holds z in Z() and
 A2: for x,y,z1,z2 st x in X() & y in Y() & P[x,y,z1] & P[x,y,z2] holds z1 = z2
- proof
+proof
 defpred Q[set,set] means for x1,y1 st $1 = [x1,y1] holds P[x1,y1,$2];
 A3: for x,z st x in [:X(),Y():] & Q[x,z] holds z in Z()
      proof let x,z;
@@ -449,7 +455,7 @@ scheme LambdaR2{X,Y,Z()->set,F(set,set)->set,P[set,set]}:
      (for x,y st [x,y] in dom f holds f.[x,y] = F(x,y))
 provided
 A1:  for x,y st P[x,y] holds F(x,y) in Z()
- proof
+proof
 defpred Q[set,set,set] means P[$1,$2] & $3 = F($1,$2);
 A2: for x,y,z st x in X() & y in Y() & Q[x,y,z] holds z in Z() by A1;
 A3: for x,y,z1,z2 st x in X() & y in Y() & Q[x,y,z1] & Q[x,y,z2] holds z1 = z2;
@@ -482,6 +488,7 @@ definition let X,Y,V,Z;
     hence g*f is PartFunc of X,Z by Lm3;
    end;
 end;
+
 
 theorem
      for f being PartFunc of X,Y holds f*(id X) = f
@@ -533,6 +540,7 @@ definition let X,Y; let f be PartFunc of X,Y; let Z be set;
  redefine func f|Z -> PartFunc of X,Y;
  coherence by Th44;
 end;
+
 
 theorem
      for f being PartFunc of X,Y holds Z|f is PartFunc of X,Z
@@ -760,6 +768,7 @@ func <:f,X,Y:> -> PartFunc of X,Y equals
 :Def3:  Y|f|X;
  coherence by Th47;
 end;
+
 
 canceled;
 
@@ -1096,6 +1105,7 @@ definition let X,Y; let f be Relation of X,Y;
 :Def4: dom f = X;
 end;
 
+
 canceled;
 
 theorem
@@ -1183,7 +1193,7 @@ definition let X,Y;
      defpred P[set] means
       ex f be Function st $1 = f & dom f c= X & rng f c= Y;
      consider F being set such that
-A1:    z in F iff z in bool [:X,Y:] & P[z] from Separation;
+A1:    z in F iff z in bool [:X,Y:] & P[z] from XBOOLE_0:sch 1;
      take F;
      let z;
      thus z in F implies
@@ -1219,7 +1229,8 @@ A9: x in F2 iff ex f being Function st x = f & dom f c= X & rng f c= Y;
   end;
 end;
 
-definition let X,Y;
+
+registration let X,Y;
  cluster PFuncs(X,Y) -> non empty;
 coherence
   proof
@@ -1228,6 +1239,7 @@ coherence
     hence thesis by Def5;
   end;
 end;
+
 
 canceled;
 
@@ -1330,6 +1342,7 @@ definition let f,g be Function;
  reflexivity;
  symmetry;
 end;
+
 
 canceled;
 
@@ -1509,6 +1522,7 @@ A2:  f tolerates g;
       by A1,Th112,Th142;
      hence ex h being PartFunc of X,Y st h is total & f tolerates h &
      g tolerates h;
+    end;
     suppose
 A3:  Y <> {};
      consider y being Element of Y;
@@ -1527,6 +1541,7 @@ A5:         x in dom f & x in dom g;
            x in dom f /\ dom g by A5,XBOOLE_0:def 3;
          hence x in dom g implies y' = g.x by A2,Def6;
          thus not x in dom f & not x in dom g implies y' = y by A5;
+        end;
         suppose
 A6:         x in dom f & not x in dom g;
          take y' = f.x;
@@ -1534,6 +1549,7 @@ A6:         x in dom f & not x in dom g;
             (x in dom f implies y' = f.x) &
           (x in dom g implies y' = g.x) &
           (not x in dom f & not x in dom g implies y' = y) by A6;
+        end;
         suppose
 A7:        not x in dom f & x in dom g;
          take y' = g.x;
@@ -1541,18 +1557,20 @@ A7:        not x in dom f & x in dom g;
             (x in dom f implies y' = f.x) &
           (x in dom g implies y' = g.x) &
           (not x in dom f & not x in dom g implies y' = y) by A7;
+        end;
         suppose not x in dom f & not x in dom g;
          hence ex y' st
           (x in dom f implies y' = f.x) &
           (x in dom g implies y' = g.x) &
           (not x in dom f & not x in dom g implies y' = y);
        end;
+       end;
        hence thesis;
       end;
 A8:   for x,y1,y2 st x in X & P[x,y1] & P[x,y2] holds y1 = y2;
      consider h being Function such that
 A9:   dom h = X and
-A10:    for x st x in X holds P[x,h.x] from FuncEx(A8,A4);
+A10:    for x st x in X holds P[x,h.x] from FUNCT_1:sch 2(A8,A4);
 A11:    f tolerates h
       proof let x;
        assume x in dom f /\ dom h;
@@ -1577,22 +1595,27 @@ A14:      z = h.x by FUNCT_1:def 5;
 A15:         x in dom f & x in dom g;
           then z = f.x by A10,A14;
           hence z in Y by A15,Th27;
+        end;
         suppose
 A16:         x in dom f & not x in dom g;
           then z = f.x by A10,A14;
           hence z in Y by A16,Th27;
+        end;
         suppose
 A17:        not x in dom f & x in dom g;
           then z = g.x by A10,A14;
           hence z in Y by A17,Th27;
+        end;
         suppose not x in dom f & not x in dom g;
           then z = y by A9,A10,A13,A14;
           hence z in Y by A3;
+      end;
       end;
      then reconsider h' = h as PartFunc of X,Y by A9,Lm3;
        h' is total by A9,Def4;
      hence ex h being PartFunc of X,Y st
      h is total & f tolerates h & g tolerates h by A11,A12;
+   end;
    end;
    hence thesis;
  end;
@@ -1607,7 +1630,7 @@ definition let X,Y; let f be PartFunc of X,Y;
      defpred P[set] means
       ex g being PartFunc of X,Y st g = $1 & g is total & f tolerates g;
      now consider F being set such that
-A1:  for x holds x in F iff x in PFuncs(X,Y) & P[x] from Separation;
+A1:  for x holds x in F iff x in PFuncs(X,Y) & P[x] from XBOOLE_0:sch 1;
     take F;
     let x;
     thus x in F implies
@@ -1629,9 +1652,10 @@ A4:    f tolerates g;
    let F1,F2 be set such that
 A5: for x holds x in F1 iff P[x] and
 A6: for x holds x in F2 iff P[x];
-   thus thesis from Extensionality(A5,A6);
+   thus thesis from XBOOLE_0:sch 2(A5,A6);
   end;
 end;
+
 
 canceled 5;
 
@@ -1785,7 +1809,7 @@ Lm6: id X is Relation of X
   hence thesis by RELSET_1:11;
  end;
 
-definition let X;
+registration let X;
  cluster total reflexive symmetric antisymmetric transitive Relation of X;
  existence
   proof reconsider R = id X as Relation of X by Lm6;
@@ -1794,7 +1818,8 @@ definition let X;
   end;
 end;
 
-definition
+
+registration
  cluster symmetric transitive -> reflexive Relation;
  coherence
   proof let R be Relation;
@@ -1817,14 +1842,17 @@ A6:   y in field R by A5,XBOOLE_0:def 2;
   end;
 end;
 
-definition let X;
+
+registration let X;
  cluster id X -> symmetric antisymmetric transitive;
  coherence by Lm5;
 end;
+
 
 definition let X;
  redefine
   func id X -> total Relation of X;
  coherence by Lm4,Lm6;
 end;
+
 

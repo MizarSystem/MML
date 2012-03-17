@@ -27,6 +27,7 @@ func W1 + W2 -> strict Subspace of V means
      the carrier of it = {v + u where v,u is VECTOR of V: v in W1 & u in W2};
 end;
 
+
 definition
 let V be RealUnitarySpace, W1,W2 be Subspace of V;
 func W1 /\ W2 -> strict Subspace of V means
@@ -34,6 +35,7 @@ func W1 /\ W2 -> strict Subspace of V means
 
      the carrier of it = (the carrier of W1) /\ (the carrier of W2);
 end;
+
 
 begin :: Theorems of sum and intersection of subspaces.
 
@@ -189,9 +191,17 @@ func Subspaces(V) -> set means
   for x being set holds x in it iff x is strict Subspace of V;
 end;
 
-definition let V be RealUnitarySpace;
+
+registration let V be RealUnitarySpace;
 cluster Subspaces(V) -> non empty;
+coherence
+proof
+   consider x being strict Subspace of V;
+     x in Subspaces(V) by Def3;
+   hence thesis;
 end;
+end;
+
 
 theorem :: RUSUB_2:33
    for V being strict RealUnitarySpace holds
@@ -215,9 +225,17 @@ mode Linear_Compl of W -> Subspace of V means
   V is_the_direct_sum_of it,W;
 end;
 
-definition
+
+registration
 let V be RealUnitarySpace; let W be Subspace of V;
 cluster strict Linear_Compl of W;
+existence
+proof
+   consider C being strict Subspace of V such that
+A1:V is_the_direct_sum_of C,W by Lm14;
+     C is Linear_Compl of W by A1,Def5;
+   hence thesis;
+end;
 end;
 
 theorem :: RUSUB_2:34
@@ -304,6 +322,7 @@ assume  V is_the_direct_sum_of W1,W2;
    v = it`1 + it`2 & it`1 in W1 & it`2 in W2;
 end;
 
+
 theorem :: RUSUB_2:47
 for V being RealUnitarySpace, v being VECTOR of V,
  W1,W2 being Subspace of V st V is_the_direct_sum_of W1,W2 holds
@@ -350,6 +369,7 @@ func SubJoin(V) -> BinOp of Subspaces(V) means
    A1 = W1 & A2 = W2 holds it.(A1,A2) = W1 + W2;
 end;
 
+
  definition let V be RealUnitarySpace;
 func SubMeet(V) -> BinOp of Subspaces(V) means
 :: RUSUB_2:def 8
@@ -359,15 +379,18 @@ func SubMeet(V) -> BinOp of Subspaces(V) means
     A1 = W1 & A2 = W2 holds it.(A1,A2) = W1 /\ W2;
 end;
 
+
 begin :: Theorems of functions SubJoin, SubMeet
 
 theorem :: RUSUB_2:54
 for V being RealUnitarySpace holds
  LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) is Lattice;
 
-definition let V be RealUnitarySpace;
+registration let V be RealUnitarySpace;
   cluster LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) -> Lattice-like;
+  coherence by Th54;
 end;
+
 
 theorem :: RUSUB_2:55
 for V being RealUnitarySpace holds
@@ -389,10 +412,12 @@ theorem :: RUSUB_2:59
 for V being RealUnitarySpace holds
  LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) is complemented;
 
-definition let V be RealUnitarySpace;
+registration let V be RealUnitarySpace;
   cluster LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) ->
     lower-bounded upper-bounded modular complemented;
+  coherence by Th55,Th56,Th58,Th59;
 end;
+
 
 theorem :: RUSUB_2:60
   for V being RealUnitarySpace,

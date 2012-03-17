@@ -28,12 +28,14 @@ definition let X be non empty TopSpace;
            a <> b implies MaxADSet(a) misses MaxADSet(b);
  end;
 
+
 definition let X be non empty TopSpace;
   let A be Subset of X;
  redefine attr A is T_0 means
 :: TSP_2:def 2
  for a being Point of X st a in A holds A /\ MaxADSet(a) = {a};
 end;
+
 
 definition let X be non empty TopSpace;
   let A be Subset of X;
@@ -44,6 +46,7 @@ definition let X be non empty TopSpace;
    st D is maximal_anti-discrete & A /\ D = {a};
 end;
 
+
 definition let Y be TopStruct;
   let IT be Subset of Y;
  attr IT is maximal_T_0 means
@@ -51,6 +54,7 @@ definition let Y be TopStruct;
  IT is T_0 &
   for D being Subset of Y st D is T_0 & IT c= D holds IT = D;
 end;
+
 
 theorem :: TSP_2:1
    for Y0, Y1 being TopStruct, D0 being Subset of Y0,
@@ -65,6 +69,7 @@ definition let X be non empty TopSpace;
  M is T_0 &
      MaxADSet(M) = the carrier of X;
 end;
+
 
 reserve X for non empty TopSpace;
 
@@ -104,6 +109,7 @@ definition let X be non empty TopSpace;
      ex a being Point of X st a in M & M /\ MaxADSet(x) = {a};
 end;
 
+
 theorem :: TSP_2:9
  for A being Subset of X holds A is T_0 implies
    ex M being Subset of X st A c= M & M is maximal_T_0;
@@ -123,15 +129,36 @@ definition let Y be non empty TopStruct;
                                              A is maximal_T_0;
 end;
 
+
 theorem :: TSP_2:11
  for Y being non empty TopStruct, Y0 being SubSpace of Y,
      A being Subset of Y st
    A = the carrier of Y0 holds A is maximal_T_0 iff Y0 is maximal_T_0;
 
-definition let Y be non empty TopStruct;
+registration let Y be non empty TopStruct;
  cluster maximal_T_0 -> T_0 (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A1: Y0 is maximal_T_0;
+       the carrier of Y0 is Subset of Y by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of Y;
+         A is maximal_T_0 by A1,Th11;
+      then A is T_0 by Def4;
+    hence thesis by TSP_1:15;
+  end;
  cluster non T_0 -> non maximal_T_0 (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A2: Y0 is non T_0;
+   assume A3: Y0 is maximal_T_0;
+       the carrier of Y0 is Subset of Y by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of Y;
+         A is maximal_T_0 by A3,Th11;
+      then A is T_0 by Def4;
+    hence contradiction by A2,TSP_1:15;
+  end;
 end;
+
 
 definition let X be non empty TopSpace;
   let X0 be non empty SubSpace of X;
@@ -142,6 +169,7 @@ definition let X be non empty TopSpace;
                               the TopStruct of X0 = the TopStruct of Y0;
 end;
 
+
 reserve X for non empty TopSpace;
 
 theorem :: TSP_2:12
@@ -149,29 +177,132 @@ theorem :: TSP_2:12
   ex X0 being strict non empty SubSpace of X st
             X0 is maximal_T_0 & A0 = the carrier of X0;
 
-definition let X be non empty TopSpace;
+registration let X be non empty TopSpace;
  cluster maximal_T_0 -> dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A1: X0 is maximal_T_0;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is maximal_T_0 by A1,Th11;
+      then A is dense by Th2;
+    hence thesis by TEX_3:9;
+  end;
  cluster non dense -> non maximal_T_0 SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A2: X0 is non dense;
+   assume A3: X0 is maximal_T_0;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is maximal_T_0 by A3,Th11;
+      then A is dense by Th2;
+    hence contradiction by A2,TEX_3:9;
+  end;
  cluster open maximal_T_0 -> non proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is open;
+    then A4: A is open by TSEP_1:16;
+   assume X0 is maximal_T_0;
+      then A is maximal_T_0 by Th11;
+      then A is non proper by A4,Th3;
+    hence thesis by TEX_2:13;
+  end;
  cluster open proper -> non maximal_T_0 SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is open;
+    then A5: A is open by TSEP_1:16;
+   assume A6: X0 is proper;
+   assume X0 is maximal_T_0;
+      then A is maximal_T_0 by Th11;
+      then A is non proper by A5,Th3;
+    hence contradiction by A6,TEX_2:13;
+  end;
  cluster proper maximal_T_0 -> non open SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume A7: X0 is proper;
+   assume A8: X0 is maximal_T_0;
+   assume X0 is open;
+    then A9: A is open by TSEP_1:16;
+         A is maximal_T_0 by A8,Th11;
+      then A is non proper by A9,Th3;
+    hence contradiction by A7,TEX_2:13;
+  end;
  cluster closed maximal_T_0 -> non proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is closed;
+    then A10: A is closed by TSEP_1:11;
+   assume X0 is maximal_T_0;
+      then A is maximal_T_0 by Th11;
+      then A is non proper by A10,Th3;
+    hence thesis by TEX_2:13;
+  end;
  cluster closed proper -> non maximal_T_0 SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is closed;
+    then A11: A is closed by TSEP_1:11;
+   assume A12: X0 is proper;
+   assume X0 is maximal_T_0;
+      then A is maximal_T_0 by Th11;
+      then A is non proper by A11,Th3;
+    hence contradiction by A12,TEX_2:13;
+  end;
  cluster proper maximal_T_0 -> non closed SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume A13: X0 is proper;
+   assume A14: X0 is maximal_T_0;
+   assume X0 is closed;
+    then A15: A is closed by TSEP_1:11;
+      A is maximal_T_0 by A14,Th11;
+    then A is non proper by A15,Th3;
+    hence contradiction by A13,TEX_2:13;
+  end;
 end;
+
 
 theorem :: TSP_2:13
    for Y0 being T_0 non empty SubSpace of X
    ex X0 being strict SubSpace of X st
             Y0 is SubSpace of X0 & X0 is maximal_T_0;
 
-definition let X be non empty TopSpace;
+registration let X be non empty TopSpace;
  cluster maximal_T_0 strict non empty SubSpace of X;
+ existence
+  proof
+   consider M being Subset of X such that
+        A1: M is maximal_T_0 by Th10;
+       M is non empty by A1,Th4;
+    then consider X0 being strict non empty SubSpace of X such that
+          A2: X0 is maximal_T_0 and
+                 M = the carrier of X0 by A1,Th12;
+   take X0;
+   thus thesis by A2;
+  end;
 end;
+
 
 definition let X be non empty TopSpace;
  mode maximal_Kolmogorov_subspace of X is maximal_T_0 SubSpace of X;
 end;
+
 
 theorem :: TSP_2:14
  for X0 being maximal_Kolmogorov_subspace of X
@@ -242,6 +373,7 @@ definition let X be non empty TopSpace,
  it is_a_retraction;
 end;
 
+
 theorem :: TSP_2:24
    for a being Point of X, b being Point of X0 st a = b holds
                       (Stone-retraction(X,X0))" Cl {b} = Cl {a};
@@ -263,12 +395,14 @@ definition let X be non empty TopSpace,
     for a being Point of X holds M /\ MaxADSet(a) = {it.a};
 end;
 
+
 definition let X be non empty TopSpace,
       X0 be non empty maximal_Kolmogorov_subspace of X;
  redefine func Stone-retraction(X,X0) -> continuous map of X,X0 means
 :: TSP_2:def 11
  for a being Point of X holds it.a in MaxADSet(a);
 end;
+
 
 theorem :: TSP_2:27
  for a being Point of X holds
@@ -285,6 +419,7 @@ definition let X be non empty TopSpace,
  for M being Subset of X st M = the carrier of X0
     for A being Subset of X holds M /\ MaxADSet(A) = it.: A;
 end;
+
 
 theorem :: TSP_2:29
  for A being Subset of X holds

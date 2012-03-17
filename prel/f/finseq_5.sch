@@ -13,8 +13,6 @@ FINSET_1
 CARD_1
 FINSEQ_1
 #
-domSeqLambda
-#
 M4 K52 ;K56 ;;M1 ;;
 ªM1 V2 ;V4 ;V19 ;;ª&R1 K74 B1 ;F1 ;;M4 K52 ;K56 ;;ª&R2 B2 K75 B1 ;;ªR1 K20 B1 B2 ;F2 B2 ;;;;;
 #

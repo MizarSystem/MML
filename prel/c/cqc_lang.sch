@@ -18,16 +18,6 @@ QC_LANG1
 QC_LANG2
 CQC_LANG
 #
-CQC_Ind
-CQC_Func_Ex
-CQC_Func_Uniq
-CQC_Def_correctness
-CQC_Def_VERUM
-CQC_Def_atomic
-CQC_Def_negative
-QC_Def_conjunctive
-QC_Def_universal
-#
 ;
 M3 K116 ;K156 ;;P1 B1 ;M3 K116 ;K156 ;;M3 K116 ;K156 ;;M3 K109 ;K110 ;;M3 K71 ;K75 ;;M9 V34 B4 ;B4 ;M3 K113 ;K115 B4 ;;&P1 K158 ;;P1 K157 B4 B6 B5 ;;ª&P1 B1 ;ªP1 K159 B1 ;;;ª&P1 B1 ;P1 B2 ;ªP1 K160 B1 B2 ;;;ª&P1 B1 ;ªP1 K164 B3 B1 ;;;;;
 #

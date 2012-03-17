@@ -42,12 +42,14 @@ proof X /\ Y c= Y by XBOOLE_1:17;
 end;
 end;
 
-definition
+
+registration
   cluster cardinal infinite -> being_limit_ordinal Ordinal;
   coherence by CARD_4:32;
 end;
 
-definition
+
+registration
   cluster non empty being_limit_ordinal -> infinite Ordinal;
   coherence
   proof let A be Ordinal such that A1: A is non empty being_limit_ordinal;
@@ -61,7 +63,8 @@ definition
   end;
 end;
 
-definition
+
+registration
   cluster non limit -> non countable Aleph;
   coherence
 proof let M be Aleph such that A1: M is non limit;
@@ -77,7 +80,8 @@ proof let M be Aleph such that A1: M is non limit;
 end;
 end;
 
-definition
+
+registration
   cluster regular non countable Aleph;
   existence
   proof consider M being non limit Aleph;
@@ -85,6 +89,7 @@ definition
      thus thesis;
   end;
 end;
+
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                                   ::
@@ -104,11 +109,13 @@ definition
 :Def2:  X c= A & for B st B in A holds sup (X /\ B)=B implies B in X;
 end;
 
+
 definition
   let A,X;
   pred X is_club_in A means
 :Def3:  X is_closed_in A & X is_unbounded_in A;
 end;
+
 
 reserve X for Subset of A;
 
@@ -116,10 +123,13 @@ definition
   let A,X;
   attr X is unbounded means
 :Def4:  sup X = A;
-  antonym X is bounded;
   attr X is closed means
 :Def5:  for B st B in A holds sup (X /\ B)=B implies B in X;
 end;
+notation
+  let A,X;
+  antonym X is bounded for X is unbounded ; end;
+
 
 canceled;
 
@@ -258,10 +268,11 @@ definition let A,X,B1;
      consider B3 being Element of A such that
      A3: B3 in LB by A1,A2,Th9;
      A4: inf LB in LB by A3,ORDINAL2:25;
-     P[inf LB] from ElemProp(A4);
+     P[inf LB] from CARD_FIL:sch 1(A4);
      hence inf LB is Element of X;
   end;
 end;
+
 
 theorem Th10:
   X is unbounded & B1 in A implies
@@ -273,13 +284,13 @@ proof assume A1: X is unbounded;
    defpred P[set] means $1 in X & B1 in $1;
    set LB = { B2 where B2 is Element of A: P[B2]};
    A3: inf LB = meet On LB by ORDINAL2:def 6;
-     LB is Subset of A from SubsetD;
+     LB is Subset of A from DOMAIN_1:sch 7;
    then A4: On LB = LB by ORDINAL3:8;
    A5: ex B3 being Element of A st B3 in LB by A1,A2,Th9;
      for x  being set st x in LB holds B1 in x
    proof let x be set;
       assume A6: x in LB;
-      P[x] from ElemProp(A6);
+      P[x] from CARD_FIL:sch 1(A6);
       hence thesis;
    end;
    then B1 in meet LB by A5,SETFAM_1:def 1;
@@ -308,6 +319,7 @@ definition let A be set; let X be Subset of A; let Y be set;
   end;
 end;
 
+
 theorem Th12:
   B1 in A & X is closed unbounded implies
   X \ B1 is closed unbounded
@@ -322,12 +334,14 @@ proof assume A1: B1 in A;
          B1 in D by A5,A7;
        hence D in (X \ B1) by A6,XBOOLE_0:def 4;
        thus B2 c= D by A7;
+      end;
       suppose A8: B2 c= B1;
        consider D such that A9: D in X and A10: B1 c= D by A1,A2,Th7;
        take D;
          not D in B1 by A10,ORDINAL1:7;
        hence D in (X \ B1) by A9,XBOOLE_0:def 4;
        thus B2 c= D by A8,A10,XBOOLE_1:1;
+   end;
    end;
    thus (X \ B1) is closed
    proof
@@ -370,6 +384,7 @@ definition
   Y is closed unbounded implies X /\ Y is non empty;
 end;
 
+
 theorem Th14:
   for X,Y being Subset of A holds (X is stationary & X c= Y implies
   Y is stationary)
@@ -392,6 +407,7 @@ definition
 :Def8: X c= A & for Y being Subset of A holds
   Y is closed unbounded implies X /\ Y is non empty;
 end;
+
 
 theorem Th15:
   for X,Y being set holds (X is_stationary_in A & X c= Y & Y c= A
@@ -421,11 +437,14 @@ definition let X be set;
      suppose S is empty;
      then E is empty by SUBSET_1:def 2;
      hence thesis by SUBSET_1:4;
+     end;
      suppose S is non empty;
      then E in S;
      hence thesis;
   end;
+  end;
 end;
+
 
 theorem
     X is stationary implies X is unbounded
@@ -447,9 +466,11 @@ definition let A,X;
   proof
     defpred P[set] means
      $1 is infinite being_limit_ordinal & sup (X /\ $1) = $1;
-    thus {B1 where B1 is Element of A: P[B1]} is Subset of A from SubsetD;
+    thus {B1 where B1 is Element of A: P[B1]} is Subset of A from
+DOMAIN_1:sch 7;
   end;
 end;
+
 
 theorem Th17:
   X /\ B3 c= B1 implies B3 /\ limpoints X c= succ B1
@@ -465,7 +486,7 @@ proof assume A1: X /\ B3 c= B1;
    then A5: x1 in {B2 where B2 is Element of A: P[B2]} by Def9;
      succ B1 c= x1 by A3,ORDINAL1:26;
    then A6: B1 in x1 by ORDINAL1:33;
-   A7: P[x1] from ElemProp(A5);
+   A7: P[x1] from CARD_FIL:sch 1(A5);
    then reconsider x2=x1 as infinite being_limit_ordinal Ordinal;
    reconsider Y = (X /\ x2) as Subset of x2 by XBOOLE_1:17;
      Y is unbounded by A7,Def4;
@@ -592,7 +613,7 @@ end;
 reserve M for non countable Aleph;
 reserve X for Subset of M;
 
-definition let M;
+registration let M;
   cluster cardinal infinite Element of M;
   existence
   proof take omega;
@@ -605,6 +626,7 @@ definition let M;
      thus thesis by CARD_1:83;
   end;
 end;
+
 
 reserve N,N1 for cardinal infinite Element of M;
 
@@ -639,6 +661,7 @@ proof
        hence contradiction by A4,ORDINAL2:26;
     end;
     hence thesis;
+   end;
    suppose A5: S <> {};
    assume A6: sup (meet S /\ C) = C;
      for X being set holds X in S implies C in X
@@ -658,6 +681,7 @@ proof
    end;
    hence C in meet S by A5,SETFAM_1:def 1;
 end;
+end;
 
 theorem Th23:
   alef 0 <` cf M implies
@@ -674,11 +698,13 @@ proof assume A1:  alef 0 <` cf M;
       rng f c= X by RELSET_1:12;
     then rng f c= M by XBOOLE_1:1;
     hence sup rng f in M by A3,CARD_5:38;
+   end;
    suppose X = {};
     then f = {} by FUNCT_2:def 1;
     then A4: sup rng f = {} by ORDINAL2:26,RELAT_1:60;
       not M c= {} by XBOOLE_1:3;
     hence sup rng f in M by A4,ORDINAL1:26;
+end;
 end;
 
 theorem
@@ -720,7 +746,7 @@ proof
       proof let B be Element of M;
         deffunc f(Subset of M) = LBound(B,$1);
            Card { f(X) where X is Element of S: X in S } <=` Card S
-         from FraenkelCard;
+         from TREES_2:sch 2;
          then Card Ch(B) <=` Card S by A5;
          then Card Ch(B) <` cf M by A2,ORDINAL1:22;
          hence sup Ch(B) in M by CARD_5:38;
@@ -744,7 +770,7 @@ proof
       end;
       consider L being Function of NAT,M such that A12:
       L.0 = B11 and A13: for n being Element of NAT holds P[n,L.n,L.(n+1)]
-       from RecExD(A11);
+       from RECDEF_1:sch 2(A11);
       take sup rng L;
         M = [#]M by SUBSET_1:def 4;
       then reconsider L1=L as Function of NAT,[#]M;
@@ -831,7 +857,7 @@ proof
    end;
    consider L being Function of NAT,X1 such that A7:
    L.0 = LB1 and A8:
-   for n be Element of NAT holds P[n,L.n,L.(n+1)] from RecExD(A4);
+   for n be Element of NAT holds P[n,L.n,L.(n+1)] from RECDEF_1:sch 2(A4);
    A9: dom L = NAT by FUNCT_2:def 1;
    then A10: L.0 in rng L by FUNCT_1:def 5;
    A11: rng L c= X by RELSET_1:12;
@@ -889,12 +915,14 @@ end;
 definition let M;
   attr M is Mahlo means
 :Def10: { N : N is regular } is_stationary_in M;
-  synonym M is_Mahlo;
   attr M is strongly_Mahlo means
 :Def11: { N :  N is strongly_inaccessible}
    is_stationary_in M;
-  synonym M is_strongly_Mahlo;
-end;
+  end;
+notation let M;
+  synonym M is_Mahlo for M is Mahlo ; synonym M is_strongly_Mahlo for
+ M is strongly_Mahlo ; end;
+
 
 theorem Th27:
   M is strongly_Mahlo implies M is Mahlo
@@ -973,7 +1001,7 @@ proof assume M is Mahlo;
     $1 is infinite being_limit_ordinal & sup (RNG /\ $1) = $1;
    A19: N1 in {B1 where B1 is Element of M: P[B1]}
    by A16,A17,Def9;
-   A20: P[N1] from ElemProp(A19);
+   A20: P[N1] from CARD_FIL:sch 1(A19);
    reconsider RNG1= (N1 /\ RNG) as Subset of N1 by XBOOLE_1:17;
      RNG1 is unbounded by A20,Def4;
    then A21: cf N1 <=` Card RNG1 by Th21;
@@ -1119,6 +1147,7 @@ proof let M be Aleph;
       M <> {} & {} c= M by XBOOLE_1:2;
     then {} c< M by XBOOLE_0:def 8;
     hence Card union X in M by A3,CARD_1:47,ORDINAL1:21,ZFMISC_1:2;
+   end;
    suppose X is non empty;
     then reconsider X1=X as non empty set;
     deffunc f(set) = Card $1;
@@ -1137,7 +1166,7 @@ proof let M be Aleph;
     y is Cardinal;
     then A7: CARDS c= M by TARSKI:def 3;
     reconsider UN=union CARDS as Cardinal by A6,Th33;
-      Card CARDS <=` Card X1 from FraenkelCard;
+      Card CARDS <=` Card X1 from TREES_2:sch 2;
     then Card CARDS <` cf M by A1,ORDINAL1:22;
     then A8: UN <` M by A7,CARD_5:38;
       for Y st Y in X1 holds Card Y <=` UN
@@ -1151,6 +1180,7 @@ proof let M be Aleph;
     then (cf M) *` M <=` M *` M by CARD_4:68;
     then (cf M) *` M <=` M by CARD_4:77;
     hence Card union X in M by A10,A11,ORDINAL1:22;
+end;
 end;
 
 deffunc f(Ordinal) = Rank $1;
@@ -1178,7 +1208,7 @@ proof
       assume A11: B1 in M;
       then A12: Card B1 <` M by CARD_1:25;
       consider L being T-Sequence such that
-      A13:  dom L = B1 & for A st A in B1 holds L.A = f(A) from TS_Lambda;
+      A13:  dom L = B1 & for A st A in B1 holds L.A = f(A) from ORDINAL2:sch 2;
       A14:  Rank B1 = Union L by A9,A13,CLASSES2:25 .=
       union rng L by PROB_1:def 3;
         Card rng L <=` Card B1 by A13,CARD_1:28;
@@ -1194,7 +1224,7 @@ proof
       end;
       hence Card Rank B1 <` M by A14,A15,Th34;
    end;
-   for B1 holds P[B1] from Ordinal_Ind(A4,A5,A8);
+   for B1 holds P[B1] from ORDINAL2:sch 1(A4,A5,A8);
    hence thesis by A1;
 end;
 
@@ -1202,7 +1232,7 @@ theorem Th36:
   M is strongly_inaccessible implies Card Rank M = M
 proof assume A1: M is strongly_inaccessible;
    consider L being T-Sequence such that
-   A2:  dom L = M & for A st A in M holds L.A = f(A) from TS_Lambda;
+   A2:  dom L = M & for A st A in M holds L.A = f(A) from ORDINAL2:sch 2;
    A3:  Rank M = Union L by A2,CLASSES2:25 .=
    union rng L by PROB_1:def 3;
    A4:  M c= Rank M by CLASSES1:44;
@@ -1261,6 +1291,7 @@ A4:    Card X c< M iff Card X c= M & Card X <> M by XBOOLE_0:def 8;
        then {} c< M by XBOOLE_0:def 8;
        then {} in M & M c= Rank M by CLASSES1:44,ORDINAL1:21;
        hence contradiction by A5,A7;
+      end;
       suppose X is non empty;
        then reconsider X1=X as non empty set;
          R in M
@@ -1291,7 +1322,7 @@ A4:    Card X c< M iff Card X c= M & Card X <> M by XBOOLE_0:def 8;
              end;
              then RANKS1 is unbounded by Th7;
              then A15: cf M <=` Card RANKS1 by Th21;
-               Card RANKS <=` Card X1 from FraenkelCard;
+               Card RANKS <=` Card X1 from TREES_2:sch 2;
              then M <=` Card X1 by A2,A15,XBOOLE_1:1;
              then Card X1 in Card X1 by A6;
              hence contradiction;
@@ -1302,6 +1333,7 @@ A4:    Card X c< M iff Card X c= M & Card X <> M by XBOOLE_0:def 8;
           hence R in M by A16,ORDINAL1:22;
        end;
        hence contradiction by A5,CLASSES1:74;
+    end;
     end;
 end;
 
@@ -1314,10 +1346,11 @@ proof let A be non empty Ordinal;
    hence thesis by CLASSES1:42;
 end;
 
-definition let A be non empty Ordinal;
+registration let A be non empty Ordinal;
   cluster Rank A -> non empty;
   coherence by Th38;
 end;
+
 
 theorem Th39:
   M is strongly_inaccessible implies Rank M is Universe

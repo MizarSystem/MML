@@ -11,9 +11,7 @@ NUMBERS
 XREAL_0
 FINSET_1
 #
-FinSegRng
-#
 M4 K52 ;K56 ;;M4 K52 ;K56 ;;M1 ;;
-V19 ËM4 K52 ;K56 ;;;F3 B1 ;&R11 F1 ;B1 ;R11 B1 F2 ;;P1 B1 ;;;;
+V19 ËM4 K52 ;K56 ;;;F3 B1 ;&R12 F1 ;B1 ;R12 B1 F2 ;;P1 B1 ;;;;
 #
 !

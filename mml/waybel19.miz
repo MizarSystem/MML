@@ -14,9 +14,9 @@ environ
       RLVECT_3;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
       FINSET_1, STRUCT_0, REALSET1, FUNCT_2, ORDERS_1, LATTICE3, ORDERS_3,
-      PRE_TOPC, TOPS_1, TOPS_2, TSP_1, BORSUK_1, URYSOHN1, COMPTS_1, YELLOW_0,
-      WAYBEL_0, YELLOW_1, CANTOR_1, YELLOW_3, WAYBEL_2, YELLOW_6, YELLOW_7,
-      WAYBEL_3, WAYBEL_9, WAYBEL11, YELLOW_9;
+      PRE_TOPC, TOPS_1, TOPS_2, TSP_1, CONNSP_2, BORSUK_1, URYSOHN1, COMPTS_1,
+      YELLOW_0, WAYBEL_0, YELLOW_1, CANTOR_1, YELLOW_3, WAYBEL_2, YELLOW_6,
+      YELLOW_7, WAYBEL_3, WAYBEL_9, WAYBEL11, YELLOW_9;
  constructors ORDERS_3, WAYBEL_1, CANTOR_1, TOPS_1, TOPS_2, WAYBEL_3, TSP_1,
       WAYBEL11, TDLAT_3, URYSOHN1, YELLOW_9, LATTICE3, MEMBERED;
  clusters STRUCT_0, LATTICE3, WAYBEL_0, FINSET_1, BORSUK_1, YELLOW_1, YELLOW_3,
@@ -41,6 +41,7 @@ definition :: 1.1. DEFINITION, p. 142 (part I)
 Def1:
   {(uparrow x)` where x is Element of T: not contradiction} is prebasis of T;
 end;
+
 
 Lm1:
 now let LL,T be non empty RelStr such that
@@ -77,7 +78,7 @@ A3:     a = (uparrow x)`;
       end;
 end;
 
-definition
+registration
  cluster trivial -> lower (non empty reflexive TopSpace-like TopRelStr);
  coherence
   proof let T be non empty reflexive TopSpace-like TopRelStr;
@@ -138,13 +139,15 @@ A4:       y in a;
   end;
 end;
 
-definition
+
+registration
  cluster lower trivial complete strict TopLattice;
  existence
   proof consider T being trivial complete strict TopLattice;
    take T; thus thesis;
   end;
 end;
+
 
 theorem Th1:
  for LL being non empty RelStr
@@ -192,11 +195,12 @@ then A5:   A = BB by Lm1;
      hence BB is prebasis of T by A3,A4,A5,CANTOR_1:def 5;
    end;
 
-definition
+registration
  let R be non empty RelStr;
  cluster lower (strict correct TopAugmentation of R);
  existence by Th1;
 end;
+
 
 theorem Th2:
  for L1,L2 being TopSpace-like lower (non empty TopRelStr)
@@ -234,6 +238,7 @@ A2:  the RelStr of S = the RelStr of R by YELLOW_9:def 4;
    hence thesis by A2,Th2;
   end;
 end;
+
 
 theorem Th3:
  for R1,R2 being non empty RelStr st the RelStr of R1 = the RelStr of R2
@@ -351,13 +356,13 @@ A3:     F is finite;
        deffunc F(Element of T') = uparrow $1;
 A4:      Y' = {F(x) where x is Element of T': x in F};
 A5:      COMPLEMENT Y' = {F(x)` where x is Element of T': x in F}
-          from FraenkelComplement1(A4);
+          from YELLOW_9:sch 2(A4);
           uparrow F = union Y by YELLOW_9:4;
           then
 A6:      a = Intersect COMPLEMENT Y by A2,YELLOW_8:15;
        deffunc F(Element of T) = (uparrow $1)`;
 A7:      {F(x) where x is Element of T: x in F} is finite
-         from FraenkelFin(A3);
+         from FRAENKEL:sch 21(A3);
           COMPLEMENT Y c=
          {(uparrow x)` where x is Element of T: x in F} by A5;
 then A8:      COMPLEMENT Y is finite by A7,FINSET_1:13;
@@ -381,7 +386,7 @@ A10:     now let y be set; assume y in Y;
       consider f being Function such that
 A11:     dom f = Y & rng f c= the carrier of T and
 A12:     for y being set st y in Y holds P[y,f.y]
-         from NonUniqBoundFuncEx(A10);
+         from COMPTS_1:sch 1(A10);
       reconsider F = rng f as Subset of T by A11;
       set X = {uparrow x where x is Element of T: x in F};
          X c= bool the carrier of T
@@ -395,7 +400,7 @@ A12:     for y being set st y in Y holds P[y,f.y]
       deffunc F(Element of T') = uparrow $1;
 A13:     X' = {F(x) where x is Element of T': x in F};
 A14:     COMPLEMENT X' = {F(x)` where x is Element of T': x in F}
-        from FraenkelComplement1(A13);
+        from YELLOW_9:sch 2(A13);
 A15:     COMPLEMENT X = Y
         proof
          hereby let a be set; assume a in COMPLEMENT X;
@@ -440,6 +445,7 @@ A2:   A = (uparrow x)`;
 A3:    ex_inf_of f"A`, S & ex_inf_of A`, T & ex_inf_of f.:(f"A`), T
        by YELLOW_0:17;
      per cases; suppose f"A` = {}S; hence f"A` is closed by TOPS_1:22;
+     end;
      suppose f"A` <> {};
 then A4:    f preserves_inf_of f"A` by A1;
 A5:    A` = uparrow x by A2;
@@ -468,6 +474,7 @@ A10:       s <= a by A9,WAYBEL_0:18;
         hence thesis by A5,FUNCT_2:46;
        end;
      hence f"A` is closed by Th4;
+    end;
     end;
    hence f is continuous by YELLOW_9:35;
   end;
@@ -638,7 +645,8 @@ definition
  mode TopPoset is TopSpace-like reflexive transitive antisymmetric TopRelStr;
 end;
 
-definition
+
+registration
 :: Remark before 1.3., p. 143
  cluster lower -> T_0 (non empty TopPoset);
  coherence
@@ -659,6 +667,7 @@ then A4:    not x in Vy & not y in Vx by YELLOW_9:1;
           st V is open & x in V & not y in V) or
         ex V being Subset of T st V is open & not x in V & y in V
          by A3,A4;
+      end;
       suppose not a <= b;
         then b in Vy by YELLOW_9:1;
        hence
@@ -667,11 +676,13 @@ then A4:    not x in Vy & not y in Vx by YELLOW_9:1;
         ex V being Subset of T st V is open & not x in V & y in V
          by A3,A4;
     end;
+    end;
    hence thesis by TSP_1:def 3;
   end;
 end;
 
-definition
+
+registration
  let R be lower-bounded non empty RelStr;
  cluster -> lower-bounded TopAugmentation of R;
  coherence
@@ -680,6 +691,7 @@ definition
    hence thesis by YELLOW_0:13;
   end;
 end;
+
 
 theorem Th14:
  for S, T being non empty RelStr, s being Element of S, t being Element of T
@@ -770,6 +782,7 @@ A9:     uparrow x = uparrow [Bottom S,t] by A1,Lm2;
            .= z by A1,A6;
         then z = (uparrow x)` by A1,A9;
        hence thesis;
+      end;
       suppose z in B2;
        then consider a being Subset of S' such that
 A10:     z = [:a, the carrier of T':] & a in BS;
@@ -790,6 +803,7 @@ A13:     uparrow x = uparrow [s,Bottom T] by A1,Lm2;
            .= z by A1,A10;
         then z = (uparrow x)` by A1,A13;
        hence thesis;
+     end;
      end;
     then FinMeetCl BB c= FinMeetCl BX by A2,A4,CANTOR_1:16;
 then A14:  UniCl FinMeetCl BB c= UniCl FinMeetCl BX by A2,A4,CANTOR_1:9;
@@ -882,7 +896,7 @@ A2:   for F being Subset-Family of T()
 A3:   for A1,A2 being Subset of T() st P[A1] & P[A2] holds P[A1 /\ A2]
  and
 A4:   P[[#]T()]
-  proof consider K being prebasis of T() such that
+proof   consider K being prebasis of T() such that
 A5: for A being Subset of T() st A in K holds P[A] by A1;
       FinMeetCl K is Basis of T() by YELLOW_9:23;
 then A6: UniCl FinMeetCl K = the topology of T() by YELLOW_9:22;
@@ -919,7 +933,7 @@ A15:      Intersect xx = Ax by MSSUBFAM:9;
          then Intersect a = Ax /\ Ay by A15,MSSUBFAM:8;
         hence thesis by A3,A14;
        end;
-        Q[Y] from Finite(A9,A11,A12);
+        Q[Y] from FINSET_1:sch 2(A9,A11,A12);
      hence P[A] by A10;
     end;
    hence thesis by A2,A7;
@@ -945,7 +959,7 @@ then A4:  waybelow y = waybelow x & ex_sup_of waybelow y, L1
    hence x = sup waybelow x by A1,A4,YELLOW_0:26;
   end;
 
-definition
+registration
  let T be continuous (non empty Poset);
  cluster -> continuous TopAugmentation of T;
  coherence
@@ -954,6 +968,7 @@ definition
    hence thesis by YELLOW12:15;
   end;
 end;
+
 
 theorem Th19:
  for T,S being TopSpace, R being Refinement of T,S
@@ -1102,6 +1117,7 @@ A5:    A in the topology of T2;
          A1 is open by A5,PRE_TOPC:def 5;
        then f"A1 is open by A2,TOPS_2:55;
       hence h"A is open by A1,Th20;
+     end;
      suppose
 A6:    A in the topology of S2;
       then reconsider A1 = A as Subset of S2;
@@ -1109,6 +1125,7 @@ A6:    A in the topology of S2;
        then g"A1 is open & R1 is Refinement of S1,T1 by A3,TOPS_2:55,YELLOW_9:
 55;
       hence h"A is open by A1,Th20;
+    end;
     end;
    hence h is continuous by YELLOW_9:36;
   end;
@@ -1149,7 +1166,7 @@ A9:      for j being Element of N st j >= i holds N.j in a by WAYBEL_0:def 11;
        end;
      consider f being Function such that
 A10:   dom f = Z & rng f c= the carrier of N and
-A11:   for a being set st a in Z holds P[a,f.a] from NonUniqBoundFuncEx(A7);
+A11:   for a being set st a in Z holds P[a,f.a] from COMPTS_1:sch 1(A7);
       reconsider z = rng f as finite Subset of [#]N by A6,A10,FINSET_1:26,
 PRE_TOPC:12;
         [#]N is directed by WAYBEL_0:def 6;
@@ -1248,6 +1265,7 @@ Def3:
   (omega T) \/ (sigma T) is prebasis of T;
 end;
 
+
 theorem Th29:
  for R being complete LATTICE
  for LL being lower correct TopAugmentation of R
@@ -1269,7 +1287,7 @@ A5: the RelStr of LL = the RelStr of R &
    hence thesis by A1,A2,A3,A4,A5,YELLOW_9:def 6;
   end;
 
-definition
+registration
  let R be complete LATTICE;
  cluster Lawson strict correct TopAugmentation of R;
  existence
@@ -1300,7 +1318,8 @@ then A3:  LL is correct by TEX_2:12;
   end;
 end;
 
-definition
+
+registration
  cluster Scott complete strict TopLattice;
  existence
   proof consider R being complete LATTICE;
@@ -1314,6 +1333,7 @@ definition
    take T; thus thesis;
   end;
 end;
+
 
 theorem Th30:
  for T being Lawson (complete TopLattice) holds
@@ -1517,6 +1537,7 @@ then A5:  FinMeetCl ((omega S') \/ sigma S') is Basis of S' &
           .= the topology of S' by A2,A3,A4,A5,YELLOW_9:22;
   end;
 end;
+
 
 theorem Th33:
  for R being complete LATTICE holds
@@ -1856,6 +1877,7 @@ then A14:    A is upper by A4,WAYBEL_0:25;
           then z in A by A12,A14,WAYBEL_0:def 20;
          hence thesis by YELLOW_9:7;
         end;
+     end;
      suppose A in {(uparrow x)` where x is Element of T: not contradiction};
       then consider x being Element of T such that
 A15:    A = (uparrow x)`;
@@ -1877,11 +1899,12 @@ A17:      z~ = z & y~ = y by LATTICE3:def 6;
         hence thesis by YELLOW_9:7;
        end;
     end;
+    end;
     then inf F in Lim N by Th25;
    hence thesis by ZFMISC_1:37;
   end;
 
-definition
+registration
 :: 1.9. THEOREM, p. 146
  cluster Lawson -> being_T1 compact (complete TopLattice);
  coherence
@@ -1952,7 +1975,7 @@ A14:       i = (uparrow c)` & c in a by A5,A13,TARSKI:def 1;
 A15:     a is finite;
         deffunc F(Element of T) = (uparrow $1)`;
 A16:     {F(c) where c is Element of T: c in a} is finite
-        from FraenkelFin(A15);
+        from FRAENKEL:sch 21(A15);
       AA is finite & {Y} is finite by A16;
       then reconsider G as finite Subset of F by A12,FINSET_1:14;
       take G; let u be set; assume
@@ -1981,7 +2004,8 @@ A20:        v = c & (uparrow c)` in F;
   end;
 end;
 
-definition
+
+registration
 :: 1.10. THEOREM, p. 146
  cluster Lawson -> Hausdorff (complete continuous TopLattice);
  coherence
@@ -2001,6 +2025,7 @@ A4:   u << y' & not u <= x' by A3,WAYBEL_3:24;
     thus y in W by A4,WAYBEL_3:8;
        W c= uparrow u & V` = uparrow u by WAYBEL_3:11;
     hence thesis by PRE_TOPC:21;
+   end;
    suppose not x' <= y';
     then consider u being Element of T such that
 A5:   u << x' & not u <= y' by A3,WAYBEL_3:24;
@@ -2011,5 +2036,7 @@ A5:   u << x' & not u <= y' by A3,WAYBEL_3:24;
        W c= uparrow u & V` = uparrow u by WAYBEL_3:11;
     hence thesis by PRE_TOPC:21;
   end;
+  end;
 end;
+
 

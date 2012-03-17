@@ -31,14 +31,97 @@ theorem :: AMI_4:2
 
 reserve i,j,k for Nat;
 
-scheme Euklides' { F(Nat)->Nat,G(Nat)->Nat,a()->Nat,b()->Nat } :
+scheme :: AMI_4:sch 1
+ Euklides' { F(Nat)->Nat,G(Nat)->Nat,a()->Nat,b()->Nat } :
   ex k st F(k) = a() hcf b() & G(k) = 0
    provided
  0 < b() and
  b() < a() and
  F(0) = a() and
  G(0) = b() and
- for k st G(k) > 0 holds F(k+1) = G(k) & G(k+1) = F(k) mod G(k);
+ for k st G(k) > 0 holds F(k+1) = G(k) & G(k+1) = F(k) mod G(k)
+proof
+
+A6: 0 < b() & b() < a() by A1,A2;
+   deffunc _F(Nat,set) = IFEQ($2,0,0,G($1));
+   consider q being Function of NAT,NAT such that
+A7: q.0 = a() and
+A8: for i holds q.(i+1) = _F(i,q.i) from RECDEF_1:sch 4;
+   deffunc _Q(Nat) = q.$1;
+     q.(0+1) = IFEQ(q.0,0,0,G(0)) by A8
+     .= G(0) by A1,A2,A7,CQC_LANG:def 1;
+then A9: _Q(0) = a() & _Q(1) = b() by A4,A7;
+A10: for k st q.k qua Nat > 0 holds q.k = F(k)
+    proof let k such that
+A11:    q.k qua Nat > 0;
+       now per cases;
+      case k = 0;
+       hence q.k = F(k) by A3,A7;
+      end;
+      case k <> 0;
+       then consider i such that
+A12:       k = i+1 by NAT_1:22;
+A13:      now assume
+A14:        q.i qua Nat = 0;
+            q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
+             .= 0 by A14,CQC_LANG:def 1;
+         hence contradiction by A11;
+        end;
+          q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
+          .= G(i) by A13,CQC_LANG:def 1;
+      hence q.k = F(k) by A5,A11,A12;
+     end;
+     end;
+     hence q.k = F(k);
+    end;
+A15: for k holds _Q(k+2) = _Q(k) mod _Q(k+1)
+    proof let k;
+        now per cases;
+       case
+A16:      q.(k+1) <> 0;
+           now assume
+A17:        G(k) = 0;
+A18:        q.k = 0 or q.k <> 0;
+
+             q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+            .= 0 by A17,A18,CQC_LANG:def 1;
+          hence contradiction by A16;
+         end;
+         then A19:       G(k) > 0 by NAT_1:19;
+A20:       q.(k+(1+1)) = q.((k+1)+1) by XCMPLX_1:1
+           .= IFEQ(q.(k+1),0,0,G(k+1)) by A8
+           .= G(k+1) by A16,CQC_LANG:def 1
+           .= F(k) mod G(k) by A5,A19;
+A21:       now assume
+A22:         q.k = 0;
+             q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+            .= 0 by A22,CQC_LANG:def 1;
+          hence contradiction by A16;
+         end;
+then A23:       q.k qua Nat > 0 by NAT_1:19;
+           q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+            .= G(k) by A21,CQC_LANG:def 1;
+        hence q.(k+2) = q.(k) mod q.(k+1) by A10,A20,A23;
+       end;
+       case
+A24:       q.(k+1) = 0;
+        thus q.(k+2) = q.(k+(1+1))
+           .= q.((k+1)+1) by XCMPLX_1:1
+           .= IFEQ(q.(k+1),0,0,G(k+1)) by A8
+           .= 0 by A24,CQC_LANG:def 1
+           .= q.(k) mod q.(k+1) by A24,NAT_1:def 2;
+      end;
+      end;
+     hence q.(k+2) = q.(k) mod q.(k+1);
+    end;
+   consider k such that
+A25:  _Q(k) = a() hcf b() & _Q(k + 1) = 0 from NAT_1:sch 8(A6,A9,A15);
+  take k;
+A26: a() hcf b() > 0 by A1,NAT_LAT:43;
+  hence F(k) = a() hcf b() by A10,A25;
+  thus G(k) = IFEQ(q.k,0,0,G(k)) by A25,A26,CQC_LANG:def 1
+     .= 0 by A8,A25;
+ end;
 
 
 
@@ -114,6 +197,7 @@ definition
    iff ex x,y being Integer st x > 0 & y > 0 &
     p = (dl.0,dl.1) --> (x,y) & q = dl.0 .--> (x gcd y);
 end;
+
 
 theorem :: AMI_4:11
  for p being set holds p in dom Euclide-Function iff

@@ -29,16 +29,32 @@ definition
        scalar -> Function of [: the carrier, the carrier :], REAL #);
 end;
 
-definition
+
+registration
  cluster non empty strict UNITSTR;
+ existence
+  proof
+    consider D being non empty set, Z being Element of D,
+             a being BinOp of D,m being Function of [:REAL, D:], D,
+             s being Function of [: D,D:],REAL;
+    take UNITSTR (#D,Z,a,m,s#);
+    thus the carrier of UNITSTR (#D,Z,a,m,s#) is non empty;
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   let D be non empty set, Z be Element of D,
       a be BinOp of D,m be Function of [:REAL, D:], D,
       s be Function of [: D,D:],REAL;
   cluster UNITSTR (#D,Z,a,m,s#) -> non empty;
+ coherence
+  proof
+   thus the carrier of UNITSTR (#D,Z,a,m,s#) is non empty;
+  end;
 end;
+
 
  reserve X for non empty UNITSTR;
  reserve a, b for Real;
@@ -61,16 +77,106 @@ definition let IT be non empty UNITSTR;
     (a*x) .|. y = a * ( x .|. y );
 end;
 
-definition
+
+registration
  cluster RealUnitarySpace-like RealLinearSpace-like Abelian add-associative
    right_zeroed right_complementable strict (non empty UNITSTR);
+  existence
+   proof
+    take X0;
+    thus X0 is RealUnitarySpace-like by Def2,Lm8;
+A1: now
+       let x,y be VECTOR of X0;
+       let x',y' be VECTOR of (0).V0;
+       assume A2: x = x' & y = y';
+       hence x + y= (the add of X0).[x',y'] by RLVECT_1:def 3 .=
+       x' + y' by RLVECT_1:def 3;
+       let a;
+       thus a * x = (the Mult of X0).[a,x'] by A2,RLVECT_1:def 4 .=
+       a * x' by RLVECT_1:def 4;
+      end;
+A3:  0.X0 = the Zero of X0 by RLVECT_1:def 2 .=
+     0.(0).V0 by RLVECT_1:def 2;
+    thus X0 is RealLinearSpace-like
+    proof
+     thus for a for v,w being VECTOR of X0 holds a * (v + w) = a * v + a * w
+     proof
+      let a;
+      let v,w be VECTOR of X0;
+      reconsider v'= v, w' = w as VECTOR of (0).V0;
+A4:   a * v' = a * v by A1;
+A5:  a * w' = a * w by A1;
+    v + w = v'+ w' by A1;
+      hence a * (v + w) = a *( v' + w') by A1 .=
+      a * v' + a * w' by RLVECT_1:def 9 .= a * v + a * w by A1,A4,A5;
+     end;
+     thus for a,b for v being VECTOR of X0 holds (a + b) * v = a * v + b * v
+     proof
+      let a,b;
+      let v be VECTOR of X0;
+      reconsider v'= v as VECTOR of (0).V0;
+A6:   a * v' = a * v by A1;
+A7:  b * v' = b * v by A1;
+      thus (a + b) * v = (a + b) * v' by A1 .=
+      a * v' + b * v' by RLVECT_1:def 9 .= a * v + b * v by A1,A6,A7;
+     end;
+     thus for a,b for v being VECTOR of X0 holds (a * b) * v = a * (b * v)
+     proof
+      let a,b;
+      let v be VECTOR of X0;
+      reconsider v'= v as VECTOR of (0).V0;
+A8:   b * v' = b * v by A1;
+      thus (a * b) * v = (a * b) * v' by A1
+                .= a * (b * v') by RLVECT_1:def 9
+                .= a * (b * v) by A1,A8;
+     end;
+     let v be VECTOR of X0;
+     reconsider v'= v as VECTOR of (0).V0;
+     thus 1 * v = 1 * v' by A1 .= v by RLVECT_1:def 9;
+    end;
+    thus for v,w being VECTOR of X0 holds v + w = w + v
+    proof
+     let v,w be VECTOR of X0;
+     reconsider v'= v , w'= w as VECTOR of (0).V0;
+     thus v + w = w'+ v' by A1 .= w + v by A1;
+    end;
+     thus for u,v,w being VECTOR of X0 holds (u + v) + w = u + (v + w)
+     proof
+      let u,v,w be VECTOR of X0;
+      reconsider u'= u, v'= v, w'= w as VECTOR of (0).V0;
+      A9: u + v = u'+ v' by A1;
+      A10: v + w = v' + w' by A1;
+      thus (u + v) + w = (u' + v') + w' by A1,A9 .=
+      u' + (v' + w') by RLVECT_1:def 6 .= u + (v + w) by A1,A10;
+     end;
+     thus for v being VECTOR of X0 holds v + 0.X0 = v
+     proof
+      let v be VECTOR of X0;
+      reconsider v'= v as VECTOR of (0).V0;
+      thus v + 0.X0 = v'+ 0.(0).V0 by A1,A3 .=v by RLVECT_1:10;
+     end;
+     thus for v being VECTOR of X0
+       ex w being VECTOR of X0 st v + w = 0.X0
+       proof
+        let v be VECTOR of X0;
+        reconsider v'= v as VECTOR of (0).V0;
+        consider w' be VECTOR of (0).V0 such that
+        A11: v' + w' = 0.(0).V0 by RLVECT_1:def 8;
+        reconsider w = w' as VECTOR of X0;
+        take w;
+        thus v + w = 0.X0 by A1,A3,A11;
+       end;
+    thus thesis;
+   end;
 end;
+
 
 definition
  mode RealUnitarySpace is RealUnitarySpace-like RealLinearSpace-like
   Abelian add-associative right_zeroed right_complementable
    (non empty UNITSTR);
 end;
+
 
 reserve X for RealUnitarySpace;
 reserve x , y , z , u , v for Point of X;
@@ -79,6 +185,7 @@ definition let X; let x, y;
   redefine func x .|. y;
   commutativity;
 end;
+
 
 canceled 5;
 
@@ -146,6 +253,7 @@ definition let X; let x, y;
   symmetry;
 end;
 
+
 canceled;
 
 theorem :: BHSP_1:26
@@ -171,6 +279,7 @@ definition let X, x;
 :: BHSP_1:def 4
   sqrt (x .|. x);
 end;
+
 
 theorem :: BHSP_1:32
   ||.x.|| = 0 iff x = 0.X;
@@ -202,6 +311,7 @@ definition let X, x, y;
   ||.x - y.||;
 end;
 
+
 theorem :: BHSP_1:40
   dist(x,y) = dist(y,x);
 
@@ -209,6 +319,7 @@ definition let X, x, y;
   redefine func dist(x,y);
   commutativity;
 end;
+
 
 theorem :: BHSP_1:41
   dist(x,x) = 0;
@@ -245,8 +356,35 @@ reserve k, n, m for Nat;
 reserve f for Function;
 reserve d, s, t for set;
 
-scheme Ex_Seq_in_RUS { X() -> non empty UNITSTR, F(Nat) -> Point of X() } :
-       ex seq be sequence of X() st for n holds seq.n = F(n);
+scheme :: BHSP_1:sch 1
+ Ex_Seq_in_RUS { X() -> non empty UNITSTR, F(Nat) -> Point of X() } :
+       ex seq be sequence of X() st for n holds seq.n = F(n)
+proof
+       defpred P[set,set] means ex n st n =$1 & $2 = F(n);
+    A1: for d st d in NAT ex s st P[d,s]
+       proof
+            let d; assume d in NAT;
+            then reconsider n = d as Nat;
+            reconsider z = F(n) as set;
+            take z;
+            thus thesis;
+       end;
+    A2: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
+       consider f such that
+    A3: dom f = NAT and
+    A4: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A2,A1);
+         for d st d in NAT holds f.d is Point of X()
+       proof
+            let d; assume d in NAT;
+            then ex n st n = d & f.d = F(n) by A4;
+            hence f.d is Point of X();
+       end;
+       then reconsider f as sequence of X() by A3,NORMSP_1:17;
+       take seq = f;
+       let n;
+         P[n,seq.n] by A4;
+       hence seq.n = F(n);
+end;
 
 definition let X; let seq;
  canceled 4;
@@ -256,6 +394,7 @@ definition let X; let seq;
  for n holds it.n = - seq.n;
 end;
 
+
 definition let X; let seq; let x;
  canceled;
 
@@ -263,6 +402,7 @@ definition let X; let seq; let x;
 :: BHSP_1:def 12
      for n holds it.n = seq.n + x;
 end;
+
 
 canceled 4;
 
@@ -273,6 +413,7 @@ definition let X, seq1, seq2;
  redefine func seq1 + seq2;
  commutativity;
 end;
+
 
 theorem :: BHSP_1:56
     seq1 + (seq2 + seq3) = (seq1 + seq2) + seq3;

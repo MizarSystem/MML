@@ -35,15 +35,15 @@ begin :: Square roots of primes are irrational
  reserve seq, seq1, seq2 for Real_Sequence;
  reserve sq for FinSequence of REAL;
 
-definition let x;
- redefine attr x is rational;
- antonym x is irrational;
-end;
+notation let x;
+ antonym x is irrational for x is rational;
+ end;
 
-definition let x, y;
- redefine func x to_power y;
- synonym x.^.y;
-end;
+
+notation let x, y;
+ synonym x.^.y for x to_power y;
+ end;
+
 
 theorem Th1:
  p is prime implies sqrt p is irrational
@@ -95,9 +95,11 @@ proof
  suppose A2: w.^.w is rational;
   take w, w;
   thus thesis by A2,Th1,INT_2:44;
+ end;
  suppose A3: w.^.w is irrational;
   take w.^.w, w;
   thus thesis by A1,A3,Th1,INT_2:44;
+end;
 end;
 
 begin :: A proof that e = e
@@ -108,7 +110,7 @@ scheme LambdaRealSeq{F(set)->real number}:
   (for n holds seq1.n=F(n)) & (for n holds seq2.n=F(n)) holds seq1=seq2)
 proof
   deffunc F1(set)=F($1);
- thus ex seq st for n holds seq.n=F1(n) from ExRealSeq;
+ thus ex seq st for n holds seq.n=F1(n) from SEQ_1:sch 1;
  let seq1, seq2;
  assume A1: for n holds seq1.n=F(n);
  assume A2: for n holds seq2.n=F(n);
@@ -134,6 +136,7 @@ definition let k;
   end;
 end;
 
+
 definition
  let k;
  func bseq(k) -> Real_Sequence means
@@ -150,6 +153,7 @@ definition
   end;
 end;
 
+
 definition
  let n;
  func cseq(n) -> Real_Sequence means
@@ -165,6 +169,7 @@ definition
   from LambdaRealSeq;
   end;
 end;
+
 
 theorem Th3:
  cseq(n).k=bseq(k).n
@@ -188,6 +193,7 @@ definition
   end;
 end;
 
+
 definition
  func eseq -> Real_Sequence means
   :Def5: for k holds it.k=1/(k!);
@@ -202,6 +208,7 @@ definition
   from LambdaRealSeq;
   end;
 end;
+
 
 :: lim(\n:(n choose k)*(n.^.(-k))) = 1/(k!)
 
@@ -243,14 +250,17 @@ proof
    .= n!/((k!*(k+1))*((l+1)!/(l+1))) by NEWTON:21
    .= (l1/(k+1))*(n!/((k!)*(l1!))) by A2,Th5
    .= ((n-k)/(k+1))*(n choose k) by A3,NEWTON:def 3;
+ end;
  suppose A4: k+1>n & k<=n;
   then k>=n & k<=n by NAT_1:38;
   then k=n by AXIOMS:21;
   then n-k=0 by XCMPLX_1:14;
   hence (n choose (k+1)) = ((n-k)/(k+1))*(n choose k) by A4,NEWTON:def 3;
+ end;
  suppose A5: k+1>n & k>n;
   hence (n choose (k+1)) = ((n-k)/(k+1))*0 by NEWTON:def 3
    .= ((n-k)/(k+1))*(n choose k) by A5,NEWTON:def 3;
+end;
 end;
 
 theorem Th7:
@@ -351,7 +361,7 @@ proof
  proof
    deffunc F(set)=1;
   consider bseq0 being Real_Sequence such that
-   A2: for n holds bseq0.n=F(n) from ExRealSeq;
+   A2: for n holds bseq0.n=F(n) from SEQ_1:sch 1;
   A3: bseq0 is convergent & lim(bseq0)=1 by A2,Th10;
   A4: for n st n>=1 holds bseq(0).n=bseq0.n
   proof
@@ -369,7 +379,7 @@ proof
   proof
     deffunc F(Nat)=(1/(k+1))*(bseq(k).$1);
    consider seq such that
-    A7: for n holds seq.n = F(n) from ExRealSeq;
+    A7: for n holds seq.n = F(n) from SEQ_1:sch 1;
    A8: seq = (1/(k+1))(#)(bseq(k)) by A7,SEQ_1:13;
    A9: seq is convergent & lim(seq)=1/((k+1)!)
    proof
@@ -379,7 +389,7 @@ proof
    end;
    deffunc G(Nat)=seq.$1*(aseq(k).$1);
    consider seq1 such that
-    A10: for n holds seq1.n=G(n) from ExRealSeq;
+    A10: for n holds seq1.n=G(n) from SEQ_1:sch 1;
    A11: seq1=seq(#)(aseq(k)) by A10,SEQ_1:12;
    A12: seq1 is convergent & lim(seq1)=1/((k+1)!)
    proof
@@ -402,7 +412,7 @@ proof
    thus lim(bseq(k+1)) = 1/((k+1)!) by A12,A14,SEQ_4:32;
   end;
  end;
-   for k holds P[k] from Ind(A1,A5);
+   for k holds P[k] from NAT_1:sch 1(A1,A5);
  hence bseq(k) is convergent & lim(bseq(k))=1/(k!);
  hence lim(bseq(k))=eseq.k by Def5;
 end;
@@ -455,6 +465,7 @@ proof
       aseq(k).n<=1 by A10,Th14;
     then 1/((k+1)!)*(aseq(k).n)<=1/((k+1)!) by A9,REAL_2:147;
     hence thesis by A11,A13,AXIOMS:22;
+   end;
    suppose k>=n;
     then A14: k+1>n by NAT_1:38;
       bseq(k+1).n = (n choose (k+1))*(n.^.(-(k+1))) by Def2
@@ -462,8 +473,9 @@ proof
      .= 0;
     hence thesis by A8,REAL_2:127;
   end;
+  end;
  end;
-   for k holds P[k] from Ind(A5,A6);
+   for k holds P[k] from NAT_1:sch 1(A5,A6);
  hence A15: bseq(k).n<=1/(k!);
  hence bseq(k).n<=eseq.k by Def5;
  hence 0<=cseq(n).k & cseq(n).k<=1/(k!) & cseq(n).k<=eseq.k by A4,A15,Th3;
@@ -544,7 +556,7 @@ defpred P[Nat] means
     = (Partial_Sums(seq).k)+(seq.(k+1)) by SERIES_1:def 1;
     hence P[k+1] by A3,A6;
   end;
-    for k holds P[k] from Ind(A4,A5);
+    for k holds P[k] from NAT_1:sch 1(A4,A5);
   then A7:
    Partial_Sums(seq) is convergent & lim(Partial_Sums(seq))=0 by Th10;
   hence seq is summable by SERIES_1:def 2;
@@ -587,7 +599,7 @@ defpred P[Nat] means
    .= (sq.(0+1))+Sum(seq^\1) by A10,A12
    .= Sum(sq) by A10,A12,A18,Th18;
  end; then A19: P[k] implies P[k+1];
- thus P[n] from Ind(A8,A19);
+ thus P[n] from NAT_1:sch 1(A8,A19);
 end;
 
 theorem Th20:
@@ -712,7 +724,7 @@ defpred P[Nat] means
      dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K;
      deffunc F(Nat)=Partial_Sums(cseq($1)).K;
   consider dseqK being Real_Sequence such that
-   A5: for n holds dseqK.n=F(n) from ExRealSeq;
+   A5: for n holds dseqK.n=F(n) from SEQ_1:sch 1;
   A6: dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K by A4,A5;
   let dseqK1 be Real_Sequence;
   assume A7: for n holds dseqK1.n=Partial_Sums(cseq(n)).(K+1);
@@ -730,7 +742,7 @@ defpred P[Nat] means
    .= Partial_Sums(eseq).K+eseq.(K+1) by A6,Th13
    .= Partial_Sums(eseq).(K+1) by SERIES_1:def 1;
  end; then A10: P[n] implies P[n+1];
- thus P[n] from Ind(A3,A10);
+ thus P[n] from NAT_1:sch 1(A3,A10);
 end;
 
 theorem Th26:
@@ -840,7 +852,7 @@ proof
    A2: Partial_Sums(eseq).K>Sum(eseq)-eps/2 by Th24,Th28;
    deffunc F(Nat)=Partial_Sums(cseq($1)).K;
   consider dseqK being Real_Sequence such that
-   A3: for n holds dseqK.n=F(n) from ExRealSeq;
+   A3: for n holds dseqK.n=F(n) from SEQ_1:sch 1;
      dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K by A3,Th25;
   then consider N such that
    A4: for n st n>=N holds dseqK.n>Partial_Sums(eseq).K-eps/2 by A1,Th26;
@@ -873,11 +885,13 @@ definition
  compatibility by Th23,Th31;
 end;
 
+
 definition
  redefine func number_e equals
     exp(1);
  compatibility by Def6,Th24;
 end;
+
 
 begin :: number_e is irrational
 
@@ -896,6 +910,7 @@ proof
   take n = 2;
     n!*x1 is integer;
   hence n>=2 & n!*x is integer;
+ end;
  suppose A3: n>=2;
   take n;
   thus n>=2 by A3;
@@ -906,6 +921,7 @@ proof
    .= (n*x)*(m!) by A4,XCMPLX_1:4
    .= i*(m!) by A1,XCMPLX_1:88;
   hence n!*x is integer;
+end;
 end;
 
 theorem Th33:
@@ -976,7 +992,7 @@ proof
     .= (m+k+1)*(((m+k)!)/(k!)) by XCMPLX_0:def 9;
    hence (((m+1)+k)!)/(k!) is integer by A3;
   end; then A4: for n being Nat holds P[n] implies P[n+1];
-  for n being Nat holds P[n] from Ind(A2,A4); hence thesis;
+  for n being Nat holds P[n] from NAT_1:sch 1(A2,A4); hence thesis;
  end;
  hence (n!)/(k!) is integer by A1;
 end;
@@ -1005,7 +1021,7 @@ proof
      i+j is Integer;
    hence n!*Partial_Sums(eseq).(k+1) is integer by A5;
   end; then A6: P[k] implies P[k+1];
-  for k holds P[k] from Ind(A2,A6); hence thesis;
+  for k holds P[k] from NAT_1:sch 1(A2,A6); hence thesis;
  end;
  hence thesis;
 end;
@@ -1049,7 +1065,7 @@ proof
     .= (n!)/((n+k+1)!)*(n+(k+1)+1)" by XCMPLX_0:def 9;
    hence P[k+1] by A1,A5,A8,A9,A10,A11,REAL_2:197;
   end;
-  thus for n holds P[n] from Ind(A2,A4);
+  thus for n holds P[n] from NAT_1:sch 1(A2,A4);
  end;
  hence thesis;
 end;
@@ -1064,7 +1080,7 @@ proof
  A5: 0<x & x<1 by A1,A2,A3,REAL_2:127,SQUARE_1:2;
  deffunc F(Nat)=x.^.($1+1);
  consider seq being Real_Sequence such that
-  A6: for k holds seq.k=F(k) from ExRealSeq;
+  A6: for k holds seq.k=F(k) from SEQ_1:sch 1;
  A7: seq.0 = x.^.(0+1) by A6
   .= x by POWER:30;
  A8: abs x=x by A1,A4,ABSVALUE:def 1;

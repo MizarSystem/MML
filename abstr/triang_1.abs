@@ -27,45 +27,91 @@ begin
  reserve A,x,y,z,u for set;
  reserve k,l,m,n for Nat;
 
-scheme Regr1 { n() -> Nat, P[set] }:
+scheme :: TRIANG_1:sch 1
+ Regr1 { n() -> Nat, P[set] }:
  for k st k <= n() holds P[k]
  provided
    P[n()] and
-   for k st k < n() & P[k+1] holds P[k];
+   for k st k < n() & P[k+1] holds P[k]
+proof
+   defpred X[Nat] means $1 <= n() & not P[$1];
+ assume A3: ex k st X[k];
+ A4: for l st X[l] holds l <= n();
+ consider l such that
+ A5: X[l] and
+ A6: for n st X[n] holds n <= l from NAT_1:sch 6(A4,A3);
+ A7: l < n() by A1,A5,REAL_1:def 5;
+ then A8: l + 1 <= n() by NAT_1:38;
+   now assume not P[l+1];
+  then l + 1 <= l by A6,A8;
+  hence contradiction by REAL_1:69;
+ end;
+ hence contradiction by A2,A5,A7;
+end;
 
 
-definition
+registration
 let n be Nat;
 cluster Seg (n+1) -> non empty;
+coherence by FINSEQ_1:6;
 end;
 
 
-definition
+
+registration
 let X be non empty set, R be Order of X;
 cluster RelStr (#X,R#) -> non empty;
+coherence;
 end;
+
 
 
 theorem :: TRIANG_1:1
   {}|_2 A = {};
 
 
-definition
+registration
 let X be set;
 cluster non empty Subset of Fin X;
+existence
+ proof
+    {} in Fin X by FINSUB_1:18;
+  then {{}} is Subset of Fin X by ZFMISC_1:37;
+  hence thesis;
+ end;
 end;
 
 
-definition
+
+registration
 let X be non empty set;
 cluster non empty with_non-empty_elements Subset of Fin X;
+existence
+ proof
+  consider x be Element of X;
+     {x} is Subset of X by SUBSET_1:55;
+   then {x} in Fin X by FINSUB_1:def 5;
+  then reconsider s = {{x}} as Subset of Fin X by SUBSET_1:55;
+  take s;
+  thus s is non empty;
+  assume {} in s;
+  hence contradiction by TARSKI:def 1;
+ end;
 end;
 
 
-definition
+
+registration
 let X be non empty set, F be non empty with_non-empty_elements Subset of Fin X;
 cluster non empty Element of F;
+existence
+ proof
+  consider f be Element of F;
+    f <> {} by AMI_1:def 1;
+  hence thesis;
+ end;
 end;
+
 
 
 definition let IT be set;
@@ -75,25 +121,56 @@ ex X be non empty set st X in IT;
 end;
 
 
-definition
+
+registration
 cluster with_non-empty_element set;
+existence
+ proof
+  take {{{}}}, {{}};
+  thus {{}} in {{{}}} by TARSKI:def 1;
+ end;
 end;
 
-definition
+
+registration
 let X be with_non-empty_element set;
 cluster non empty Element of X;
+existence
+ proof
+    ex x  be non empty set st x in X by Def1;
+  hence thesis;
+ end;
 end;
 
 
-definition
+
+registration
 cluster with_non-empty_element -> non empty set;
+coherence
+ proof
+  let X be set; assume X is with_non-empty_element;
+  then ex x  be non empty set st x in X by Def1;
+  hence thesis;
+ end;
 end;
 
 
-definition
+
+registration
 let X be non empty set;
 cluster with_non-empty_element Subset of Fin X;
+existence
+ proof
+  consider x be Element of X;
+     {x} is Subset of X by SUBSET_1:55;
+   then {x} in Fin X by FINSUB_1:def 5;
+  then reconsider s = {{x}} as Subset of Fin X by SUBSET_1:55;
+  take s;
+    {x} in s by TARSKI:def 1;
+  hence thesis by Def1;
+ end;
 end;
+
 
 
 definition
@@ -101,13 +178,54 @@ let X be non empty set, R be Order of X, A be Subset of X;
 redefine func R|_2 A -> Order of A;
 end;
 
-scheme SubFinite{D()->set, A()->Subset of D(), P[set]}:
+
+scheme :: TRIANG_1:sch 2
+ SubFinite{D()->set, A()->Subset of D(), P[set]}:
  P[A()]
   provided
    A() is finite and
    P[{}(D())] and
    for x being Element of D(), B being Subset of D()
-       st x in A() & B c= A() & P[B] holds P[B \/ {x}];
+       st x in A() & B c= A() & P[B] holds P[B \/ {x}]
+proof
+      now assume A() <> {};
+    defpred X[set] means ex B be set st B=$1 & P[B];
+    consider G being set such that
+     A4: for x be set holds x in G iff x in bool A() & X[x]
+         from XBOOLE_0:sch 1;
+      G c= bool A()
+     proof
+      let x be set; assume x in G;
+      hence thesis by A4;
+     end;
+    then reconsider GA=G as Subset-Family of A() by SETFAM_1:def 7;
+   {} c= A() & P[ {} ] by A2,XBOOLE_1:2;
+    then {} in bool A() by ZFMISC_1:def 1;
+    then GA <> {} by A2,A4;
+    then consider B be set such that A5:
+    B in GA & for X being set st X in GA holds B c= X implies B=X
+                                   by A1,FINSET_1:18;
+    A6: B in bool A() & ex A st A = B & P[A] by A4,A5;
+      now consider x being Element of A() \ B;
+     assume B <> A();
+      then not A() c= B by A5,XBOOLE_0:def 10;
+      then A7:  A() \ B <> {} by XBOOLE_1:37;
+      then A8: x in A() by XBOOLE_0:def 4;
+         B is Subset of D() by A5,XBOOLE_1:1;
+      then A9: P[B \/ {x}] by A3,A6,A8;
+        {x} c= A() by A8,ZFMISC_1:37;
+      then B \/ {x} c= A() by A5,XBOOLE_1:8;
+      then B \/ {x} in bool A() by ZFMISC_1:def 1;
+      then A10: B \/ {x} in GA by A4,A9;
+        not x in B by A7,XBOOLE_0:def 4;
+      then not {x} c= B by ZFMISC_1:37;
+      then B c= B \/ {x} & B \/ {x} <> B by XBOOLE_1:7;
+     hence contradiction by A5,A10;
+   end;
+   hence thesis by A6;
+   end;
+   hence thesis by A2;
+ end;
 
 
 theorem :: TRIANG_1:2
@@ -117,18 +235,32 @@ ex m being Element of F st m in A & for C being Element of F st C in A
 holds m <= C;
 
 
-definition
+registration
 let X be non empty set,
     F be with_non-empty_element Subset of Fin X;
 cluster finite non empty Element of F;
+existence
+ proof
+  consider x be non empty set such that A1: x in F by Def1;
+  reconsider x1 = x as Element of F by A1;
+  take x1;
+  thus thesis by FINSUB_1:def 5;
+ end;
 end;
 
-definition
+
+registration
 let P be non empty Poset,
     A be non empty finite Subset of P,
     x be Element of P;
 cluster InitSegm(A,x) -> finite;
+coherence
+ proof
+    InitSegm(A,x) c= A by ORDERS_1:61;
+  hence thesis by FINSET_1:13;
+ end;
 end;
+
 
 theorem :: TRIANG_1:3
 for A,B being finite set st A c= B & card A = card B holds A = B;
@@ -142,6 +274,7 @@ rng it = A & for n,m be Nat
   st n in dom it & m in dom it & n < m holds
    it/.n <> it/.m & [it/.n,it/.m] in R;
 end;
+
 
 theorem :: TRIANG_1:4
 for X be set,
@@ -165,10 +298,38 @@ func symplexes(C) -> Subset of Fin the carrier of C equals
 end;
 
 
-definition
+
+registration
 let C be non empty Poset;
 cluster symplexes(C) -> with_non-empty_element;
+coherence
+ proof
+  consider x be Element of C;
+  reconsider a = {x} as Element of Fin the carrier of C by FINSUB_1:def 5;
+  field the InternalRel of C = the carrier of C by ORDERS_1:97;
+  then
+    the InternalRel of C is_reflexive_in the carrier of C &
+  the InternalRel of C is_antisymmetric_in the carrier of C &
+  the InternalRel of C is_transitive_in the carrier of C
+                        by RELAT_2:def 9,def 12,def 16;
+  then A1: the InternalRel of C is_reflexive_in a &
+  the InternalRel of C is_antisymmetric_in a &
+  the InternalRel of C is_transitive_in a
+                      by ORDERS_1:93,94,95;
+    the InternalRel of C is_connected_in a
+   proof
+    let k,l be set; assume A2: k in a & l in a & k <> l;
+    then k = x & l = x by TARSKI:def 1;
+   hence thesis by A2;
+   end;
+  then the InternalRel of C linearly_orders a by A1,ORDERS_2:def 6;
+  then a in {A where A is Element of Fin the carrier of C :
+      the InternalRel of C linearly_orders A};
+  then a in symplexes(C) by Def3;
+  hence thesis by Def1;
+ end;
 end;
+
 
 reserve C for non empty Poset;
 
@@ -183,15 +344,18 @@ theorem :: TRIANG_1:6
 theorem :: TRIANG_1:7
 for x, s be set st x c= s & s in symplexes(C) holds x in symplexes(C);
 
-definition
+registration
  let X be set, F be non empty Subset of Fin X;
   cluster -> finite Element of F;
+ coherence by FINSUB_1:def 5;
 end;
+
 
 definition
  let X be set, F be non empty Subset of Fin X;
  redefine mode Element of F -> Subset of X;
 end;
+
 
 theorem :: TRIANG_1:8
 for X being set,
@@ -213,16 +377,24 @@ st Card A = n
 holds dom(SgmX(the InternalRel of C, A)) = Seg n;
 
 
-definition
+registration
 let C be non empty Poset;
 cluster non empty Element of symplexes(C);
+existence
+ proof
+  consider x be Element of C;
+    {x} in symplexes(C) by Th5;
+  hence thesis;
+ end;
 end;
+
 
 begin :: Triangulations
 
 definition
   mode SetSequence is ManySortedSet of NAT;
 end;
+
 
 definition let IT be SetSequence;
 attr IT is lower_non-empty means
@@ -231,9 +403,22 @@ for n st IT.n is non empty holds
 for m st m < n holds IT.m is non empty;
 end;
 
-definition
+
+registration
 cluster lower_non-empty SetSequence;
+existence
+ proof
+  deffunc U(set) = 1;
+  consider f be ManySortedSet of NAT such that
+  A1: for x st x in NAT holds f.x = U(x) from MSUALG_1:sch 2;
+  reconsider f as SetSequence;
+  take f;
+    for n st f.n is non empty holds
+   for m st m < n holds f.m is non empty by A1;
+  hence thesis by Def4;
+ end;
 end;
+
 
 definition
 let X be SetSequence;
@@ -243,11 +428,22 @@ for n be Nat holds it.n = Funcs(X.(n+1),X.n);
 end;
 
 
-definition
+
+registration
 let X be lower_non-empty SetSequence;
 let n be Nat;
 cluster (FuncsSeq X).n -> non empty;
+coherence
+ proof
+  A1: (FuncsSeq X).n = Funcs(X.(n+1),X.n) by Def5;
+    now
+     n < n + 1 by NAT_1:38;
+   hence X.(n+1) = {} or X.n <> {} by Def4;
+  end;
+  hence thesis by A1,FUNCT_2:11;
+ end;
 end;
+
 
 
 definition
@@ -259,6 +455,7 @@ func @ f -> FinSequence of REAL equals
 end;
 
 
+
 definition
 func NatEmbSeq -> SetSequence means
 :: TRIANG_1:def 7
@@ -267,16 +464,49 @@ for n be Nat holds
 end;
 
 
-definition
+
+registration
 let n;
 cluster NatEmbSeq.n -> non empty;
+coherence
+ proof
+    n <= n + 1 by NAT_1:29;
+  then A1: Seg n c= Seg(n+1) by FINSEQ_1:7;
+    dom id Seg n = Seg n & rng id Seg n = Seg n by RELAT_1:71;
+then A2: dom (idseq n) = Seg n & rng (idseq n) = Seg n by FINSEQ_2:def 1;
+  then reconsider n1 = (idseq n) as Element of Funcs(Seg n,Seg(n+1))
+                            by A1,FUNCT_2:def 2;
+    @ n1 is increasing
+   proof
+    let l,m; assume
+A3:  l in dom @ n1 & m in dom @ n1 & l < m;
+      @ n1 = n1 by Def6;
+    then (@ n1).l = l & (@ n1).m = m by A2,A3,FINSEQ_2:56;
+    hence thesis by A3;
+   end;
+  then n1 in {f where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is
+increasing};
+  hence thesis by Def7;
+ end;
 end;
 
 
-definition
+
+registration
 let n be Nat;
 cluster -> Function-like Relation-like Element of NatEmbSeq.n;
+coherence
+ proof
+  A1: NatEmbSeq.n = {f where f is Element of Funcs(Seg n,Seg(n+1)) :
+                    @ f is increasing} by Def7;
+  let x be Element of NatEmbSeq.n;
+    x in NatEmbSeq.n;
+  then consider f being Element of Funcs(Seg n,Seg(n+1)) such that
+  A2: x = f and @ f is increasing by A1;
+  thus thesis by A2;
+ end;
 end;
+
 
 definition
   let X be SetSequence;
@@ -284,11 +514,13 @@ definition
   canceled;
 end;
 
+
 definition
   struct TriangStr (# SkeletonSeq -> SetSequence,
                       FacesAssign -> ManySortedFunction of
                         NatEmbSeq, FuncsSeq(the SkeletonSeq) #);
 end;
+
 
 definition
 let T be TriangStr;
@@ -297,21 +529,40 @@ attr T is lower_non-empty means
 the SkeletonSeq of T is lower_non-empty;
 end;
 
-definition
+
+registration
 cluster lower_non-empty strict TriangStr;
+existence
+ proof
+  deffunc U(set) = {};
+  consider Sk be ManySortedSet of NAT such that
+  A1: for x st x in NAT holds Sk.x = U(x) from MSUALG_1:sch 2;
+  reconsider Sk as SetSequence;
+    for n st Sk.n is non empty holds
+   for m st m < n holds Sk.m is non empty by A1;
+  then A2: Sk is lower_non-empty by Def4;
+  consider A be ManySortedFunction of NatEmbSeq, FuncsSeq(Sk);
+  take TriangStr (# Sk,A #);
+  thus thesis by A2,Def9;
+ end;
 end;
 
-definition
+
+registration
 let T be lower_non-empty TriangStr;
 cluster the SkeletonSeq of T -> lower_non-empty;
+coherence by Def9;
 end;
 
 
-definition
+
+registration
 let S be lower_non-empty SetSequence,
     F be ManySortedFunction of NatEmbSeq, FuncsSeq S;
 cluster TriangStr (#S,F#) -> lower_non-empty;
+coherence by Def9;
 end;
+
 
 
 :: Relationship between  Abstract Complexes and Triangulations
@@ -323,10 +574,12 @@ mode Symplex of T,n is Element of (the SkeletonSeq of T).n;
 end;
 
 
+
 definition
 let n be Nat;
 mode Face of n is Element of NatEmbSeq.n;
 end;
+
 
 
 definition
@@ -340,6 +593,7 @@ func face (x,f) -> Symplex of T,n means
 for F,G be Function st F = (the FacesAssign of T).n & G = F.f holds
 it = G.x;
 end;
+
 
 
 definition
@@ -358,3 +612,4 @@ for A be non empty Element of symplexes(C)
  st SgmX(the InternalRel of C, A) = s
 holds face (s,f) = (SgmX(the InternalRel of C, A)) * f;
 end;
+

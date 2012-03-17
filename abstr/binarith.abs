@@ -22,9 +22,11 @@ environ
 
 begin
 
-definition
+registration
   cluster non empty Nat;
+  existence by CARD_5:1;
 end;
+
 
   theorem :: BINARITH:1
     for i,j being Nat holds addnat.(i,j) = i + j;
@@ -58,6 +60,7 @@ canceled;
     commutativity;
   end;
 
+
   definition
     let x, y be boolean set;
     func x 'xor' y equals
@@ -67,21 +70,33 @@ canceled;
     commutativity;
   end;
 
-  definition
+
+  registration
     let x, y be boolean set;
     cluster x 'or' y -> boolean;
+    correctness
+     proof x 'or' y = 'not' ('not' x '&' 'not' y) by Def1;
+      hence thesis;
+     end;
   end;
 
-  definition
+
+  registration
     let x, y be boolean set;
     cluster x 'xor' y -> boolean;
+    correctness
+     proof x 'xor' y = ('not' x '&' y) 'or' (x '&' 'not' y) by Def2;
+      hence thesis;
+     end;
   end;
+
 
   definition
     let x, y be Element of BOOLEAN;
     redefine func x 'or' y -> Element of BOOLEAN;
     func x 'xor' y -> Element of BOOLEAN;
   end;
+
 
   reserve x,y,z for boolean set;
 
@@ -174,6 +189,7 @@ canceled 5;
       i - j if i - j >= 0 otherwise 0;
   end;
 
+
   theorem :: BINARITH:39
   for i,j being natural number holds i + j -' j = i;
 
@@ -187,6 +203,7 @@ canceled 5;
       for i st i in Seg n holds it/.i = 'not' (x/.i);
  end;
 
+
   definition let n be non empty Nat, x, y be Tuple of n, BOOLEAN;
   func carry(x, y) -> Tuple of n, BOOLEAN means
 :: BINARITH:def 5
@@ -196,6 +213,7 @@ canceled 5;
         (x/.i) '&' (it/.i) 'or' (y/.i) '&' (it/.i);
   end;
 
+
   definition let n be Nat, x be Tuple of n, BOOLEAN;
   func Binary(x) -> Tuple of n, NAT means
 :: BINARITH:def 6
@@ -203,11 +221,13 @@ canceled 5;
                   it/.i = IFEQ(x/.i,FALSE,0,2 to_power(i-'1));
    end;
 
+
   definition let n be Nat, x be Tuple of n, BOOLEAN;
   func Absval (x) -> Nat equals
 :: BINARITH:def 7
   addnat $$ Binary (x);
   end;
+
 
   definition let n, x, y;
   func x + y -> Tuple of n, BOOLEAN means
@@ -216,6 +236,7 @@ canceled 5;
                      (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i);
   end;
 
+
   definition let n,z1,z2;
   func add_ovfl(z1,z2) -> Element of BOOLEAN equals
 :: BINARITH:def 9
@@ -223,17 +244,40 @@ canceled 5;
         (z1/.n) '&' (carry(z1,z2)/.n) 'or' (z2/.n) '&' (carry(z1,z2)/.n);
   end;
 
- scheme Ind_from_1 { P[Nat] } :
+
+ scheme :: BINARITH:sch 1
+ Ind_from_1 { P[Nat] } :
  for k being non empty Nat holds P[k]
    provided
     P[1] and
-    for k being non empty Nat st P[k] holds P[k + 1];
+    for k being non empty Nat st P[k] holds P[k + 1]
+proof
+          defpred _P[Nat] means $1 is non empty implies P[$1];
+       A3: _P[0];
+       A4: now
+          let k be Nat;
+          assume A5: _P[k];
+          now
+          assume k+1 is non empty;
+          per cases;
+            suppose k is empty;
+              hence P[k+1] by A1,CARD_1:51;
+            end;
+            suppose k is non empty;
+              hence P[k+1] by A2,A5;
+          end;
+          end; hence _P[k+1];
+          end;
+         for k being Nat holds _P[k] from NAT_1:sch 1(A3,A4);
+       hence thesis;
+     end;
 
 definition let n,z1,z2;
   pred z1,z2 are_summable means
 :: BINARITH:def 10
       add_ovfl(z1,z2) = FALSE;
 end;
+
 
   theorem :: BINARITH:40
    for z1 being Tuple of 1,BOOLEAN holds
@@ -256,11 +300,13 @@ end;
     redefine func z1 ^ z2 -> Tuple of n1+n2,D;
   end;
 
+
   definition
     let D be non empty set;
     let d be Element of D;
     redefine func <* d *> -> Tuple of 1,D;
   end;
+
 
   theorem :: BINARITH:43
     for z1,z2 being Tuple of n,BOOLEAN holds

@@ -64,9 +64,11 @@ A3:    u in L;
      then z = (L --> y).u by A1,A2,FUNCT_4:14;
      then z = y by A3,FUNCOP_1:13;
     hence z in {y} by TARSKI:def 1;
+   end;
    case not u in L;
      then u in dom f & z = f.u by A1,A2,FUNCT_4:12,13;
     hence z in f.:K by A1,FUNCT_1:def 12;
+  end;
   end;
  hence z in f.:K \/ {y} by XBOOLE_0:def 2;
 end;
@@ -266,28 +268,35 @@ A3: for n be Nat st S[n] holds S[n+1]
         case len @p <> n+1;
          take y = F.p;
          thus y =F.p;
+        end;
         case A6:len @p = n+1 & p = VERUM;
          take y = V();
          thus Pfgp[y, F, p] by A6,QC_LANG1:51;
+        end;
         case A7: len @p = n+1 & p is atomic;
          take y = A(p);
          thus Pfgp[y, F, p] by A7,QC_LANG1:51;
+        end;
         case A8: len @p = n+1 & p is negative;
          take y = N(F.the_argument_of p, p);
          thus Pfgp[y, F, p] by A8,QC_LANG1:51;
+        end;
         case A9: len @p = n+1 & p is conjunctive;
          take y = C(F.the_left_argument_of p, F.the_right_argument_of p, p);
          thus Pfgp[y, F, p] by A9,QC_LANG1:51;
+        end;
         case A10: len @p = n+1 & p is universal;
          take y = Q(F.the_scope_of p, p);
          thus Pfgp[y, F, p] by A10,QC_LANG1:51;
+      end;
       end;
       hence ex y being Element of D() st
                 (len @p <> n+1 implies y = F.p) &
                 (len @p = n+1 implies Pfgp[y, F, p]);
      end;
      consider G being Function of QC-WFF, D() such that
-   A11:      for p being Element of QC-WFF holds P[p,G.p] from FuncExD (A5);
+   A11:      for p being Element of QC-WFF holds P[p,G.p] from FUNCT_2:sch 3
+ (A5);
        take H = G;
      thus Pfn[H, n+1]
     proof
@@ -299,8 +308,10 @@ A3: for n be Nat st S[n] holds S[n+1]
           suppose A13: len @p <> n+1; then A14: len @p <= n by A12,NAT_1:26;
                   H.p = F.p by A11,A13;
            hence thesis by A4,A14;
+          end;
           suppose len @p = n+1;
            hence thesis by A11;
+         end;
          end;
         hence thesis;
         end;
@@ -310,8 +321,10 @@ A3: for n be Nat st S[n] holds S[n+1]
           suppose A15: len @p <> n+1; then A16: len @p <= n by A12,NAT_1:26;
                   H.p = F.p by A11,A15;
            hence thesis by A4,A16;
+          end;
           suppose len @p = n+1;
            hence thesis by A11;
+         end;
          end;
         hence thesis;
         end;
@@ -323,8 +336,10 @@ A3: for n be Nat st S[n] holds S[n+1]
           suppose A19: len @p <> n+1; then A20: len @p <= n by A12,NAT_1:26;
               H.p = F.p by A11,A19;
            hence thesis by A4,A17,A18,A20;
+          end;
           suppose len @p = n+1;
            hence thesis by A11,A17,A18;
+         end;
          end;
         hence thesis;
         end;
@@ -339,8 +354,10 @@ A3: for n be Nat st S[n] holds S[n+1]
           suppose A24: len @p <> n+1; then A25: len @p <= n by A12,NAT_1:26;
                   H.p = F.p by A11,A24;
            hence thesis by A4,A21,A22,A23,A25;
+          end;
           suppose len @p = n+1;
            hence thesis by A11,A21,A22,A23;
+         end;
          end;
         hence thesis;
         end;
@@ -352,15 +369,17 @@ A3: for n be Nat st S[n] holds S[n+1]
           suppose A28: len @p <> n+1; then A29: len @p <= n by A12,NAT_1:26;
                   H.p = F.p by A11,A28;
            hence H.p = Q(H.the_scope_of p, p) by A4,A26,A27,A29;
+          end;
           suppose len @p = n+1;
            hence H.p = Q(H.the_scope_of p, p) by A11,A26,A27;
+         end;
          end;
         hence thesis;
         end;
      end;
    end;
 
-A30: for n being Nat holds S[n] from Ind (A1, A3);
+A30: for n being Nat holds S[n] from NAT_1:sch 1 (A1, A3);
 
 defpred Qfn[set, set] means
         ex p being Element of QC-WFF st p = $1 &
@@ -425,14 +444,14 @@ A45:          len @the_left_argument_of p < len @p by A41,QC_LANG1:46;
                   .= G.p by A33,A46,A48;
          end;
        end;
-      for p being Element of QC-WFF holds Prop[p] from QC_Ind2 (A34);
+      for p being Element of QC-WFF holds Prop[p] from QC_LANG1:sch 2 (A34);
        hence F.x = G.x';
    end;
 
  consider F being Function such that
 A49: dom F = QC-WFF and
 A50: for x being set st x in
- QC-WFF holds Qfn[x, F.x] from NonUniqFuncEx (A31);
+ QC-WFF holds Qfn[x, F.x] from ZFREFLE1:sch 1 (A31);
   F is Function of QC-WFF, D()
  proof
     rng F c= D()
@@ -607,7 +626,7 @@ scheme CQCF2_FUniq { D, E() -> non empty set,
  A6: for r,s,x holds F2().('not' r) = N(F2().r,r) &
        F2().(r '&' s) = C(F2().r,F2().s,r,s) &
        F2().All(x,r) = Q(x,F2().r,r)
- proof
+proof
    defpred P[set] means F1().$1 = F2().$1;
 A7: for r,s,x,k,ll,P holds
        P[VERUM] &
@@ -628,7 +647,7 @@ A7: for r,s,x,k,ll,P holds
      F1().All(x,r) = Q(x,F1().r,r) & F2().All(x,r) = Q(x,F2().r,r) by A3,A6;
     hence thesis;
    end;
-    P[r] from CQC_Ind(A7);
+    P[r] from CQC_LANG:sch 1(A7);
   hence thesis by FUNCT_2:113;
  end;
 
@@ -678,7 +697,7 @@ definition let D be non empty set, f be Function of D, CQC-WFF;
        take 'not' p; thus thesis;
       end;
    consider F being Function of D,CQC-WFF such that
-  A2:  for e being Element of D holds P[e,F.e] from FuncExD(A1);
+  A2:  for e being Element of D holds P[e,F.e] from FUNCT_2:sch 3(A1);
      F is Element of Funcs(D,CQC-WFF) by FUNCT_2:11;
   hence thesis by A2;
   end;
@@ -701,6 +720,7 @@ definition let D be non empty set, f be Function of D, CQC-WFF;
     end;
    end;
 end;
+
 
 reserve f,h for Element of Funcs(bound_QC-variables,bound_QC-variables),
   K,L for Finite_Subset of bound_QC-variables;
@@ -726,7 +746,7 @@ func CON(f,g,n) -> Element of
      end;
    consider F being Function of
     [:NAT,Funcs(bound_QC-variables,bound_QC-variables):],CQC-WFF such that
-A2: for k,h holds P[k,h,F.[k,h]] from FuncEx2D(A1);
+A2: for k,h holds P[k,h,F.[k,h]] from FUNCT_2:sch 7(A1);
     reconsider F as Element of
      Funcs([:NAT,Funcs(bound_QC-variables,bound_QC-variables):],CQC-WFF)
        by FUNCT_2:11;
@@ -761,6 +781,7 @@ A4: for k,h,p,q holds p = f.[k,h] & q = g.[k+n,h] implies G.[k,h] = p '&' q;
     end;
   end;
 end;
+
 
  Lm1: h+*({x} --> x.k) is Function of bound_QC-variables,bound_QC-variables
   proof
@@ -802,7 +823,7 @@ existence
     end;
   consider F being Function of
    [:NAT,Funcs(bound_QC-variables,bound_QC-variables):],CQC-WFF such that
- A2: for k,h holds P[k,h,F.[k,h]] from FuncEx2D(A1);
+ A2: for k,h holds P[k,h,F.[k,h]] from FUNCT_2:sch 7(A1);
    reconsider F as Element of
     Funcs([:NAT,Funcs(bound_QC-variables,bound_QC-variables):],CQC-WFF)
      by FUNCT_2:11;
@@ -841,6 +862,7 @@ A4: for k,h,p st p = f.[k+1,h +* ({x} --> x.k)] holds G.[k,h] = All(x.k,p);
   end;
 end;
 
+
 Lm2: for f being FinSequence of bound_QC-variables st len f = k holds
  f is CQC-variable_list of k
   proof
@@ -874,6 +896,7 @@ coherence
  end;
 end;
 
+
 definition let k; let P be QC-pred_symbol of k, l be CQC-variable_list of k;
  func ATOMIC(P,l) -> Element of
   Funcs([:NAT,Funcs(bound_QC-variables,bound_QC-variables):], CQC-WFF) means
@@ -885,7 +908,7 @@ existence
      P!($2*l);
   consider f being Function of
    [:NAT,Funcs(bound_QC-variables,bound_QC-variables):], CQC-WFF such that
- A1: for n,h holds f.[n,h] = f(n,h) from Lambda2D;
+ A1: for n,h holds f.[n,h] = f(n,h) from FUNCT_2:sch 8;
     f is Element of
    Funcs([:NAT,Funcs(bound_QC-variables,bound_QC-variables):], CQC-WFF)
     by FUNCT_2:11;
@@ -914,6 +937,7 @@ uniqueness
     end;
  end;
 end;
+
 
 deffunc A(set,set,set) = 0;
 deffunc N(Nat) = $1;
@@ -959,9 +983,10 @@ func QuantNbr(p) -> Element of NAT means
            F.('not' r) = N(F.r) &
            F.(r '&' s) = C(F.r,F.s) &
            F.All(x,r) = Q(x,F.r) )
-    holds d1 = d2) from CQC_Def_correctness;
+    holds d1 = d2) from CQC_LANG:sch 4;
  end;
 end;
+
 
 definition let f be Function of CQC-WFF,
  Funcs([:NAT,Funcs(bound_QC-variables,bound_QC-variables):],CQC-WFF),
@@ -974,6 +999,7 @@ definition let f be Function of CQC-WFF,
    Funcs([:NAT,Funcs(bound_QC-variables,bound_QC-variables):],CQC-WFF);
   end;
 end;
+
 
 definition
  func SepFunc -> Function of CQC-WFF,
@@ -1047,11 +1073,13 @@ uniqueness
  end;
 end;
 
+
 definition let p,k,f;
  func SepFunc (p,k,f) -> Element of CQC-WFF equals :Def7:
    (SepFunc.p).[k,f];
  correctness;
 end;
+
 
 deffunc F(Element of CQC-WFF) = QuantNbr($1);
 
@@ -1067,7 +1095,7 @@ theorem QuantNbr(VERUM) = 0
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r) by Def5;
-  thus F(VERUM) = 0 from CQC_Def_VERUM(A1);
+  thus F(VERUM) = 0 from CQC_LANG:sch 5(A1);
  end;
 
 theorem QuantNbr(P!ll) = 0
@@ -1082,7 +1110,7 @@ theorem QuantNbr(P!ll) = 0
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r) by Def5;
-  thus F(P!ll) = A(k,P,ll) from CQC_Def_atomic(A1);
+  thus F(P!ll) = A(k,P,ll) from CQC_LANG:sch 6(A1);
  end;
 
 theorem QuantNbr('not' p) = QuantNbr(p)
@@ -1097,7 +1125,7 @@ A1: for p being Element of CQC-WFF, d being Element of NAT holds
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r) by Def5;
-  thus F('not' p) = N(F(p)) from CQC_Def_negative(A1);
+  thus F('not' p) = N(F(p)) from CQC_LANG:sch 7(A1);
  end;
 
 theorem QuantNbr(p '&' q) = QuantNbr(p) + QuantNbr(q)
@@ -1112,7 +1140,7 @@ A1: for p being Element of CQC-WFF, d being Element of NAT holds
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r) by Def5;
-  thus F(p '&' q) = C(F(p), F(q)) from QC_Def_conjunctive(A1);
+  thus F(p '&' q) = C(F(p), F(q)) from CQC_LANG:sch 8(A1);
  end;
 
 theorem QuantNbr(All(x,p)) = QuantNbr(p) + 1
@@ -1127,7 +1155,7 @@ A1: for p being Element of CQC-WFF, d being Element of NAT holds
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r) by Def5;
-  thus F(All(x,p)) = Q(x,F(p)) from QC_Def_universal(A1);
+  thus F(All(x,p)) = Q(x,F(p)) from CQC_LANG:sch 9(A1);
  end;
 
 definition let A be non empty Subset of NAT;
@@ -1139,7 +1167,7 @@ definition let A be non empty Subset of NAT;
    defpred P[Nat] means $1 in A;
    x is Nat;
    then A1: ex x be Nat st P[x];
-   thus ex n be Nat st P[n] & for k st P[k] holds n <= k from Min(A1);
+   thus ex n be Nat st P[n] & for k st P[k] holds n <= k from NAT_1:sch 5(A1);
   end;
  uniqueness
   proof
@@ -1149,6 +1177,7 @@ definition let A be non empty Subset of NAT;
    hence thesis by AXIOMS:21;
   end;
 end;
+
 
 theorem Th19:
  for A,B being non empty Subset of NAT st A c= B
@@ -1188,7 +1217,7 @@ theorem
          defpred B[Nat] means 1 <= $1 & $1 <= len the_arguments_of p;
          deffunc F(set) = (the_arguments_of p).$1;
        A3: for k st A[k] holds B[k];
-         { F(k) : A[k] } c= { F(n) : B[n]} from Fraenkel5'(A3);
+         { F(k) : A[k] } c= { F(n) : B[n]} from FRAENKEL:sch 1(A3);
       then still_not-bound_in p c= rng (the_arguments_of p) &
       rng (the_arguments_of p) is finite by A2,Th9;
       hence thesis by FINSET_1:13;
@@ -1218,7 +1247,7 @@ theorem
       by XBOOLE_1:36;
     hence still_not-bound_in p is finite by A7,FINSET_1:13;
    end;
-   thus for p being Element of QC-WFF holds P[p] from QC_Ind2(A1);
+   thus for p being Element of QC-WFF holds P[p] from QC_LANG1:sch 2(A1);
   end;
 
 scheme MaxFinDomElem {D()->non empty set, X()->set, P[set,set] }:
@@ -1236,7 +1265,7 @@ proof
   A6: for x,y,z being set st R[x,y] & R[y,z] holds R[x,z] by A1,A3;
   consider x being set such that
    A7: x in X and
-   A8: for y being set st y in X holds R[x,y] from MaxFinSetElem(A4,A5,A6);
+   A8: for y being set st y in X holds R[x,y] from CARD_3:sch 3(A4,A5,A6);
   reconsider x as Element of D() by A1,A7;
   take x; thus x in X() by A7;
    let y be Element of D(); assume y in X();
@@ -1249,12 +1278,13 @@ definition let p;
  coherence
   proof
     defpred P[Nat] means for i st $1<=i holds not x.i in still_not-bound_in p;
-    {k: P[k]} c= NAT from Fr_Set0;
+    {k: P[k]} c= NAT from FRAENKEL:sch 10;
    hence thesis;
   end;
 end;
 
-definition let p;
+
+registration let p;
  cluster NBI p -> non empty;
  coherence
   proof
@@ -1266,6 +1296,7 @@ definition let p;
        then 0<=i implies not x.i in still_not-bound_in p;
        then 0 in {k: for i st k<=i holds not x.i in still_not-bound_in p};
       hence ex n st n in A;
+      end;
       suppose
 A1:     still_not-bound_in p <> {};
       consider x being Element of still_not-bound_in p;
@@ -1288,11 +1319,11 @@ A1:     still_not-bound_in p <> {};
             thus thesis by A6;
            end;
        defpred P[Nat] means x.$1 in still_not-bound_in p;
-      A7: {l: P[l]} c= NAT from Fr_Set0;
+      A7: {l: P[l]} c= NAT from FRAENKEL:sch 10;
       consider f being Function such that
        A8: dom f = still_not-bound_in p & rng f c= NAT and
        A9: for e st e in still_not-bound_in p holds R[e,f.e]
-         from NonUniqBoundFuncEx(A5);
+         from COMPTS_1:sch 1(A5);
       reconsider f as Function of still_not-bound_in p, NAT
        by A8,FUNCT_2:def 1,RELSET_1:11;
         now let y be set;
@@ -1335,17 +1366,20 @@ A1:     still_not-bound_in p <> {};
       then m+1 in A;
       hence ex n st n in A;
      end;
+     end;
      hence thesis;
     end;
    hence thesis by Def9;
   end;
 end;
 
+
 definition let p;
  func index p -> Nat equals  :Def10:
     min (NBI p);
  coherence;
 end;
+
 
 theorem Th21: index p = 0 iff p is closed
  proof
@@ -1455,11 +1489,13 @@ definition let C be non empty set, D be non empty Subset of C;
    end;
 end;
 
+
 definition let p;
  func SepVar(p) -> Element of CQC-WFF equals
 :Def11: SepFunc(p, index p, id(bound_QC-variables));
  coherence;
 end;
+
 
 theorem SepVar VERUM = VERUM
 proof
@@ -1491,7 +1527,7 @@ A6: for r,s,x,k for l being CQC-variable_list of k
     (p[r] implies p['not' r]) &
     (p[r] & p[s] implies p[r '&' s]) &
     (p[r] implies p[All(x, r)]) by A1,A2,A3,A4,A5;
- thus for r holds p[r] from CQC_Ind(A6);
+ thus for r holds p[r] from CQC_LANG:sch 1(A6);
 end;
 
 theorem Th27: SepVar(P!ll) = P!ll
@@ -1552,6 +1588,7 @@ definition let p; let X be Subset of
    holds [q,k+1,K \/ {x}, f+*({x} --> x.k)] in X;
 end;
 
+
 definition let D be non empty set; let x be Element of D;
  redefine func {x} -> Element of Fin D;
  coherence
@@ -1559,6 +1596,7 @@ definition let D be non empty set; let x be Element of D;
    thus {x} is Element of Fin D;
   end;
 end;
+
 
 definition let p;
  func SepQuadruples p -> Subset of
@@ -1696,6 +1734,7 @@ A21:   for D being Subset of
      thus D1 c= D2 & D2 c= D1 by A18,A19,A20,A21;
    end;
 end;
+
 
 theorem Th31:
  [p,index p,{}.bound_QC-variables,id(bound_QC-variables)] in SepQuadruples(p)
@@ -2345,6 +2384,7 @@ definition let p,q;
  reflexivity;
  symmetry;
 end;
+
 
 canceled 2;
 

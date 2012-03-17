@@ -28,6 +28,7 @@ definition let Y be TopStruct;
       st G is open & G0 = G /\ the carrier of it;
 end;
 
+
 canceled;
 
 theorem :: TSP_1:2
@@ -46,6 +47,7 @@ definition let Y be TopStruct;
    st F is closed & F0 = F /\ the carrier of it;
 end;
 
+
 canceled;
 
 theorem :: TSP_1:4
@@ -58,15 +60,18 @@ theorem :: TSP_1:4
 begin
 :: 2. Kolmogorov Spaces.
 
+notation let T be TopStruct;
+ synonym T is T_0 for T is discerning ;
+end;
 definition let T be TopStruct;
- redefine attr T is discerning means
+ redefine attr T is T_0 means
 :: TSP_1:def 3
  T is empty or
    for x, y being Point of T st x <> y holds
    (ex V being Subset of T st V is open & x in V & not y in V) or
    (ex W being Subset of T st W is open & not x in W & y in W);
- synonym T is T_0;
-end;
+ end;
+
 
 definition let Y be TopStruct;
  redefine attr Y is T_0 means
@@ -78,22 +83,107 @@ definition let Y be TopStruct;
    (ex F being Subset of Y st F is closed & not x in F & y in F);
 end;
 
-definition
+
+registration
  cluster trivial -> T_0 (non empty TopStruct);
+ coherence
+  proof let Y be non empty TopStruct;
+   assume Y is trivial;
+    then consider a being Point of Y such that
+           A1: the carrier of Y = {a} by TEX_1:def 1;
+       now let x, y be Point of Y;
+        A2: x = a & y = a by A1,TARSKI:def 1;
+      assume x <> y;
+      hence (ex V being Subset of Y
+        st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+         st W is open & not x in W & y in W) by A2;
+     end;
+   hence thesis by Def3;
+  end;
  cluster non T_0 -> non trivial (non empty TopStruct);
+ coherence
+  proof let Y be non empty TopStruct;
+   assume A3: Y is non T_0;
+   assume Y is trivial;
+    then consider a being Point of Y such that
+           A4: the carrier of Y = {a} by TEX_1:def 1;
+       now let x, y be Point of Y;
+        A5: x = a & y = a by A4,TARSKI:def 1;
+      assume x <> y;
+      hence (ex V being Subset of Y
+        st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+         st W is open & not x in W & y in W) by A5;
+     end;
+    hence contradiction by A3,Def3;
+  end;
 end;
 
-definition
+registration
  cluster strict T_0 non empty TopSpace;
+ existence
+  proof
+    consider X being trivial strict (non empty TopSpace);
+   take X;
+   thus thesis;
+  end;
  cluster strict non T_0 non empty TopSpace;
+ existence
+  proof
+    consider X being anti-discrete non trivial strict (non empty TopSpace);
+   take X;
+   thus thesis by Lm1;
+  end;
 end;
 
-definition
+
+registration
  cluster discrete -> T_0 (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A1: Y is discrete;
+       now let x, y be Point of Y;
+      assume A2: x <> y;
+         now
+        take V = {x};
+        thus V is open by A1,TDLAT_3:17;
+        thus x in V by TARSKI:def 1;
+        thus not y in V by A2,TARSKI:def 1;
+       end;
+      hence (ex V being Subset of Y
+         st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+          st W is open & not x in W & y in W);
+     end;
+   hence thesis by Def3;
+  end;
  cluster non T_0 -> non discrete (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A3: Y is non T_0;
+   assume A4: Y is discrete;
+       now let x, y be Point of Y;
+      assume A5: x <> y;
+         now
+        take V = {x};
+        thus V is open by A4,TDLAT_3:17;
+        thus x in V by TARSKI:def 1;
+        thus not y in V by A5,TARSKI:def 1;
+       end;
+      hence (ex V being Subset of Y
+         st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+         st W is open & not x in W & y in W);
+     end;
+    hence contradiction by A3,Def3;
+  end;
  cluster anti-discrete non trivial -> non T_0 (non empty TopSpace);
+ coherence by Lm1;
  cluster anti-discrete T_0 -> trivial (non empty TopSpace);
+ coherence by Lm1;
  cluster T_0 non trivial -> non anti-discrete (non empty TopSpace);
+ coherence by Lm1;
 end;
 
 definition let X be non empty TopSpace;
@@ -102,12 +192,14 @@ definition let X be non empty TopSpace;
  for x, y being Point of X st x <> y holds Cl {x} <> Cl {y};
 end;
 
+
 definition let X be non empty TopSpace;
  redefine attr X is T_0 means
 :: TSP_1:def 6
  for x, y being Point of X st x <> y holds
             not x in Cl {y} or not y in Cl {x};
 end;
+
 
 definition let X be non empty TopSpace;
  redefine attr X is T_0 means
@@ -116,21 +208,129 @@ definition let X be non empty TopSpace;
                                    not Cl {y} c= Cl {x};
 end;
 
-definition
+
+registration
  cluster almost_discrete T_0 -> discrete (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A1: Y is almost_discrete T_0;
+      for A being Subset of Y, x being Point of Y st A = {x}
+      holds A is closed
+     proof let A be Subset of Y, x be Point of Y;
+      assume A2: A = {x};
+            x in Cl {x} by Lm2;
+         then A3: {x} c= Cl {x} by ZFMISC_1:37;
+            now
+           assume not Cl {x} c= {x};
+            then consider a being set such that
+                  A4: a in Cl {x} and A5: not a in {x} by TARSKI:def 3;
+              reconsider a as Point of Y by A4;
+                  a <> x by A5,TARSKI:def 1;
+               then not x in Cl {a} by A1,A4,Def6;
+                then x in (Cl {a})` by SUBSET_1:50;
+                then {x} c= (Cl {a})` by ZFMISC_1:37;
+               then A6: {x} misses Cl {a} by SUBSET_1:43;
+                 Cl {a} is closed by PCOMPS_1:4;
+               then Cl {a} is open by A1,TDLAT_3:24;
+               then A7: (Cl {x}) misses Cl {a} by A6,TSEP_1:40;
+                   a in {a} & {a} c= Cl {a} by PRE_TOPC:48,TARSKI:def 1;
+                hence contradiction by A4,A7,XBOOLE_0:3;
+          end;
+       then Cl {x} = {x} by A3,XBOOLE_0:def 10;
+      hence A is closed by A2,PCOMPS_1:4;
+     end;
+    hence thesis by A1,TDLAT_3:28;
+  end;
  cluster almost_discrete non discrete -> non T_0 (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A8: Y is almost_discrete non discrete;
+   assume A9: Y is T_0;
+      for A being Subset of Y, x being Point of Y st A = {x}
+      holds A is closed
+     proof let A be Subset of Y, x be Point of Y;
+      assume A10: A = {x};
+            x in Cl {x} by Lm2;
+         then A11: {x} c= Cl {x} by ZFMISC_1:37;
+            now
+           assume not Cl {x} c= {x};
+            then consider a being set such that
+                  A12: a in Cl {x} and A13: not a in {x} by TARSKI:def 3;
+              reconsider a as Point of Y by A12;
+                  a <> x by A13,TARSKI:def 1;
+               then not x in Cl {a} by A9,A12,Def6;
+                then x in (Cl {a})` by SUBSET_1:50;
+                then {x} c= (Cl {a})` by ZFMISC_1:37;
+               then A14: {x} misses Cl {a} by SUBSET_1:43;
+                    Cl {a} is closed by PCOMPS_1:4;
+                 then Cl {a} is open by A8,TDLAT_3:24;
+               then A15: (Cl {x}) misses Cl {a} by A14,TSEP_1:40;
+                   a in {a} & {a} c= Cl {a} by PRE_TOPC:48,TARSKI:def 1;
+                hence contradiction by A12,A15,XBOOLE_0:3;
+          end;
+       then Cl {x} = {x} by A11,XBOOLE_0:def 10;
+      hence A is closed by A10,PCOMPS_1:4;
+     end;
+    hence contradiction by A8,TDLAT_3:28;
+  end;
  cluster non discrete T_0 -> non almost_discrete (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A16: Y is non discrete T_0;
+   assume A17: Y is almost_discrete;
+      for A being Subset of Y, x being Point of Y st A = {x}
+      holds A is closed
+     proof let A be Subset of Y, x be Point of Y;
+      assume A18: A = {x};
+            x in Cl {x} by Lm2;
+         then A19: {x} c= Cl {x} by ZFMISC_1:37;
+            now
+           assume not Cl {x} c= {x};
+            then consider a being set such that
+                  A20: a in Cl {x} and A21: not a in {x} by TARSKI:def 3;
+              reconsider a as Point of Y by A20;
+                  a <> x by A21,TARSKI:def 1;
+               then not x in Cl {a} by A16,A20,Def6;
+                then x in (Cl {a})` by SUBSET_1:50;
+                then {x} c= (Cl {a})` by ZFMISC_1:37;
+               then A22:{x} misses Cl {a} by SUBSET_1:43;
+                    Cl {a} is closed by PCOMPS_1:4;
+                 then Cl {a} is open by A17,TDLAT_3:24;
+               then A23: (Cl {x}) misses Cl {a} by A22,TSEP_1:40;
+                   a in {a} & {a} c= Cl {a} by PRE_TOPC:48,TARSKI:def 1;
+                hence contradiction by A20,A23,XBOOLE_0:3;
+          end;
+       then Cl {x} = {x} by A19,XBOOLE_0:def 10;
+      hence A is closed by A18,PCOMPS_1:4;
+     end;
+    hence contradiction by A16,A17,TDLAT_3:28;
+  end;
 end;
+
 
 definition
  mode Kolmogorov_space is T_0 non empty TopSpace;
  mode non-Kolmogorov_space is non T_0 non empty TopSpace;
 end;
 
-definition
+
+registration
  cluster non trivial strict Kolmogorov_space;
+ existence
+  proof
+    consider X being non trivial discrete strict (non empty TopSpace);
+   take X;
+   thus thesis;
+  end;
  cluster non trivial strict non-Kolmogorov_space;
+ existence
+  proof
+    consider X being non trivial anti-discrete strict (non empty TopSpace);
+   take X;
+   thus thesis;
+  end;
 end;
+
 
 
 begin
@@ -145,6 +345,7 @@ definition let Y be TopStruct;
        (ex W being Subset of Y st W is open & not x in W & y in W);
 end;
 
+
 definition let Y be non empty TopStruct;
   let A be Subset of Y;
  redefine attr A is T_0 means
@@ -154,6 +355,7 @@ definition let Y be non empty TopStruct;
    or
    (ex F being Subset of Y st F is closed & not x in F & y in F);
 end;
+
 
 theorem :: TSP_1:5
    for Y0, Y1 being TopStruct, D0 being Subset of Y0,
@@ -199,6 +401,7 @@ definition let X be non empty TopSpace;
                                             Cl {x} <> Cl {y};
 end;
 
+
 definition let X be non empty TopSpace;
   let A be Subset of X;
  redefine attr A is T_0 means
@@ -207,6 +410,7 @@ definition let X be non empty TopSpace;
                                   not x in Cl {y} or not y in Cl {x};
 end;
 
+
 definition let X be non empty TopSpace;
   let A be Subset of X;
  redefine attr A is T_0 means
@@ -214,6 +418,7 @@ definition let X be non empty TopSpace;
    for x, y being Point of X st x in A & y in A & x <> y holds
                       x in Cl {y} implies not Cl {y} c= Cl {x};
 end;
+
 
 reserve X for non empty TopSpace;
 
@@ -227,8 +432,14 @@ theorem :: TSP_1:14
 begin
 :: 4. Kolmogorov Subspaces.
 
-definition let Y be non empty TopStruct;
+registration let Y be non empty TopStruct;
  cluster strict T_0 non empty SubSpace of Y;
+ existence
+  proof
+    consider X0 being trivial strict (non empty SubSpace of Y);
+   take X0;
+   thus thesis;
+  end;
 end;
 
 definition let Y be TopStruct;
@@ -243,6 +454,7 @@ definition let Y be TopStruct;
           st W is open & not x in W & y in W);
 end;
 
+
 definition let Y be TopStruct;
   let Y0 be SubSpace of Y;
  redefine attr Y0 is T_0 means
@@ -255,6 +467,7 @@ definition let Y be TopStruct;
        (ex F being Subset of Y
        st F is closed & not x in F & y in F);
 end;
+
 
 reserve Y for non empty TopStruct;
 
@@ -285,31 +498,89 @@ definition let X be non empty TopSpace;
  mode Kolmogorov_subspace of X is T_0 non empty SubSpace of X;
 end;
 
+
 theorem :: TSP_1:20
    for X being non empty TopSpace,
     A0 being non empty Subset of X st A0 is T_0
   ex X0 being strict Kolmogorov_subspace of X st A0 = the carrier of X0;
 
-definition let X be non trivial (non empty TopSpace);
+registration let X be non trivial (non empty TopSpace);
  cluster proper strict Kolmogorov_subspace of X;
+ existence
+  proof
+    consider X0 being trivial strict (non empty SubSpace of X);
+   take X0;
+   thus thesis;
+  end;
 end;
 
-definition let X be Kolmogorov_space;
+
+registration let X be Kolmogorov_space;
  cluster -> T_0 (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+  then reconsider A0 = the carrier of X0 as non empty Subset of X;
+       X is SubSpace of X by TSEP_1:2;
+   then the carrier of X is non empty Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X as non empty Subset of X;
+       A is T_0 & A0 c= A by Th6;
+    then A0 is T_0 by Th7;
+    hence thesis by Th15;
+  end;
 end;
 
-definition let X be non-Kolmogorov_space;
+
+registration let X be non-Kolmogorov_space;
  cluster non proper -> non T_0 (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+      the carrier of X0 is non empty Subset of X by TSEP_1:1;
+    then reconsider A0 = the carrier of X0 as non empty Subset of X
+   ;
+        X is SubSpace of X by TSEP_1:2;
+    then reconsider A = the carrier of X
+       as non empty Subset of X by TSEP_1:1;
+   assume X0 is non proper;
+     then A0 is not proper by TEX_2:13;
+     then A0 = A by TEX_2:5;
+     then A0 is not T_0 by Th6;
+    hence thesis by Th15;
+  end;
  cluster T_0 -> proper (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+      the carrier of X0 is non empty Subset of X by TSEP_1:1;
+    then reconsider A0 = the carrier of X0 as non empty Subset of X
+     ;
+        X is SubSpace of X by TSEP_1:2;
+    then reconsider A = the carrier of X
+       as non empty Subset of X by TSEP_1:1;
+   assume A1: X0 is T_0;
+   assume X0 is non proper;
+     then A0 is not proper by TEX_2:13;
+     then A0 = A by TEX_2:5;
+     then A0 is not T_0 by Th6;
+    hence contradiction by A1,Th15;
+  end;
 end;
 
-definition let X be non-Kolmogorov_space;
+
+registration let X be non-Kolmogorov_space;
  cluster strict non T_0 SubSpace of X;
+ existence
+  proof
+    consider X0 being non proper strict (non empty SubSpace of X);
+   take X0;
+   thus thesis;
+  end;
 end;
+
 
 definition let X be non-Kolmogorov_space;
  mode non-Kolmogorov_subspace of X is non T_0 SubSpace of X;
 end;
+
 
 theorem :: TSP_1:21
    for X being non empty non-Kolmogorov_space,

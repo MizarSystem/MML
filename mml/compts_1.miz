@@ -31,7 +31,7 @@ scheme NonUniqBoundFuncEx { X() -> set, Y() -> set, P[set,set] }:
    for x st x in X() holds P[x,f.x]
   provided
 A1: for x st x in X() ex y st y in Y() & P[x,y]
-  proof defpred Q[set,set] means
+proof   defpred Q[set,set] means
     ex X st $2 = X & for y holds y in X iff y in Y() & P[$1,y];
 A2:  for e,u1,u2 being set st e in X() & Q[e,u1] & Q[e,u2] holds u1 = u2
      proof let e,u1,u2 be set such that e in X();
@@ -44,23 +44,23 @@ A6:    for y holds y in Y iff y in Y() & P[e,y];
        defpred A[set] means $1 in Y() & P[e,$1];
 A7:    for x be set holds x in X iff A[x] by A4;
 A8:    for x be set holds x in Y iff A[x] by A6;
-        X = Y from Extensionality(A7,A8);
+        X = Y from XBOOLE_0:sch 2(A7,A8);
       hence thesis by A3,A5;
      end;
 A9:  for x st x in X() ex y st Q[x,y]
      proof let x such that x in X();
        defpred R[set] means P[x,$1];
       consider X such that
-A10:    y in X iff y in Y() & R[y] from Separation;
+A10:    y in X iff y in Y() & R[y] from XBOOLE_0:sch 1;
       take X,X; thus thesis by A10;
      end;
    consider G being Function such that
-A11:  dom G = X() & for x st x in X() holds Q[x,G.x] from FuncEx(A2,A9);
+A11:  dom G = X() & for x st x in X() holds Q[x,G.x] from FUNCT_1:sch 2(A2,A9);
 A12:  now assume
 A13:   X() = {};
      deffunc G(set) = 0;
      consider F being Function such that
-A14:   dom F = {} & for x st x in {} holds F.x = G(x) from Lambda;
+A14:   dom F = {} & for x st x in {} holds F.x = G(x) from FUNCT_1:sch 3;
      thus thesis
        proof take F; thus dom F = X() by A13,A14; rng F = {} by A14,RELAT_1:65;
         hence thesis by A13,XBOOLE_1:2;
@@ -111,7 +111,7 @@ scheme BiFuncEx{A()->set,B()->set,C()->set,P[set,set,set]}:
   for x st x in A() holds P[x,f.x,g.x]
 provided
 A1: x in A() implies ex y,z st y in B() & z in C() & P[x,y,z]
-   proof
+proof
     defpred H[set,set] means
       for y,z st $2`1 = y & $2`2 = z holds P[$1,y,z];
 A2:  x in A() implies ex p being set st p in [:B(),C():] & H[x,p]
@@ -132,10 +132,10 @@ A2:  x in A() implies ex p being set st p in [:B(),C():] & H[x,p]
      A4: for x st x in A() holds H[x,h.x] from NonUniqBoundFuncEx(A2);
      deffunc f(set) = (h.$1)`1;
      consider f being Function such that A5: dom f = A() and
-     A6: for x st x in A() holds f.x = f(x) from Lambda;
+     A6: for x st x in A() holds f.x = f(x) from FUNCT_1:sch 3;
      deffunc g(set) = (h.$1)`2;
      consider g being Function such that A7: dom g = A() and
-     A8: for x st x in A() holds g.x = g(x) from Lambda;
+     A8: for x st x in A() holds g.x = g(x) from FUNCT_1:sch 3;
      take f,g;
      thus dom f = A() & dom g = A() by A5,A7;
      thus for x st x in A() holds P[x,f.x,g.x]
@@ -156,10 +156,11 @@ theorem Th1:
      take Y = {};
      thus Y c= dom f & Y is finite by XBOOLE_1:2;
      thus f.:Y = Z by A3,RELAT_1:149;
+     end;
      suppose A4: Z <> {};
      deffunc F(set) = f"{$1};
     consider g being Function such that A5: dom g = Z and
-     A6: for x st x in Z holds g.x = F(x) from Lambda;
+     A6: for x st x in Z holds g.x = F(x) from FUNCT_1:sch 3;
     reconsider AA = rng g as non empty set by A4,A5,RELAT_1:65;
     A7: for X being set st X in AA holds X <> {}
         proof
@@ -223,6 +224,7 @@ A11: z <> {} by A7;
      end;
     hence f.:Y = Z by TARSKI:2;
   end;
+  end;
 
 reserve T for TopStruct;
 reserve A for SubSpace of T;
@@ -234,11 +236,13 @@ definition let T be 1-sorted, F be Subset-Family of T,
     :Def1: P c= union F;
 end;
 
+
 definition let F be set;
   attr F is centered means
    :Def2: F <> {} &
   for G being set st G <> {} & G c= F & G is finite holds meet G <> {};
 end;
+
 
 definition let T be TopStruct;
   attr T is compact means :Def3:
@@ -251,22 +255,21 @@ definition let T be TopStruct;
      for p, q being Point of T st not p = q
       ex W, V being Subset of T st W is open & V is open &
        p in W & q in V & W misses V;
-  synonym T is_T2;
-
   attr T is being_T3 means
        for p being Point of T, P being Subset of T
       st P <> {} & P is closed & not p in P
       ex W, V being Subset of T st W is open & V is open &
        p in W & P c= V & W misses V;
-  synonym T is_T3;
-
   attr T is being_T4 means
       for W, V being Subset of T st W <> {} & V <> {} &
       W is closed & V is closed & W misses V
      ex P, Q being Subset of T st P is open & Q is open &
          W c= P & V c= Q & P misses Q;
-  synonym T is_T4;
-end;
+  end;
+notation let T be TopStruct;
+  synonym T is_T2 for T is being_T2 ; synonym T is_T3 for T is being_T3 ;
+synonym T is_T4 for T is being_T4 ; end;
+
 
 definition let T be TopStruct, P be Subset of T;
   attr P is compact means :Def7:
@@ -274,6 +277,7 @@ definition let T be TopStruct, P be Subset of T;
     F is_a_cover_of P & F is open
     ex G being Subset-Family of T st G c= F & G is_a_cover_of P & G is finite;
 end;
+
 
 canceled 7;
 
@@ -735,6 +739,7 @@ theorem Th16:
       suppose PS = {};
        then PS = {} TS;
        hence PS is closed by TOPS_1:22;
+      end;
       suppose A3: PS <> {};
          now let a be set;
       thus a in PS` implies ex Q being Subset of TS
@@ -758,6 +763,7 @@ theorem Th16:
       end;
      then PS` is open by TOPS_1:57;
      hence PS is closed by TOPS_1:29;
+     end;
      end;
     hence thesis;
    end;
@@ -819,6 +825,7 @@ theorem Th18:
     suppose PS = {};
      then QS = {} TS by A2,XBOOLE_1:3;
     hence QS is compact by Th9;
+    end;
     suppose A4: PS <> {};
      A5: PS = [#] (TS|PS) by PRE_TOPC:def 10;
      then QS is Subset of TS|PS by A2,PRE_TOPC:12;
@@ -828,6 +835,7 @@ theorem Th18:
      then for QQ being Subset of TS|PS st QQ=QS holds QQ is compact
        by A6,Th17;
     hence thesis by A2,A5,Th11;
+   end;
    end;
    hence thesis;
   end;

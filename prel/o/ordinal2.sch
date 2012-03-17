@@ -6,23 +6,6 @@ ORDINAL1
 XBOOLE_0
 ORDINAL2
 #
-Ordinal_Ind
-TS_Lambda
-OS_Lambda
-TS_Uniq1
-TS_Exist1
-TS_Result
-TS_Def
-TS_Result0
-TS_ResultS
-TS_ResultL
-OS_Exist
-OS_Result
-OS_Def
-OS_Result0
-OS_ResultS
-OS_ResultL
-#
 ;
 M1 V7 ;;P1 B1 ;P1 K19 ;;M1 V7 ;;ª&P1 B1 ;ªP1 K17 B1 ;;;M1 V7 ;;ª&ªR1 B1 K19 ;;V8 B1 ;M1 V7 ;;ª&R2 B2 B1 ;ªP1 B2 ;;ªP1 B1 ;;;
 #

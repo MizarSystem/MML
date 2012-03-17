@@ -41,17 +41,137 @@ definition let A;
        (the Comp of it).(i,j,k).([g1,g2],[f1,f2]) = [g1*f1,g2*f2];
 end;
 
-definition let A;
+
+registration let A;
   cluster MSSCat A -> transitive associative with_units;
+  coherence
+  proof
+   set G = MSSCat A;
+   thus G is transitive
+   proof
+   let o1,o2,o3 be object of G;
+   reconsider o1'=o1, o2'=o2,o3'=o3 as Element of MSS_set A by Def1;
+   assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
+   then (the Arrows of G).(o1,o2) <> {} & (the Arrows of G).(o2,o3) <> {}
+     by ALTCAT_1:def 2;
+then A1: MSS_morph (o1',o2') <> {} & MSS_morph (o2',o3') <> {} by Def1;
+     consider t be Element of MSS_morph (o1',o2');
+     consider s be Element of MSS_morph (o2',o3');
+     consider f,g be Function such that
+A2:    t = [f,g] & f,g form_morphism_between o1',o2' by A1,MSALIMIT:def 10;
+    consider u,w be Function such that
+A3:    s = [u,w] & u,w form_morphism_between o2',o3' by A1,MSALIMIT:def 10;
+      u * f , w * g form_morphism_between o1',o3' by A2,A3,PUA2MSS1:30;
+    then [u * f, w * g] in MSS_morph (o1',o3') by MSALIMIT:def 10;
+    then [u * f, w * g] in (the Arrows of G).(o1,o3) by Def1;
+    hence <^o1,o3^> <> {} by ALTCAT_1:def 2;
+   end;
+   set M = MSSCat A;
+   set G = the Arrows of M, C = the Comp of M;
+   thus C is associative
+   proof
+     let i,j,k,l be Element of M;
+     reconsider i'=i,j'=j,k'=k,l'=l as Element of MSS_set A by Def1;
+     reconsider I=i,J=j,K=k,L=l as object of M;
+  I in the carrier of M & J in the carrier of M & K in the carrier of M &
+       L in the carrier of M;
+then A4:  I in MSS_set A & J in MSS_set A & K in MSS_set A & L in MSS_set A
+       by Def1;
+     let f,g,h be set; assume A5: f in G.(i,j) & g in G.(j,k) & h in G.(k,l);
+then A6:  f in MSS_morph (i',j') &
+     g in MSS_morph (j',k') & h in MSS_morph (k',l') by Def1;
+     then consider f1,f2 be Function such that
+A7:      f = [f1,f2] & f1,f2 form_morphism_between i',j' by MSALIMIT:def 10;
+     consider g1,g2 be Function such that
+A8:      g = [g1,g2] & g1,g2 form_morphism_between j',k'
+         by A6,MSALIMIT:def 10;
+     consider h1,h2 be Function such that
+A9:      h = [h1,h2] & h1,h2 form_morphism_between k',l'
+        by A6,MSALIMIT:def 10;
+A10: C.(i,j,k).(g,f) = [g1*f1,g2*f2] by A5,A7,A8,Def1;
+      g1*f1,g2*f2 form_morphism_between i',k' by A7,A8,PUA2MSS1:30;
+    then [g1*f1,g2*f2] in MSS_morph (i',k') by MSALIMIT:def 10;
+    then [g1*f1,g2*f2] in G.(i,k) by Def1;
+then A11: C.(i,k,l).(h,[g1*f1,g2*f2]) = [h1*(g1*f1),h2*(g2*f2)] by A4,A5,A9,
+Def1;
+A12: C.(j,k,l).(h,g) = [h1*g1,h2*g2] by A5,A8,A9,Def1;
+      h1*g1,h2*g2 form_morphism_between j',l' by A8,A9,PUA2MSS1:30;
+    then [h1*g1,h2*g2] in MSS_morph (j',l') by MSALIMIT:def 10;
+then A13: [h1*g1,h2*g2] in G.(j,l) by Def1;
+      h1*g1*f1 = h1*(g1*f1) & h2*g2*f2 = h2*(g2*f2) by RELAT_1:55;
+    hence thesis by A4,A5,A7,A10,A11,A12,A13,Def1;
+   end;
+   thus C is with_left_units
+   proof
+     let j be Element of M;
+     reconsider j' = j as Element of MSS_set A by Def1;
+     set e1 = id the carrier of j',e2 = id the OperSymbols of j';
+A14:   e1, e2 form_morphism_between j',j' by PUA2MSS1:29;
+     take e = [e1,e2];
+       G.(j,j) = MSS_morph (j',j') by Def1;
+     hence A15: e in G.(j,j) by A14,MSALIMIT:def 10;
+     let i be Element of M; let f be set;
+     reconsider i' = i as Element of MSS_set A by Def1;
+     assume A16: f in G.(i,j);
+     then f in MSS_morph (i',j') by Def1;
+     then consider f1,f2 be Function such that
+A17:    f = [f1,f2] & f1,f2 form_morphism_between i',j' by MSALIMIT:def 10;
+     reconsider I=i,J=j as object of M;
+A18:   C.(I,J,J).([e1,e2],[f1,f2]) = [e1*f1,e2*f2] by A15,A16,A17,Def1;
+A19:   rng f1 c= the carrier of j' & rng f2 c= the OperSymbols of j'
+       by A17,PUA2MSS1:def 13;
+then e1*f1 = f1 by RELAT_1:79;
+     hence C.(i,j,j).(e,f) = f by A17,A18,A19,RELAT_1:79;
+   end;
+   thus C is with_right_units
+   proof
+     let i be Element of M;
+     reconsider i' = i as Element of MSS_set A by Def1;
+     set e1 = id the carrier of i',e2 = id the OperSymbols of i';
+A20:   e1, e2 form_morphism_between i',i' by PUA2MSS1:29;
+     take e = [e1,e2];
+       G.(i,i) = MSS_morph (i',i') by Def1;
+     hence A21: e in G.(i,i) by A20,MSALIMIT:def 10;
+     let j be Element of M; let f be set;
+     reconsider j' = j as Element of MSS_set A by Def1;
+     assume A22: f in G.(i,j);
+     then f in MSS_morph (i',j') by Def1;
+     then consider f1,f2 be Function such that
+A23:    f = [f1,f2] & f1,f2 form_morphism_between i',j' by MSALIMIT:def 10;
+     reconsider I=i,J=j as object of M;
+A24:   C.(I,I,J).([f1,f2],[e1,e2]) = [f1*e1,f2*e2] by A21,A22,A23,Def1;
+A25:   dom f1 = the carrier of i' & dom f2 = the OperSymbols of i'
+       by A23,PUA2MSS1:def 13;
+then f1*e1 = f1 by RELAT_1:78;
+     hence C.(i,i,j).(f,e) = f by A23,A24,A25,RELAT_1:78;
+   end;
+  end;
 end;
+
 
 theorem :: MSINST_1:1
    for C be category st C = MSSCat A
   for o be object of C holds o is non empty non void ManySortedSign;
 
-definition let S;
+registration let S;
   cluster strict feasible MSAlgebra over S;
+  existence
+   proof
+    consider M be feasible MSAlgebra over S;
+    take E = the MSAlgebra of M;
+    thus E is strict;
+      now let o be OperSymbol of S;
+A1:   Result (o,M) = ((the Sorts of E) * the ResultSort of S).o by MSUALG_1:def
+10
+        .= Result (o,E) by MSUALG_1:def 10;
+        Args (o,M) = ((the Sorts of E)# * the Arity of S).o by MSUALG_1:def 9
+        .= Args (o,E) by MSUALG_1:def 9;
+      hence Args(o,E) <> {} implies Result(o,E) <> {} by A1,MSUALG_6:def 1;
+    end;
+    hence E is feasible by MSUALG_6:def 1;
+  end;
 end;
+
 
 definition let S, A;
   func MSAlg_set (S,A) means
@@ -60,9 +180,36 @@ definition let S, A;
      for C be Component of the Sorts of M holds C c= A;
 end;
 
-definition let S, A;
+
+registration let S, A;
   cluster MSAlg_set (S,A) -> non empty;
+  coherence
+  proof
+    consider a be Element of A;
+      dom ((the carrier of S) --> {a}) = the carrier of S by FUNCOP_1:19;
+    then reconsider f = (the carrier of S) --> {a} as
+       ManySortedSet of the carrier of S by PBOOLE:def 3;
+    consider Ch being ManySortedFunction of
+      f# * the Arity of S, f * the ResultSort of S;
+    set Ex = MSAlgebra(#f,Ch#);
+   for i be set st i in the carrier of S holds
+      f.i is non empty by FUNCOP_1:13;
+    then the Sorts of Ex is non-empty by PBOOLE:def 16;
+    then reconsider Ex as non-empty MSAlgebra over S
+      by MSUALG_1:def 8;
+    reconsider Ex as strict feasible MSAlgebra over S;
+      for C be Component of the Sorts of Ex holds C c= A
+    proof
+     let C be Component of the Sorts of Ex;
+     consider i be set such that A1: i in the carrier of S &
+      C = (the Sorts of Ex).i by MSUALG_1:2;
+       C = {a} by A1,FUNCOP_1:13;
+     hence thesis by ZFMISC_1:37;
+    end;
+    hence thesis by Def2;
+  end;
 end;
+
 
 begin :: Category of Many Sorted Algebras
 
@@ -108,6 +255,7 @@ definition let S, A; let i,j be set;
     the Sorts of M is_transformable_to the Sorts of N & f is_homomorphism M,N);
 end;
 
+
 definition let S, A;
   func MSAlgCat (S,A) -> strict non empty AltCatStr means
 :: MSINST_1:def 4
@@ -120,9 +268,133 @@ definition let S, A;
    (the Comp of it).(i,j,k).(g,f) = ( g ** f ) );
 end;
 
-definition let S, A;
+
+registration let S, A;
   cluster MSAlgCat (S,A) -> transitive associative with_units;
+  coherence
+  proof
+   set G = MSAlgCat (S,A);
+   thus G is transitive
+   proof
+   let o1,o2,o3 be object of G;
+   reconsider o1'=o1, o2'=o2,o3'=o3 as Element of MSAlg_set (S,A) by Def4;
+   assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
+   then (the Arrows of G).(o1,o2) <> {} & (the Arrows of G).(o2,o3) <> {}
+     by ALTCAT_1:def 2;
+then A1: MSAlg_morph (S,A,o1',o2') <> {} & MSAlg_morph (S,A,o2',o3') <> {}
+         by Def4;
+     consider t be Element of MSAlg_morph (S,A,o1',o2');
+     consider s be Element of MSAlg_morph (S,A,o2',o3');
+    consider M,N be strict feasible MSAlgebra over S,
+     f be ManySortedFunction of M,N such that
+A2:  M = o1' & N = o2' & f = t & the Sorts of M is_transformable_to
+      the Sorts of N & f is_homomorphism M,N by A1,Def3;
+    consider M1,N1 be strict feasible MSAlgebra over S,
+     g be ManySortedFunction of M1,N1 such that
+A3:  M1 = o2' & N1 = o3' & g = s & the Sorts of M1 is_transformable_to
+      the Sorts of N1 & g is_homomorphism M1,N1 by A1,Def3;
+A4:  the Sorts of M is_transformable_to the Sorts of N1 by A2,A3,AUTALG_1:11;
+     reconsider g' = g as ManySortedFunction of N,N1 by A2,A3;
+     consider GF be ManySortedFunction of M,N1 such that
+A5:   GF = g' ** f & GF is_homomorphism M,N1 by A2,A3,Th5;
+      GF in MSAlg_morph (S,A,o1',o3') by A2,A3,A4,A5,Def3;
+    then (g ** f) in (the Arrows of G).(o1,o3) by A5,Def4;
+    hence <^o1,o3^> <> {} by ALTCAT_1:def 2;
+   end;
+   set M = MSAlgCat (S,A);
+   set GM = the Arrows of M, C = the Comp of M;
+   thus C is associative
+   proof
+     let i,j,k,l be Element of M;
+     reconsider i'=i,j'=j,k'=k,l'=l as Element of MSAlg_set (S,A) by Def4;
+     let f,g,h be set; assume A6: f in GM.(i,j) & g in GM.(j,k) &
+       h in GM.(k,l);
+then A7:  f in MSAlg_morph (S,A,i',j') & g in MSAlg_morph (S,A,j',k') &
+     h in MSAlg_morph (S,A,k',l') by Def4;
+     then consider M1,N1 be strict feasible MSAlgebra over S,
+     F be ManySortedFunction of M1,N1 such that
+A8:  M1 = i' & N1 = j' & f = F & the Sorts of M1 is_transformable_to
+      the Sorts of N1 & F is_homomorphism M1,N1 by Def3;
+     consider M2,N2 be strict feasible MSAlgebra over S,
+     G be ManySortedFunction of M2,N2 such that
+A9:  M2 = j' & N2 = k' & g = G & the Sorts of M2 is_transformable_to
+      the Sorts of N2 & G is_homomorphism M2,N2 by A7,Def3;
+     consider M3,N3 be strict feasible MSAlgebra over S,
+     H be ManySortedFunction of M3,N3 such that
+A10:  M3 = k' & N3 = l' & h = H & the Sorts of M3 is_transformable_to
+      the Sorts of N3 & H is_homomorphism M3,N3 by A7,Def3;
+A11:  the Sorts of M1 is_transformable_to the Sorts of M3
+       by A8,A9,A10,AUTALG_1:11;
+A12:  the Sorts of M2 is_transformable_to the Sorts of N3
+       by A9,A10,AUTALG_1:11;
+     reconsider G' = G as ManySortedFunction of M2,M3 by A9,A10;
+A13:  C.(i,j,k).(g,f) = G ** F by A6,A8,A9,Def4;
+     consider GF be ManySortedFunction of M1,M3 such that
+A14:    GF = G' ** F & GF is_homomorphism M1,M3 by A8,A9,A10,Th5;
+       G' ** F in MSAlg_morph (S,A,i',k') by A8,A10,A11,A14,Def3;
+     then GF in GM.(i,k) by A14,Def4;
+then A15:  C.(i,k,l).(H,GF) = H ** GF by A6,A10,Def4;
+A16:  C.(j,k,l).(H,G) = H ** G' by A6,A9,A10,Def4;
+     consider HG be ManySortedFunction of M2,N3 such that
+A17:    HG = H ** G' & HG is_homomorphism M2,N3 by A9,A10,Th5;
+       HG in MSAlg_morph (S,A,j',l') by A9,A10,A12,A17,Def3;
+then A18:  H ** G' in GM.(j,l) by A17,Def4;
+    (H ** G') ** F = H ** (G' ** F) by AUTALG_1:13;
+     hence thesis by A6,A8,A9,A10,A13,A14,A15,A16,A18,Def4;
+   end;
+   thus C is with_left_units
+   proof
+     let j be Element of M;
+     reconsider j' = j as Element of MSAlg_set (S,A) by Def4;
+     consider MS be strict feasible MSAlgebra over S such that
+A19:    MS = j' & for C be Component of the Sorts of MS holds C c= A by Def2;
+     reconsider e = id (the Sorts of MS) as ManySortedFunction of MS,MS;
+A20:   e is_homomorphism MS,MS by MSUALG_3:9;
+     take e;
+       GM.(j,j) = MSAlg_morph (S,A,j',j') by Def4;
+     hence A21: e in GM.(j,j) by A19,A20,Def3;
+     let i be Element of M; let f be set;
+     reconsider i' = i as Element of MSAlg_set (S,A) by Def4;
+     assume A22: f in GM.(i,j);
+     then f in MSAlg_morph (S,A,i',j') by Def4;
+     then consider M1,N1 be strict feasible MSAlgebra over S,
+       F be ManySortedFunction of M1,N1 such that
+A23:    M1 = i' & N1 = j' & F = f &
+     the Sorts of M1 is_transformable_to the Sorts of N1 &
+     F is_homomorphism M1,N1 by Def3;
+     reconsider F as ManySortedFunction of M1,MS by A19,A23;
+     reconsider I=i,J=j as object of M;
+    C.(I,J,J).(e,f) = e ** F by A21,A22,A23,Def4;
+     hence C.(i,j,j).(e,f) = f by A23,MSUALG_3:4;
+   end;
+   thus C is with_right_units
+   proof
+     let i be Element of M;
+     reconsider i' = i as Element of MSAlg_set (S,A) by Def4;
+     consider MS be strict feasible MSAlgebra over S such that
+A24:    MS = i' & for C be Component of the Sorts of MS holds C c= A by Def2;
+     reconsider e = id (the Sorts of MS) as ManySortedFunction of MS,MS;
+A25:   e is_homomorphism MS,MS by MSUALG_3:9;
+     take e;
+       GM.(i,i) = MSAlg_morph (S,A,i',i') by Def4;
+     hence A26: e in GM.(i,i) by A24,A25,Def3;
+     let j be Element of M; let f be set;
+     reconsider j' = j as Element of MSAlg_set (S,A) by Def4;
+     assume A27: f in GM.(i,j);
+     then f in MSAlg_morph (S,A,i',j') by Def4;
+     then consider M1,N1 be strict feasible MSAlgebra over S,
+       F be ManySortedFunction of M1,N1 such that
+A28:    M1 = i' & N1 = j' & F = f &
+     the Sorts of M1 is_transformable_to the Sorts of N1 &
+     F is_homomorphism M1,N1 by Def3;
+     reconsider F as ManySortedFunction of MS,N1 by A24,A28;
+     reconsider I=i,J=j as object of M;
+    C.(I,I,J).(f,e) = F ** e by A26,A27,A28,Def4;
+     hence C.(i,i,j).(f,e) = f by A28,MSUALG_3:3;
+   end;
+  end;
 end;
+
 
 theorem :: MSINST_1:6
     for C be category st C = MSAlgCat (S,A)

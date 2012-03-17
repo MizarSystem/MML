@@ -23,11 +23,6 @@ VECTSP_1
 MATRIX_1
 PBOOLE
 #
-MSSLambda2
-MSSLambda2D
-MSSLambda3
-MSSLambda3D
-#
 M1 ;M1 ;M1 ;;
 ªM16 K11 F1 ;F2 ;;;ªM1 ;M1 ;ª&R2 B2 F1 ;;R2 B3 F2 ;;ªR1 K53 B1 B2 B3 ;F3 B2 B3 ;;;;
 #

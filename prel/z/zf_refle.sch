@@ -13,12 +13,6 @@ SETFAM_1
 CLASSES2
 ORDINAL4
 #
-ALFA
-ALFA'Universe
-OrdSeqOfUnivEx
-UOS_Exist
-Universe_Ind
-#
 M1 W1 ;;;
 ªM1 V2 ;V4 ;;ª&R1 K10 B1 ;F1 ;;M3 F1 ;;ªM1 V8 ;;ª&R1 B3 K20 B1 B2 ;;P1 B2 B3 ;M1 V8 ;;ª&P1 B2 B4 ;ªR3 B3 B4 ;;;;M3 F1 ;;ªM1 V8 ;;ªP1 B1 B2 ;;
 #

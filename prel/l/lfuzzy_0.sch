@@ -20,12 +20,6 @@ EQREL_1
 FILTER_1
 LATTICE3
 #
-SupDistributivity
-SupDistributivity'
-FraenkelF'R'
-FraenkelF6''R
-SupCommutativity
-#
 G3 V13 ;V14 ;V15 ;V54 ;V55 ;V56 ;;M1 W1 ;;M1 W1 ;;M2 U1 F1 ;;;;
 R1 K74 F1 ;ËM2 F2 ;;;K74 F1 ;ËM2 F3 ;;;F4 B1 B2 ;P2 B2 ;;P1 B1 ;;K74 F1 ;ËM2 F2 ;;M2 F3 ;;;F4 B1 B2 ;&P1 B1 ;P2 B2 ;;;;;
 #

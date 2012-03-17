@@ -62,6 +62,7 @@ definition
 redefine func H.n -> Nat;
 end;
 
+
 definition
    let S be non empty set;
    let H be Function of S,ExtREAL;
@@ -71,6 +72,7 @@ for n being Element of NAT holds
               (n in S implies it.n = H.n) &
               (not n in S implies it.n = 0.);
 end;
+
 
 theorem :: MEASURE7:8
    for X being non empty set
@@ -109,12 +111,14 @@ definition
 A c= union(rng it) & for n being Nat holds it.n is Interval;
 end;
 
+
 definition
    let A be Subset of REAL;
    let F be Interval_Covering of A;
    let n be Nat;
 redefine func F.n ->Interval;
 end;
+
 
 definition
    let F be Function of NAT,bool REAL;
@@ -123,6 +127,7 @@ definition
 for n being Nat holds it.n is Interval_Covering of F.n;
 end;
 
+
 definition
    let A be Subset of REAL;
    let F be Interval_Covering of A;
@@ -130,6 +135,7 @@ definition
 :: MEASURE7:def 4
 for n being Nat holds it.n = vol(F.n);
 end;
+
 
 theorem :: MEASURE7:13
    for A being Subset of REAL holds
@@ -143,6 +149,7 @@ definition
 redefine func H.n -> Interval_Covering of F.n;
 end;
 
+
 definition
    let F be Function of NAT, bool REAL;
    let G be Interval_Covering of F;
@@ -150,6 +157,7 @@ definition
 :: MEASURE7:def 5
   for n being Nat holds it.n = (G.n) vol;
 end;
+
 
 definition
    let A be Subset of REAL;
@@ -159,6 +167,7 @@ definition
  SUM(F vol);
 end;
 
+
 definition
    let F be Function of NAT,(bool REAL);
    let G be Interval_Covering of F;
@@ -166,6 +175,7 @@ definition
 :: MEASURE7:def 7
 for n being Nat holds it.n = vol(G.n);
 end;
+
 
 theorem :: MEASURE7:14
    for F being Function of NAT,(bool REAL) holds
@@ -180,10 +190,31 @@ for x being R_eal holds x in it iff
        ex F being Interval_Covering of A st x = vol(F);
 end;
 
-definition
+
+registration
    let A be Subset of REAL;
    cluster Svc(A) -> non empty;
+coherence
+proof
+   defpred P[set] means ex F being Interval_Covering of A st $1 = vol(F);
+   consider D being set such that
+A1:for x being set holds x in D iff x in ExtREAL & P[x] from XBOOLE_0:sch 1;
+  consider F0 being Function of NAT, bool REAL such that
+A2: rng F0 = {REAL,{}} & F0.0 = REAL &
+    for n being Nat st 0 < n holds F0.n = {} by Lm1,MEASURE1:40;
+A3:   union{REAL,{}} = REAL \/ {} by ZFMISC_1:93;
+   for n being Nat holds F0.n is Interval
+      proof
+         let n be Nat;
+           n = 0 or 0 < n by NAT_1:19;
+       hence thesis by A2,MEASURE6:35;
+      end;
+   then reconsider F0 as Interval_Covering of A by A2,A3,Def2;
+      vol F0 in D by A1;
+   hence thesis by Def8;
 end;
+end;
+
 
 definition
    let A be Element of bool REAL;
@@ -192,11 +223,13 @@ definition
  inf(Svc(A));
 end;
 
+
 definition
    func OS_Meas -> Function of bool REAL,ExtREAL means
 :: MEASURE7:def 10
 for A being Subset of REAL holds it.A = inf(Svc(A));
 end;
+
 
 definition
    let H be Function of NAT,[:NAT,NAT:];
@@ -206,6 +239,7 @@ definition
        ex s being Element of NAT st H.n = [it.n,s];
 end;
 
+
 definition
    let H be Function of NAT,[:NAT,NAT:];
  redefine func pr2(H) -> Function of NAT,NAT means
@@ -213,6 +247,7 @@ definition
 for n being Element of NAT holds
        H.n = [pr1(H).n,it.n];
 end;
+
 
 definition
    let F be Function of NAT,bool REAL;
@@ -224,6 +259,7 @@ func On(G,H) -> Interval_Covering of union rng F means
 for n being Element of NAT holds
               it.n = (G.(pr1(H).n)).(pr2(H).n);
 end;
+
 
 theorem :: MEASURE7:15
    for H being Function of NAT,[:NAT,NAT:] st
@@ -246,17 +282,20 @@ definition
    redefine func OS_Meas -> C_Measure of REAL;
 end;
 
+
 definition
    func Lmi_sigmaFIELD -> sigma_Field_Subset of REAL equals
 :: MEASURE7:def 14
   sigma_Field(OS_Meas);
 end;
 
+
 definition
    func L_mi -> sigma_Measure of Lmi_sigmaFIELD equals
 :: MEASURE7:def 15
  sigma_Meas(OS_Meas);
 end;
+
 
 theorem :: MEASURE7:18
      L_mi is_complete Lmi_sigmaFIELD;

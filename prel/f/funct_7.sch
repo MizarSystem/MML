@@ -39,12 +39,6 @@ MATRIX_1
 PBOOLE
 PRALG_1
 #
-Kappa2D
-FinMono
-CardMono
-CardMono'
-FuncSeqInd
-#
 M1 W11 ;;M1 W11 ;;M1 W11 ;;M1 ;;
 ªM6 V3 ;V16 K41 F1 ;F2 ;;F3 ;;K41 F1 ;F2 ;;F3 ;;ªM3 F1 ;;M3 F2 ;;R1 K75 K41 F1 ;F2 ;;F3 ;B1 K162 F1 ;F2 ;B2 B3 ;;F4 B2 B3 ;;M3 F1 ;;M3 F2 ;;R2 F4 B1 B2 ;F3 ;;;
 #

@@ -32,6 +32,7 @@ definition
  end;
 end;
 
+
 theorem Th1: for s being State of SCM
      holds IC s = s.0 & CurInstr s = s.(s.0)
  proof let s be State of SCM;
@@ -116,6 +117,7 @@ A3:     I.(n+1) in SCM-Instr by A2,Lm2,AMI_3:def 1;
       take y;
       thus y in SCM-Instr by A3;
       thus X[x,y] by A2;
+    end;
     suppose
 A4:    not ex n being Nat st x = il.(ps+n) & n < len I;
        reconsider y = halt SCM as Element of the Instructions of SCM;
@@ -123,9 +125,10 @@ A4:    not ex n being Nat st x = il.(ps+n) & n < len I;
      thus y in SCM-Instr by AMI_3:def 1;
      thus X[x,y] by A4;
    end;
+   end;
   consider I1 being Function such that
 A5: dom I1 = NAT & rng I1 c= SCM-Instr &
-    for x being set st x in NAT holds X[x,I1.x] from NonUniqBoundFuncEx(A1);
+    for x being set st x in NAT holds X[x,I1.x] from COMPTS_1:sch 1(A1);
   reconsider I1 as Function of NAT, the Instructions of SCM
     by A5,AMI_3:def 1,FUNCT_2:def 1,RELSET_1:11;
 A6:  0 in INT by INT_1:12;
@@ -142,12 +145,14 @@ A7: now let x be set;
       take y = D.(n+1);
       thus y in INT by A8,Lm2;
       thus X[x,y] by A8;
+    end;
     suppose not ex n being Nat st x = dl.(ds+n) & n < len D;
      hence ex y being set st y in INT &  X[x,y] by A6;
    end;
+   end;
   consider D1 being Function such that
 A9: dom D1 = NAT & rng D1 c= INT &
-    for x being set st x in NAT holds X[x,D1.x] from NonUniqBoundFuncEx(A7);
+    for x being set st x in NAT holds X[x,D1.x] from COMPTS_1:sch 1(A7);
   reconsider D1 as Function of NAT, INT by A9,FUNCT_2:def 1,RELSET_1:11;
 A10: dom the Object-Kind of SCM = NAT by AMI_3:def 1,FUNCT_2:def 1;
   consider s being State of SCM;
@@ -157,15 +162,18 @@ A10: dom the Object-Kind of SCM = NAT by AMI_3:def 1,FUNCT_2:def 1;
   consider s1 being Function such that
 A11: dom s1 = NAT &
     for x being set st x in NAT holds
-     (X[x] implies s1.x = U(x)) & (not X[x] implies s1.x = V(x)) from LambdaC;
+     (X[x] implies s1.x = U(x)) & (not X[x] implies s1.x = V(x)) from
+PARTFUN1:sch 1;
     now let x be set; assume x in NAT; then reconsider n = x as Nat;
    per cases;
    suppose x = 0;
      then s1.n = il.il & (the Object-Kind of SCM).x = SCM-Instr-Loc
        by A11,AMI_2:def 5,AMI_3:def 1;
     hence s1.x in (the Object-Kind of SCM).x by AMI_3:def 1;
+   end;
    suppose x <> 0; then s1.n = s.x by A11;
     hence s1.x in (the Object-Kind of SCM).x by A10,CARD_3:18;
+  end;
   end;
   then reconsider s1 as State of SCM by A10,A11,CARD_3:18;
   deffunc U(set) = I1.$1;
@@ -175,7 +183,7 @@ A11: dom s1 = NAT &
 A12: dom s2 = NAT &
     for x being set st x in NAT holds
      (X[x] implies s2.x = U(x)) &
-     (not X[x] implies s2.x = V(x)) from LambdaC;
+     (not X[x] implies s2.x = V(x)) from PARTFUN1:sch 1;
     now let x be set; assume x in NAT; then reconsider n = x as Nat;
    per cases;
    suppose ex n being Nat st x = il.n;
@@ -183,9 +191,11 @@ A12: dom s2 = NAT &
      then s2.x is Instruction of SCM & (the Object-Kind of SCM).x = SCM-Instr
       by AMI_2:11,AMI_3:def 1;
     hence s2.x in (the Object-Kind of SCM).x by AMI_3:def 1;
+   end;
    suppose not ex n being Nat st x = il.n;
     then s2.n = s1.x by A12;
     hence s2.x in (the Object-Kind of SCM).x by A10,CARD_3:18;
+  end;
   end;
   then reconsider s2 as State of SCM by A10,A12,CARD_3:18;
   deffunc U(set) = D1.$1;
@@ -196,7 +206,7 @@ A12: dom s2 = NAT &
 A13: dom s3 = NAT &
     for x being set st x in NAT holds
      (X[x] implies s3.x = U(x)) &
-     (not X[x] implies s3.x = V(x)) from LambdaC;
+     (not X[x] implies s3.x = V(x)) from PARTFUN1:sch 1;
     now let x be set; assume x in NAT; then reconsider n = x as Nat;
    per cases;
    suppose ex n being Nat st x = dl.n;
@@ -204,9 +214,11 @@ A13: dom s3 = NAT &
      then s3.x in INT & (the Object-Kind of SCM).x = INT by AMI_2:10,AMI_3:def
 1;
     hence s3.x in (the Object-Kind of SCM).x;
+   end;
    suppose not ex n being Nat st x = dl.n;
     then s3.n = s2.x by A13;
     hence s3.x in (the Object-Kind of SCM).x by A10,CARD_3:18;
+  end;
   end;
   then reconsider s3 as State of SCM by A10,A13,CARD_3:18;
 
@@ -232,6 +244,7 @@ A17:     ds+k = ds+k' by A16,AMI_3:52;
               .= D.(k+1) by A16,A17,XCMPLX_1:2;
  end;
 end;
+
 
 Lm3:  1 in Seg 3 & 2 in Seg 3 & 3 in Seg 3 by FINSEQ_1:3;
 Lm4:  1 in Seg 4 & 2 in Seg 4 & 3 in Seg 4 & 4 in Seg 4 by FINSEQ_1:3;
@@ -426,7 +439,7 @@ A1: s is halting;
     defpred X[Nat] means CurInstr((Computation s).$1)=halt S;
 A2: ex k being Nat st X[k] by A1,AMI_1:def 20;
    thus  ex k being Nat st X[k] &
-    for n being Nat st X[n] holds k <= n from Min ( A2 );
+    for n being Nat st X[n] holds k <= n from NAT_1:sch 5 ( A2 );
   end;
   uniqueness proof
    let it1, it2 be Nat;
@@ -435,8 +448,14 @@ A3:  not thesis;
     then it1 <= it2 & it2 <= it1;
    hence contradiction by A3,AXIOMS:21;
   end;
- synonym LifeSpan s;
-end;
+ end;
+notation
+let N be with_non-empty_elements set;
+ let S be halting IC-Ins-separated definite
+    (non empty non void AMI-Struct over N);
+ let s be State of S;
+ synonym LifeSpan s for Complexity s ; end;
+
 
 theorem Th16:
  for s being State of SCM, k being Nat
@@ -768,12 +787,14 @@ A1:  CurInstr((Computation s).n) = halt S by AMI_1:def 20;
    then (Computation s).n = (Computation s).(m+0) by A1,AMI_1:52
             .= (Computation (Computation s).m).0 by AMI_1:51;
   hence (Computation s).m is halting by A1,AMI_1:def 20;
+  end;
   suppose n >= m;
    then reconsider k = n - m as Nat by INT_1:18;
      (Computation (Computation s).m).k
         = (Computation s).(m+k) by AMI_1:51
        .= (Computation s).n by XCMPLX_1:27;
   hence (Computation s).m is halting by A1,AMI_1:def 20;
+ end;
  end;
  assume (Computation s).m is halting;
   then consider n being Nat such that

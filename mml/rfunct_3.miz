@@ -43,6 +43,7 @@ redefine func min(n,m)->Nat;
  coherence by FINSEQ_2:1;
 end;
 
+
 definition let r be real number;
 func max+ (r) -> Real equals :Def1:
  max(r,0);
@@ -51,6 +52,7 @@ func max- (r) -> Real equals :Def2:
  max(-r,0);
   correctness by XREAL_0:def 1;
 end;
+
 
 theorem Th1:
 for r be real number holds r = max+(r) - max-(r)
@@ -63,6 +65,7 @@ for r be real number holds r = max+(r) - max-(r)
       max-(r) = max(-r,0) by Def2
     .= 0 by A3,SQUARE_1:def 2;
     hence thesis by A2;
+   end;
    case A4: r<0;
     A5: max+(r) = max(r,0) by Def1
     .= 0 by A4,SQUARE_1:def 2;
@@ -71,6 +74,7 @@ for r be real number holds r = max+(r) - max-(r)
     .= -r by A6,SQUARE_1:def 2;
     thus r = 0+-(-r)
     .= max+(r) - max-(r) by A5,A7,XCMPLX_0:def 8;
+   end;
    end;
   hence thesis;
  end;
@@ -86,6 +90,7 @@ for r be real number holds abs(r) = max+(r) + max-(r)
       max-(r) = max(-r,0) by Def2
     .= 0 by A3,SQUARE_1:def 2;
     hence thesis by A1,A2,ABSVALUE:def 1;
+   end;
    case A4: r<0;
     A5: max+(r) = max(r,0) by Def1
     .= 0 by A4,SQUARE_1:def 2;
@@ -93,6 +98,7 @@ for r be real number holds abs(r) = max+(r) + max-(r)
        max-(r) = max(-r,0) by Def2
     .= -r by A6,SQUARE_1:def 2;
     hence abs(r) = max+(r) + max-(r) by A4,A5,ABSVALUE:def 1;
+   end;
    end;
   hence thesis;
  end;
@@ -117,10 +123,12 @@ for r,s be real number st 0<=r holds max+(r*s) = r*(max+ s)
     then 0<=r*s by A1,SQUARE_1:19;
     then max+(r*s) = r*s & r*(max+ s) = r*s by A2,A3,SQUARE_1:def 2;
     hence thesis;
+   end;
    case A4: s<0;
     then A5: max+ s= 0 by A2,SQUARE_1:def 2;
       r*s<=0 by A1,A4,REAL_2:123;
     hence max+(r*s) = r*(max+ s) by A2,A5,SQUARE_1:def 2;
+   end;
    end;
   hence thesis;
  end;
@@ -136,11 +144,13 @@ for r,s be real number holds max+(r+s) <= max+(r) + max+(s)
     then max+(r+s)<= max(r,0) + max(s,0) by A2,REAL_1:55;
     then max+(r+s)<= max+(r) + max(s,0) by Def1;
     hence thesis by Def1;
+   end;
    case r+s<0;
     then max+(r+s) = 0+0 by A1,SQUARE_1:def 2;
     then max+(r+s)<= max(r,0) + max(s,0) by A2,REAL_1:55;
     then max+(r+s)<= max+(r) + max(s,0) by Def1;
     hence thesis by Def1;
+   end;
    end;
   hence thesis;
  end;
@@ -252,10 +262,12 @@ for D be non empty set, F be PartFunc of D,REAL, r be Real st 0<r holds
       then F.rr = r by A5,ABSVALUE:def 1;
       then F.rr in {-r,r} by TARSKI:def 2;
       hence thesis by A2,A4,FUNCT_1:def 13;
+     end;
      case F.rr<0;
       then -F.rr = r by A5,ABSVALUE:def 1;
       then F.rr in {-r,r} by TARSKI:def 2;
       hence thesis by A2,A4,FUNCT_1:def 13;
+     end;
      end;
     hence thesis;
    end;
@@ -270,11 +282,13 @@ for D be non empty set, F be PartFunc of D,REAL, r be Real st 0<r holds
     .= abs(F).rr by A2,A7,SEQ_1:def 10;
     then abs(F).rr in {r} by TARSKI:def 1;
     hence thesis by A2,A7,FUNCT_1:def 13;
+   end;
    case F.rr = r;
     then r = abs(F.rr) by A1,ABSVALUE:def 1
     .= abs(F).rr by A2,A7,SEQ_1:def 10;
     then abs(F).rr in {r} by TARSKI:def 1;
     hence thesis by A2,A7,FUNCT_1:def 13;
+   end;
    end;
   hence thesis;
  end;
@@ -368,12 +382,15 @@ theorem
      case 0<r;
       then abs(F)"{r} = F"{-r,r} & abs(G)"{r} = G"{-r,r} by Th10;
       hence Card(abs(F)"{r}) = Card(abs(G)"{r}) by A1,RFINSEQ:4;
+     end;
      case 0=r;
       then abs(F)"{r} = F"{r} & abs(G)"{r} = G"{r} by Th11;
       hence Card(abs(F)"{r}) = Card(abs(G)"{r}) by A1,RFINSEQ:4;
+     end;
      case r<0;
       then abs(F)"{r} = {} & abs(G)"{r} = {} by Th12;
       hence Card(abs(F)"{r}) = Card(abs(G)"{r});
+     end;
      end;
     hence Card(abs(F)"{r}) = Card(abs(G)"{r});
    end;
@@ -391,7 +408,8 @@ for x being Element of it holds x is PartFunc of X,Y;
   end;
 end;
 
-definition let X,Y be set;
+
+registration let X,Y be set;
  cluster non empty PartFunc-set of X,Y;
  existence
   proof
@@ -404,9 +422,11 @@ definition let X,Y be set;
   end;
 end;
 
+
 definition let X,Y be set;
  mode PFUNC_DOMAIN of X,Y is non empty PartFunc-set of X,Y;
 end;
+
 
 definition let X,Y be set;
 redefine func PFuncs(X,Y) -> PartFunc-set of X,Y;
@@ -421,6 +441,7 @@ redefine func PFuncs(X,Y) -> PartFunc-set of X,Y;
  coherence by Def3;
 end;
 
+
 definition let D,C be non empty set,
                X be Subset of D,
                c be Element of C;
@@ -431,6 +452,7 @@ redefine func X --> c -> Element of PFuncs(D,C);
    hence thesis by PARTFUN1:119;
   end;
 end;
+
 
 definition let D be non empty set,
                F1,F2 be Element of PFuncs(D,REAL);
@@ -444,6 +466,7 @@ redefine func F1+F2 -> Element of PFuncs(D,REAL);
   coherence by PARTFUN1:119;
 end;
 
+
 definition let D be non empty set,
                F be Element of PFuncs(D,REAL);
 redefine func abs(F) -> Element of PFuncs(D,REAL);
@@ -454,12 +477,14 @@ redefine func abs(F) -> Element of PFuncs(D,REAL);
   coherence by PARTFUN1:119;
 end;
 
+
 definition let D be non empty set,
                F be Element of PFuncs(D,REAL),
                r be real number;
 redefine func r(#)F -> Element of PFuncs(D,REAL);
  coherence by PARTFUN1:119;
 end;
+
 
 definition let D be non empty set;
 func addpfunc(D) -> BinOp of PFuncs(D,REAL) means :Def4:
@@ -470,7 +495,7 @@ for F1,F2 be Element of PFuncs(D,REAL) holds it.(F1,F2) = F1 + F2;
             $1 + $2;
      ex o being BinOp of PFuncs(D,REAL) st
        for a,b being Element of PFuncs(D,REAL) holds o.(a,b) = O(a,b)
-              from BinOpLambda;
+              from BINOP_1:sch 2;
      hence thesis;
    end;
  uniqueness
@@ -484,6 +509,7 @@ for F1,F2 be Element of PFuncs(D,REAL) holds it.(F1,F2) = F1 + F2;
    hence thesis by BINOP_1:2;
   end;
 end;
+
 
 theorem Th16:
 for D be non empty set holds addpfunc(D) is commutative
@@ -549,6 +575,7 @@ func Sum(f) -> Element of PFuncs(D,REAL) equals :Def5:
  (addpfunc(D)) $$ f;
  correctness;
 end;
+
 
 theorem Th21:
 for D be non empty set holds Sum(<*> PFuncs(D,REAL) ) = [#](D)-->(0 qua Real)
@@ -689,7 +716,7 @@ theorem
     .= Sum gm + Sum gg by A12,A14,Th24
     .= Sum g by A8,Th24;
    end;
-  A17: for n holds P[n] from Ind(A1,A2);
+  A17: for n holds P[n] from NAT_1:sch 1(A1,A2);
   let f,g be FinSequence of PFuncs(D,REAL); assume
   A18: f,g are_fiberwise_equipotent;
     len f = len f;
@@ -705,7 +732,7 @@ len it = len f & for n st n in dom it holds it.n = chi(f.n,D);
   deffunc F(Nat)= chi(f.$1,D);
    consider p be FinSequence such that
    A1: len p = len f and
-   A2: for n st n in Seg len f holds p.n = F(n) from SeqLambda;
+   A2: for n st n in Seg len f holds p.n = F(n) from FINSEQ_1:sch 2;
      rng p c= PFuncs(D,REAL)
     proof let x be set; assume x in rng p;
      then consider n such that
@@ -735,6 +762,7 @@ len it = len f & for n st n in dom it holds it.n = chi(f.n,D);
   end;
 end;
 
+
 definition let D be non empty set,
                f be FinSequence of PFuncs(D,REAL),
                R be FinSequence of REAL;
@@ -760,7 +788,8 @@ for n st n in dom it
      thus P[n,a];
     end;
    consider p be FinSequence of PFuncs(D,REAL) such that
-   A4: dom p = Seg m & for n st n in Seg m holds P[n,p.n] from SeqDEx(A2);
+   A4: dom p = Seg m & for n st n in Seg m holds P[n,p.n] from MATRIX_2:sch 1
+(A2);
    take p;
    thus len p = m by A4,FINSEQ_1:def 3;
    let n; assume n in dom p;
@@ -790,6 +819,7 @@ for n st n in dom it
   end;
 end;
 
+
 definition let D be non empty set,
                f be FinSequence of PFuncs(D,REAL),
                d be Element of D;
@@ -810,7 +840,7 @@ len it = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
     end;
    consider p being FinSequence of REAL such that
    A2: dom p = Seg len f and
-   A3: for n st n in Seg len f holds P[n,p.n] from SeqDEx(A1);
+   A3: for n st n in Seg len f holds P[n,p.n] from MATRIX_2:sch 1(A1);
    take p;
    thus len p = len f by A2,FINSEQ_1:def 3;
    let n be Nat, G be Element of PFuncs(D,REAL); assume
@@ -835,6 +865,7 @@ len it = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
   end;
 end;
 
+
 definition let D,C be non empty set,
                f be FinSequence of PFuncs(D,C),
                d be Element of D;
@@ -842,6 +873,7 @@ pred d is_common_for_dom f means :Def9:
 for G be Element of PFuncs(D,C), n be Nat
   st n in dom f & f.n = G holds d in dom G;
 end;
+
 
 theorem Th29:
 for D,C be non empty set, f be FinSequence of PFuncs(D,C), d be Element of D,
@@ -854,6 +886,7 @@ for D,C be non empty set, f be FinSequence of PFuncs(D,C), d be Element of D,
      now per cases;
    case n>=len f; then f|n = f by Lm1;
     hence thesis by A1,A2,Def9;
+   end;
    case
 A3: n<len f;
     then A4: dom f = Seg len f & dom(f|n) = Seg len(f|n) & len(f|n) = n
@@ -863,6 +896,7 @@ A3: n<len f;
     then n in dom f by A3,FINSEQ_3:27;
     then G = f.m & m in dom f by A2,A4,RFINSEQ:19;
     hence thesis by A1,Def9;
+   end;
    end;
   hence thesis;
  end;
@@ -879,6 +913,7 @@ theorem
      now per cases;
    case len f<n; then fn = <*>PFuncs(D1,D2) by RFINSEQ:def 2;
     hence thesis by A2,FINSEQ_1:26;
+   end;
    case n<=len f;
     then A3: dom f = Seg len f & dom fn = Seg len fn & len fn = len f - n &
         G= f.(m+n) by A2,FINSEQ_1:def 3,RFINSEQ:def 2;
@@ -886,6 +921,7 @@ theorem
     then 1<=m+n & m+n<=len f by A3,AXIOMS:22,REAL_1:84;
     then m+n in dom f by FINSEQ_3:27;
     hence thesis by A1,A3,Def9;
+   end;
    end;
   hence thesis;
  end;
@@ -916,6 +952,7 @@ for D be non empty set, d be Element of D, f be FinSequence of PFuncs(D,REAL)
 in dom F
         by A4,A5,A6,A8,FINSEQ_1:4,TARSKI:def 1;
       hence d is_common_for_dom f by Def9;
+     end;
      case A9: n <> 0;
       then 0<n by NAT_1:19;
       then A10: 0+1<=n by NAT_1:38;
@@ -947,6 +984,7 @@ in dom F
            now per cases;
          case m=len f;
           hence d in dom F by A4,A16,A18,XBOOLE_0:def 3;
+         end;
          case m<>len f; then m<len f by A19,REAL_1:def 5;
           then m<=n by A4,NAT_1:38;
           then A20: m in Seg n & dom fn = Seg len fn
@@ -955,13 +993,15 @@ in dom F
           then F = fn.m by A11,A18,RFINSEQ:19;
           hence d in dom F by A11,A17,A20,Def9;
          end;
+         end;
         hence d in dom F;
        end;
       hence d is_common_for_dom f by Def9;
      end;
+     end;
     hence thesis;
    end;
-  A21: for n holds P[n] from Ind(A1,A2);
+  A21: for n holds P[n] from NAT_1:sch 1(A1,A2);
   let f be FinSequence of PFuncs(D,REAL); assume len f <> 0;
   hence thesis by A21;
  end;
@@ -976,6 +1016,7 @@ for D be non empty set, f be FinSequence of PFuncs(D,REAL), d be Element of D,
    case A2: len f<=n;
     then f|n = f by Lm1;
     hence thesis by A1,A2,Lm1;
+   end;
    case
 A3:    n<len f;
     then A4: len(f|n) = n & len((f#d1)|n) = n by A1,TOPREAL1:3;
@@ -985,6 +1026,7 @@ A3:    n<len f;
      case n=0;
       then (f#d1)|n = <*>REAL & (f|n)#d1 = <*>REAL by A1,A4,FINSEQ_1:32;
       hence (f#d1)|n = (f|n)#d1;
+     end;
      case n<>0;
       then 0<n by NAT_1:19;
       then 0+1<=n by NAT_1:38;
@@ -1001,7 +1043,9 @@ A3:    n<len f;
        end;
       hence thesis by A1,A4,FINSEQ_2:10;
      end;
+     end;
     hence thesis;
+   end;
    end;
   hence thesis;
  end;
@@ -1096,6 +1140,7 @@ theorem
       then A18: f#d = <*G.d*> by A15,FINSEQ_2:10;
       thus (Sum f).d = G.d by A14,Th22
       .=Sum (f#d) by A18,RVSUM_1:103;
+     end;
      case A19: n<>0;
       then A20: d is_common_for_dom fn by A7,Th29;
       then (Sum(fn)).d = Sum(fn#d) & d in dom(Sum(fn)) by A6,A8,A19,Th31;
@@ -1108,9 +1153,10 @@ theorem
       .= Sum(((f#d)|n)^<*G.d*>) by RVSUM_1:104
       .= Sum(f#d) by A7,A9,A22,RFINSEQ:20;
      end;
+     end;
     hence thesis;
    end;
-  A23: for n holds P[n] from Ind(A1,A5);
+  A23: for n holds P[n] from NAT_1:sch 1(A1,A5);
   let f be FinSequence of PFuncs(D,REAL); assume
   A24: d is_common_for_dom f;
     len f = len f;
@@ -1128,7 +1174,7 @@ dom it = dom F & for d be Element of D st d in dom it holds it.d = max+(F.d);
     consider f be PartFunc of D,REAL such that
     A1: for d be Element of D holds d in dom f iff P[d] and
     A2: for d be Element of D st d in dom f holds
-    f.d = Q(d) from LambdaPFD';
+    f.d = Q(d) from SEQ_1:sch 3;
     take f;
     thus dom f = dom F
      proof
@@ -1148,7 +1194,7 @@ dom it = dom F & for d be Element of D st d in dom it holds it.d = max+(F.d);
      for f,g being PartFunc of D,REAL st
        (dom f=dom F & for c be Element of D st c in dom f holds f.c = F(c)) &
        (dom g=dom F & for c be Element of D st c in dom g holds g.c = F(c))
-       holds f = g from UnPartFuncD';
+       holds f = g from SEQ_1:sch 4;
      hence thesis;
    end;
 func max-(F) -> PartFunc of D,REAL means :Def11:
@@ -1159,7 +1205,7 @@ dom it = dom F & for d be Element of D st d in dom it holds it.d = max-(F.d);
     deffunc F(set)=max-(F.$1);
     consider f be PartFunc of D,REAL such that
     A3: for d be Element of D holds d in dom f iff P[d] and
-A4: for d be Element of D st d in dom f holds f.d =F(d) from LambdaPFD';
+A4: for d be Element of D st d in dom f holds f.d =F(d) from SEQ_1:sch 3;
     take f;
     thus dom f = dom F
      proof
@@ -1179,10 +1225,11 @@ A4: for d be Element of D st d in dom f holds f.d =F(d) from LambdaPFD';
      for f,g being PartFunc of D,REAL st
        (dom f=dom F & for c be Element of D st c in dom f holds f.c = F(c)) &
        (dom g=dom F & for c be Element of D st c in dom g holds g.c = F(c))
-       holds f = g from UnPartFuncD';
+       holds f = g from SEQ_1:sch 4;
      hence thesis;
     end;
 end;
+
 
 theorem
   for D be non empty set, F be PartFunc of D,REAL holds
@@ -1377,9 +1424,11 @@ theorem
      case 0<r;
       then F"{r} = (max+ F)"{r} & G"{r} = (max+ G)"{r} by Th38;
       hence Card((max+ F)"{r}) = Card((max+ G)"{r}) by A1,A2,RFINSEQ:5;
+     end;
      case A4: r=0;
         F" li = (max+ F)"{0} & G" li = (max+ G)"{0} by Th39;
       hence Card((max+ F)"{r}) = Card((max+ G)"{r}) by A1,A4,RFINSEQ:4;
+     end;
      case A5: r<0;
          now assume r in rng(max+ F);
         then consider d be Element of D such that
@@ -1393,6 +1442,7 @@ theorem
         thus contradiction by A3,A5,A8,Th40;
        end;
       hence Card(( max+F)"{r}) = Card(( max+ G)"{r}) by A7,Lm2;
+     end;
      end;
     hence Card(( max+F)"{r}) = Card(( max+ G)"{r});
    end;
@@ -1415,9 +1465,11 @@ theorem
      case 0<r;
       then F"{-r} = (max- F)"{r} & G"{-r} = (max- G)"{r} by Th41;
       hence Card((max- F)"{r}) = Card((max- G)"{r}) by A1,A2,RFINSEQ:5;
+     end;
      case A4: r=0;
         F" li = (max- F)"{0} & G" li = (max- G)"{0} by Th42;
       hence Card((max- F)"{r}) = Card((max- G)"{r}) by A1,A4,RFINSEQ:4;
+     end;
      case A5: r<0;
          now assume r in rng(max- F);
         then consider d be Element of D such that
@@ -1432,12 +1484,13 @@ theorem
        end;
       hence Card(( max-F)"{r}) = Card(( max- G)"{r}) by A7,Lm2;
      end;
+     end;
     hence Card(( max-F)"{r}) = Card(( max- G)"{r});
    end;
   hence thesis by A2,RFINSEQ:5;
  end;
 
-definition let A,B be set;
+registration let A,B be set;
  cluster finite PartFunc of A,B;
  existence
   proof
@@ -1446,7 +1499,8 @@ definition let A,B be set;
   end;
 end;
 
-definition let D be non empty set,
+
+registration let D be non empty set,
                F be finite PartFunc of D,REAL;
  cluster max+(F) -> finite;
   coherence
@@ -1463,6 +1517,7 @@ definition let D be non empty set,
     hence thesis by AMI_1:21;
    end;
 end;
+
 
 theorem
   for D,C be non empty set,
@@ -1509,13 +1564,16 @@ theorem
      case 0<r;
       then F"{r} = (max+ F)"{r} & G"{r} = (max+ G)"{r} by Th38;
       hence card(F"{r}) = card(G"{r}) by A1,A2,RFINSEQ:11;
+     end;
      case 0=r;
       then F"{r} = F"lh /\ F"rh & G"{r} = G"lh /\ G"rh by A4,FUNCT_1:137;
       hence card(F"{r}) = card(G"{r}) by A1,A3,A5,A6,A9,A11,A12,RFINSEQ:10;
+     end;
      case r<0;
       then 0<-r & --r=r by REAL_1:66;
       then F"{r} = (max- F)"{-r} & G"{r} = (max- G)"{-r} by Th41;
       hence card(F"{r}) = card(G"{r}) by A1,A2,RFINSEQ:11;
+     end;
      end;
     hence card(F"{r}) = card(G"{r});
    end;
@@ -1607,7 +1665,7 @@ for d be Element of D st d in dom it holds it.d = F.d - r;
    deffunc F(set)=F.$1 - r;
    consider f be PartFunc of D,REAL such that
    A1: for d be Element of D holds d in dom f iff P[d] and
-   A2: for d be Element of D st d in dom f holds f.d = F(d) from LambdaPFD';
+   A2: for d be Element of D st d in dom f holds f.d = F(d) from SEQ_1:sch 3;
    take f;
    thus dom f = dom F
     proof
@@ -1627,10 +1685,11 @@ for d be Element of D st d in dom it holds it.d = F.d - r;
      for f,g being PartFunc of D,REAL st
        (dom f=dom F & for c be Element of D st c in dom f holds f.c = F(c)) &
        (dom g=dom F & for c be Element of D st c in dom g holds g.c = F(c))
-       holds f = g from UnPartFuncD';
+       holds f = g from SEQ_1:sch 4;
      hence thesis;
     end;
 end;
+
 
 theorem Th51:
 for D be non empty set, F be PartFunc of D,REAL holds F - 0 = F
@@ -1723,6 +1782,7 @@ pred F is_convex_on X means :Def13:
   for r,s be Real st r in X & s in X & p*r + (1-p)*s in X holds
      F.(p*r + (1-p)*s) <= p*F.r + (1-p)*F.s;
 end;
+
 
 theorem Th55:
 for a,b be Real, F be PartFunc of REAL,REAL holds
@@ -1896,14 +1956,17 @@ XCMPLX_1:26
       .= 1* f.x by XCMPLX_1:27
       .= f.x;
      hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y by A34;
+    end;
     case A35: x<>y;
         now per cases;
       case p=0;
        hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+      end;
       case A36: p<>0;
           now per cases;
         case p=1;
          hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+        end;
         case p<>1;
          then p<1 by A22,REAL_1:def 5;
          then A37: 0<1-p by SQUARE_1:11;
@@ -1933,6 +1996,7 @@ XCMPLX_1:26
            then f.r *p + (f.r *(1-p) - f.y*(1-p)) <= f.x *p by REAL_1:84;
            then f.r *p + f.r *(1-p) - f.y*(1-p) <= f.x *p by XCMPLX_1:29;
            hence f.r <= p*f.x + (1-p)*f.y by A38,REAL_1:86;
+          end;
           case A45: y<x;
            then p*y < p*x by A22,A36,REAL_1:70;
            then A46: y<r by A26,REAL_1:67;
@@ -1966,11 +2030,15 @@ XCMPLX_1:26
            then f.r *p + f.r *(1-p) - f.x *p <= f.y *(1-p) by XCMPLX_1:29;
            hence f.r <= p*f.x + (1-p)*f.y by A38,REAL_1:86;
           end;
+          end;
          hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+        end;
         end;
        hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
       end;
+      end;
      hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+    end;
     end;
    hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
   end;
@@ -2242,6 +2310,7 @@ func FinS(F,X) -> non-increasing FinSequence of REAL means :Def14:
   end;
 end;
 
+
 theorem Th66:
 for D be non empty set, F be PartFunc of D,REAL, X be set st
  dom(F|X) is finite holds FinS(F,dom(F|X)) = FinS(F,X)
@@ -2273,6 +2342,7 @@ definition let D be non empty set;
    hence thesis;
   end;
 end;
+
 
 theorem Th68:
 for D be non empty set, d be Element of D, X be set, F be PartFunc of D,REAL
@@ -2328,6 +2398,7 @@ A5:  Y misses {x} by XBOOLE_1:79;
        end;
       then <*F.x*>"{y} = {1} by A14,XBOOLE_0:def 10;
       hence card((F|{x})"{y}) = card(<*F.x*>"{y}) by A13,CARD_1:79;
+     end;
      case A16: y <> F.x;
        A17: now assume
 A18:     (F|{x})"{y} <> {};
@@ -2344,6 +2415,7 @@ A20:     <*F.x*>"{y} <> {};
         hence contradiction by A16,FINSEQ_1:57;
        end;
       hence card((F|{x})"{y}) = card(<*F.x*>"{y}) by A17;
+     end;
      end;
     hence card((F|X)"{y}) = card((F|Y)"{y}) + card(<*F.x*>"{y}) - card {}
       by A6,A7,CARD_2:64
@@ -2570,6 +2642,7 @@ A1: Z = dom(F|Y);
       then A24: d1 in dy & not d1 in {d} by A13,XBOOLE_0:def 4;
          now per cases by A22,A23,XBOOLE_0:def 2;
        case d2 in dxy; hence F.d1>=F.d2 by A2,A24;
+       end;
        case d2 in {d};
         then A25: d2 = d & d1<>d by A24,TARSKI:def 1;
           (F|Y).d1 in rng(F|Y) by A2,A24,FUNCT_1:def 5;
@@ -2579,11 +2652,14 @@ A1: Z = dom(F|Y);
         A27: 1<=m & m<=len fy by A26,FINSEQ_3:27;
            now per cases;
          case m = len fy; hence F.d1>=F.d2 by A2,A10,A25,A26,FUNCT_1:68;
+         end;
          case m<> len fy;
           then m<len fy by A27,REAL_1:def 5;
           hence F.d1>=F.d2 by A9,A11,A25,A26,RFINSEQ:32;
          end;
+         end;
         hence F.d1>=F.d2;
+       end;
        end;
       hence F.d1>=F.d2;
      end;
@@ -2626,6 +2702,7 @@ A1: Z = dom(F|Y);
          now per cases;
        suppose n = 1;
         hence r>=s by A41,A43,A44,FINSEQ_1:58;
+       end;
        suppose n <> 1;
         then A45: 1<n by A36,REAL_1:def 5;
         then A46: xfy.n = fxy.n1 by A35,A36,FINSEQ_1:37;
@@ -2633,6 +2710,7 @@ A1: Z = dom(F|Y);
         then 1<=n1 by REAL_1:84;
         then n1 in dom fxy by A38,FINSEQ_3:27;
         hence r>=s by A40,A41,A46,RFINSEQ:def 4;
+       end;
        end;
       hence r>=s;
      end;
@@ -2653,7 +2731,7 @@ theorem
   d1 in dom(F|Y) & d2 in dom(F|(X\Y)) holds F.d1>=F.d2)
    holds FinS(F,X) = FinS(F,Y) ^ FinS(F,X \ Y)
  proof let D be non empty set, F be PartFunc of D,REAL, X be set;
-  A1: for n holds P[n] from Ind(Lm3,Lm4);
+  A1: for n holds P[n] from NAT_1:sch 1(Lm3,Lm4);
   let Y be set; assume
   A2: dom(F|X) is finite & Y c= X &
   for d1,d2 be Element of D st
@@ -2719,11 +2797,13 @@ FinS(F-r,X).(len FinS(F-r,X)) = (F-r).d iff FinS(F,X).(len FinS(F,X)) = F.d
      case len frx = m; then F.d1+-r=F.d-r by A8,A13,A18,XCMPLX_0:def 8;
       then F.d1+-r=F.d+-r by XCMPLX_0:def 8;
       hence contradiction by A14,A16,XCMPLX_1:2;
+     end;
      case len frx <>m;
       then m<len frx by A19,REAL_1:def 5;
       then F.d1-r>=F.d-r by A3,A4,A8,A10,A13,A18,RFINSEQ:32;
       then F.d1>=F.d by REAL_1:54;
       hence contradiction by A14,A16,A20,AXIOMS:21;
+     end;
      end;
     hence contradiction;
    end;
@@ -2752,10 +2832,12 @@ FinS(F-r,X).(len FinS(F-r,X)) = (F-r).d iff FinS(F,X).(len FinS(F,X)) = F.d
      now per cases;
    case len fx = m;
     hence contradiction by A7,A21,A22,A25,A26,Def12;
+   end;
    case len fx <> m;
     then m<len fx by A27,REAL_1:def 5;
     then F.d1>=F.d by A10,A21,A26,RFINSEQ:32;
     hence contradiction by A8,A22,A25,A29,AXIOMS:21;
+   end;
    end;
   hence contradiction;
  end;
@@ -2880,6 +2962,7 @@ A45:      m in dom (fx - n1r) by A33,A42,FINSEQ_1:def 3;
         .= F.d - r by A35,A41,RVSUM_1:47;
         hence (fx - n1r).m = ((fy - nr)^(<*F.d*> - <*r*>)).m
          by A16,A31,A43,A44,A45,RVSUM_1:47;
+       end;
        suppose
 A46:      m<>n+1;
       A47: 1<=m & m<=n+1 by A42,FINSEQ_1:3;
@@ -2900,9 +2983,10 @@ A53:      m in dom(fx - n1r) by A33,A42,FINSEQ_1:def 3;
           by A17,A50,A51,A52,RVSUM_1:47
         .=(fx - n1r).m by A52,A53,RVSUM_1:47;
      end;
+     end;
     hence thesis by A9,A18,A20,A28,A29,A33,A37,FINSEQ_2:10;
    end;
-     for n holds P[n] from Ind(A2,A6);
+     for n holds P[n] from NAT_1:sch 1(A2,A6);
   hence thesis by A1;
  end;
 
@@ -3055,7 +3139,7 @@ A16: dom(F|y1) = dom(F|Y) \ {x}
      are_fiberwise_equipotent by A28,RFINSEQ:2;
     hence thesis by A25,RFINSEQ:2;
    end;
-  A29: for n holds P[n] from Ind(A2,A7);
+  A29: for n holds P[n] from NAT_1:sch 1(A2,A7);
   assume
   A30: X /\ Y = {};
      card dfy = card dfy;
@@ -3069,6 +3153,7 @@ func Sum(F,X) -> Real equals :Def15:
   Sum(FinS(F,X));
  correctness;
 end;
+
 
 theorem Th80:
 for D be non empty set, F be PartFunc of D,REAL, X be set, r be Real
@@ -3118,6 +3203,7 @@ A14:       n in dom (r*b) by A8,A13,FINSEQ_3:31;
          hence contradiction by A9,A14,FUNCT_1:def 5;
         end;
        hence card((r*b)"{x}) = card(rFX"{x}) by A10,Lm2;
+      end;
       case x in rng(r*b);
        then consider n such that
        A15: n in dom(r*b) & (r*b).n = x by FINSEQ_2:11;
@@ -3130,6 +3216,7 @@ A14:       n in dom (r*b) by A8,A13,FINSEQ_3:31;
          .=((r(#)F)|X)"{x} by RFUNCT_1:65;
          hence card((r*b)"{x}) = card(rFX"{x})
            by A2,A3,A18,RFINSEQ:10;
+        end;
         case A19: r<>0;
          then A20: (r*b)"{x} = b"{x/r} by RFINSEQ:37;
            ((r(#)F)|X)"{x} = (r(#)(F|X))"{x} by RFUNCT_1:65
@@ -3137,7 +3224,9 @@ A14:       n in dom (r*b) by A8,A13,FINSEQ_3:31;
          hence card((r*b)"{x}) = card(rFX"{x})
            by A2,A3,A6,A20,RFINSEQ:11;
         end;
+        end;
        hence card((r*b)"{x}) = card(rFX"{x});
+      end;
       end;
      hence card((r*b)"{x}) = card(rFX"{x});
     end;
@@ -3270,7 +3359,7 @@ A16:    dom((F+G)|X) = dom(F|X + G|X) by RFUNCT_1:60
     .= Sum(FinS(F+G,X)) by A32,RFINSEQ:22
     .= Sum(F+G,X) by Def15;
    end;
-  A33: for n holds P[n] from Ind(A2,A9);
+  A33: for n holds P[n] from NAT_1:sch 1(A2,A9);
   assume
   A34: dom(F|X) = dom(G|X);
     card(Y)=card(Y);

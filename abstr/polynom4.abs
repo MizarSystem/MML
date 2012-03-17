@@ -37,18 +37,44 @@ canceled;
    for n be Nat st 1 <= n & n <= len p holds
     p = (p|(n-'1))^<*p.n*>^(p/^n);
 
-definition
+registration
 cluster Field-like -> domRing-like
            (left_zeroed add-right-cancelable right-distributive
             left_unital commutative associative (non empty doubleLoopStr));
+coherence
+ proof
+ let L be left_zeroed add-right-cancelable right-distributiveleft_unital
+          commutative associative (non empty doubleLoopStr);
+ assume A1: L is Field-like;
+   now let x,y be Element of L;
+   assume A2: x * y = 0.L;
+   thus x = 0.L or y = 0.L
+     proof
+     assume x <> 0.L;
+     then consider z being Element of L such that
+     A3: x * z = 1_ L by A1,VECTSP_1:def 20;
+       z * 0.L = 1_ L * y by A2,A3,VECTSP_1:def 16
+            .= y by VECTSP_1:def 19;
+     hence y = 0.L by BINOM'2;
+     end;
+   end;
+ hence thesis by VECTSP_2:def 5;
+ end;
 end;
 
-definition
+
+registration
  cluster strict Abelian add-associative right_zeroed right_complementable
          associative commutative distributive well-unital
          domRing-like Field-like
          non degenerated non trivial (non empty doubleLoopStr);
+  existence proof
+      consider F be non degenerated strict Field;
+      take F;
+      thus thesis;
+     end;
 end;
+
 
 begin  :: About Polynomials
 
@@ -115,16 +141,53 @@ begin  :: Leading Monomials
     for n be Nat st n <> len p-'1 holds it.n = 0.L;
   end;
 
+
   theorem :: POLYNOM4:14
    for L be non empty ZeroStr
    for p be Polynomial of L holds
     Leading-Monomial(p) = 0_.(L)+*(len p-'1,p.(len p-'1));
 
-  definition
+  registration
    let L be non empty ZeroStr;
    let p be Polynomial of L;
    cluster Leading-Monomial(p) -> finite-Support;
+   coherence
+   proof
+    take len p;
+    let i be Nat;
+    A1: Leading-Monomial(p) = 0_.(L)+*(len p-'1,p.(len p-'1)) by Th14;
+    assume i >= len p;
+    then i+1 > len p by NAT_1:38;
+    then i+1-1 > len p-1 by REAL_1:54;
+    then A2: i <> len p-1 by XCMPLX_1:26;
+    per cases by NAT_1:18;
+     suppose len p > 0;
+      then len p >= 0+1 by NAT_1:38;
+      then len p-1 >= 0+1-1 by REAL_1:49;
+      then i <> len p-'1 by A2,BINARITH:def 3;
+      hence (Leading-Monomial(p)).i = (0_.(L)).i by A1,FUNCT_7:34
+         .= 0.L by POLYNOM3:28;
+     end;
+     suppose A3: len p = 0;
+      then A4: len p-'1 = 0 by Th1;
+        0 in NAT;
+      then A5: 0 in dom 0_.(L) by NORMSP_1:17;
+        now per cases by NAT_1:18;
+       suppose i > 0;
+        hence (Leading-Monomial(p)).i = (0_.(L)).i by A1,A4,FUNCT_7:34
+           .= 0.L by POLYNOM3:28;
+       end;
+       suppose i = 0;
+        hence (Leading-Monomial(p)).i = p.0 by A1,A4,A5,FUNCT_7:33
+           .= (0_.(L)).0 by A3,Th8
+           .= 0.L by POLYNOM3:28;
+      end;
+      end;
+      hence thesis;
+   end;
+   end;
   end;
+
 
   theorem :: POLYNOM4:15
    for L be non empty ZeroStr
@@ -165,6 +228,7 @@ begin  :: Evaluation of Polynomials
      len F = len p &
      for n be Nat st n in dom F holds F.n = p.(n-'1) * (power L).(x,n-'1);
   end;
+
 
   theorem :: POLYNOM4:20
    for L be unital (non empty doubleLoopStr)
@@ -232,32 +296,70 @@ begin  :: Evaluation Homomorphism
     for p be Polynomial of L holds it.p = eval(p,x);
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable distributive
     associative well-unital non degenerated (non empty doubleLoopStr);
    let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> unity-preserving;
+   coherence
+   proof
+    thus (Polynom-Evaluation(L,x)).(1_(Polynom-Ring L)) =
+          (Polynom-Evaluation(L,x)).(1_.(L)) by POLYNOM3:def 12
+       .= eval(1_.(L),x) by Def3
+       .= 1_(L) by Th21;
+   end;
   end;
 
-  definition
+
+  registration
    let L be Abelian add-associative right_zeroed right_complementable
     distributive unital (non empty doubleLoopStr);
    let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> additive;
+   coherence
+   proof
+    let a,b be Element of the carrier of Polynom-Ring L;
+    reconsider p=a,q=b as Polynomial of L by POLYNOM3:def 12;
+    thus (Polynom-Evaluation(L,x)).(a+b) = (Polynom-Evaluation(L,x)).(p+q)
+                                                          by POLYNOM3:def 12
+       .= eval(p+q,x) by Def3
+       .= eval(p,x) + eval(q,x) by Th22
+       .= (Polynom-Evaluation(L,x)).a + eval(q,x) by Def3
+       .= (Polynom-Evaluation(L,x)).a+(Polynom-Evaluation(L,x)).b by Def3;
+   end;
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable Abelian
     left_unital distributive commutative associative non trivial
     (non empty doubleLoopStr);
    let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> multiplicative;
+   coherence
+   proof
+    let a,b be Element of the carrier of Polynom-Ring L;
+    reconsider p=a,q=b as Polynomial of L by POLYNOM3:def 12;
+    thus (Polynom-Evaluation(L,x)).(a*b) = (Polynom-Evaluation(L,x)).(p*'q)
+                                                          by POLYNOM3:def 12
+       .= eval(p*'q,x) by Def3
+       .= eval(p,x)*eval(q,x) by Th27
+       .= (Polynom-Evaluation(L,x)).a*eval(q,x) by Def3
+       .= (Polynom-Evaluation(L,x)).a*(Polynom-Evaluation(L,x)).b by Def3;
+   end;
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable Abelian
     left_unital distributive commutative associative non degenerated
     (non empty doubleLoopStr);
    let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> RingHomomorphism;
+   coherence
+   proof
+    thus Polynom-Evaluation(L,x) is additive multiplicative unity-preserving;
+   end;
   end;
+

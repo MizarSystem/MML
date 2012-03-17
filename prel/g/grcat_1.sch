@@ -7,9 +7,6 @@ SUBSET_1
 RELSET_1
 TARSKI
 #
-PartLambda2
-PartLambda2D
-#
 M1 ;M1 ;M1 ;M1 ;;
 ªM5 V3 ;K19 F1 ;F2 ;;F3 ;;ª&M1 ;M1 ;&ª&R2 K44 B2 B3 ;K1 B1 ;;ª&R2 B2 F1 ;;R2 B3 F2 ;;P1 B2 B3 ;;;ª&R2 B2 F1 ;;R2 B3 F2 ;;P1 B2 B3 ;ªR2 K44 B2 B3 ;K1 B1 ;;;;M1 ;M1 ;ª&R2 K44 B2 B3 ;K1 B1 ;;ªR1 K11 B1 K44 B2 B3 ;;F4 B2 B3 ;;;;M1 ;M1 ;ª&R2 B1 F1 ;;R2 B2 F2 ;;P1 B1 B2 ;ªR2 F4 B1 B2 ;F3 ;;;;
 #

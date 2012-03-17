@@ -33,6 +33,7 @@ definition
   for x,y being Element of L holds [x,y] in it iff x << y;
 end;
 
+
 definition let L be RelStr;
   func IntRel L -> Relation of L equals
 :: WAYBEL_4:def 3
@@ -51,6 +52,7 @@ definition let L be RelStr, R be Relation of L;
     ( u <= x & [x,y] in R & y <= z implies [u,z] in R );
 end;
 
+
 definition let L be non empty RelStr, R be Relation of L;
   attr R is auxiliary(iii) means
 :: WAYBEL_4:def 6
@@ -62,6 +64,7 @@ definition let L be non empty RelStr, R be Relation of L;
    for x being Element of L holds [Bottom L,x] in R;
 end;
 
+
 :: Definition 1.9 p.43
 definition let L be non empty RelStr, R be Relation of L;
   attr R is auxiliary means
@@ -69,16 +72,70 @@ definition let L be non empty RelStr, R be Relation of L;
    R is auxiliary(i) auxiliary(ii) auxiliary(iii) auxiliary(iv);
 end;
 
-definition let L be non empty RelStr;
+
+registration let L be non empty RelStr;
   cluster auxiliary ->
     auxiliary(i) auxiliary(ii) auxiliary(iii) auxiliary(iv) Relation of L;
+  coherence by Def8;
   cluster auxiliary(i) auxiliary(ii) auxiliary(iii) auxiliary(iv) ->
     auxiliary Relation of L;
+  coherence by Def8;
 end;
 
-definition let L be lower-bounded with_suprema transitive antisymmetric RelStr;
+
+registration
+let L be lower-bounded with_suprema transitive antisymmetric RelStr;
  cluster auxiliary Relation of L;
+ existence
+  proof
+    set A = IntRel L;
+    take A;
+    thus A is auxiliary(i)
+    proof
+      let x, y be Element of L;
+      assume [x,y] in A;
+      then [x,y] in the InternalRel of L by Def3;
+      hence thesis by ORDERS_1:def 9;
+    end;
+    thus A is auxiliary(ii)
+    proof
+      let x, y, z, u be Element of L;
+      assume that
+A1:   u <= x and
+A2:   [x,y] in A and
+A3:   y <= z;
+        [x,y] in the InternalRel of L by A2,Def3;
+      then x <= y by ORDERS_1:def 9;
+      then u <= y by A1,ORDERS_1:26;
+      then u <= z by A3,ORDERS_1:26;
+      then [u,z] in the InternalRel of L by ORDERS_1:def 9;
+      hence thesis by Def3;
+    end;
+    thus A is auxiliary(iii)
+    proof
+      let x, y, z be Element of L;
+      assume that A4: [x,z] in A and A5: [y,z] in A;
+        [x,z] in the InternalRel of L by A4,Def3;
+then A6:   x <= z by ORDERS_1:def 9;
+        [y,z] in the InternalRel of L by A5,Def3;
+then A7:   y <= z by ORDERS_1:def 9;
+        ex q being Element of L st x <= q & y <= q &
+       for c being Element of L st x <= c & y <= c holds q <= c
+        by LATTICE3:def 10;
+      then (x "\/" y) <= z by A6,A7,LATTICE3:def 13;
+      then [x "\/" y, z] in the InternalRel of L by ORDERS_1:def 9;
+      hence thesis by Def3;
+    end;
+    thus A is auxiliary(iv)
+    proof
+     let x be Element of L;
+       Bottom L <= x by YELLOW_0:44;
+     then [Bottom L,x] in the InternalRel of L by ORDERS_1:def 9;
+     hence thesis by Def3;
+    end;
+  end;
 end;
+
 
 theorem :: WAYBEL_4:1
  for L being lower-bounded sup-Semilattice
@@ -86,25 +143,71 @@ theorem :: WAYBEL_4:1
    for x, y, z, u being Element of L holds
    [x, z] in AR & [y, u] in AR implies [x "\/" y, z "\/" u] in AR;
 
-definition let L be lower-bounded sup-Semilattice;
+registration let L be lower-bounded sup-Semilattice;
   cluster auxiliary(i) auxiliary(ii) -> transitive Relation of L;
+  coherence by Lm2;
 end;
 
-definition let L be RelStr;
+
+registration let L be RelStr;
   cluster IntRel L -> auxiliary(i);
+  coherence
+  proof
+   let x, y be Element of L;
+   assume [x, y] in IntRel L;
+   hence x <= y by Lm1;
+ end;
 end;
 
-definition let L be transitive RelStr;
+
+registration let L be transitive RelStr;
   cluster IntRel L -> auxiliary(ii);
+  coherence
+  proof
+   set A = IntRel L;
+     let x,y,z,u be Element of L;
+     assume that A1: u <= x and A2: [x,y] in A and A3: y <= z;
+       x <= y by A2,Lm1;
+     then u <= y by A1,ORDERS_1:26;
+     then u <= z by A3,ORDERS_1:26;
+     hence [u,z] in A by Lm1;
+   end;
  end;
 
-definition let L be with_suprema antisymmetric RelStr;
+
+registration let L be with_suprema antisymmetric RelStr;
   cluster IntRel L -> auxiliary(iii);
+  coherence
+  proof
+   set A = IntRel L;
+     let x,y,z be Element of L;
+     assume that A1: [x,z] in A and A2: [y,z] in A;
+A3:  x <= z by A1,Lm1;
+A4:  y <= z by A2,Lm1;
+       ex q being Element of L st x <= q & y <= q &
+       for c being Element of L st x <= c & y <= c holds q <= c
+        by LATTICE3:def 10;
+     then x "\/" y <= z by A3,A4,LATTICE3:def 13;
+     hence thesis by Lm1;
+   end;
  end;
 
-definition let L be lower-bounded antisymmetric non empty RelStr;
+
+registration let L be lower-bounded antisymmetric non empty RelStr;
   cluster IntRel L -> auxiliary(iv);
+  coherence
+  proof
+   set A = IntRel L;
+     for x be Element of L holds [Bottom L,x] in A
+   proof
+     let x be Element of L;
+       Bottom L <= x by YELLOW_0:44;
+     hence thesis by Lm1;
+   end;
+   hence A is auxiliary(iv) by Def7;
+  end;
 end;
+
 
  reserve a for set;
 
@@ -114,8 +217,14 @@ definition let L be lower-bounded sup-Semilattice;
    a in it iff a is auxiliary Relation of L;
 end;
 
-definition let L be lower-bounded sup-Semilattice;
+
+registration let L be lower-bounded sup-Semilattice;
   cluster Aux L -> non empty;
+  coherence
+  proof
+      IntRel L is auxiliary Relation of L;
+    hence thesis by Def9;
+  end;
 end;
 
 theorem :: WAYBEL_4:2
@@ -127,9 +236,28 @@ theorem :: WAYBEL_4:3
    for L being lower-bounded sup-Semilattice holds
   Top InclPoset Aux L = IntRel L;
 
-definition let L be lower-bounded sup-Semilattice;
+registration let L be lower-bounded sup-Semilattice;
  cluster InclPoset Aux L -> upper-bounded;
+ coherence
+ proof
+  set I = IntRel L;
+    I in Aux L by Def9;
+  then I in the carrier of InclPoset Aux L by YELLOW_1:1;
+  then reconsider I as Element of InclPoset Aux L;
+  take I;
+    I is_>=_than the carrier of InclPoset Aux L
+  proof
+   let b be Element of InclPoset Aux L;
+   assume b in the carrier of InclPoset Aux L;
+   then b in Aux L by YELLOW_1:1;
+   then reconsider b' = b as auxiliary Relation of L by Def9;
+     b' c= I by Th2;
+   hence thesis by YELLOW_1:3;
+  end;
+  hence thesis;
+ end;
 end;
+
 
 definition let L be non empty RelStr;
  func AuxBottom L -> Relation of L means
@@ -137,9 +265,42 @@ definition let L be non empty RelStr;
   for x,y be Element of L holds [x,y] in it iff x = Bottom L;
 end;
 
-definition let L be lower-bounded sup-Semilattice;
+
+registration let L be lower-bounded sup-Semilattice;
  cluster AuxBottom L -> auxiliary;
+ coherence
+ proof
+  set A = AuxBottom L;
+A1:A is auxiliary(i)
+  proof
+   let x, y be Element of L;
+   assume [x,y] in A;
+   then x = Bottom L by Def10;
+   hence thesis by YELLOW_0:44;
+  end;
+A2:A is auxiliary(ii)
+  proof let x, y, z, u be Element of L;
+   assume A3: u <= x & [x,y] in A & y <= z;
+then A4: x = Bottom L by Def10;
+     Bottom L <= u by YELLOW_0:44;
+   then u = Bottom L by A3,A4,ORDERS_1:25;
+   hence thesis by Def10;
+  end;
+A5:A is auxiliary(iii)
+  proof
+   let x, y, z be Element of L;
+   assume [x,z] in A & [y,z] in A;
+then A6: x = Bottom L & y = Bottom L by Def10;
+   then x <= y;
+   then x "\/" y = Bottom L by A6,YELLOW_0:24;
+   hence thesis by Def10;
+  end;
+    for x be Element of L holds [Bottom L,x] in A by Def10;
+  then A is auxiliary(iv) by Def7;
+  hence thesis by A1,A2,A5,Def8;
+ end;
 end;
+
 
 theorem :: WAYBEL_4:4
  for L being lower-bounded sup-Semilattice
@@ -150,9 +311,28 @@ theorem :: WAYBEL_4:5
   for AR being auxiliary(iv) Relation of L holds
    Bottom InclPoset Aux L = AuxBottom L;
 
-definition let L be lower-bounded sup-Semilattice;
+registration let L be lower-bounded sup-Semilattice;
  cluster InclPoset Aux L -> lower-bounded;
+ coherence
+ proof
+  set I = AuxBottom L;
+    I in Aux L by Def9;
+  then I in the carrier of InclPoset Aux L by YELLOW_1:1;
+  then reconsider I as Element of InclPoset Aux L;
+  take I;
+    I is_<=_than the carrier of InclPoset Aux L
+  proof
+   let b be Element of InclPoset Aux L;
+   assume b in the carrier of InclPoset Aux L;
+   then b in Aux L by YELLOW_1:1;
+   then reconsider b' = b as auxiliary Relation of L by Def9;
+     I c= b' by Th4;
+   hence thesis by YELLOW_1:3;
+  end;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: WAYBEL_4:6
  for L being lower-bounded sup-Semilattice
@@ -184,13 +364,68 @@ theorem :: WAYBEL_4:11
   for X being non empty Subset of InclPoset Aux L holds
    meet X is auxiliary Relation of L;
 
-definition let L be lower-bounded sup-Semilattice;
+registration let L be lower-bounded sup-Semilattice;
  cluster InclPoset Aux L -> with_infima;
+ coherence
+  proof
+     for x, y be set st (x in Aux L & y in Aux L) holds x /\ y in Aux L
+   proof
+    let x, y be set;
+    assume x in Aux L & y in Aux L;
+    then x is auxiliary Relation of L & y is auxiliary Relation of L by Def9;
+    then x /\ y is auxiliary Relation of L by Th10;
+    hence x /\ y in Aux L by Def9;
+   end;
+   hence InclPoset Aux L is with_infima by YELLOW_1:12;
+  end;
 end;
 
-definition let L be lower-bounded sup-Semilattice;
+
+registration let L be lower-bounded sup-Semilattice;
  cluster InclPoset Aux L -> complete;
+ coherence
+ proof
+    for X be Subset of InclPoset Aux L holds ex_inf_of X, InclPoset Aux L
+  proof
+   let X be Subset of InclPoset Aux L;
+   set N = meet X;
+   per cases;
+   suppose A1: X <> {};
+   then N is auxiliary Relation of L by Th11;
+   then N in Aux L by Def9;
+   then N in the carrier of InclPoset Aux L by YELLOW_1:1;
+   then reconsider N as Element of InclPoset Aux L;
+A2: X is_>=_than N
+   proof
+    let b be Element of InclPoset Aux L;
+    assume b in X;
+    then N c= b by SETFAM_1:4;
+    hence N <= b by YELLOW_1:3;
+   end;
+     for b being Element of InclPoset Aux L st X is_>=_than b holds N >= b
+   proof
+    let b be Element of InclPoset Aux L;
+    assume A3: X is_>=_than b;
+      for Z1 be set st Z1 in X holds b c= Z1
+    proof
+     let Z1 be set; assume A4: Z1 in X;
+     then reconsider Z1' = Z1 as Element of InclPoset Aux L;
+       b <= Z1' by A3,A4,LATTICE3:def 8;
+     hence b c= Z1 by YELLOW_1:3;
+    end;
+    then b c= meet X by A1,SETFAM_1:6;
+    hence thesis by YELLOW_1:3;
+   end;
+   hence thesis by A2,YELLOW_0:16;
+   end;
+   suppose X = {};
+   hence thesis by YELLOW_0:43;
+  end;
+  end;
+  hence thesis by YELLOW_2:30;
+ end;
 end;
+
 
 definition let L be non empty RelStr, x be Element of L;
   let AR be Relation of the carrier of L;
@@ -202,25 +437,62 @@ definition let L be non empty RelStr, x be Element of L;
    {y where y is Element of L: [x,y] in AR};
 end;
 
+
 theorem :: WAYBEL_4:12
  for L being lower-bounded sup-Semilattice, x being Element of L
   for AR being auxiliary(i) Relation of L holds
    AR-below x c= downarrow x;
 
-definition let L be lower-bounded sup-Semilattice, x be Element of L;
+registration let L be lower-bounded sup-Semilattice, x be Element of L;
   let AR be auxiliary(iv) Relation of L;
  cluster AR-below x -> non empty;
+ coherence
+ proof
+   set I = AR-below x;
+A1:I = {y where y is Element of L: [y,x] in AR} by Def11;
+     [Bottom L,x] in AR by Def7;
+   then Bottom L in I by A1;
+   hence thesis;
+ end;
 end;
 
-definition let L be lower-bounded sup-Semilattice, x be Element of L;
+
+registration let L be lower-bounded sup-Semilattice, x be Element of L;
   let AR be auxiliary(ii) Relation of L;
  cluster AR-below x -> lower;
+ coherence
+ proof
+   set I = AR-below x;
+A1:I = {y where y is Element of L: [y,x] in AR} by Def11;
+    let x1, y1 be Element of L;
+    assume A2: x1 in I & y1 <= x1;
+    then consider v1 be Element of L such that A3: v1 = x1 & [v1, x] in AR by
+A1;
+      x <= x;
+    then [y1, x] in AR by A2,A3,Def5;
+    hence thesis by A1;
+ end;
 end;
 
-definition let L be lower-bounded sup-Semilattice, x be Element of L;
+
+registration let L be lower-bounded sup-Semilattice, x be Element of L;
   let AR be auxiliary(iii) Relation of L;
  cluster AR-below x -> directed;
+ coherence
+ proof
+   set I = AR-below x;
+A1:I = {y where y is Element of L: [y,x] in AR} by Def11;
+    let u1,u2 be Element of L; assume A2: u1 in I & u2 in I;
+    then consider v1 be Element of L such that A3: v1 = u1 &
+       [v1,x] in AR by A1;
+    consider v2 be Element of L such that A4: v2 = u2 &
+       [v2,x] in AR by A1,A2;
+    take u12 = u1 "\/" u2;
+      [u12,x] in AR by A3,A4,Def6;
+    hence thesis by A1,YELLOW_0:22;
+ end;
 end;
+
 
 definition let L be lower-bounded sup-Semilattice;
  let AR be auxiliary(ii) auxiliary(iii) auxiliary(iv) Relation of L;
@@ -229,6 +501,7 @@ definition let L be lower-bounded sup-Semilattice;
   for x be Element of L holds
    it.x = AR-below x;
 end;
+
 
 theorem :: WAYBEL_4:13
  for L being non empty RelStr, AR being Relation of L
@@ -257,6 +530,7 @@ definition let L be non empty Poset;
      c in the carrier of it & d in the carrier of it & f <= g;
 end;
 
+
 theorem :: WAYBEL_4:16
    for L being lower-bounded sup-Semilattice holds
   MonSet L is full SubRelStr of (InclPoset Ids L)|^(the carrier of L);
@@ -267,19 +541,36 @@ theorem :: WAYBEL_4:17
   for x, y being Element of L holds
    x <= y implies AR-below x c= AR-below y;
 
-definition let L be lower-bounded sup-Semilattice;
+registration let L be lower-bounded sup-Semilattice;
   let AR be auxiliary(ii) auxiliary(iii) auxiliary(iv) Relation of L;
   cluster AR-below -> monotone;
+  coherence
+  proof
+   set s = AR-below;
+   let x, y be Element of L;
+A1: s.x = AR-below x & s.y = AR-below y by Def13;
+   assume x <= y;
+   then AR-below x c= AR-below y by Th17;
+   hence thesis by A1,YELLOW_1:3;
+  end;
 end;
+
 
 theorem :: WAYBEL_4:18
  for L being lower-bounded sup-Semilattice, AR being auxiliary Relation of L
   holds
    AR-below in the carrier of MonSet L;
 
-definition let L be lower-bounded sup-Semilattice;
+registration let L be lower-bounded sup-Semilattice;
  cluster MonSet L -> non empty;
+ coherence
+ proof
+  consider AR be auxiliary Relation of L;
+    AR-below in the carrier of MonSet L by Th18;
+  hence thesis by STRUCT_0:def 1;
+ end;
 end;
+
 
 theorem :: WAYBEL_4:19
  for L being lower-bounded sup-Semilattice holds
@@ -319,15 +610,24 @@ theorem :: WAYBEL_4:27
   [(the carrier of L) --> {Bottom L} , AR-below] in the InternalRel of MonSet L
 ;
 
-definition let L;
+registration let L;
   cluster MonSet L -> upper-bounded;
+  coherence
+  proof
+   consider x be Element of MonSet L such that
+A1:  x is_>=_than the carrier of MonSet L by Lm7;
+   take x;
+   thus thesis by A1;
+  end;
 end;
+
 
 definition let L;
  func Rel2Map L -> map of InclPoset Aux L, MonSet L means
 :: WAYBEL_4:def 15
   for AR being auxiliary Relation of L holds it.AR = AR-below;
 end;
+
 
 theorem :: WAYBEL_4:28
    for R1, R2 being auxiliary Relation of L st R1 c= R2 holds
@@ -337,9 +637,11 @@ theorem :: WAYBEL_4:29
   for R1, R2 being Relation of L st R1 c= R2 holds
    R1-below x c= R2-below x;
 
-definition let L;
+registration let L;
   cluster Rel2Map L -> monotone;
+  coherence by Lm8;
 end;
+
 
 definition let L;
   func Map2Rel L -> map of MonSet L, InclPoset Aux L means
@@ -352,9 +654,11 @@ definition let L;
      x' = x & y' = y & s' = s & x' in s'.y';
 end;
 
-definition let L;
+registration let L;
   cluster Map2Rel L -> monotone;
+  coherence by Lm9;
 end;
+
 
 theorem :: WAYBEL_4:30
   (Map2Rel L) * (Rel2Map L) = id dom (Rel2Map L);
@@ -362,9 +666,19 @@ theorem :: WAYBEL_4:30
 theorem :: WAYBEL_4:31
   (Rel2Map L) * (Map2Rel L) = id (the carrier of MonSet L);
 
-definition let L;
+registration let L;
   cluster Rel2Map L -> one-to-one;
+  coherence
+  proof
+     ex g be Function st g*(Rel2Map L) = id dom (Rel2Map L)
+   proof
+    take Map2Rel L;
+    thus thesis by Th30;
+   end;
+   hence Rel2Map L is one-to-one by FUNCT_1:53;
+  end;
 end;
+
 
 :: Proposition 1.10 (i) p.43
 theorem :: WAYBEL_4:32
@@ -378,11 +692,33 @@ theorem :: WAYBEL_4:34
  for L being complete LATTICE, x being Element of L holds
   meet { I where I is Ideal of L : x <= sup I } = waybelow x;
 
-scheme LambdaC'{ A() -> non empty RelStr, C[set], F(set) -> set,
+scheme :: WAYBEL_4:sch 1
+ LambdaC'{ A() -> non empty RelStr, C[set], F(set) -> set,
   G(set) -> set } :
  ex f being Function st dom f = the carrier of A() &
   for x be Element of A() holds
-   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x));
+   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
+proof
+  defpred c[set] means C[$1];
+  deffunc f(set) = F($1);
+  deffunc g(set) = G($1);
+A1:  ex f being Function st dom f = the carrier of A() &
+  for x be set st x in the carrier of A() holds
+   (c[x] implies f.x = f(x)) & (not c[x] implies f.x = g(x)) from
+PARTFUN1:sch 1;
+ thus ex f being Function st dom f = the carrier of A() &
+  for x be Element of A() holds
+   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
+     proof
+      consider f being Function such that A2: dom f = the carrier of A() &
+       for x be set st x in the carrier of A() holds
+       (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x)) by A1;
+      take f;
+      thus dom f = the carrier of A() by A2;
+      let x be Element of A();
+      thus (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x)) by A2;
+     end;
+ end;
 
 definition let L be Semilattice, I be Ideal of L;
   func DownMap I -> map of L, InclPoset Ids L means
@@ -410,12 +746,14 @@ definition let L be non empty RelStr, AR be Relation of L;
    for x be Element of L holds x = sup (AR-below x);
 end;
 
+
 definition let L be non empty Poset; let mp be map of L, InclPoset Ids L;
   attr mp is approximating means
 :: WAYBEL_4:def 19
   for x be Element of L
    ex ii be Subset of L st ii = mp.x & x = sup ii;
 end;
+
 
 :: Lemma 1.12 (i) p.44
 theorem :: WAYBEL_4:37
@@ -426,34 +764,81 @@ theorem :: WAYBEL_4:37
 theorem :: WAYBEL_4:38
  for L being lower-bounded continuous LATTICE holds L is meet-continuous;
 
-definition
+registration
   cluster continuous -> meet-continuous (lower-bounded LATTICE);
+  coherence by Th38;
 end;
+
 
 :: Lemma 1.12 (iii) p.44
 theorem :: WAYBEL_4:39
    for L being lower-bounded continuous LATTICE,
      I being Ideal of L holds DownMap I is approximating;
 
-definition let L be non empty reflexive antisymmetric RelStr;
+registration let L be non empty reflexive antisymmetric RelStr;
   cluster L-waybelow -> auxiliary(i);
+  coherence
+ proof
+   let x, y be Element of L;
+   assume [x,y] in L-waybelow;
+   then x << y by Def2;
+   hence thesis by WAYBEL_3:1;
+ end;
 end;
 
-definition let L be non empty reflexive transitive RelStr;
+
+registration let L be non empty reflexive transitive RelStr;
   cluster L-waybelow -> auxiliary(ii);
+  coherence
+ proof
+   set AR = L-waybelow;
+   let x, y, z, u be Element of L;
+   assume u <= x & [x,y] in AR & y <= z;
+   then u <= x & x << y & y <= z by Def2;
+   then u << z by WAYBEL_3:2;
+   hence [u,z] in AR by Def2;
+  end;
 end;
 
-definition let L be with_suprema Poset;
+
+registration let L be with_suprema Poset;
   cluster L-waybelow -> auxiliary(iii);
+  coherence
+ proof
+   set AR = L-waybelow;
+   let x, y, z be Element of L;
+   assume [x,z] in AR & [y,z] in AR;
+   then x << z & y << z by Def2;
+   then (x "\/" y) << z by WAYBEL_3:3;
+   hence [(x "\/" y),z] in AR by Def2;
+  end;
 end;
 
-definition let L be /\-complete (non empty Poset);
+
+registration let L be /\-complete (non empty Poset);
   cluster L-waybelow -> auxiliary(iii);
+  coherence
+ proof
+   set AR = L-waybelow;
+   let x, y, z be Element of L;
+   assume [x,z] in AR & [y,z] in AR;
+   then x << z & y << z by Def2;
+   then (x "\/" y) << z by WAYBEL_3:3;
+   hence [(x "\/" y),z] in AR by Def2;
+  end;
 end;
 
-definition let L be lower-bounded antisymmetric reflexive non empty RelStr;
+
+registration let L be lower-bounded antisymmetric reflexive non empty RelStr;
   cluster L-waybelow -> auxiliary(iv);
+  coherence
+ proof
+   let x be Element of L;
+     Bottom L << x by WAYBEL_3:4;
+   hence thesis by Def2;
+  end;
 end;
+
 
 theorem :: WAYBEL_4:40
  for L being complete LATTICE, x being Element of L holds
@@ -462,13 +847,22 @@ theorem :: WAYBEL_4:40
 theorem :: WAYBEL_4:41
  for L being LATTICE holds IntRel L is approximating;
 
-definition let L be lower-bounded continuous LATTICE;
+registration let L be lower-bounded continuous LATTICE;
   cluster L-waybelow -> approximating;
+  coherence by Lm13;
 end;
 
-definition let L be complete LATTICE;
+
+registration let L be complete LATTICE;
   cluster approximating auxiliary Relation of L;
+  existence
+proof
+  reconsider A = IntRel L as auxiliary Relation of L;
+    A is approximating by Th41;
+  hence thesis;
 end;
+end;
+
 
 definition let L be complete LATTICE;
   func App L means
@@ -476,9 +870,17 @@ definition let L be complete LATTICE;
    a in it iff a is approximating auxiliary Relation of L;
 end;
 
-definition let L be complete LATTICE;
+
+registration let L be complete LATTICE;
   cluster App L -> non empty;
+  coherence
+ proof
+  consider a be approximating auxiliary Relation of L;
+    a in App L by Def20;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: WAYBEL_4:42
  for L being complete LATTICE
@@ -518,8 +920,10 @@ definition let L be RelStr, AR be Relation of L;
    for x, z be Element of L holds
    ( [x,z] in AR & x <> z implies
      ex y be Element of L st ( [x,y] in AR & [y,z] in AR & x <> y ) );
-  synonym AR satisfies_SI;
-end;
+  end;
+notation let L be RelStr, AR be Relation of L;
+  synonym AR satisfies_SI for AR is satisfying_SI ; end;
+
 
 :: Definition 1.15 (INT) p.46
 definition let L be RelStr, AR be Relation of L;
@@ -528,8 +932,10 @@ definition let L be RelStr, AR be Relation of L;
    for x, z be Element of L holds
    ( [x,z] in AR implies
     ex y be Element of L st ( [x,y] in AR & [y,z] in AR ) );
-  synonym AR satisfies_INT;
-end;
+  end;
+notation let L be RelStr, AR be Relation of L;
+  synonym AR satisfies_INT for AR is satisfying_INT ; end;
+
 
 canceled;
 
@@ -537,9 +943,11 @@ theorem :: WAYBEL_4:48
 for L being RelStr, AR being Relation of L
  holds AR satisfies_SI implies AR satisfies_INT;
 
-definition let L be non empty RelStr;
+registration let L be non empty RelStr;
   cluster satisfying_SI -> satisfying_INT Relation of L;
+  coherence by Th48;
 end;
+
 
 reserve AR for Relation of L;
 reserve x, y, z for Element of L;
@@ -565,9 +973,11 @@ theorem :: WAYBEL_4:52
  for L being lower-bounded continuous LATTICE holds
   L-waybelow satisfies_SI;
 
-definition let L be lower-bounded continuous LATTICE;
+registration let L be lower-bounded continuous LATTICE;
   cluster L-waybelow -> satisfying_SI;
+  coherence by Th52;
 end;
+
 
 theorem :: WAYBEL_4:53
  for L being lower-bounded continuous LATTICE,
@@ -593,6 +1003,7 @@ definition
    ex z being Element of L st z in X & [x,z] in R & [y,z] in R;
 end;
 
+
 theorem :: WAYBEL_4:55
     for L being RelStr, X being Subset of L st
    X is_directed_wrt (the InternalRel of L) holds X is directed;
@@ -605,12 +1016,14 @@ definition
    x in X & not ex y being set st y in X & y <> x & [x,y] in R;
 end;
 
+
 definition
  let L be RelStr, X be set, x be Element of L;
   pred x is_maximal_in X means
 :: WAYBEL_4:def 25
    x is_maximal_wrt X, the InternalRel of L;
 end;
+
 
 theorem :: WAYBEL_4:56
    for L being RelStr, X being set, x being Element of L holds
@@ -625,12 +1038,14 @@ definition
    x in X & not ex y being set st y in X & y <> x & [y,x] in R;
 end;
 
+
 definition
  let L be RelStr, X be set, x be Element of L;
   pred x is_minimal_in X means
 :: WAYBEL_4:def 27
    x is_minimal_wrt X, the InternalRel of L;
 end;
+
 
 theorem :: WAYBEL_4:57
    for L being RelStr, X being set, x being Element of L holds
@@ -664,8 +1079,10 @@ theorem :: WAYBEL_4:62
    Relation of L st
   R satisfies_INT holds R satisfies_SI;
 
-definition let L;
+registration let L;
   cluster satisfying_INT ->
     satisfying_SI (approximating auxiliary Relation of L);
+  coherence by Th62;
 end;
+
 

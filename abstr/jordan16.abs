@@ -36,9 +36,16 @@ reserve C for Simple_closed_curve,
         p,p1,p2,q,q1,q2 for Point of TOP-REAL 2,
         n for Nat;
 
-definition let n;
+registration let n;
  cluster trivial Subset of TOP-REAL n;
+ existence
+  proof
+    consider A being trivial Subset of TOP-REAL n;
+      A is Subset of TOP-REAL n;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: JORDAN16:2
   for a,b,c,X being set st a in X & b in X & c in X
@@ -156,11 +163,13 @@ definition let f be PartFunc of REAL, REAL;
  f is_continuous_on dom f;
 end;
 
+
 definition let f be Function of REAL, REAL;
  redefine attr f is continuous means
 :: JORDAN16:def 2
      f is_continuous_on REAL;
 end;
+
 
 definition let a,b be real number;
  func AffineMap(a,b) -> Function of REAL, REAL means
@@ -168,13 +177,26 @@ definition let a,b be real number;
  for x being real number holds it.x = a*x + b;
 end;
 
-definition let a,b be real number;
+
+registration let a,b be real number;
  cluster AffineMap(a,b) -> continuous;
+ coherence
+  proof set f = AffineMap(a,b);
+A1:  REAL c= dom f by FUNCT_2:def 1;
+      for x0 being real number st x0 in REAL holds f.x0 = a*x0+b by Def3;
+   hence AffineMap(a,b) is_continuous_on REAL by A1,FCONT_1:48;
+  end;
 end;
 
-definition
+
+registration
  cluster continuous Function of REAL, REAL;
+ existence
+  proof take AffineMap(1,1);
+   thus thesis;
+  end;
 end;
+
 
 theorem :: JORDAN16:24
    for f,g being continuous PartFunc of REAL, REAL

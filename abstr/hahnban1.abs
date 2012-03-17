@@ -51,11 +51,13 @@ begin :: Some Facts on the Field of Complex Numbers
     [*x,y*];
   end;
 
+
   definition
    func i_FC -> Element of F_Complex equals
 :: HAHNBAN1:def 2
     <i>;
   end;
+
 
   theorem :: HAHNBAN1:6
      i_FC = [*0,1*] & i_FC = [**0,1**];
@@ -94,12 +96,14 @@ begin :: Some Facts on the Field of Complex Numbers
     ex z' be Element of COMPLEX st z = z' & it = Re z';
   end;
 
+
   definition
    let z be Element of F_Complex;
    func Im z -> Real means
 :: HAHNBAN1:def 4
     ex z' be Element of COMPLEX st z = z' & it = Im z';
   end;
+
 
   theorem :: HAHNBAN1:15
    for x,y be Real holds
@@ -132,6 +136,7 @@ begin :: Functionals of Vector Space
    canceled;
   end;
 
+
   definition
    let K be non empty LoopStr;
    let V be non empty VectSpStr over K;
@@ -140,6 +145,7 @@ begin :: Functionals of Vector Space
 :: HAHNBAN1:def 6
     for x be Element of V holds it.x = f.x + g.x;
   end;
+
 
   definition
    let K be non empty LoopStr;
@@ -150,6 +156,7 @@ begin :: Functionals of Vector Space
     for x be Element of V holds it.x = -(f.x);
   end;
 
+
   definition
    let K be non empty LoopStr;
    let V be non empty VectSpStr over K;
@@ -158,6 +165,7 @@ begin :: Functionals of Vector Space
 :: HAHNBAN1:def 8
     f+-g;
   end;
+
 
   definition
    let K be non empty HGrStr;
@@ -169,6 +177,7 @@ begin :: Functionals of Vector Space
     for x be Element of V holds it.x = v*(f.x);
   end;
 
+
   definition
    let K be non empty ZeroStr;
    let V be VectSpStr over K;
@@ -176,6 +185,7 @@ begin :: Functionals of Vector Space
 :: HAHNBAN1:def 10
     [#]V --> 0.K;
   end;
+
 
   definition
    let K be non empty LoopStr;
@@ -186,6 +196,7 @@ begin :: Functionals of Vector Space
     for x,y be Vector of V holds F.(x+y) = F.x+F.y;
   end;
 
+
   definition
    let K be non empty HGrStr;
    let V be non empty VectSpStr over K;
@@ -194,6 +205,7 @@ begin :: Functionals of Vector Space
 :: HAHNBAN1:def 12
     for x be Vector of V, r be Scalar of V holds F.(r*x) = r*F.x;
   end;
+
 
   definition
    let K be non empty ZeroStr;
@@ -204,38 +216,87 @@ begin :: Functionals of Vector Space
       F.(0.V) = 0.K;
   end;
 
-  definition
+
+  registration
    let K be add-associative right_zeroed right_complementable Abelian
     associative left_unital distributive (non empty doubleLoopStr);
    let V be VectSp of K;
    cluster homogeneous -> 0-preserving Functional of V;
+   coherence
+   proof
+    let F be Functional of V;
+    assume A1: F is homogeneous;
+    thus F.(0.V) = F.(0.K * 0.V) by VECTSP_1:59
+                .= 0.K * F.(0.V) by A1,Def12
+                .= 0.K by VECTSP_1:39;
+   end;
   end;
 
-  definition
+
+  registration
    let K be right_zeroed (non empty LoopStr);
    let V be non empty VectSpStr over K;
    cluster 0Functional(V) -> additive;
+   coherence
+   proof
+    let x,y be Vector of V;
+    A1: [#]V = the carrier of V by PRE_TOPC:12;
+    A2: (0Functional(V)).x = ([#]V --> 0.K).x by Def10
+                          .= 0.K by A1,FUNCOP_1:13;
+    A3: (0Functional(V)).y = ([#]V --> 0.K).y by Def10
+                          .= 0.K by A1,FUNCOP_1:13;
+    thus (0Functional(V)).(x+y) = ([#]V --> 0.K).(x+y) by Def10
+                               .= 0.K by A1,FUNCOP_1:13
+                               .= (0Functional(V)).x + (0Functional(V)).y
+                                                     by A2,A3,RLVECT_1:def 7;
+   end;
   end;
 
-  definition
+
+  registration
    let K be add-associative right_zeroed right_complementable
                  right-distributive (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    cluster 0Functional(V) -> homogeneous;
+   coherence
+   proof
+    let x be Vector of V;
+    let r be Scalar of V;
+    A1: [#]V = the carrier of V by PRE_TOPC:12;
+    A2: (0Functional(V)).x = ([#]V --> 0.K).x by Def10
+                          .= 0.K by A1,FUNCOP_1:13;
+    thus (0Functional(V)).(r*x) = ([#]V --> 0.K).(r*x) by Def10
+                               .= 0.K by A1,FUNCOP_1:13
+                               .= r*(0Functional(V)).x by A2,VECTSP_1:36;
+   end;
   end;
 
-  definition
+
+  registration
    let K be non empty ZeroStr;
    let V be non empty VectSpStr over K;
    cluster 0Functional(V) -> 0-preserving;
+   coherence
+   proof
+    A1: [#]V = the carrier of V by PRE_TOPC:12;
+    thus (0Functional(V)).(0.V) = ([#]V --> 0.K).(0.V) by Def10
+                               .= 0.K by A1,FUNCOP_1:13;
+   end;
   end;
 
-  definition
+
+  registration
    let K be add-associative right_zeroed right_complementable
                  right-distributive (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    cluster additive homogeneous 0-preserving Functional of V;
+   existence
+   proof
+    take 0Functional(V);
+    thus thesis;
+   end;
   end;
+
 
   theorem :: HAHNBAN1:20
    for K be Abelian (non empty LoopStr)
@@ -295,55 +356,119 @@ begin :: Functionals of Vector Space
    for f be Functional of V holds
     (1_ K)*f = f;
 
-  definition
+  registration
    let K be Abelian add-associative right_zeroed right_complementable
                  right-distributive (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    let f,g be additive Functional of V;
    cluster f+g -> additive;
+   coherence
+   proof
+    let x,y be Vector of V;
+    thus (f+g).(x+y) = f.(x+y)+g.(x+y) by Def6
+       .= f.x+f.y+g.(x+y) by Def11
+       .= f.x+f.y+(g.x+g.y) by Def11
+       .= f.x+(f.y+(g.x+g.y)) by RLVECT_1:def 6
+       .= f.x+(g.x+(f.y+g.y)) by RLVECT_1:def 6
+       .= f.x+g.x+(f.y+g.y) by RLVECT_1:def 6
+       .= (f+g).x+(f.y+g.y) by Def6
+       .= (f+g).x+(f+g).y by Def6;
+   end;
   end;
 
-  definition
+
+  registration
    let K be Abelian add-associative right_zeroed right_complementable
                  right-distributive (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    let f be additive Functional of V;
    cluster -f -> additive;
+   coherence
+   proof
+    let x,y be Vector of V;
+    thus (-f).(x+y) = -f.(x+y) by Def7
+       .= -(f.x + f.y) by Def11
+       .= -f.x+-f.y by RLVECT_1:45
+       .= (-f).x+-f.y by Def7
+       .= (-f).x+(-f).y by Def7;
+   end;
   end;
 
-  definition
+
+  registration
    let K be add-associative right_zeroed right_complementable
                  right-distributive (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    let v be Element of K;
    let f be additive Functional of V;
    cluster v*f -> additive;
+   coherence
+   proof
+    let x,y be Vector of V;
+    thus (v*f).(x+y) = v*f.(x+y) by Def9
+       .= v*(f.x + f.y) by Def11
+       .= v*f.x+v*f.y by VECTSP_1:def 11
+       .= (v*f).x+v*f.y by Def9
+       .= (v*f).x+(v*f).y by Def9;
+   end;
   end;
 
-  definition
+
+  registration
    let K be add-associative right_zeroed right_complementable
                  right-distributive (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    let f,g be homogeneous Functional of V;
    cluster f+g -> homogeneous;
+   coherence
+   proof
+    let x be Vector of V;
+    let r be Scalar of V;
+    thus (f+g).(r*x) = f.(r*x) + g.(r*x) by Def6
+       .= r*f.x + g.(r*x) by Def12
+       .= r*f.x + r*g.x by Def12
+       .= r*(f.x + g.x) by VECTSP_1:def 11
+       .= r*(f+g).x by Def6;
+   end;
   end;
 
-  definition
+
+  registration
    let K be Abelian add-associative right_zeroed right_complementable
                  right-distributive (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    let f be homogeneous Functional of V;
    cluster -f -> homogeneous;
+   coherence
+   proof
+    let x be Vector of V;
+    let r be Scalar of V;
+    thus (-f).(r*x) = -f.(r*x) by Def7
+       .= -r*f.x by Def12
+       .= r*-f.x by Lm1
+       .= r*(-f).x by Def7;
+   end;
   end;
 
-  definition
+
+  registration
    let K be add-associative right_zeroed right_complementable
         right-distributive associative commutative (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    let v be Element of K;
    let f be homogeneous Functional of V;
    cluster v*f -> homogeneous;
+   coherence
+   proof
+    let x be Vector of V;
+    let r be Scalar of V;
+    thus (v*f).(r*x) = v*f.(r*x) by Def9
+       .= v*(r*f.x) by Def12
+       .= r*(v*f.x) by VECTSP_1:def 16
+       .= r*(v*f).x by Def9;
+   end;
   end;
+
 
   definition
    let K be add-associative right_zeroed right_complementable
@@ -351,6 +476,7 @@ begin :: Functionals of Vector Space
    let V be non empty VectSpStr over K;
    mode linear-Functional of V is additive homogeneous Functional of V;
   end;
+
 
 begin :: The Vector Space of linear Functionals
 
@@ -368,30 +494,130 @@ begin :: The Vector Space of linear Functionals
      (the lmult of it).(x,f) = x*f;
   end;
 
-  definition
+
+  registration
    let K be Abelian add-associative right_zeroed right_complementable
         right-distributive associative commutative (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    cluster V*' -> Abelian;
+   coherence
+   proof
+    let v,w be Element of V*';
+    reconsider f=v,g=w as linear-Functional of V by Def14;
+    thus v+w = (the add of V*').[v,w] by RLVECT_1:def 3
+       .= (the add of V*').(v,w) by BINOP_1:def 1
+       .= f+g by Def14
+       .= g+f by Th20
+       .= (the add of V*').(w,v) by Def14
+       .= (the add of V*').[w,v] by BINOP_1:def 1
+       .= w+v by RLVECT_1:def 3;
+   end;
   end;
 
-  definition
+
+  registration
    let K be Abelian add-associative right_zeroed right_complementable
         right-distributive associative commutative (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    cluster V*' -> add-associative;
+   coherence
+   proof
+    let u,v,w be Element of V*';
+    reconsider f=u,g=v,h=w as linear-Functional of V by Def14;
+    thus u+v+w = (the add of V*').[u+v,w] by RLVECT_1:def 3
+       .= (the add of V*').(u+v,w) by BINOP_1:def 1
+       .= (the add of V*').((the add of V*').[u,v],w) by RLVECT_1:def 3
+       .= (the add of V*').((the add of V*').(u,v),w) by BINOP_1:def 1
+       .= (the add of V*').(f+g,w) by Def14
+       .= f+g+h by Def14
+       .= f+(g+h) by Th21
+       .= (the add of V*').(u,g+h) by Def14
+       .= (the add of V*').(u,(the add of V*').(v,w)) by Def14
+       .= (the add of V*').(u,(the add of V*').[v,w]) by BINOP_1:def 1
+       .= (the add of V*').(u,v+w) by RLVECT_1:def 3
+       .= (the add of V*').[u,v+w] by BINOP_1:def 1
+       .= u+(v+w) by RLVECT_1:def 3;
+   end;
 
    cluster V*' -> right_zeroed;
+   coherence
+   proof
+    let x be Element of V*';
+    reconsider f=x as linear-Functional of V by Def14;
+    thus x + 0.(V*') = (the add of V*').[x,0.(V*')] by RLVECT_1:def 3
+       .= (the add of V*').(x,0.(V*')) by BINOP_1:def 1
+       .= (the add of V*').(x,the Zero of V*') by RLVECT_1:def 2
+       .= (the add of V*').(x,0Functional(V)) by Def14
+       .= f+0Functional(V) by Def14
+       .= x by Th23;
+   end;
 
    cluster V*' -> right_complementable;
+   coherence
+   proof
+    let x be Element of V*';
+    reconsider f=x as linear-Functional of V by Def14;
+    reconsider b = -f as Element of V*' by Def14;
+    take b;
+    thus x+b = (the add of V*').[x,b] by RLVECT_1:def 3
+       .= (the add of V*').(x,-f) by BINOP_1:def 1
+       .= f+-f by Def14
+       .= f-f by Def8
+       .= 0Functional(V) by Th24
+       .= the Zero of V*' by Def14
+       .= 0.(V*') by RLVECT_1:def 2;
+   end;
   end;
 
-  definition
+
+  registration
    let K be Abelian add-associative right_zeroed right_complementable
    left_unital distributive associative commutative (non empty doubleLoopStr);
    let V be non empty VectSpStr over K;
    cluster V*' -> VectSp-like;
+   coherence
+   proof
+    let x,y be Element of K;
+    let v,w be Element of V*';
+    reconsider f=v,g=w as linear-Functional of V by Def14;
+    thus x*(v+w) = (the lmult of V*').(x,v+w) by VECTSP_1:def 24
+       .= (the lmult of V*').(x,(the add of V*').[v,w]) by RLVECT_1:def 3
+       .= (the lmult of V*').(x,(the add of V*').(v,w)) by BINOP_1:def 1
+       .= (the lmult of V*').(x,f+g) by Def14
+       .= x*(f+g) by Def14
+       .= x*f+x*g by Th25
+       .= (the add of V*').(x*f,x*g) by Def14
+       .= (the add of V*').((the lmult of V*').(x,f),x*g) by Def14
+       .= (the add of V*').((the lmult of V*').(x,f),(the lmult of V*').(x,g))
+                                                                       by Def14
+       .= (the add of V*').(x*v,(the lmult of V*').(x,g)) by VECTSP_1:def 24
+       .= (the add of V*').(x*v,x*w) by VECTSP_1:def 24
+       .= (the add of V*').[x*v,x*w] by BINOP_1:def 1
+       .= x*v+x*w by RLVECT_1:def 3;
+    thus (x+y)*v = (the lmult of V*').(x+y,v) by VECTSP_1:def 24
+       .= (x+y)*f by Def14
+       .= x*f+y*f by Th26
+       .= (the add of V*').(x*f,y*f) by Def14
+       .= (the add of V*').((the lmult of V*').(x,f),y*f) by Def14
+       .= (the add of V*').((the lmult of V*').(x,f),(the lmult of V*').(y,f))
+                                                                       by Def14
+       .= (the add of V*').(x*v,(the lmult of V*').(y,f)) by VECTSP_1:def 24
+       .= (the add of V*').(x*v,y*v) by VECTSP_1:def 24
+       .= (the add of V*').[x*v,y*v] by BINOP_1:def 1
+       .= x*v+y*v by RLVECT_1:def 3;
+    thus (x*y)*v = (the lmult of V*').(x*y,v) by VECTSP_1:def 24
+       .= (x*y)*f by Def14
+       .= x*(y*f) by Th27
+       .= (the lmult of V*').(x,y*f) by Def14
+       .= (the lmult of V*').(x,(the lmult of V*').(y,f)) by Def14
+       .= (the lmult of V*').(x,y*v) by VECTSP_1:def 24
+       .= x*(y*v) by VECTSP_1:def 24;
+    thus (1_ K)*v = (the lmult of V*').(1_ K,v) by VECTSP_1:def 24
+       .= (1_ K)*f by Def14
+       .= v by Th28;
+   end;
   end;
+
 
 begin :: Semi Norm of Vector Space
 
@@ -402,6 +628,7 @@ begin :: Semi Norm of Vector Space
    canceled;
   end;
 
+
   definition
    let K be 1-sorted;
    let V be non empty VectSpStr over K;
@@ -410,6 +637,7 @@ begin :: Semi Norm of Vector Space
 :: HAHNBAN1:def 16
     for x,y be Vector of V holds F.(x+y) <= F.x+F.y;
   end;
+
 
   definition
    let K be 1-sorted;
@@ -420,6 +648,7 @@ begin :: Semi Norm of Vector Space
     for x,y be Vector of V holds F.(x+y) = F.x+F.y;
   end;
 
+
   definition
    let V be non empty VectSpStr over F_Complex;
    let F be RFunctional of V;
@@ -429,6 +658,7 @@ begin :: Semi Norm of Vector Space
     for r be Real holds
      F.([**r,0**]*v) = r*F.v;
   end;
+
 
   theorem :: HAHNBAN1:29
    for V be VectSp-like (non empty VectSpStr over F_Complex)
@@ -446,6 +676,7 @@ begin :: Semi Norm of Vector Space
     for r be Scalar of V holds F.(r*v) = |.r.|*F.v;
   end;
 
+
   definition
    let K be 1-sorted;
    let V be VectSpStr over K;
@@ -455,16 +686,34 @@ begin :: Semi Norm of Vector Space
       F.(0.V) = 0;
   end;
 
-  definition
+
+  registration
    let K be 1-sorted;
    let V be non empty VectSpStr over K;
    cluster additive -> subadditive RFunctional of V;
+   coherence
+   proof
+    let F be RFunctional of V;
+    assume A1: F is additive;
+    let x,y be Vector of V;
+    thus F.(x+y) <= F.x+F.y by A1,Def17;
+   end;
   end;
 
-  definition
+  registration
    let V be VectSp of F_Complex;
    cluster Real_homogeneous -> 0-preserving RFunctional of V;
+   coherence
+   proof
+    let F be RFunctional of V;
+    assume A1: F is Real_homogeneous;
+    A2: 0.F_Complex = [**0,0**] by Def1,COMPLFLD:9,L0;
+    thus F.(0.V) = F.(0.F_Complex*0.V) by VECTSP_1:59
+                .= 0*F.(0.V) by A1,A2,Def18
+                .= 0;
+   end;
   end;
+
 
   definition
    let K be 1-sorted;
@@ -474,36 +723,91 @@ begin :: Semi Norm of Vector Space
     [#]V --> 0;
   end;
 
-  definition
+
+  registration
    let K be 1-sorted;
    let V be non empty VectSpStr over K;
    cluster 0RFunctional(V) -> additive;
+   coherence
+   proof
+    let x,y be Vector of V;
+    A1: [#]V = the carrier of V by PRE_TOPC:12;
+    A2: (0RFunctional(V)).x = ([#]V --> 0).x by Def21
+                           .= 0 by A1,FUNCOP_1:13;
+    A3: (0RFunctional(V)).y = ([#]V --> 0).y by Def21
+                           .= 0 by A1,FUNCOP_1:13;
+    thus (0RFunctional(V)).(x+y) = ([#]V --> 0).(x+y) by Def21
+                                .= (0RFunctional(V)).x + (0RFunctional(V)).y
+                                                       by A1,A2,A3,FUNCOP_1:13;
+   end;
 
    cluster 0RFunctional(V) -> 0-preserving;
+   coherence
+   proof
+    A4: [#]V = the carrier of V by PRE_TOPC:12;
+    thus (0RFunctional(V)).(0.V) = ([#]V --> 0).(0.V) by Def21
+                                .= 0 by A4,FUNCOP_1:13;
+    thus thesis;
+   end;
   end;
 
-  definition
+
+  registration
    let V be non empty VectSpStr over F_Complex;
    cluster 0RFunctional(V) -> Real_homogeneous;
+   coherence
+   proof
+    let x be Vector of V;
+    let r be Real;
+    A1: [#]V = the carrier of V by PRE_TOPC:12;
+    A2: (0RFunctional(V)).x = ([#]V --> 0).x by Def21
+                          .= 0 by A1,FUNCOP_1:13;
+    thus (0RFunctional(V)).([**r,0**]*x) = ([#]V --> 0).([**r,0**]*x) by Def21
+           .= r*((0RFunctional(V)).x) by A1,A2,FUNCOP_1:13;
+   end;
 
    cluster 0RFunctional(V) -> homogeneous;
+   coherence
+   proof
+    let x be Vector of V;
+    let r be Scalar of V;
+    A3: [#]V = the carrier of V by PRE_TOPC:12;
+    A4: (0RFunctional(V)).x = ([#]V --> 0).x by Def21
+                          .= 0 by A3,FUNCOP_1:13;
+    thus (0RFunctional(V)).(r*x) = ([#]V --> 0).(r*x) by Def21
+           .= |.r.|*((0RFunctional(V)).x) by A3,A4,FUNCOP_1:13;
+   end;
   end;
 
-  definition
+
+  registration
    let K be 1-sorted;
    let V be non empty VectSpStr over K;
    cluster additive 0-preserving RFunctional of V;
+   existence
+   proof
+    take 0RFunctional(V);
+    thus thesis;
+   end;
   end;
 
-  definition
+
+  registration
    let V be non empty VectSpStr over F_Complex;
    cluster additive Real_homogeneous homogeneous RFunctional of V;
+   existence
+   proof
+    take 0RFunctional(V);
+    thus thesis;
+   end;
   end;
+
 
   definition
    let V be non empty VectSpStr over F_Complex;
    mode Semi-Norm of V is subadditive homogeneous RFunctional of V;
   end;
+
 
 begin :: Hahn Banach Theorem
 
@@ -516,35 +820,198 @@ begin :: Hahn Banach Theorem
      (the Mult of it).(r,v)=[**r,0**]*v;
   end;
 
-  definition
+
+  registration
    let V be non empty VectSpStr over F_Complex;
    cluster RealVS(V) -> non empty;
+   coherence
+   proof
+      the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    hence RealVS(V) is non empty by STRUCT_0:def 1;
+   end;
   end;
 
-  definition
+
+  registration
    let V be Abelian (non empty VectSpStr over F_Complex);
    cluster RealVS(V) -> Abelian;
+   coherence
+   proof
+    let v,w be Element of RealVS(V);
+    A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    then reconsider v1=v,w1=w as Element of V;
+    thus v + w = (the add of V).[v1,w1] by A1,RLVECT_1:def 3
+              .= v1 + w1 by RLVECT_1:def 3
+              .= (the add of RealVS(V)).[w,v] by A1,RLVECT_1:def 3
+              .= w + v by RLVECT_1:def 3;
+   end;
   end;
 
-  definition
+
+  registration
    let V be add-associative (non empty VectSpStr over F_Complex);
    cluster RealVS(V) -> add-associative;
+   coherence
+   proof
+    let u,v,w be Element of RealVS(V);
+    A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    then reconsider u1=u,v1=v,w1=w as Element of V;
+    thus (u + v) + w = (the add of RealVS(V)).[u+v,w] by RLVECT_1:def 3
+                 .= (the add of V).[((the add of V).[u1,v1]),w1] by A1,RLVECT_1
+:def 3
+                 .= (the add of V).[u1+v1,w1] by RLVECT_1:def 3
+                 .= (u1 + v1) + w1 by RLVECT_1:def 3
+                 .= u1 + (v1 + w1) by RLVECT_1:def 6
+                 .= (the add of V).[u1,v1+w1] by RLVECT_1:def 3
+                 .= (the add of RealVS(V)).[u,((the add of RealVS(V)).[v,w])]
+                                                            by A1,RLVECT_1:def
+3
+                 .= (the add of RealVS(V)).[u,v+w] by RLVECT_1:def 3
+                 .= u + (v + w) by RLVECT_1:def 3;
+   end;
   end;
 
-  definition
+
+  registration
    let V be right_zeroed (non empty VectSpStr over F_Complex);
    cluster RealVS(V) -> right_zeroed;
+   coherence
+   proof
+    let v be Element of RealVS(V);
+    A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    then reconsider v1=v as Element of V;
+    thus v + 0.RealVS(V) = (the add of V).[v1,0.RealVS(V)] by A1,RLVECT_1:def 3
+                        .= (the add of V).[v1,the Zero of RealVS(V)]
+                                                           by RLVECT_1:def 2
+                        .= (the add of V).[v1,0.V] by A1,RLVECT_1:def 2
+                        .= v1 + 0.V by RLVECT_1:def 3
+                        .= v by RLVECT_1:def 7;
+   end;
   end;
 
-  definition
+
+  registration
    let V be right_complementable (non empty VectSpStr over F_Complex);
    cluster RealVS(V) -> right_complementable;
+   coherence
+   proof
+    let v be Element of RealVS(V);
+    A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    then reconsider v1=v as Element of V;
+    consider w1 be Element of V such that
+     A2: v1 + w1 = 0.V by RLVECT_1:def 8;
+    reconsider w=w1 as Element of RealVS(V) by A1;
+    take w;
+    thus v + w = (the add of V).[v1,w1] by A1,RLVECT_1:def 3
+              .= v1 + w1 by RLVECT_1:def 3
+              .= the Zero of RealVS(V) by A1,A2,RLVECT_1:def 2
+              .= 0.RealVS(V) by RLVECT_1:def 2;
+   end;
   end;
 
-  definition
+
+  registration
    let V be VectSp-like (non empty VectSpStr over F_Complex);
    cluster RealVS(V) -> RealLinearSpace-like;
+   coherence
+   proof
+    thus for a be Real for v,w be Element of RealVS(V) holds
+     a * (v + w) = a * v + a * w
+     proof
+      let a be Real;
+      let v,w be Element of RealVS(V);
+      A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+      set a1=[**a,0**];
+      reconsider v1=v,w1=w as Element of V by A1;
+      thus a * (v + w) = (the Mult of RealVS(V)).[a,v+w] by RLVECT_1:def 4
+            .= (the Mult of RealVS(V)).(a,v+w) by BINOP_1:def 1
+            .= (the Mult of RealVS(V)).(a,((the add of V).[v1,w1])) by A1,
+RLVECT_1:def 3
+            .= (the Mult of RealVS(V)).(a,(v1 + w1)) by RLVECT_1:def 3
+            .= [**a,0**] * (v1 + w1) by Def22
+            .= a1 * v1 + a1 * w1 by VECTSP_1:def 26
+            .= (the add of V).[a1*v1,a1*w1] by RLVECT_1:def 3
+            .= (the add of V).[((the Mult of RealVS(V)).(a,v1)),[**a,0**]*w1]
+                                                                       by Def22
+            .= (the add of RealVS(V)).[((the Mult of RealVS(V)).(a,v)),
+                                      ((the Mult of RealVS(V)).(a,w))] by A1,
+Def22
+            .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
+                              ((the Mult of RealVS(V)).(a,w))] by BINOP_1:def 1
+            .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
+                              ((the Mult of RealVS(V)).[a,w])] by BINOP_1:def 1
+            .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
+                                      (a*w)] by RLVECT_1:def 4
+            .= (the add of RealVS(V)).[a*v,a*w] by RLVECT_1:def 4
+            .= a * v + a * w by RLVECT_1:def 3;
+     end;
+    thus for a,b be Real for v be Element of RealVS(V) holds
+     (a + b) * v = a * v + b * v
+     proof
+      let a,b be Real;
+      let v be Element of RealVS(V);
+      A2: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+      set a1=[**a,0**];
+      set b1=[**b,0**];
+        [**a,0**] = [*a,0*] & [**b,0**] = [*b,0*] by Def1;
+      then A3: [**a,0**] + [**b,0**] = [*a,0*] + [*b,0*] by COMPLFLD:3
+                                    .= [*a+b,0+0*] by COMPLFLD:2
+                                    .= [**a+b,0**] by Def1;
+      reconsider v1=v as Element of V by A2;
+      thus (a + b) * v = (the Mult of RealVS(V)).[a+b,v] by RLVECT_1:def 4
+             .= (the Mult of RealVS(V)).(a+b,v) by BINOP_1:def 1
+             .= ([**a,0**] + [**b,0**]) * v1 by A3,Def22
+             .= a1 * v1 + b1 * v1 by VECTSP_1:def 26
+             .= (the add of RealVS(V)).[([**a,0**]*v1),([**b,0**]*v1)] by A2,
+RLVECT_1:def 3
+             .= (the add of RealVS(V)).[((the Mult of RealVS(V)).(a,v)),
+                                                       ([**b,0**]*v1)] by Def22
+             .= (the add of RealVS(V)).[((the Mult of RealVS(V)).(a,v)),
+                                      ((the Mult of RealVS(V)).(b,v))] by Def22
+             .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
+                              ((the Mult of RealVS(V)).(b,v))] by BINOP_1:def 1
+             .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
+                              ((the Mult of RealVS(V)).[b,v])] by BINOP_1:def 1
+             .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
+                                                       b*v] by RLVECT_1:def 4
+             .= (the add of RealVS(V)).[a*v,b*v] by RLVECT_1:def 4
+             .= a * v + b * v by RLVECT_1:def 3;
+     end;
+    thus for a,b be Real for v be Element of RealVS(V) holds
+     (a * b) * v = a * (b * v)
+     proof
+      let a,b be Real;
+      let v be Element of RealVS(V);
+      A4: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+      A5: [**a,0**]=[*a,0*] & [**b,0**]=[*b,0*] by Def1;
+      A6: [**a*b,0**] = [*a*b - 0*0,a*0+b*0*] by Def1
+                     .= [*a,0*] * [*b,0*] by Th2
+                     .= [**a,0**]*[**b,0**] by A5,COMPLFLD:6;
+      reconsider v1=v as Element of V by A4;
+      thus (a * b) * v = (the Mult of RealVS(V)).[a*b,v] by RLVECT_1:def 4
+       .= (the Mult of RealVS(V)).(a*b,v) by BINOP_1:def 1
+       .= ([**a,0**] * [**b,0**]) * v1 by A6,Def22
+       .= [**a,0**] * ([**b,0**] * v1) by VECTSP_1:def 26
+       .= (the Mult of RealVS(V)).(a,([**b,0**] * v1)) by Def22
+       .= (the Mult of RealVS(V)).(a,(the Mult of RealVS(V)).(b,v)) by Def22
+       .= (the Mult of RealVS(V)).[a,(the Mult of RealVS(V)).(b,v)]
+                                                             by BINOP_1:def 1
+       .= (the Mult of RealVS(V)).[a,(the Mult of RealVS(V)).[b,v]]
+                                                             by BINOP_1:def 1
+       .= (the Mult of RealVS(V)).[a,b*v] by RLVECT_1:def 4
+       .= a * (b * v) by RLVECT_1:def 4;
+     end;
+    let v be Element of RealVS(V);
+      the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    then reconsider v1=v as Element of V;
+    A7: [**1,0**] = 1_(F_Complex) by Def1,COMPLFLD:10,L1;
+    thus 1 * v = (the Mult of RealVS(V)).[1,v] by RLVECT_1:def 4
+              .= (the Mult of RealVS(V)).(1,v) by BINOP_1:def 1
+              .= [**1,0**] * v1 by Def22
+              .= v by A7,VECTSP_1:def 26;
+   end;
   end;
+
 
   theorem :: HAHNBAN1:30
    for V be non empty VectSp of F_Complex
@@ -570,6 +1037,7 @@ begin :: Hahn Banach Theorem
      it.i = Re(l.i);
   end;
 
+
   definition
    let V be non empty VectSpStr over F_Complex;
    let l be Functional of V;
@@ -579,6 +1047,7 @@ begin :: Hahn Banach Theorem
      it.i = Im(l.i);
   end;
 
+
   definition
    let V be non empty VectSpStr over F_Complex;
    let l be Functional of RealVS(V);
@@ -586,6 +1055,7 @@ begin :: Hahn Banach Theorem
 :: HAHNBAN1:def 25
     l;
   end;
+
 
   definition
    let V be non empty VectSpStr over F_Complex;
@@ -595,29 +1065,84 @@ begin :: Hahn Banach Theorem
     l;
   end;
 
-  definition
+
+  registration
    let V be non empty VectSp of F_Complex;
    let l be additive Functional of RealVS(V);
    cluster RtoC(l) -> additive;
+   coherence
+   proof
+    let x,y be Vector of V;
+    A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    then reconsider x1=x,y1=y as VECTOR of RealVS(V);
+      x+y = (the add of RealVS(V)).[x1,y1] by A1,RLVECT_1:def 3
+       .= x1+y1 by RLVECT_1:def 3;
+    hence (RtoC l).(x+y) = l.(x1+y1) by Def25
+       .= l.x1+l.y1 by HAHNBAN:def 4
+       .= (RtoC l).x+l.y1 by Def25
+       .= (RtoC l).x+(RtoC l).y by Def25;
+   end;
   end;
 
-  definition
+
+  registration
    let V be non empty VectSp of F_Complex;
    let l be additive RFunctional of V;
    cluster CtoR(l) -> additive;
+   coherence
+   proof
+    let x,y be VECTOR of RealVS(V);
+    A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    then reconsider x1=x,y1=y as Vector of V;
+      x+y = (the add of V).[x1,y1] by A1,RLVECT_1:def 3
+       .= x1+y1 by RLVECT_1:def 3;
+    hence (CtoR l).(x+y) = l.(x1+y1) by Def26
+       .= l.x1+l.y1 by Def17
+       .= (CtoR l).x+l.y1 by Def26
+       .= (CtoR l).x+(CtoR l).y by Def26;
+   end;
   end;
 
-  definition
+
+  registration
    let V be non empty VectSp of F_Complex;
    let l be homogeneous Functional of RealVS(V);
    cluster RtoC(l) -> Real_homogeneous;
+   coherence
+   proof
+    let x be Vector of V;
+    let r be Real;
+      the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    then reconsider x1=x as VECTOR of RealVS(V);
+      [**r,0**]*x = (the Mult of RealVS(V)).(r,x) by Def22
+       .= (the Mult of RealVS(V)).[r,x] by BINOP_1:def 1
+       .= r*x1 by RLVECT_1:def 4;
+    hence (RtoC l).([**r,0**]*x) = l.(r*x1) by Def25
+       .= r*l.x1 by HAHNBAN:def 5
+       .= r*(RtoC l).x by Def25;
+   end;
   end;
 
-  definition
+
+  registration
    let V be non empty VectSp of F_Complex;
    let l be Real_homogeneous RFunctional of V;
    cluster CtoR(l) -> homogeneous;
+   coherence
+   proof
+    let x be VECTOR of RealVS(V);
+    let r be Real;
+      the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    then reconsider x1=x as Vector of V;
+      [**r,0**]*x1 = (the Mult of RealVS(V)).(r,x1) by Def22
+       .= (the Mult of RealVS(V)).[r,x1] by BINOP_1:def 1
+       .= r*x by RLVECT_1:def 4;
+    hence (CtoR l).(r*x) = l.([**r,0**]*x1) by Def26
+       .= r*l.x1 by Def18
+       .= r*(CtoR l).x by Def26;
+   end;
   end;
+
 
   definition
    let V be non empty VectSpStr over F_Complex;
@@ -628,6 +1153,7 @@ begin :: Hahn Banach Theorem
      it.v = l.(i_FC*v);
   end;
 
+
   definition
    let V be non empty VectSpStr over F_Complex;
    let l be Functional of RealVS(V);
@@ -636,6 +1162,7 @@ begin :: Hahn Banach Theorem
     for v be Element of V holds
      it.v = [**(RtoC l).v,-(i-shift(RtoC l)).v**];
   end;
+
 
   theorem :: HAHNBAN1:33
    for V be non empty VectSp of F_Complex

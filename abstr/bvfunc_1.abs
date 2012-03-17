@@ -34,22 +34,44 @@ definition let k,l be boolean set;
  commutativity;
 end;
 
-definition let k,l be boolean set;
+
+registration let k,l be boolean set;
  cluster k 'imp' l -> boolean;
+ correctness
+  proof
+      k 'imp' l = 'not' k 'or' l by Def1;
+   hence thesis;
+  end;
  cluster k 'eqv' l -> boolean;
+ correctness
+  proof
+     k 'eqv' l = 'not' (k 'xor' l) by Def2;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster boolean -> natural set;
+ coherence
+  proof let x be set;
+   assume x is boolean;
+    then x in BOOLEAN by MARGREL1:def 15;
+   hence thesis by MARGREL1:def 12,TARSKI:def 2;
+  end;
 end;
 
+
+notation let k,l be boolean set;
+ synonym k '<' l for k <= l ;
+end;
 definition let k,l be boolean set;
  redefine
- pred k <= l means
+ pred k '<' l means
 :: BVFUNC_1:def 3
   k 'imp' l = TRUE;
- synonym k '<' l;
-end;
+ end;
+
 
 begin :: Chap.2   Boolean Valued Functions
 
@@ -59,21 +81,83 @@ definition let Y;
   Funcs(Y,BOOLEAN);
 end;
 
-definition let Y be set;
+
+registration let Y be set;
  cluster BVF(Y) -> functional non empty;
+coherence
+ proof
+   A1:BVF(Y) = Funcs(Y,BOOLEAN) by Def4;
+   hence BVF(Y) is functional;
+   thus BVF(Y) is non empty by A1;
+ end;
 end;
 
-definition let Y be set;
+
+registration let Y be set;
  cluster -> boolean-valued Element of BVF Y;
+ coherence
+  proof let f be Element of BVF Y;
+      BVF Y = Funcs(Y,BOOLEAN) by Def4;
+   hence rng f c= BOOLEAN by ALTCAT_1:6;
+  end;
 end;
+
 
 reserve Y for non empty set;
 reserve B for Subset of Y;
 
-definition let a be boolean-valued Function, x be set;
- redefine
- func a.x;
- synonym Pj(a,x);
+notation let a be boolean-valued Function, x be set;
+ synonym Pj(a,x) for a.x;
+ end;
+
+
+scheme :: BVFUNC_1:sch 1
+ BVFUniq {Y() -> non empty set, a,b() -> Element of Funcs(Y(),BOOLEAN),
+  F(set, Element of Funcs(Y(),BOOLEAN), Element of Funcs(Y(),BOOLEAN)) -> set}:
+for f1,f2 being Element of Funcs(Y(),BOOLEAN) st
+(for x being Element of Y() holds Pj(f1,x) = F(x,a(),b())) &
+(for x being Element of Y() holds Pj(f2,x) = F(x,a(),b())) holds
+  f1 = f2
+proof
+  let f1,f2 be Element of Funcs(Y(),BOOLEAN);
+  assume that
+A1:  (for x being Element of Y() holds Pj(f1,x) = F(x,a(),b())) and
+A2:  (for x being Element of Y() holds Pj(f2,x) = F(x,a(),b()));
+   consider k3 being Function such that
+A3: f1=k3 & dom k3=Y() & rng k3 c= BOOLEAN by FUNCT_2:def 2;
+   consider k4 being Function such that
+A4: f2=k4 & dom k4=Y() & rng k4 c= BOOLEAN by FUNCT_2:def 2;
+     for u being set st u in Y() holds k3.u=k4.u
+    proof let u be set;assume u in Y();
+      then reconsider u'=u as Element of Y();
+       Pj(f2,u') = F(u',a(),b()) by A2;
+     hence k3.u=k4.u by A1,A3,A4;
+    end;
+  hence f1=f2 by A3,A4,FUNCT_1:9;
+end;
+
+scheme :: BVFUNC_1:sch 2
+ BVFUniq1 {Y() -> non empty set, F(set) -> set}:
+for f1,f2 being Element of Funcs(Y(),BOOLEAN) st
+(for x being Element of Y() holds Pj(f1,x) = F(x)) &
+(for x being Element of Y() holds Pj(f2,x) = F(x)) holds
+  f1 = f2
+proof
+  let f1,f2 be Element of Funcs(Y(),BOOLEAN);
+  assume that
+A1:  (for x being Element of Y() holds Pj(f1,x) = F(x)) and
+A2:  (for x being Element of Y() holds Pj(f2,x) = F(x));
+   consider k3 being Function such that
+A3: f1=k3 & dom k3=Y() & rng k3 c= BOOLEAN by FUNCT_2:def 2;
+   consider k4 being Function such that
+A4: f2=k4 & dom k4=Y() & rng k4 c= BOOLEAN by FUNCT_2:def 2;
+     for u being set st u in Y() holds k3.u=k4.u
+    proof let u be set;assume u in Y();
+      then reconsider u'=u as Element of Y();
+       Pj(f2,u') = F(u') by A2;
+     hence k3.u=k4.u by A1,A3,A4;
+    end;
+  hence f1=f2 by A3,A4,FUNCT_1:9;
 end;
 
 definition let Y;let a be Element of BVF(Y);
@@ -82,6 +166,7 @@ definition let Y;let a be Element of BVF(Y);
  let b be Element of BVF(Y);
  func a '&' b ->Element of BVF(Y);
 end;
+
 
 definition
  let p,q be boolean-valued Function;
@@ -97,11 +182,33 @@ definition
  commutativity;
 end;
 
-definition
+
+registration
  let p,q be boolean-valued Function;
   cluster p 'or' q -> boolean-valued;
+  coherence
+   proof let x be set;
+    assume x in rng(p 'or' q);
+     then consider y being set such that
+A1:   y in dom(p 'or' q) and
+A2:   x = (p 'or' q).y by FUNCT_1:def 5;
+    x = (p.y) 'or' (q.y) by A1,A2,Def5;
+     then x = FALSE or x = TRUE by MARGREL1:39;
+    hence x in BOOLEAN;
+   end;
   cluster p 'xor' q -> boolean-valued;
+  coherence
+   proof let x be set;
+    assume x in rng(p 'xor' q);
+     then consider y being set such that
+A3:   y in dom(p 'xor' q) and
+A4:   x = (p 'xor' q).y by FUNCT_1:def 5;
+    x = (p.y) 'xor' (q.y) by A3,A4,Def6;
+     then x = FALSE or x = TRUE by MARGREL1:39;
+    hence x in BOOLEAN;
+   end;
 end;
+
 
 definition let A be non empty set;
  redefine
@@ -114,11 +221,13 @@ definition let A be non empty set;
    for x being Element of A holds it.x = (p.x) 'xor' (q.x);
 end;
 
+
 definition let Y;let a,b be Element of BVF(Y);
  redefine
  func a 'or' b ->Element of BVF(Y);
  func a 'xor' b ->Element of BVF(Y);
 end;
+
 
 definition
  let p,q be boolean-valued Function;
@@ -133,11 +242,35 @@ definition
  commutativity;
 end;
 
-definition
+
+registration
  let p,q be boolean-valued Function;
   cluster p 'imp' q -> boolean-valued;
+  coherence
+   proof let x be set;
+    assume x in rng(p 'imp' q);
+     then consider y being set such that
+A1:   y in dom(p 'imp' q) and
+A2:   x = (p 'imp' q).y by FUNCT_1:def 5;
+    x = (p.y) 'imp' (q.y) by A1,A2,Def9
+      .= 'not' (p.y) 'or' (q.y) by Def1;
+     then x = FALSE or x = TRUE by MARGREL1:39;
+    hence x in BOOLEAN;
+   end;
   cluster p 'eqv' q -> boolean-valued;
+  coherence
+   proof let x be set;
+    assume x in rng(p 'eqv' q);
+     then consider y being set such that
+A3:   y in dom(p 'eqv' q) and
+A4:   x = (p 'eqv' q).y by FUNCT_1:def 5;
+    x = (p.y) 'eqv' (q.y) by A3,A4,Def10
+      .= 'not' ((p.y) 'xor' (q.y)) by Def2;
+     then x = FALSE or x = TRUE by MARGREL1:39;
+    hence x in BOOLEAN;
+   end;
 end;
+
 
 definition let A be non empty set;
  redefine
@@ -150,11 +283,13 @@ definition let A be non empty set;
  for x being Element of A holds it.x = 'not' (Pj(p,x) 'xor' Pj(q,x));
 end;
 
+
 definition let Y;let a,b be Element of BVF(Y);
  redefine
  func a 'imp' b ->Element of BVF(Y);
  func a 'eqv' b ->Element of BVF(Y);
 end;
+
 
 definition let Y;
  func O_el(Y) ->Element of Funcs(Y,BOOLEAN) means
@@ -162,11 +297,13 @@ definition let Y;
  for x being Element of Y holds Pj(it,x)= FALSE;
 end;
 
+
 definition let Y;
  func I_el(Y) ->Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 14
  for x being Element of Y holds Pj(it,x)= TRUE;
 end;
+
 
 canceled 3;
 
@@ -232,6 +369,7 @@ definition let Y;let a,b be Element of Funcs(Y,BOOLEAN);
 reflexivity;
 end;
 
+
 theorem :: BVFUNC_1:18
 for a,b,c being Element of Funcs(Y,BOOLEAN) holds
 ((a '<' b) & (b '<' a) implies a=b)&
@@ -263,6 +401,7 @@ definition let Y;let a be Element of Funcs(Y,BOOLEAN);
    otherwise it = I_el(Y);
 end;
 
+
 theorem :: BVFUNC_1:22
 for a being Element of Funcs(Y,BOOLEAN) holds
      'not' B_INF(a) = B_SUP('not' a) & 'not' B_SUP(a)=B_INF('not' a);
@@ -271,18 +410,64 @@ theorem :: BVFUNC_1:23
        B_INF(O_el(Y)) = O_el(Y) & B_INF(I_el(Y))=I_el(Y) &
      B_SUP(O_el(Y)) = O_el(Y) & B_SUP(I_el(Y))=I_el(Y);
 
-definition let Y;
+registration let Y;
  cluster O_el(Y) -> constant;
+coherence
+proof
+ thus O_el(Y) is constant
+ proof
+   consider f being Function such that
+     A1:O_el(Y) = f & dom f = Y & rng f c= BOOLEAN by FUNCT_2:def 2;
+     for n1,n2 being set st n1 in dom O_el(Y) & n2 in dom O_el(Y) holds
+     O_el(Y).n1=O_el(Y).n2
+   proof
+     let n1,n2 be set;
+     assume n1 in dom O_el(Y) & n2 in dom O_el(Y);
+     then reconsider n1, n2 as Element of Y by A1;
+     A2:Pj(O_el(Y),n2)= FALSE by Def13;
+      Pj(O_el(Y),n1) = O_el(Y).n1;
+     hence thesis by A2,Def13;
+   end;
+   hence thesis by SEQM_3:def 5;
+ end;
+end;
 end;
 
-definition let Y;
+
+registration let Y;
  cluster I_el(Y) -> constant;
+coherence
+proof
+ thus I_el(Y) is constant
+ proof
+   consider f being Function such that
+     A1:I_el(Y) = f & dom f = Y & rng f c= BOOLEAN by FUNCT_2:def 2;
+     for n1,n2 being set st n1 in dom I_el(Y) & n2 in dom I_el(Y) holds
+     I_el(Y).n1=I_el(Y).n2
+   proof
+     let n1,n2 be set;
+     assume n1 in dom I_el(Y) & n2 in dom I_el(Y);
+     then reconsider n1, n2 as Element of Y by A1;
+     A2:Pj(I_el(Y),n2)= TRUE by Def14;
+      Pj(I_el(Y),n1) = I_el(Y).n1;
+     hence thesis by A2,Def14;
+   end;
+   hence thesis by SEQM_3:def 5;
+ end;
+end;
 end;
 
-definition
+
+registration
  let Y be non empty set;
  cluster constant Element of Funcs(Y,BOOLEAN);
+existence
+proof
+  take O_el(Y);
+  thus thesis;
 end;
+end;
+
 
 theorem :: BVFUNC_1:24
 for a being constant Element of Funcs(Y,BOOLEAN) holds
@@ -327,6 +512,7 @@ pred a is_dependent_of PA means
   for x1,x2 being set st x1 in F & x2 in F holds a.x1=a.x2;
 end;
 
+
 theorem :: BVFUNC_1:31
 for a being Element of Funcs(Y,BOOLEAN) holds
   a is_dependent_of %I(Y);
@@ -339,10 +525,11 @@ definition let Y;let PA be a_partition of Y;
  redefine mode Element of PA -> Subset of Y;
 end;
 
+
 definition let Y;let x be Element of Y;let PA be a_partition of Y;
  redefine func EqClass(x,PA) -> Element of PA;
- synonym Lift(x,PA);
-end;
+ end;
+
 
 definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
  func B_INF(a,PA) -> Element of Funcs(Y,BOOLEAN) means
@@ -354,6 +541,7 @@ definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
          implies Pj(it,y) = FALSE);
 end;
 
+
 definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
  func B_SUP(a,PA) -> Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 20
@@ -363,6 +551,7 @@ definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
    (not (ex x being Element of Y st x in EqClass(y,PA) & Pj(a,x)=TRUE)
          implies Pj(it,y) = FALSE);
 end;
+
 
 theorem :: BVFUNC_1:33
 for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
@@ -419,6 +608,7 @@ definition let Y;let f be Element of Funcs(Y,BOOLEAN);
    {{x where x is Element of Y:f.x = TRUE },
     {x' where x' is Element of Y:f.x' = FALSE}} \ {{}};
 end;
+
 
 theorem :: BVFUNC_1:44
 for a being Element of Funcs(Y,BOOLEAN) holds

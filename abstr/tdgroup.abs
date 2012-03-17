@@ -34,24 +34,30 @@ definition let IT be non empty LoopStr;
    ex b being Element of IT st b + b = a;
 end;
 
-definition
+registration
   cluster G_Real -> Fanoian Two_Divisible;
+  coherence by Def1,Lm1,Th2;
 end;
 
-definition
+
+registration
   cluster strict Fanoian Two_Divisible add-associative
     right_zeroed right_complementable Abelian (non empty LoopStr);
+  existence by Lm1;
 end;
+
 
 definition
   mode Two_Divisible_Group is Two_Divisible add-associative right_zeroed
    right_complementable Abelian (non empty LoopStr);
 end;
 
+
 definition
   mode Uniquely_Two_Divisible_Group is Fanoian Two_Divisible add-associative
     right_zeroed right_complementable Abelian (non empty LoopStr);
 end;
+
 
 canceled 3;
 
@@ -68,11 +74,11 @@ reserve ADG for Uniquely_Two_Divisible_Group;
 reserve a,b,c,d,a',b',c',p,q for Element of ADG;
 reserve x,y for set;
 
-definition let ADG be non empty LoopStr;
+notation let ADG be non empty LoopStr;
   let a,b be Element of ADG;
-  redefine func a+b;
-   synonym a # b;
- end;
+  synonym a # b for a+b;
+   end;
+
 
 definition let ADG be non empty LoopStr;
  canceled 2;
@@ -84,15 +90,23 @@ definition let ADG be non empty LoopStr;
     holds [[a,b],[c,d]] in it iff a # d = b # c;
  end;
 
+
 definition let ADG be non empty LoopStr;
  func AV(ADG) -> strict AffinStruct equals
 :: TDGROUP:def 5
    AffinStruct(#the carrier of ADG,CONGRD(ADG)#);
  end;
 
-definition let ADG be non empty LoopStr;
+
+registration let ADG be non empty LoopStr;
  cluster AV ADG -> non empty;
+ coherence
+  proof
+      AV ADG = AffinStruct(#the carrier of ADG,CONGRD(ADG)#) by Def5;
+   hence the carrier of AV ADG is non empty;
+  end;
 end;
+
 
 canceled;
 
@@ -105,6 +119,7 @@ definition let ADG; let a,b,c,d;
 :: TDGROUP:def 6
    [[a,b],[c,d]] in the CONGR of AV(ADG);
  end;
+
 
 theorem :: TDGROUP:10
 a,b ==> c,d iff a # d = b # c;
@@ -175,13 +190,36 @@ definition let IT be non empty AffinStruct;
          a,b // c,d holds a,c // b,d);
 end;
 
-definition
+
+registration
  cluster strict non trivial AffVect-like (non empty AffinStruct);
+  existence
+   proof consider ADG such that A1: ex a,b st a<>b by Th11;
+      (ex a,b being Element of AV(ADG) st a<>b) &
+    (for a,b,c being Element of AV(ADG) st a,b // c,c
+      holds a=b) &
+    (for a,b,c,d,p,q being Element of AV(ADG) st
+           a,b // p,q & c,d // p,q holds a,b // c,d) &
+    (for a,b,c being Element of AV(ADG)
+        ex d being Element of AV(ADG) st a,b // c,d) &
+    (for a,b,c,a',b',c' being Element of AV(ADG) st
+           a,b // a',b' & a,c // a',c' holds b,c // b',c') &
+    (for a,c being Element of AV(ADG)
+        ex b being Element of AV(ADG) st a,b // b,c) &
+    (for a,b,c,b' being Element of AV(ADG) st
+           a,b // b,c & a,b' // b',c holds b = b') &
+    (for a,b,c,d being Element of AV(ADG) st
+           a,b // c,d holds a,c // b,d) by A1,Th20;
+     then AV(ADG) is non trivial AffVect-like by Def8,REALSET1:def 20;
+    hence thesis;
+   end;
 end;
+
 
 definition
  mode AffVect is non trivial AffVect-like (non empty AffinStruct);
 end;
+
 
 theorem :: TDGROUP:21
 for AS holds

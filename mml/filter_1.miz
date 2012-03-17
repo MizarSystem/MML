@@ -80,6 +80,7 @@ theorem
    coherence by Th1;
  end;
 
+
  definition let D,R;
   mode UnOp of D,R -> UnOp of D means :Def1:
    for x,y being Element of D st [x,y] in R
@@ -88,7 +89,7 @@ theorem
     proof
      deffunc F(Element of D) = $1;
      consider f being UnOp of D such that
-A1:    for x being Element of D holds f.x = F(x) from LambdaD;
+A1:    for x being Element of D holds f.x = F(x) from FUNCT_2:sch 4;
      take f; let x,y be Element of D;
         f.x = x & f.y = y by A1;
      hence thesis;
@@ -103,18 +104,21 @@ A1:    for x being Element of D holds f.x = F(x) from LambdaD;
      deffunc F(Element of D,Element of D) = $1;
      consider f being BinOp of D such that
 A2:    for x,y being Element of D holds f.(x,y) = F(x,y)
-         from BinOpLambda;
+         from BINOP_1:sch 2;
      take f; let x1,y1, x2,y2 be Element of D;
         f.(x1,x2) = x1 & f.(y1,y2) = y1 by A2;
      hence thesis;
     end;
  end;
 
+
  reserve F,G for BinOp of D,R_D;
 
  definition let D; let R be Equivalence_Relation of D;
   mode UnOp of R is UnOp of D,R;
   mode BinOp of R is BinOp of D,R;
+  end;
+registration let D; let R be Equivalence_Relation of D;
   cluster Class R -> non empty;
    coherence
     proof consider d being Element of D;
@@ -123,11 +127,13 @@ A2:    for x,y being Element of D holds f.(x,y) = F(x,y)
     end;
  end;
 
+
  definition let D; let R be Equivalence_Relation of D;
   let d be Element of D;
   redefine func Class(R,d) -> Element of Class R;
    coherence by EQREL_1:def 5;
  end;
+
 
  definition let D; let R be Equivalence_Relation of D; let u be UnOp of D;
   assume
@@ -139,7 +145,7 @@ A1: u is UnOp of D,R;
     proof
        deffunc F(Element of D) = Class(R,$1);
        consider f being Function of D, Class R such that
-A2:    for x being Element of D holds f.x = F(x) from LambdaD;
+A2:    for x being Element of D holds f.x = F(x) from FUNCT_2:sch 4;
         now let X; assume X in Class R;
        then consider x such that
 A3:      x in D & X = Class(R,x) by EQREL_1:def 5;
@@ -188,6 +194,7 @@ A13:     y in D & x = Class(R,y) by EQREL_1:def 5;
     end;
  end;
 
+
  definition let D; let R be Equivalence_Relation of D; let b be BinOp of D;
   assume
 A1: b is BinOp of D,R;
@@ -198,7 +205,7 @@ A1: b is BinOp of D,R;
     proof
      deffunc F(Element of D) = Class(R,$1);
      consider f being Function of D, Class R such that
-A2:    for x being Element of D holds f.x = F(x) from LambdaD;
+A2:    for x being Element of D holds f.x = F(x) from FUNCT_2:sch 4;
         now let X; assume X in Class R;
        then consider x such that
 A3:      x in D & X = Class(R,x) by EQREL_1:def 5;
@@ -218,7 +225,7 @@ A5:      y in dom g & x = g.y by FUNCT_1:def 5;
      deffunc F(Element of Class R,Element of Class R) = f.(b.(g.$1,g.$2));
      consider bR being BinOp of Class R such that
 A6:    for x,y being Element of Class R
-       holds bR.(x,y) = F(x,y) from BinOpLambda;
+       holds bR.(x,y) = F(x,y) from BINOP_1:sch 2;
      take bR; let x,y, x1,y1;
      assume
 A7:    x in Class R & y in Class R & x1 in x & y1 in y;
@@ -255,38 +262,43 @@ A13:     y1 in D & y = Class(R,y1) by EQREL_1:def 5;
     end;
  end;
 
+
 theorem
  Th3: (F /\/ R_D).(Class(R_D,a), Class(R_D,b)) = Class(R_D, F.(a,b))
   proof a in Class(R_D,a) & b in Class(R_D,b) by EQREL_1:28;
    hence thesis by Def4;
   end;
 
+scheme
 SchAux1 { D()->non empty set, R()->Equivalence_Relation of D(), P[set] }:
  for x being Element of Class R() holds P[x]
   provided
 A1: for x being Element of D() holds P[Class(R(),x)]
-  proof let x be Element of Class R();
+  proof
+   let x be Element of Class R();
       ex y st y in D() & x = Class(R(),y) by EQREL_1:def 5;
    hence thesis by A1;
   end;
 
+scheme
 SchAux2 { D()->non empty set, R()->Equivalence_Relation of D(), P[set,set] }:
  for x,y being Element of Class R() holds P[x,y]
   provided
 A1: for x,y being Element of D() holds P[Class(R(),x),Class(R(),y)]
-  proof let x1,x2 be Element of Class R();
+  proof
+   let x1,x2 be Element of Class R();
  A2:   ex y1 st y1 in D() & x1 = Class(R(),y1) by EQREL_1:def 5;
       ex y2 st y2 in D() & x2 = Class(R(),y2) by EQREL_1:def 5;
    hence thesis by A1,A2;
   end;
 
-SchAux3 { D()->non empty set, R()->Equivalence_Relation of D(),
+scheme SchAux3 { D()->non empty set, R()->Equivalence_Relation of D(),
           P[set,set,set] }:
  for x,y,z being Element of Class R() holds P[x,y,z]
   provided
 A1: for x,y,z being Element of D() holds
      P[Class(R(),x),Class(R(),y),Class(R(),z)]
-  proof let x1,x2,x3 be Element of Class R();
+proof   let x1,x2,x3 be Element of Class R();
  A2:   ex y1 st y1 in D() & x1 = Class(R(),y1) by EQREL_1:def 5;
  A3:   ex y2 st y2 in D() & x2 = Class(R(),y2) by EQREL_1:def 5;
       ex y3 be set st y3 in D() & x3 = Class(R(),y3) by EQREL_1:def 5;
@@ -602,6 +614,7 @@ A3:   for R being Equivalence_Relation of the carrier of L st
     end;
  end;
 
+
  definition let L be Lattice, F be Filter of L,
     a be Element of L;
   assume
@@ -634,6 +647,7 @@ A3:   for R being Equivalence_Relation of the carrier of L st
      hence thesis by A3;
     end;
  end;
+
 
 theorem
  Th15: (i/\/F_I) "\/" (j/\/F_I) = (i"\/"j)/\/F_I &
@@ -829,6 +843,7 @@ then A1:    [:rng f1,rng f2:] c= [:D1,D2:] & rng |:f1,f2:| c= [:rng f1,rng f2:]
     end;
  end;
 
+
 theorem
  Th22: |:f1,f2:|.([a1,a2],[b1,b2]) = [f1.(a1,b1),f2.(a2,b2)]
   proof
@@ -839,25 +854,25 @@ theorem
    hence thesis by FUNCT_4:58;
   end;
 
- AuxCart1 { D1() -> non empty set, D2() -> non empty set, P[set] }:
+ scheme AuxCart1 { D1() -> non empty set, D2() -> non empty set, P[set] }:
   for d being Element of [:D1(),D2():] holds P[d]
    provided
 A1:  for d1 being Element of D1(),
         d2 being Element of D2() holds P[[d1,d2]]
-  proof let d be Element of [:D1(),D2():];
+proof   let d be Element of [:D1(),D2():];
       ex d1 being Element of D1(),
     d2 being Element of D2() st
   d = [d1,d2] by DOMAIN_1:9;
    hence thesis by A1;
   end;
 
- AuxCart2 { D1() -> non empty set, D2() -> non empty set, P[set,set] }:
+ scheme AuxCart2 { D1() -> non empty set, D2() -> non empty set, P[set,set] }:
   for d,d' being Element of [:D1(),D2():] holds P[d,d']
    provided
 A1:  for d1,d1' being Element of D1(),
       d2,d2' being Element of D2() holds
      P[[d1,d2],[d1',d2']]
-  proof let d,d' be Element of [:D1(),D2():];
+proof   let d,d' be Element of [:D1(),D2():];
  A2:   ex d1 being Element of D1(),
       d2 being Element of D2() st
   d = [d1,d2] by DOMAIN_1:9;
@@ -867,13 +882,15 @@ A1:  for d1,d1' being Element of D1(),
    hence thesis by A1,A2;
   end;
 
- AuxCart3 { D1() -> non empty set, D2() -> non empty set, P[set,set,set] }:
+ scheme
+AuxCart3 { D1() -> non empty set, D2() -> non empty set, P[set,set,set] }:
   for a,b,c being Element of [:D1(),D2():] holds P[a,b,c]
    provided
 A1:  for a1,b1,c1 being Element of D1(),
         a2,b2,c2 being Element of D2() holds
      P[[a1,a2],[b1,b2],[c1,c2]]
-  proof let a,b,c be Element of [:D1(),D2():];
+  proof
+   let a,b,c be Element of [:D1(),D2():];
  A2:   ex a1 being Element of D1(),
          a2 being Element of D2() st
   a = [a1,a2] by DOMAIN_1:9;
@@ -1242,7 +1259,8 @@ Def7:
    correctness;
  end;
 
-definition let L1,L2 be non empty LattStr;
+
+registration let L1,L2 be non empty LattStr;
  cluster [:L1,L2:] -> non empty;
  coherence
   proof [:L1,L2:] = LattStr (#[:the carrier of L1, the carrier of L2:],
@@ -1251,6 +1269,7 @@ definition let L1,L2 be non empty LattStr;
    hence the carrier of [:L1,L2:] is non empty;
   end;
 end;
+
 
  definition let L be Lattice;
   func LattRel L -> Relation equals:
@@ -1267,6 +1286,7 @@ Def8:
       end; hence thesis by RELAT_1:def 1;
     end;
  end;
+
 
 theorem
  Th32: [p,q] in LattRel L iff p [= q
@@ -1327,6 +1347,8 @@ A6:   [y,x] = [p,q] & p [= q by A1,A5;
       LattRel L1, LattRel L2 are_isomorphic;
    reflexivity by WELLORD1:48;
    symmetry by WELLORD1:50;
+  end;
+registration let L1,L2 be Lattice;
   cluster [:L1,L2:] -> Lattice-like;
    coherence
     proof
@@ -1349,6 +1371,7 @@ A6:   [y,x] = [p,q] & p [= q by A1,A5;
      hence thesis;
     end;
  end;
+
 
 theorem
    for L1,L2,L3 being Lattice st L1,L2 are_isomorphic & L2,L3 are_isomorphic
@@ -1394,6 +1417,7 @@ A1:  [:L1,L2:] is Lattice;
      hence thesis;
     end;
  end;
+
 
 theorem
  Th36: [p1,p2] "\/" [q1,q2] = [p1"\/"q1,p2"\/"q2] &
@@ -2220,7 +2244,7 @@ A1: B is 0_Lattice & B is 1_Lattice & B is I_Lattice
    deffunc F(set) = Class(E,$1);
    consider g being Function such that
 A2:  dom g = the carrier of B & for x st x in the carrier of B holds
-     g.x = F(x) from Lambda;
+     g.x = F(x) from FUNCT_1:sch 3;
 A3: (b"\/"(b<=>a)) <=> b = b"\/"a
      proof
          (b"\/"(b<=>a)) <=> b = ((b"\/"(b<=>a))"/\"b)"\/"((b"\/"(b<=>a))`"/\"
@@ -2250,7 +2274,7 @@ a)) by LATTICES:def 5
 A4: the carrier of latt F = F by FILTER_0:63;
    deffunc F(Element of B) = ($1"\/"($1<=>a)) <=> $1;
    consider h being UnOp of the carrier of B such that
-A5:  h.b = F(b) from LambdaD;
+A5:  h.b = F(b) from FUNCT_2:sch 4;
    take f = <:g,h:>; set R = LattRel B; set S = LattRel [:B/\/F,latt F:];
 A6: field R = the carrier of B &
     field S = the carrier of [:B/\/F,latt F:] by Th33;

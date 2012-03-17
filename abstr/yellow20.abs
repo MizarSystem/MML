@@ -104,6 +104,7 @@ definition
  symmetry;
 end;
 
+
 theorem :: YELLOW20:10
  for A, B being AltCatStr holds
     A,B have_the_same_composition
@@ -137,6 +138,7 @@ definition
   for x being set st x in (dom f) /\ (dom g) holds it.x = (f.x) /\ (g.x);
  commutativity;
 end;
+
 
 theorem :: YELLOW20:13
    for I being set, A,B being ManySortedSet of I
@@ -196,6 +198,7 @@ definition
    the Comp of it = Intersect(the Comp of A, the Comp of B);
 end;
 
+
 theorem :: YELLOW20:20
    for A, B being AltCatStr st A, B have_the_same_composition
   holds Intersect(A, B) = Intersect(B, A);
@@ -242,7 +245,8 @@ theorem :: YELLOW20:26
 
 begin :: Subcategories
 
-scheme SubcategoryUniq
+scheme :: YELLOW20:sch 1
+ SubcategoryUniq
  { A() -> category,
    B1, B2() -> non empty subcategory of A(),
    P[set], Q[set,set,set]}:
@@ -255,7 +259,56 @@ scheme SubcategoryUniq
   for a being object of A() holds a is object of B2() iff P[a] and
   for a,b being object of A(), a',b' being object of B2()
      st a' = a & b' = b & <^a,b^> <> {}
-    for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f];
+    for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f]
+proof
+A5: the carrier of B1() c= the carrier of A() &
+    the carrier of B2() c= the carrier of A() by ALTCAT_2:def 11;
+A6: the carrier of B1() = the carrier of B2()
+     proof
+      hereby let x be set; assume
+A7:      x in the carrier of B1();
+        then reconsider a = x as object of B1();
+        reconsider a as object of A() by A5,A7;
+           P[a] by A1;
+         then a is object of B2() by A3;
+        hence x in the carrier of B2();
+       end;
+      let x be set; assume
+A8:    x in the carrier of B2();
+      then reconsider a = x as object of B2();
+      reconsider a as object of A() by A5,A8;
+         P[a] by A3;
+       then a is object of B1() by A1;
+      hence x in the carrier of B1();
+     end;
+      now let a,b be Element of B1();
+     reconsider x1 = a, y1 = b as object of B1();
+     reconsider x2 = x1, y2 = y1 as object of B2() by A6;
+        x1 in the carrier of B1() & y1 in the carrier of B1();
+     then reconsider a' = a, b' = b as object of A() by A5;
+A9:   <^x1,y1^> c= <^a',b'^> & <^x2,y2^> c= <^a',b'^> by ALTCAT_2:32;
+A10:   <^x1,y1^> c= <^x2,y2^>
+       proof let f be set; assume
+A11:      f in <^x1,y1^>;
+        then reconsider f as Morphism of a',b' by A9;
+           Q[a',b',f] by A2,A9,A11;
+        hence thesis by A4,A9,A11;
+       end;
+A12:   <^x2,y2^> c= <^x1,y1^>
+       proof let f be set; assume
+A13:      f in <^x2,y2^>;
+        then reconsider f as Morphism of a',b' by A9;
+           Q[a',b',f] by A4,A9,A13;
+        hence thesis by A2,A9,A13;
+       end;
+     thus (the Arrows of B1()).(a,b)
+        = <^x1,y1^> by ALTCAT_1:def 2
+       .= <^x2,y2^> by A10,A12,XBOOLE_0:def 10
+       .= (the Arrows of B2()).(a,b) by ALTCAT_1:def 2;
+    end;
+    then the Arrows of B1() = the Arrows of B2() by A6,ALTCAT_1:9;
+   hence thesis by A6,ALTCAT_2:27;
+  end;
 
 theorem :: YELLOW20:27
  for A being non empty AltCatStr, B being non empty SubCatStr of A holds
@@ -263,52 +316,124 @@ theorem :: YELLOW20:27
     for a1,a2 being object of A, b1,b2 being object of B st b1 = a1 & b2 = a2
      holds <^b1,b2^> = <^a1,a2^>;
 
-scheme FullSubcategoryEx
+scheme :: YELLOW20:sch 2
+ FullSubcategoryEx
  { A() -> category, P[set]}:
  ex B being strict full non empty subcategory of A() st
   for a being object of A() holds a is object of B iff P[a]
  provided
-  ex a being object of A() st P[a];
+  ex a being object of A() st P[a]
+proof   defpred p[set] means P[$1];
+    defpred Q[set,set,set] means not contradiction;
+A2:  ex a being object of A() st p[a] by A1;
+A3: for a,b,c being object of A()
+     st p[a] & p[b] & p[c] & <^a,b^> <> {} & <^b,c^> <> {}
+     for f being Morphism of a,b, g being Morphism of b,c
+       st Q[a,b,f] & Q[b,c,g]
+       holds Q[a,c,g*f];
+A4: for a being object of A() st p[a] holds Q[a,a, idm a];
+   consider B being strict non empty subcategory of A() such that
+A5: for a being object of A() holds a is object of B iff p[a] and
+A6: for a,b being object of A(), a',b' being object of B
+     st a' = a & b' = b & <^a,b^> <> {}
+    for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f]
+     from YELLOW18:sch 7(A2,A3,A4);
+      now let a1,a2 be object of A(), b1,b2 be object of B; assume
+A7:   b1 = a1 & b2 = a2;
+then A8:   <^b1,b2^> c= <^a1,a2^> by ALTCAT_2:32;
+        <^a1,a2^> c= <^b1,b2^>
+       proof let f be set; assume f in <^a1,a2^>;
+        hence thesis by A6,A7;
+       end;
+     hence <^b1,b2^> = <^a1,a2^> by A8,XBOOLE_0:def 10;
+    end;
+    then B is full by Th27;
+   hence thesis by A5;
+  end;
 
-scheme FullSubcategoryUniq
+scheme :: YELLOW20:sch 3
+ FullSubcategoryUniq
  { A() -> category,
    B1, B2() -> full non empty subcategory of A(),
    P[set]}:
   the AltCatStr of B1() = the AltCatStr of B2()
  provided
   for a being object of A() holds a is object of B1() iff P[a] and
-  for a being object of A() holds a is object of B2() iff P[a];
+  for a being object of A() holds a is object of B2() iff P[a]
+proof   defpred p[set] means P[$1];
+A3:  for a being object of A() holds a is object of B1() iff p[a] by A1;
+A4:  for a being object of A() holds a is object of B2() iff p[a] by A2;
+    defpred Q[set,set,set] means not contradiction;
+A5: now let a,b be object of A(), a',b' be object of B1();
+     assume a' = a & b' = b; then <^a',b'^> = <^a,b^> by Th27;
+     hence <^a,b^> <> {} implies
+      for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f];
+    end;
+A6: now let a,b be object of A(), a',b' be object of B2();
+     assume a' = a & b' = b; then <^a',b'^> = <^a,b^> by Th27;
+     hence <^a,b^> <> {} implies
+      for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f];
+    end;
+   thus thesis from SubcategoryUniq(A3,A5,A4,A6);
+  end;
 
 begin :: Inclusion functors and functor restrictions
 
-definition
+registration
  let f be Function-yielding Function;
  let x,y be set;
  cluster f.(x,y) -> Relation-like Function-like;
+ coherence
+  proof f.(x,y) = f.[x,y] by BINOP_1:def 1;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: YELLOW20:28
  for A being category, C being non empty subcategory of A
  for a,b being object of C st <^a,b^> <> {}
  for f being Morphism of a,b holds (incl C).f = f;
 
-definition
+registration
  let A be category;
  let C be non empty subcategory of A;
  cluster incl C -> id-preserving comp-preserving;
+ coherence
+  proof
+   thus incl C is id-preserving
+     proof let a be object of C;
+A2:    (incl C).a = a by FUNCTOR0:28;
+      thus Morph-Map(incl C, a, a).idm a = (incl C).idm a by FUNCTOR0:def 16
+        .= idm a by Th28
+        .= idm ((incl C).a) by A2,ALTCAT_2:35;
+     end;
+   let o1,o2,o3 be object of C such that
+A3: <^o1,o2^> <> {} & <^o2,o3^> <> {};
+   let f be Morphism of o1,o2, g be Morphism of o2,o3;
+      <^o1,o3^> <> {} by A3,ALTCAT_1:def 4;
+    then (incl C).o1 = o1 & (incl C).o2 = o2 & (incl C).o3 = o3 &
+    (incl C).g = g & (incl C).f = f & (incl C).(g*f) = g*f
+     by A3,Th28,FUNCTOR0:28;
+   hence (incl C).(g*f) = ((incl C).g)*((incl C).f) by A3,ALTCAT_2:33;
+  end;
 end;
 
-definition
+
+registration
  let A be category;
  let C be non empty subcategory of A;
  cluster incl C -> Covariant;
+ coherence;
 end;
+
 
 definition
  let A be category;
  let C be non empty subcategory of A;
  redefine func incl C -> strict covariant Functor of C,A;
 end;
+
 
 definition
  let A,B be category;
@@ -317,12 +442,14 @@ definition
  redefine func F|C -> strict covariant Functor of C,B;
 end;
 
+
 definition
  let A,B be category;
  let C be non empty subcategory of A;
  let F be contravariant Functor of A,B;
  redefine func F|C -> strict contravariant Functor of C,B;
 end;
+
 
 theorem :: YELLOW20:29
  for A,B being category, C being non empty subcategory of A
@@ -415,6 +542,7 @@ definition
     st f' = f holds G.f' = Morph-Map(F,b,c).f);
 end;
 
+
 theorem :: YELLOW20:38
    for A,B, A1, B1 being category, F being FunctorStr over A,B
   st A1, B1 are_isomorphic_under F
@@ -445,7 +573,8 @@ theorem :: YELLOW20:43
   st F is bijective
   holds A, B are_anti-isomorphic_under F;
 
-scheme CoBijectRestriction
+scheme :: YELLOW20:sch 4
+ CoBijectRestriction
  {A1, A2() -> non empty category,
   F() -> covariant Functor of A1(), A2(),
   B1() -> non empty subcategory of A1(),
@@ -459,9 +588,133 @@ scheme CoBijectRestriction
    for a1,b1 being object of B1() st a1 = a & b1 = b
    for a2,b2 being object of B2() st a2 = F().a & b2 = F().b
    for f being Morphism of a,b holds
-       f in <^a1,b1^> iff F().f in <^a2,b2^>;
+       f in <^a1,b1^> iff F().f in <^a2,b2^>
+proof
+   thus B1() is subcategory of A1() & B2() is subcategory of A2();
+A4: the carrier of B1() c= the carrier of A1() by ALTCAT_2:def 11;
+   deffunc O(object of B1()) = (F()|B1()).$1;
+   deffunc F(object of B1(),object of B1(),Morphism of $1,$2) =
+      (F()|B1()).$3;
+A5: now let a be object of B1();
+        a in the carrier of B1();
+     then reconsider b = a as object of A1() by A4;
+        (F()|B1()).a = F().b by Th29;
+     hence O(a) is object of B2() by A2;
+    end;
+A6: now let a,b be object of B1() such that
+A7:   <^a,b^> <> {};
+        a in the carrier of B1() & b in the carrier of B1();
+     then reconsider c = a, d = b as object of A1() by A4;
+     reconsider a' = (F()|B1()).a, b' = (F()|B1()).b as object of B2() by A5;
+     let f be Morphism of a,b;
+A8:   <^a,b^> c= <^c,d^> & f in <^a,b^> by A7,ALTCAT_2:32;
+     then reconsider g = f as Morphism of c,d ;
+        (F()|B1()).a = F().c & (F()|B1()).b = F().d &
+      (F()|B1()).f = F().g by A7,Th29,Th30;
+      then (F()|B1()).f in <^a',b'^> by A3,A8;
+     hence F(a,b,f) in (the Arrows of B2()).(O(a), O(b)) by ALTCAT_1:def 2;
+    end;
+A9: now let a,b,c be object of B1() such that
+A10:   <^a,b^> <> {} & <^b,c^> <> {};
+        a in the carrier of B1() & b in the carrier of B1() &
+      c in the carrier of B1();
+     then reconsider a1 = a, b1 = b, c1 = c as object of A1()
+       by A4;
+     let f be Morphism of a,b, g be Morphism of b,c;
+     let a',b',c' be object of B2() such that
+A11:   a' = O(a) & b' = O(b) & c' = O(c);
+     let f' be Morphism of a',b', g' be Morphism of b',c' such that
+A12:   f' = F(a,b,f) & g' = F(b,c,g);
+A13:   <^a,b^> c= <^a1,b1^> & f in <^a,b^> by A10,ALTCAT_2:32;
+     then reconsider f1 = f as Morphism of a1,b1 ;
+A14:   <^b,c^> c= <^b1,c1^> & g in <^b,c^> by A10,ALTCAT_2:32;
+     then reconsider g1 = g as Morphism of b1,c1 ;
+A15:   <^a,c^> <> {} by A10,ALTCAT_1:def 4;
+A16:   g*f = g1*f1 by A10,ALTCAT_2:33;
+A17:   a' = F().a1 & b' = F().b1 & c' = F().c1 by A11,Th29;
+A18:   (F()|B1()).(g*f) = F().(g1*f1) & f' = F().f1 & g' = F().g1
+       by A10,A12,A15,A16,Th30; then
+A19:  f' in <^a',b'^> & g' in <^b',c'^> by A3,A13,A14,A17;
+     thus F(a,c,g*f) = (F().g1)*(F().f1) by A13,A14,A18,FUNCTOR0:def 24
+        .= g'*f' by A17,A18,A19,ALTCAT_2:33;
+    end;
+A20: now let a be object of B1(), a' be object of B2() such that
+A21:   a' = O(a);
+        a in the carrier of B1();
+     then reconsider a1 = a as object of A1() by A4;
+        idm a in <^a,a^> & idm a = idm a1 by ALTCAT_2:35;
+     hence F(a,a,idm a) = F().idm a1 by Th30
+        .= idm (F().a1) by FUNCTOR2:2
+        .= idm ((F()|B1()).a) by Th29
+        .= idm a' by A21,ALTCAT_2:35;
+    end;
+   consider G being covariant strict Functor of B1(),B2() such that
+A22: for a being object of B1() holds G.a = O(a) and
+A23: for a,b being object of B1() st <^a,b^> <> {}
+     for f being Morphism of a,b holds G.f = F(a,b,f)
+      from YELLOW18:sch 8(A5,A6,A9,A20);
+   take G;
+A24: F() is injective surjective by A1,FUNCTOR0:def 36;
+then
+A25: F() is one-to-one faithful surjective by FUNCTOR0:def 34;
+A26: now let a,b be object of B1();
+        a in the carrier of B1() & b in the carrier of B1();
+     then reconsider a1 = a, b1 = b as object of A1() by A4;
+     assume O(a) = O(b);
+      then F().a1 = (F()|B1()).b by Th29 .= F().b1 by Th29;
+     hence a = b by A25,Th32;
+    end;
+A27: now let a,b be object of B1() such that
+A28:   <^a,b^> <> {};
+        a in the carrier of B1() & b in the carrier of B1();
+     then reconsider a1 = a, b1 = b as object of A1() by A4;
+     let f,g be Morphism of a,b;
+A29:   <^a,b^> c= <^a1,b1^> & f in <^a,b^> & g in <^a,b^>
+       by A28,ALTCAT_2:32;
+     then reconsider f1 = f, g1 = g as Morphism of a1,b1 ;
+     assume F(a,b,f) = F(a,b,g);
+      then F().f1 = (F()|B1()).g by A28,Th30 .= F().g1 by A28,Th30;
+     hence f = g by A25,A29,Th33;
+    end;
+A30: for a,b being object of B2() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of B1(), g being Morphism of c,d
+      st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g)
+      proof let a,b be object of B2() such that
+A31:     <^a,b^> <> {};
+          a in the carrier of B2() & b in the carrier of B2() &
+        the carrier of B2() c= the carrier of A2() by ALTCAT_2:def 11;
+       then reconsider a1 = a, b1 = b as object of A2();
+       let f be Morphism of a,b;
+A32:     <^a,b^> c= <^a1,b1^> & f in <^a,b^> by A31,ALTCAT_2:32;
+       then reconsider f1 = f as Morphism of a1,b1 ;
+       consider c1, d1 being object of A1(), g1 being Morphism of c1,d1
+       such that
+A33:     a1 = F().c1 & b1 = F().d1 & <^c1,d1^> <> {} & f1 = F().g1
+         by A24,A32,Th34;
+       reconsider c = c1, d = d1 as object of B1() by A2,A33;
+A34:     g1 in <^c,d^> by A3,A31,A33;
+       then reconsider g = g1 as Morphism of c,d ;
+       take c,d,g;
+       thus thesis by A33,A34,Th29,Th30;
+      end;
+   thus G is bijective from YELLOW18:sch 10(A22,A23,A26,A27,A30);
+   hereby let a be object of B1(), a1 be object of A1() such that
+A35:   a = a1;
+     thus G.a = (F()|B1()).a by A22 .= F().a1 by A35,Th29;
+    end;
+   let b,c be object of B1(), b1,c1 be object of A1() such that
+A36: <^b,c^> <> {} & b1 = b & c1 = c;
+   let f be Morphism of b,c, f1 be Morphism of b1,c1 such that
+A37: f = f1;
+A38: <^b,c^> c= <^b1,c1^> & f in <^b,c^> by A36,ALTCAT_2:32;
+then A39: <^F().b1, F().c1^> <> {} by FUNCTOR0:def 19;
+   thus G.f = (F()|B1()).f by A23,A36 .= F().f1 by A36,A37,Th30
+      .= Morph-Map(F(),b1,c1).f1 by A38,A39,FUNCTOR0:def 16;
+  end;
 
-scheme ContraBijectRestriction
+scheme :: YELLOW20:sch 5
+ ContraBijectRestriction
  {A1, A2() -> non empty category,
   F() -> contravariant Functor of A1(), A2(),
   B1() -> non empty subcategory of A1(),
@@ -475,7 +728,130 @@ scheme ContraBijectRestriction
    for a1,b1 being object of B1() st a1 = a & b1 = b
    for a2,b2 being object of B2() st a2 = F().a & b2 = F().b
    for f being Morphism of a,b holds
-       f in <^a1,b1^> iff F().f in <^b2,a2^>;
+       f in <^a1,b1^> iff F().f in <^b2,a2^>
+proof
+   thus B1() is subcategory of A1() & B2() is subcategory of A2();
+A4: the carrier of B1() c= the carrier of A1() by ALTCAT_2:def 11;
+   deffunc O(object of B1()) = (F()|B1()).$1;
+   deffunc F(object of B1(),object of B1(),Morphism of $1,$2) =
+          (F()|B1()).$3;
+A5: now let a be object of B1();
+        a in the carrier of B1();
+     then reconsider b = a as object of A1() by A4;
+        (F()|B1()).a = F().b by Th29;
+     hence O(a) is object of B2() by A2;
+    end;
+A6: now let a,b be object of B1() such that
+A7:   <^a,b^> <> {};
+        a in the carrier of B1() & b in the carrier of B1();
+     then reconsider c = a, d = b as object of A1() by A4;
+     reconsider a' = (F()|B1()).a, b' = (F()|B1()).b as object of B2() by A5;
+     let f be Morphism of a,b;
+A8:   <^a,b^> c= <^c,d^> & f in <^a,b^> by A7,ALTCAT_2:32;
+     then reconsider g = f as Morphism of c,d ;
+        (F()|B1()).a = F().c & (F()|B1()).b = F().d &
+      (F()|B1()).f = F().g by A7,Th29,Th31;
+      then (F()|B1()).f in <^b',a'^> by A3,A8;
+     hence F(a,b,f) in (the Arrows of B2()).(O(b), O(a)) by ALTCAT_1:def 2;
+    end;
+A9: now let a,b,c be object of B1() such that
+A10:   <^a,b^> <> {} & <^b,c^> <> {};
+        a in the carrier of B1() & b in the carrier of B1() &
+      c in the carrier of B1();
+     then reconsider a1 = a, b1 = b, c1 = c as object of A1() by A4;
+     let f be Morphism of a,b, g be Morphism of b,c;
+     let a',b',c' be object of B2() such that
+A11:   a' = O(a) & b' = O(b) & c' = O(c);
+     let f' be Morphism of b',a', g' be Morphism of c',b' such that
+A12:   f' = F(a,b,f) & g' = F(b,c,g);
+A13:   <^a,b^> c= <^a1,b1^> & f in <^a,b^> by A10,ALTCAT_2:32;
+     then reconsider f1 = f as Morphism of a1,b1 ;
+A14:   <^b,c^> c= <^b1,c1^> & g in <^b,c^> by A10,ALTCAT_2:32;
+     then reconsider g1 = g as Morphism of b1,c1 ;
+A15:   <^a,c^> <> {} by A10,ALTCAT_1:def 4;
+A16:   g*f = g1*f1 by A10,ALTCAT_2:33;
+A17:   a' = F().a1 & b' = F().b1 & c' = F().c1 by A11,Th29;
+A18:   (F()|B1()).(g*f) = F().(g1*f1) & f' = F().f1 & g' = F().g1
+       by A10,A12,A15,A16,Th31;
+then
+A19:  f' in <^b',a'^> & g' in <^c',b'^> by A3,A13,A14,A17;
+     thus F(a,c,g*f) = (F().f1)*(F().g1) by A13,A14,A18,FUNCTOR0:def 25
+        .= f'*g' by A17,A18,A19,ALTCAT_2:33;
+    end;
+A20: now let a be object of B1(), a' be object of B2() such that
+A21:   a' = O(a);
+        a in the carrier of B1();
+     then reconsider a1 = a as object of A1() by A4;
+        idm a in <^a,a^> & idm a = idm a1 by ALTCAT_2:35;
+     hence F(a,a,idm a) = F().idm a1 by Th31
+        .= idm (F().a1) by ALTCAT_4:13
+        .= idm ((F()|B1()).a) by Th29
+        .= idm a' by A21,ALTCAT_2:35;
+    end;
+   consider G being contravariant strict Functor of B1(),B2() such that
+A22: for a being object of B1() holds G.a = O(a) and
+A23: for a,b being object of B1() st <^a,b^> <> {}
+     for f being Morphism of a,b holds G.f = F(a,b,f)
+      from YELLOW18:sch 9(A5,A6,A9,A20);
+   take G;
+    A24: F() is injective surjective by A1,FUNCTOR0:def 36;
+then A25: F() is one-to-one faithful surjective by FUNCTOR0:def 34;
+A26: now let a,b be object of B1();
+        a in the carrier of B1() & b in the carrier of B1();
+     then reconsider a1 = a, b1 = b as object of A1() by A4;
+     assume O(a) = O(b);
+      then F().a1 = (F()|B1()).b by Th29 .= F().b1 by Th29;
+     hence a = b by A25,Th35;
+    end;
+A27: now let a,b be object of B1() such that
+A28:   <^a,b^> <> {};
+        a in the carrier of B1() & b in the carrier of B1();
+     then reconsider a1 = a, b1 = b as object of A1() by A4;
+     let f,g be Morphism of a,b;
+A29:   <^a,b^> c= <^a1,b1^> & f in <^a,b^> & g in <^a,b^>
+       by A28,ALTCAT_2:32;
+     then reconsider f1 = f, g1 = g as Morphism of a1,b1 ;
+     assume F(a,b,f) = F(a,b,g);
+      then F().f1 = (F()|B1()).g by A28,Th31 .= F().g1 by A28,Th31;
+     hence f = g by A25,A29,Th36;
+    end;
+A30: for a,b being object of B2() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of B1(), g being Morphism of c,d
+      st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g)
+      proof let a,b be object of B2() such that
+A31:     <^a,b^> <> {};
+          a in the carrier of B2() & b in the carrier of B2() &
+        the carrier of B2() c= the carrier of A2() by ALTCAT_2:def 11;
+       then reconsider a1 = a, b1 = b as object of A2();
+       let f be Morphism of a,b;
+A32:     <^a,b^> c= <^a1,b1^> & f in <^a,b^> by A31,ALTCAT_2:32;
+       then reconsider f1 = f as Morphism of a1,b1 ;
+       consider c1, d1 being object of A1(), g1 being Morphism of c1,d1
+       such that
+A33:     b1 = F().c1 & a1 = F().d1 & <^c1,d1^> <> {} & f1 = F().g1
+         by A24,A32,Th37;
+       reconsider c = c1, d = d1 as object of B1() by A2,A33;
+A34:     g1 in <^c,d^> by A3,A31,A33;
+       then reconsider g = g1 as Morphism of c,d ;
+       take c,d,g;
+       thus thesis by A33,A34,Th29,Th31;
+      end;
+   thus G is bijective from YELLOW18:sch 12(A22,A23,A26,A27,A30);
+   hereby let a be object of B1(), a1 be object of A1() such that
+A35:   a = a1;
+     thus G.a = (F()|B1()).a by A22 .= F().a1 by A35,Th29;
+    end;
+   let b,c be object of B1(), b1,c1 be object of A1();
+   assume
+A36: <^b,c^> <> {} & b = b1 & c = c1;
+   let f be Morphism of b,c, f1 be Morphism of b1,c1 such that
+A37: f = f1;
+A38: <^b,c^> c= <^b1,c1^> & f in <^b,c^> by A36,ALTCAT_2:32;
+then A39: <^F().c1, F().b1^> <> {} by FUNCTOR0:def 20;
+   thus G.f = (F()|B1()).f by A23,A36 .= F().f1 by A36,A37,Th31
+      .= Morph-Map(F(),b1,c1).f1 by A38,A39,FUNCTOR0:def 17;
+  end;
 
 theorem :: YELLOW20:44
    for A being category, B being non empty subcategory of A

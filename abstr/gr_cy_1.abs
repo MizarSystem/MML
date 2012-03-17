@@ -86,6 +86,7 @@ definition
  it.(i1,i2) = addreal.(i1,i2);
 end;
 
+
 theorem :: GR_CY_1:14
  for j1,j2 holds addint.(j1,j2)=j1+j2;
 
@@ -109,6 +110,7 @@ definition let F be FinSequence of INT;
 :: GR_CY_1:def 3
   addint $$ F;
 end;
+
 
 theorem :: GR_CY_1:20
  Sum(I^<*i1*>) =Sum I +@i1;
@@ -164,12 +166,14 @@ theorem :: GR_CY_1:33
   HGrStr(#INT,addint#);
  end;
 
+
 definition let n such that n > 0;
  func addint(n) -> BinOp of Segm(n) means
 :: GR_CY_1:def 5
   for k,l being Element of Segm(n) holds
   it.(k,l) = (k+l) mod n;
 end;
+
 
 theorem :: GR_CY_1:34
  for n st n > 0 holds HGrStr(#Segm(n),addint(n)#) is associative Group-like;
@@ -179,6 +183,7 @@ definition let n such that  n > 0;
 :: GR_CY_1:def 6
  HGrStr(#Segm(n),addint(n)#);
 end;
+
 
 theorem :: GR_CY_1:35
  1.INT.Group = 0;
@@ -193,12 +198,14 @@ definition
   h;
 end;
 
+
 definition
  let h be Integer;
  func @'h -> Element of INT.Group equals
 :: GR_CY_1:def 8
     h;
 end;
+
 
 theorem :: GR_CY_1:37
  for h being Element of INT.Group holds h" = -@'h;
@@ -218,9 +225,15 @@ definition let IT be Group;
   ex a being Element of IT st the HGrStr of IT=gr {a};
 end;
 
-definition
+
+registration
  cluster strict cyclic Group;
+  existence
+   proof INT.Group is cyclic by Def9,Lm5;
+    hence thesis;
+   end;
 end;
+
 
 theorem :: GR_CY_1:40
  (1).G is cyclic;
@@ -254,9 +267,33 @@ theorem :: GR_CY_1:46
  for n st n>0 ex g being Element of INT.Group(n) st
   for b being Element of INT.Group(n) ex j1 st b = g|^j1;
 
-definition
+registration
  cluster cyclic -> commutative Group;
+ coherence
+proof let G;
+ assume A1:G is cyclic;
+   for a,b being Element of G holds a * b = b * a
+ proof
+  let a,b be Element of G;
+    ex e being Element of G st
+   (ex j2 st a=e|^j2 & ex j3 st b=e|^j3)
+  proof
+   consider e being Element of G such that
+   A2:for d being Element of G ex j3 st d=e|^j3 by A1,Th41;
+   take e;
+   A3:ex j2 st a=e|^j2 by A2;
+     ex j3 st b=e|^j3 by A2;
+   hence thesis by A3;
+  end;
+  then consider e being Element of G,j2,j3 such that
+  A4:( a = e|^j2 & b = e|^j3);
+    a * b = e |^(j3 + j2) by A4,GROUP_1:63 .= b * a by A4,GROUP_1:63;
+  hence thesis;
+ end;
+ hence thesis by VECTSP_1:def 17;
 end;
+end;
+
 
 canceled;
 

@@ -43,9 +43,69 @@ begin
   theorem :: MSUALG_7:3
    [|M,M|] is Equivalence_Relation of M;
 
-  definition let I,M;
+  registration let I,M;
    cluster EqRelLatt M -> bounded;
+   coherence
+   proof
+      ex c being Element of EqRelLatt M st
+     for a being Element of EqRelLatt M
+      holds c"/\"a = c & a"/\"c = c
+    proof
+     reconsider c' = id M as Equivalence_Relation of M by Th2;
+     reconsider c = c' as Element of EqRelLatt M
+                                                          by MSUALG_5:def 5;
+     take c;
+     let a be Element of EqRelLatt M;
+     reconsider a' = a as Equivalence_Relation of M by MSUALG_5:def 5;
+     A1: now let i be set; assume A2: i in I;
+      then reconsider i' = i as Element of I;
+      reconsider a2 = a'.i' as Equivalence_Relation of M.i by MSUALG_4:def 3;
+      thus (c' /\ a').i = c'.i /\ a'.i by A2,PBOOLE:def 8
+         .= id (M.i) /\ a2 by MSUALG_3:def 1
+         .= id (M.i) by EQREL_1:17
+         .= c'.i by A2,MSUALG_3:def 1;
+     end;
+     thus c"/\"a = (the L_meet of EqRelLatt M).(c,a) by LATTICES:def 2
+       .= c' /\ a' by MSUALG_5:def 5
+       .= c by A1,PBOOLE:3;
+     hence a"/\"c = c;
+    end;
+    then A3: EqRelLatt M is lower-bounded by LATTICES:def 13;
+      ex c being Element of EqRelLatt M st
+     for a being Element of EqRelLatt M holds
+      c"\/"a = c & a"\/"c = c
+    proof
+     reconsider c' = [|M,M|] as Equivalence_Relation of M by Th3;
+     reconsider c = c' as Element of EqRelLatt M
+                                                          by MSUALG_5:def 5;
+     take c;
+     let a be Element of EqRelLatt M;
+     reconsider a' = a as Equivalence_Relation of M by MSUALG_5:def 5;
+     A4: now let i be set; assume A5: i in I;
+      then reconsider i' = i as Element of I;
+      consider K1 be ManySortedRelation of M such that
+       A6: K1 = c' \/ a' & c' "\/" a' = EqCl K1 by MSUALG_5:def 4;
+      reconsider K2 = c'.i' , a2 = a'.i' as Equivalence_Relation of M.i
+                                                          by MSUALG_4:def 3;
+        (c' \/ a').i = c'.i \/ a'.i by A5,PBOOLE:def 7
+           .= [:M.i,M.i:] \/ a'.i by A5,PRALG_2:def 9
+           .= nabla M.i \/ a2 by EQREL_1:def 1
+           .= nabla M.i by MSUALG_5:4
+           .= [:M.i,M.i:] by EQREL_1:def 1
+           .= c'.i by A5,PRALG_2:def 9;
+      hence (c' "\/" a').i = EqCl K2 by A6,MSUALG_5:def 3
+         .= c'.i by MSUALG_5:3;
+     end;
+     thus c"\/"a = (the L_join of EqRelLatt M).(c,a) by LATTICES:def 1
+       .= c' "\/" a' by MSUALG_5:def 5
+       .= c by A4,PBOOLE:3;
+     hence a"\/"c = c;
+    end;
+    then EqRelLatt M is upper-bounded by LATTICES:def 14;
+    hence thesis by A3,LATTICES:def 15;
+   end;
   end;
+
 
   theorem :: MSUALG_7:4
      Bottom EqRelLatt M = id M;
@@ -83,13 +143,16 @@ begin
        st X is_less_than b holds a [= b;
   end;
 
+
   theorem :: MSUALG_7:10
    EqRelLatt M is complete;
 
-  definition
+  registration
    let I,M;
    cluster EqRelLatt M -> complete;
+   coherence by Th10;
   end;
+
 
   theorem :: MSUALG_7:11
      for X be Subset of EqRelLatt M,
@@ -115,6 +178,7 @@ begin
     for X being Subset of IT holds
      "\/" (X,L) in the carrier of IT;
   end;
+
 
   theorem :: MSUALG_7:12
    for L be Lattice,
@@ -149,16 +213,26 @@ begin
        L' be SubLattice of L st L' is \/-inheriting holds
     L' is complete;
 
-  definition
+  registration
    let L be complete Lattice;
    cluster complete SubLattice of L;
+   existence
+   proof
+    reconsider L1 = L as SubLattice of L by NAT_LAT:75;
+    take L1;
+    thus thesis;
+   end;
   end;
 
-  definition
+
+  registration
    let L be complete Lattice;
    cluster /\-inheriting -> complete SubLattice of L;
+   coherence by Th15;
    cluster \/-inheriting -> complete SubLattice of L;
+   coherence by Th16;
   end;
+
 
   theorem :: MSUALG_7:17
    for L be complete Lattice,
@@ -199,6 +273,7 @@ begin
     the L_join of it = maxreal|([:[.r1,r2.],[.r1,r2.]:] qua set) &
     the L_meet of it = minreal|([:[.r1,r2.],[.r1,r2.]:] qua set);
   end;
+
 
   theorem :: MSUALG_7:21
    for r1,r2 st r1 <= r2 holds

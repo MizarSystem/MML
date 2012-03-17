@@ -37,6 +37,7 @@ definition let L be RelStr,
  A & a <= b;
 end;
 
+
 definition let L be non empty reflexive RelStr,
                A, B be Subset of L;
  redefine pred A is_finer_than B;
@@ -44,6 +45,7 @@ reflexivity;
  redefine pred B is_coarser_than A;
 reflexivity;
 end;
+
 
 theorem :: YELLOW_4:3
   for L being RelStr, B being Subset of L holds {}L is_finer_than B;
@@ -78,11 +80,13 @@ definition let L be non empty RelStr,
    { x "\/" y where x, y is Element of L : x in D1 & y in D2 };
 end;
 
+
 definition let L be with_suprema antisymmetric RelStr,
                D1, D2 be Subset of L;
  redefine func D1 "\/" D2;
 commutativity;
 end;
+
 
 theorem :: YELLOW_4:9
   for L being non empty RelStr, X being Subset of L holds X "\/" {}L = {};
@@ -109,25 +113,102 @@ theorem :: YELLOW_4:14
  for D1, D2, D3 being Subset of L holds (D1 "\/" D2) "\/" D3 = D1 "\/" (D2 "\/"
  D3);
 
-definition let L be non empty RelStr,
+registration let L be non empty RelStr,
                D1, D2 be non empty Subset of L;
  cluster D1 "\/" D2 -> non empty;
+coherence
+  proof
+    consider a being set such that
+A1:   a in D1 by XBOOLE_0:def 1;
+    consider b being set such that
+A2:   b in D2 by XBOOLE_0:def 1;
+    reconsider a as Element of D1 by A1;
+    reconsider b as Element of D2 by A2;
+      a "\/" b in { x "\/" y where x, y is Element of L : x in D1 & y in D2 };
+    hence thesis by Def3;
+  end;
 end;
 
-definition let L be with_suprema transitive antisymmetric RelStr,
+
+registration let L be with_suprema transitive antisymmetric RelStr,
                D1, D2 be directed Subset of L;
  cluster D1 "\/" D2 -> directed;
+coherence
+  proof
+    set X = D1 "\/" D2;
+    let a, b be Element of L; assume
+A1:   a in X & b in X;
+    then a in { x "\/" y where x, y is Element of L : x in D1 & y in
+ D2 } by Def3;
+     then consider x, y being Element of L such that
+A2:   a = x "\/" y & x in D1 & y in D2;
+      b in { s "\/"
+ t where s, t is Element of L : s in D1 & t in D2 } by A1,Def3;
+     then consider s, t being Element of L such that
+A3:   b = s "\/" t & s in D1 & t in D2;
+    consider z1 being Element of L such that
+A4:   z1 in D1 & x <= z1 & s <= z1 by A2,A3,WAYBEL_0:def 1;
+    consider z2 being Element of L such that
+A5:   z2 in D2 & y <= z2 & t <= z2 by A2,A3,WAYBEL_0:def 1;
+    take z = z1 "\/" z2;
+      X = { o "\/" p where o, p is Element of L : o in D1 & p in D2 } by Def3;
+    hence z in X by A4,A5;
+    thus a <= z & b <= z by A2,A3,A4,A5,YELLOW_3:3;
+  end;
 end;
 
-definition let L be with_suprema transitive antisymmetric RelStr,
+
+registration let L be with_suprema transitive antisymmetric RelStr,
                D1, D2 be filtered Subset of L;
  cluster D1 "\/" D2 -> filtered;
+coherence
+  proof
+    set X = D1 "\/" D2;
+    let a, b be Element of L; assume
+A1:   a in X & b in X;
+    then a in { x "\/" y where x, y is Element of L : x in D1 & y in
+ D2 } by Def3;
+     then consider x, y being Element of L such that
+A2:   a = x "\/" y & x in D1 & y in D2;
+      b in { s "\/"
+ t where s, t is Element of L : s in D1 & t in D2 } by A1,Def3;
+     then consider s, t being Element of L such that
+A3:   b = s "\/" t & s in D1 & t in D2;
+    consider z1 being Element of L such that
+A4:   z1 in D1 & x >= z1 & s >= z1 by A2,A3,WAYBEL_0:def 2;
+    consider z2 being Element of L such that
+A5:   z2 in D2 & y >= z2 & t >= z2 by A2,A3,WAYBEL_0:def 2;
+    take z = z1 "\/" z2;
+      X = { o "\/" p where o, p is Element of L : o in D1 & p in D2 } by Def3;
+    hence z in X by A4,A5;
+    thus a >= z & b >= z by A2,A3,A4,A5,YELLOW_3:3;
+  end;
 end;
 
-definition let L be with_suprema Poset,
+
+registration let L be with_suprema Poset,
                D1, D2 be upper Subset of L;
  cluster D1 "\/" D2 -> upper;
+coherence
+  proof
+    set X = D1 "\/" D2;
+    let a, b be Element of L such that
+A1:   a in X & a <= b;
+A2: X = { x "\/" y where x, y is Element of L : x in D1 & y in D2 } by Def3;
+     then consider x, y being Element of L such that
+A3:   a = x "\/" y & x in D1 & y in D2 by A1;
+      ex xx being Element of L st x <= xx & y <= xx &
+     for c being Element of L st x <= c & y <= c holds xx <= c
+       by LATTICE3:def 10;
+    then x <= x "\/" y & y <= x "\/" y by LATTICE3:def 13;
+    then x <= b & y <= b by A1,A3,YELLOW_0:def 2;
+then A4: b in D1 & b in D2 by A3,WAYBEL_0:def 20;
+      b <= b;
+    then b = b "\/" b by YELLOW_0:24;
+    hence b in X by A2,A4;
+  end;
 end;
+
 
 theorem :: YELLOW_4:15
 for L being non empty RelStr, Y being Subset of L, x being Element of L
@@ -236,11 +317,13 @@ definition let L be non empty RelStr,
    { x "/\" y where x, y is Element of L : x in D1 & y in D2 };
 end;
 
+
 definition let L be with_infima antisymmetric RelStr,
                D1, D2 be Subset of L;
  redefine func D1 "/\" D2;
 commutativity;
 end;
+
 
 theorem :: YELLOW_4:36
   for L being non empty RelStr, X being Subset of L holds X "/\" {}L = {};
@@ -267,25 +350,101 @@ theorem :: YELLOW_4:41
  for D1, D2, D3 being Subset of L holds (D1 "/\" D2) "/\" D3 = D1 "/\" (D2 "/\"
  D3);
 
-definition let L be non empty RelStr,
+registration let L be non empty RelStr,
                D1, D2 be non empty Subset of L;
  cluster D1 "/\" D2 -> non empty;
+coherence
+  proof
+    consider a being set such that
+A1:   a in D1 by XBOOLE_0:def 1;
+    consider b being set such that
+A2:   b in D2 by XBOOLE_0:def 1;
+    reconsider a as Element of D1 by A1;
+    reconsider b as Element of D2 by A2;
+      a "/\" b in { x "/\" y where x, y is Element of L : x in D1 & y in D2 };
+    hence thesis by Def4;
+  end;
 end;
 
-definition let L be with_infima transitive antisymmetric RelStr,
+
+registration let L be with_infima transitive antisymmetric RelStr,
                D1, D2 be directed Subset of L;
  cluster D1 "/\" D2 -> directed;
+coherence
+  proof
+    set X = D1 "/\" D2;
+    let a, b be Element of L; assume
+A1:   a in X & b in X;
+    then a in { x "/\" y where x, y is Element of L : x in D1 & y in
+ D2 } by Def4;
+     then consider x, y being Element of L such that
+A2:   a = x "/\" y & x in D1 & y in D2;
+      b in { s "/\"
+ t where s, t is Element of L : s in D1 & t in D2 } by A1,Def4;
+     then consider s, t being Element of L such that
+A3:   b = s "/\" t & s in D1 & t in D2;
+    consider z1 being Element of L such that
+A4:   z1 in D1 & x <= z1 & s <= z1 by A2,A3,WAYBEL_0:def 1;
+    consider z2 being Element of L such that
+A5:   z2 in D2 & y <= z2 & t <= z2 by A2,A3,WAYBEL_0:def 1;
+    take z = z1 "/\" z2;
+      X = { o "/\" p where o, p is Element of L : o in D1 & p in D2 } by Def4;
+    hence z in X by A4,A5;
+    thus a <= z & b <= z by A2,A3,A4,A5,YELLOW_3:2;
+  end;
 end;
 
-definition let L be with_infima transitive antisymmetric RelStr,
+
+registration let L be with_infima transitive antisymmetric RelStr,
                D1, D2 be filtered Subset of L;
  cluster D1 "/\" D2 -> filtered;
+coherence
+  proof
+    set X = D1 "/\" D2;
+    let a, b be Element of L; assume
+A1:   a in X & b in X;
+    then a in { x "/\" y where x, y is Element of L : x in D1 & y in
+ D2 } by Def4;
+     then consider x, y being Element of L such that
+A2:   a = x "/\" y & x in D1 & y in D2;
+      b in { s "/\"
+ t where s, t is Element of L : s in D1 & t in D2 } by A1,Def4;
+     then consider s, t being Element of L such that
+A3:   b = s "/\" t & s in D1 & t in D2;
+    consider z1 being Element of L such that
+A4:   z1 in D1 & x >= z1 & s >= z1 by A2,A3,WAYBEL_0:def 2;
+    consider z2 being Element of L such that
+A5:   z2 in D2 & y >= z2 & t >= z2 by A2,A3,WAYBEL_0:def 2;
+    take z = z1 "/\" z2;
+      X = { o "/\" p where o, p is Element of L : o in D1 & p in D2 } by Def4;
+    hence z in X by A4,A5;
+    thus a >= z & b >= z by A2,A3,A4,A5,YELLOW_3:2;
+  end;
 end;
 
-definition let L be Semilattice,
+
+registration let L be Semilattice,
                D1, D2 be lower Subset of L;
  cluster D1 "/\" D2 -> lower;
+coherence
+  proof
+    set X = D1 "/\" D2;
+    let a, b be Element of L such that
+A1:   a in X & b <= a;
+A2: X = { x "/\" y where x, y is Element of L : x in D1 & y in D2 } by Def4;
+     then consider x, y being Element of L such that
+A3:   a = x "/\" y & x in D1 & y in D2 by A1;
+      ex xx being Element of L st x >= xx & y >= xx &
+     for c being Element of L st x >= c & y >= c holds xx >= c
+       by LATTICE3:def 11;
+    then x "/\" y <= x & x "/\" y <= y by LATTICE3:def 14;
+    then b <= x & b <= y by A1,A3,YELLOW_0:def 2;
+then A4: b in D1 & b in D2 by A3,WAYBEL_0:def 19;
+      b = b "/\" b by YELLOW_0:25;
+    hence b in X by A2,A4;
+  end;
 end;
+
 
 theorem :: YELLOW_4:42
 for L being non empty RelStr, Y being Subset of L, x being Element of L

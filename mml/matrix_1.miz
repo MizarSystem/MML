@@ -40,7 +40,8 @@ begin
    ex s st s=x & len s = n;
  end;
 
- definition
+
+ registration
   cluster tabular FinSequence;
     existence
      proof
@@ -50,6 +51,7 @@ begin
        hence thesis;
      end;
  end;
+
 
 theorem
 Th1: <*<*d*>*> is tabular
@@ -136,18 +138,21 @@ theorem <*<*a1,a2*>,<*b1,b2*>*> is tabular
      for s being set st s in rng f holds Card s = 0;
  end;
 
- definition
+
+ registration
   let D be set;
   cluster tabular FinSequence of D*;
    existence proof take <*>(D*),0; thus thesis; end;
  end;
+
 
  definition
   let D be set;
   mode Matrix of D is tabular FinSequence of D*;
  end;
 
- definition
+
+ registration
   let D be non empty set;
   cluster non empty-yielding Matrix of D;
    existence
@@ -161,6 +166,7 @@ A1:    rng <*<*d*>*>= {<*d*>} & <*d*> in D* by FINSEQ_1:55,def 11;
       thus len s <> 0 by FINSEQ_1:56;
     end;
  end;
+
 
 theorem Th9:
   s is Matrix of D iff ex n st for x st x in rng s ex p st x = p & len p = n
@@ -251,9 +257,11 @@ Def3:
      end;
  end;
 
+
  definition let D,n;
   mode Matrix of n,D is Matrix of n,n,D;
  end;
+
 
  definition let K be non empty 1-sorted;
   mode Matrix of K is Matrix of the carrier of K;
@@ -262,6 +270,7 @@ Def3:
   let m;
   mode Matrix of n,m,K is Matrix of n,m,the carrier of K;
  end;
+
 
 theorem Th10:
  m |-> (n |-> a) is Matrix of m,n,D
@@ -422,6 +431,7 @@ Def4:
     consistency;
  end;
 
+
 theorem Th20: len M > 0 implies for n holds
   M is Matrix of len M, n, D iff n = width M
    proof
@@ -447,6 +457,7 @@ theorem Th20: len M > 0 implies for n holds
    [:dom M,Seg width M:];
     coherence;
  end;
+
 
  definition let D be set; let M be Matrix of D; let i,j;
  assume A1:[i,j] in Indices M;
@@ -478,6 +489,7 @@ A7:  ex t st s = t & len t = n by A4,A6;
      end;
     uniqueness;
  end;
+
 
 theorem Th21:len M1 =len M2 & width M1= width M2 &
  (for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j))
@@ -528,7 +540,7 @@ theorem Th21:len M1 =len M2 & width M1= width M2 &
                    f(set,set) -> Element of D()} :
   ex M being Matrix of n(),m(),D() st
    for i,j st [i,j] in Indices M holds M*(i,j) = f(i,j)
-  proof
+proof
    defpred P[set,set] means
     ex p being FinSequence st
     $2=p & len p = m() & for i st i in Seg m() holds p.i = f($1,i);
@@ -553,14 +565,14 @@ theorem Th21:len M1 =len M2 & width M1= width M2 &
     deffunc F(Nat) = f(k,$1);
     consider p being FinSequence such that
      A10: len p =m() & for i st i in Seg m() holds p.i = F(i)
-      from SeqLambda;
+      from FINSEQ_1:sch 2;
     reconsider y =p as set;
     take y,p;
     thus thesis by A10;
    end;
    consider M being FinSequence such that
     A11:dom M = Seg n() and
-    A12:for k st k in Seg n() holds P[k,M.k] from SeqEx(A1,A9);
+    A12:for k st k in Seg n() holds P[k,M.k] from FINSEQ_1:sch 1(A1,A9);
     A13:len M = n() by A11,FINSEQ_1:def 3;
      rng M c=D()*
     proof
@@ -643,7 +655,7 @@ then A28:      i in Seg n() & j in Seg width M by A11,A25,ZFMISC_1:106;
       holds x1 = x2 and
 A1:  for i,j st [i,j] in [:Seg n(), Seg m():]
      ex x being Element of D() st P[i,j,x]
-     proof
+proof
       defpred Q[set,set,set] means
       P[$1,$2,$3] & $3 in D();
       A2:for x ,y st x in Seg n() & y in Seg m() ex z st z in D()
@@ -663,7 +675,7 @@ A1:  for i,j st [i,j] in [:Seg n(), Seg m():]
      consider f being Function of [:Seg n(),Seg m():],D()
      such that
     A5:for x,y st x in Seg n() & y in Seg m() holds Q[x,y,f.[x,y]]
-          from FuncEx2(A2);
+          from FUNCT_2:sch 5(A2);
     defpred R[set,set] means
       ex p being FinSequence st
       $2=p & len p = m() & for i st i in Seg m() holds p.i = f.[$1,i];
@@ -688,14 +700,14 @@ A1:  for i,j st [i,j] in [:Seg n(), Seg m():]
          deffunc F(Nat) = f.[k,$1];
          consider p being FinSequence such that
          A15: len p =m() & for i st i in Seg m() holds p.i = F(i)
-              from SeqLambda;
+              from FINSEQ_1:sch 2;
          reconsider y =p as set;
          take y,p;
          thus thesis by A15;
         end;
      consider M being FinSequence such that
      A16:dom M = Seg n() and
-     A17:for k st k in Seg n() holds R[k,M.k] from SeqEx(A6,A14);
+     A17:for k st k in Seg n() holds R[k,M.k] from FINSEQ_1:sch 1(A6,A14);
      A18:len M = n() by A16,FINSEQ_1:def 3;
        rng M c=D()*
        proof
@@ -813,8 +825,10 @@ A3:    0 <= n by NAT_1:18;
       now per cases by A3,REAL_1:def 5;
      case n =0;
       hence width M = 0 by A2,Def4;
+     end;
      case n > 0;
      hence width M= n by A2,Th20;
+   end;
    end;
     hence thesis by A1,A2,Def5;
    end;
@@ -842,9 +856,11 @@ A3:    0 <= n by NAT_1:18;
      suppose n =0;
       then width M1 = 0 & width M2 =0 by A1,Def4;
       hence width M1= width M2;
+     end;
      suppose n > 0;
      then width M1= m & width M2= m by A1,Th20;
      hence width M1 = width M2;
+   end;
    end;
    then Indices M1 =[:Seg n,Seg width M1:] & Indices M2=[:Seg n,Seg width M1:]
      by A2,Def5;
@@ -866,9 +882,11 @@ A3:    0 <= n by NAT_1:18;
      suppose n =0;
       then width M1 = 0 & width M2 =0 by A2,Def4;
       hence width M1= width M2;
+     end;
      suppose n > 0;
     then width M1= m & width M2= m by A2,Th20;
      hence width M1 = width M2;
+   end;
    end;
    hence thesis by A1,A2,Th21;
   end;
@@ -923,6 +941,7 @@ A2:     Seg len M = dom M by FINSEQ_1:def 3;
            then [i,j] in Indices M' by A5;
            hence thesis by A3;
           end;
+       end;
        suppose A7: width M =0;
         reconsider M1 = {} as Matrix of D by Th13;
         thus thesis
@@ -933,6 +952,7 @@ A8:          [:dom M,Seg width M:]={} by A7,FINSEQ_1:4,ZFMISC_1:113;
           then Indices M1=[:{},Seg width M1:] by Def5;
           hence thesis by A7,A8,Def5,FINSEQ_1:25,ZFMISC_1:113;
          end;
+       end;
        end;
        hence thesis;
       end;
@@ -987,10 +1007,12 @@ then A23:     dom M2 <> {} by FINSEQ_1:def 3;
           then dom M1 <> {} by FINSEQ_1:def 3;
           then Seg width M1 = Seg width M2 by A19,A24,ZFMISC_1:134;
           hence width M1 = width M2 by FINSEQ_1:8;
+         end;
          suppose A25: Seg width M1 = {};
           then [:dom M2,Seg width M2:]= {} by A19,ZFMISC_1:113;
           then Seg width M2 = {} by A23,ZFMISC_1:113;
           hence width M1=width M2 by A25,FINSEQ_1:8;
+        end;
         end;
        hence len M1=len M2 & width M1 =width M2 by A9,A12;
       end;
@@ -1004,6 +1026,7 @@ then A23:     dom M2 <> {} by FINSEQ_1:def 3;
      end;
  end;
 
+
  definition let D,M,i;
   func Line(M,i) -> FinSequence of D means:
 Def8:
@@ -1012,7 +1035,7 @@ Def8:
      proof
       deffunc F(Nat) =  M*(i,$1);
      thus ex f being FinSequence of D st len f = width M &
-      for j st j in Seg width M holds f.j = F(j) from SeqLambdaD;
+      for j st j in Seg width M holds f.j = F(j) from FINSEQ_2:sch 1;
      end;
     uniqueness
     proof
@@ -1039,7 +1062,7 @@ Def9:
      deffunc F(Nat) =  M*($1,i);
     A5: ex z being FinSequence of D st
        len z = len M & for j st j in Seg len M holds z.j = F(j)
-         from SeqLambdaD;
+         from FINSEQ_2:sch 1;
         Seg len M = dom M by FINSEQ_1:def 3;
       hence thesis by A5;
     end;
@@ -1062,6 +1085,7 @@ Def9:
     end;
  end;
 
+
  definition let D; let M be Matrix of D; let i;
   redefine func Line(M,i) -> Element of (width M)-tuples_on D;
     coherence
@@ -1083,6 +1107,7 @@ Def9:
        hence Col(M,i) is Element of (len M)-tuples_on D by FINSEQ_2:def 4;
      end;
  end;
+
 
  reserve A,B for Matrix of n,K;
 
@@ -1215,7 +1240,8 @@ Def14:
     end;
  end;
 
- definition let K,n;
+
+ registration let K,n;
   cluster n-Matrices_over K -> non empty;
     coherence
     proof
@@ -1223,6 +1249,7 @@ Def14:
      hence thesis;
     end;
    end;
+
 
 theorem Th30: [i,j] in Indices (0.(K,n)) implies (0.(K,n))*(i,j)= 0.K
     proof
@@ -1304,6 +1331,7 @@ n
     end;
    end;
 
+
 reserve A,A',B,B',C for Matrix of n,F;
 
 theorem Th32: A + B = B + A
@@ -1382,7 +1410,7 @@ theorem Th35: A + (-A) = 0.(F,n)
         end;
      consider h being BinOp of n-Matrices_over F such that
      A2:for a,b being Element of n-Matrices_over F holds P[a,b,h.(a,b)]
-       from BinOpEx(A1);
+       from BINOP_1:sch 1(A1);
      A3:h.(A,B)=A+B
      proof
         A is Element of (n-Matrices_over F) &
@@ -1460,3 +1488,4 @@ A5:   ex A st a=A & b= -A by A4;
     end;
  end;
  end;
+

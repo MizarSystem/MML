@@ -24,6 +24,7 @@ definition
   redefine mode Element of r -> Element of [:A,B:];
 end;
 
+
 :: Place/Transition Net Structure
 definition
   struct PT_net_Str
@@ -31,6 +32,7 @@ definition
        S-T_Arcs -> non empty Relation of the Places, the Transitions,
        T-S_Arcs -> non empty Relation of the Transitions, the Places #);
 end;
+
 
 reserve PTN for PT_net_Str;
 
@@ -45,6 +47,7 @@ definition
   mode T-S_arc of PTN is Element of the T-S_Arcs of PTN;
 end;
 
+
 :: Redefinition of Relation for s->t Arcs
 definition
   let PTN;
@@ -53,6 +56,7 @@ definition
 
   func x`2 -> transition of PTN;
 end;
+
 
 :: Redefinition of Relation for t->s Arcs
 definition
@@ -64,6 +68,7 @@ definition
 
   func x`2 -> place of PTN;
 end;
+
 
 :: *S, S* Definitions and Theorems
 reserve S0 for Subset of the Places of PTN;
@@ -82,6 +87,7 @@ definition
      { t where t is transition of PTN : ex f being S-T_arc of PTN,
       s being place of PTN st s in S0 & f = [s,t] };
 end;
+
 
 theorem :: PETRI:1
     *'S0 = {f`1 where f is T-S_arc of PTN : f`2 in S0};
@@ -116,6 +122,7 @@ definition
      { s where s is place of PTN : ex f being T-S_arc of PTN,
       t being transition of PTN st t in T0 & f = [t,s] };
 end;
+
 
 theorem :: PETRI:5
     *'T0 = {f`1 where f is S-T_arc of PTN : f`2 in T0};
@@ -156,6 +163,7 @@ definition
       *'IT is Subset of IT*';
 end;
 
+
 :: With_Deadlocks Mode for Place\Transition Nets
 definition let IT be PT_net_Str;
   attr IT is With_Deadlocks means
@@ -163,9 +171,39 @@ definition let IT be PT_net_Str;
       ex S being Subset of the Places of IT st S is Deadlock-like;
 end;
 
-definition
+
+registration
   cluster With_Deadlocks PT_net_Str;
+  existence
+    proof
+        0 in {0} by TARSKI:def 1;
+      then reconsider f = {[0,0]} as non empty Relation of {0}, {0}
+        by RELSET_1:8;
+      take PTN1 = PT_net_Str (# {0}, {0}, f, f #);
+        {0} c= the Places of PTN1;
+      then reconsider S = {0} as Subset of the Places of PTN1;
+      take S;
+      A1: *'S = { t where t is transition of PTN1 : ex f being T-S_arc of PTN1,
+        s being place of PTN1 st s in S & f = [t,s] } by Def1;
+      A2: S*' = { t where t is transition of PTN1 : ex f being S-T_arc of PTN1,
+        s being place of PTN1 st s in S & f = [s,t] } by Def2;
+      reconsider s = 0 as place of PTN1 by TARSKI:def 1;
+      reconsider t = 0 as transition of PTN1 by TARSKI:def 1;
+      reconsider st_f = [0,0] as S-T_arc of PTN1 by TARSKI:def 1;
+      reconsider ts_f = [0,0] as T-S_arc of PTN1 by TARSKI:def 1;
+
+        ts_f = [t,s] & s in S;
+      then t in *'S by A1;
+      then {t} c= *'S by ZFMISC_1:37;
+      then A3: {t} = *'S by XBOOLE_0:def 10;
+
+        st_f = [s,t] & s in S;
+      then t in S*' by A2;
+
+      hence *'S is Subset of S*' by A3,ZFMISC_1:37;
+    end;
 end;
+
 
 begin
 
@@ -178,6 +216,7 @@ definition
       IT*' is Subset of *'IT;
 end;
 
+
 :: With_Traps Mode for Place\Transition Nets
 definition let IT be PT_net_Str;
   attr IT is With_Traps means
@@ -185,9 +224,39 @@ definition let IT be PT_net_Str;
       ex S being Subset of the Places of IT st S is Trap-like;
 end;
 
-definition
+
+registration
   cluster With_Traps PT_net_Str;
+  existence
+    proof
+        0 in {0} by TARSKI:def 1;
+      then reconsider f = {[0,0]} as non empty Relation of {0}, {0}
+        by RELSET_1:8;
+      take PTN1 = PT_net_Str (# {0}, {0}, f, f #);
+        {0} c= the Places of PTN1;
+      then reconsider S = {0} as Subset of the Places of PTN1;
+      take S;
+      A1: *'S = { t where t is transition of PTN1 : ex f being T-S_arc of PTN1,
+        s being place of PTN1 st s in S & f = [t,s] } by Def1;
+      A2: S*' = { t where t is transition of PTN1 : ex f being S-T_arc of PTN1,
+        s being place of PTN1 st s in S & f = [s,t] } by Def2;
+      reconsider s = 0 as place of PTN1 by TARSKI:def 1;
+      reconsider t = 0 as transition of PTN1 by TARSKI:def 1;
+      reconsider st_f = [0,0] as S-T_arc of PTN1 by TARSKI:def 1;
+      reconsider ts_f = [0,0] as T-S_arc of PTN1 by TARSKI:def 1;
+
+        st_f = [s,t] & s in S;
+      then t in S*' by A2;
+      then {t} c= S*' by ZFMISC_1:37;
+      then A3: {t} = S*' by XBOOLE_0:def 10;
+
+        ts_f = [t,s] & s in S;
+      then t in *'S by A1;
+
+      hence S*' is Subset of *'S by A3,ZFMISC_1:37;
+    end;
 end;
+
 
 definition
   let A, B be non empty set;
@@ -195,6 +264,7 @@ definition
   redefine
     func r~ -> non empty Relation of B, A;
 end;
+
 
 begin
 
@@ -207,6 +277,7 @@ definition
      PT_net_Str (# the Places of PTN, the Transitions of PTN,
       (the T-S_Arcs of PTN)~, (the S-T_Arcs of PTN)~ #);
 end;
+
 
 theorem :: PETRI:13
   PTN.:.: = the PT_net_Str of PTN;
@@ -226,6 +297,7 @@ definition
      S0;
 end;
 
+
 definition
   let PTN;
   let s be place of PTN;
@@ -235,6 +307,7 @@ definition
      s;
 end;
 
+
 definition
   let PTN;
   let S0 be Subset of the Places of PTN.:;
@@ -242,6 +315,7 @@ definition
 :: PETRI:def 12
        S0;
 end;
+
 
 definition
   let PTN;
@@ -252,6 +326,7 @@ definition
      s;
 end;
 
+
 definition
   let PTN;
   let T0 be Subset of the Transitions of PTN;
@@ -259,6 +334,7 @@ definition
 :: PETRI:def 14
        T0;
 end;
+
 
 definition
   let PTN;
@@ -268,6 +344,7 @@ definition
        t;
 end;
 
+
 definition
   let PTN;
   let T0 be Subset of the Transitions of PTN.:;
@@ -276,6 +353,7 @@ definition
        T0;
 end;
 
+
 definition
   let PTN;
   let t be transition of PTN.:;
@@ -283,6 +361,7 @@ definition
 :: PETRI:def 17
        t;
 end;
+
 
 reserve S for Subset of the Places of PTN;
 

@@ -21,15 +21,33 @@ definition let L be non empty ComplLattStr;
       (((x + y)` + z)` + (x + (z` + (z + u)`)`)`)` = z;
 end;
 
-definition
+
+registration
   cluster TrivComplLat -> satisfying_DN_1;
+  coherence
+  proof
+    let x, y, z, u be Element of TrivComplLat;
+    thus thesis by REALSET1:def 20;
+  end;
   cluster TrivOrtLat -> satisfying_DN_1;
+  coherence
+  proof
+    let x, y, z, u be Element of TrivOrtLat;
+    thus thesis by REALSET1:def 20;
+  end;
 end;
 
-definition
+
+registration
   cluster join-commutative join-associative satisfying_DN_1
     (non empty ComplLattStr);
+  existence
+  proof
+    take TrivComplLat;
+    thus thesis;
+  end;
 end;
+
 
  reserve L for satisfying_DN_1 (non empty ComplLattStr);
  reserve x, y, z, u, v for Element of L;
@@ -169,9 +187,11 @@ theorem :: ROBBINS2:27  :: A89
       x, y being Element of L holds
     x + y = y + x;
 
-definition
+registration
   cluster satisfying_DN_1 -> join-commutative (non empty ComplLattStr);
+  coherence by Lm1;
 end;
+
 
 theorem :: ROBBINS2:28  :: A90
   for L being satisfying_DN_1 (non empty ComplLattStr),
@@ -323,10 +343,13 @@ theorem :: ROBBINS2:57 :: A121
       x, y, z being Element of L holds
     (x + y) + z = x + (y + z);
 
-definition
+registration
   cluster satisfying_DN_1 -> join-associative (non empty ComplLattStr);
+  coherence by Lm2;
   cluster satisfying_DN_1 -> Robbins (non empty ComplLattStr);
+  coherence by Lm3;
 end;
+
 
 theorem :: ROBBINS2:58
   for L being non empty ComplLattStr,
@@ -339,19 +362,45 @@ theorem :: ROBBINS2:59
     L is join-commutative join-associative Robbins holds
       L is satisfying_DN_1;
 
-definition
+registration
   cluster join-commutative join-associative Robbins -> satisfying_DN_1
       (non empty ComplLattStr);
+  coherence by Th59;
 end;
 
-definition
+
+registration
   cluster satisfying_DN_1 de_Morgan preOrthoLattice;
+  existence
+  proof
+    take TrivOrtLat;
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   cluster satisfying_DN_1 de_Morgan -> Boolean preOrthoLattice;
+  coherence
+  proof
+    let L be preOrthoLattice;
+    assume L is satisfying_DN_1 de_Morgan; then
+    reconsider L' = L as satisfying_DN_1 de_Morgan preOrthoLattice;
+    L' is Boolean;
+    hence thesis;
+  end;
   cluster Boolean -> satisfying_DN_1 (well-complemented preOrthoLattice);
+  coherence
+  proof
+    let L be well-complemented preOrthoLattice;
+    assume
+A1: L is Boolean;
+    reconsider L' = L as Boolean well-complemented preOrthoLattice by A1;
+    L' is satisfying_DN_1;
+    hence thesis;
+  end;
 end;
+
 
 begin :: Meredith Two Axioms for Boolean Algebras
 
@@ -366,21 +415,80 @@ definition let L be non empty ComplLattStr;
       (x` + y)` + (z + y) = y + (z + x);
 end;
 
-definition
+registration
   cluster satisfying_MD_1 satisfying_MD_2 ->
      join-commutative join-associative Huntington (non empty ComplLattStr);
+  coherence by Lm4;
   cluster join-commutative join-associative Huntington ->
      satisfying_MD_1 satisfying_MD_2 (non empty ComplLattStr);
+  coherence
+  proof
+    let L be non empty ComplLattStr;
+    assume L is join-commutative join-associative Huntington; then
+    reconsider L' = L as join-commutative join-associative Huntington
+      (non empty ComplLattStr);
+A1: L' is satisfying_MD_1
+    proof
+      let x, y be Element of L';
+      (x` + y)` + x = (x` + y``)` + x by ROBBINS1:3
+                   .= (x *' y`) + x by ROBBINS1:def 4
+                   .= x by ROBBINS1:21;
+      hence thesis;
+    end;
+    L' is satisfying_MD_2
+    proof
+      let x, y, z be Element of L';
+      set Z = z + y;
+      consider k being Element of L' such that
+A2:   k + k` = Top L' by ROBBINS1:def 8;
+A3:   Z + y` = z + (y + y`) by LATTICES:def 5
+            .= z + Top L' by A2,ROBBINS1:4
+            .= Top L' by ROBBINS1:20;
+      (x` + y)` + (z + y) = (x` + y``)` + (z + y) by ROBBINS1:3
+                         .= (x *' y`) + (z + y) by ROBBINS1:def 4
+                         .= (Z + x) *' (Z + y`) by ROBBINS1:32
+                         .= Z + x by A3,ROBBINS1:15
+                         .= y + (z + x) by LATTICES:def 5;
+      hence thesis;
+    end;
+    hence thesis by A1;
+  end;
 end;
 
-definition
+
+registration
   cluster satisfying_MD_1 satisfying_MD_2 satisfying_DN_1 de_Morgan
     preOrthoLattice;
+  existence
+  proof
+    take TrivOrtLat;
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   cluster satisfying_MD_1 satisfying_MD_2 de_Morgan ->
     Boolean preOrthoLattice;
+  coherence
+  proof
+    let L be preOrthoLattice;
+    assume L is satisfying_MD_1 satisfying_MD_2 de_Morgan; then
+    reconsider L' = L as satisfying_MD_1 satisfying_MD_2 de_Morgan
+      preOrthoLattice;
+    L' is Boolean;
+    hence thesis;
+  end;
   cluster Boolean -> satisfying_MD_1 satisfying_MD_2 (well-complemented
     preOrthoLattice);
+  coherence
+  proof
+    let L be well-complemented preOrthoLattice;
+    assume
+A1: L is Boolean;
+    reconsider L' = L as Boolean well-complemented preOrthoLattice by A1;
+    L' is satisfying_MD_1 satisfying_MD_2;
+    hence thesis;
+  end;
 end;
+

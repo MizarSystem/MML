@@ -36,7 +36,7 @@ scheme RealSeqChoice { P[set,set] }:
  ex s1 being Function of NAT, REAL st for n being Nat holds P[n,s1.n]
 provided
 A1: for n being Nat ex r being real number st P[n,r]
- proof
+proof
   defpred Q[Element of NAT,Element of REAL] means P[$1,$2];
 A2: for t being Element of NAT
    ex ff being Element of REAL st Q[t,ff]
@@ -49,7 +49,7 @@ A3:      P[t,ff] by A1;
      hence thesis;
    end;
   consider f being Function of NAT,REAL such that A4:
-  for t being Element of NAT holds Q[t,f.t] from FuncExD(A2);
+  for t being Element of NAT holds Q[t,f.t] from FUNCT_2:sch 3(A2);
   take f; let n;
   thus thesis by A4;
  end;
@@ -112,6 +112,7 @@ coherence
  end;
 end;
 
+
 definition let g,s be real number;
 func ]. g,s .[ -> Subset of REAL equals : Def2:
   {r where r is Real : g<r & r<s };
@@ -125,6 +126,7 @@ coherence
   hence thesis by TARSKI:def 3;
  end;
 end;
+
 
 canceled 2;
 
@@ -252,13 +254,16 @@ A8: g is Real by XREAL_0:def 1;
     then ex r be Real st x = r & g<r & r<s;
    then x in {r where r is Real: g<=r & r<=s};
    hence x in [.g,s.] by Def1;
+  end;
   suppose A9: x=g;
      g in {r where r is Real: g<=r & r<=s} by A1,A8;
    hence x in [.g,s.] by A9,Def1;
+  end;
   suppose A10: x=s;
       s is Real by XREAL_0:def 1;
    then s in {r where r is Real: g<=r & r<=s} by A1;
    hence x in [.g,s.] by A10,Def1;
+  end;
   end; hence thesis;
  end;
 end;
@@ -363,9 +368,11 @@ proof assume A1: p<=g;
    now per cases;
  suppose p=g;
   hence [.p,g.] \/ [.g,p.] = [.p,g.];
+ end;
  suppose p<>g; then p<g by A1,REAL_1:def 5;
   hence [.p,g.] \/ [.g,p.] = [.p,g.] \/ {} by Th13
    .= [.p,g.];
+ end;
  end;
  hence thesis;
 end;
@@ -376,14 +383,17 @@ attr X is compact means :Def3:
  s2 is convergent & lim s2 in X;
 end;
 
+
 definition let X;
 attr X is closed means :Def4:
  for s1 st rng s1 c= X & s1 is convergent holds lim s1 in X;
 end;
 
+
 definition let X;
 attr X is open means :Def5: X` is closed;
 end;
+
 
 canceled 3;
 
@@ -440,7 +450,7 @@ A3: lim s1 <= g
     proof
      deffunc F(Nat) = g;
      consider s2 be Real_Sequence such that
- A4: for n holds s2.n = F(n) from ExRealSeq;
+ A4: for n holds s2.n = F(n) from SEQ_1:sch 1;
 A5: s2.0 = g by A4;
 A6:  s2 is constant by A4,SEQM_3:def 6;
 then A7:  lim s2 = g by A5,SEQ_4:40;
@@ -458,7 +468,7 @@ A8: s2 is convergent by A6,SEQ_4:39;
     proof
      deffunc F(Nat)=s;
      consider s2 be Real_Sequence such that
- A9: for n holds s2.n = F(n) from ExRealSeq;
+ A9: for n holds s2.n = F(n) from SEQ_1:sch 1;
 A10: s2.0 = s by A9;
 A11:  s2 is constant by A9,SEQM_3:def 6;
 then A12:  lim s2 = s by A10,SEQ_4:40;
@@ -500,7 +510,7 @@ theorem Th25:
 proof
  defpred P[Real] means $1<=p or q<=$1;
  consider X such that A1: for r be Real holds r in X iff P[r]
- from SepReal;
+ from REAL_1:sch 1;
  A2: ].p,q.[` = X
  proof thus ].p,q.[` c= X
   proof
@@ -558,10 +568,11 @@ A6: r is Real by XREAL_0:def 1;
  hence thesis by A2,Def5;
 end;
 
-definition let p, q be real number;
+registration let p, q be real number;
   cluster ].p,q.[ -> open;
   coherence by Th25;
 end;
+
 
 theorem Th26:
 X is compact implies X is closed
@@ -621,7 +632,7 @@ proof
        end;
    consider f being Function of NAT,REAL such that A6:
    for n being Element of NAT holds P[n,f.n]
-     from FuncExD(A4);
+     from FUNCT_2:sch 3(A4);
 A7: now let n;
        ex q st q=f.n & q in X & n<q by A6;
     hence f.n in X & n<f.n;
@@ -649,6 +660,7 @@ then A12: 1 < f.m - p by REAL_1:86;
    then ex s2 st s2 is_subsequence_of f & s2 is convergent & lim s2 in X
           by A1,Def3;
   hence contradiction by A8,Th27;
+  end;
   suppose A14: not X is bounded_below;
   defpred P[Element of NAT,Element of REAL] means
           ex q st q=$2 & q in X & q<-$1;
@@ -660,7 +672,7 @@ then A12: 1 < f.m - p by REAL_1:86;
         thus thesis by A16;
        end;
    consider f being Function of NAT,REAL such that A17:
-   for n being Element of NAT holds P[n,f.n] from FuncExD(A15);
+   for n being Element of NAT holds P[n,f.n] from FUNCT_2:sch 3(A15);
 A18: now let n;
        ex q st q=f.n & q in X & q<-n by A17;
     hence f.n in X & f.n<-n;
@@ -692,6 +704,7 @@ then A24: 1 < p - f.m by REAL_1:86; then 0 < p-f.m by AXIOMS:22;
    then ex s2 st s2 is_subsequence_of f & s2 is convergent & lim s2 in X
       by A1,Def3;
   hence contradiction by A19,Th27;
+ end;
  end;
 hence contradiction;
 end;
@@ -771,7 +784,7 @@ A5: for n being Element of NAT
         thus thesis by A6,A7;
        end;
    consider f being Function of NAT,REAL such that A8:
-   for n being Element of NAT holds P[n,f.n] from FuncExD(A5);
+   for n being Element of NAT holds P[n,f.n] from FUNCT_2:sch 3(A5);
 A9: now let n;
        ex q st q = f.n & q in X & s1 -q < 1/(n+1) by A8;
     hence f.n in X & s1 - f.n<1/(n+1);
@@ -827,7 +840,7 @@ proof
       thus thesis by A6,A7;
      end;
  consider f being Function of NAT,REAL such that A8:
- for n being Element of NAT holds P[n,f.n] from FuncExD(A5);
+ for n being Element of NAT holds P[n,f.n] from FUNCT_2:sch 3(A5);
  A9: now let n;
      ex q st q = f.n & q in X & q-i1 < 1/(n+1) by A8;
   hence f.n in X & f.n-i1<1/(n+1);
@@ -875,6 +888,7 @@ proof assume that A1: X is compact and
  per cases;
  suppose A3: X={}; take 1; take 0;
   thus thesis by A3,Th13;
+ end;
  suppose A4: X<>{};
     X is bounded closed by A1,Th26,Th28;
   then A5: X is bounded_below & X is bounded_above & X is closed by SEQ_4:def 3
@@ -890,14 +904,16 @@ proof assume that A1: X is compact and
   end; then X c= [.p,g.] by SUBSET_1:7;
   hence X = [.p,g.] by A8,XBOOLE_0:def 10;
 end;
+end;
 
-definition
+registration
 cluster open Subset of REAL;
 existence
  proof take ].0,1.[;
   thus thesis;
  end;
 end;
+
 
 definition let r be real number;
  canceled;
@@ -911,7 +927,8 @@ existence
  end;
 end;
 
-definition let r be real number;
+
+registration let r be real number;
   cluster -> open Neighbourhood of r;
   coherence
   proof
@@ -920,6 +937,7 @@ definition let r be real number;
     hence thesis;
   end;
 end;
+
 
 canceled 3;
 
@@ -961,6 +979,7 @@ A9: now per cases;
    hence y in ].r-g2,r+g2.[ by Def2;
   end;
   hence ].r-g,r+g.[ c= N1 & ].r-g,r+g.[ c= N2 by A1,A2,A10,TARSKI:def 3;
+ end;
  suppose g2<=g1; then A13: g2=g by SQUARE_1:def 1;
     now let y; assume y in ].r-g,r+g.[;
    then y in {p2 where p2 is Real: r-g<p2 & p2<r+g} by Def2;
@@ -971,6 +990,7 @@ A9: now per cases;
    hence y in ].r-g1,r+g1.[ by Def2;
   end;
   hence ].r-g,r+g.[ c= N1 & ].r-g,r+g.[ c= N2 by A1,A2,A13,TARSKI:def 3;
+ end;
  end;
  reconsider N = ].r-g,r+g.[ as Neighbourhood of r by A3,Def7;
  take N;
@@ -1009,10 +1029,10 @@ Def7;
   end;
  deffunc F(Nat)= r - 1/($1+1);
  consider s1 be Real_Sequence such that
-A8: for n holds s1.n = F(n) from ExRealSeq;
+A8: for n holds s1.n = F(n) from SEQ_1:sch 1;
  deffunc G(Nat)= r + 1/($1+1);
  consider s2 be Real_Sequence such that
-A9: for n holds s2.n = G(n) from ExRealSeq;
+A9: for n holds s2.n = G(n) from SEQ_1:sch 1;
  consider s3 such that
 A10: for n holds P[n,s3.n]     from RealSeqChoice(A7);
 A11: now
@@ -1183,6 +1203,7 @@ proof assume that A1: X is open & X is bounded and
  per cases;
  suppose A3: X={}; take 1; take 0;
   thus thesis by A3,Th12;
+ end;
  suppose A4: X<>{};
   A5: X is bounded_below & X is bounded_above by A1,SEQ_4:def 3;
   take p=lower_bound X, g=upper_bound X;
@@ -1211,4 +1232,5 @@ then A9:   ex s be Real st s=r & p<s & s<g; then g-r>0 by SQUARE_1:11;
    hence r in X by A13;
   end;
   hence X = ].p,g.[ by SUBSET_1:8;
+end;
 end;

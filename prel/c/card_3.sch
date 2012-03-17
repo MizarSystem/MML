@@ -12,11 +12,6 @@ FINSET_1
 CARD_1
 CARD_3
 #
-CF_Lambda
-FinRegularity
-MaxFinSetElem
-FuncSeparation
-#
 M1 ;M1 V17 ;;;
 ªM1 V2 ;V4 ;V19 ;;ª&R1 K10 B1 ;F1 ;;M1 ;ª&R2 B2 F1 ;;ªR1 K20 B1 B2 ;F2 B2 ;;;;;
 #

@@ -30,13 +30,6 @@ MSUALG_1
 FUNCT_4
 CIRCCOMB
 #
-2AryBooleEx
-2AryBooleUniq
-2AryBooleDef
-3AryBooleEx
-3AryBooleUniq
-3AryBooleDef
-#
 M3 K56 ;K225 ;;;
 ™ùM6 V4 ;V16 K123 N2 K225 ;;K225 ;;K123 N2 K225 ;;K225 ;;™ùM3 K56 ;K225 ;;ùM3 K56 ;K225 ;;R1 K32 B1 K114 B2 B3 ;;F1 B2 B3 ;;;
 #

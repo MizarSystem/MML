@@ -133,11 +133,13 @@ A1: now let a be Int-Location;
        hence s1.a = (Initialized I).intloc 0 by A2,FUNCT_4:14
        .= 1 by SCMFSA6A:46
        .= (Initialize s).a by A2,SCMFSA6C:3;
+      end;
       suppose A3: intloc 0 <> a;
     then A4: a is read-write by SF_MASTR:def 5;
          a in dom s & not a in dom Initialized I by A3,SCMFSA6A:48,SCMFSA_2:66;
        hence s1.a = s.a by FUNCT_4:12
        .= (Initialize s).a by A4,SCMFSA6C:3;
+     end;
      end;
      now let f be FinSeq-Location;
         f in dom s & not f in dom Initialized I by SCMFSA6A:49,SCMFSA_2:67;
@@ -220,7 +222,7 @@ A12: now let k be Nat;
      end;
      now let k be Nat;
    A24: IC C1.k in dom I by A2,SCMFSA7B:def 7;
-        for k being Nat holds P[k] from Ind(A11,A12);
+        for k being Nat holds P[k] from NAT_1:sch 1(A11,A12);
       hence IC C2.k in dom I by A24;
      end;
    hence I is_closed_on s2 by SCMFSA7B:def 7;
@@ -327,12 +329,12 @@ A14: now let k be Nat;
       thus C1.(k + 1) | D = C2.(k + 1) | D by A16,A21,A22,A23,SCMFSA6A:39;
       end;
      end;
-     for k being Nat holds P[k] from Ind(A13,A14);
+     for k being Nat holds P[k] from NAT_1:sch 1(A13,A14);
    then CurInstr C2.m = halt SCM+FSA by A3;
 then A26: s2 +* (I +* Start-At insloc 0) is halting by AMI_1:def 20;
      now let k be Nat;
    A27: IC C1.k in dom I by A2,SCMFSA7B:def 7;
-        for k being Nat holds P[k] from Ind(A13,A14);
+        for k being Nat holds P[k] from NAT_1:sch 1(A13,A14);
       hence IC C2.k in dom I by A27;
      end;
    hence I is_closed_on s2 by SCMFSA7B:def 7;
@@ -470,7 +472,7 @@ then A22: dom I c= dom (I +* Start-At insloc 0) by GRFUNC_1:8;
        = C2.(k + 1) | (Int-Locations \/ FinSeq-Locations) by A17,A18,A19,
 SCMFSA6A:41;
      end;
-     for k being Nat holds P[k] from Ind(A7,A16); hence thesis;
+     for k being Nat holds P[k] from NAT_1:sch 1(A7,A16); hence thesis;
  end;
 
 theorem Th12: ::TG25
@@ -519,6 +521,7 @@ definition
  coherence;
 end;
 
+
 definition
  let a be Int-Location;
  let I,J be Macro-Instruction;
@@ -527,6 +530,7 @@ definition
   if=0(a,J,if>0(a,J,I));
  coherence;
 end;
+
 
 Lm5:
  for a being Int-Location, I,J being Macro-Instruction holds
@@ -771,8 +775,10 @@ then A24: s3 is halting by AMI_1:def 20;
        .= IC (Computation s1).k1 + (card J + 3) by A4,A7,A19,A20,A23,Th11
        .= insloc (m + (card J + 3)) by A26,SCMFSA_4:def 1;
        hence IC C3.k in dom if=0(a,I,J) by A29,SCMFSA6A:15;
+      end;
       suppose k = 0; hence IC C3.k in dom if=0(a,I,J) by A9,A12,AMI_1:def 19
 ;
+     end;
      end;
    hence if=0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
    thus if=0(a,I,J) is_halting_on s by A24,SCMFSA7B:def 8;
@@ -863,6 +869,7 @@ then A25: s3 is halting by AMI_1:def 20;
       suppose l = 0;
    then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A12,Lm2;
+      end;
       suppose l <> 0;
        then consider n being Nat such that A27: l = n + 1 by NAT_1:22;
    A28:  n < LifeSpan s1 by A26,A27,AXIOMS:24;
@@ -874,6 +881,7 @@ then A25: s3 is halting by AMI_1:def 20;
        .= 0 by A27,A29,AMI_1:51,SCMFSA_2:124;
        then CurInstr (Computation s1).n = halt SCM+FSA by SCMFSA_2:122;
        hence contradiction by A5,A28,SCM_1:def 2;
+     end;
      end;
    then for l be Nat st CurInstr (Computation s3).l = halt SCM+FSA holds
       LifeSpan s1 + 1 <= l;
@@ -904,6 +912,7 @@ A32: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(I1,s).x by A33,A39,FUNCT_4:12
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A38,FUNCT_4:12;
+      end;
       suppose A40: x is FinSeq-Location;
        then x <> IC SCM+FSA by SCMFSA_2:82;
     then A41: x in dom IExec(I1,s) &
@@ -918,6 +927,7 @@ A32: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(I1,s).x by A33,A42,FUNCT_4:12
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A41,FUNCT_4:12;
+      end;
       suppose A43: x = IC SCM+FSA;
   then A44: x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
    A45: x in dom Result s1 & not x in dom (s | A) by A15,A43,Th1,AMI_1:48;
@@ -941,6 +951,7 @@ A32: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= (Start-At insloc (card I + card J + 3)).IC SCM+FSA by XCMPLX_1:1
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A43,A44,FUNCT_4:14;
+      end;
       suppose A47: x is Instruction-Location of SCM+FSA;
        then x <> IC SCM+FSA by AMI_1:48;
     then A48: x in dom IExec(I1,s) &
@@ -950,6 +961,7 @@ A32: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(I1,s).x by A15,A33,A47,FUNCT_4:14
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A48,FUNCT_4:12;
+     end;
      end;
    hence IExec(if=0(a,I,J),s)
     = IExec(I1,s) +* Start-At insloc (card I + card J + 3) by A32,FUNCT_1:9
@@ -1075,10 +1087,13 @@ then A27: s2 | D = s5 | D by A26,SCMFSA6A:38;
        .= IC (Computation s2).k2 + 2 by A4,A7,A19,A24,A27,Th11
        .= insloc (m + 2) by A33,SCMFSA_4:def 1;
        hence IC C3.k in dom if=0(a,I,J) by A35,SCMFSA6A:15;
+      end;
       suppose k = 0; hence IC C3.k in dom if=0(a,I,J) by A9,A12,AMI_1:def 19
 ;
+      end;
       suppose k = 1;
        hence IC C3.k in dom if=0(a,I,J) by A20,Lm5;
+     end;
      end;
    hence if=0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
    thus if=0(a,I,J) is_halting_on s by A28,SCMFSA7B:def 8;
@@ -1185,8 +1200,10 @@ A27: CurInstr (Computation s3).(LifeSpan s2 + 2)
       suppose l = 0;
    then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A12,Lm2;
+      end;
       suppose l = 1;
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A21,Lm1;
+      end;
       suppose A30: l <> 0 & l <> 1;
        then consider n being Nat such that A31: l = n + 1 by NAT_1:22;
          n + 1 < LifeSpan s2 + (1 + 1) by A29,A31;
@@ -1203,6 +1220,7 @@ A27: CurInstr (Computation s3).(LifeSpan s2 + 2)
        .= 0 by A31,A33,A35,SCMFSA_2:124,XCMPLX_1:1;
        then CurInstr (Computation s2).l2 = halt SCM+FSA by SCMFSA_2:122;
        hence contradiction by A5,A34,SCM_1:def 2;
+     end;
      end;
    then for l be Nat st CurInstr (Computation s3).l = halt SCM+FSA holds
       LifeSpan s2 + 2 <= l;
@@ -1234,6 +1252,7 @@ A38: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(JI2,s).x by A39,A45,FUNCT_4:12
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A44,FUNCT_4:12;
+      end;
       suppose A46: x is FinSeq-Location;
        then x <> IC SCM+FSA by SCMFSA_2:82;
     then A47: x in dom IExec(JI2,s) &
@@ -1248,6 +1267,7 @@ A38: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(JI2,s).x by A39,A48,FUNCT_4:12
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A47,FUNCT_4:12;
+      end;
       suppose A49: x = IC SCM+FSA;
   then A50: x in dom Start-At insloc (card I + card J + 3) by A42,TARSKI:def 1;
    A51: x in dom Result s2 & not x in dom (s | A) by A14,A49,Th1,AMI_1:48;
@@ -1271,6 +1291,7 @@ A38: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
            by XCMPLX_1:1
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A49,A50,FUNCT_4:14;
+      end;
       suppose A53: x is Instruction-Location of SCM+FSA;
        then x <> IC SCM+FSA by AMI_1:48;
     then A54: x in dom IExec(JI2,s) &
@@ -1280,6 +1301,7 @@ A38: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(JI2,s).x by A14,A39,A53,FUNCT_4:14
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A54,FUNCT_4:12;
+     end;
      end;
    hence IExec(if=0(a,I,J),s)
     = IExec(JI2,s) +* Start-At insloc (card I + card J + 3) by A38,FUNCT_1:9
@@ -1313,9 +1335,11 @@ A2: J is_closed_on Initialize s & J is_halting_on Initialize s
        suppose s.a = 0;
         then if=0(a,I,J) is_halting_on s by A4,Th16;
         hence s is halting by A3,SCMFSA7B:def 8;
+       end;
        suppose s.a <> 0;
         then if=0(a,I,J) is_halting_on s by A5,Th18;
         hence s is halting by A3,SCMFSA7B:def 8;
+     end;
      end;
    then if=0(a,I,J) +* Start-At insloc 0 is halting by AMI_1:def 26;
    hence if=0(a,I,J) is parahalting by SCMFSA6B:def 3;
@@ -1348,11 +1372,13 @@ theorem Th21: ::ThIF0'
            IExec(I,s) +* Start-At insloc (card I + card J + 3) by Th20;
        hence IC IExec(if=0(a,I,J),s) = insloc (card I + card J + 3)
            by AMI_5:79;
+      end;
       suppose s.a <> 0;
        then IExec(if=0(a,I,J),s) =
            IExec(J,s) +* Start-At insloc (card I + card J + 3) by Th20;
        hence IC IExec(if=0(a,I,J),s) = insloc (card I + card J + 3)
            by AMI_5:79;
+     end;
      end;
    hereby assume s.a = 0;
    then A1: IExec(if=0(a,I,J),s) =
@@ -1477,8 +1503,10 @@ then A24: s3 is halting by AMI_1:def 20;
        .= IC (Computation s1).k1 + (card J + 3) by A4,A7,A19,A20,A23,Th11
        .= insloc (m + (card J + 3)) by A26,SCMFSA_4:def 1;
        hence IC C3.k in dom if>0(a,I,J) by A29,SCMFSA6A:15;
+      end;
       suppose k = 0; hence IC C3.k in dom if>0(a,I,J) by A9,A12,AMI_1:def 19
 ;
+     end;
      end;
    hence if>0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
    thus if>0(a,I,J) is_halting_on s by A24,SCMFSA7B:def 8;
@@ -1569,6 +1597,7 @@ then A25: s3 is halting by AMI_1:def 20;
       suppose l = 0;
    then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A12,Lm3;
+      end;
       suppose l <> 0;
        then consider n being Nat such that A27: l = n + 1 by NAT_1:22;
    A28:  n < LifeSpan s1 by A26,A27,AXIOMS:24;
@@ -1580,6 +1609,7 @@ then A25: s3 is halting by AMI_1:def 20;
        .= 0 by A27,A29,AMI_1:51,SCMFSA_2:124;
        then CurInstr (Computation s1).n = halt SCM+FSA by SCMFSA_2:122;
        hence contradiction by A5,A28,SCM_1:def 2;
+     end;
      end;
    then for l be Nat st CurInstr (Computation s3).l = halt SCM+FSA holds
       LifeSpan s1 + 1 <= l;
@@ -1610,6 +1640,7 @@ A32: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(I1,s).x by A33,A39,FUNCT_4:12
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A38,FUNCT_4:12;
+      end;
       suppose A40: x is FinSeq-Location;
        then x <> IC SCM+FSA by SCMFSA_2:82;
     then A41: x in dom IExec(I1,s) &
@@ -1624,6 +1655,7 @@ A32: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(I1,s).x by A33,A42,FUNCT_4:12
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A41,FUNCT_4:12;
+      end;
       suppose A43: x = IC SCM+FSA;
   then A44: x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
    A45: x in dom Result s1 & not x in dom (s | A) by A15,A43,Th1,AMI_1:48;
@@ -1647,6 +1679,7 @@ A32: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= (Start-At insloc (card I + card J + 3)).IC SCM+FSA by XCMPLX_1:1
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A43,A44,FUNCT_4:14;
+      end;
       suppose A47: x is Instruction-Location of SCM+FSA;
        then x <> IC SCM+FSA by AMI_1:48;
     then A48: x in dom IExec(I1,s) &
@@ -1656,6 +1689,7 @@ A32: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(I1,s).x by A15,A33,A47,FUNCT_4:14
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A48,FUNCT_4:12;
+     end;
      end;
    hence IExec(if>0(a,I,J),s)
     = IExec(I1,s) +* Start-At insloc (card I + card J + 3) by A32,FUNCT_1:9
@@ -1781,10 +1815,13 @@ then A27: s2 | D = s5 | D by A26,SCMFSA6A:38;
        .= IC (Computation s2).k2 + 2 by A4,A7,A19,A24,A27,Th11
        .= insloc (m + 2) by A33,SCMFSA_4:def 1;
        hence IC C3.k in dom if>0(a,I,J) by A35,SCMFSA6A:15;
+      end;
       suppose k = 0; hence IC C3.k in dom if>0(a,I,J) by A9,A12,AMI_1:def 19
 ;
+      end;
       suppose k = 1;
        hence IC C3.k in dom if>0(a,I,J) by A20,Lm5;
+     end;
      end;
    hence if>0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
    thus if>0(a,I,J) is_halting_on s by A28,SCMFSA7B:def 8;
@@ -1891,8 +1928,10 @@ A27: CurInstr (Computation s3).(LifeSpan s2 + 2)
       suppose l = 0;
    then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A12,Lm3;
+      end;
       suppose l = 1;
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A21,Lm1;
+      end;
       suppose A30: l <> 0 & l <> 1;
        then consider n being Nat such that A31: l = n + 1 by NAT_1:22;
          n + 1 < LifeSpan s2 + (1 + 1) by A29,A31;
@@ -1909,6 +1948,7 @@ A27: CurInstr (Computation s3).(LifeSpan s2 + 2)
        .= 0 by A31,A33,A35,SCMFSA_2:124,XCMPLX_1:1;
        then CurInstr (Computation s2).l2 = halt SCM+FSA by SCMFSA_2:122;
        hence contradiction by A5,A34,SCM_1:def 2;
+     end;
      end;
    then for l be Nat st CurInstr (Computation s3).l = halt SCM+FSA holds
       LifeSpan s2 + 2 <= l;
@@ -1940,6 +1980,7 @@ A38: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(JI2,s).x by A39,A45,FUNCT_4:12
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A44,FUNCT_4:12;
+      end;
       suppose A46: x is FinSeq-Location;
        then x <> IC SCM+FSA by SCMFSA_2:82;
     then A47: x in dom IExec(JI2,s) &
@@ -1954,6 +1995,7 @@ A38: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(JI2,s).x by A39,A48,FUNCT_4:12
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A47,FUNCT_4:12;
+      end;
       suppose A49: x = IC SCM+FSA;
   then A50: x in dom Start-At insloc (card I + card J + 3) by A42,TARSKI:def 1;
    A51: x in dom Result s2 & not x in dom (s | A) by A14,A49,Th1,AMI_1:48;
@@ -1977,6 +2019,7 @@ A38: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
            by XCMPLX_1:1
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A49,A50,FUNCT_4:14;
+      end;
       suppose A53: x is Instruction-Location of SCM+FSA;
        then x <> IC SCM+FSA by AMI_1:48;
     then A54: x in dom IExec(JI2,s) &
@@ -1986,6 +2029,7 @@ A38: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IExec(JI2,s).x by A14,A39,A53,FUNCT_4:14
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A54,FUNCT_4:12;
+     end;
      end;
    hence IExec(if>0(a,I,J),s)
     = IExec(JI2,s) +* Start-At insloc (card I + card J + 3) by A38,FUNCT_1:9
@@ -2019,9 +2063,11 @@ A2: J is_closed_on Initialize s & J is_halting_on Initialize s
        suppose s.a > 0;
         then if>0(a,I,J) is_halting_on s by A4,Th22;
         hence s is halting by A3,SCMFSA7B:def 8;
+       end;
        suppose s.a <= 0;
         then if>0(a,I,J) is_halting_on s by A5,Th24;
         hence s is halting by A3,SCMFSA7B:def 8;
+     end;
      end;
    then if>0(a,I,J) +* Start-At insloc 0 is halting by AMI_1:def 26;
    hence if>0(a,I,J) is parahalting by SCMFSA6B:def 3;
@@ -2054,11 +2100,13 @@ theorem Th27: ::ThIFg0'
            IExec(I,s) +* Start-At insloc (card I + card J + 3) by Th26;
        hence IC IExec(if>0(a,I,J),s) = insloc (card I + card J + 3)
            by AMI_5:79;
+      end;
       suppose s.a <= 0;
        then IExec(if>0(a,I,J),s) =
            IExec(J,s) +* Start-At insloc (card I + card J + 3) by Th26;
        hence IC IExec(if>0(a,I,J),s) = insloc (card I + card J + 3)
            by AMI_5:79;
+     end;
      end;
    hereby assume s.a > 0;
    then A1: IExec(if>0(a,I,J),s) =
@@ -2252,14 +2300,16 @@ A1: if<0(a,I,J) = if=0(a,J,if>0(a,J,I)) by Def3;
       hence IExec(if<0(a,I,J),s) =
          IExec(J,s) +* Start-At insloc (card I + card J + card J + 7)
          by A4,Th31;
+     end;
      suppose s.a <> 0;
       hence IExec(if<0(a,I,J),s) =
          IExec(J,s) +* Start-At insloc (card I + card J + card J + 7)
          by A3,A4,Th33;
      end;
+     end;
  end;
 
-definition
+registration
  let I,J be parahalting Macro-Instruction;
  let a be read-write Int-Location;
  cluster if=0(a,I,J) -> parahalting;
@@ -2267,6 +2317,7 @@ definition
  cluster if>0(a,I,J) -> parahalting;
  correctness by Th26;
 end;
+
 
 definition
  let a,b be Int-Location;
@@ -2278,10 +2329,14 @@ definition
  func if>0(a,b,I,J) -> Macro-Instruction equals
 :Def5:  SubFrom(a,b) ';' if>0(a,I,J);
  coherence;
- synonym if<0(b,a,I,J);
-end;
+ end;
+notation
+ let a,b be Int-Location;
+ let I,J be Macro-Instruction;
+ synonym if<0(b,a,I,J) for if>0(a,b,I,J) ; end;
 
-definition
+
+registration
  let I,J be parahalting Macro-Instruction;
  let a,b be read-write Int-Location;
  cluster if=0(a,b,I,J) -> parahalting;
@@ -2297,6 +2352,7 @@ definition
    hence thesis;
   end;
 end;
+
 
 theorem Th35: ::PRE8'90'(@AAAA)
  for s being State of SCM+FSA, I being Macro-Instruction holds
@@ -2369,6 +2425,7 @@ A8: now let b be Int-Location;
        hence Exec(i,s1).b = s1.b by AMI_1:def 8
        .= s2.b by A1,A9
        .= Exec(i,s2).b by A10,AMI_1:def 8;
+      end;
       suppose InsCode i = 1;
        then consider da, db being Int-Location such that
    A11:  i = da := db by SCMFSA_2:54;
@@ -2378,11 +2435,14 @@ A8: now let b be Int-Location;
         hence Exec(i,s1).b = s1.db by A11,SCMFSA_2:89
         .= s2.db by A1,A12
         .= Exec(i,s2).b by A11,A13,SCMFSA_2:89;
+       end;
        suppose A14: b <> da;
         hence Exec(i,s1).b = s1.b by A11,SCMFSA_2:89
         .= s2.b by A1,A9
         .= Exec(i,s2).b by A11,A14,SCMFSA_2:89;
        end;
+       end;
+      end;
       suppose InsCode i = 2;
        then consider da, db being Int-Location such that
    A15:  i = AddTo(da,db) by SCMFSA_2:55;
@@ -2393,11 +2453,14 @@ A8: now let b be Int-Location;
         .= s2.b + s1.db by A1,A9
         .= s2.b + s2.db by A1,A16
         .= Exec(i,s2).b by A15,A17,SCMFSA_2:90;
+       end;
        suppose A18: b <> da;
         hence Exec(i,s1).b = s1.b by A15,SCMFSA_2:90
         .= s2.b by A1,A9
         .= Exec(i,s2).b by A15,A18,SCMFSA_2:90;
        end;
+       end;
+      end;
       suppose InsCode i = 3;
        then consider da, db being Int-Location such that
    A19:  i = SubFrom(da, db) by SCMFSA_2:56;
@@ -2408,11 +2471,14 @@ A8: now let b be Int-Location;
         .= s2.b - s1.db by A1,A9
         .= s2.b - s2.db by A1,A20
         .= Exec(i,s2).b by A19,A21,SCMFSA_2:91;
+       end;
        suppose A22: b <> da;
         hence Exec(i,s1).b = s1.b by A19,SCMFSA_2:91
         .= s2.b by A1,A9
         .= Exec(i,s2).b by A19,A22,SCMFSA_2:91;
        end;
+       end;
+      end;
       suppose InsCode i = 4;
        then consider da, db being Int-Location such that
    A23:  i = MultBy(da,db) by SCMFSA_2:57;
@@ -2423,11 +2489,14 @@ A8: now let b be Int-Location;
         .= s2.b * s1.db by A1,A9
         .= s2.b * s2.db by A1,A24
         .= Exec(i,s2).b by A23,A25,SCMFSA_2:92;
+       end;
        suppose A26: b <> da;
         hence Exec(i,s1).b = s1.b by A23,SCMFSA_2:92
         .= s2.b by A1,A9
         .= Exec(i,s2).b by A23,A26,SCMFSA_2:92;
        end;
+       end;
+      end;
       suppose InsCode i = 5;
        then consider da, db being Int-Location such that
    A27:  i = Divide(da, db) by SCMFSA_2:58;
@@ -2438,22 +2507,27 @@ A8: now let b be Int-Location;
         .= s2.da mod s1.db by A1,A28
         .= s2.da mod s2.db by A1,A28
         .= Exec(i,s2).b by A27,A29,SCMFSA_2:93;
+       end;
        suppose A30: b = da & b <> db;
         hence Exec(i,s1).b = s1.da div s1.db by A27,SCMFSA_2:93
         .= s1.da div s2.db by A1,A28
         .= s2.da div s2.db by A1,A28
         .= Exec(i,s2).b by A27,A30,SCMFSA_2:93;
+       end;
        suppose A31: b <> da & b <> db;
         hence Exec(i,s1).b = s1.b by A27,SCMFSA_2:93
         .= s2.b by A1,A9
         .= Exec(i,s2).b by A27,A31,SCMFSA_2:93;
        end;
+       end;
+      end;
       suppose InsCode i = 6;
        then consider loc being Instruction-Location of SCM+FSA such that
    A32:  i = goto loc by SCMFSA_2:59;
        thus Exec(i,s1).b = s1.b by A32,SCMFSA_2:95
        .= s2.b by A1,A9
        .= Exec(i,s2).b by A32,SCMFSA_2:95;
+      end;
       suppose InsCode i = 7;
        then consider loc being Instruction-Location of SCM+FSA,
            da being Int-Location such that
@@ -2461,6 +2535,7 @@ A8: now let b be Int-Location;
        thus Exec(i,s1).b = s1.b by A33,SCMFSA_2:96
        .= s2.b by A1,A9
        .= Exec(i,s2).b by A33,SCMFSA_2:96;
+      end;
       suppose InsCode i = 8;
         then consider loc being Instruction-Location of SCM+FSA,
             da being Int-Location such that
@@ -2468,6 +2543,7 @@ A8: now let b be Int-Location;
        thus Exec(i,s1).b = s1.b by A34,SCMFSA_2:97
        .= s2.b by A1,A9
        .= Exec(i,s2).b by A34,SCMFSA_2:97;
+      end;
       suppose InsCode i = 9;
        then consider db, da being Int-Location, g being FinSeq-Location such
 that
@@ -2483,11 +2559,14 @@ that
    A41:     Exec(da:=(g,db), s2).b = (s2.g)/.m2 by A37,SCMFSA_2:98;
           m1 = m2 & s1.g = s2.g by A1,A36,A38,A40;
         hence Exec(i,s1).b = Exec(i,s2).b by A35,A39,A41;
+       end;
        suppose A42: b <> da;
         hence Exec(i,s1).b = s1.b by A35,SCMFSA_2:98
         .= s2.b by A1,A9
         .= Exec(i,s2).b by A35,A42,SCMFSA_2:98;
        end;
+       end;
+      end;
       suppose InsCode i = 10;
        then consider db, da being Int-Location, g being FinSeq-Location such
 that
@@ -2495,6 +2574,7 @@ that
        thus Exec(i,s1).b = s1.b by A43,SCMFSA_2:99
        .= s2.b by A1,A9
        .= Exec(i,s2).b by A43,SCMFSA_2:99;
+      end;
       suppose InsCode i = 11;
        then consider da being Int-Location, g being FinSeq-Location such that
    A44:  i = da :=len g by SCMFSA_2:64;
@@ -2503,17 +2583,21 @@ that
         hence Exec(i,s1).b = len (s1.g) by A44,SCMFSA_2:100
         .= len (s2.g) by A1
         .= Exec(i,s2).b by A44,A45,SCMFSA_2:100;
+       end;
        suppose A46: b <> da;
         hence Exec(i,s1).b = s1.b by A44,SCMFSA_2:100
         .= s2.b by A1,A9
         .= Exec(i,s2).b by A44,A46,SCMFSA_2:100;
        end;
+       end;
+      end;
       suppose InsCode i = 12;
        then consider da being Int-Location, g being FinSeq-Location such that
    A47:  i = g:=<0,...,0>da by SCMFSA_2:65;
        thus Exec(i,s1).b = s1.b by A47,SCMFSA_2:101
        .= s2.b by A1,A9
        .= Exec(i,s2).b by A47,SCMFSA_2:101;
+      end;
       end;
      now let f be FinSeq-Location;
       per cases by A4,A5,A6,A7,CQC_THE1:9,NAT_1:26;
@@ -2522,42 +2606,49 @@ that
        hence Exec(i,s1).f = s1.f by AMI_1:def 8
        .= s2.f by A1
        .= Exec(i,s2).f by A48,AMI_1:def 8;
+      end;
       suppose InsCode i = 1;
        then consider da, db being Int-Location such that
    A49:  i = da := db by SCMFSA_2:54;
        thus Exec(i,s1).f = s1.f by A49,SCMFSA_2:89
        .= s2.f by A1
        .= Exec(i,s2).f by A49,SCMFSA_2:89;
+      end;
       suppose InsCode i = 2;
        then consider da, db being Int-Location such that
    A50:  i = AddTo(da,db) by SCMFSA_2:55;
        thus Exec(i,s1).f = s1.f by A50,SCMFSA_2:90
        .= s2.f by A1
        .= Exec(i,s2).f by A50,SCMFSA_2:90;
+      end;
       suppose InsCode i = 3;
        then consider da, db being Int-Location such that
    A51:  i = SubFrom(da, db) by SCMFSA_2:56;
        thus Exec(i,s1).f = s1.f by A51,SCMFSA_2:91
        .= s2.f by A1
        .= Exec(i,s2).f by A51,SCMFSA_2:91;
+      end;
       suppose InsCode i = 4;
        then consider da, db being Int-Location such that
    A52:  i = MultBy(da,db) by SCMFSA_2:57;
        thus Exec(i,s1).f = s1.f by A52,SCMFSA_2:92
        .= s2.f by A1
        .= Exec(i,s2).f by A52,SCMFSA_2:92;
+      end;
       suppose InsCode i = 5;
        then consider da, db being Int-Location such that
    A53:  i = Divide(da, db) by SCMFSA_2:58;
        thus Exec(i,s1).f = s1.f by A53,SCMFSA_2:93
        .= s2.f by A1
        .= Exec(i,s2).f by A53,SCMFSA_2:93;
+      end;
       suppose InsCode i = 6;
        then consider loc being Instruction-Location of SCM+FSA such that
    A54:  i = goto loc by SCMFSA_2:59;
        thus Exec(i,s1).f = s1.f by A54,SCMFSA_2:95
        .= s2.f by A1
        .= Exec(i,s2).f by A54,SCMFSA_2:95;
+      end;
       suppose InsCode i = 7;
        then consider loc being Instruction-Location of SCM+FSA,
                 da being Int-Location such that
@@ -2565,6 +2656,7 @@ that
        thus Exec(i,s1).f = s1.f by A55,SCMFSA_2:96
        .= s2.f by A1
        .= Exec(i,s2).f by A55,SCMFSA_2:96;
+      end;
       suppose InsCode i = 8;
         then consider loc being Instruction-Location of SCM+FSA,
                  da being Int-Location such that
@@ -2572,6 +2664,7 @@ that
        thus Exec(i,s1).f = s1.f by A56,SCMFSA_2:97
        .= s2.f by A1
        .= Exec(i,s2).f by A56,SCMFSA_2:97;
+      end;
       suppose InsCode i = 9;
        then consider db, da being Int-Location, g being FinSeq-Location such
 that
@@ -2579,6 +2672,7 @@ that
        thus Exec(i,s1).f = s1.f by A57,SCMFSA_2:98
        .= s2.f by A1
        .= Exec(i,s2).f by A57,SCMFSA_2:98;
+      end;
       suppose InsCode i = 10;
        then consider db, da being Int-Location, g being FinSeq-Location such
 that
@@ -2595,17 +2689,21 @@ that
    A65:  m1 = m2 by A1,A59,A61,A63;
       s1.da = s2.da by A1,A59;
         hence Exec(i,s1).f = Exec(i,s2).f by A1,A58,A60,A62,A64,A65;
+       end;
        suppose A66: f <> g;
         hence Exec(i,s1).f = s1.f by A58,SCMFSA_2:99
         .= s2.f by A1
         .= Exec(i,s2).f by A58,A66,SCMFSA_2:99;
        end;
+       end;
+      end;
       suppose InsCode i = 11;
        then consider da being Int-Location, g being FinSeq-Location such that
    A67:  i = da :=len g by SCMFSA_2:64;
        thus Exec(i,s1).f = s1.f by A67,SCMFSA_2:100
        .= s2.f by A1
        .= Exec(i,s2).f by A67,SCMFSA_2:100;
+      end;
       suppose InsCode i = 12;
        then consider da being Int-Location, g being FinSeq-Location such that
    A68:  i = g:=<0,...,0>da by SCMFSA_2:65;
@@ -2619,11 +2717,14 @@ that
     A73:   m2 = abs(s2.da) and
     A74:   Exec(g:=<0,...,0>da, s2).g = m2 |-> 0 by SCMFSA_2:101;
         thus Exec(i,s1).f = Exec(i,s2).f by A1,A68,A69,A70,A71,A72,A73,A74;
+       end;
        suppose A75: f <> g;
         hence Exec(i,s1).f = s1.f by A68,SCMFSA_2:101
         .= s2.f by A1
         .= Exec(i,s2).f by A68,A75,SCMFSA_2:101;
        end;
+       end;
+     end;
      end;
    hence S[Exec(i,s1),Exec(i,s2)] by A8;
 A76: now per cases by A4,A5,A6,A7,CQC_THE1:9,NAT_1:26;
@@ -2633,36 +2734,43 @@ A76: now per cases by A4,A5,A6,A7,CQC_THE1:9,NAT_1:26;
        .= IC s1 by AMI_1:def 15
        .= s2.IC SCM+FSA by A3,AMI_1:def 15
        .= Exec(i,s2).IC SCM+FSA by A77,AMI_1:def 8;
+      end;
       suppose InsCode i = 1;
        then consider da, db being Int-Location such that
    A78:  i = da := db by SCMFSA_2:54;
        thus Exec(i,s1).IC SCM+FSA = Next IC s1 by A78,SCMFSA_2:89
        .= Exec(i,s2).IC SCM+FSA by A3,A78,SCMFSA_2:89;
+      end;
       suppose InsCode i = 2;
        then consider da, db being Int-Location such that
    A79:  i = AddTo(da,db) by SCMFSA_2:55;
        thus Exec(i,s1).IC SCM+FSA = Next IC s1 by A79,SCMFSA_2:90
        .= Exec(i,s2).IC SCM+FSA by A3,A79,SCMFSA_2:90;
+      end;
       suppose InsCode i = 3;
        then consider da, db being Int-Location such that
    A80:  i = SubFrom(da, db) by SCMFSA_2:56;
        thus Exec(i,s1).IC SCM+FSA = Next IC s1 by A80,SCMFSA_2:91
        .= Exec(i,s2).IC SCM+FSA by A3,A80,SCMFSA_2:91;
+      end;
       suppose InsCode i = 4;
        then consider da, db being Int-Location such that
    A81:  i = MultBy(da,db) by SCMFSA_2:57;
        thus Exec(i,s1).IC SCM+FSA = Next IC s1 by A81,SCMFSA_2:92
        .= Exec(i,s2).IC SCM+FSA by A3,A81,SCMFSA_2:92;
+      end;
       suppose InsCode i = 5;
        then consider da, db being Int-Location such that
    A82:  i = Divide(da, db) by SCMFSA_2:58;
        thus Exec(i,s1).IC SCM+FSA = Next IC s1 by A82,SCMFSA_2:93
        .= Exec(i,s2).IC SCM+FSA by A3,A82,SCMFSA_2:93;
+      end;
       suppose InsCode i = 6;
        then consider loc being Instruction-Location of SCM+FSA such that
    A83:  i = goto loc by SCMFSA_2:59;
        thus Exec(i,s1).IC SCM+FSA = loc by A83,SCMFSA_2:95
        .= Exec(i,s2).IC SCM+FSA by A83,SCMFSA_2:95;
+      end;
       suppose InsCode i = 7;
        then consider loc being Instruction-Location of SCM+FSA,
            da being Int-Location such that
@@ -2673,10 +2781,13 @@ A76: now per cases by A4,A5,A6,A7,CQC_THE1:9,NAT_1:26;
        suppose A86: s1.da = 0;
         hence Exec(i,s1).IC SCM+FSA = loc by A84,SCMFSA_2:96
         .= Exec(i,s2).IC SCM+FSA by A84,A85,A86,SCMFSA_2:96;
+       end;
        suppose A87: s1.da <> 0;
         hence Exec(i,s1).IC SCM+FSA = Next IC s1 by A84,SCMFSA_2:96
         .= Exec(i,s2).IC SCM+FSA by A3,A84,A85,A87,SCMFSA_2:96;
        end;
+       end;
+      end;
       suppose InsCode i = 8;
         then consider loc being Instruction-Location of SCM+FSA,
             da being Int-Location such that
@@ -2687,32 +2798,39 @@ A76: now per cases by A4,A5,A6,A7,CQC_THE1:9,NAT_1:26;
        suppose A90: s1.da > 0;
         hence Exec(i,s1).IC SCM+FSA = loc by A88,SCMFSA_2:97
         .= Exec(i,s2).IC SCM+FSA by A88,A89,A90,SCMFSA_2:97;
+       end;
        suppose A91: s1.da <= 0;
         hence Exec(i,s1).IC SCM+FSA = Next IC s1 by A88,SCMFSA_2:97
         .= Exec(i,s2).IC SCM+FSA by A3,A88,A89,A91,SCMFSA_2:97;
        end;
+       end;
+      end;
       suppose InsCode i = 9;
        then consider db, da being Int-Location, g being FinSeq-Location such
 that
    A92:  i = da := (g,db) by SCMFSA_2:62;
        thus Exec(i,s1).IC SCM+FSA = Next IC s1 by A92,SCMFSA_2:98
        .= Exec(i,s2).IC SCM+FSA by A3,A92,SCMFSA_2:98;
+      end;
       suppose InsCode i = 10;
        then consider db, da being Int-Location, g being FinSeq-Location such
 that
    A93:  i = (g,db):=da by SCMFSA_2:63;
        thus Exec(i,s1).IC SCM+FSA = Next IC s1 by A93,SCMFSA_2:99
        .= Exec(i,s2).IC SCM+FSA by A3,A93,SCMFSA_2:99;
+      end;
       suppose InsCode i = 11;
        then consider da being Int-Location, g being FinSeq-Location such that
    A94:  i = da :=len g by SCMFSA_2:64;
        thus Exec(i,s1).IC SCM+FSA = Next IC s1 by A94,SCMFSA_2:100
        .= Exec(i,s2).IC SCM+FSA by A3,A94,SCMFSA_2:100;
+      end;
       suppose InsCode i = 12;
        then consider da being Int-Location, g being FinSeq-Location such that
    A95:  i = g:=<0,...,0>da by SCMFSA_2:65;
        thus Exec(i,s1).IC SCM+FSA = Next IC s1 by A95,SCMFSA_2:101
        .= Exec(i,s2).IC SCM+FSA by A3,A95,SCMFSA_2:101;
+     end;
      end;
      IC Exec(i,s1) = Exec(i,s1).IC SCM+FSA &
        IC Exec(i,s2) = Exec(i,s2).IC SCM+FSA by AMI_1:def 15;
@@ -2817,7 +2935,7 @@ A18: for k being Nat holds P[k] implies P[k + 1]
       .= C2.(k + 1).IC C2.(k + 1) by A22,A28,A29,GRFUNC_1:8
       .= CurInstr C2.(k + 1) by AMI_1:def 17;
      end;
-    for k being Nat holds P[k] from Ind(A12,A18);
+    for k being Nat holds P[k] from NAT_1:sch 1(A12,A18);
   hence thesis;
  end;
 
@@ -2918,11 +3036,13 @@ A4: now let d be Int-Location;
       suppose A6: d = intloc 0;
        hence (Initialize s1).d = 1 by SCMFSA6C:3
        .= (Initialize s2).d by A6,SCMFSA6C:3;
+      end;
       suppose d <> intloc 0;
     then A7: d is read-write by SF_MASTR:def 5;
        hence (Initialize s1).d = s1.d by SCMFSA6C:3
        .= s2.d by A1,A5,A7
        .= (Initialize s2).d by A7,SCMFSA6C:3;
+     end;
      end;
 A8: now let f be FinSeq-Location;
       thus (Initialize s1).f = s1.f by SCMFSA6C:3

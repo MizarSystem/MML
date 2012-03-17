@@ -67,6 +67,7 @@ definition let D,n;
   redefine func F.:(x,y) -> Element of n-tuples_on D;
  end;
 
+
 definition let D be non empty set;
            let F be BinOp of D;
            let n be Nat;
@@ -76,6 +77,7 @@ definition let D be non empty set;
               it.(x,y)=F.:(x,y);
   end;
 
+
 definition let D;
            let F be UnOp of D;
            let n;
@@ -84,11 +86,16 @@ definition let D;
      for x being Element of n-tuples_on D holds it.x=F*x;
  end;
 
+
+notation let D be non empty set;
+ let n; let x be Element of D;
+ synonym n .--> x for n |-> x ;
+end;
 definition let D be non empty set;
  let n; let x be Element of D;
- redefine func n |-> x -> Element of n-tuples_on D;
- synonym n .--> x;
-end;
+ redefine func n .--> x -> Element of n-tuples_on D;
+ end;
+
 
 canceled 2;
 
@@ -116,9 +123,12 @@ definition let F be non empty LoopStr, n;
         (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#);
 end;
 
-definition let F be AbGroup, n;
+
+registration let F be AbGroup, n;
  cluster n-Group_over F -> non empty;
+ coherence;
 end;
+
 
 reserve x,y for set;
 
@@ -132,6 +142,7 @@ definition let F,n;
     it.(x,v) = (the mult of F)[;](x,v);
  end;
 
+
 definition let F,n;
   func n -VectSp_over F -> strict VectSpStr over F means
 :: PRVECT_1:def 5
@@ -139,9 +150,17 @@ definition let F,n;
    the lmult of it = n -Mult_over F;
  end;
 
-definition let F,n;
+
+registration let F,n;
  cluster n -VectSp_over F -> non empty;
+ coherence
+  proof
+A1:  the carrier of n -Group_over F is non empty;
+      the LoopStr of n -VectSp_over F = n -Group_over F by Def5;
+   hence the carrier of n -VectSp_over F is non empty by A1;
+  end;
 end;
+
 
  reserve D for non empty set,
          H,G for BinOp of D,
@@ -160,9 +179,95 @@ definition let D be non empty set,
   redefine func F[;](x,v) -> Element of n-tuples_on D;
  end;
 
-definition let F,n;
+
+registration let F,n;
   cluster n -VectSp_over F -> VectSp-like;
+   coherence
+   proof
+A1:       the unity of F is_a_unity_wrt the mult of F by Th11;
+then A2:       the mult of F has_a_unity by SETWISEO:def 2;
+A3:       the_unity_wrt the mult of F = the unity of F by A1,BINOP_1:def 8;
+A4:       the mult of F is associative by Lm4;
+A5:       the mult of F is_distributive_wrt the add of F by Lm5;
+A6:       the LoopStr of n -VectSp_over F=n-Group_over F by Def5;
+A7:       n-Group_over F=LoopStr(# n-tuples_on the carrier of F,
+        product(the add of F,n),
+        (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#)
+        by Def3;
+    n-VectSp_over F is VectSp-like proof
+   let x,y be Element of F;
+   let v,w be Element of n -VectSp_over F;
+   reconsider v'=v,w'=w as Element of n-tuples_on the carrier of F by A6,A7;
+   thus x*(v+w) = (the lmult of n-VectSp_over F).(x,v+w)
+                              by VECTSP_1:def 24
+          .= (the lmult of n-VectSp_over F).(x,
+               (the add of n-Group_over F).(v,w)) by A6,RLVECT_1:5
+          .= (n-Mult_over F).(x,product(the add of F,n).(v,w))
+                by A7,Def5
+          .= (n-Mult_over F).(x,(the add of F).:(v',w')) by Def1
+          .= (the mult of F)[;](x,(the add of F).:(v',w')) by Def4
+          .= (the add of F).:
+((the mult of F)[;](x,v'),(the mult of F)[;](x,w'))
+                by A5,Th18
+          .= product(the add of F,n).((the mult of F)[;](x,v'),
+                (the mult of F)[;](x,w')) by Def1
+          .= product(the add of F,n).((n-Mult_over F).(x,v'),
+                (the mult of F)[;](x,w')) by Def4
+          .= product(the add of F,n).((n-Mult_over F).(x,v'),
+                (n-Mult_over F).(x,w')) by Def4
+          .= product(the add of F,n).((the lmult of n-VectSp_over F).(x,v),
+                (n-Mult_over F).(x,w')) by Def5
+          .= (the add of n-Group_over F).((the lmult of n-VectSp_over F).
+                (x,v),(the lmult of n-VectSp_over F).(x,w)) by A7,Def5
+          .= (the add of n-Group_over F).(x*v,(the lmult of n-VectSp_over F).
+                (x,w)) by VECTSP_1:def 24
+          .= (the add of n-Group_over F).(x*v,x*w) by VECTSP_1:def 24
+          .= x*v + x*w by A6,RLVECT_1:5;
+thus (x+y)*v = (the lmult of n-VectSp_over F).(x+y,v) by VECTSP_1:def 24
+          .= (n-Mult_over F).(x+y,v') by Def5
+          .= (the mult of F)[;](x+y,v') by Def4
+          .= (the mult of F)[;]((the add of F).(x,y),v') by RLVECT_1:5
+          .= (the add of F).:
+((the mult of F)[;](x,v'),(the mult of F)[;](y,v'))
+                by A5,FINSEQOP:47
+          .= product(the add of F,n).((the mult of F)[;](x,v'),
+                (the mult of F)[;](y,v')) by Def1
+          .= product(the add of F,n).((n-Mult_over F).(x,v'),
+                (the mult of F)[;](y,v')) by Def4
+          .= product(the add of F,n).((n-Mult_over F).(x,v'),
+                (n-Mult_over F).(y,v')) by Def4
+          .= product(the add of F,n).((the lmult of n-VectSp_over F).(x,v),
+                (n-Mult_over F).(y,v')) by Def5
+          .= (the add of n-Group_over F).((the lmult of n-VectSp_over F).(x,v),
+                (the lmult of n-VectSp_over F).(y,v)) by A7,Def5
+          .= (the add of n-Group_over F).(x*v,(the lmult of n-VectSp_over F).
+                (y,v)) by VECTSP_1:def 24
+          .= (the add of n-Group_over F).(x*v,y*v) by VECTSP_1:def 24
+          .= x*v + y*v by A6,RLVECT_1:5;
+   thus (x*y)*v = (the lmult of n-VectSp_over F).(x*y,v) by VECTSP_1:def 24
+          .= (n-Mult_over F).(x*y,v') by Def5
+          .= (the mult of F)[;](x*y,v') by Def4
+          .= (the mult of F)[;]((the mult of F).(x,y),v') by VECTSP_1:def 10
+          .= (the mult of F)[;](x,(the mult of F)[;](y,v')) by A4,FINSEQOP:32
+          .= (n-Mult_over F).(x,(the mult of F)[;](y,v')) by Def4
+          .= (n-Mult_over F).(x,(n-Mult_over F).(y,v')) by Def4
+          .= (n-Mult_over F).(x,(the lmult of n-VectSp_over F).(y,v)) by Def5
+          .= (the lmult of n-VectSp_over F).(x,(the lmult of n-VectSp_over F).
+                    (y,v)) by Def5
+          .= (the lmult of n-VectSp_over F).(x,y*v) by VECTSP_1:def 24
+          .= x*(y*v) by VECTSP_1:def 24;
+  thus (1_ F)*v = (the unity of F)*v by VECTSP_1:def 9
+          .= (the lmult of n-VectSp_over F).(the unity of F,v)
+                    by VECTSP_1:def 24
+          .= (n-Mult_over F).(the unity of F,v') by Def5
+          .= (the mult of F)[;](the unity of F,v') by Def4
+          .= v by A2,A3,FINSEQOP:58;
+   thus thesis;
+   end;
+   hence thesis;
+   end;
  end;
+
 
 begin :: Sequences of domains
 
@@ -171,39 +276,92 @@ reserve x,y,y1,y2,z for set,
          A for AbGroup,
          D for non empty set;
 
-definition
+registration
   cluster non empty non-empty FinSequence;
+   existence
+    proof consider D;
+     take <*D*>;
+A1:      Seg 1 = dom <*D*> by FINSEQ_1:def 8;
+       1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+     then [1,<*D*>.1] in <*D*> by A1,FUNCT_1:def 4;
+     hence <*D*> is non empty;
+     assume {} in rng <*D*>;
+     then {} in {D} by FINSEQ_1:55;
+     hence contradiction by TARSKI:def 1;
+    end;
  end;
 
-definition
+
+registration
   let f be non-empty Function;
   cluster product f -> functional non empty;
+   coherence
+    proof
+       product f is non empty set
+        proof
+          not {} in rng f by RELAT_1:def 9;
+        hence thesis by CARD_3:37;
+        end;
+     hence thesis;
+    end;
  end;
+
 
 definition
   mode Domain-Sequence is non empty non-empty FinSequence;
  end;
 
-definition
+
+registration
   let a be non empty Function;
   cluster dom a -> non empty;
+   coherence
+   proof
+    consider x being Element of a;
+    consider y,z such that A1: x = [y,z] by RELAT_1:def 1;
+    thus thesis by A1,RELAT_1:def 4;
+   end;
  end;
 
-scheme NEFinSeqLambda {w()-> non empty FinSequence, F(set)->set}:
- ex p being non empty FinSequence st len p = len w() &
-  for i being Element of dom w() holds p.i = F(i);
 
-definition
+scheme :: PRVECT_1:sch 1
+ NEFinSeqLambda {w()-> non empty FinSequence, F(set)->set}:
+ ex p being non empty FinSequence st len p = len w() &
+  for i being Element of dom w() holds p.i = F(i)
+proof
+   deffunc G(set) = F($1);
+   consider p being FinSequence such that
+A1:    len p = len w() & for i st i in Seg len w() holds p.i = G(i)
+               from FINSEQ_1:sch 2;
+     consider x being Element of dom w();
+        dom p = dom w() by A1,FINSEQ_3:31;
+      then [x,p.x] in p & p = p by FUNCT_1:def 4;
+    then reconsider p'=p as non empty FinSequence;
+    take p';
+    thus len p' = len w() by A1;
+    let i be Element of dom w();
+       dom w() = Seg len w() by FINSEQ_1:def 3;
+    hence p'.i = F(i) by A1;
+  end;
+
+registration
   let a be non-empty non empty Function;
   let i be Element of dom a;
   cluster a.i -> non empty;
+   coherence
+    proof
+       a.i in rng a by FUNCT_1:def 5;
+     hence thesis by RELAT_1:def 9;
+    end;
 end;
+
 
 definition let a be non-empty non empty Function;
  let f be Element of product a;
  let i be Element of dom a;
  redefine func f.i -> Element of a.i;
 end;
+
 
 begin :: The Product of Families of Operations
 
@@ -223,10 +381,22 @@ definition let a be non-empty non empty Function;
    dom it = dom a & for i being Element of dom a holds it.i is UnOp of a.i;
 end;
 
-definition let a;
+
+registration let a;
  cluster -> FinSequence-like BinOps of a;
+  coherence
+   proof let f be BinOps of a;
+       dom a = dom f & dom a = Seg len a by Def8,FINSEQ_1:def 3;
+    hence thesis by FINSEQ_1:def 2;
+   end;
  cluster -> FinSequence-like UnOps of a;
+  coherence
+   proof let f be UnOps of a;
+       dom a = dom f & dom a = Seg len a by Def9,FINSEQ_1:def 3;
+    hence thesis by FINSEQ_1:def 2;
+   end;
 end;
+
 
 theorem :: PRVECT_1:19
  p is BinOps of a iff len p = len a &
@@ -242,16 +412,19 @@ definition let a;
   redefine func b.i -> BinOp of a.i;
  end;
 
+
 definition let a;
  let u be UnOps of a;
  let i;
  redefine func u.i -> UnOp of a.i;
 end;
 
+
 definition let F be functional non empty set;
  let u be UnOp of F, f be Element of F;
  redefine func u.f -> Element of F;
 end;
+
 
 theorem :: PRVECT_1:21
    for d,d' being UnOp of product a st
@@ -267,6 +440,7 @@ definition let a;
  redefine func Frege u -> UnOp of product a;
 end;
 
+
 theorem :: PRVECT_1:23
  for u being UnOps of a for f being Element of product a,
      i being Element of dom a holds (Frege u).f.i = (u.i).(f.i);
@@ -275,6 +449,7 @@ definition let F be functional non empty set;
  let b be BinOp of F, f,g be Element of F;
  redefine func b.(f,g) -> Element of F;
 end;
+
 
 theorem :: PRVECT_1:24
  for d,d' being BinOp of product a st
@@ -290,6 +465,7 @@ definition let a;
   for f,g being Element of product a,
       i being Element of dom a holds (it.(f,g)).i = (b.i).(f.i,g.i);
 end;
+
 
 theorem :: PRVECT_1:25
  for b being BinOps of a st for i holds b.i is commutative
@@ -316,13 +492,27 @@ definition let F be Function;
     x in rng F implies x is AbGroup;
 end;
 
-definition
+
+registration
   cluster non empty AbGroup-yielding FinSequence;
+   existence
+    proof consider A;
+     take <*A*>;
+A1:      Seg 1 = dom <*A*> by FINSEQ_1:def 8;
+       1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+        then [1,<*A*>.1] in <*A*> & <*A*> = <*A*> by A1,FUNCT_1:def 4;
+     hence <*A*> is non empty; let x;
+     assume A2: x in rng <*A*> & not x is AbGroup;
+      then x in {A} by FINSEQ_1:55;
+     hence contradiction by A2,TARSKI:def 1;
+    end;
 end;
+
 
 definition
  mode Group-Sequence is non empty AbGroup-yielding FinSequence;
 end;
+
 
 definition
   let g be Group-Sequence;
@@ -330,17 +520,20 @@ definition
   redefine func g.i -> AbGroup;
  end;
 
+
 definition let g be Group-Sequence;
  func carr g -> Domain-Sequence means
 :: PRVECT_1:def 12
   len it = len g & for j be Element of dom g holds it.j = the carrier of g.j;
 end;
 
+
 reserve g for Group-Sequence, i for Element of dom carr g;
 
 definition let g,i;
  redefine func g.i -> AbGroup;
 end;
+
 
 definition let g;
  func addop g -> BinOps of carr g means
@@ -354,10 +547,12 @@ definition let g;
   for i holds it.i = the Zero of g.i;
 end;
 
+
 definition
  let G be Group-Sequence;
  func product G -> strict AbGroup equals
 :: PRVECT_1:def 16
      LoopStr(# product carr G, [:addop G:], zeros G #);
 end;
+
 

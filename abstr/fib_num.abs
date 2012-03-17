@@ -10,7 +10,8 @@ environ
       FUNCT_3, RELAT_1, ORDINAL2, FIB_NUM, ABSVALUE, POWER, SEQ_1, SEQ_2,
       SEQM_3, LATTICES, GROUP_1;
  notation ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, SEQ_1, NAT_1, INT_2,
-      PRE_FF, SEQ_2, SEQM_3, LIMFUNC1, QUIN_1, ABSVALUE, PREPOWER, POWER;
+      PRE_FF, SEQ_2, SEQM_3, LIMFUNC1, QUIN_1, ABSVALUE, NEWTON, PREPOWER,
+      POWER;
  constructors REAL_1, NAT_1, PREPOWER, INT_2, SEQ_2, SEQM_3, PRE_FF, LIMFUNC1,
       QUIN_1, POWER, PARTFUN1, MEMBERED;
  clusters XREAL_0, SQUARE_1, QUIN_1, NEWTON, SEQ_1, RELSET_1, MEMBERED,
@@ -41,21 +42,85 @@ theorem :: FIB_NUM:3
 ex n being Nat st
 (n > 0 & 0 < 1/n & 1/n <= s);
 
-scheme Fib_Ind {P[Nat] } :
+scheme :: FIB_NUM:sch 1
+ Fib_Ind {P[Nat] } :
 for k being Nat holds P[k]
     provided
  P[0] and
  P[1] and
- for k being Nat st P[k] & P[k+1] holds P[k+2];
+ for k being Nat st P[k] & P[k+1] holds P[k+2]
+proof
+    defpred Q[Nat] means P[$1] & P[$1 + 1];
+    A4:Q[0] by A1,A2;
+    A5:for k st Q[k] holds Q[k+1]
+        proof
+        let k;
+        assume A6:Q[k];
+          k + 2 = k + (1 + 1)
+        .= (k + 1) + 1 by XCMPLX_1:1;
+        hence thesis by A3,A6;
+        end;
+    A7:for k holds Q[k] from NAT_1:sch 1(A4,A5);
+    let k;
+    thus thesis by A7;
+    end;
 
-scheme Bin_Ind { P[Nat,Nat] } :
+scheme :: FIB_NUM:sch 2
+ Bin_Ind { P[Nat,Nat] } :
 for m, n  being Nat holds P[m, n]
     provided
      for m, n being Nat st P[m,n] holds P[n,m] and
      for k  being Nat st
         (for m, n  being Nat st (m < k & n < k) holds P[m,n])
         holds
-        (for m  being Nat st m <= k holds P[k,m]);
+        (for m  being Nat st m <= k holds P[k,m])
+proof
+    defpred Q[Nat] means
+    for m, n st (m <= $1 & n <= $1) holds P[m,n];
+    A3: for k st (for r st r < k holds Q[r]) holds Q[k]
+        proof
+        let k; assume
+        A4:for r st r < k holds Q[r];
+        let m, n; assume
+        A5: m <= k & n <= k;
+        set s = max(m,n);
+        A6: s <= k by A5,SQUARE_1:50;
+        per cases by A6,AXIOMS:21;
+        suppose s < k;
+        then (m <= s & n <= s) implies P[m,n] by A4;
+        hence thesis by SQUARE_1:46;
+        end;
+        suppose A7:s = k;
+
+        A8:for m, n holds (m < k & n < k) implies P[m,n]
+             proof
+             let m, n;
+             assume A9: m < k & n < k;
+             set s = max(m,n);
+             A10:s < k by A9,SQUARE_1:49;
+             A11:m <= s by SQUARE_1:46;
+                   n <= s by SQUARE_1:46;
+             hence thesis by A4,A10,A11;
+             end;
+        thus thesis
+            proof
+            per cases by A7,SQUARE_1:49;
+            suppose k = m;
+            hence thesis by A2,A5,A8;
+            end;
+            suppose k = n;
+            then P[n,m] by A2,A5,A8;
+            hence thesis by A1;
+            end;
+            end;
+        end;
+        end;
+    A12:for k holds Q[k] from NAT_1:sch 4(A3);
+    let m, n;
+    set k = max(m,n);
+      (m <= k & n <= k) implies P[m,n] by A12;
+    hence thesis by SQUARE_1:50;
+    end;
 
 theorem :: FIB_NUM:4
  for m, n being Nat holds
@@ -92,6 +157,7 @@ definition
 :: FIB_NUM:def 1
    (1 + sqrt 5)/2;
 end;
+
 
 :: The value of tau_bar is approximately -.618
 

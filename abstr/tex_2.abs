@@ -28,9 +28,22 @@ redefine attr X is trivial means
  ex s being Element of X st X = {s};
 end;
 
-definition
+
+registration
  cluster trivial non empty set;
+ existence
+  proof
+   set o = {0};
+   take o;
+       now
+      reconsider d = 0 as Element of o by TARSKI:def 1;
+      take d;
+      thus o = {d};
+     end;
+   hence thesis by Def1;
+  end;
 end;
+
 
 theorem :: TEX_2:1
  for A being non empty set, B being trivial non empty set st
@@ -53,35 +66,94 @@ definition let S be set;
  IT <> union S;
 end;
 
-definition let S be set;
+
+registration let S be set;
  cluster non proper Subset of S;
+ existence
+  proof
+   take [#]S;
+     [#]S = S by SUBSET_1:def 4;
+   hence [#]S = union bool S by ZFMISC_1:99;
+  end;
 end;
+
 
 theorem :: TEX_2:5
  for S being set, A being Subset of S holds A is proper iff A <> S;
 
-definition let S be non empty set;
+registration let S be non empty set;
  cluster non proper -> non empty Subset of S;
+ coherence by Th5;
  cluster empty -> proper Subset of S;
+ coherence by Th5;
 end;
 
-definition let S be trivial non empty set;
+
+registration let S be trivial non empty set;
  cluster proper -> empty Subset of S;
+ coherence
+  proof let A be Subset of S;
+   assume A is proper;
+    then A1: A <> S by Th5;
+      consider s being Element of S such that A2: S = {s} by Def1;
+   thus thesis by A1,A2,ZFMISC_1:39;
+  end;
  cluster non empty -> non proper Subset of S;
+ coherence
+  proof let A be Subset of S;
+   assume A3: A is non empty;
+   assume A is proper;
+    then A4: A <> S by Th5;
+      consider s being Element of S such that A5: S = {s} by Def1;
+   thus contradiction by A3,A4,A5,ZFMISC_1:39;
+  end;
 end;
 
-definition let S be non empty set;
+
+registration let S be non empty set;
  cluster proper Subset of S;
+ existence
+  proof
+   take {} S;
+   thus {} S <> union bool S by ZFMISC_1:99;
+  end;
  cluster non proper Subset of S;
+ existence
+  proof consider A being non proper Subset of S;
+   take A;
+   thus thesis;
+  end;
 end;
 
-definition let S be non empty set;
+
+registration let S be non empty set;
  cluster trivial (non empty Subset of S);
+ existence
+  proof consider s being Element of S;
+   take {s};
+       now
+        reconsider e = s as Element of {s} by TARSKI:def 1;
+      take e;
+      thus {s} = {e};
+     end;
+   hence thesis by Def1;
+  end;
 end;
 
-definition let y be set;
+
+registration let y be set;
  cluster {y} -> trivial;
+ coherence
+  proof
+       now
+        reconsider e = y as Element of {y} by TARSKI:def 1;
+      take e;
+      thus {y} = {e};
+     end;
+   hence thesis by Def1;
+  end;
 end;
+
 
 theorem :: TEX_2:6
    for S being non empty set, y being Element of S holds
@@ -91,19 +163,36 @@ theorem :: TEX_2:7
   for S being non trivial non empty set, y being Element of S holds
   {y} is proper;
 
-definition let S be trivial non empty set;
+registration let S be trivial non empty set;
  cluster non proper -> trivial (non empty Subset of S);
+ coherence by Th5;
 end;
 
-definition let S be non trivial non empty set;
+
+registration let S be non trivial non empty set;
  cluster trivial -> proper (non empty Subset of S);
+ coherence by Th5;
  cluster non proper -> non trivial (non empty Subset of S);
+ coherence by Th5;
 end;
 
-definition let S be non trivial non empty set;
+
+registration let S be non trivial non empty set;
  cluster trivial proper (non empty Subset of S);
+ existence
+  proof consider A being trivial (non empty Subset of S);
+   take A;
+   thus thesis;
+  end;
  cluster non trivial non proper (non empty Subset of S);
+ existence
+  proof consider A being non proper Subset of S;
+    reconsider A as non empty Subset of S;
+   take A;
+   thus thesis;
+  end;
 end;
+
 
 theorem :: TEX_2:8
  for Y being non empty 1-sorted, y being Element of Y holds
@@ -114,24 +203,74 @@ theorem :: TEX_2:9
      y being Element of Y holds
   {y} is proper;
 
-definition let Y be trivial non empty 1-sorted;
+registration let Y be trivial non empty 1-sorted;
  cluster -> non proper (non empty Subset of Y);
+ coherence
+  proof let A be non empty Subset of Y;
+   assume A is proper;
+    then A1: A <> the carrier of Y by Th5;
+      consider s being Element of Y such that
+                  A2: the carrier of Y = {s} by TEX_1:def 1;
+   thus contradiction by A1,A2,ZFMISC_1:39;
+  end;
  cluster non proper -> trivial (non empty Subset of Y);
+ coherence
+  proof let A be non empty Subset of Y;
+   assume A3: A is non proper;
+        ex s being Element of Y st
+        the carrier of Y = {s} by TEX_1:def 1;
+   hence thesis by A3,Th5;
+  end;
 end;
 
-definition let Y be non trivial non empty 1-sorted;
+
+registration let Y be non trivial non empty 1-sorted;
  cluster trivial -> proper (non empty Subset of Y);
+ coherence
+  proof let A be non empty Subset of Y;
+   assume A is trivial;
+    then consider s being Element of A such that A1: A = {s} by Def1;
+   thus A is proper by A1,Th9;
+  end;
  cluster non proper -> non trivial (non empty Subset of Y);
+ coherence
+  proof let A be non empty Subset of Y;
+   assume A2: A is non proper;
+   assume A is trivial;
+    then consider s being Element of A such that A3: A = {s} by Def1;
+   thus contradiction by A2,A3,Th9;
+  end;
 end;
 
-definition let Y be non trivial non empty 1-sorted;
+
+registration let Y be non trivial non empty 1-sorted;
  cluster trivial proper (non empty Subset of Y);
+ existence
+  proof consider A being trivial (non empty Subset of Y);
+   take A;
+   thus thesis;
+  end;
  cluster non trivial non proper (non empty Subset of Y);
+ existence
+  proof consider A being non proper Subset of Y;
+    reconsider A as non empty Subset of Y;
+   take A;
+   thus thesis;
+  end;
 end;
 
-definition let Y be non trivial non empty 1-sorted;
+
+registration let Y be non trivial non empty 1-sorted;
   cluster non empty trivial proper Subset of Y;
+  existence
+  proof
+    consider X being trivial proper (non empty Subset of Y);
+    reconsider X as Subset of Y;
+    take X;
+    thus thesis;
+  end;
 end;
+
 
 begin
 :: 2. Proper Subspaces of Topological Spaces.
@@ -155,6 +294,7 @@ definition let Y be TopStruct;
   holds A is proper;
 end;
 
+
 reserve Y for TopStruct;
 
 theorem :: TEX_2:13
@@ -170,31 +310,176 @@ theorem :: TEX_2:15
  for Y0 being SubSpace of Y holds
   the carrier of Y0 = the carrier of Y implies Y0 is non proper;
 
-definition let Y be trivial non empty TopStruct;
+registration let Y be trivial non empty TopStruct;
  cluster -> non proper (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+    reconsider A = the carrier of Y0 as non empty Subset of Y
+    by Lm1;
+       now take A;
+      thus A = the carrier of Y0 & A is non proper;
+     end;
+   hence Y0 is non proper by Def3;
+  end;
  cluster non proper -> trivial (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume Y0 is non proper;
+    then consider A being Subset of Y such that
+           A1: A = the carrier of Y0 and A is non proper by Def3;
+   reconsider A = the carrier of Y0 as non empty Subset of Y
+   by A1;
+       A is trivial;
+   hence Y0 is trivial by REALSET1:def 13;
+  end;
 end;
 
-definition let Y be non trivial non empty TopStruct;
+
+registration let Y be non trivial non empty TopStruct;
  cluster trivial -> proper (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A1: Y0 is trivial;
+       now let A be Subset of Y;
+      assume A2: A = the carrier of Y0;
+       then reconsider B = A as non empty Subset of Y;
+        reconsider B as trivial (non empty Subset of Y)
+        by A1,A2,REALSET1:def 13;
+           B is proper;
+      hence A is proper;
+     end;
+   hence Y0 is proper by Def3;
+  end;
  cluster non proper -> non trivial (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A3: Y0 is non proper;
+   assume A4: Y0 is trivial;
+       now let A be Subset of Y;
+      assume A5: A = the carrier of Y0;
+       then reconsider B = A as non empty Subset of Y;
+        reconsider B as trivial (non empty Subset of Y)
+        by A4,A5,REALSET1:def 13;
+           B is proper;
+      hence A is proper;
+     end;
+   hence contradiction by A3,Def3;
+  end;
 end;
 
-definition let Y be non empty TopStruct;
+
+registration let Y be non empty TopStruct;
  cluster non proper strict non empty SubSpace of Y;
+ existence
+  proof
+       [#]Y = the carrier of Y by PRE_TOPC:12;
+    then reconsider A0 = the carrier of Y
+      as non empty Subset of Y;
+   set Y0 = Y|A0;
+   take Y0;
+      A0 = [#]Y0 by PRE_TOPC:def 10;
+    then A0 = the carrier of Y0 by PRE_TOPC:12;
+   hence thesis by Th15;
+  end;
 end;
+
 
 theorem :: TEX_2:16
    for Y being non empty TopStruct,
      Y0 being non proper SubSpace of Y holds
    the TopStruct of Y0 = the TopStruct of Y;
 
-definition let Y be non empty TopStruct;
+registration let Y be non empty TopStruct;
  cluster discrete -> TopSpace-like SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume Y0 is discrete;
+    then the topology of Y0 = bool the carrier of Y0 by TDLAT_3:def 1;
+    then the carrier of Y0 in the topology of Y0 &
+         (for F being Subset-Family of Y0 st
+           F c= the topology of Y0 holds union F in the topology of Y0) &
+          (for A,B being Subset of Y0 st
+            A in the topology of Y0 & B in the topology of Y0 holds
+              A /\ B in the topology of Y0) by ZFMISC_1:def 1;
+   hence thesis by PRE_TOPC:def 1;
+  end;
  cluster anti-discrete -> TopSpace-like SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume Y0 is anti-discrete;
+    then A1: the topology of Y0 = {{}, the carrier of Y0} by TDLAT_3:def 2;
+     now
+    thus the carrier of Y0 in the topology of Y0 by A1,TARSKI:def 2;
+    thus for F being Subset-Family of Y0 st
+          F c= the topology of Y0 holds union F in the topology of Y0
+     proof let F be Subset-Family of Y0;
+      assume F c= the topology of Y0;
+       then F = {} or F = {{}} or F = {the carrier of Y0} or
+            F = {{},the carrier of Y0} by A1,ZFMISC_1:42;
+       then union F = {} or union F = the carrier of Y0 or
+            union F = {} \/ (the carrier of Y0) by ZFMISC_1:2,31,93;
+      hence thesis by A1,TARSKI:def 2;
+     end;
+    thus for A,B being Subset of Y0 st
+          A in the topology of Y0 & B in the topology of Y0 holds
+           A /\ B in the topology of Y0
+     proof
+       let A,B be Subset of Y0;
+      assume A in the topology of Y0 & B in the topology of Y0;
+       then (A = {} or A = the carrier of Y0) &
+             (B = {} or B = the carrier of Y0) by A1,TARSKI:def 2;
+      hence A /\ B in the topology of Y0 by A1,TARSKI:def 2;
+     end;
+   end;
+   hence thesis by PRE_TOPC:def 1;
+  end;
  cluster non TopSpace-like -> non discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume A2: Y0 is non TopSpace-like;
+   assume Y0 is discrete;
+    then the topology of Y0 = bool the carrier of Y0 by TDLAT_3:def 1;
+    then the carrier of Y0 in the topology of Y0 &
+         (for F being Subset-Family of Y0 st
+           F c= the topology of Y0 holds union F in the topology of Y0) &
+          (for A,B being Subset of Y0 st
+            A in the topology of Y0 & B in the topology of Y0 holds
+              A /\ B in the topology of Y0) by ZFMISC_1:def 1;
+   hence contradiction by A2,PRE_TOPC:def 1;
+  end;
  cluster non TopSpace-like -> non anti-discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume A3: Y0 is non TopSpace-like;
+   assume Y0 is anti-discrete;
+    then A4: the topology of Y0 = {{}, the carrier of Y0} by TDLAT_3:def 2;
+     now
+    thus the carrier of Y0 in the topology of Y0 by A4,TARSKI:def 2;
+    thus for F being Subset-Family of Y0 st
+          F c= the topology of Y0 holds union F in the topology of Y0
+     proof let F be Subset-Family of Y0;
+      assume F c= the topology of Y0;
+       then F = {} or F = {{}} or F = {the carrier of Y0} or
+            F = {{},the carrier of Y0} by A4,ZFMISC_1:42;
+       then union F = {} or union F = the carrier of Y0 or
+            union F = {} \/ (the carrier of Y0) by ZFMISC_1:2,31,93;
+      hence thesis by A4,TARSKI:def 2;
+     end;
+    thus for A,B being Subset of Y0 st
+          A in the topology of Y0 & B in the topology of Y0 holds
+           A /\ B in the topology of Y0
+     proof
+       let A,B be Subset of Y0;
+      assume A in the topology of Y0 & B in the topology of Y0;
+       then (A = {} or A = the carrier of Y0) &
+             (B = {} or B = the carrier of Y0) by A4,TARSKI:def 2;
+      hence A /\ B in the topology of Y0 by A4,TARSKI:def 2;
+     end;
+   end;
+   hence contradiction by A3,PRE_TOPC:def 1;
+  end;
 end;
+
 
 theorem :: TEX_2:17
  for Y0, Y1 being TopStruct st
@@ -206,23 +491,94 @@ theorem :: TEX_2:18
     the TopStruct of Y0 = the TopStruct of Y1 holds
    Y0 is anti-discrete implies Y1 is anti-discrete;
 
-definition let Y be non empty TopStruct;
+registration let Y be non empty TopStruct;
  cluster discrete -> almost_discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume Y0 is discrete;
+    then for A be Subset of Y0 holds
+          A in the topology of Y0 implies
+      (the carrier of Y0) \ A in the topology of Y0 by TDLAT_3:14;
+   hence Y0 is almost_discrete by TDLAT_3:def 3;
+  end;
  cluster non almost_discrete -> non discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume A1: Y0 is non almost_discrete;
+   assume Y0 is discrete;
+    then for A be Subset of Y0 holds
+          A in the topology of Y0 implies
+      (the carrier of Y0) \ A in the topology of Y0 by TDLAT_3:14;
+   hence contradiction by A1,TDLAT_3:def 3;
+  end;
  cluster anti-discrete -> almost_discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume Y0 is anti-discrete;
+    then for A be Subset of Y0 holds
+            A in the topology of Y0 implies
+         (the carrier of Y0) \ A in the topology of Y0 by TDLAT_3:15;
+   hence Y0 is almost_discrete by TDLAT_3:def 3;
+  end;
  cluster non almost_discrete -> non anti-discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume A2: Y0 is non almost_discrete;
+   assume Y0 is anti-discrete;
+    then for A be Subset of Y0 holds
+            A in the topology of Y0 implies
+         (the carrier of Y0) \ A in the topology of Y0 by TDLAT_3:15;
+   hence contradiction by A2,TDLAT_3:def 3;
+  end;
 end;
+
 
 theorem :: TEX_2:19
    for Y0, Y1 being TopStruct st
     the TopStruct of Y0 = the TopStruct of Y1 holds
    Y0 is almost_discrete implies Y1 is almost_discrete;
 
-definition let Y be non empty TopStruct;
+registration let Y be non empty TopStruct;
  cluster discrete anti-discrete -> trivial (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume Y0 is discrete anti-discrete;
+    then A1: bool the carrier of Y0 = {{}, the carrier of Y0} by TDLAT_3:12;
+       now
+       consider d0 being Element of Y0;
+      take d0;
+      thus {d0} = the carrier of Y0 by A1,TARSKI:def 2;
+     end;
+   hence Y0 is trivial by TEX_1:def 1;
+  end;
  cluster anti-discrete non trivial -> non discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A2: Y0 is anti-discrete non trivial;
+   assume Y0 is discrete;
+    then A3: bool the carrier of Y0 = {{}, the carrier of Y0} by A2,TDLAT_3:12;
+       now
+       consider d0 being Element of Y0;
+      take d0;
+      thus {d0} = the carrier of Y0 by A3,TARSKI:def 2;
+     end;
+   hence contradiction by A2,TEX_1:def 1;
+  end;
  cluster discrete non trivial -> non anti-discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A4: Y0 is discrete non trivial;
+   assume Y0 is anti-discrete;
+    then A5: bool the carrier of Y0 = {{}, the carrier of Y0} by A4,TDLAT_3:12;
+       now
+       consider d0 being Element of Y0;
+      take d0;
+      thus {d0} = the carrier of Y0 by A5,TARSKI:def 2;
+     end;
+   hence contradiction by A4,TEX_1:def 1;
+  end;
 end;
+
 
 definition let Y be non empty TopStruct, y be Point of Y;
  func Sspace(y) -> strict non empty SubSpace of Y means
@@ -230,13 +586,22 @@ definition let Y be non empty TopStruct, y be Point of Y;
  the carrier of it = {y};
 end;
 
-definition let Y be non empty TopStruct;
+registration let Y be non empty TopStruct;
  cluster trivial strict non empty SubSpace of Y;
+ existence
+  proof
+   consider y being Point of Y;
+   take Sspace(y);
+   thus thesis by Lm2;
+  end;
 end;
 
-definition let Y be non empty TopStruct, y be Point of Y;
+
+registration let Y be non empty TopStruct, y be Point of Y;
  cluster Sspace(y) -> trivial;
+ coherence by Lm2;
 end;
+
 
 theorem :: TEX_2:20
  for Y being non empty TopStruct, y being Point of Y holds
@@ -250,9 +615,15 @@ theorem :: TEX_2:22
    for Y being non trivial non empty TopStruct, y being Point of Y holds
   Sspace(y) is proper;
 
-definition let Y be non trivial non empty TopStruct;
+registration let Y be non trivial non empty TopStruct;
  cluster proper trivial strict (non empty SubSpace of Y);
+ existence
+  proof consider Y0 being trivial strict non empty SubSpace of Y;
+   take Y0;
+   thus thesis;
+  end;
 end;
+
 
 theorem :: TEX_2:23
  for Y being non empty TopStruct, Y0 be trivial non empty SubSpace of Y holds
@@ -262,63 +633,223 @@ theorem :: TEX_2:24
  for Y being non empty TopStruct, y being Point of Y holds
   Sspace(y) is TopSpace-like implies Sspace(y) is discrete anti-discrete;
 
-definition let Y be non empty TopStruct;
+registration let Y be non empty TopStruct;
  cluster trivial TopSpace-like ->
       discrete anti-discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A1: Y0 is trivial TopSpace-like;
+    then consider y being Point of Y such that
+          A2: the TopStruct of Y0 = the TopStruct of Sspace(y) by Th23;
+        Sspace(y) is trivial TopSpace-like by A1,A2,Th12;
+    then Sspace(y) is discrete anti-discrete by Th24;
+   hence Y0 is discrete anti-discrete by A2,Th17,Th18;
+  end;
 end;
 
-definition let X be non empty TopSpace;
+
+registration let X be non empty TopSpace;
  cluster trivial strict TopSpace-like non empty SubSpace of X;
+ existence
+  proof
+    consider x being Point of X;
+   take Sspace(x);
+   thus thesis;
+  end;
 end;
 
-definition let X be non empty TopSpace, x be Point of X;
+
+registration let X be non empty TopSpace, x be Point of X;
  cluster Sspace(x) -> TopSpace-like;
+ coherence;
 end;
 
-definition let X be non empty TopSpace;
+
+registration let X be non empty TopSpace;
  cluster discrete anti-discrete strict non empty SubSpace of X;
+ existence
+  proof
+    consider x being Point of X;
+   take Sspace(x);
+   thus thesis;
+  end;
 end;
 
-definition let X be non empty TopSpace, x be Point of X;
+
+registration let X be non empty TopSpace, x be Point of X;
  cluster Sspace(x) -> discrete anti-discrete;
+ coherence;
 end;
 
-definition let X be non empty TopSpace;
+
+registration let X be non empty TopSpace;
  cluster non proper -> open closed SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume X0 is non proper;
+    then consider A being Subset of X such that
+             A1: A = the carrier of X0 and A2: A is non proper by Def3;
+      A3: A = the carrier of X by A2,Th5;
+A4:    now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A1,A3,PRE_TOPC:12;
+     hence A is open by TOPS_1:53;
+    end;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A1,A3,PRE_TOPC:12;
+     hence A is closed;
+    end;
+   hence thesis by A4,BORSUK_1:def 14,TSEP_1:def 1;
+  end;
  cluster non open -> proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A5: X0 is non open;
+   assume X0 is non proper;
+    then consider A being Subset of X such that
+             A6: A = the carrier of X0 and A7: A is non proper by Def3;
+      A8: A = the carrier of X by A7,Th5;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A6,A8,PRE_TOPC:12;
+     hence A is open by TOPS_1:53;
+    end;
+   hence contradiction by A5,TSEP_1:def 1;
+  end;
  cluster non closed -> proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A9: X0 is non closed;
+   assume X0 is non proper;
+    then consider A being Subset of X such that
+             A10: A = the carrier of X0 and A11: A is non proper by Def3;
+      A12: A = the carrier of X by A11,Th5;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A10,A12,PRE_TOPC:12;
+     hence A is closed;
+    end;
+   hence contradiction by A9,BORSUK_1:def 14;
+  end;
 end;
 
-definition let X be non empty TopSpace;
+
+registration let X be non empty TopSpace;
  cluster open closed strict SubSpace of X;
+ existence
+  proof consider X0 being non proper strict SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
 end;
 
-definition let X be discrete non empty TopSpace;
+
+registration let X be discrete non empty TopSpace;
  cluster anti-discrete -> trivial (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume Y0 is anti-discrete;
+    then reconsider Y0 as discrete anti-discrete non empty SubSpace of X;
+       Y0 is trivial;
+   hence thesis;
+  end;
  cluster non trivial -> non anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A1: Y0 is non trivial;
+   assume Y0 is anti-discrete;
+    then reconsider Y0 as discrete anti-discrete non empty SubSpace of X;
+       Y0 is trivial;
+   hence contradiction by A1;
+  end;
 end;
 
-definition let X be discrete non trivial non empty TopSpace;
+
+registration let X be discrete non trivial non empty TopSpace;
  cluster discrete open closed proper strict SubSpace of X;
+ existence
+  proof consider X0 being proper strict SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
 end;
 
-definition let X be anti-discrete non empty TopSpace;
+
+registration let X be anti-discrete non empty TopSpace;
  cluster discrete -> trivial (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume X0 is discrete;
+    then reconsider Y0 = X0 as discrete anti-discrete non empty SubSpace of X;
+        Y0 is trivial;
+   hence X0 is trivial;
+  end;
  cluster non trivial -> non discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume A1: X0 is non trivial;
+   assume X0 is discrete;
+    then reconsider Y0 = X0 as discrete anti-discrete non empty SubSpace of X;
+        Y0 is trivial;
+   hence contradiction by A1;
+  end;
 end;
 
-definition let X be anti-discrete non trivial non empty TopSpace;
+
+registration let X be anti-discrete non trivial non empty TopSpace;
  cluster -> non open non closed (proper non empty SubSpace of X);
+ coherence
+  proof let X0 be proper non empty SubSpace of X;
+      the carrier of X0 is non empty Subset of X by Lm1;
+    then reconsider A = the carrier of X0 as non empty Subset of X
+    ;
+     set B = A`;
+        A is proper by Def3;
+     then A1: A <> the carrier of X by Th5;
+     then A2: B <> {} & B <> the carrier of X by TOPS_3:1,2;
+   assume A3: X0 is open or X0 is closed;
+      now per cases by A3;
+     suppose X0 is open;
+       then A is open by TSEP_1:def 1;
+       then A in the topology of X by PRE_TOPC:def 5;
+       then A in {{},the carrier of X} by TDLAT_3:def 2;
+      hence contradiction by A1,TARSKI:def 2;
+     end;
+     suppose X0 is closed;
+       then A is closed by BORSUK_1:def 14;
+       then B is open by TOPS_1:29;
+       then B in the topology of X by PRE_TOPC:def 5;
+       then B in {{},the carrier of X} by TDLAT_3:def 2;
+      hence contradiction by A2,TARSKI:def 2;
+    end;
+    end;
+   hence thesis;
+  end;
  cluster -> trivial proper (discrete non empty SubSpace of X);
+ coherence;
 end;
 
-definition let X be anti-discrete non trivial non empty TopSpace;
+
+registration let X be anti-discrete non trivial non empty TopSpace;
  cluster anti-discrete non open non closed proper strict SubSpace of X;
+ existence
+  proof consider X0 being proper strict non empty SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
 end;
 
-definition let X be almost_discrete non trivial non empty TopSpace;
+
+registration let X be almost_discrete non trivial non empty TopSpace;
  cluster almost_discrete proper strict non empty SubSpace of X;
+ existence
+  proof consider X0 being proper strict non empty SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
 end;
+
 
 
 begin
@@ -332,6 +863,7 @@ definition let Y be TopStruct,
    ex G being Subset of Y st G is open & IT /\ G = D;
 end;
 
+
 definition let Y be TopStruct;
   let A be Subset of Y;
  redefine attr A is discrete means
@@ -339,6 +871,7 @@ definition let Y be TopStruct;
  for D being Subset of Y st D c= A
    ex F being Subset of Y st F is closed & A /\ F = D;
 end;
+
 
 theorem :: TEX_2:25
  for Y0, Y1 being TopStruct, D0 being Subset of Y0,
@@ -448,6 +981,7 @@ definition let Y be TopStruct,
    for D being Subset of Y st D is discrete & IT c= D holds IT = D;
 end;
 
+
 theorem :: TEX_2:45
    for Y0, Y1 being TopStruct, D0 being Subset of Y0,
      D1 being Subset of Y1 st
@@ -482,16 +1016,37 @@ definition let Y be non empty TopStruct;
     A is maximal_discrete;
 end;
 
+
 theorem :: TEX_2:51
  for Y being non empty TopStruct, Y0 being SubSpace of Y,
      A being Subset of Y st
    A = the carrier of Y0 holds
       A is maximal_discrete iff Y0 is maximal_discrete;
 
-definition let Y be non empty TopStruct;
+registration let Y be non empty TopStruct;
  cluster maximal_discrete -> discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A1: Y0 is maximal_discrete;
+       the carrier of Y0 is Subset of Y by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of Y;
+         A is maximal_discrete by A1,Def8;
+      then A is discrete by Def7;
+   hence thesis by Th26;
+  end;
  cluster non discrete -> non maximal_discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A2: Y0 is non discrete;
+   assume A3: Y0 is maximal_discrete;
+       the carrier of Y0 is Subset of Y by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of Y;
+         A is maximal_discrete by A3,Def8;
+      then A is discrete by Def7;
+   hence contradiction by A2,Th26;
+  end;
 end;
+
 
 theorem :: TEX_2:52
    for X0 being non empty SubSpace of X holds
@@ -505,31 +1060,142 @@ theorem :: TEX_2:53
   ex X0 being strict non empty SubSpace of X st
             X0 is maximal_discrete & A0 = the carrier of X0;
 
-definition let X be discrete non empty TopSpace;
+registration let X be discrete non empty TopSpace;
  cluster maximal_discrete -> non proper SubSpace of X;
+ coherence
+  proof let Y0 be SubSpace of X;
+   assume A1: Y0 is maximal_discrete;
+       the carrier of Y0 is Subset of X by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of X;
+A2:       A is maximal_discrete by A1,Def8;
+       now
+      take A;
+      thus A = the carrier of Y0;
+      thus A is non proper by A2,Th49;
+     end;
+   hence thesis by Def3;
+  end;
  cluster proper -> non maximal_discrete SubSpace of X;
+ coherence
+  proof let Y0 be SubSpace of X;
+   assume A3: Y0 is proper;
+   assume A4: Y0 is maximal_discrete;
+       the carrier of Y0 is Subset of X by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of X;
+A5:       A is maximal_discrete by A4,Def8;
+       now
+      take A;
+      thus A = the carrier of Y0;
+      thus A is non proper by A5,Th49;
+     end;
+   hence contradiction by A3,Def3;
+  end;
  cluster non proper -> maximal_discrete SubSpace of X;
+ coherence
+  proof let Y0 be SubSpace of X;
+   assume A6: Y0 is non proper;
+     reconsider A = the carrier of Y0 as Subset of X by Lm1;
+        A is non proper by A6,Th13;
+     then for A be Subset of X st A = the carrier of Y0
+      holds A is maximal_discrete by Th49;
+   hence thesis by Def8;
+  end;
  cluster non maximal_discrete -> proper SubSpace of X;
+ coherence
+  proof let Y0 be SubSpace of X;
+   assume A7: Y0 is non maximal_discrete;
+   assume A8: Y0 is non proper;
+     reconsider A = the carrier of Y0 as Subset of X by Lm1;
+        A is non proper by A8,Th13;
+     then for A be Subset of X st A = the carrier of Y0
+      holds A is maximal_discrete by Th49;
+   hence contradiction by A7,Def8;
+  end;
 end;
 
-definition let X be anti-discrete non empty TopSpace;
+
+registration let X be anti-discrete non empty TopSpace;
  cluster maximal_discrete -> trivial (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A1: Y0 is maximal_discrete;
+       the carrier of Y0 is non empty Subset of X by Lm1;
+     then reconsider A = the carrier of Y0 as non empty Subset of X
+    ;
+         A is maximal_discrete by A1,Def8;
+      then A is trivial by Th50;
+   hence thesis by REALSET1:def 13;
+  end;
  cluster non trivial -> non maximal_discrete (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A2: Y0 is non trivial;
+   assume A3: Y0 is maximal_discrete;
+       the carrier of Y0 is non empty Subset of X by Lm1;
+     then reconsider A = the carrier of Y0 as non empty Subset of X
+    ;
+         A is maximal_discrete by A3,Def8;
+      then A is trivial by Th50;
+   hence contradiction by A2,REALSET1:def 13;
+  end;
  cluster trivial -> maximal_discrete (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A4: Y0 is trivial;
+    reconsider A = the carrier of Y0 as non empty Subset of X
+    by Lm1;
+        A is trivial by A4,REALSET1:def 13;
+     then for A be Subset of X st A = the carrier of Y0
+      holds A is maximal_discrete by Th50;
+   hence thesis by Def8;
+  end;
  cluster non maximal_discrete -> non trivial (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A5: Y0 is non maximal_discrete;
+   assume A6: Y0 is trivial;
+    reconsider A = the carrier of Y0 as non empty Subset of X
+    by Lm1;
+        A is trivial by A6,REALSET1:def 13;
+     then for A be Subset of X st A = the carrier of Y0
+      holds A is maximal_discrete by Th50;
+   hence contradiction by A5,Def8;
+  end;
 end;
-
 
 begin
 :: 4. Maximal Discrete Subspaces of Almost Discrete Spaces.
 
-scheme
+scheme :: TEX_2:sch 1
+
  ExChoiceFCol{X()->non empty TopStruct,F()->Subset-Family of X(),P[set,set]}:
  ex f being Function of F(),the carrier of X() st
   for S being Subset of X() st S in F() holds P[S,f.S]
  provided
    for S being Subset of X() st S in F()
-                   ex x being Point of X() st P[S,x];
+                   ex x being Point of X() st P[S,x]
+proof
+   defpred X[set,set] means $2 in the carrier of X() & P[$1,$2];
+    A2: for S being set st S in F()
+          ex x being set st x in the carrier of X() & X[S,x]
+         proof let S be set;
+          assume A3: S in F();
+            then reconsider Q = S as Subset of X();
+           consider x being Point of X() such that
+              A4: P[Q,x] by A1,A3;
+          take x;
+          thus thesis by A4;
+         end;
+   consider f being Function such that
+      A5: dom f = F() and A6: rng f c= the carrier of X() and
+      A7: for S being set st S in F() holds X[S,f.S]
+           from COMPTS_1:sch 1(A2);
+   reconsider f as Function of F(),the carrier of X()
+     by A5,A6,FUNCT_2:def 1,RELSET_1:11;
+  take f;
+  thus for S being Subset of X() st S in F() holds P[S,f.S]
+  by A7;
+ end;
 
 reserve X for almost_discrete non empty TopSpace;
 
@@ -599,29 +1265,140 @@ theorem :: TEX_2:67
    ex X0 being strict non empty SubSpace of X st
                        Y0 is SubSpace of X0 & X0 is maximal_discrete;
 
-definition let X be almost_discrete non discrete non empty TopSpace;
+registration let X be almost_discrete non discrete non empty TopSpace;
  cluster maximal_discrete -> proper (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume A1: X0 is maximal_discrete;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is maximal_discrete by A1,Def8;
+      then A is discrete by Def7;
+    then A2: X0 is discrete by Th26;
+            X0 is proper
+            proof
+             assume X0 is non proper;
+                then A is not proper by Th13;
+               then A = the carrier of X & X is SubSpace of X
+                                                  by Th5,TSEP_1:2;
+               then the TopStruct of X0 = the TopStruct of X by TSEP_1:5;
+              hence contradiction by A2,Th17;
+            end;
+   hence thesis;
+  end;
  cluster non proper -> non maximal_discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume A3: X0 is non proper;
+   assume A4: X0 is maximal_discrete;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is maximal_discrete by A4,Def8;
+      then A is discrete by Def7;
+    then A5: X0 is discrete by Th26;
+         A is not proper by A3,Th13;
+      then A = the carrier of X & X is SubSpace of X by Th5,TSEP_1:2;
+      then the TopStruct of X0 = the TopStruct of X by TSEP_1:5;
+   hence contradiction by A5,Th17;
+  end;
 end;
 
-definition let X be almost_discrete non anti-discrete non empty TopSpace;
+
+registration let X be almost_discrete non anti-discrete non empty TopSpace;
  cluster maximal_discrete -> non trivial (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+       the carrier of X0 is non empty Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as non empty Subset of X
+     ;
+   assume X0 is maximal_discrete;
+    then A1: A is maximal_discrete by Def8;
+   assume X0 is trivial;
+    then the carrier of X0 is trivial by REALSET1:def 13;
+      then consider s being Element of X0 such that
+                                   A2: the carrier of X0 = {s} by Def1;
+          s in A & A c= the carrier of X;
+      then reconsider a = s as Point of X;
+       A3: A = {a} by A2;
+           A is dense by A1,Th62;
+        then Cl A = the carrier of X by TOPS_3:def 2;
+      then for C being Subset of X, x being Point of X
+      st C = {x} holds Cl C = the carrier of X by A3,Th55;
+   hence contradiction by TDLAT_3:22;
+  end;
  cluster trivial -> non maximal_discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+       the carrier of X0 is non empty Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as non empty Subset of X
+     ;
+   assume X0 is trivial;
+    then A4: the carrier of X0 is trivial by REALSET1:def 13;
+   assume X0 is maximal_discrete;
+    then A5: A is maximal_discrete by Def8;
+      consider s being Element of X0 such that
+                                   A6: the carrier of X0 = {s} by A4,Def1;
+          s in A & A c= the carrier of X;
+      then reconsider a = s as Point of X;
+       A7: A = {a} by A6;
+           A is dense by A5,Th62;
+        then Cl A = the carrier of X by TOPS_3:def 2;
+      then for C being Subset of X, x being Point of X
+      st C = {x} holds Cl C = the carrier of X by A7,Th55;
+   hence contradiction by TDLAT_3:22;
+  end;
 end;
 
-definition let X be almost_discrete non empty TopSpace;
+
+registration let X be almost_discrete non empty TopSpace;
  cluster maximal_discrete strict non empty non empty SubSpace of X;
+ existence
+  proof
+   consider M being Subset of X such that
+        A1: M is maximal_discrete by Th66;
+       M is non empty by A1,Th46;
+    then consider X0 being strict non empty SubSpace of X such that
+          A2: X0 is maximal_discrete and
+                 M = the carrier of X0 by A1,Th53;
+   take X0;
+   thus thesis by A2;
+  end;
 end;
-
 
 begin
 :: 5. Continuous Mappings and Almost Discrete Spaces.
 
-scheme MapExChoiceF{X,Y()->non empty TopStruct,P[set,set]}:
+scheme :: TEX_2:sch 2
+ MapExChoiceF{X,Y()->non empty TopStruct,P[set,set]}:
  ex f being map of X(),Y() st
   for x being Point of X() holds P[x,f.x]
  provided
-   for x being Point of X() ex y being Point of Y() st P[x,y];
+   for x being Point of X() ex y being Point of Y() st P[x,y]
+proof
+   set A = [#]Y();
+     A2: A = the carrier of Y() by PRE_TOPC:12;
+    reconsider A as non empty Subset of Y();
+   set C = [#]X();
+     A3: C = the carrier of X() by PRE_TOPC:12;
+    reconsider C as non empty Subset of X();
+   defpred X[set,set] means $2 in A & P[$1,$2];
+   A4: for x being set st x in C ex a being set st a in A & X[x,a]
+         proof let x be set;
+          assume x in C;
+           then consider a being Point of Y() such that
+                    A5: P[x,a] by A1;
+          take a;
+          thus thesis by A2,A5;
+         end;
+   consider f being Function such that
+        A6: dom f = C and A7: rng f c= A and
+        A8: for x being set st x in C holds X[x,f.x]
+                                                from COMPTS_1:sch 1(A4);
+   reconsider f as Function of C,A by A6,A7,FUNCT_2:def 1,RELSET_1:11;
+        reconsider f as map of X(),Y() by A2,A3;
+   take f;
+  thus for x be Point of X() holds P[x,f.x] by A3,A8;
+ end;
 
 reserve X,Y for non empty TopSpace;
 

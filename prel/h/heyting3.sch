@@ -11,8 +11,6 @@ SETFAM_1
 STRUCT_0
 ORDERS_1
 #
-SSubsetUniq
-#
 G3 ;;
 M2 K22 U1 F1 ;;;;M2 K22 U1 F1 ;;;;ª&M1 ;&ª&R2 B3 B1 ;ªP1 B3 ;;ª&P1 B3 ;ªR2 B3 B1 ;;;M1 ;&ª&R2 B3 B2 ;ªP1 B3 ;;ª&P1 B3 ;ªR2 B3 B2 ;;;ªR1 B1 B2 ;;;
 #

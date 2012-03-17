@@ -49,15 +49,22 @@ func f*' ->PartFunc of C,COMPLEX means
    it.c = (f/.c)*';
 end;
 
+
 definition let C be non empty set; let f be Function of C,COMPLEX;
  redefine func f*' means
 :: COMSEQ_2:def 2
  dom it = C & for n being Element of C holds it.n=(f.n)*';
 end;
 
-definition let C be non empty set; let seq be Function of C,COMPLEX;
+
+registration let C be non empty set; let seq be Function of C,COMPLEX;
  cluster seq*' -> total;
+ coherence
+  proof
+   thus dom(seq*') = dom seq by Def1 .= C by FUNCT_2:def 1;
+  end;
 end;
+
 
   theorem :: COMSEQ_2:3
      s is non-zero implies s*' is non-zero;
@@ -83,9 +90,22 @@ begin :: BOUNDED COMPLEX SEQUENCES
     ex r being Real st for n holds |.s.n.|<r;
   end;
 
-  definition
+
+  registration
    cluster bounded Complex_Sequence;
+   existence
+    proof
+      deffunc F(Nat) = 0c;
+     consider s such that
+A1:   for n holds s.n = F(n) from COMSEQ_1:sch 1;
+     take s;
+     take 1;
+     let n;
+     s.n = 0c by A1;
+     hence |.s.n.| < 1 by COMPLEX1:130;
+    end;
   end;
+
 
   theorem :: COMSEQ_2:8
    s is bounded iff ex r being Real st (0<r & for n holds |.s.n.|<r);
@@ -103,6 +123,7 @@ begin
     ex g st for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p;
   end;
 
+
   definition
    let s;
    assume  s is convergent;
@@ -111,28 +132,86 @@ begin
     for p be Real st 0<p ex n st for m st n<=m holds |.s.m-it.|<p;
    end;
 
+
   theorem :: COMSEQ_2:9
    (ex g st for n being Nat holds s.n = g) implies s is convergent;
 
   theorem :: COMSEQ_2:10
    for g st for n being Nat holds s.n = g holds lim s = g;
 
-  definition
+  registration
    cluster convergent Complex_Sequence;
+    existence
+    proof
+      deffunc F(Nat) = 0c;
+     consider s such that
+A1:   for n holds s.n = F(n) from COMSEQ_1:sch 1;
+     take s;
+     thus thesis by A1,Th9;
+    end;
   end;
 
-  definition
+
+  registration
   let s be convergent Complex_Sequence;
   cluster |.s.| -> convergent;
+   coherence
+    proof
+     consider g such that
+A1:   for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by Def4;
+     take R=|.g.|;
+     let p be real number;
+A2:   p is Real by XREAL_0:def 1;
+     assume 0<p;
+     then consider n such that
+A3:   for m st n<=m holds |.s.m-g.|<p by A1,A2;
+     take n;
+     let m; assume
+     n<=m;
+then A4:   |.s.m-g.|<p by A3;
+       abs(|.s.m.|- |.g.|) <= |.s.m-g.| by COMPLEX1:150;
+     then abs(|.s.m.|- |.g.|) + |.s.m-g.| < p+|.s.m-g.| by A4,REAL_1:67;
+     then abs(|.s.m.|- |.g.|) + |.s.m-g.|- |.s.m-g.| <
+                               p+|.s.m-g.|- |.s.m-g.| by REAL_1:54;
+     then abs(|.s.m.|- |.g.|) + (|.s.m-g.|- |.s.m-g.|)<
+                 p + |.s.m-g.|- |.s.m-g.| by XCMPLX_1:29;
+     then abs(|.s.m.|- |.g.|) + (|.s.m-g.|+- |.s.m-g.|)<
+                 p + |.s.m-g.|- |.s.m-g.| by XCMPLX_0:def 8;
+     then abs(|.s.m.|- |.g.|) +0 <
+                 p + |.s.m-g.|- |.s.m-g.| by XCMPLX_0:def 6;
+     then abs(|.s.m.|- |.g.|) < p + (|.s.m-g.|- |.s.m-g.|) by XCMPLX_1:29;
+     then abs(|.s.m.|- |.g.|) < p + (|.s.m-g.|+- |.s.m-g.|) by XCMPLX_0:def 8;
+     then abs(|.s.m.|- R ) < p + 0 by XCMPLX_0:def 6;
+     hence thesis by COMSEQ_1:def 14;
+    end;
   end;
+
 
   theorem :: COMSEQ_2:11
    s is convergent implies lim |.s.| = |.lim s.|;
 
-  definition
+  registration
   let s be convergent Complex_Sequence;
   cluster s*' -> convergent;
+   coherence
+    proof
+     consider g such that
+A1:   for p being Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by Def4;
+     take r = g*';
+     let p be Real; assume
+     0<p;
+     then consider n such that
+A2:   for m st n<=m holds |.s.m-g.|<p by A1;
+     take n;
+     let m such that
+A3:   n<=m;
+       |.(s*').m - r.| = |.(s.m)*' - g*'.| by Def2
+                     .= |.(s.m - g)*'.| by COMPLEX1:120
+                     .= |.s.m-g.| by COMPLEX1:139;
+     hence thesis by A2,A3;
+    end;
   end;
+
 
   theorem :: COMSEQ_2:12
    s is convergent implies lim(s*') = (lim s)*';
@@ -197,13 +276,108 @@ begin
      s is convergent & s' is convergent implies
                               lim (s - s')*' = (lim s)*' - (lim s')*';
 
-  definition
+  registration
   cluster convergent -> bounded Complex_Sequence;
+   coherence
+    proof
+     let s;
+     assume s is convergent;
+     then consider g such that
+A1:   for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by Def4;
+     consider n1 such that
+A2:   for m st n1<=m holds |.s.m-g.|<1 by A1;
+    now take R=|.g.| +1;
+        0<=|.g.| by COMPLEX1:132;
+      then 0+0 < R by REAL_1:67;
+      hence 0<R;
+      let m;
+      assume n1<=m;
+then A3:    |.s.m-g.|<1 by A2;
+        |.s.m.| - |.g.| <= |.s.m-g.| by COMPLEX1:145;
+      then A4:    |.s.m.| - |.g.| < 1 by A3,AXIOMS:22;
+        |.s.m.|- |.g.|+|.g.|=|.s.m.|+- |.g.|+|.g.| by XCMPLX_0:def 8
+          .=|.s.m.|+(- |.g.|+|.g.|) by XCMPLX_1:1
+          .=|.s.m.|+0 by XCMPLX_0:def 6
+          .=|.s.m.|;
+      hence |.s.m.|<R by A4,REAL_1:53;
+     end;
+     then consider R1 be real number such that
+A5:   0<R1 and
+A6:   for m st n1<=m holds |.s.m.|< R1;
+     consider R2 such that
+A7:   0<R2
+     and
+A8:   for m st m<=n1 holds |.s.m.|< R2 by Th2;
+     take R=R1+R2;
+     thus R is Real by XREAL_0:def 1;
+A9:  R1+0 < R by A7,REAL_1:67;
+A10:  R2+0 < R by A5,REAL_1:67;
+     let m;
+A11:   now assume n1<=m;
+      then |.s.m.|< R1 by A6;
+      hence |.s.m.|< R by A9,AXIOMS:22;
+     end;
+       now assume m<=n1;
+      then |.s.m.|< R2 by A8;
+      hence |.s.m.|< R by A10,AXIOMS:22;
+     end;
+     hence |.s.m.|< R by A11;
+    end;
   end;
 
-  definition
+
+  registration
   cluster non bounded -> non convergent Complex_Sequence;
+   coherence
+    proof
+     let s;
+     assume
+A1:   s is non bounded & s is convergent;
+       now
+      consider g such that
+ A2:   for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by A1,Def4;
+      consider n1 such that
+ A3:   for m st n1<=m holds |.s.m-g.|<1 by A2;
+     now take R=|.g.| +1;
+         0<=|.g.| by COMPLEX1:132;
+       then 0+0 < R by REAL_1:67;
+       hence 0<R;
+       let m;
+       assume n1<=m;
+       then A4:    |.s.m-g.|<1 by A3;
+         |.s.m.| - |.g.| <= |.s.m-g.| by COMPLEX1:145;
+       then A5:    |.s.m.| - |.g.| < 1 by A4,AXIOMS:22;
+         |.s.m.|- |.g.|+|.g.|=|.s.m.|+- |.g.|+|.g.| by XCMPLX_0:def 8
+           .=|.s.m.|+(- |.g.|+|.g.|) by XCMPLX_1:1
+           .=|.s.m.|+0 by XCMPLX_0:def 6
+           .=|.s.m.|;
+       hence |.s.m.|<R by A5,REAL_1:53;
+      end;
+      then consider R1 be real number such that
+ A6:   0<R1 and
+ A7:   for m st n1<=m holds |.s.m.|< R1;
+      reconsider R1 as Real by XREAL_0:def 1;
+      consider R2 such that
+ A8:   0<R2 and
+ A9:   for m st m<=n1 holds |.s.m.|< R2 by Th2;
+      take R=R1+R2;
+A10:   R1+0 < R by A8,REAL_1:67;
+A11:   R2+0 < R by A6,REAL_1:67;
+      let m;
+ A12:   now assume n1<=m;
+       then |.s.m.|< R1 by A7;
+       hence |.s.m.|< R by A10,AXIOMS:22;
+      end;
+        now assume m<=n1;
+       then |.s.m.|< R2 by A9;
+       hence |.s.m.|< R by A11,AXIOMS:22;
+      end;
+      hence |.s.m.|< R by A12;
+     end;
+     hence contradiction by A1,Def3;
+    end;
   end;
+
 
   theorem :: COMSEQ_2:29
    s is convergent Complex_Sequence & s' is convergent Complex_Sequence

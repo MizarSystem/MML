@@ -27,9 +27,14 @@ begin
 
 :: Auxiliary theorems & redefinitions.
 
-definition let i be integer number;
+registration let i be integer number;
  cluster abs i -> natural;
+ coherence
+  proof 0 <= abs i by ABSVALUE:5;
+   hence thesis by INT_1:16;
+  end;
 end;
+
 
 definition let k;
  redefine func abs k -> Nat;
@@ -47,23 +52,42 @@ definition
    x in it iff ex m,n st x = m/n;
  end;
 
+
 definition let r be number;
  attr r is rational means
 :: RAT_1:def 2
    r in RAT;
 end;
 
-definition
+
+registration
  cluster rational Real;
+  existence
+   proof
+    reconsider a = 0, b = 1 as Integer;
+    take x=a/b;
+    thus x is Real;
+    thus x in RAT by Def1;
+   end;
 end;
 
-definition
+
+registration
  cluster rational number;
+  existence
+   proof
+    reconsider a = 0 as Integer;
+    reconsider b = 1 as Integer;
+    take x=a/b;
+    thus x in RAT by Def1;
+   end;
 end;
+
 
 definition
  mode Rational is rational number;
 end;
+
 
 theorem :: RAT_1:1
  x in RAT implies ex m,n st n<>0 & x = m/n;
@@ -76,9 +100,15 @@ canceled;
  theorem :: RAT_1:4
   RAT c= REAL;
 
-definition
+registration
  cluster rational -> real number;
+ coherence
+  proof let n be number;
+   assume n in RAT;
+   hence n in REAL by Th4;
+  end;
 end;
+
 
 canceled;
 
@@ -88,9 +118,11 @@ canceled;
 theorem :: RAT_1:7
  for x being Integer holds x is Rational;
 
-definition
+registration
   cluster integer -> rational number;
+  coherence by Th7;
 end;
+
 
 canceled 3;
 
@@ -105,42 +137,123 @@ theorem :: RAT_1:12
 :: Now we prove that fractions of integer denominator and natural numerator
 :: or of natural denominator and numerator, etc., are all rational numbers.
 
-  definition let p,q;
+  registration let p,q;
     cluster p*q -> rational;
+    coherence
+     proof
+      consider m1,n1 being Integer such that n1<>0
+                         and A2: p = m1/n1 by Th3;
+      consider m2,n2 being Integer such that n2<>0
+                         and A4: q = m2/n2 by Th3;
+       p*q=(m1*m2)/(n1*n2) by A2,A4,XCMPLX_1:77;
+       hence thesis by Th6;
+     end;
     cluster p+q -> rational;
+    coherence
+     proof
+      consider m1,n1 being Integer such that A6: n1<>0
+                         and A7: p = m1/n1 by Th3;
+      consider m2,n2 being Integer such that A8: n2<>0
+                         and A9: q = m2/n2 by Th3;
+      p+q=(m1*n2+m2*n1)/(n1*n2) by A6,A7,A8,A9,XCMPLX_1:117;
+      hence thesis by Th6;
+     end;
     cluster p-q -> rational;
+    coherence
+     proof
+      consider m1,n1 being Integer such that A11: n1<>0
+                         and A12: p = m1/n1 by Th3;
+      consider m2,n2 being Integer such that A13: n2<>0
+                         and A14: q = m2/n2 by Th3;
+      p-q=(m1*n2-m2*n1)/(n1*n2) by A11,A12,A13,A14,XCMPLX_1:131;
+      hence thesis by Th6;
+     end;
   end;
 
- definition let p,m;
+
+ registration let p,m;
    cluster p+m -> rational;
+    coherence
+    proof
+     reconsider x=m as Rational by Th7;
+       p+x is Rational;hence thesis;
+    end;
    cluster p-m -> rational;
+    coherence
+    proof
+     reconsider x=m as Rational by Th7;
+       p-x is Rational;hence thesis;
+    end;
    cluster p*m -> rational;
+    coherence
+    proof
+     reconsider x=m as Rational by Th7;
+       p*x is Rational;hence thesis;
+    end;
  end;
 
- definition let m,p;
+
+ registration let m,p;
    cluster m+p -> rational;
+    coherence
+    proof
+     reconsider x=m as Rational by Th7;
+       x+p is Rational;hence thesis;
+    end;
    cluster m-p -> rational;
+    coherence
+    proof
+     reconsider x=m as Rational by Th7;
+       x-p is Rational;hence thesis;
+    end;
    cluster m*p -> rational;
+    coherence
+    proof
+     reconsider x=m as Rational by Th7;
+       x*p is Rational;hence thesis;
+    end;
  end;
 
- definition let p,k;
+
+ registration let p,k;
    cluster p+k -> rational;
+    coherence;
    cluster p-k -> rational;
+    coherence;
    cluster p*k -> rational;
+    coherence;
  end;
 
- definition let k,p;
+
+ registration let k,p;
    cluster k+p -> rational;
+    coherence;
    cluster k-p -> rational;
+    coherence;
    cluster k*p -> rational;
+    coherence;
  end;
 
- definition
+
+ registration
   let p;
   cluster -p -> rational;
+   coherence
+    proof
+     consider m,n such that n<>0 and A2: p=m/n by Th3;
+     -p = (-m)/n by A2,XCMPLX_1:188;
+     hence thesis by Th6;
+    end;
 
   cluster abs(p) -> rational;
+   coherence
+    proof
+     consider m,n such that A3:n<>0 & p=m/n by Th3;
+       abs(p)=abs(m)/abs(n) by A3,ABSVALUE:16;
+     hence thesis by Th6;
+    end;
   end;
+
 
 :: Now we prove that the quotient of two rational numbers is rational
 
@@ -149,18 +262,22 @@ canceled 3;
  theorem :: RAT_1:16
    for p,q holds p/q is Rational;
 
-definition let p, q be rational number;
+registration let p, q be rational number;
   cluster p/q -> rational;
+  coherence by Th16;
 end;
+
 
 canceled 4;
 
 theorem :: RAT_1:21
   p" is Rational;
 
-definition let p be rational number;
+registration let p be rational number;
   cluster p" -> rational;
+  coherence by Th21;
 end;
+
 
 :: RAT is dense, that is there exists at least one rational number between
 :: any two distinct real numbers.
@@ -188,11 +305,13 @@ definition let p;
  it<>0 & (ex m st p=m/it) & for n,k st k<>0 & p=n/k holds it<=k;
  end;
 
+
  definition let p;
   func numerator(p) -> Integer equals
 :: RAT_1:def 4
    denominator(p)*p;
  end;
+
 
 :: Some basic theorems concerning p, numerator(p) and denominator(p).
 

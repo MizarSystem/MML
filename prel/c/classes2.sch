@@ -8,8 +8,6 @@ ZFMISC_1
 SUBSET_1
 CLASSES1
 #
-TC
-#
 ;
 M1 ;P1 K36 B1 ;;M1 ;ª&V13 B1 ;ªP1 B1 ;;;
 #

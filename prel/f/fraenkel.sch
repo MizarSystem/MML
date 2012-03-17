@@ -11,34 +11,6 @@ RELSET_1
 FUNCT_2
 FRAENKEL
 #
-Fraenkel5'
-Fraenkel5''
-Fraenkel6'
-Fraenkel6''
-FraenkelF'
-FraenkelF'R
-FraenkelF''
-FraenkelF6''
-RelevantArgs
-Fr_Set0
-Gen1''
-Gen1''A
-Gen2''
-Gen3'
-Gen3''
-Gen4''
-FrSet_1
-FrSet_2
-FrEqua1
-FrEqua2
-FraenkelFin
-CartFin
-Finiteness
-Fin_Im
-ImFin
-FunctChoice
-FuncsChoice
-#
 M1 W2 ;;M1 ;;
 R3 ËM2 F1 ;;;F2 B1 ;P1 B1 ;ËM2 F1 ;;;F2 B1 ;P2 B1 ;;ùM2 F1 ;;™&P1 B1 ;™P2 B1 ;;;
 #

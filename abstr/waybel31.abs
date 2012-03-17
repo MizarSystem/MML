@@ -30,21 +30,116 @@ environ
 
 begin
 
-  scheme UparrowUnion{L1()->RelStr,P[set]}:
+  scheme :: WAYBEL31:sch 1
+ UparrowUnion{L1()->RelStr,P[set]}:
    for S be Subset-Family of L1() st
     S = { X where X is Subset of L1() : P[X] } holds
-     uparrow union S = union { uparrow X where X is Subset of L1() : P[X] };
+     uparrow union S = union { uparrow X where X is Subset of L1() : P[X] }
+proof
+    let S be Subset-Family of L1();
+    assume A1: S = { X where X is Subset of L1() : P[X] };
+    A2: uparrow union S c= union { uparrow X where X is Subset of L1() : P[X]}
+    proof
+     let z be set;
+     assume A3: z in uparrow union S;
+     then reconsider z1 = z as Element of L1();
+     consider y1 be Element of L1() such that
+      A4: y1 <= z1 and
+      A5: y1 in union S by A3,WAYBEL_0:def 16;
+     consider Z be set such that
+      A6: y1 in Z and
+      A7: Z in S by A5,TARSKI:def 4;
+     consider X1 be Subset of L1() such that
+      A8: Z = X1 and
+      A9: P[X1] by A1,A7;
+     A10: z in uparrow X1 by A4,A6,A8,WAYBEL_0:def 16;
+       uparrow X1 in { uparrow X where X is Subset of L1() : P[X] } by A9;
+     hence z in union { uparrow X where X is Subset of L1() : P[X] }
+                                                         by A10,TARSKI:def 4;
+    end;
+      union { uparrow X where X is Subset of L1() : P[X] } c= uparrow union S
+    proof
+     let z be set;
+     assume z in union { uparrow X where X is Subset of L1() : P[X] };
+     then consider Z be set such that
+      A11: z in Z and
+      A12: Z in
+ { uparrow X where X is Subset of L1() : P[X] } by TARSKI:def 4;
+     consider X1 be Subset of L1() such that
+      A13: Z = uparrow X1 and
+      A14: P[X1] by A12;
+     reconsider z1 = z as Element of L1() by A11,A13;
+     consider y1 be Element of L1() such that
+      A15: y1 <= z1 and
+      A16: y1 in X1 by A11,A13,WAYBEL_0:def 16;
+       X1 in S by A1,A14;
+     then y1 in union S by A16,TARSKI:def 4;
+     hence z in uparrow union S by A15,WAYBEL_0:def 16;
+    end;
+    hence uparrow union S =
+     union { uparrow X where X is Subset of L1() : P[X] } by A2,XBOOLE_0:def 10
+;
+   end;
 
-  scheme DownarrowUnion{L1()->RelStr,P[set]}:
+  scheme :: WAYBEL31:sch 2
+ DownarrowUnion{L1()->RelStr,P[set]}:
    for S be Subset-Family of L1() st
     S = { X where X is Subset of L1() : P[X] } holds
-     downarrow union S = union { downarrow X where X is Subset of L1() : P[X]};
+     downarrow union S = union { downarrow X where X is Subset of L1() : P[X]}
+proof
+    let S be Subset-Family of L1();
+    assume A1: S = { X where X is Subset of L1() : P[X] };
+    A2: downarrow union S c=
+     union { downarrow X where X is Subset of L1() : P[X] }
+    proof
+     let z be set;
+     assume A3: z in downarrow union S;
+     then reconsider z1 = z as Element of L1();
+     consider y1 be Element of L1() such that
+      A4: y1 >= z1 and
+      A5: y1 in union S by A3,WAYBEL_0:def 15;
+     consider Z be set such that
+      A6: y1 in Z and
+      A7: Z in S by A5,TARSKI:def 4;
+     consider X1 be Subset of L1() such that
+      A8: Z = X1 and
+      A9: P[X1] by A1,A7;
+     A10: z in downarrow X1 by A4,A6,A8,WAYBEL_0:def 15;
+       downarrow X1 in { downarrow X where X is Subset of L1() : P[X] } by A9;
+     hence z in union { downarrow X where X is Subset of L1() : P[X] }
+                                                         by A10,TARSKI:def 4;
+    end;
+      union { downarrow X where X is Subset of L1(): P[X] } c= downarrow union
+S
+    proof
+     let z be set;
+     assume z in union { downarrow X where X is Subset of L1() : P[X] };
+     then consider Z be set such that
+      A11: z in Z and
+      A12: Z in
+ { downarrow X where X is Subset of L1(): P[X]} by TARSKI:def 4;
+     consider X1 be Subset of L1() such that
+      A13: Z = downarrow X1 and
+      A14: P[X1] by A12;
+     reconsider z1 = z as Element of L1() by A11,A13;
+     consider y1 be Element of L1() such that
+      A15: y1 >= z1 and
+      A16: y1 in X1 by A11,A13,WAYBEL_0:def 15;
+       X1 in S by A1,A14;
+     then y1 in union S by A16,TARSKI:def 4;
+     hence z in downarrow union S by A15,WAYBEL_0:def 15;
+    end;
+    hence downarrow union S = union { downarrow X where X is Subset of L1() :
+     P[X] } by A2,XBOOLE_0:def 10;
+   end;
 
-  definition
+  registration
    let L1 be lower-bounded continuous sup-Semilattice;
    let B1 be with_bottom CLbasis of L1;
    cluster InclPoset Ids subrelstr B1 -> algebraic;
+   coherence by WAYBEL13:10;
   end;
+
 
   definition  :: DEFINITION 4.5
    let L1 be continuous sup-Semilattice;
@@ -52,6 +147,7 @@ begin
 :: WAYBEL31:def 1
     meet {Card B1 where B1 is with_bottom CLbasis of L1 : not contradiction};
   end;
+
 
   theorem :: WAYBEL31:1
    for T be TopStruct
@@ -132,14 +228,47 @@ canceled;
    for L1 be finite LATTICE holds
     L1 is arithmetic;
 
-  definition
+  registration
    cluster finite -> arithmetic LATTICE;
+   coherence by Th15;
   end;
 
-  definition
+
+  registration
    cluster trivial reflexive transitive antisymmetric with_suprema with_infima
     lower-bounded non empty finite strict RelStr;
+   existence
+   proof
+      0 in {0} by TARSKI:def 1;
+    then reconsider r = {[0,0]} as Relation of {0} by RELSET_1:8;
+    reconsider T = RelStr(#{0},r#) as non empty RelStr;
+    take T;
+    thus T is trivial;
+    thus T is reflexive
+    proof
+     let x be Element of T;
+       x = 0 by TARSKI:def 1;
+     then [x,x] in {[0,0]} by TARSKI:def 1;
+     hence x <= x by ORDERS_1:def 9;
+    end;
+    then reconsider T' = T as trivial non empty reflexive RelStr;
+      T' is transitive;
+    hence T is transitive;
+      T' is antisymmetric;
+    hence T is antisymmetric;
+      T' is with_suprema;
+    hence T is with_suprema;
+      T' is with_infima;
+    hence T is with_infima;
+    reconsider T'' = T' as LATTICE;
+      T'' is lower-bounded;
+    hence T is lower-bounded;
+    thus T is non empty;
+    thus T is finite;
+    thus thesis;
+   end;
   end;
+
 
   theorem :: WAYBEL31:16
    for L1 be finite LATTICE
@@ -154,6 +283,7 @@ canceled;
 :: WAYBEL31:def 2
     wayabove a \ uparrow A;
   end;
+
 
   theorem :: WAYBEL31:17
      for L1 be non empty reflexive RelStr
@@ -231,10 +361,20 @@ canceled 2;
    for B1 be with_bottom CLbasis of L1 st Card B1 = CLweight L1 holds
     CLweight L1 = CLweight InclPoset Ids subrelstr B1;
 
-  definition
+  registration
    let L1 be continuous lower-bounded sup-Semilattice;
    cluster InclPoset sigma L1 -> with_suprema continuous;
+   coherence
+   proof
+    consider S be Scott TopAugmentation of L1;
+    A1: the RelStr of S = the RelStr of L1 by YELLOW_9:def 4;
+      InclPoset sigma S is complete;
+    hence InclPoset sigma L1 is with_suprema by A1,YELLOW_9:52;
+      InclPoset sigma S is continuous by WAYBEL14:36;
+    hence thesis by A1,YELLOW_9:52;
+   end;
   end;
+
 
   theorem :: WAYBEL31:33  :: THEOREM 4.7 (5)
      for L1 be continuous lower-bounded sup-Semilattice holds

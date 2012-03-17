@@ -22,10 +22,10 @@ reserve V for RealLinearSpace;
 reserve p,q,r,u,v,w,y,u1,v1,w1 for Element of V;
 reserve a,b,c,d,a1,b1,c1,a2,b2,c2,a3,b3,c3,e,f for Real;
 
-definition let V be RealLinearSpace, p be Element of V;
- redefine attr p is non-zero;
- synonym p is_Prop_Vect;
-end;
+notation let V be RealLinearSpace, p be Element of V;
+ synonym p is_Prop_Vect for p is non-zero;
+ end;
+
 
 definition let V,p,q;
  canceled;
@@ -36,6 +36,7 @@ definition let V,p,q;
   reflexivity;
   symmetry;
 end;
+
 
 canceled 4;
 
@@ -53,6 +54,7 @@ definition let V,u,v,w;
 :: ANPROJ_1:def 3
   ex a,b,c st a*u + b*v + c*w = 0.V & (a<>0 or b<>0 or c <>0);
 end;
+
 
 canceled;
 
@@ -126,6 +128,7 @@ definition let V;
      for u being set holds (u in it iff u<>0.V & u is Element of V);
 end;
 
+
 canceled 2;
 
 theorem :: ANPROJ_1:26
@@ -139,6 +142,7 @@ definition let V; func
     (x in Proper_Vectors_of V & y in Proper_Vectors_of V
        & ex u,v being Element of V st x=u & y=v & are_Prop u,v );
 end;
+
 
 canceled;
 
@@ -156,6 +160,7 @@ definition let V; let v;
     Class(Proportionality_as_EqRel_of V,v);
 end;
 
+
 definition let V;
  func ProjectivePoints(V) means
 :: ANPROJ_1:def 7
@@ -163,15 +168,34 @@ definition let V;
          Y = Class Proportionality_as_EqRel_of V & it = Y;
 end;
 
+
 definition let V be non empty ZeroStr;
  redefine attr V is trivial means
 :: ANPROJ_1:def 8
    for u being Element of V holds u = 0.V;
 end;
 
-definition
+
+registration
  cluster strict non trivial RealLinearSpace;
+  existence
+ proof
+  consider V being strict RealLinearSpace such that A1:
+    ex u,v being Element of V st
+     (for a,b st a*u + b*v = 0.V holds a=0 & b=0) &
+     (for w being Element of V ex a,b st w = a*u + b*v)
+       by FUNCSDOM:37;
+  consider u,v being Element of V such that A2:
+     (for a,b st a*u + b*v = 0.V holds a=0 & b=0) &
+     (for w being Element of V ex a,b st w = a*u + b*v) by A1;
+    u <> 0.V proof assume A3: u = 0.V; 0.V = 0.V + 0.V by RLVECT_1:10
+    .= 1*u + 0.V by A3,RLVECT_1:def 9
+    .= 1*u + 0*v by RLVECT_1:23; hence contradiction by A2; end;
+  then V is non trivial by Def8;
+  hence thesis;
+ end;
 end;
+
 
 canceled 3;
 
@@ -182,11 +206,27 @@ theorem :: ANPROJ_1:33
 reserve V for non trivial RealLinearSpace;
 reserve p,q,r,u,v,w for Element of V;
 
-definition let V;
+registration let V;
  cluster Proper_Vectors_of V -> non empty;
+ coherence proof
+  consider u being Element of V such that A1:u <> 0.V by Def8;
+ thus Proper_Vectors_of V is non empty by A1,Def4; end;
 
  cluster ProjectivePoints V -> non empty;
+ coherence proof
+  consider Z being Subset-Family of Proper_Vectors_of V such that
+  A2: Z = Class Proportionality_as_EqRel_of V & ProjectivePoints(V)
+ = Z by Def7;
+  consider u be Element of V such that A3: u <> 0.V by Def8;
+  reconsider u as Element of V;
+  A4: u in Proper_Vectors_of V by A3,Def4;
+  set Y = Dir(u);
+   Y in Z proof Y = Class(Proportionality_as_EqRel_of V,u) by Def6;hence
+   thesis by A2,A4,EQREL_1:def 5; end;
+  hence thesis by A2;
+  end;
 end;
+
 
 theorem :: ANPROJ_1:34
  p is_Prop_Vect implies Dir(p) is Element of ProjectivePoints(V);
@@ -202,15 +242,25 @@ definition let V;
      p is_Prop_Vect & q is_Prop_Vect & r is_Prop_Vect & p,q,r are_LinDep);
 end;
 
+
 definition let V;
  func ProjectiveSpace(V) -> strict CollStr equals
 :: ANPROJ_1:def 10
   CollStr (# ProjectivePoints(V),ProjectiveCollinearity(V) #);
 end;
 
-definition let V;
+
+registration let V;
  cluster ProjectiveSpace V -> non empty;
+ coherence
+  proof
+      ProjectiveSpace V
+     = CollStr (# ProjectivePoints(V),ProjectiveCollinearity(V) #)
+                            by Def10;
+   hence the carrier of ProjectiveSpace V is non empty;
+  end;
 end;
+
 
 canceled 3;
 

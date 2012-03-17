@@ -27,6 +27,7 @@ definition
   struct 2-sorted (# Objects, Attributes -> set #);
 end;
 
+
 definition
 let C be 2-sorted;
 attr C is empty means :Def1:
@@ -35,7 +36,8 @@ attr C is quasi-empty means :Def2:
  the Objects of C is empty or the Attributes of C is empty;
 end;
 
-definition
+
+registration
  cluster strict non empty 2-sorted;
 existence
  proof
@@ -52,7 +54,8 @@ existence
  end;
 end;
 
-definition
+
+registration
  cluster strict empty quasi-empty 2-sorted;
 existence
  proof
@@ -62,13 +65,15 @@ existence
 end;
 end;
 
+
 definition
 struct (2-sorted) ContextStr
          (# Objects, Attributes -> set,
            Information -> Relation of the Objects,the Attributes #);
 end;
 
-definition
+
+registration
  cluster strict non empty ContextStr;
 existence
  proof
@@ -87,9 +92,11 @@ existence
  end;
 end;
 
+
 definition
  mode FormalContext is non quasi-empty ContextStr;
 end;
+
 
 definition
 let C be 2-sorted;
@@ -98,7 +105,8 @@ mode Attribute of C is Element of the Attributes of C;
  canceled 2;
 end;
 
-definition
+
+registration
 let C be non quasi-empty 2-sorted;
  cluster the Attributes of C -> non empty;
 coherence by Def2;
@@ -106,7 +114,8 @@ coherence by Def2;
 coherence by Def2;
 end;
 
-definition
+
+registration
 let C be non quasi-empty 2-sorted;
  cluster non empty Subset of the Objects of C;
 existence
@@ -124,14 +133,20 @@ existence
  end;
 end;
 
+
 definition
 let C be FormalContext;
 let o be Object of C;
 let a be Attribute of C;
 pred o is-connected-with a means :Def5:
  [o,a] in the Information of C;
-antonym o is-not-connected-with a;
 end;
+notation
+let C be FormalContext;
+let o be Object of C;
+let a be Attribute of C;
+antonym o is-not-connected-with a for o is-connected-with a ; end;
+
 
 
 ::: Derivation Operators
@@ -305,6 +320,7 @@ uniqueness
  end;
 end;
 
+
 definition
 let C be FormalContext;
 func AttributeDerivation(C) ->
@@ -471,6 +487,7 @@ uniqueness
  hence thesis by A21,A22,FUNCT_1:9;
  end;
 end;
+
 
 theorem
   for C being FormalContext
@@ -746,12 +763,14 @@ A1: for x being set holds x in A implies x in A'
        now per cases;
      case o in O';
           hence thesis by A5;
+     end;
      case not o in O';
           then consider a being Attribute of C such that A7: a in A &
                not(o is-connected-with a);
           consider a' being Attribute of C such that A8: a' = a &
           for o being Object of C st o in O holds o is-connected-with a' by A7;
           thus thesis by A6,A7,A8;
+     end;
      end;
      hence thesis;
      end;
@@ -826,6 +845,7 @@ A1: for x being set holds x in O implies x in O'
        now per cases;
      case a in A';
           hence thesis by A5;
+     end;
      case not(a in A');
           then consider o being Object of C such that A7: o in O &
                not(o is-connected-with a);
@@ -833,6 +853,7 @@ A1: for x being set holds x in O implies x in O'
           for a being Attribute of C st a in A holds o' is-connected-with a
             by A7;
           thus thesis by A6,A7,A8;
+     end;
      end;
      hence thesis;
      end;
@@ -1031,6 +1052,7 @@ A1: LattPOSet BooleLatt (the Objects of C)
  end;
 end;
 
+
 definition
 let C be FormalContext;
 func psi(C) -> map of BoolePoset(the Attributes of C),
@@ -1085,6 +1107,7 @@ A1: LattPOSet BooleLatt (the Attributes of C)
  end;
 end;
 
+
 definition
 let P,R be non empty RelStr;
 let Con be Connection of P,R;
@@ -1095,6 +1118,7 @@ attr Con is co-Galois means :Def10:
   for p1,p2 being Element of P, r1,r2 being Element of R holds
    p1 <= g.(f.p1) & r1 <= f.(g.r1));
 end;
+
 
 canceled;
 
@@ -1420,7 +1444,9 @@ implies x in (ObjectDerivation(C)).O'
      assume A7: o in (O1 \/ O2);
        now per cases by A7,XBOOLE_0:def 2;
      case o in O1; hence thesis by A5;
+     end;
      case o in O2; hence thesis by A6;
+     end;
      end;
      hence thesis;
      end;
@@ -1501,7 +1527,9 @@ implies x in (AttributeDerivation(C)).A'
      assume A7: a in (A1 \/ A2);
        now per cases by A7,XBOOLE_0:def 2;
      case a in A1; hence thesis by A5;
+     end;
      case a in A2; hence thesis by A6;
+     end;
      end;
      hence thesis;
      end;
@@ -1582,6 +1610,7 @@ definition
             Intent -> Subset of the Attributes of C #);
 end;
 
+
 definition
 let C be 2-sorted;
 let CP be ConceptStr over C;
@@ -1591,7 +1620,8 @@ attr CP is quasi-empty means :Def12:
  the Extent of CP is empty or the Intent of CP is empty;
 end;
 
-definition
+
+registration
 let C be non quasi-empty 2-sorted;
  cluster strict non empty ConceptStr over C;
 existence
@@ -1611,7 +1641,8 @@ existence
  end;
 end;
 
-definition
+
+registration
 let C be empty 2-sorted;
  cluster -> empty ConceptStr over C;
 coherence
@@ -1635,7 +1666,8 @@ coherence
  end;
 end;
 
-definition
+
+registration
 let C be quasi-empty 2-sorted;
  cluster -> quasi-empty ConceptStr over C;
 coherence
@@ -1658,6 +1690,7 @@ coherence
  end;
 end;
 
+
 Lm1:for C being FormalContext
 for CS being ConceptStr over C st
  (ObjectDerivation(C)).(the Extent of CS) = the Intent of CS &
@@ -1672,8 +1705,10 @@ assume A1: (ObjectDerivation(C)).(the Extent of CS) = the Intent of CS &
 case the Extent of CS is empty;
      then the Intent of CS = the Attributes of C by A1,Th18;
      hence thesis by Def11;
+end;
 case the Extent of CS is non empty;
      hence thesis by Def11;
+end;
 end;
 hence thesis;
 end;
@@ -1686,7 +1721,8 @@ attr CP is concept-like means :Def13:
  (AttributeDerivation(C)).(the Intent of CP) = the Extent of CP;
 end;
 
-definition
+
+registration
 let C be FormalContext;
  cluster concept-like non empty ConceptStr over C;
 existence
@@ -1742,12 +1778,14 @@ existence
  end;
 end;
 
+
 definition
   let C be FormalContext;
   mode FormalConcept of C is concept-like non empty ConceptStr over C;
 end;
 
-definition
+
+registration
 let C be FormalContext;
  cluster strict FormalConcept of C;
 existence
@@ -1760,6 +1798,7 @@ existence
  hence thesis;
  end;
 end;
+
 
 theorem
 Th20:for C being FormalContext
@@ -1919,6 +1958,7 @@ definition
     the Extent of CP = the Objects of C;
 end;
 
+
 definition
 let C be FormalContext;
 let CP be ConceptStr over C;
@@ -1926,7 +1966,8 @@ attr CP is co-universal means :Def15:
  the Intent of CP = the Attributes of C;
 end;
 
-definition
+
+registration
 let C be FormalContext;
  cluster strict universal FormalConcept of C;
 existence
@@ -1952,6 +1993,7 @@ existence
  end;
 end;
 
+
 definition
 let C be FormalContext;
 func Concept-with-all-Objects(C)
@@ -1974,6 +2016,7 @@ existence
 uniqueness;
 end;
 
+
 definition
 let C be FormalContext;
 func Concept-with-all-Attributes(C)
@@ -1995,6 +2038,7 @@ existence
  end;
 uniqueness;
 end;
+
 
 theorem
 Th24:for C being FormalContext holds
@@ -2078,9 +2122,11 @@ A1: (ObjectDerivation(C)).(the Extent of CP) = the Intent of CP &
 case the Intent of CP is empty;
   then the Extent of CP = the Objects of C by A1,Th19;
   hence CP is universal by Def14;
+end;
 case the Extent of CP is empty;
   then the Intent of CP = the Attributes of C by A1,Th18;
   hence CP is co-universal by Def15;
+end;
 end;
 hence thesis;
 end;
@@ -2097,8 +2143,10 @@ assume A1: CP is strict FormalConcept of C;
   now per cases by Def12;
 case the Intent of CP is empty;
   hence CP = Concept-with-all-Objects(C) by A1,Th26;
+end;
 case the Extent of CP is empty;
   hence CP = Concept-with-all-Attributes(C) by A1,Th26;
+end;
 end;
 hence thesis;
 end;
@@ -2115,6 +2163,7 @@ existence
  end;
 end;
 
+
 definition
 let C be FormalContext;
 let FCS be Set-of-FormalConcepts of C;
@@ -2122,13 +2171,18 @@ redefine mode Element of FCS -> FormalConcept of C;
 coherence by Def18;
 end;
 
+
 definition
 let C be FormalContext;
 let CP1,CP2 be FormalConcept of C;
 pred CP1 is-SubConcept-of CP2 means :Def19:
  the Extent of CP1 c= the Extent of CP2;
-synonym CP2 is-SuperConcept-of CP1;
 end;
+notation
+let C be FormalContext;
+let CP1,CP2 be FormalConcept of C;
+synonym CP2 is-SuperConcept-of CP1 for CP1 is-SubConcept-of CP2 ; end;
+
 
 canceled 2;
 
@@ -2226,6 +2280,7 @@ coherence
  end;
 end;
 
+
 definition
 let C be FormalContext;
 redefine func B-carrier(C) -> Set-of-FormalConcepts of C;
@@ -2251,11 +2306,13 @@ coherence
  end;
 end;
 
-definition
+
+registration
   let C be FormalContext;
   cluster B-carrier(C) -> non empty;
   coherence;
 end;
+
 
 theorem
 Th35:for C being FormalContext
@@ -2349,7 +2406,7 @@ existence
  consider f being Function of [:B-carrier(C),B-carrier(C):],B-carrier(C)
  such that A5: for CP1 being Element of B-carrier(C),
      CP2 being Element of B-carrier(C) holds P[CP1,CP2,f.[CP1,CP2]]
- from FuncEx2D(A1);
+ from FUNCT_2:sch 7(A1);
  reconsider f as BinOp of B-carrier(C);
  A6: for CP1,CP2 being strict FormalConcept of C holds
     ex O being Subset of the Objects of C,
@@ -2414,6 +2471,7 @@ uniqueness
  end;
 end;
 
+
 definition
 let C be FormalContext;
 func B-join(C) -> BinOp of B-carrier(C) means :Def22:
@@ -2468,7 +2526,7 @@ existence
  consider f being Function of [:B-carrier(C),B-carrier(C):],B-carrier(C)
  such that A5: for CP1 being Element of B-carrier(C),
        CP2 being Element of B-carrier(C) holds P[CP1,CP2,f.[CP1,CP2]]
- from FuncEx2D(A1);
+ from FUNCT_2:sch 7(A1);
  reconsider f as BinOp of B-carrier(C);
  A6: for CP1,CP2 being strict FormalConcept of C holds
     ex O being Subset of the Objects of C,
@@ -2532,6 +2590,7 @@ uniqueness
  hence thesis by A10,A14,FUNCT_1:9;
  end;
 end;
+
 
 Lm2: for C being FormalContext
 for CP1,CP2 being strict FormalConcept of C holds
@@ -3065,6 +3124,7 @@ func ConceptLattice(C) -> strict non empty LattStr equals :Def23:
 coherence by STRUCT_0:def 1;
 end;
 
+
 theorem
 Th46:for C being FormalContext holds ConceptLattice(C) is Lattice
 proof
@@ -3156,11 +3216,12 @@ b)"/\"c
  hence thesis by Def23;
 end;
 
-definition
+registration
   let C be FormalContext;
   cluster ConceptLattice(C) -> strict non empty Lattice-like;
   coherence by Th46;
 end;
+
 
 definition
 let C be FormalContext;
@@ -3175,6 +3236,7 @@ coherence
  end;
 end;
 
+
 definition
 let C be FormalContext;
 let CP be Element of ConceptLattice(C);
@@ -3186,6 +3248,7 @@ coherence
  hence thesis by Th35;
  end;
 end;
+
 
 theorem
 Th47:for C being FormalContext
@@ -3286,6 +3349,7 @@ st a is_less_than X &
      hence thesis by LATTICES:def 3;
      end;
    hence thesis by A2;
+   end;
    suppose X <> {};
    then reconsider X as non empty Subset of ConceptLattice(C);
    set ExX = { the Extent of x where x is Element of B-carrier(C) : x in X };
@@ -3531,11 +3595,13 @@ st a is_less_than X &
      end;
    hence thesis by A31;
    end;
+   end;
 hence thesis by VECTSP_8:def 6;
 end;
 
-definition
+registration
 let C be FormalContext;
 cluster ConceptLattice(C) -> complete;
 coherence by Th48;
 end;
+

@@ -42,9 +42,22 @@ theorem :: WAYBEL30:2
    union D is Ideal of R;
 
 :: Exercise 2.16 (i), p. 16
-definition let R be non empty reflexive transitive RelStr;
+registration let R be non empty reflexive transitive RelStr;
  cluster InclPoset Ids R -> up-complete;
+coherence
+  proof
+    set I = InclPoset Ids R;
+    let D be non empty directed Subset of I;
+    reconsider UD = union D as Ideal of R by Th2;
+      Ids R = {X where X is Ideal of R: not contradiction} by WAYBEL_0:def 23;
+    then UD in Ids R;
+    then UD in the carrier of InclPoset Ids R by YELLOW_1:1;
+    then reconsider UD as Element of I;
+    take UD;
+    thus thesis by Lm1,Lm2;
+  end;
 end;
+
 
 theorem :: WAYBEL30:3
  for R being non empty reflexive transitive RelStr,
@@ -59,13 +72,31 @@ theorem :: WAYBEL30:4
 ;
 
 :: Exercise 4.8 (i), p. 33
-definition let R be Semilattice;
+registration let R be Semilattice;
  cluster InclPoset Ids R -> satisfying_MC;
+coherence
+  proof
+    set I = InclPoset Ids R;
+    let x be Element of I,
+        D be non empty directed Subset of I;
+    thus x "/\" sup D = x /\ sup D by YELLOW_2:45
+        .= x /\ union D by Th3
+        .= union {x /\ d where d is Element of D: not contradiction} by Th1
+        .= sup ({x} "/\" D) by Th4;
+  end;
 end;
 
-definition let R be non empty trivial RelStr;
+
+registration let R be non empty trivial RelStr;
  cluster -> trivial TopAugmentation of R;
+coherence
+  proof
+    let T be TopAugmentation of R;
+      the RelStr of T = the RelStr of R by YELLOW_9:def 4;
+    hence thesis by TEX_2:4;
+  end;
 end;
+
 
 theorem :: WAYBEL30:5
    for S being Scott complete TopLattice, T being complete LATTICE,
@@ -85,18 +116,45 @@ theorem :: WAYBEL30:7
    for A being Subset of N, J being Subset of S st A = J & J is closed holds
   A is closed;
 
-definition let A be complete LATTICE;
+registration let A be complete LATTICE;
  cluster lambda A -> non empty;
+coherence
+  proof
+    consider S being Lawson correct TopAugmentation of A;
+      InclPoset the topology of S is non trivial;
+    hence thesis by WAYBEL19:def 4;
+  end;
 end;
 
-definition let S be Scott complete TopLattice;
+
+registration let S be Scott complete TopLattice;
  cluster InclPoset sigma S -> complete non trivial;
+coherence
+  proof
+      InclPoset the topology of S is complete non trivial;
+    hence thesis by WAYBEL14:23;
+  end;
 end;
 
-definition let N be Lawson complete TopLattice;
+
+registration let N be Lawson complete TopLattice;
  cluster InclPoset sigma N -> complete non trivial;
+coherence
+  proof
+    consider S being Scott TopAugmentation of N;
+A1: the RelStr of S = the RelStr of N by YELLOW_9:def 4;
+      InclPoset sigma S is complete non trivial;
+    hence thesis by A1,YELLOW_9:52;
+  end;
  cluster InclPoset lambda N -> complete non trivial;
+coherence
+  proof
+    consider S being Lawson correct TopAugmentation of N;
+      InclPoset the topology of S is complete non trivial;
+    hence thesis by WAYBEL19:def 4;
+  end;
 end;
+
 
 theorem :: WAYBEL30:8
  for T being non empty reflexive RelStr holds
@@ -117,31 +175,93 @@ theorem :: WAYBEL30:12
  for N being Lawson complete TopLattice, X being Subset of N holds
   X in lambda N iff X is open;
 
-definition
+registration
  cluster trivial TopSpace-like -> Scott (reflexive non empty TopRelStr);
+coherence
+  proof
+    let T be reflexive non empty TopRelStr;
+    assume T is trivial TopSpace-like;
+    then reconsider W = T as trivial reflexive non empty TopSpace-like
+TopRelStr;
+      W is Scott
+    proof
+      let S be Subset of W;
+      thus S is open implies S is upper;
+      thus thesis by TDLAT_3:17;
+    end;
+    hence thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster trivial -> Lawson (complete TopLattice);
+coherence
+  proof
+    let T be complete TopLattice;
+    assume T is trivial;
+    then reconsider W = T as trivial complete TopLattice;
+A1: the topology of W = {{}, the carrier of W} by TDLAT_3:def 2;
+    consider N being Lawson correct TopAugmentation of W;
+      the RelStr of T = the RelStr of N by YELLOW_9:def 4;
+    then the topology of T = the topology of N by A1,TDLAT_3:def 2
+     .= lambda T by WAYBEL19:def 4
+     .= UniCl FinMeetCl ((sigma T) \/ (omega T)) by WAYBEL19:33;
+    then FinMeetCl ((omega T) \/ (sigma T)) is Basis of T by YELLOW_9:22;
+    hence (omega T) \/ (sigma T) is prebasis of T by YELLOW_9:23;
+  end;
 end;
 
-definition
+
+registration
  cluster strict continuous lower-bounded meet-continuous Scott
   (complete TopLattice);
+existence
+  proof
+    consider A being strict trivial TopLattice;
+    take A;
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster strict continuous compact Hausdorff Lawson (complete TopLattice);
+existence
+  proof
+    consider R being strict trivial complete TopLattice;
+    take R;
+    thus thesis;
+  end;
 end;
+
+
+scheme :: WAYBEL30:sch 1
+ EmptySch { A() -> Scott TopLattice, X() -> set, F(set) -> set }:
+ { F(w) where w is Element of A(): w in {} } = {}
+proof
+   thus { F(w) where w is Element of A(): w in {} } c= {}
+   proof
+     let a be set such that
+A1:    a in { F(w) where w is Element of A(): w in {} };
+     assume not a in {};
+     consider w being Element of A() such that
+A2:    a = F(w) & w in {} by A1;
+     thus thesis by A2;
+   end;
+   thus thesis by XBOOLE_1:2;
+  end;
 
 theorem :: WAYBEL30:13
  for N being meet-continuous LATTICE, A being Subset of N st
   A has_the_property_(S) holds uparrow A has_the_property_(S);
 
-definition let N be meet-continuous LATTICE,
+registration let N be meet-continuous LATTICE,
                A be property(S) Subset of N;
  cluster uparrow A -> property(S);
+coherence by Th13;
 end;
+
 
 :: Proposition 2.1 (i), p. 153
 theorem :: WAYBEL30:14
@@ -199,10 +319,12 @@ theorem :: WAYBEL30:21
      x being Element of N
   holds x"/\" is continuous;
 
-definition let N be meet-continuous Lawson (complete TopLattice),
+registration let N be meet-continuous Lawson (complete TopLattice),
                x be Element of N;
  cluster x"/\" -> continuous;
+coherence by Th21;
 end;
+
 
 :: Theorem 2.3, p. 153, second conjunct
 theorem :: WAYBEL30:22
@@ -226,10 +348,36 @@ definition let N be non empty reflexive RelStr,
       st u <= sup D holds X meets D };
 end;
 
-definition let N be non empty reflexive antisymmetric RelStr,
+
+registration let N be non empty reflexive antisymmetric RelStr,
                X be empty Subset of N;
  cluster X^0 -> empty;
+coherence
+  proof
+A1: X^0 = { u where u is Element of N :
+    for D being non empty directed Subset of N st u <= sup D holds X meets D
+      } by Def1;
+      X^0 = {}
+    proof
+      thus X^0 c= {}
+      proof
+        let a be set such that
+A2:       a in X^0 and not a in {};
+        consider u being Element of N such that
+A3:       a = u &
+          for D being non empty directed Subset of N st u <= sup D
+           holds X meets D by A1,A2;
+        reconsider D = {u} as non empty directed Subset of N by WAYBEL_0:5;
+A4:     u <= sup D by YELLOW_0:39;
+          X misses D by XBOOLE_1:65;
+        hence contradiction by A3,A4;
+      end;
+      thus thesis by XBOOLE_1:2;
+    end;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL30:24
    for N being non empty reflexive RelStr, A, J being Subset of N st A c= J
@@ -264,10 +412,13 @@ theorem :: WAYBEL30:30
  for N being Lawson (complete TopLattice)
   holds N is continuous iff N is meet-continuous Hausdorff;
 
-definition
+registration
  cluster continuous Lawson -> Hausdorff (complete TopLattice);
+coherence by Th30;
  cluster meet-continuous Lawson Hausdorff -> continuous (complete TopLattice);
+coherence by Th30;
 end;
+
 
 :: Definition 2.10, p. 155
 definition let N be non empty TopRelStr;
@@ -286,23 +437,119 @@ definition let N be non empty TopRelStr;
    for A being Subset of N st A in J holds subrelstr A is meet-inheriting;
 end;
 
-definition
+
+registration
  cluster with_open_semilattices -> with_small_semilattices
                                    (non empty TopSpace-like TopRelStr);
+coherence
+  proof
+    let N be non empty TopSpace-like TopRelStr;
+    assume
+A1:   for x being Point of N ex J being Basis of x st
+     for A being Subset of N st A in J holds subrelstr A is meet-inheriting;
+    let x be Point of N;
+    consider J being Basis of x such that
+A2:   for A being Subset of N st A in J holds subrelstr A is meet-inheriting
+        by A1;
+    reconsider J as basis of x by YELLOW13:23;
+    take J;
+    thus thesis by A2;
+  end;
 
  cluster with_compact_semilattices -> with_small_semilattices
                                       (non empty TopSpace-like TopRelStr);
+coherence
+  proof
+    let N be non empty TopSpace-like TopRelStr;
+    assume
+A3:  for x being Point of N ex J being basis of x st
+      for A being Subset of N st A in J holds subrelstr A is meet-inheriting &
+       A is compact;
+    let x be Point of N;
+    consider J being basis of x such that
+A4:   for A being Subset of N st A in J holds subrelstr A is meet-inheriting
+        & A is compact by A3;
+    take J;
+    thus thesis by A4;
+  end;
 
  cluster anti-discrete -> with_small_semilattices with_open_semilattices
                                                    (non empty TopRelStr);
+coherence
+  proof
+    let T be non empty TopRelStr;
+    assume T is anti-discrete;
+    then reconsider W = T as anti-discrete non empty TopRelStr;
+    set J = {the carrier of W};
+A5: now
+      let A be Subset of W;
+      assume A in J;
+then A6:   A = the carrier of W by TARSKI:def 1
+       .= [#]W by PRE_TOPC:12;
+        subrelstr [#]W is infs-inheriting;
+      then reconsider K = subrelstr A as infs-inheriting SubRelStr of T by A6;
+        K is meet-inheriting;
+      hence subrelstr A is meet-inheriting;
+    end;
+A7: W is with_small_semilattices
+    proof
+      let x be Point of W;
+      reconsider J as basis of x by YELLOW13:21;
+      take J;
+      let A be Subset of W;
+      assume A in J;
+      hence subrelstr A is meet-inheriting by A5;
+    end;
+      W is with_open_semilattices
+    proof
+      let x be Point of W;
+      reconsider J as Basis of x by YELLOW13:13;
+      take J;
+      let A be Subset of W;
+      assume A in J;
+      hence subrelstr A is meet-inheriting by A5;
+    end;
+    hence thesis by A7;
+  end;
 
  cluster reflexive trivial TopSpace-like ->
                              with_compact_semilattices (non empty TopRelStr);
+coherence
+  proof
+    let T be non empty TopRelStr;
+    assume T is reflexive trivial TopSpace-like;
+    then reconsider W = T as reflexive trivial non empty TopSpace-like
+TopRelStr;
+      W is with_compact_semilattices
+    proof
+      let x be Point of W;
+      reconsider J = {the carrier of W} as basis of x by YELLOW13:21;
+      take J;
+      let A be Subset of W;
+      assume A in J;
+then A8:   A = the carrier of W by TARSKI:def 1
+       .= [#]W by PRE_TOPC:12;
+        subrelstr [#]W is infs-inheriting;
+      then reconsider K = subrelstr A as infs-inheriting SubRelStr of T by A8;
+        K is meet-inheriting;
+      hence subrelstr A is meet-inheriting;
+      thus A is compact by A8;
+    end;
+    hence thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster strict trivial lower TopLattice;
+existence
+  proof
+    consider T being strict trivial TopLattice;
+    take T;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL30:31
  for N being topological_semilattice (with_infima TopPoset),
@@ -339,13 +586,24 @@ theorem :: WAYBEL30:35
   N is continuous iff
    N is with_open_semilattices & InclPoset sigma N is continuous;
 
-definition
+registration
  cluster continuous -> with_open_semilattices (Lawson complete TopLattice);
+coherence
+  proof
+    let N be Lawson complete TopLattice;
+    assume N is continuous;
+    then reconsider M = N as continuous Lawson complete TopLattice;
+      M is with_open_semilattices by Th35;
+    hence thesis;
+  end;
 end;
 
-definition let N be continuous Lawson (complete TopLattice);
+
+registration let N be continuous Lawson (complete TopLattice);
  cluster InclPoset sigma N -> continuous;
+coherence by Th35;
 end;
+
 
 :: Theorem 2.13, p. 155,  1 => 3
 theorem :: WAYBEL30:36
@@ -377,6 +635,8 @@ theorem :: WAYBEL30:40
   N is algebraic iff
   N is with_open_semilattices & InclPoset sigma N is algebraic;
 
-definition let N be meet-continuous algebraic Lawson (complete TopLattice);
+registration let N be meet-continuous algebraic Lawson (complete TopLattice);
  cluster InclPoset sigma N -> algebraic;
+coherence by Th40;
 end;
+

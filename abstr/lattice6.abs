@@ -22,13 +22,23 @@ environ
 
 begin
 
-definition
+registration
 cluster finite Lattice;
+existence
+ proof
+ set L = BooleLatt {};
+ A1: the carrier of L = bool {} by LATTICE3:def 1;
+   bool {} is finite by FINSET_1:24;
+ then L is finite by A1,GROUP_1:def 13;
+ hence thesis;
+ end;
 end;
 
-definition
+registration
 cluster finite -> complete Lattice;
+coherence by Lm5;
 end;
+
 
 definition
 let L be Lattice;
@@ -38,6 +48,7 @@ func D% -> Subset of LattPOSet L equals
  {d% where d is Element of L : d in D};
 end;
 
+
 definition
 let L be Lattice;
 let D be Subset of LattPOSet L;
@@ -46,8 +57,37 @@ func %D -> Subset of L equals
  {%d where d is Element of LattPOSet L : d in D};
 end;
 
-definition let L be finite Lattice;
+
+registration let L be finite Lattice;
 cluster LattPOSet L -> well_founded;
+ coherence
+  proof set R = LattPOSet L;
+  let Y be set; assume A1: Y c= the carrier of R & Y <> {};
+     LattPOSet L = RelStr(#the carrier of L, LattRel L#) by LATTICE3:def 2;
+  then reconsider Y as Subset of L by A1;
+  consider a being Element of LattPOSet L such that
+  A2: a in Y & for b being Element of LattPOSet L
+              st b in Y & b <> a holds not(b <= a) by A1,Lm1;
+  A3: not(ex x being Element of R
+          st x <> a & [x,a] in the InternalRel of R & x in Y)
+      proof
+      given x being Element of R such that
+      A4: x <> a & [x,a] in the InternalRel of R & x in Y;
+        x <= a by A4,ORDERS_1:def 9;
+      hence thesis by A2,A4;
+      end;
+    (the InternalRel of R)-Seg(a) /\ Y = {}
+     proof
+     assume A5: (the InternalRel of R)-Seg(a) /\ Y <> {};
+     consider z being Element of (the InternalRel of R)-Seg(a) /\ Y;
+     A6: z in (the InternalRel of R)-Seg(a) & z in Y by A5,XBOOLE_0:def 3;
+     then A7: z <> a & [z,a] in (the InternalRel of R) by WELLORD1:def 1;
+       z is Element of R by A1,A6;
+     hence thesis by A3,A6,A7;
+     end;
+   then (the InternalRel of R)-Seg(a) misses Y by XBOOLE_0:def 7;
+   hence thesis by A2;
+  end;
 end;
 
 definition
@@ -60,21 +100,41 @@ attr L is co-noetherian means
   (LattPOSet L)~ is well_founded;
 end;
 
-definition
+
+registration
 cluster noetherian upper-bounded lower-bounded complete Lattice;
+existence
+ proof
+ consider L being finite Lattice;
+ take L;
+    LattPOSet L is well_founded;
+ hence thesis by Def3;
+ end;
 end;
 
-definition
+
+registration
 cluster co-noetherian upper-bounded lower-bounded complete Lattice;
+existence
+ proof
+ consider L being finite Lattice;
+ take L;
+    (LattPOSet L)~ is well_founded by Lm6;
+ hence thesis by Def4;
+ end;
 end;
+
 
 theorem :: LATTICE6:1
   for L being Lattice holds L is noetherian iff L.: is co-noetherian;
 
-definition
+registration
 cluster finite -> noetherian Lattice;
+coherence by Lm7;
 cluster finite -> co-noetherian Lattice;
+coherence by Lm7;
 end;
+
 
 definition
 let L be Lattice;
@@ -84,8 +144,12 @@ pred a is-upper-neighbour-of b means
  a <> b & b [= a &
  for c being Element of L holds
  (b [= c & c [= a) implies (c = a or c = b);
-synonym b is-lower-neighbour-of a;
 end;
+notation
+let L be Lattice;
+let a,b be Element of L;
+synonym b is-lower-neighbour-of a for a is-upper-neighbour-of b ; end;
+
 
 theorem :: LATTICE6:2
 for L being Lattice
@@ -141,6 +205,7 @@ func *'a -> Element of L equals
   "\/"({d where d is Element of L : d [= a & d <> a},L);
 end;
 
+
 definition
 let L be complete Lattice;
 let a be Element of L;
@@ -151,6 +216,7 @@ attr a is completely-join-irreducible means
 :: LATTICE6:def 9
   *'a <> a;
 end;
+
 
 theorem :: LATTICE6:9
 for L being complete Lattice
@@ -233,6 +299,7 @@ attr a is co-atomic means
   a is-lower-neighbour-of Top L;
 end;
 
+
 theorem :: LATTICE6:21
   for L being complete Lattice
 for a being Element of L st a is atomic holds
@@ -253,13 +320,48 @@ attr L is atomic means
  a = "\/"(X,L);
 end;
 
-definition
+
+registration
   cluster strict non empty trivial Lattice;
+  existence
+  proof
+ consider x being set;
+ set X = {x};
+ consider XJ,XM being BinOp of X;
+ reconsider L = LattStr(#X,XJ,XM#) as non empty LattStr by STRUCT_0:def 1;
+ A1: the carrier of L is trivial by REALSET1:def 12;
+then A2: L is trivial by REALSET1:def 13;
+   L is Lattice-like
+   proof
+   A3: for a,b being Element of L holds a"\/"b = b"\/"a
+     by A2,REALSET1:def 20;
+   A4: for a,b,c being Element of L
+             holds a"\/"(b"\/"c) = (a"\/"b)"\/"c by A2,REALSET1:def 20;
+   A5: for a,b being Element of L holds (a"/\"b)"\/"b = b
+             by A2,REALSET1:def 20;
+   A6: for a,b being Element of L holds a"/\"b = b"/\"a
+             by A2,REALSET1:def 20;
+   A7: for a,b,c being Element of L
+                                   holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+             by A2,REALSET1:def 20;
+     for a,b being Element of L holds a"/\"(a"\/"b)=a
+             by A2,REALSET1:def 20;
+   then L is join-commutative join-associative meet-absorbing
+        meet-commutative meet-associative join-absorbing
+   by A3,A4,A5,A6,A7,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+   hence thesis by LATTICES:def 10;
+   end;
+   then reconsider L as Lattice;
+   take L;
+   thus thesis by A1,REALSET1:def 13;
+  end;
 end;
 
-definition
+registration
 cluster atomic complete Lattice;
+existence by Lm9;
 end;
+
 
 definition
 let L be complete Lattice;
@@ -273,6 +375,7 @@ attr D is infimum-dense means
  for a being Element of L holds
  ex D' being Subset of D st a = "/\"(D',L);
 end;
+
 
 theorem :: LATTICE6:23
 for L being complete Lattice
@@ -303,6 +406,7 @@ func JIRRS(L) -> Subset of L equals
 {a where a is Element of L : a is completely-join-irreducible };
 end;
 
+
 theorem :: LATTICE6:26
   for L being complete Lattice
 for D being Subset of L st D is supremum-dense holds JIRRS(L) c= D;
@@ -311,12 +415,15 @@ theorem :: LATTICE6:27
   for L being complete Lattice
 for D being Subset of L st D is infimum-dense holds MIRRS(L) c= D;
 
-definition
+registration
 let L be co-noetherian complete Lattice;
 cluster MIRRS(L) -> infimum-dense;
+coherence by Lm10;
 end;
 
-definition
+registration
 let L be noetherian complete Lattice;
 cluster JIRRS(L) -> supremum-dense;
+coherence by Lm11;
 end;
+

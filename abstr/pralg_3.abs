@@ -42,21 +42,31 @@ reserve I for non empty set,
         o for OperSymbol of S,
         f for Function;
 
-definition let I be set, S; let AF be MSAlgebra-Family of I,S;
+registration let I be set, S; let AF be MSAlgebra-Family of I,S;
  cluster product AF -> non-empty;
+ coherence
+ proof
+    the Sorts of product AF = SORTS AF by PRALG_2:20;
+  hence thesis by MSUALG_1:def 8;
+ end;
 end;
+
 
 definition let I be set;
  redefine func id I -> ManySortedSet of I;
 end;
 
-definition let I, EqR;
+
+registration let I, EqR;
  cluster Class EqR -> with_non-empty_elements;
+ coherence by EQREL_1:42;
 end;
+
 
 definition let X be with_non-empty_elements set;
  redefine func id X -> non-empty ManySortedSet of X;
 end;
+
 
 theorem :: PRALG_3:1
  for f,F being Function, A being set st f in product F holds
@@ -96,6 +106,7 @@ func const(o,U0) equals
  Den(o,U0).{};
 end;
 
+
 theorem :: PRALG_3:6
 the_arity_of o = {} & Result(o,U0) <> {} implies const(o,U0) in Result(o,U0);
 
@@ -112,9 +123,40 @@ theorem :: PRALG_3:9
 the_arity_of o = {} implies const(o,product A) in Funcs(I,
    union { Result(o,A.i') where i' is Element of I: not contradiction });
 
-definition let S,I,o,A;
+registration let S,I,o,A;
  cluster const (o,product A) -> Relation-like Function-like;
+ coherence
+ proof
+     const(o,product A) is Function
+     proof
+   per cases;
+   suppose the_arity_of o = {};
+     then const(o,product A) in Funcs(I,
+   union { Result(o,A.i') where i' is Element of I: not contradiction })
+     by Th9;
+     then consider g be Function such that
+A1:  g = const(o,product A) & dom g = I &
+rng g c= union { Result(o,A.i') where i' is Element of I: not contradiction }
+      by FUNCT_2:def 2;
+     thus thesis by A1;
+   end;
+   suppose A2:the_arity_of o <> {};
+A3:dom Den(o,product A) = Args(o,product A) by FUNCT_2:def 1
+      .= product ((the Sorts of (product A))*(the_arity_of o)) by PRALG_2:10;
+      dom ((the Sorts of (product A))*(the_arity_of o)) = dom (the_arity_of o)
+          by PRALG_2:10;
+then dom ((the Sorts of (product A))*(the_arity_of o)) <> dom {}
+       by A2,FINSEQ_1:26;
+then A4: not {} in dom Den(o,product A) by A3,CARD_3:18;
+       const(o,product A) = Den(o,product A).{} by Def1
+                       .= {} by A4,FUNCT_1:def 4;
+     hence thesis;
+     end;
+     end;
+     hence thesis;
+ end;
 end;
+
 
 theorem :: PRALG_3:10
 for o be OperSymbol of S st the_arity_of o = {}
@@ -209,6 +251,7 @@ definition let f be Function, x be set;
   for y being Function st y in dom it holds it.y = y.x;
 end;
 
+
 definition let I,S;
            let A be MSAlgebra-Family of I,S,
                i be Element of I;
@@ -217,6 +260,7 @@ func proj(A,i) -> ManySortedFunction of product A,A.i means
     for s be Element of S holds
      it.s = proj (Carrier(A,s), i);
 end;
+
 
 theorem :: PRALG_3:24
 for x be Element of Args(o,product A) st Args(o,product A) <> {} &
@@ -282,12 +326,14 @@ mode MSAlgebra-Class of S,J -> ManySortedSet of I means
 for i be set st i in I holds it.i is MSAlgebra-Family of J.i,S;
 end;
 
+
 definition
   let I,S,A,EqR;
 func A / EqR -> MSAlgebra-Class of S,id (Class EqR) means
 :: PRALG_3:def 5
   for c st c in Class EqR holds it.c = A|c;
 end;
+
 
 definition let I,S;
            let J be non-empty ManySortedSet of I;
@@ -297,6 +343,7 @@ func product C -> MSAlgebra-Family of I,S means
    for i st i in I ex Ji be non empty set, Cs be MSAlgebra-Family of Ji,S
    st Ji = J.i & Cs = C.i & it.i = product Cs;
 end;
+
 
 theorem :: PRALG_3:31
     for A be MSAlgebra-Family of I,S,

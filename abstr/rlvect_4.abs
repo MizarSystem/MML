@@ -24,7 +24,8 @@ reserve V for RealLinearSpace;
 reserve u,v,v1,v2,v3,w,w1,w2,w3 for VECTOR of V;
 reserve W,W1,W2 for Subspace of V;
 
-scheme LambdaSep3{D, R() -> non empty set,
+scheme :: RLVECT_4:sch 1
+ LambdaSep3{D, R() -> non empty set,
                   A1, A2, A3() -> Element of D(),
                   B1, B2, B3() -> Element of R(),
                   F(set) -> Element of R()}:
@@ -34,24 +35,113 @@ scheme LambdaSep3{D, R() -> non empty set,
     f.C = F(C) provided
   A1() <> A2() and
   A1() <> A3() and
-  A2() <> A3();
+  A2() <> A3()
+proof   defpred P[Element of D(),set] means ($1 = A1() implies $2 = B1()) &
+         ($1 = A2() implies $2 = B2()) & ($1 = A3() implies $2 = B3()) &
+         ($1 <> A1() & $1 <> A2() & $1 <> A3() implies $2 = F($1));
+     A4: for x being Element of D() ex y being Element of R() st P[x,y]
+      proof let x be Element of D();
+          (x = A1() implies thesis) & (x = A2() implies thesis) &
+        (x = A3() implies thesis) &
+        (x <> A1() & x <> A2() & x <> A3() implies thesis) by A1,A2,A3;
+       hence thesis;
+      end;
+    consider f being Function of D(),R() such that
+     A5: for x being Element of D() holds P[x,f.x] from FUNCT_2:sch 3(A4);
+   take f;
+   thus thesis by A5;
+  end;
 
-scheme LinCEx1{V() -> RealLinearSpace, v() -> VECTOR of V(), a() -> Real}:
- ex l being Linear_Combination of {v()} st l.v() = a();
+scheme :: RLVECT_4:sch 2
+ LinCEx1{V() -> RealLinearSpace, v() -> VECTOR of V(), a() -> Real}:
+ ex l being Linear_Combination of {v()} st l.v() = a()
+proof
+    deffunc F(VECTOR of V())=0;
+    consider f being Function of the carrier of V(),REAL such that
+     A1: f.v() = a() and
+     A2: for u being VECTOR of V() st u <> v() holds f.u = F(u)
+         from RLVECT_2:sch 1;
+    reconsider f as Element of Funcs(the carrier of V(),REAL) by FUNCT_2:11;
+       now let u be VECTOR of V();
+       assume not u in {v()};
+        then u <> v() by TARSKI:def 1;
+      hence f.u = 0 by A2;
+     end;
+    then reconsider f as Linear_Combination of V() by RLVECT_2:def 5;
+       Carrier f c= {v()}
+      proof let x;
+        assume that A3: x in Carrier f and A4: not x in {v()};
+           f.x <> 0 & x <> v() by A3,A4,RLVECT_2:28,TARSKI:def 1;
+       hence thesis by A2,A3;
+      end;
+    then reconsider f as Linear_Combination of {v()} by RLVECT_2:def 8;
+   take f;
+   thus thesis by A1;
+  end;
 
-scheme LinCEx2{V() -> RealLinearSpace, v1, v2() -> VECTOR of V(),
+scheme :: RLVECT_4:sch 3
+ LinCEx2{V() -> RealLinearSpace, v1, v2() -> VECTOR of V(),
                a, b() -> Real}:
  ex l being Linear_Combination of {v1(),v2()} st l.v1() = a() & l.v2() = b()
   provided
-  v1() <> v2();
+  v1() <> v2()
+proof
+    deffunc F(VECTOR of V())=0;
+    consider f being Function of the carrier of V(),REAL such that
+     A2: f.v1() = a() & f.v2() = b() and
+     A3: for u being VECTOR of V() st u <> v1() & u <> v2() holds
+         f.u = F(u) from RLVECT_2:sch 2(A1);
+    reconsider f as Element of Funcs(the carrier of V(),REAL) by FUNCT_2:11;
+       now let u be VECTOR of V();
+       assume not u in {v1(),v2()};
+        then u <> v1() & u <> v2() by TARSKI:def 2;
+      hence f.u = 0 by A3;
+     end;
+    then reconsider f as Linear_Combination of V() by RLVECT_2:def 5;
+       Carrier f c= {v1(),v2()}
+      proof let x;
+        assume that A4: x in Carrier f and A5: not x in {v1(),v2()};
+           f.x <> 0 & x <> v1() & x <> v2() by A4,A5,RLVECT_2:28,TARSKI:def 2;
+       hence thesis by A3,A4;
+      end;
+    then reconsider f as Linear_Combination of {v1(),v2()} by RLVECT_2:def 8;
+   take f;
+   thus thesis by A2;
+  end;
 
-scheme LinCEx3{V() -> RealLinearSpace, v1, v2, v3() -> VECTOR of V(),
+scheme :: RLVECT_4:sch 4
+ LinCEx3{V() -> RealLinearSpace, v1, v2, v3() -> VECTOR of V(),
                a, b, c() -> Real}:
  ex l being Linear_Combination of {v1(),v2(),v3()} st
   l.v1() = a() & l.v2() = b() & l.v3() = c() provided
   v1() <> v2() and
   v1() <> v3() and
-  v2() <> v3();
+  v2() <> v3()
+proof
+    deffunc F(VECTOR of V())=0;
+    consider f being Function of the carrier of V(),REAL such that
+     A4: f.v1() = a() & f.v2() = b() & f.v3() = c() and
+     A5: for u being VECTOR of V() st u <> v1() & u <> v2() & u <> v3() holds
+         f.u = F(u) from LambdaSep3(A1,A2,A3);
+    reconsider f as Element of Funcs(the carrier of V(),REAL) by FUNCT_2:11;
+       now let u be VECTOR of V();
+       assume not u in {v1(),v2(),v3()};
+        then u <> v1() & u <> v2() & u <> v3() by ENUMSET1:14;
+      hence f.u = 0 by A5;
+     end;
+    then reconsider f as Linear_Combination of V() by RLVECT_2:def 5;
+       Carrier f c= {v1(),v2(),v3()}
+      proof let x;
+        assume that A6: x in Carrier f and A7: not x in {v1(),v2(),v3()};
+           f.x <> 0 & x <> v1() & x <> v2() & x <> v3()
+                                    by A6,A7,ENUMSET1:14,RLVECT_2:28;
+       hence thesis by A5,A6;
+      end;
+    then reconsider f as Linear_Combination of {v1(),v2(),v3()} by RLVECT_2:def
+8;
+   take f;
+   thus thesis by A4;
+  end;
 
 theorem :: RLVECT_4:1
    v + w - v = w & w + v - v = w & v - v + w = w & w - v + v = w &

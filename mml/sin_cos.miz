@@ -74,7 +74,8 @@ correctness;
 correctness;
 end;
 
-definition let m,k be Nat;
+
+registration let m,k be Nat;
  cluster RHK(m,k) -> real;
 coherence
  proof
@@ -83,10 +84,12 @@ coherence
  end;
 end;
 
+
 definition let m,k be Nat;
  redefine func RHK(m,k) -> Real;
 coherence by XREAL_0:def 1;
 end;
+
 
 scheme ExComplex_CASE{F(Nat,Nat)->Element of COMPLEX}:
 for k holds
@@ -117,7 +120,7 @@ let k;
  A5: for x,y,z be set st x in NAT & P[x,y] & P[x,z] holds y=z;
    consider f be Function such that
 A6: dom f =NAT and
-A7: for x be set st x in NAT holds P[x,f.x] from FuncEx(A5,A1);
+A7: for x be set st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A5,A1);
       now let x be set;
      assume x in NAT;
       then ex n st (n=x & (n <= k implies f.x=F(k,n)) &
@@ -162,7 +165,7 @@ let k;
  A5: for x,y,z be set st x in NAT & P[x,y] & P[x,z] holds y=z;
    consider f be Function such that
 A6: dom f =NAT and
-A7: for x be set st x in NAT holds P[x,f.x] from FuncEx(A5,A1);
+A7: for x be set st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A5,A1);
       now let x be set;
      assume x in NAT;
       then ex n st (n=x & (n <= k implies f.x=F(k,n)) &
@@ -183,7 +186,7 @@ func Prod_complex_n -> Complex_Sequence means :Def4:
 existence
 proof deffunc U(Nat,Element of COMPLEX) = $2 * [*$1+1,0*];
  consider f being Function of NAT,COMPLEX such that
- A1: f.0 = 1r & for n being Nat holds f.(n+1) = U(n,f.n) from LambdaRecExD;
+ A1: f.0 = 1r & for n being Nat holds f.(n+1) = U(n,f.n) from RECDEF_1:sch 4;
  reconsider f as Complex_Sequence;
  take f;
  thus thesis by A1;
@@ -203,10 +206,11 @@ proof
       hence seq1.(k+1) = seq2.k * [*(k+1),0*] by A2
                       .= seq2.(k+1) by A3;
       end;
-   for n holds X[n] from Ind(A4,A5);
+   for n holds X[n] from NAT_1:sch 1(A4,A5);
  hence seq1 = seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 definition
 func Prod_real_n -> Real_Sequence means :Def5:
@@ -214,7 +218,7 @@ func Prod_real_n -> Real_Sequence means :Def5:
 existence
 proof deffunc U(Nat,Element of REAL) = $2 * ($1+1);
  consider f being Function of NAT,REAL such that
- A1: f.0 = 1 & for n being Nat holds f.(n+1) = U(n,f.n) from LambdaRecExD;
+ A1: f.0 = 1 & for n being Nat holds f.(n+1) = U(n,f.n) from RECDEF_1:sch 4;
  reconsider f as Real_Sequence;
  take f;
  thus thesis by A1;
@@ -234,16 +238,18 @@ proof
       hence rseq1.(k+1) = rseq2.k * (k+1) by A2
                     .= rseq2.(k+1) by A3;
       end;
-   for n holds X[n] from Ind(A4,A5);
+   for n holds X[n] from NAT_1:sch 1(A4,A5);
  hence rseq1 = rseq2 by FUNCT_2:113;
 end;
 end;
+
 
 definition let n be Nat;
  func n !c -> Element of COMPLEX equals :Def6:
      Prod_complex_n.n;
 correctness;
 end;
+
 
 definition let n be Nat;
  redefine func n! -> Real equals :Def7:
@@ -259,10 +265,11 @@ A2:  now let l be Nat;
        .= (l+1)! by A3,NEWTON:21;
       hence X[l+1];
      end;
-    for k be Nat holds X[k] from Ind(A1,A2);
+    for k be Nat holds X[k] from NAT_1:sch 1(A1,A2);
   hence thesis;
 end;
 end;
+
 
 definition let z be Element of COMPLEX;
  deffunc U(Nat) = z #N $1 /($1!c);
@@ -271,16 +278,17 @@ definition let z be Element of COMPLEX;
   existence
    proof
     thus ex s being Complex_Sequence st
-     for n holds s.n = U(n) from ExComplexSeq;
+     for n holds s.n = U(n) from COMSEQ_1:sch 1;
    end;
   uniqueness
    proof
     thus for s1,s2 being Complex_Sequence st
      (for x being Nat holds s1.x = U(x)) &
      (for x being Nat holds s2.x = U(x)) holds s1 = s2
-        from FuncDefUniq;
+        from COMPLSP1:sch 1;
    end;
 end;
+
 
 definition let a be real number;
  deffunc U(Nat) = a |^ $1 /($1!);
@@ -289,16 +297,17 @@ definition let a be real number;
   existence
    proof
     thus ex s being Real_Sequence st
-     for n holds s.n = U(n) from ExRealSeq;
+     for n holds s.n = U(n) from SEQ_1:sch 1;
    end;
   uniqueness
    proof
     thus for s1,s2 being Real_Sequence st
      (for x being Nat holds s1.x = U(x)) &
      (for x being Nat holds s2.x = U(x)) holds s1 = s2
-      from FuncDefUniq;
+      from COMPLSP1:sch 1;
    end;
 end;
+
 
 theorem Th1:
  (0 < n implies [*n,0*] <> 0c) &
@@ -327,7 +336,7 @@ A3: now let n;
          [*n+1,0*] <> 0c by COMSEQ_3:1;
        hence X[n+1] by A4,A5,XCMPLX_1:6;
  end;
-   for n holds X[n] from Ind(A2,A3);
+   for n holds X[n] from NAT_1:sch 1(A2,A3);
  hence n!c <> 0c;
  thus (n+1)!c = Prod_complex_n.(n+1) by Def6
              .= Prod_complex_n.n * [*n+1,0*] by Def4
@@ -392,13 +401,16 @@ A2: for k holds (k <= n implies seq2.k = n!c /( (k!c ) * ((n-'k)!c))) &
      suppose A3:k <= n;
      hence seq1.k = n!c /( (k!c ) * ((n-'k)!c)) by A1
            .= seq2.k by A2,A3;
+     end;
      suppose A4:k > n;
      hence seq1.k = 0c by A1
            .= seq2.k by A2,A4;
 end;
+end;
 hence seq1=seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 definition let n be Nat;
 func Coef_e(n) -> Complex_Sequence means :Def11:
@@ -430,13 +442,16 @@ A2: for k holds
      suppose A3:k <= n;
      hence seq1.k =1r/((k!c ) * ((n-'k)!c )) by A1
            .= seq2.k by A2,A3;
+     end;
      suppose A4:k > n;
      hence seq1.k = 0c by A1
            .= seq2.k by A2,A4;
 end;
+end;
 hence seq1=seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 definition let seq;
 func Sift seq -> Complex_Sequence means :Def12:
@@ -444,7 +459,7 @@ func Sift seq -> Complex_Sequence means :Def12:
 existence
 proof deffunc U(Nat,Element of COMPLEX) = seq.$1;
  consider f being Function of NAT,COMPLEX such that
- A1: f.0 = 0c & for n being Nat holds f.(n+1)=U(n,f.n) from LambdaRecExD;
+ A1: f.0 = 0c & for n being Nat holds f.(n+1)=U(n,f.n) from RECDEF_1:sch 4;
  reconsider f as Complex_Sequence;
  take f;
  thus thesis by A1;
@@ -464,10 +479,11 @@ proof
       thus seq1.(k+1) = seq.k by A2
                     .= seq2.(k+1) by A3;
       end;
-   for n holds X[n] from Ind(A4,A5);
+   for n holds X[n] from NAT_1:sch 1(A4,A5);
  hence seq1 = seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 definition let n;
 let z,w be Element of COMPLEX;
@@ -501,13 +517,16 @@ A2:for k holds
      suppose A3:k <= n;
      hence seq1.k =((Coef(n)).k) * (z #N k) * (w #N (n-'k)) by A1
            .= seq2.k by A2,A3;
+     end;
      suppose A4:k > n;
      hence seq1.k = 0c by A1
            .= seq2.k by A2,A4;
 end;
+end;
 hence seq1=seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 definition let n;
 let z,w be Element of COMPLEX;
@@ -541,13 +560,16 @@ A2:for k holds
     suppose A3:k <= n;
      hence seq1.k =((Coef_e(n)).k) * (z #N k) * (w #N (n-'k)) by A1
            .= seq2.k by A2,A3;
+    end;
     suppose A4:k > n;
      hence seq1.k = 0c by A1
            .= seq2.k by A2,A4;
 end;
+end;
 hence seq1=seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 definition let n;
 let z,w be Element of COMPLEX;
@@ -583,13 +605,16 @@ A2: for k holds
      suppose A3:k <= n;
      hence seq1.k = (z ExpSeq).k * Partial_Sums(w ExpSeq).(n-'k) by A1
            .= seq2.k by A2,A3;
+     end;
      suppose A4:k > n;
      hence seq1.k = 0c by A1
            .= seq2.k by A2,A4;
 end;
+end;
 hence seq1=seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 definition
 let a,b be real number;
@@ -630,13 +655,16 @@ A2:for k holds
      hence rseq1.k =(a ExpSeq).k * (Partial_Sums(b ExpSeq).n
               -Partial_Sums(b ExpSeq).(n-'k)) by A1
            .= rseq2.k by A2,A3;
+     end;
      suppose A4:k > n;
      hence rseq1.k = 0 by A1
            .= rseq2.k by A2,A4;
 end;
+end;
 hence rseq1=rseq2 by FUNCT_2:113;
 end;
 end;
+
 
 definition
 let z, w be Element of COMPLEX;
@@ -679,13 +707,16 @@ A2: for k holds
      hence seq1.k =(z ExpSeq).k * (Partial_Sums(w ExpSeq).n
               -Partial_Sums(w ExpSeq).(n-'k)) by A1
            .= seq2.k by A2,A3;
+     end;
      suppose A4:k > n;
      hence seq1.k = 0c by A1
            .= seq2.k by A2,A4;
 end;
+end;
 hence seq1=seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 Lm3:
 for p1,p2,g1,g2 being Element of REAL holds
@@ -771,7 +802,7 @@ proof
    .=( |.z.| ExpSeq ).(n+1) by Def9;
   hence X[n+1];
  end;
-   for n holds X[n] from Ind(A3,A4);
+   for n holds X[n] from NAT_1:sch 1(A3,A4);
  hence thesis by A1,A2;
  end;
 
@@ -805,7 +836,7 @@ A2: for k st X[k] holds X[k+1]
       .=(Partial_Sums(Sift(seq)).k+(Sift(seq)).(k+1)) + seq.(k+1) by Def12
       .=Partial_Sums(Sift(seq)).(k+1)+seq.(k+1) by COMSEQ_3:def 7;
  end;
-   for k holds X[k] from Ind(A1,A2);
+   for k holds X[k] from NAT_1:sch 1(A1,A2);
   hence thesis;
  end;
 
@@ -1171,7 +1202,7 @@ A36:            n+1-'0 =n+1-0 by A34,SCMFSA_7:3;
  by A7,A8,A10,A12,COMSEQ_1:def 4
                     .=Partial_Sums(Expan(n+1,z,w)).(n+1) by A14,COMSEQ_3:27;
      end;
-     for n holds X[n] from Ind(A3,A4);
+     for n holds X[n] from NAT_1:sch 1(A3,A4);
   hence thesis;
 end;
 
@@ -1252,7 +1283,7 @@ proof
     end;
     A4:  0c ExpSeq is absolutely_summable
        proof
-           for n holds X[n] from Ind(A1,A2);
+           for n holds X[n] from NAT_1:sch 1(A1,A2);
          then Partial_Sums(|.0c ExpSeq.|) is constant by SEQM_3:def 6;
          then Partial_Sums(|.0c ExpSeq.|) is convergent by SEQ_4:39;
          hence |.0c ExpSeq.| is summable by SERIES_1:def 2;
@@ -1271,12 +1302,12 @@ proof
         .=1r + (0c ExpSeq.n) * 0c/[*(n+1),0*] by Th4
         .=1r;
     end;
-     for n holds X[n] from Ind(A5,A6);
+     for n holds X[n] from NAT_1:sch 1(A5,A6);
      then lim(Partial_Sums(0c ExpSeq))=1r by COMSEQ_2:10;
 hence thesis by A4,COMSEQ_3:def 8;
 end;
 
-definition let z;
+registration let z;
   cluster z ExpSeq -> absolutely_summable;
    coherence
     proof
@@ -1305,8 +1336,8 @@ A7:             ((z ExpSeq).n * z)/[*(n+1),0*]=0c by A5,Th4;
          end;
      deffunc U(Nat) = |.(z ExpSeq).|.($1+1)/|.(z ExpSeq).|.$1;
      thus
-     A8:  for n holds X[n] from Ind(A2,A3);
-       ex rseq st for n holds rseq.n= U(n) from ExRealSeq;
+     A8:  for n holds X[n] from NAT_1:sch 1(A2,A3);
+       ex rseq st for n holds rseq.n= U(n) from SEQ_1:sch 1;
       then consider rseq such that
      A9:for n holds rseq.n=|.z ExpSeq.|.(n+1)/|.z ExpSeq.|.n;
        rseq is convergent & lim rseq < 1
@@ -1338,6 +1369,7 @@ A7:             ((z ExpSeq).n * z)/[*(n+1),0*]=0c by A5,Th4;
    hence thesis by Th10;
   end;
 end;
+
 
 theorem Th11:
 (z ExpSeq).0 = 1r & Expan(0,z,w).0 = 1r
@@ -1478,7 +1510,7 @@ proof
    .=Partial_Sums((z+w) ExpSeq).(k+1) by COMSEQ_3:def 7;
    end;
   end;
-    for n holds X[n] from Ind(A3,A4);
+    for n holds X[n] from NAT_1:sch 1(A3,A4);
   hence thesis;
 end;
 
@@ -1577,7 +1609,7 @@ A1: |. Partial_Sums(( z ExpSeq)).0 .|
     hence |. Partial_Sums(( z ExpSeq)).(k+1) .|
       <= Partial_Sums((|.z.| ExpSeq)).(k+1) by A6,A7,AXIOMS:22;
     end;
-  A8: for k holds X[k] from Ind(A2,A3);
+  A8: for k holds X[k] from NAT_1:sch 1(A2,A3);
    hence |. Partial_Sums(( z ExpSeq)).k .|
       <= Partial_Sums((|.z.| ExpSeq)).k;
   A9: Partial_Sums(|. ( z ExpSeq) .| ) is convergent by SERIES_1:def 2;
@@ -1862,7 +1894,7 @@ proof
          end;
      deffunc U(Nat) = Partial_Sums(|.Conj($1,z,w).|).$1;
       ex rseq  be Real_Sequence st for k
-           holds rseq.k = U(k) from ExRealSeq;
+           holds rseq.k = U(k) from SEQ_1:sch 1;
    then consider rseq be Real_Sequence such that
    A3: for k holds rseq.k=Partial_Sums(|.Conj(k,z,w).|).k;
    A4: now let k;
@@ -1896,7 +1928,7 @@ end;
 Sum(z ExpSeq) * Sum(w ExpSeq) = Sum((z+w) ExpSeq)
 proof deffunc U(Nat) = Partial_Sums(Conj($1,z,w)).$1;
    ex seq st
-   for k holds seq.k= U(k) from ExComplexSeq;
+   for k holds seq.k= U(k) from COMSEQ_1:sch 1;
    then consider seq such that
 A1:  for k holds seq.k=Partial_Sums(Conj(k,z,w)).k;
 
@@ -1943,7 +1975,7 @@ func exp -> PartFunc of COMPLEX, COMPLEX means :Def18:
   consider f being PartFunc of COMPLEX, COMPLEX such that
   A1: for z be Element of COMPLEX holds z in dom f iff X[z] and
   A2:   for z be Element of COMPLEX st z in dom f holds f/.z = U(z)
-                     from LambdaPFD;
+                     from PARTFUN2:sch 2;
   take f;
     dom(f)=COMPLEX
   &for z be Element of COMPLEX holds f.z = Sum(z ExpSeq)
@@ -1986,6 +2018,7 @@ func exp -> PartFunc of COMPLEX, COMPLEX means :Def18:
  end;
  end;
 
+
 definition let z;
 func exp z -> Element of COMPLEX equals:Def19:
  exp.z;
@@ -1995,6 +2028,7 @@ proof
   hence exp.z is Element of COMPLEX;
 end;
 end;
+
 
 Lm5:
 for z holds exp(z)=Sum(z ExpSeq)
@@ -2029,7 +2063,7 @@ ExpSeq));
    consider f being PartFunc of REAL, REAL such that
    A1:   for d be Element of REAL holds d in dom f iff X[d] and
    A2:   for d be Element of REAL st d in dom f holds f/.d = U(d)
-     from LambdaPFD;
+     from PARTFUN2:sch 2;
    take f;
      dom(f)=REAL
    &for d be Element of REAL holds f.d = Im(Sum([*0,d*]
@@ -2073,13 +2107,15 @@ ExpSeq))
   end;
   end;
 
+
 definition let th be real number;
 func sin th equals:Def21:
  sin.th;
 correctness;
 end;
 
-definition
+
+registration
 let th be real number;
  cluster sin th -> real;
 correctness
@@ -2089,10 +2125,12 @@ correctness
   end;
 end;
 
+
 definition let th be Real;
  redefine func sin th -> Real;
 correctness by XREAL_0:def 1;
 end;
+
 
 theorem
   sin is Function of REAL,REAL
@@ -2112,7 +2150,7 @@ func cos -> PartFunc of REAL, REAL means :Def22:
    deffunc U(Element of REAL) = Re(Sum([*0,$1*] ExpSeq));
   consider f being PartFunc of REAL, REAL such that
   A1:   for d holds d in dom f iff X[d] and
-  A2:   for d st d in dom f holds f/.d = U(d) from LambdaPFD;
+  A2:   for d st d in dom f holds f/.d = U(d) from PARTFUN2:sch 2;
   take f;
     dom(f)=REAL
   &for d holds f.d = Re(Sum([*0,d*] ExpSeq))
@@ -2152,13 +2190,15 @@ func cos -> PartFunc of REAL, REAL means :Def22:
  end;
  end;
 
+
 definition let th be real number;
 func cos th equals:Def23:
  cos.th;
 correctness;
 end;
 
-definition
+
+registration
 let th be real number;
  cluster cos th -> real;
 correctness
@@ -2168,10 +2208,12 @@ correctness
   end;
 end;
 
+
 definition let th be Real;
  redefine func cos th -> Real;
 correctness by XREAL_0:def 1;
 end;
+
 
 theorem
   cos is Function of REAL,REAL
@@ -2232,7 +2274,7 @@ A3:  X[0];
        .=((-[*0,th*]) ExpSeq).n * (-[*0, th*])/[*(n+1),0*] by XCMPLX_1:75
        .=((-[*0,th*]) ExpSeq).(n+1) by Th4;
        end;
-        thus for n holds X[n] from Ind(A3,A4);
+        thus for n holds X[n] from NAT_1:sch 1(A3,A4);
        end;
       defpred X[Nat] means (Partial_Sums(([*0,th*] ExpSeq))*').$1
              =Partial_Sums((-[*0,th*]) ExpSeq).$1;
@@ -2259,7 +2301,7 @@ A6:   X[0];
        .=Partial_Sums((-[*0,th*]) ExpSeq).n+((-[*0,th*]) ExpSeq).(n+1) by A2
        .=Partial_Sums((-[*0,th*]) ExpSeq).(n+1) by COMSEQ_3:def 7;
       end;
-        for n holds X[n] from Ind(A6,A7);
+        for n holds X[n] from NAT_1:sch 1(A6,A7);
       hence thesis by COMSEQ_1:6;
   end;
   thus (Sum([*0,th*] ExpSeq))*'
@@ -2391,14 +2433,14 @@ for n holds it.n= (-1)|^ n * (th)|^ (2*n+1)/((2*n+1)!);
   existence
    proof
     thus ex s being Real_Sequence st
-     for n holds s.n = U(n) from ExRealSeq;
+     for n holds s.n = U(n) from SEQ_1:sch 1;
    end;
   uniqueness
    proof
     thus for s1,s2 being Real_Sequence st
      (for x being Nat holds s1.x = U(x)) &
      (for x being Nat holds s2.x = U(x)) holds s1 = s2
-      from FuncDefUniq;
+      from COMPLSP1:sch 1;
    end;
 
  deffunc U(Nat) = (-1)|^ $1 * (th)|^ (2*$1)/((2*$1)!);
@@ -2407,16 +2449,17 @@ func th P_cos -> Real_Sequence means :Def25:
   existence
    proof
     thus ex s being Real_Sequence st
-     for n holds s.n = U(n) from ExRealSeq;
+     for n holds s.n = U(n) from SEQ_1:sch 1;
    end;
   uniqueness
    proof
     thus for s1,s2 being Real_Sequence st
      (for x being Nat holds s1.x = U(x)) &
      (for x being Nat holds s2.x = U(x)) holds s1 = s2
-      from FuncDefUniq;
+      from COMPLSP1:sch 1;
    end;
 end;
+
 
 Lm9: for p,q,r st r<>0 holds
        [*p,q*]/[*r,0*]=[*p/r,q/r*]& [*p,q*]/[*0,r*]=[*q/r,-p/r*]
@@ -2513,7 +2556,7 @@ A1:     z#N (2*0)=1r by COMSEQ_3:11;
                   .= (z#N 2)#N (k+1) by COMSEQ_3:def 2;
  hence thesis by A6;
     end;
-     for k holds X[k] from Ind(A2,A3);
+     for k holds X[k] from NAT_1:sch 1(A2,A3);
    hence thesis;
   end;
 
@@ -2621,7 +2664,7 @@ proof
          .=[*0,(-1)|^ (k+1)*(th |^ (2*(k+1)+1))*] by PREPOWER:def 1;
     hence thesis by A7;
     end;
-    for k holds X[k] from Ind(A4,A5);
+    for k holds X[k] from NAT_1:sch 1(A4,A5);
    hence thesis;
 end;
 
@@ -2637,7 +2680,7 @@ proof
           .=[*k!*(k+1), 0*(k+1)*] by Lm10
           .=[*(k+1)!,0*] by NEWTON:21;
   end;
- thus for k holds X[k] from Ind(A1,A2);
+ thus for k holds X[k] from NAT_1:sch 1(A1,A2);
 end;
 
 theorem Th38:for th, n holds
@@ -2830,7 +2873,7 @@ A17: Partial_Sums(Re ([*0, th*] ExpSeq)).(2*(k+1))
       .= Partial_Sums(th P_cos).(k+1) by SERIES_1:def 1;
   hence thesis by A16;
    end;
- thus for n holds X[n] from Ind(A10,A11);
+ thus for n holds X[n] from NAT_1:sch 1(A10,A11);
  end;
  hence thesis;
 end;
@@ -2922,7 +2965,7 @@ proof
  A1: rseq is convergent & lim(rseq)=th &(for n holds rseq.n >= p);
      deffunc U(Nat) = p;
  consider rseq1 such that
- A2: for n holds rseq1.n= U(n) from ExRealSeq;
+ A2: for n holds rseq1.n= U(n) from SEQ_1:sch 1;
  A3:rseq1 is constant by A2,SEQM_3:def 6;
  then A4: lim(rseq1)=rseq1.0 by SEQ_4:41
             .=p by A2;
@@ -2936,7 +2979,7 @@ end;
 
      deffunc U(Real) = 2*$1+1;
 consider bq being Real_Sequence such that
-Lm11: for n holds bq.n= U(n) from ExRealSeq;
+Lm11: for n holds bq.n= U(n) from SEQ_1:sch 1;
 
    bq is increasing Seq_of_Nat
 proof
@@ -3021,7 +3064,7 @@ proof
   end;
      deffunc U(Nat) = $1!;
   consider rseq such that
-  A3:for l holds rseq.l=U(l) from ExRealSeq;
+  A3:for l holds rseq.l=U(l) from SEQ_1:sch 1;
   A4: rseq is non-decreasing
   proof
       for l holds rseq.l<=rseq.(l+1)& rseq.l>0
@@ -3045,7 +3088,7 @@ proof
             (l+1+1)>=1 by A2;
        hence thesis by A8,A9,REAL_2:146;
      end;
-       for l holds X[l] from Ind(A6,A7);
+       for l holds X[l] from NAT_1:sch 1(A6,A7);
      hence thesis;
     end;
     hence thesis by SEQM_3:def 13;
@@ -3082,7 +3125,7 @@ proof
                  then th GeoSeq.(m+1)>=0 by A1,A5,REAL_2:121;
                  hence thesis by A1,A6,REAL_2:147;
                 end;
-         for m holds X[m] from Ind(A3,A4);
+         for m holds X[m] from NAT_1:sch 1(A3,A4);
        hence thesis;
      end;
      hence thesis by SEQM_3:def 14;
@@ -3112,7 +3155,7 @@ A1:  X[0];
               .=[* th |^ (k+1),0 *] by NEWTON:11;
        hence thesis;
    end;
-    for n holds X[n] from Ind(A1,A2);
+    for n holds X[n] from NAT_1:sch 1(A1,A2);
   hence thesis;
 end;
 
@@ -3152,7 +3195,7 @@ A2:  X[0];
         .=0 by COMPLEX1:7;
       hence thesis;
       end;
-      for n holds X[n] from Ind(A2,A3);
+      for n holds X[n] from NAT_1:sch 1(A2,A3);
     hence thesis;
  end;
    for n,m holds (Partial_Sums(Im([*p,0*] ExpSeq))).n=
@@ -3268,7 +3311,7 @@ k
          hence thesis by A8,AXIOMS:22;
 
          end;
-          for n holds X[n] from Ind(A6,A7);
+          for n holds X[n] from NAT_1:sch 1(A6,A7);
         hence thesis;
 
      end;
@@ -3371,7 +3414,7 @@ SEQ_4:30;
  by A27,REAL_2:105;
           hence thesis by A22,AXIOMS:22;
           end;
-           for n holds X[n] from Ind(A20,A21);
+           for n holds X[n] from NAT_1:sch 1(A20,A21);
          hence thesis;
 
       end;
@@ -3457,7 +3500,7 @@ proof
                   .=|.z.||^(k+1) by NEWTON:11;
        hence thesis;
      end;
-       for n holds X[n] from Ind(A5,A6);
+       for n holds X[n] from NAT_1:sch 1(A5,A6);
      hence thesis;
    end;
   hence thesis by A1,A2,A3,A4;
@@ -3493,7 +3536,7 @@ A2:  X[0];
        .=0 by COMPLEX1:7;
        hence thesis;
    end;
-     for n holds X[n] from Ind(A2,A3);
+     for n holds X[n] from NAT_1:sch 1(A2,A3);
    hence thesis;
  end;
  then Im(Partial_Sums([*th,0*] ExpSeq)) is constant by SEQM_3:def 6;
@@ -3546,7 +3589,7 @@ func exp -> PartFunc of REAL, REAL means :Def26:
   consider f being PartFunc of REAL, REAL such that
   A1:   for d be Element of REAL holds d in dom f iff X[d] and
   A2:   for d be Element of REAL st d in dom f holds f/.d = U(d)
-       from LambdaPFD;
+       from PARTFUN2:sch 2;
   take f;
 
     dom(f)=REAL
@@ -3589,13 +3632,15 @@ A5:  d is Real by XREAL_0:def 1;
  end;
  end;
 
+
 definition let th be real number;
 func exp th equals:Def27:
  exp.th;
 correctness;
 end;
 
-definition
+
+registration
 let th be real number;
  cluster exp th -> real;
 correctness
@@ -3605,10 +3650,12 @@ correctness
   end;
 end;
 
+
 definition let th be Real;
  redefine func exp th -> Real;
 correctness by XREAL_0:def 1;
 end;
+
 
 theorem Th51: dom(exp)=REAL by Def26;
 
@@ -3684,7 +3731,7 @@ ExpSeq).n
  by REAL_1:69;
        hence thesis by A5,A6,AXIOMS:22;
       end;
-      for n holds X[n] from Ind(A3,A4);
+      for n holds X[n] from NAT_1:sch 1(A3,A4);
     hence thesis;
  end;
    (th ExpSeq) is summable by Th49;
@@ -3713,15 +3760,19 @@ proof
     now per cases;
    suppose th=0;
    hence exp.th>0 by Lm17;
+   end;
    suppose A1: th<>0;
     now per cases by A1;
     suppose th<0;
     hence exp.th>0 by Th58;
+    end;
     suppose th>0;
     then exp.th >=1 by Th57;
     hence exp.th>0 by AXIOMS:22;
     end;
+    end;
     hence exp.th>0;
+  end;
   end;
   hence thesis;
 end;
@@ -3741,14 +3792,14 @@ func z P_dt -> Complex_Sequence means :Def28:
  for n holds it.n = (z#N(n+1))/((n+2)!c);
  existence
  proof   thus ex s being Complex_Sequence st
-   for n holds s.n = U(n) from ExComplexSeq;
+   for n holds s.n = U(n) from COMSEQ_1:sch 1;
  end;
  uniqueness
     proof
     thus for s1,s2 being Complex_Sequence st
      (for x being Nat holds s1.x = U(x)) &
      (for x being Nat holds s2.x = U(x)) holds s1 = s2
-        from FuncDefUniq;
+        from COMPLSP1:sch 1;
    end;
 
 deffunc U(Nat) = (z#N($1))/(($1+2)!c);
@@ -3756,16 +3807,17 @@ func z P_t -> Complex_Sequence means
    for n holds it.n = (z#N(n))/((n+2)!c);
  existence
   proof    thus ex s being Complex_Sequence st
-     for n holds s.n = U(n) from ExComplexSeq;
+     for n holds s.n = U(n) from COMSEQ_1:sch 1;
   end;
  uniqueness
     proof
     thus for s1,s2 being Complex_Sequence st
      (for x being Nat holds s1.x = U(x)) &
      (for x being Nat holds s2.x = U(x)) holds s1 = s2
-        from FuncDefUniq;
+        from COMPLSP1:sch 1;
    end;
 end;
+
 
 Lm18: for z,p holds Re([*0,p*]*z)=-p*Im z & Im([*0,p*]*z)=p*Re z
              &Re([*p,0*]*z)=p*Re z & Im([*p,0*]*z)=p*Im z
@@ -3875,7 +3927,7 @@ proof
  by A8,REAL_1:53;
          hence thesis by A10,A12,A14,AXIOMS:22;
       end;
-        for n holds X[n] from Ind(A6,A7);
+        for n holds X[n] from NAT_1:sch 1(A6,A7);
       hence thesis;
     end;
     consider r be real number such that
@@ -4154,7 +4206,7 @@ proof
    consider C_r being PartFunc of REAL, REAL such that
    A1:   for th be Real holds th in dom C_r iff X[th] and
    A2:   for th be Real st th in dom C_r holds C_r/.th = U(th)
-                from LambdaPFD;
+                from PARTFUN2:sch 2;
   A3:dom C_r=REAL
   proof
     A4:  dom(C_r) c=REAL by RELSET_1:12;
@@ -4201,11 +4253,11 @@ proof
            end;
      deffunc U(Real) = -Im((Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*]);
            consider rseq such that
-           A11: for n holds rseq.n= U(n) from ExRealSeq;
+           A11: for n holds rseq.n= U(n) from SEQ_1:sch 1;
      deffunc U(Nat) = (Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*];
           consider cq1 such that
            A12: for n holds
-           cq1.n=U(n) from ExComplexSeq;
+           cq1.n=U(n) from COMSEQ_1:sch 1;
            A13:cq1 is convergent & lim(cq1)=0c
     proof
              A14: for q be Real st q>0 holds ex k st for m st k<=m holds
@@ -4286,7 +4338,7 @@ A21:     abs(hy1.m-0)<r by A17,A19;
    consider CL being PartFunc of REAL, REAL such that
    A26: for th be Real holds th in dom CL iff X[th] and
    A27: for th be Real st th in dom CL holds CL/.th= U(th)
-   from LambdaPFD;
+   from PARTFUN2:sch 2;
   A28: for d be real number holds CL.d = -d*sin.p
    proof
    let d be real number;
@@ -4358,7 +4410,8 @@ proof
       $1 *Re((Sum([*0,$1*] P_dt))* [*cos.p,sin.p*]);
    consider C_r being PartFunc of REAL, REAL such that
    A1:   for th be Real holds th in dom C_r iff X[th] and
-   A2:   for th be Real st th in dom C_r holds C_r/.th = U(th) from LambdaPFD;
+   A2:   for th be Real st th in dom C_r holds C_r/.th = U(th) from
+PARTFUN2:sch 2;
   A3:dom C_r=REAL
   proof
     A4:  dom(C_r) c=REAL by RELSET_1:12;
@@ -4403,11 +4456,11 @@ proof
            end;
            deffunc U(Real) = Re((Sum([*0,hy1.$1*] P_dt))* [*cos.p,sin.p*]);
            consider rseq such that
-           A11: for n holds rseq.n= U(n) from ExRealSeq;
+           A11: for n holds rseq.n= U(n) from SEQ_1:sch 1;
            deffunc U(Nat) = (Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*];
            consider cq1 such that
            A12: for n holds
-           cq1.n= U(n) from ExComplexSeq;
+           cq1.n= U(n) from COMSEQ_1:sch 1;
            A13:cq1 is convergent & lim(cq1)=0c
     proof
              A14: for q be Real st q>0 holds ex k st for m st k<=m holds
@@ -4476,7 +4529,7 @@ A20: |.cq1.m-0c.|= |.(Sum([*0,(hy1.m)*] P_dt))* [*cos.p,sin.p*].| by A12
    deffunc U(Element of REAL) = $1*cos.p;
    consider CL being PartFunc of REAL, REAL such that
    A23: for th be Real holds th in dom CL iff X[th] and
-   A24: for th be Real st th in dom CL holds CL/.th=U(th) from LambdaPFD;
+   A24: for th be Real st th in dom CL holds CL/.th=U(th) from PARTFUN2:sch 2;
   A25: for d be real number holds CL.d = d*cos.p
    proof
    let d be real number;
@@ -4538,7 +4591,7 @@ proof
    consider C_r being PartFunc of REAL, REAL such that
    A1:   for th be Real holds th in dom C_r iff X[th] and
    A2:   for th be Real st th in dom C_r holds C_r/.th =U(th)
-     from LambdaPFD;
+     from PARTFUN2:sch 2;
   A3:dom C_r=REAL
   proof
     A4:  dom(C_r) c=REAL by RELSET_1:12;
@@ -4584,11 +4637,11 @@ proof
            end;
           deffunc U(Real) = exp.p*Re((Sum([*(hy1.$1),0*] P_dt)));
            consider rseq such that
-           A11: for n holds rseq.n= U(n) from ExRealSeq;
+           A11: for n holds rseq.n= U(n) from SEQ_1:sch 1;
           deffunc U(Nat) = (Sum([*(hy1.$1),0*] P_dt))*[*exp.p,0*];
            consider cq1 such that
            A12: for n holds
-           cq1.n= U(n) from ExComplexSeq;
+           cq1.n= U(n) from COMSEQ_1:sch 1;
            A13:cq1 is convergent & lim(cq1)=0c
     proof
         A14: for q be Real st q>0 holds ex k st for m st k<=m holds
@@ -4674,7 +4727,7 @@ def 16
    deffunc U(Element of REAL) = $1* (exp.p);
    consider CL being PartFunc of REAL, REAL such that
    A27: for th be Real holds th in dom CL iff X[th] and
-   A28: for th be Real st th in dom CL holds CL/.th=U(th) from LambdaPFD;
+   A28: for th be Real st th in dom CL holds CL/.th=U(th) from PARTFUN2:sch 2;
   A29: for d be real number holds CL.d = d* (exp.p)
    proof
    let d be real number;
@@ -4865,7 +4918,7 @@ def 8;
  by A22,REAL_2:105;
          hence thesis by A10,AXIOMS:22;
          end;
-          for n holds X[n] from Ind(A8,A9);
+          for n holds X[n] from NAT_1:sch 1(A8,A9);
         hence thesis;
      end;
     then cos.th >= 1/2 by A4,A5,Th41;
@@ -5035,6 +5088,7 @@ proof
  by A1,A4,A11,ROLLE:1;
        take th=r;
     thus th in ].0,1 .[ & diff((sin/cos),(th))=0 by A5,A12;
+    end;
     suppose A13: th2<th1;
       A14: ].th2,th1 .[ is open Subset of REAL & ].th2,th1 .[c=].0,1 .[&
              [.th2,th1 .]c=[.0,1 .]
@@ -5066,6 +5120,7 @@ FDIFF_1:34;
             A21: r in ].th2,th1 .[ & diff((sin/cos),r)=0 by A1,A13,A20,ROLLE:1;
             take th=r;
     thus th in ].0,1 .[ & diff((sin/cos),(th))=0 by A14,A21;
+   end;
    end;
    hence thesis;
   end;
@@ -5128,10 +5183,12 @@ hence th1=th2 by XCMPLX_1:53;
 end;
 end;
 
+
 definition
  redefine func PI -> Real;
 coherence by XREAL_0:def 1;
 end;
+
 
 theorem Th78:
 sin.(PI/4) = cos.(PI/4)
@@ -5308,6 +5365,7 @@ proof
      now per cases by A1,TOPREAL5:1;
     suppose th=0;
     hence sin.th>= sin.0;
+    end;
     suppose A3: 0<th;
      A4: sin is_differentiable_on ].0,th.[ by Th73,FDIFF_1:34;
         sin is_continuous_on REAL by Th73,FDIFF_1:33;
@@ -5322,6 +5380,7 @@ proof
        sin.th-sin.0= cos.r* th by A3,A5,A6,XCMPLX_1:88;
      then sin.th-sin.0 >0 by A3,A7,REAL_2:122;
    hence sin.th>=sin.0 by REAL_2:106;
+  end;
   end;
    hence thesis;
   end;

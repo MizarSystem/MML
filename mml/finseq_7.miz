@@ -111,12 +111,19 @@ end;
 
 begin :: Definition of Replace Function and its properties
 
+notation
+  let D be non empty set;
+  let f be FinSequence of D;
+  let i be Nat;
+  let p be Element of D;
+  synonym Replace(f, i, p) for f +* (i, p) ;
+end;
 definition
   let D be non empty set;
   let f be FinSequence of D;
   let i be Nat;
   let p be Element of D;
-  redefine func f +* (i, p) -> FinSequence of D equals :Def1:
+  redefine func Replace(f, i, p) -> FinSequence of D equals :Def1:
     (f|(i-'1))^<*p*>^(f/^i) if 1 <= i & i <= len f
     otherwise f;
   compatibility
@@ -140,8 +147,8 @@ A1: 1 <= i & i <= len f implies f +* (i, p) = (f|(i-'1))^<*p*>^(f/^i)
       f +* (i, p) is FinSequence of D;
     hence thesis;
   end;
-  synonym Replace(f, i, p);
-end;
+  end;
+
 
 canceled 2;
 
@@ -168,6 +175,7 @@ proof
       then not (1 <= i & i <= len f) by FINSEQ_1:3;
       then rng Replace(f,i,p) = rng f by Def1;
       hence thesis by A1,FINSEQ_1:42;
+    end;
     suppose i in Seg len f;
       then A2:1 <= i & i <= len f by FINSEQ_1:3;
       then A3:rng Replace(f, i, p)
@@ -190,6 +198,7 @@ proof
        .= (rng (P^(Q^<*p*>))) \/ rng F by FINSEQ_1:44
        .= rng ((P^(Q^<*p*>))^F) by FINSEQ_1:44;
     hence thesis by A3,FINSEQ_1:42;
+end;
 end;
 
 theorem
@@ -426,6 +435,7 @@ definition
   correctness;
 end;
 
+
 theorem Th20:
   len Swap(f, i, j) = len f
 proof
@@ -436,8 +446,10 @@ proof
         then len Swap(f, i, j)
            = len Replace(f, i, f/.j) by Th7;
       hence thesis by Th7;
+      end;
       suppose not (1 <= i & i <= len f & 1 <= j & j <= len f);
      hence thesis by Def2;
+  end;
   end;
 
 Lm3:
@@ -456,6 +468,7 @@ A3:     1 <= i & i <= len F & 1 <= j & j <= len F by A1,Th7;
          .= f/.i by A3,A4,Lm2
          .= f.i by A2,FINSEQ_4:def 4;
          hence thesis by A4;
+        end;
         suppose A5:i <> j;
         A6:Swap(f, i, j).i
           = Replace(F, j, f/.i).i by A1,Def2
@@ -465,6 +478,7 @@ A3:     1 <= i & i <= len F & 1 <= j & j <= len F by A1,Th7;
           = Replace(F, j, f/.i).j by A1,Def2
          .= f/.i by A3,Lm2;
          hence thesis by A2,A6,FINSEQ_4:def 4;
+  end;
   end;
 
 theorem Th21:
@@ -477,8 +491,10 @@ theorem Th21:
           = Replace(Replace(f, i, f/.i), i, f/.i) by Def2
          .= Replace(f, i, f/.i) by FUNCT_7:40;
       hence thesis by FUNCT_7:40;
+      end;
       suppose not (1 <= i & i <= len f);
       hence thesis by Def2;
+  end;
   end;
 
 theorem
@@ -504,12 +520,14 @@ proof
                   hence thesis by A1,A3,Lm3;
               end;
               hence thesis;
+            end;
             suppose A8:i <> k;
                 now per cases;
                 suppose j = k;
                   then Swap(Swap(f,i,j),j,i).k
                          = Swap(f,i,k).i by A1,A4,A6,Lm3;
                   hence thesis by A1,A3,Lm3;
+                end;
                 suppose A9:j <> k;
                   set S = Swap(f,i,j);
                     Swap(S,j,i).k
@@ -520,14 +538,18 @@ proof
                    .= Replace(f,i,f/.j).k by A9,FUNCT_7:34;
                   hence thesis by A8,FUNCT_7:34;
               end;
+              end;
               hence thesis;
+      end;
       end;
       hence thesis;
     end;
     hence thesis by A2,FINSEQ_1:18;
+  end;
   suppose A10: not (1 <= i & i <= len f & 1 <= j & j <= len f);
     then Swap(Swap(f,i,j),j,i) = Swap(f,j,i) by Def2;
     hence thesis by A10,Def2;
+end;
 end;
 
 theorem Th23:
@@ -559,6 +581,7 @@ A6:   len Swap(f,i,j) = len f by Th20
                    .= Replace(FJ,k,f/.i).k by A3,A6,Lm2
                    .= Swap(f,k,i).k by A1,A7,A8,Def2;
                   hence thesis by A8;
+                end;
                 suppose A9:j <> k;
                     Swap(f,i,j).k
                     = Replace(FI,j,f/.i).k by A1,Def2
@@ -567,7 +590,9 @@ A6:   len Swap(f,i,j) = len f by Th20
                    .= Replace(FJ,k,f/.j).k by A3,A6,Lm2;
                   hence thesis by A1,A7,Def2;
               end;
+              end;
               hence thesis;
+            end;
             suppose A10:i <> k;
                 now per cases;
                 suppose A11:j = k;
@@ -577,6 +602,7 @@ A6:   len Swap(f,i,j) = len f by Th20
                    .= FJ.k by A4,A11,Lm2
                    .= Replace(FJ,i,f/.j).k by A10,FUNCT_7:34;
                   hence thesis by A1,Def2;
+                end;
                 suppose A12:j <> k;
                     Swap(f,i,j).k
                     = Replace(FI,j,f/.i).k by A1,Def2
@@ -586,14 +612,18 @@ A6:   len Swap(f,i,j) = len f by Th20
                    .= Replace(FJ,i,f/.j).k by A10,FUNCT_7:34;
                   hence thesis by A1,Def2;
               end;
+              end;
               hence thesis;
+          end;
           end;
       hence thesis;
     end;
     hence thesis by A2,FINSEQ_1:18;
+  end;
   suppose A13: not (1 <= i & i <= len f & 1 <= j & j <= len f);
     then Swap(f, i, j) = f by Def2;
     hence thesis by A13,Def2;
+end;
 end;
 
 theorem
@@ -685,6 +715,7 @@ proof
                                                     by FINSEQ_1:45
        .= rng f by A1,A4,Th1;
       hence thesis;
+    end;
     suppose A12:i < j;
       set F = Replace(f,j,f/.i);
       A13:i <= len F by A1,Th7;
@@ -767,12 +798,16 @@ proof
        .= rng f by A1,A12,Th1;
 
       hence thesis;
+    end;
     suppose i = j;
       hence thesis by Th21;
     end;
+    end;
     hence thesis;
+  end;
   suppose not (1 <= i & i <= len f & 1 <= j & j <= len f);
     hence thesis by Def2;
+end;
 end;
 
 theorem
@@ -886,8 +921,10 @@ proof
       = Replace(f, i, f/.j).k by FUNCT_7:34
      .= f.k by A2,FUNCT_7:34;
   hence thesis by A1,Def2;
+  end;
   suppose not (1 <= i & i <= len f & 1 <= j & j <= len f);
   hence thesis by Def2;
+end;
 end;
 
 theorem Th32:
@@ -933,6 +970,7 @@ proof
     suppose A3:i = j;
       then Replace(Swap(f,i,j),i,p) = Replace(f,i,p) by Th21;
       hence thesis by A3,Th21;
+    end;
     suppose A4:i < j;
       set F = Swap(f,i,j);
       set M = (f|(i-'1));
@@ -997,6 +1035,7 @@ proof
        .= M^<*p*>^(f/^i)|(j-'i-'1)^(<*f/.i*>^(f/^j)) by A2,FINSEQ_4:def 4
        .= M^<*p*>^((f/^i)|(j-'i-'1)^(<*f/.i*>^(f/^j))) by FINSEQ_1:45;
       hence thesis by A8;
+    end;
     suppose A21:i > j;
       then consider k such that
         A22:i = j + k by NAT_1:28;
@@ -1095,6 +1134,7 @@ proof
                                         by A2,A41,A44,A45,A49,A50,FINSEQ_4:def
 4;
       hence thesis by A38;
+end;
 end;
 
 theorem Th35:

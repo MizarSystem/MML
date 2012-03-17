@@ -41,11 +41,11 @@ proof
   hence X=V by A1,A2,XBOOLE_0:3;
 end;
 
-definition let SFX,SFY;
- redefine pred SFX is_finer_than SFY;
- synonym SFX '<' SFY;
- synonym SFY '>' SFX;
-end;
+notation let SFX,SFY;
+ synonym SFX '<' SFY for SFX is_finer_than SFY;
+ synonym SFY '>' SFX for SFX is_finer_than SFY;
+ end;
+
 
 canceled;
 
@@ -124,6 +124,7 @@ definition let Y;let PA be a_partition of Y,b be set;
  :Def1: ex B being set st B c= PA & B<>{} & b = union B;
 end;
 
+
 definition let Y;let PA,PB be a_partition of Y,b be set;
   pred b is_min_depend PA,PB means
   :Def2: b is_a_dependent_set_of PA &
@@ -132,6 +133,7 @@ definition let Y;let PA,PB be a_partition of Y,b be set;
     & d is_a_dependent_set_of PA &
       d is_a_dependent_set_of PB holds d=b;
 end;
+
 
 theorem Th8: for PA,PB being a_partition of Y
    st PA '>' PB holds for b being set st b in PA holds
@@ -231,6 +233,7 @@ proof
  suppose F={};
   then Intersect(F)=Y by CANTOR_1:def 3;
   hence thesis by Th9;
+ end;
  suppose A1:F<>{};
    then reconsider F' = F as non empty Subset-Family of Y;
   assume A2:Intersect(F)<>{} &
@@ -244,7 +247,7 @@ proof
     hence ex B being set st B c= PA & B<>{} & X=union B by Def1;
   end;
   consider f being Function such that
-    A4:dom f = F & for X st X in F holds P[X,f.X] from NonUniqFuncEx(A3);
+    A4:dom f = F & for X st X in F holds P[X,f.X] from ZFREFLE1:sch 1(A3);
     rng f c= bool bool Y
   proof
     let y be set;
@@ -260,7 +263,7 @@ proof
   defpred P[set] means $1 in F;
   deffunc S(Element of F') = f.$1;
   reconsider T={S(X) where X is Element of F':P[X]}
-    as Subset of bool bool Y from SubsetFD;
+    as Subset of bool bool Y from COMPLSP1:sch 3;
   reconsider T as Subset-Family of bool Y by SETFAM_1:def 7;
   take B=Intersect(T);
   thus B c= PA
@@ -354,6 +357,7 @@ A28:  y in meet T by A26,A27,CANTOR_1:def 3;
     hence thesis by A16,XBOOLE_0:def 10;
   end;
 end;
+end;
 
 theorem Th11:
 for X0,X1 being Subset of Y st
@@ -446,7 +450,7 @@ proof
    y in $1 & $1 is_a_dependent_set_of PA & $1 is_a_dependent_set_of PB;
   deffunc F(Subset of Y) = $1;
   reconsider XX={F(X) where X is Subset of Y:P[X]}
-      as Subset of bool Y from SubsetFD;
+      as Subset of bool Y from COMPLSP1:sch 3;
   reconsider XX as Subset-Family of Y by SETFAM_1:def 7;
     Y c= Y;
 then A4: Y in XX by A2,A3;
@@ -505,6 +509,7 @@ then A6: y in meet XX by A4,SETFAM_1:def 1;
        hence X1 in d by A13,SETFAM_1:def 1;
      end;
      hence thesis by A10,XBOOLE_0:def 10;
+    end;
     suppose A14:not(y in d);
      reconsider d as Subset of Y by A1,A11,ZFMISC_1:95;
        d` = Y \ d by SUBSET_1:def 5;
@@ -533,6 +538,7 @@ then A6: y in meet XX by A4,SETFAM_1:def 1;
        ex add being set st add in ad by A23,XBOOLE_0:def 1;
      hence thesis by A24;
   end;
+  end;
   hence thesis by A4,A6,A8,A9,Def2,CANTOR_1:def 3;
 end;
 
@@ -549,7 +555,7 @@ proof
   thus Class(R,y) in P by A1,EQREL_1:def 5;
 end;
 
-definition
+registration
  let Y be non empty set;
  cluster -> non empty a_partition of Y;
  coherence
@@ -561,6 +567,7 @@ definition
  end;
 end;
 
+
 definition let Y be set;
 func PARTITIONS(Y) means
 :Def3: for x being set holds x in it iff x is a_partition of Y;
@@ -568,7 +575,8 @@ existence
 proof
   defpred P[set] means $1 is a_partition of Y;
   consider X being set such that
-  A1:for x being set holds x in X iff x in bool bool Y & P[x] from Separation;
+  A1:for x being set holds x in X iff x in bool bool Y & P[x] from
+XBOOLE_0:sch 1;
   take X;
   let x be set;
   thus x in X implies x is a_partition of Y by A1;
@@ -589,7 +597,8 @@ proof
 end;
 end;
 
-definition
+
+registration
 let Y be set;
 cluster PARTITIONS(Y) -> non empty;
 coherence
@@ -600,6 +609,7 @@ proof
    then {} is Subset-Family of {} by SETFAM_1:def 7;
    then {} is a_partition of Y by A1,EQREL_1:def 6;
   hence thesis by Def3;
+  end;
   suppose Y<>{};
    then reconsider Y as non empty set;
      {Y} c= bool Y by ZFMISC_1:80;
@@ -620,6 +630,8 @@ proof
   hence thesis by Def3;
 end;
 end;
+end;
+
 
 begin
 
@@ -700,6 +712,7 @@ def 7;
  end;
 commutativity;
 end;
+
 
 theorem for PA being a_partition of Y holds
   PA '/\' PA = PA
@@ -859,7 +872,7 @@ proof
      for B being set st B in PA holds A=B or A misses B) by EQREL_1:def 6;
    defpred P[set] means $1 is_min_depend PA,PB;
    consider X being set such that
-    A2:for d being set holds d in X iff d in bool Y & P[d] from Separation;
+    A2:for d being set holds d in X iff d in bool Y & P[d] from XBOOLE_0:sch 1;
    A3:for d being set holds (d in X) iff (d is_min_depend PA,PB)
    proof
      let d be set;
@@ -1026,6 +1039,7 @@ A31:   d in a iff d is_min_depend PA,PB by A30;
 end;
 end;
 
+
 canceled;
 
 theorem Th19: for PA,PB being a_partition of Y holds
@@ -1159,7 +1173,7 @@ proof let PA be a_partition of Y;
     end;
     consider RA being Equivalence_Relation of Y such that
      A8: for x,y holds [x,y] in RA iff
-      x in Y & y in Y & P[x,y] from Ex_Eq_Rel(A2,A4,A5);
+      x in Y & y in Y & P[x,y] from EQREL_1:sch 1(A2,A4,A5);
     take RA;
     thus thesis by A8;
   end;
@@ -1184,6 +1198,7 @@ A2: for x1,x2 being set holds [x1,x2] in f2 iff
  end;
 end;
 
+
 definition let Y;
  defpred P[set,set] means ex PA st PA = $1 & $2 = ERl PA;
 A1: for x st x in PARTITIONS(Y) ex z st P[x,z]
@@ -1199,7 +1214,7 @@ A1: for x st x in PARTITIONS(Y) ex z st P[x,z]
 existence
  proof
   thus ex f being Function st dom f = PARTITIONS(Y)
-    & for x st x in PARTITIONS(Y) holds P[x,f.x] from NonUniqFuncEx(A1);
+    & for x st x in PARTITIONS(Y) holds P[x,f.x] from ZFREFLE1:sch 1(A1);
  end;
 uniqueness
 proof
@@ -1219,6 +1234,7 @@ A5: for x st x in PARTITIONS(Y) ex PA st PA = x & f2.x = ERl PA;
    hence thesis by A2,A4,FUNCT_1:9;
  end;
 end;
+
 
 theorem Th24: for PA,PB being a_partition of Y holds
   PA '<' PB iff ERl(PA) c= ERl(PB)
@@ -1342,12 +1358,14 @@ A13:p2 in PA & p3 in PB & f.k in p2 & u in p2 &
           p3=b or p3 misses b by A3,A5,A13,A20;
         then B c= p0 by A3,A13,A18,A19,A20,XBOOLE_0:3,ZFMISC_1:92;
         hence f.(k+1) in p0 by A13,A18,A19,XBOOLE_0:3;
+       end;
        suppose 0 = k;
         hence f.(k+1) in p0 by A1;
       end;
+      end;
       hence f.(k+1) in p0;
     end;
-    thus P[k] from Ind(A6,A7);
+    thus P[k] from NAT_1:sch 1(A6,A7);
   end;
   hence y in p0 by A1;
 end;
@@ -1400,14 +1418,16 @@ proof
          end;
          then [f.i,f.(i+1)] in R1 "\/" R2 by A12,EQREL_1:36;
          hence [f.1,f.(i+1)] in R1 "\/" R2 by A4,A5,A9,EQREL_1:13,NAT_1:38;
+        end;
         suppose A13: 0 = i;
            [f.1,f.1] in R1 by A1,EQREL_1:11;
          then [f.1,f.1] in R1 \/ R2 by XBOOLE_0:def 2;
          hence [f.1,f.(i+1)] in R1 "\/" R2 by A8,A13;
        end;
+       end;
      hence [f.1,f.(i+1)] in R1 "\/" R2;
     end;
-    thus P[i] from Ind(A2,A3);
+    thus P[i] from NAT_1:sch 1(A2,A3);
   end;
   hence thesis by A1;
 end;
@@ -1567,8 +1587,10 @@ proof
             now per cases by A43,AXIOMS:21;
             case 1<=i & i<len fd;
             hence thesis by A40;
+            end;
             case 1<=i & i=len fd;
             hence thesis by A25,A28,A33,A35,A39;
+          end;
           end;
           hence thesis;
         end;
@@ -1657,8 +1679,10 @@ proof
               now per cases by A66,AXIOMS:21;
               case 1<=i & i<len fd;
               hence thesis by A62;
+              end;
               case 1<=i & i=len fd;
               hence thesis by A48,A50,A55,A57,A61;
+            end;
             end;
             hence thesis;
           end;
@@ -1739,8 +1763,10 @@ proof
             now per cases by A88,AXIOMS:21;
             case 1<=i & i<len fd;
             hence thesis by A84;
+            end;
             case 1<=i & i=len fd;
             hence thesis by A69,A72,A78,A80,A83;
+          end;
           end;
           hence thesis;
         end;
@@ -1786,12 +1812,14 @@ proof
 A;
         ex y st y in (PA '\/' PB) & A c= y by A1,A96,SETFAM_1:def 2;
       hence [x1,x2] in ERl(PA '\/' PB) by A96,Def6;
+     end;
      case (x1 in Y & x2 in Y & ex B being Subset of Y
           st B in PB & x1 in B & x2 in B);
       then consider B being Subset of Y such that A97:B in PB & x1 in B & x2 in
 B;
         ex y st y in (PA '\/' PB) & B c= y by A2,A97,SETFAM_1:def 2;
       hence [x1,x2] in ERl(PA '\/' PB) by A97,Def6;
+    end;
     end;
     hence [x1,x2] in ERl(PA '\/' PB);
   end;
@@ -1902,10 +1930,10 @@ proof
   hence thesis by Th24;
 end;
 
-definition let Y;
- redefine func SmallestPartition Y;
- synonym %I(Y);
-end;
+notation let Y;
+ synonym %I(Y) for SmallestPartition Y;
+ end;
+
 
 definition let Y;
  canceled;
@@ -1931,6 +1959,7 @@ proof
   hence thesis by A1,A2,EQREL_1:def 6;
 end;
 end;
+
 
 theorem %I(Y)={B:ex x being set st B={x} & x in Y}
 proof
@@ -2103,8 +2132,10 @@ proof
           now per cases by A6,XBOOLE_0:def 2;
          case z in id Y;
           hence thesis by A2,A5;
+         end;
          case z in ERl(PA);
           hence thesis;
+        end;
         end;
         hence thesis;
       end;

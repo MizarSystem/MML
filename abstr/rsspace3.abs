@@ -31,19 +31,113 @@ definition
    (x in the_set_of_RealSequences & seq_id(x) is absolutely_summable);
 end;
 
+
 theorem :: RSSPACE3:1
 for c be Real, seq be Real_Sequence st seq is convergent
 for rseq be Real_Sequence st
  ( for i be Nat holds rseq .i = abs(seq.i-c) ) holds
  ( rseq is convergent & lim rseq = abs(lim seq-c) );
 
-definition
+registration
   cluster the_set_of_l1RealSequences -> non empty;
+  coherence
+   proof
+     seq_id Zeroseq is absolutely_summable
+     proof
+       reconsider rseq=seq_id Zeroseq as Real_Sequence;
+       for n being Nat holds rseq.n = 0 by RSSPACE:def 6;
+       hence thesis by COMSEQ_3:3;
+     end;
+     hence thesis by Def1;
+  end;
 end;
 
-definition
+
+registration
   cluster the_set_of_l1RealSequences -> lineary-closed;
+  coherence
+proof
+set W = the_set_of_l1RealSequences;
+A1:for v,u be VECTOR of Linear_Space_of_RealSequences st
+    v in the_set_of_l1RealSequences &
+    u in the_set_of_l1RealSequences
+        holds v + u in the_set_of_l1RealSequences
+   proof
+     let v,u be VECTOR of Linear_Space_of_RealSequences such that
+A2: v in W & u in W;
+A3: seq_id(v+u) is absolutely_summable
+     proof
+A4:  seq_id v is absolutely_summable by A2,Def1;
+A5:  seq_id u is absolutely_summable by A2,Def1;
+       set p = abs seq_id v;
+       set q = abs seq_id u;
+       set r = abs seq_id(v+u);
+A6:  p is summable by A4,SERIES_1:def 5;
+A7:  q is summable by A5,SERIES_1:def 5;
+A8:  p+q is summable by A6,A7,SERIES_1:10;
+A9:  for n be Nat holds 0<=r.n
+       proof
+        let n be Nat;
+        r.n=abs((seq_id(v+u)).n) by SEQ_1:16;
+        hence thesis by ABSVALUE:5;
+      end;
+      for n be Nat holds r.n <=(p+q).n
+      proof
+        let n be Nat;
+A10:      r.n=abs((seq_id(v+u)).n) by SEQ_1:16
+          .=abs((seq_id(seq_id(v) + seq_id(u))).n) by RSSPACE:4,def 7
+          .=abs((seq_id v + seq_id u).n) by RSSPACE:3
+          .=abs((seq_id v).n + (seq_id u).n) by SEQ_1:11;
+A11:     abs((seq_id v).n)+abs((seq_id u).n)
+        = abs(seq_id v).n + abs((seq_id u).n) by SEQ_1:16
+       .= abs(seq_id v).n+ abs(seq_id u).n by SEQ_1:16
+       .= (p + q).n by SEQ_1:11;
+       thus r.n <= (p+q).n by A10,A11,ABSVALUE:13;
+      end;
+     then r is summable by A8,A9,SERIES_1:24;
+     hence thesis by SERIES_1:def 5;
+    end;
+    thus v+u in W by A3,Def1,RSSPACE:def 7;
 end;
+
+for a be Real for v be VECTOR of Linear_Space_of_RealSequences
+    st v in W holds a * v in W
+    proof
+let a be Real;
+let v be VECTOR of Linear_Space_of_RealSequences
+        such that
+    A12: v in W;
+    seq_id(a*v) is absolutely_summable
+    proof
+     A13: seq_id v is absolutely_summable by A12,Def1;
+     A14: abs seq_id v is summable by A13,SERIES_1:def 5;
+     set q1 = abs seq_id(a*v);
+     set r1 = ((abs a)(#)abs(seq_id v));
+    A15: r1 is summable by A14,SERIES_1:13;
+    A16:  for n be Nat holds 0<=q1.n
+            proof
+              let n be Nat;
+              q1.n=abs((seq_id(a*v)).n) by SEQ_1:16;
+           hence thesis by ABSVALUE:5;
+          end;
+         for n be Nat holds q1.n <=r1.n
+             proof
+              let n be Nat;
+              q1.n=abs((seq_id(a*v)).n) by SEQ_1:16
+                 .=abs((seq_id(a(#)seq_id v)).n) by RSSPACE:5,def 7
+                 .=abs((a(#)seq_id v).n) by RSSPACE:3
+                 .=abs(a(#)seq_id v).n by SEQ_1:16;
+               hence thesis by SEQ_1:64;
+              end;
+      then q1 is summable by A15,A16,SERIES_1:24;
+      hence thesis by SERIES_1:def 5;
+    end;
+    hence a*v in W by Def1,RSSPACE:def 7;
+  end;
+  hence thesis by A1,RLSUB_1:def 1;
+end;
+end;
+
 
 theorem :: RSSPACE3:2
 RLSStruct (# the_set_of_l1RealSequences,
@@ -52,14 +146,16 @@ RLSStruct (# the_set_of_l1RealSequences,
         Mult_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences) #)
 is Subspace of Linear_Space_of_RealSequences;
 
-definition
+registration
   cluster RLSStruct (# the_set_of_l1RealSequences,
         Zero_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
         Add_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
         Mult_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences) #)
    -> Abelian add-associative right_zeroed right_complementable
         RealLinearSpace-like;
+  coherence by RSSPACE:13;
 end;
+
 
 theorem :: RSSPACE3:3
 RLSStruct (# the_set_of_l1RealSequences,
@@ -75,12 +171,15 @@ definition
     it.x = Sum abs seq_id x;
 end;
 
-definition let X be non empty set,
+
+registration let X be non empty set,
                Z be Element of X, A be BinOp of X,
                M be Function of [:REAL, X:], X,
                N be Function of X, REAL;
   cluster NORMSTR (# X, Z, A, M, N #) -> non empty;
+  coherence by STRUCT_0:def 1;
 end;
+
 
 theorem :: RSSPACE3:4
 for l be NORMSTR st RLSStruct (# the carrier of l, the Zero of l,
@@ -114,6 +213,7 @@ definition
         l_norm #);
 end;
 
+
 begin :: l1_Space is Banach
 
 theorem :: RSSPACE3:8
@@ -138,9 +238,10 @@ for x, y being Point of l1_Space, a be Real holds
   ||.x+y.|| <= ||.x.|| + ||.y.|| &
   ||. a*x .|| = abs(a) * ||.x.||;
 
-definition
+registration
   cluster l1_Space -> RealNormSpace-like RealLinearSpace-like
        Abelian add-associative right_zeroed right_complementable;
+  coherence by Def3,Th3,Th4,Th9,NORMSP_1:def 2;
 end;
 
 definition let X be non empty NORMSTR, x, y be Point of X;
@@ -148,6 +249,7 @@ definition let X be non empty NORMSTR, x, y be Point of X;
 :: RSSPACE3:def 4
   ||.x - y.||;
 end;
+
 
 definition
  let NRM be non empty NORMSTR;
@@ -157,8 +259,12 @@ definition
  for r1 be Real st r1 > 0 ex k1 be Nat st
   for n1, m1 be Nat st n1 >= k1 & m1 >= k1 holds
    dist(seqt.n1, seqt.m1) < r1;
-  synonym seqt is Cauchy_sequence_by_Norm;
-end;
+  end;
+notation
+ let NRM be non empty NORMSTR;
+ let seqt be sequence of NRM;
+ synonym seqt is Cauchy_sequence_by_Norm for seqt is CCauchy ; end;
+
 
  reserve NRM for non empty RealNormSpace;
  reserve seq for sequence of NRM;

@@ -9,8 +9,6 @@ ZFMISC_1
 SUBSET_1
 NUMBERS
 #
-SepReal
-#
 ;
 ªM3 K40 K52 ;;;ªM3 K52 ;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;
 #

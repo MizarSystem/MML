@@ -70,11 +70,11 @@ begin
     ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
    provided
     A1: for k st k in Seg A() ex x st P[k,x]
-   proof
+proof
     defpred Z[set,set] means P[$1,$2];
     A2: for x st x in Seg A() ex y st Z[x,y] by A1;
     consider f being Function such that A3: dom f = Seg A() &
-     (for x st x in Seg A() holds Z[x,f.x]) from NonUniqFuncEx(A2);
+     (for x st x in Seg A() holds Z[x,f.x]) from ZFREFLE1:sch 1(A2);
     reconsider p = f as FinSequence by A3,FINSEQ_1:def 2;
     take p;
     thus thesis by A3;
@@ -106,7 +106,7 @@ begin
     end;
    end;
 
-  definition let Y;
+  registration let Y;
    cluster EqRelLatt Y -> bounded;
    coherence
    proof
@@ -146,6 +146,7 @@ begin
     hence EqRelLatt Y is bounded by A1,LATTICES:def 15;
    end;
   end;
+
 
   theorem
      Bottom EqRelLatt Y = id Y
@@ -197,6 +198,7 @@ begin
        let b be Element of EqRelLatt Y;
        assume b is_less_than X;
        thus b [= a by LATTICES:45;
+      end;
       suppose A2: X is non empty;
        set a = meet X;
          X c= bool [:Y,Y:]
@@ -240,14 +242,16 @@ begin
        end;
        hence thesis;
     end;
+    end;
     hence thesis by VECTSP_8:def 6;
    end;
 
-  definition
+  registration
    let Y;
    cluster EqRelLatt Y -> complete;
    coherence by Th5;
   end;
+
 
   theorem Th6:
    for Y be set
@@ -455,6 +459,7 @@ begin
       then "/\" (B,E) = Top E by A1,LATTICE3:34
         .= [|M,M|] by MSUALG_7:5;
       hence "/\" (B,E) is MSCongruence of A by MSUALG_5:20;
+     end;
      suppose A2: B is non empty;
         for o be OperSymbol of S, x,y be Element of Args(o,A) st
        (for n be Nat st n in dom x holds
@@ -506,6 +511,7 @@ begin
       end;
       hence thesis by MSUALG_4:def 6;
    end;
+   end;
 
   definition
    let S,A;
@@ -530,6 +536,7 @@ begin
    end;
   end;
 
+
   definition
    let S,A;
    let X be Subset of EqRelLatt the Sorts of A;
@@ -552,6 +559,7 @@ begin
     hence thesis;
    end;
   end;
+
 
   theorem
      for C be Element of EqRelLatt the Sorts of A st
@@ -761,16 +769,18 @@ begin
     consider E being Function such that
      A1: dom E = I and
      A2: for j st j in I holds ( C[j] implies E.j = F(j)) &
-      (not C[j] implies E.j = G(j)) from LambdaC;
+      (not C[j] implies E.j = G(j)) from PARTFUN1:sch 1;
     reconsider E as ManySortedSet of I by A1,PBOOLE:def 3;
       now let k be set;
      assume A3: k in I;
      per cases;
      suppose k = i;
       hence E.k is Relation of M.k by A2;
+     end;
      suppose k <> i;
       then E.k = nabla (M.k) by A2,A3;
       hence E.k is Relation of M.k;
+    end;
     end;
     then reconsider E as ManySortedRelation of M by MSUALG_4:def 2;
       now let k be set,
@@ -779,9 +789,11 @@ begin
      per cases;
      suppose k = i;
       hence R is Equivalence_Relation of M.k by A2,A4;
+     end;
      suppose k <> i;
       then E.k = nabla (M.k) by A2,A4;
       hence R is Equivalence_Relation of M.k by A4;
+    end;
     end;
     then reconsider E as Equivalence_Relation of M by MSUALG_4:def 3;
     take E;
@@ -791,12 +803,19 @@ begin
     hence E.j = nabla (M.j) by A2;
    end;
 
-  definition
+  notation
    let I be non empty set;
    let M be ManySortedSet of I;
    let i be Element of I;
    let X be Subset of EqRelLatt M;
-   redefine func pi(X,i) -> Subset of EqRelLatt M.i means :Def3:
+   synonym EqRelSet (X,i) for pi(X,i) ;
+  end;
+definition
+   let I be non empty set;
+   let M be ManySortedSet of I;
+   let i be Element of I;
+   let X be Subset of EqRelLatt M;
+   redefine func EqRelSet (X,i) -> Subset of EqRelLatt M.i means :Def3:
     x in it iff ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X;
    coherence
    proof
@@ -870,8 +889,8 @@ begin
      end;
     end;
    end;
-   synonym EqRelSet (X,i);
-  end;
+   end;
+
 
   theorem Th17:
    for i be Element of S
@@ -926,10 +945,12 @@ begin
        per cases;
        suppose j = i;
         hence c'.j c= r'.j by A4,A6,Th2;
+       end;
        suppose j <> i;
         then r'.j = nabla ((the Sorts of A).j) by A4,A7;
         then cj' /\ rj' = cj' by EQREL_1:18;
         hence c'.j c= r'.j by XBOOLE_1:17;
+      end;
       end;
       then c' c= r' by PBOOLE:def 5;
       hence c [= r by MSUALG_7:7;
@@ -983,7 +1004,7 @@ begin
       deffunc F(set)=t.(f.$1);
       consider g be FinSequence such that
        A7: len g = len f & for k be Nat st k in Seg len f holds
-        g.k = F(k) from SeqLambda;
+        g.k = F(k) from FINSEQ_1:sch 2;
       take g;
       thus 1 <= len g by A5,A7;
         1 in Seg len f by A5,FINSEQ_1:3;
@@ -1052,9 +1073,10 @@ begin
     hence thesis by MSUALG_7:def 3;
    end;
 
-  definition
+  registration
    let S,A;
    cluster CongrLatt A -> /\-inheriting \/-inheriting;
    coherence by Th19,Th20;
   end;
+
 

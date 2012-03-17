@@ -36,7 +36,7 @@ environ
 
 begin :: Preliminaries
 
-definition
+registration
  let i be good Instruction of SCM+FSA;
  cluster Macro i -> good;
  coherence
@@ -46,7 +46,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let a be read-write Int-Location,b be Int-Location;
  cluster AddTo(a,b) -> good;
  coherence
@@ -55,6 +56,7 @@ definition
     hence thesis by SCM_HALT:def 6;
  end;
 end;
+
 
 theorem Th1:  ::PR016
  for f be Function,d,r be set st d in dom f holds dom f=dom (f+*(d.-->r))
@@ -112,11 +114,13 @@ then A5: UIL=UIL2 by FUNCT_2:113;
    then p.x=pl.x by FUNCT_4:12;
       hence f.x = UIL.plx by A10,FUNCT_1:22
           .= g.x by A6,A9,A10,FUNCT_1:23;
+   end;
    suppose A11:x=l;
       thus f.x = UIL.(p.x) by A10,FUNCT_1:22
           .= UsedIntLoc plx by A1,A2,A3,A11
           .= UIL.plx by A4,A5
           .= g.x by A6,A9,A10,FUNCT_1:23;
+ end;
  end;
   hence thesis by A3,A4,A5,FUNCT_1:9;
 end;
@@ -228,11 +232,13 @@ then A5: UIL=UIL2 by FUNCT_2:113;
    then p.x=pl.x by FUNCT_4:12;
       hence f.x = UIL.plx by A10,FUNCT_1:22
           .= g.x by A6,A9,A10,FUNCT_1:23;
+   end;
    suppose A11:x=l;
       thus f.x = UIL.(p.x) by A10,FUNCT_1:22
           .= UsedInt*Loc plx by A1,A2,A3,A11
           .= UIL.plx by A4,A5
           .= g.x by A6,A9,A10,FUNCT_1:23;
+ end;
  end;
   hence thesis by A3,A4,A5,FUNCT_1:9;
 end;
@@ -307,10 +313,12 @@ thus A6: g.n=f/.m by A1,A2,A4,FUNCT_7:33
 thus A7: now per cases;
       suppose m=n;
         hence g.m=f.n by A6;
+      end;
       suppose m<>n;
         hence g.m=(f+*(m,f/.n)).m by A1,FUNCT_7:34
            .=f/.n by A3,FUNCT_7:33
            .=f.n by A1,FINSEQ_4:24;
+   end;
    end;
 hereby let k be set;
       assume A8:k<>m & k<>n & k in dom f;
@@ -696,7 +704,7 @@ then k < LifeSpan sI by A20,AXIOMS:22;
     set s2=(Computation s1).(1 + LifeSpan sI);
     set loc4=insloc (card I + 4);
     set s3=(Computation s1).(1+LifeSpan sI+1);
-   for k being Nat holds P[k] from Ind(A16,A18);
+   for k being Nat holds P[k] from NAT_1:sch 1(A16,A18);
 then A21: P[LifeSpan sI];
 then A22: CurInstr s2 = goto loc4 by A4,A5,SCMFSA_9:45;
 A23: s3 = Following s2 by AMI_1:def 19
@@ -794,16 +802,17 @@ qua non empty set & for i being Nat
    thus ex f being Function of NAT,product the Object-Kind of SCM+FSA st
    f.0 = s qua Element of (product the Object-Kind of SCM+FSA)
 qua non empty set & for i being Nat holds f.(i+1)= U(i,f.i)
-   from LambdaRecExD;
+   from RECDEF_1:sch 4;
   end;
  uniqueness
 proof let F1,F2 be Function of NAT,product the Object-Kind of SCM+FSA
       such that
 A1: F1.0 = s & for i being Nat holds F1.(i+1)= U(i,F1.i) and
 A2: F2.0 = s & for i being Nat holds F2.(i+1)= U(i,F2.i);
-    thus F1 = F2 from LambdaRecUnD(A1,A2);
+    thus F1 = F2 from RECDEF_1:sch 12(A1,A2);
  end;
 end;
+
 
 canceled 2;
 
@@ -908,7 +917,7 @@ A2: F(0) =f.s by Def1;
 A3: for k holds ( F(k+1) < F(k) or F(k) = 0 ) by A1;
     consider m being Nat such that
 A4: F(m)=0 and
-A5: for n st F(n) =0 holds m <= n from MinIndex(A2,A3);
+A5: for n st F(n) =0 holds m <= n from SCMFSA_9:sch 1(A2,A3);
 A6: now let i be Nat;
        assume i<m;
        then F(i)<>0 by A5;
@@ -949,7 +958,7 @@ A18:       sk1.intloc 0=1 by A1;
        end;
        hence P[k+1];
     end;
-A19: for k being Nat holds P[k] from Ind(A7,A9);
+A19: for k being Nat holds P[k] from NAT_1:sch 1(A7,A9);
       now per cases;
        suppose m=0;
          then (StepWhile>0(a,s,I).0).a <= 0 by A1,A4;
@@ -957,6 +966,7 @@ A19: for k being Nat holds P[k] from Ind(A7,A9);
          hence while>0(a,I) is_halting_onInit s &
          while>0(a,I) is_closed_onInit s
          by Th16;
+       end;
        suppose A20:m<>0;
          then consider i being Nat such that
 A21:      m=i+1 by NAT_1:22;
@@ -1001,6 +1011,7 @@ A35:           StepWhile>0(a,s,I).0=s by Def1;
 then A36:           s.a > 0 by A1,A35;
                 I is_closed_onInit s & I is_halting_onInit s by A6,A33,A35;
               hence IC (Computation s1).q in dom while>0(a,I) by A34,A36,Th19;
+            end;
             suppose A37: q > p;
               defpred P2[Nat] means
                 $1<=m & $1<>0 & (ex k st StepWhile>0(a,s,I).$1=
@@ -1015,7 +1026,7 @@ A39:           now
 then 1 <= m by NAT_1:38;
 then A40:          ex t being Nat st P2[t] by A39;
                 ex k st P2[k] & for i st P2[i] holds i <= k
-               from Max(A38,A40);
+               from NAT_1:sch 6(A38,A40);
               then consider t being Nat such that
 A41:           P2[t] & for i st P2[i] holds i <= t;
                 now per cases;
@@ -1029,6 +1040,7 @@ AMI_1:51;
                      while>0(a,I) is_closed_onInit sm by A24,Th16;
                    hence IC (Computation s1).q in dom while>0(a,I) by A44,
 SCM_HALT:def 4;
+                 end;
                  suppose t<>m;
 then A45:                t < m by A41,REAL_1:def 5;
                    consider y being Nat such that
@@ -1069,9 +1081,12 @@ A59:                I is_closed_onInit Dt & I is_halting_onInit Dt by A6,A45;
                    hence IC (Computation s1).q in dom while>0(a,I)
                     by A57,A58,A59,Th19;
               end;
+              end;
               hence IC (Computation s1).q in dom while>0(a,I);
          end;
+         end;
          hence while>0(a,I) is_closed_onInit s by SCM_HALT:def 4;
+    end;
     end;
     hence thesis;
 end;
@@ -1098,6 +1113,7 @@ A3: now let k be Nat;
            then t.a < k+1 by A5,REAL_1:def 5;
            then t.a <= k by INT_1:20;
            hence while>0(a,I) is_halting_onInit t by A4;
+         end;
          suppose A6:t.a=k+1;
          then A7: t.a > 0 by NAT_1:19;
          A8: I is_closed_onInit t by SCM_HALT:35;
@@ -1150,17 +1166,20 @@ A3: now let k be Nat;
         then tW0 is halting by AMI_1:def 20;
        hence while>0(a,I) is_halting_onInit t by SCM_HALT:def 5;
      end;
+     end;
      hence P[k+1];
   end;
-A19: for k be Nat holds P[k] from Ind(A2,A3);
+A19: for k be Nat holds P[k] from NAT_1:sch 1(A2,A3);
     now let t be State of SCM+FSA;
     per cases;
     suppose t.a<=0;
      hence while>0(a,I) is_halting_onInit t by Th16;
+    end;
     suppose t.a>0;
       then reconsider n=t.a as Nat by INT_1:16;
         P[n] by A19;
       hence while>0(a,I) is_halting_onInit t;
+  end;
   end;
   hence thesis by SCM_HALT:36;
 end;
@@ -1179,8 +1198,10 @@ proof
         per cases by A1;
          suppose IExec(I, t).a < t.a;
            hence IExec(I, t).a < t.a;
+         end;
          suppose IExec(I, t).a <= 0;
            hence IExec(I, t).a < t.a by A2;
+    end;
     end;
     hence thesis by Th29;
 end;
@@ -1197,11 +1218,14 @@ definition let D be set,
      reconsider f as Function of D,INT;
        f.d is Integer;
      hence thesis;
+     end;
      suppose D is empty;
      then f = {} by PARTFUN1:57;
      hence f.d is Integer by CARD_1:51,FUNCT_1:def 4,RELAT_1:60;
   end;
+  end;
 end;
+
 
 theorem    :: W_halt3
    for I be good InitHalting Macro-Instruction,a be read-write Int-Location
@@ -1234,6 +1258,7 @@ A3: now let k be Nat;
            then f.t < k+1 by A5,REAL_1:def 5;
            then f.t <= k by INT_1:20;
            hence while>0(a,I) is_halting_onInit t by A4;
+         end;
          suppose A6:f.t=k+1;
          then A7: f.t > 0 by NAT_1:19;
          then A8: not t.a <= 0 by A1;
@@ -1283,18 +1308,21 @@ A3: now let k be Nat;
         then tW0 is halting by AMI_1:def 20;
        hence while>0(a,I) is_halting_onInit t by SCM_HALT:def 5;
      end;
+     end;
      hence P[k+1];
   end;
-A19: for k be Nat holds P[k] from Ind(A2,A3);
+A19: for k be Nat holds P[k] from NAT_1:sch 1(A2,A3);
     now let t be State of SCM+FSA;
     per cases;
     suppose f.t<=0;
      then t.a <= 0 by A1;
      hence while>0(a,I) is_halting_onInit t by Th16;
+    end;
     suppose f.t>0;
       then reconsider n=f.t as Nat by INT_1:16;
         P[n] by A19;
       hence while>0(a,I) is_halting_onInit t;
+  end;
   end;
   hence thesis by SCM_HALT:36;
 end;
@@ -1515,8 +1543,10 @@ A15: (Computation CW.(m1 + 3)).(m3+mW) | D = C3.m3 | D
              thus s3.b = CI.m1.b by A26,FUNCT_4:12
                .=(CI.m1 +* while>0(a,I)).b by A27,FUNCT_4:12
                .=Cm3.b by A20,SCMFSA6A:38;
+           end;
            suppose b = intloc 0;
              hence s3.b=Cm3.b by A6,A21,SCM_HALT:7;
+         end;
          end;
      then A28: Cm3,s3 equal_outside A by A19,A23,SCMFSA6A:28;
      then A29: LifeSpan Cm3 = m3 by A1,A6,A22,Th12;
@@ -1650,12 +1680,14 @@ definition
   correctness;
 end;
 
+
 definition
  func Insert-Sort-Algorithm -> Macro-Instruction means
 :Def3:  ::def2
   it = insert-sort fsloc 0;
   correctness;
 end;
+
 
 theorem Th38:   ::IS002
  for f being FinSeq-Location holds
@@ -2519,26 +2551,37 @@ then A86: Cs.11.IC SCM+FSA = Next IC Cs.10 by SCMFSA_2:100
      per cases by A88,A89,Th8;
      suppose k = 1;
               hence c1=d1 & c2=d2 & c3=d3 by A3,A5,A6,A9,SCMFSA_2:89;
+     end;
      suppose k = 2;
               hence c1=d1 & c2=d2 & c3=d3 by A10,A11,A12,SCMFSA_2:95;
+     end;
      suppose k = 3;
               hence c1=d1 & c2=d2 & c3=d3 by A14,A15,A17,A18,A21,SCMFSA_2:89;
+     end;
      suppose k = 4;
               hence c1=d1 & c2=d2 & c3=d3 by A22,A23,A25,SCMFSA_2:95;
+     end;
      suppose k = 5;
               hence c1=d1 & c2=d2 & c3=d3 by A27,A28,A31,A32,A35,SCMFSA_2:89;
+     end;
      suppose k = 6;
               hence c1=d1 & c2=d2 & c3=d3 by A36,A37,A40,SCMFSA_2:95;
+     end;
      suppose k = 7;
               hence c1=d1 & c2=d2 & c3=d3 by A42,A43,A47,A48,A51,SCMFSA_2:89;
+     end;
      suppose k = 8;
               hence c1=d1 & c2=d2 & c3=d3 by A52,A53,A57,SCMFSA_2:95;
+     end;
      suppose k = 9;
               hence c1=d1 & c2=d2 & c3=d3 by A59,A60,A65,A66,A69,SCMFSA_2:89;
+     end;
      suppose k = 10;
               hence c1=d1 & c2=d2 & c3=d3 by A70,A71,A76,SCMFSA_2:95;
+     end;
      suppose k = 11;
               hence c1=d1 & c2=d2 & c3=d3 by A78,A79,A85,A86,A87,SCMFSA_2:100;
+end;
 end;
 
 thus Cs.11.a1 =len(s.fsloc 0) by A79,A85,SCMFSA_2:100;
@@ -2599,10 +2642,12 @@ A2:  s2.b2=Exec(n2,s1).b2 by SCMFSA6C:9
           IExec(body2,s).b2=IExec(IF,s2).b2 by SCM_HALT:30
         .=0 by A3,Lm3;
        hence thesis;
+     end;
      suppose A4:s2.b5<=0;
          IExec(body2,s).b2=IExec(IF,s2).b2 by SCM_HALT:30
        .=s.b2-1 by A2,A4,Lm3;
        hence thesis by INT_1:26;
+end;
 end;
 
 then Lm5:   ::Lem08
@@ -2742,12 +2787,14 @@ proof
            .=Exec(m0,s0).f0 by SCMFSA6C:6
            .=s0.f0 by SCMFSA_2:91
            .=s.f0 by SCMFSA6C:3;
+    end;
     suppose s.b5 <= 0;
       hence IExec(IF,s).f0 = IExec(m2 ';' m3, s).f0 by SCM_HALT:54
          .=Exec(m3,Exec(m2, s0)).f0 by SCMFSA6C:10
          .=Exec(m2, s0).f0 by SCMFSA_2:91
          .=s0.f0 by SCMFSA_2:90
          .=s.f0 by SCMFSA6C:3;
+end;
 end;
 
 Lm14:   ::Lem17
@@ -2794,8 +2841,10 @@ A3: s2.a=Exec(m3,s1).a by SCMFSA6C:9
            .=Exec(m0,Initialize s).a by SCMFSA6C:6
            .=(Initialize s).a by A1,SCMFSA_2:91
            .=s.a by SCMFSA6C:3;
+    end;
     suppose s.b5 <= 0;
      hence IExec(IF,s).a =s.a by A3,SCM_HALT:54;
+end;
 end;
 
 Lm16:  ::Lem36
@@ -2951,6 +3000,7 @@ A3: now let k be Nat;
          & (for i be Nat st i>k+1-n & i<k+1+1 holds ex x2 be Integer st
          x2=s.f0.i & x2 <= s.b6);
 
+    end;
     suppose A11:m-s.b6<=0;
         then A12: bs.b2=k by A5,A8,XCMPLX_1:26;
         A13: bs.f0=s.f0 by A5,A7,Lm16;
@@ -2992,6 +3042,7 @@ A3: now let k be Nat;
                   thus x2=s.f0.i by A5,A8,A21;
                     x2<=0+s.b6 by A11,REAL_1:86;
                   hence x2<=s.b6;
+            end;
             suppose A22: i<>k+1;
                    i<=k+1 by A20,INT_1:20;
                  then i<k+1 by A22,REAL_1:def 5;
@@ -3001,6 +3052,7 @@ A3: now let k be Nat;
                 thus x2=s.f0.i by A5,A7,A23,Lm16;
                 thus x2<=s.b6 by A5,A7,A23,Lm16;
           end;
+          end;
           hence for i be Nat st i>k+1-n1 & i<k+1+1 holds
           ex x2 be Integer st x2=s.f0.i & x2 <= s.b6;
         end;
@@ -3009,6 +3061,7 @@ A3: now let k be Nat;
          & (for i be Nat st i>k+1-n & i<k+1+1 holds ex x2 be Integer st
          x2=s.f0.i & x2 <= s.b6);
 
+       end;
        suppose A24:k=0;
            A25: IExec(Wg,s).b4=IExec(Wg,bs).b4 by A6,Lm5,Th37
             .=bs0.b4 by A5,A8,A24,Th35
@@ -3034,10 +3087,12 @@ A3: now let k be Nat;
            & (for i be Nat st i>k+1-n & i<k+1+1 holds ex x2 be Integer st
           x2=s.f0.i & x2 <= s.b6);
         end;
+        end;
+      end;
       end;
       hence P[k+1];
     end;
-     for k be Nat holds P[k] from Ind(A1,A3);
+     for k be Nat holds P[k] from NAT_1:sch 1(A1,A3);
    hence thesis;
 end;
 
@@ -3204,6 +3259,7 @@ SCM_HALT:82;
            thus IExec(T3,s).f0.i=IExec(T3,b3s).f0.i
                by A6,Lm6,SCM_HALT:82
            .=s.f0.(i-1) by A4,A5,A7,A9,A12,A13,A22,A24,A26,A30,A31;
+        end;
         suppose i<>s.b3;
         then i<s.b3 by A29,REAL_1:def 5;
            then A32: i+1<=s.b3 by INT_1:20;
@@ -3226,6 +3282,7 @@ SCM_HALT:82;
                by A6,Lm6,SCM_HALT:82
            .=bds.f0.(i-1) by A4,A7,A9,A12,A13,A22,A26,A28,A29,A34
            .=s.f0.(i-1) by A5,A20,A21,A22,A23,A29,A33,A35,A39,Th9;
+     end;
      end;
      hereby let i be Nat;
        assume A40:s.b3<i & i<=len(s.f0);
@@ -3261,7 +3318,7 @@ SCM_HALT:82;
     end;
     hence P[k+1];
   end;
-    for k be Nat holds P[k] from Ind(A1,A3);
+    for k be Nat holds P[k] from NAT_1:sch 1(A1,A3);
   hence thesis;
 end;
 
@@ -3358,6 +3415,7 @@ proof
           hence contradiction by A4,AXIOMS:22;
       end;
       hence thesis;
+    end;
     suppose A5:len (s.f0)>1;
      defpred P[Nat] means
      for t be State of SCM+FSA st t.b1=$1 & t.b1<=len(t.f0)-1 holds
@@ -3484,6 +3542,7 @@ Lm19;
                    then A54:j<=k1 by INT_1:20;
                        y2=t.f0.j by A22,A23,A24,A25,A27,A31,A43,A46,A53,Lm19;
                     hence y1 >= y2 by A40,A42,A52,A54;
+                     end;
                      suppose A55:j>mm;
                      then mm+1<=j by INT_1:20;
                      then mm<=j1 by REAL_1:84;
@@ -3491,6 +3550,7 @@ Lm19;
                        y2=t.f0.j1 by A22,A23,A24,A25,A27,A31,A42,A43,A44,A55,
 Lm19;
                     hence y1 >= y2 by A40,A42,A45,A52,A56;
+                     end;
                      suppose A57: j=mm;
                  then A58: y2=t.f0.(k1+1) by A22,A23,A24,A25,A28,A30,A43,Lm19;
                        i<k1-n+1 by A51,XCMPLX_1:29;
@@ -3504,13 +3564,17 @@ Lm19;
                        suppose i=kn;
                         hence y1>=y2 by A21,A22,A23,A24,A25,A27,A30,A34,A42,A43
 ,A51,A58,A61,Lm19;
+                       end;
                        suppose i<>kn;
                           then i<kn by A59,REAL_1:def 5;
                           then y1>=x1 by A35,A40,A42,A48,A52,AXIOMS:22;
                           hence y1 >= y2 by A21,A22,A23,A34,A36,A42,A43,A57,A59
 ,AXIOMS:22;
                      end;
+                     end;
                    end;
+                   end;
+               end;
                suppose A62:i>mm;
                    i<=k1+1 by A42,A44,AXIOMS:22;
                 then A63: y1=t.f0.i1 by A22,A23,A24,A25,A27,A31,A43,A62,Lm19;
@@ -3521,6 +3585,7 @@ Lm19;
                     then 0<i1 by A29,REAL_1:84;
                     then 1+0<=i1 by INT_1:20;
                 hence y1 >= y2 by A40,A45,A50,A63,A64;
+               end;
                suppose A65:i=mm;
                 then A66: y2=t.f0.j1 by A22,A23,A24,A25,A28,A31,A42,A43,A44,
 Lm19;
@@ -3533,6 +3598,7 @@ Lm19;
                 A69: yy=t.f0.j1 & yy <= n3 by A13,A21,A34,A67,A68;
                   thus y1 >= y2 by A22,A23,A24,A25,A28,A31,A43,A65,A66,A69,Lm19
 ;
+           end;
            end;
        then A70: (IB.f0, IExec(T1,IB).f0 are_fiberwise_equipotent) &
            (for i,j be Nat st i>=1 & j<=len(IB.f0) & i<j
@@ -3554,7 +3620,7 @@ A70,RFINSEQ:2;
       1-1<len(s.f0)-1 by A5,REAL_1:54
 ;
     then reconsider m=len(s.f0)-1 as Nat by INT_1:16;
-      for k be Nat holds P[k] from Ind(A6,A8);
+      for k be Nat holds P[k] from NAT_1:sch 1(A6,A8);
     then A74: P[m];
 then A75: (for i,j be Nat st i>=1 & j<=len(s.f0)-s.b1 & i<j
         for x1,x2 be Integer st x1 =s.f0.i & x2=s.f0.j holds x1 >= x2)
@@ -3572,6 +3638,7 @@ then A78: for i,j be Nat st i>=1 & j<=len(s.f0)-s.b1 & i<j
         for x1,x2 be Integer st x1 =s.f0.i & x2=s.f0.j holds x1 >= x2;
      thus s.f0, IExec(T1,s).f0 are_fiberwise_equipotent by A75,A76;
      thus thesis by A1,A74,A78;
+end;
 end;
 
 theorem Th45:   ::IS016
@@ -3715,6 +3782,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        thus (Cs1.i).IC SCM+FSA = IC s2 by A3,A10,A11,AMI_1:def 15
        .= (Cs2.i).IC SCM+FSA by A3,A11,AMI_1:def 15;
        thus Cs1.i.fsloc 0 = Cs2.i.fsloc 0 by A3,A9,A11;
+     end;
      suppose A12:i = 1;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A12,Lm2;
@@ -3722,6 +3790,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A12,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A12,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A12,Lm2;
+     end;
      suppose A13:i = 2;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A13,Lm2;
@@ -3729,6 +3798,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A13,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A13,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A13,Lm2;
+     end;
      suppose A14:i = 3;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A14,Lm2;
@@ -3736,6 +3806,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A14,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A14,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A14,Lm2;
+     end;
      suppose A15:i = 4;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A15,Lm2;
@@ -3743,6 +3814,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A15,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A15,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A15,Lm2;
+     end;
      suppose A16:i = 5;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A16,Lm2;
@@ -3750,6 +3822,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A16,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A16,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A16,Lm2;
+    end;
     suppose A17:i = 6;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A17,Lm2;
@@ -3757,6 +3830,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A17,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A17,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A17,Lm2;
+    end;
     suppose A18:i = 7;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A18,Lm2;
@@ -3764,6 +3838,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A18,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A18,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A18,Lm2;
+    end;
     suppose A19:i = 8;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A19,Lm2;
@@ -3771,6 +3846,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A19,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A19,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A19,Lm2;
+    end;
     suppose A20:i = 9;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A20,Lm2;
@@ -3778,6 +3854,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A20,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A20,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A20,Lm2;
+    end;
     suppose A21:i = 10;
        hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
           .= Cs2.i.intloc 0 by A6,A7,A8,A21,Lm2;
@@ -3785,6 +3862,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
        .= (Cs2.i).IC SCM+FSA by A6,A7,A21,Lm2;
        thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A21,Lm2
           .= Cs2.i.fsloc 0 by A6,A7,A9,A21,Lm2;
+   end;
    end;
     set UD={fsloc 0,a0,a1,a2,a3,a4,a5,a6},
         Us=UsedInt*Loc q \/ UsedIntLoc q;
@@ -3822,27 +3900,35 @@ A37:   Us c= dom(Cs21) by SCMBSORT:56;
       suppose A39: x = fsloc 0;
         hence Cs11.x =s1.fsloc 0 by A30,A32,Lm2
         .=Cs21.x by A31,A33,A35,A39,Lm2;
+      end;
       suppose A40: x = a0;
         hence Cs11.x =s1.a0 by A30,A32,Lm2
         .=Cs21.x by A31,A33,A34,A40,Lm2;
+      end;
       suppose A41: x = a1;
         hence Cs11.x=len(s1.fsloc 0) by A30,A32,Lm2
         .=Cs21.x by A31,A33,A35,A41,Lm2;
+      end;
       suppose A42: x = a2;
         hence Cs11.x=s1.a0 by A30,A32,Lm2
         .=Cs21.x by A31,A33,A34,A42,Lm2;
+      end;
       suppose A43: x = a3;
         hence Cs11.x=s1.a0 by A30,A32,Lm2
         .=Cs21.x by A31,A33,A34,A43,Lm2;
+      end;
       suppose A44: x = a4;
         hence Cs11.x=s1.a0 by A30,A32,Lm2
         .=Cs21.x by A31,A33,A34,A44,Lm2;
+      end;
       suppose A45: x = a5;
         hence Cs11.x=s1.a0 by A30,A32,Lm2
         .=Cs21.x by A31,A33,A34,A45,Lm2;
+      end;
       suppose A46: x = a6;
         hence Cs11.x=s1.a0 by A30,A32,Lm2
         .=Cs21.x by A31,A33,A34,A46,Lm2;
+     end;
      end;
 then A47:  Cs11 | Us = Cs21 | Us by A36,A37,SCMFSA6A:9;
 A48:  Cs11.IC SCM+FSA = insloc 11 by A30,A32,Lm2
@@ -3875,31 +3961,40 @@ A59:     i>10 implies 10+1 < i+1 by REAL_1:53;
               now per cases;
              suppose i<=10;
               hence Cs1i.x=Cs2i.x by A1,A51,A61;
+             end;
              suppose i>10;
               then 11 <= i by A59,NAT_1:38;
               then Cs1i | Us = Cs2i | Us by A25,A51;
               hence Cs1i.x=Cs2i.x by A55,A57,A58,A61,SCMFSA6A:9;
            end;
+           end;
            hence Cs1i.x=Cs2i.x;
+         end;
          suppose A62: x=IC SCM+FSA;
               now per cases;
              suppose i<=10;
               hence Cs1i.x=Cs2i.x by A1,A51,A62;
+             end;
              suppose i>10;
               then 11 <= i by A59,NAT_1:38;
               hence Cs1i.x=Cs2i.x by A25,A51,A62;
            end;
+           end;
            hence Cs1i.x=Cs2i.x;
+         end;
          suppose A63: x=fsloc 0;
               now per cases;
              suppose i<=10;
               hence Cs1i.x=Cs2i.x by A1,A51,A63;
+             end;
              suppose i>10;
               then 11 <= i by A59,NAT_1:38;
               then Cs1i | Us = Cs2i | Us by A25,A51;
               hence Cs1i.x=Cs2i.x by A56,A57,A58,A63,SCMFSA6A:9;
            end;
+           end;
            hence Cs1i.x=Cs2i.x;
+         end;
          end;
          hence thesis by A53,A54,SCMFSA6A:9;
       end;

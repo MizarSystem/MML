@@ -12,10 +12,11 @@ environ
       TSP_1, METRIC_1, URYSOHN1, PCOMPS_1, EUCLID, MCART_1, CONNSP_2, TOPS_1,
       BORSUK_2;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, REAL_1,
-      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC, EUCLID, TOPS_2,
-      MCART_1, RCOMP_1, PCOMPS_1, CARD_1, TOPS_1, COMPTS_1, CONNSP_1, TREAL_1,
-      FUNCT_4, SEQM_3, BORSUK_1, T_0TOPSP, TOPMETR, BINOP_1, FUNCT_3, GRCAT_1,
-      URYSOHN1, TSP_1, WEIERSTR;
+      RELAT_1, SETFAM_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC,
+      EUCLID, TOPS_2, MCART_1, RCOMP_1, PCOMPS_1, CARD_1, TOPS_1, COMPTS_1,
+      CONNSP_1, CONNSP_2,
+      TREAL_1, FUNCT_4, SEQM_3, BORSUK_1, T_0TOPSP, TOPMETR, BINOP_1,
+      FUNCT_3, GRCAT_1, URYSOHN1, TSP_1, WEIERSTR;
  constructors EUCLID, TOPS_2, CONNSP_1, REAL_1, T_0TOPSP, TREAL_1, SEQM_3,
       TOPS_1, WEIERSTR, RCOMP_1, COMPTS_1, YELLOW_8, URYSOHN1, GRCAT_1,
       MEMBERED;
@@ -38,10 +39,11 @@ begin :: Preliminaries
 scheme FrCard { A() -> non empty set, X() -> set,
        F(set) -> set, P[set] }:
  Card { F(w) where w is Element of A(): w in X() & P[w] } <=` Card X()
-  proof
+proof
      deffunc G(set) = F($1);
      consider f be Function such that
-A1:  dom f = X() & for x be set st x in X() holds f.x = G(x) from Lambda;
+A1:  dom f = X() & for x be set st x in X() holds f.x = G(x) from FUNCT_1:sch 3
+;
       { F(w) where w is Element of A(): w in X() & P[w]} c= rng f
      proof let x be set;
      assume x in { F(w) where w is Element of A(): w in X() & P[w]};
@@ -99,8 +101,10 @@ then A11: dom h = [#] T by A2,A9,FUNCT_4:def 1
         then x in [#] T1 /\ [#] T2 by A16,XBOOLE_0:def 3;
         then f.x = g.x by A8;
         hence thesis by A10,A17,FUNCT_4:14;
+        end;
         suppose not x in [#] T2;
          hence h.x = f.x by A10,FUNCT_4:12;
+       end;
        end;
        hence thesis;
       end;
@@ -157,7 +161,7 @@ then A11: dom h = [#] T by A2,A9,FUNCT_4:def 1
   hence h is continuous by PRE_TOPC:def 12;
  end;
 
-definition
+registration
   let S, T be non empty TopSpace;
   cluster continuous map of S, T;
   existence
@@ -168,7 +172,8 @@ definition
   end;
 end;
 
-definition let T be non empty TopStruct;
+
+registration let T be non empty TopStruct;
   cluster id T -> open continuous;
   coherence
   proof
@@ -187,7 +192,8 @@ A2:    V is closed;
   end;
 end;
 
-definition
+
+registration
   let T be non empty TopStruct;
   cluster continuous one-to-one map of T, T;
   existence
@@ -196,6 +202,7 @@ definition
    thus thesis;
   end;
 end;
+
 
 canceled;
 
@@ -225,6 +232,7 @@ A1:  f is continuous & f.0 = a & f.1 = b;
  existence by A1;
 end;
 
+
 theorem Th4:
  for T be non empty TopSpace, a be Point of T
   ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a
@@ -240,7 +248,7 @@ A2:  IT.0 = a & IT.1 = a by A1,BORSUK_1:def 17,def 18,FUNCOP_1:13;
   hence thesis by A2;
 end;
 
-definition let T be non empty TopSpace; let a be Point of T;
+registration let T be non empty TopSpace; let a be Point of T;
  cluster continuous Path of a, a;
  existence
  proof
@@ -255,6 +263,7 @@ A2:  IT.0 = a & IT.1 = a by A1,BORSUK_1:def 17,def 18,FUNCOP_1:13;
  end;
 end;
 
+
 definition let T be TopStruct;
   attr T is arcwise_connected means :Def2:
    for a, b being Point of T ex f being map of I[01], T st
@@ -262,7 +271,8 @@ definition let T be TopStruct;
  correctness;
 end;
 
-definition
+
+registration
  cluster arcwise_connected non empty TopSpace;
  existence
  proof
@@ -287,6 +297,7 @@ A3: f is continuous by BORSUK_1:36;
  end;
 end;
 
+
 definition let T be arcwise_connected TopStruct;
   let a, b be Point of T;
   redefine mode Path of a, b means :Def3:
@@ -299,11 +310,13 @@ definition let T be arcwise_connected TopStruct;
   end;
 end;
 
-definition let T be arcwise_connected TopStruct;
+
+registration let T be arcwise_connected TopStruct;
   let a, b be Point of T;
   cluster -> continuous Path of a, b;
  coherence by Def3;
 end;
+
 
 reserve GY for non empty TopSpace,
         r,s for Real;
@@ -337,10 +350,11 @@ end;
 hence thesis by JORDAN1:2;
 end;
 
-definition
+registration
   cluster arcwise_connected -> connected (non empty TopSpace);
   coherence by Th5;
 end;
+
 
 begin :: Basic operations on paths
 
@@ -494,6 +508,7 @@ then A31:  t' in [.0,1/2.] by RCOMP_1:def 1;
      then f.t = E1.t by A29,FUNCT_4:12
         .= P.(2*t') by A8,A29,A30;
      hence thesis;
+     end;
      suppose A33: t' = 1/2;
        1/2 in { r : 1/2 <= r & r <= 1 };
      then 1/2 in [.1/2, 1.] by RCOMP_1:def 1;
@@ -503,6 +518,7 @@ then A31:  t' in [.0,1/2.] by RCOMP_1:def 1;
      then f.t = E1.t by A26,A29,A33,FUNCT_4:14
         .= P.(2*t') by A8,A29,A30;
      hence thesis;
+    end;
     end;
     thus 1/2 <= t' & t' <= 1 implies f.t = Q.(2*t'-1)
     proof
@@ -543,10 +559,12 @@ A41:     r' = x & 0 <= r' & r' <= 1;
      then A.y = P.(2*r') by A35,A41
         .= B.y by A36,A41,A42;
      hence thesis;
+     end;
      suppose A43: 1/2 < r';
      then A.y = Q.(2*r'-1) by A35,A41
         .= B.y by A36,A41,A43;
      hence thesis;
+    end;
     end;
     hence thesis by A38,FUNCT_1:9;
    end;
@@ -554,7 +572,8 @@ A41:     r' = x & 0 <= r' & r' <= 1;
   end;
 end;
 
-definition let T be non empty TopSpace;
+
+registration let T be non empty TopSpace;
  let a be Point of T;
  cluster constant Path of a, a;
   existence
@@ -579,6 +598,7 @@ then A3: n1 in the carrier of I[01] & n2 in the carrier of I[01] by FUNCT_2:def
   hence thesis;
  end;
 end;
+
 
 theorem
    for T being non empty TopSpace,
@@ -632,6 +652,7 @@ A7:  2 * r >= 0 by A5,REAL_2:121;
   then 2 * r in the carrier of I[01] by BORSUK_1:83,RCOMP_1:def 1;
   then P.(2*r) = P.p by A2,SEQM_3:def 5;
   hence thesis by A3,A5,A6,Def4;
+  end;
   suppose A8: r >= 1/2;
   then r * 2 >= 1/2 * 2 by AXIOMS:25;
   then 2 * r >= 1 + 0;
@@ -643,15 +664,17 @@ then A9:  2 * r - 1 >= 0 by REAL_1:84;
   then P.(2*r-1) = P.p by A2,SEQM_3:def 5;
   hence thesis by A3,A5,A8,Def4;
  end;
+ end;
  hence thesis by A1,A2,FUNCT_1:9;
 end;
 
-definition let T be non empty TopSpace,
+registration let T be non empty TopSpace,
                a be Point of T,
                P be constant Path of a, a;
  cluster P + P -> constant;
  coherence by Th7;
 end;
+
 
 definition let T be non empty TopSpace;
   let a, b be Point of T;
@@ -732,6 +755,7 @@ A13:  the carrier of I[01] = dom Q by FUNCT_2:def 1;
   end;
 end;
 
+
 Lm2:
  for r be Real st 0 <= r & r <= 1 holds 0 <= 1-r & 1-r <= 1
 proof
@@ -787,12 +811,13 @@ A3:  dom P = the carrier of I[01] by FUNCT_2:def 1;
   hence thesis by A2,A3,FUNCT_1:9;
 end;
 
-definition let T be non empty TopSpace,
+registration let T be non empty TopSpace,
                a be Point of T,
                P be constant Path of a, a;
  cluster - P -> constant;
  coherence by Th8;
 end;
+
 
 begin :: The product of two topological spaces
 
@@ -855,6 +880,7 @@ A1: dom h = [:the carrier of S1, the carrier of T1:] by FUNCT_2:def 1
  hence thesis ;
 end;
 end;
+
 
 theorem Th10:
  for S1, S2, T1, T2 be non empty TopSpace,
@@ -922,12 +948,13 @@ theorem Th12:
    hence thesis by TOPS_2:55;
   end;
 
-definition
+registration
   cluster empty -> T_0 TopStruct;
   coherence by T_0TOPSP:def 7;
 end;
 
-definition let T1, T2 be discerning (non empty TopSpace);
+
+registration let T1, T2 be discerning (non empty TopSpace);
   cluster [:T1, T2:] -> discerning;
   coherence
   proof
@@ -957,12 +984,15 @@ A8:  X is open by A5,A6,BORSUK_1:46;
       suppose x in V1 & not z in V1;
       hence (p in X & not q in X) or (q in X & not p in
  X) by A3,A4,A7,ZFMISC_1:106;
+      end;
       suppose z in V1 & not x in V1;
       hence (p in X & not q in X) or (q in X & not p in
  X) by A3,A4,A7,ZFMISC_1:106;
      end;
+     end;
    hence ex X being Subset of T st X is open &
      ((p in X & not q in X) or (q in X & not p in X)) by A8;
+  end;
   suppose x = z;
    then consider V1 being Subset of T2 such that
 A9:   V1 is open &
@@ -976,16 +1006,20 @@ A12:  X is open by A9,A10,BORSUK_1:46;
       suppose y in V1 & not v in V1;
 hence (p in X & not q in X) or (q in X & not p in X)
         by A3,A4,A11,ZFMISC_1:106;
+      end;
       suppose v in V1 & not y in V1;
 hence (p in X & not q in X) or (q in X & not p in X)
         by A3,A4,A11,ZFMISC_1:106;
      end;
+     end;
    hence ex X being Subset of T st X is open &
      ((p in X & not q in X) or (q in X & not p in X)) by A12;
+  end;
   end;
   hence thesis by T_0TOPSP:def 7;
 end;
 end;
+
 
 canceled;
 
@@ -1023,6 +1057,7 @@ A9:  X is open & Z is open by A6,A7,BORSUK_1:46;
 A10:  p in X & q in Z by A4,A5,A6,A8,ZFMISC_1:106;
     not q in X & not p in Z by A4,A5,A6,ZFMISC_1:106;
   hence thesis by A9,A10;
+  end;
   suppose A11: x = z;
   then consider Y, V be Subset of T2 such that
 A12:  Y is open & V is open &
@@ -1036,13 +1071,15 @@ A16:  p in X & q in Z by A4,A5,A12,A14,ZFMISC_1:106;
     not p in Z & not q in X by A4,A5,A12,ZFMISC_1:106;
   hence thesis by A15,A16;
  end;
+ end;
  hence thesis;
 end;
 
-definition let T1, T2 be being_T1 (non empty TopSpace);
+registration let T1, T2 be being_T1 (non empty TopSpace);
  cluster [:T1, T2:] -> being_T1;
  coherence by Th14;
 end;
+
 
 Lm5:
   for T1, T2 be non empty TopSpace holds
@@ -1078,6 +1115,7 @@ A8: y in [#]T2 & v in [#]T2 by A4,A5,PRE_TOPC:12;
 A9:  X is open & Z is open by A6,A7,BORSUK_1:46;
     p in X & q in Z & X misses Z by A4,A5,A6,A8,ZFMISC_1:106,127;
   hence thesis by A9;
+  end;
   suppose A10: x = z;
   then consider Y, V be Subset of T2 such that
 A11:  Y is open & V is open &
@@ -1090,15 +1128,17 @@ A14:  X is open & Z is open by A11,A12,BORSUK_1:46;
     p in X & q in Z & X misses Z by A4,A5,A11,A13,ZFMISC_1:106,127;
   hence thesis by A14;
  end;
+ end;
  hence thesis;
 end;
 
-definition let T1, T2 be being_T2 (non empty TopSpace);
+registration let T1, T2 be being_T2 (non empty TopSpace);
  cluster [:T1, T2:] -> being_T2;
  coherence by Lm5;
 end;
 
-definition
+
+registration
  cluster I[01] -> compact being_T2;
  coherence
  proof
@@ -1107,10 +1147,12 @@ definition
  end;
 end;
 
-definition let n be Nat;
+
+registration let n be Nat;
  cluster TOP-REAL n -> being_T2;
  coherence by SPPOL_1:26;
 end;
+
 
 definition let T be non empty arcwise_connected TopSpace;
   let a, b be Point of T;
@@ -1137,7 +1179,7 @@ A1: for x be set st x in [:the carrier of I[01], the carrier of I[01]:]
     [:the carrier of I[01], the carrier of I[01]:], the carrier of T
      such that
 A2:    for x being set st x in [:the carrier of I[01], the carrier of I[01]:]
-        holds Z[x, f.x] from FuncEx1(A1);
+        holds Z[x, f.x] from FUNCT_2:sch 1(A1);
      the carrier of [:I[01],I[01]:]
     = [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
    then reconsider f as Function of the carrier of [:I[01],I[01]:],
@@ -1338,4 +1380,5 @@ A44:  ff.(0,t) = ff.([0,t]) by BINOP_1:def 1
    hence thesis by A20,A21;
   end;
 end;
+
 

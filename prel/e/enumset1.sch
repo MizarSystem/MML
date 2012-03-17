@@ -1,15 +1,5 @@
 HIDDEN
 #
-UI1
-UI2
-UI3
-UI4
-UI5
-UI6
-UI7
-UI8
-UI9
-#
 M1 ;;
 P1 F1 ;;ùM1 ;P1 B1 ;;
 #

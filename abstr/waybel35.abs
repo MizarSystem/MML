@@ -23,35 +23,70 @@ environ
 
 begin
 
-definition
+registration
   let X be set;
   cluster trivial Subset of X;
+existence
+  proof
+    take {};
+    thus thesis by XBOOLE_1:2;
+  end;
 end;
 
-definition
+registration
   let X be trivial set;
   cluster -> trivial Subset of X;
+coherence by Lm4;
 end;
 
-definition
+
+registration
   let L be 1-sorted;
   cluster trivial Subset of L;
+existence
+  proof
+    take {};
+      {} c= the carrier of L by XBOOLE_1:2;
+    hence thesis;
+  end;
 end;
 
-definition
+
+registration
   let L be RelStr;
   cluster trivial Subset of L;
+existence
+  proof
+    take {};
+      {} c= the carrier of L by XBOOLE_1:2;
+    hence thesis;
+  end;
 end;
 
-definition
+
+registration
   let L be non empty 1-sorted;
   cluster non empty trivial Subset of L;
+existence
+  proof
+    consider a being Element of L;
+    take {a};
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   let L be non empty RelStr;
   cluster non empty trivial Subset of L;
+existence
+  proof
+    consider a being Element of L;
+    take {a};
+    thus thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL35:1
   for X being set holds RelIncl X is_reflexive_in X;
@@ -64,25 +99,49 @@ theorem :: WAYBEL35:3
 
 begin :: Main part
 
-definition
+registration
   let L be RelStr;
   cluster auxiliary(i) Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   let L be transitive RelStr;
   cluster auxiliary(i) auxiliary(ii) Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   let L be with_suprema antisymmetric RelStr;
   cluster auxiliary(iii) Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   let L be non empty lower-bounded antisymmetric RelStr;
   cluster auxiliary(iv) Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
 end;
+
 
 :: Definition 2.1, p. 203
 definition
@@ -94,24 +153,48 @@ definition
   R is auxiliary(i) auxiliary(ii) auxiliary(iv);
 end;
 
-definition
+
+registration
   let L be non empty RelStr;
   cluster extra-order ->
     auxiliary(i) auxiliary(ii) auxiliary(iv) Relation of L;
+coherence by Def1;
   cluster auxiliary(i) auxiliary(ii) auxiliary(iv) ->
     extra-order Relation of L;
+coherence by Def1;
 end;
 
-definition
+
+registration
   let L be non empty RelStr;
   cluster extra-order auxiliary(iii) -> auxiliary Relation of L;
+coherence
+  proof
+    let R be Relation of L;
+    assume R is extra-order auxiliary(iii);
+    hence R is auxiliary(i) auxiliary(ii) auxiliary(iii) auxiliary(iv) by Def1
+;
+  end;
   cluster auxiliary -> extra-order Relation of L;
+coherence
+  proof
+    let R be Relation of L;
+    assume R is auxiliary;
+    hence R is auxiliary(i) auxiliary(ii) auxiliary(iv) by WAYBEL_4:def 8;
+  end;
 end;
 
-definition
+
+registration
   let L be lower-bounded antisymmetric transitive non empty RelStr;
   cluster extra-order Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
 end;
+
 
 definition
   let L be lower-bounded with_suprema Poset,
@@ -122,11 +205,22 @@ definition
   for x being Element of L holds it.x = R-below x;
 end;
 
-definition
+
+registration
   let L be lower-bounded with_suprema Poset,
       R be auxiliary(ii) Relation of L;
   cluster R-LowerMap -> monotone;
+coherence
+  proof
+    set s = R-LowerMap;
+    let x, y be Element of L;
+A1: s.x = R-below x & s.y = R-below y by Def2;
+    assume x <= y;
+    then R-below x c= R-below y by WAYBEL_4:17;
+    hence thesis by A1,YELLOW_1:3;
+  end;
 end;
+
 
 definition
   let L be 1-sorted,
@@ -138,17 +232,26 @@ definition
    [x,y] in R or x = y or [y,x] in R;
 end;
 
+
 theorem :: WAYBEL35:4
  for L being 1-sorted,
      C being trivial Subset of L,
      R being Relation of the carrier of L holds
   C is strict_chain of R;
 
-definition
+registration
   let L be non empty 1-sorted,
       R be Relation of the carrier of L;
   cluster non empty trivial strict_chain of R;
+existence
+  proof
+    consider C being non empty trivial Subset of L;
+    reconsider C as strict_chain of R by Th4;
+    take C;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL35:5
  for L being antisymmetric RelStr,
@@ -186,6 +289,7 @@ definition
   for D being strict_chain of R st C c= D holds C = D;
 end;
 
+
 definition
   let L be 1-sorted,
       R be (Relation of the carrier of L),
@@ -196,18 +300,21 @@ definition
   for x being set holds x in it iff x is strict_chain of R & C c= x;
 end;
 
-definition
+
+registration
   let L be 1-sorted,
       R be (Relation of the carrier of L),
       C be strict_chain of R;
   cluster Strict_Chains (R,C) -> non empty;
+coherence by Def5;
 end;
 
-definition
+
+notation
   let R be Relation, X be set;
-  redefine pred X has_upper_Zorn_property_wrt R;
-  synonym X is_inductive_wrt R;
-end;
+  synonym X is_inductive_wrt R for X has_upper_Zorn_property_wrt R;
+  end;
+
 
 :: Lemma 2.2, p. 203
 theorem :: WAYBEL35:9
@@ -282,6 +389,7 @@ definition
      ex y being Element of L st y in C & [x,y] in R & [y,z] in R & x <> y;
 end;
 
+
 definition
   let L be RelStr,
       R be (Relation of the carrier of L),
@@ -290,9 +398,14 @@ definition
 :: WAYBEL35:def 7
 
     R satisfies_SIC_on C;
-  synonym C is satisfying_the_interpolation_property;
-  synonym C satisfies_the_interpolation_property;
-end;
+  end;
+notation
+  let L be RelStr,
+      R be (Relation of the carrier of L),
+      C be strict_chain of R;
+  synonym C is satisfying_the_interpolation_property for C is satisfying_SIC ;
+synonym C satisfies_the_interpolation_property for C is satisfying_SIC ; end;
+
 
 theorem :: WAYBEL35:16
   for L being RelStr,
@@ -303,17 +416,35 @@ theorem :: WAYBEL35:16
     x in C & z in C & [x,z] in R & x <> z implies
      ex y being Element of L st y in C & [x,y] in R & [y,z] in R & x < y;
 
-definition
+registration
   let L be RelStr,
       R be Relation of the carrier of L;
   cluster trivial -> satisfying_SIC strict_chain of R;
+coherence
+  proof
+    let C be strict_chain of R;
+    assume
+A1:   C is trivial;
+    let x, z be Element of L;
+    assume x in C & z in C & [x,z] in R & x <> z;
+    hence thesis by A1,YELLOW_8:def 1;
+  end;
 end;
 
-definition
+
+registration
   let L be non empty RelStr,
       R be Relation of the carrier of L;
   cluster non empty trivial strict_chain of R;
+existence
+  proof
+    consider C being non empty trivial Subset of L;
+    reconsider C as strict_chain of R by Th4;
+    take C;
+    thus thesis;
+  end;
 end;
+
 
 :: Proposition 2.5 (iii), p. 204
 theorem :: WAYBEL35:17
@@ -331,6 +462,7 @@ definition
     ( R"{y} ) /\ C;
 end;
 
+
 theorem :: WAYBEL35:18
   for R being Relation,
       C, x, y being set holds
@@ -342,6 +474,7 @@ definition
       C, y be set;
   redefine func SetBelow (R,C,y) -> Subset of L;
 end;
+
 
 theorem :: WAYBEL35:19
   for L being RelStr,
@@ -374,6 +507,7 @@ definition
    for X being Subset of C st ex_sup_of X,L
     holds "\/"(X,L) = "\/"(X,subrelstr C);
 end;
+
 
 :: Lemma 2.6, p. 205
 theorem :: WAYBEL35:22
@@ -416,12 +550,14 @@ definition
    for y being set holds y in it iff y = sup SetBelow (R,C,y);
 end;
 
+
 definition
   let L be non empty RelStr,
       R be (Relation of the carrier of L),
       C be set;
   redefine func SupBelow (R,C) -> Subset of L;
 end;
+
 
 :: Lemma 2.8, (i) a), p. 205
 theorem :: WAYBEL35:25

@@ -6,9 +6,6 @@ SUBSET_1
 RELAT_1
 FUNCT_1
 #
-SingleFraenkel
-FuncFraenkel
-#
 M1 ;M1 W1 ;;;
 R1 èM2 F2 ;;;F1 ;P1 B1 ;K1 F1 ;;;ªM2 F2 ;;ªP1 B1 ;;
 #

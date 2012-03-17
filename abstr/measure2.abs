@@ -37,6 +37,7 @@ definition
  it c= S;
 end;
 
+
 canceled;
 
 theorem :: MEASURE2:3
@@ -52,6 +53,7 @@ definition
 
    redefine func union T -> Element of S;
 end;
+
 
 theorem :: MEASURE2:4
    for S being sigma_Field_Subset of X,
@@ -157,11 +159,46 @@ ex F being Function of NAT,S st
    IT = rng F & for n being Element of NAT holds F.n c= F.(n+1);
 end;
 
-definition
+
+registration
    let X be set;
    let S be sigma_Field_Subset of X;
 cluster non-decreasing N_Measure_fam of S;
+existence
+proof
+     {} in S by MEASURE1:45;
+   then consider A being set such that
+A1:A in S;
+   reconsider A as Subset of X by A1;
+   consider B,C being Subset of X such that
+A2:B = A & C = A;
+   consider F being Function of NAT,bool X such that
+A3:rng F = {B,C} &
+   F.0 = B & for n being Nat st 0 < n holds F.n = C by MEASURE1:40;
+A4:rng F = {A} &
+   F.0 = A & for n being Nat st 0 < n holds F.n = A by A2,A3,ENUMSET1:69;
+   then rng F c= S by A1,ZFMISC_1:37;
+   then reconsider F as Function of NAT,S by FUNCT_2:8;
+A5:{A} is N_Sub_set_fam of X by A4,MEASURE1:6,SUPINF_2:def 14;
+     {A} c= S by A1,ZFMISC_1:37;
+   then reconsider T = {A} as N_Measure_fam of S by A5,Def1;
+   take T,F;
+     for n being Element of NAT holds F.n c= F.(n+1)
+   proof
+      let n be Element of NAT;
+        for n being Nat holds F.n = A
+      proof
+         let n be Nat;
+           n = 0 or 0 < n by NAT_1:19;
+         hence thesis by A2,A3;
+      end;
+      then F.n = A & F.(n + 1) = A;
+      hence thesis;
+   end;
+   hence thesis by A2,A3,ENUMSET1:69;
 end;
+end;
+
 
 definition
    let X be set;
@@ -174,11 +211,45 @@ attr IT is non-increasing means
           for n being Element of NAT holds F.(n+1) c= F.n);
 end;
 
-definition
+
+registration
    let X be set;
    let S be sigma_Field_Subset of X;
 cluster non-increasing N_Measure_fam of S;
+existence
+proof
+     {} in S by MEASURE1:45;
+   then consider A being set such that
+A1:A in S;
+   reconsider A as Subset of X by A1;
+   set B = A, C = A;
+   consider F being Function of NAT,bool X such that
+A2:rng F = {B,C} &
+   F.0 = B & for n being Nat st 0 < n holds F.n = C by MEASURE1:40;
+A3:rng F = {A} &
+   F.0 = A & for n being Nat st 0 < n holds F.n = A by A2,ENUMSET1:69;
+   then rng F c= S by A1,ZFMISC_1:37;
+   then reconsider F as Function of NAT,S by FUNCT_2:8;
+A4:{A} is N_Sub_set_fam of X by A3,MEASURE1:6,SUPINF_2:def 14;
+     {A} c= S by A1,ZFMISC_1:37;
+   then reconsider T = {A} as N_Measure_fam of S by A4,Def1;
+   take T,F;
+     for n being Element of NAT holds F.(n+1) c= F.n
+   proof
+      let n be Element of NAT;
+        for n being Nat holds F.n = A
+      proof
+         let n be Nat;
+           n = 0 or 0 < n by NAT_1:19;
+         hence thesis by A2;
+      end;
+      then F.n = A & F.(n + 1) = A;
+      hence thesis;
+   end;
+   hence thesis by A2,ENUMSET1:69;
 end;
+end;
+
 
 canceled 2;
 

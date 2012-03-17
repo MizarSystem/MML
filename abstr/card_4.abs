@@ -164,6 +164,7 @@ theorem :: CARD_4:42
    Card X <=` alef 0;
  end;
 
+
 theorem :: CARD_4:43
   X is finite implies X is countable;
 
@@ -249,14 +250,76 @@ theorem :: CARD_4:65
 theorem :: CARD_4:66
    alef 0 <=` Card (D*);
 
-scheme FraenCoun1 { f(set)->set, P[Nat] } :
- { f(n) : P[n] } is countable;
+scheme :: CARD_4:sch 1
+ FraenCoun1 { f(set)->set, P[Nat] } :
+ { f(n) : P[n] } is countable
+proof
+    deffunc g(set) = f($1);
+    consider f such that
+A1:  dom f = NAT & for x st x in NAT holds f.x = g(x) from FUNCT_1:sch 3;
+      { f(n) : P[n] } c= rng f
+     proof let x; assume x in { f(n) : P[n] };
+      then consider n such that
+A2:     x = f(n) & P[n];
+         f.n = x by A1,A2;
+      hence thesis by A1,FUNCT_1:def 5;
+     end;
+   hence thesis by A1,Th45;
+  end;
 
-scheme FraenCoun2 { f(set,set)->set, P[set,set] } :
- { f(n1,n2) : P[n1,n2] } is countable;
+scheme :: CARD_4:sch 2
+ FraenCoun2 { f(set,set)->set, P[set,set] } :
+ { f(n1,n2) : P[n1,n2] } is countable
+proof   consider N being Function such that
+A1: N is one-to-one & dom N = NAT & rng N = [:NAT,NAT:] by Th53,WELLORD2:def 4;
+   deffunc g(set) = f((N.$1)`1,(N.$1)`2);
+   consider f such that
+A2:  dom f = NAT & for x st x in NAT holds f.x = g(x) from FUNCT_1:sch 3;
+      { f(n1,n2) : P[n1,n2] } c= rng f
+     proof let x; assume x in { f(n1,n2) : P[n1,n2] };
+      then consider n1,n2 such that
+A3:     x = f(n1,n2) & P[n1,n2];
+      consider y such that
+A4:     y in dom N & [n1,n2] = N.y by A1,FUNCT_1:def 5;
+         [n1,n2]`1 = n1 & [n1,n2]`2 = n2 by MCART_1:7;
+       then x = f.y by A1,A2,A3,A4;
+      hence thesis by A1,A2,A4,FUNCT_1:def 5;
+     end;
+   hence thesis by A2,Th45;
+  end;
 
-scheme FraenCoun3 { f(set,set,set)->set, P[Nat,Nat,Nat] } :
- { f(n1,n2,n3) : P[n1,n2,n3] } is countable;
+scheme :: CARD_4:sch 3
+ FraenCoun3 { f(set,set,set)->set, P[Nat,Nat,Nat] } :
+ { f(n1,n2,n3) : P[n1,n2,n3] } is countable
+proof
+    [:NAT,NAT:],[:[:NAT,NAT:],NAT:] are_equipotent
+  by Th53,CARD_2:15;
+    then NAT,[:[:NAT,NAT:],NAT:] are_equipotent &
+    [:[:NAT,NAT:],NAT:] = [:NAT,NAT,NAT:]
+     by Th53,WELLORD2:22,ZFMISC_1:def 3;
+   then consider N being Function such that
+A1:  N is one-to-one & dom N = NAT & rng N = [:NAT,NAT,NAT:] by WELLORD2:def 4;
+   deffunc g(set) = f((N.$1)`1`1,(N.$1)`1`2,(N.$1)`2);
+   consider f such that
+A2:  dom f = NAT & for x st x in NAT holds f.x = g(x) from FUNCT_1:sch 3;
+      { f(n1,n2,n3) : P[n1,n2,n3] } c= rng f
+     proof let x; assume x in { f(n1,n2,n3) : P[n1,n2,n3] };
+      then consider n1,n2,n3 such that
+A3:     x = f(n1,n2,n3) & P[n1,n2,n3];
+      reconsider NAT' = NAT as non empty set;
+      reconsider n1,n2,n3 as Element of NAT';
+      consider y such that
+A4:     y in dom N & [n1,n2,n3] = N.y by A1,FUNCT_1:def 5;
+         [n1,n2,n3]`1 = n1 & [n1,n2,n3]`2 = n2 & [n1,n2,n3]`3 = n3 &
+        [n1,n2,n3]`1 = ([n1,n2,n3] qua set)`1`1 &
+         [n1,n2,n3]`2 = ([n1,n2,n3] qua set)`1`2 &
+          [n1,n2,n3]`3 = ([n1,n2,n3] qua set)`2
+           by MCART_1:47,50;
+       then x = f.y by A1,A2,A3,A4;
+      hence thesis by A1,A2,A4,FUNCT_1:def 5;
+     end;
+   hence thesis by A2,Th45;
+  end;
 
 theorem :: CARD_4:67
   (alef 0)*`(Card n) <=` alef 0 & (Card n)*`(alef 0) <=` alef 0;

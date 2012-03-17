@@ -26,8 +26,14 @@ environ
 
 begin :: Preliminaries
 
-scheme NonEmpty{ A()-> non empty set, F(set)-> set}:
- { F(a) where a is Element of A(): not contradiction } is non empty;
+scheme :: JCT_MISC:sch 1
+ NonEmpty{ A()-> non empty set, F(set)-> set}:
+ { F(a) where a is Element of A(): not contradiction } is non empty
+proof consider a0 being set such that
+A1: a0 in A() by XBOOLE_0:def 1;
+    F(a0) in { F(a) where a is Element of A(): not contradiction } by A1;
+ hence thesis;
+end;
 
 canceled 2;
 
@@ -82,14 +88,36 @@ definition let A,B,C be non empty set;
  for x being Element of A holds it.x = (f.x)`2;
 end;
 
-scheme DoubleChoice{ A,B,C() -> non empty set, P[set,set,set]}:
+
+scheme :: JCT_MISC:sch 2
+ DoubleChoice{ A,B,C() -> non empty set, P[set,set,set]}:
  ex a being Function of A(), B(),
     b being Function of A(), C() st
   for i being Element of A() holds P[i,a.i,b.i]
  provided
  for i being Element of A()
   ex ai being Element of B(),
-     bi being Element of C() st P[i,ai,bi];
+     bi being Element of C() st P[i,ai,bi]
+proof
+  defpred P1[set,set] means P[$1,($2)`1,($2)`2];
+A2: for e being Element of A()
+       ex u being Element of [:B(),C():] st P1[e,u]
+   proof let e be Element of A();
+     consider ai being Element of B(),
+              bi being Element of C() such that
+A3:    P[e,ai,bi] by A1;
+    take [ai,bi];
+    thus [ai,bi] is Element of [:B(),C():] by ZFMISC_1:106;
+       [ai,bi]`1 = ai & [ai,bi]`2 = bi by MCART_1:7;
+    hence P[e,[ai,bi]`1,[ai,bi]`2] by A3;
+   end;
+  consider f being Function of A(), [:B(),C():] such that
+A4: for e being Element of A() holds P1[e,f.e] from FUNCT_2:sch 3(A2);
+ take pr1 f, pr2 f;
+ let i be Element of A();
+    (f.i)`1 = (pr1 f).i & (f.i)`2 = (pr2 f).i by Def1,Def2;
+ hence P[i,(pr1 f).i,(pr2 f).i] by A4;
+end;
 
 theorem :: JCT_MISC:13
  for S,T being non empty TopSpace, G being Subset of [:S,T:]
@@ -109,6 +137,7 @@ definition let A be Subset of REAL;
  for r,s being real number st r in A & s in A holds [.r,s.] c= A;
 end;
 
+
 theorem :: JCT_MISC:15
    for T being non empty TopSpace
  for f being continuous RealMap of T
@@ -124,6 +153,7 @@ definition let A,B be Subset of REAL;
           & it = lower_bound X;
  commutativity;
 end;
+
 
 theorem :: JCT_MISC:16
  for A,B being Subset of REAL, r, s st r in A & s in B

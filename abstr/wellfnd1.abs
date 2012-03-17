@@ -27,15 +27,25 @@ begin :: Preliminaries
 
 :: General preliminaries :::::::::::::::::::::::::::::::::::::::::::::
 
-definition let A, B be set;
+registration let A, B be set;
   cluster PFuncs(A,B) -> functional;
+  coherence
+   proof
+    let x be set;
+    assume x in PFuncs(A,B);
+     then ex f being Function st x = f & dom f c= A & rng f c= B
+      by PARTFUN1:def 5;
+    hence x is Function;
+   end;
 end;
+
 
 definition
  let R be 1-sorted, X be set,
      p be PartFunc of the carrier of R, X;
  redefine func dom p -> Subset of R;
 end;
+
 
 theorem :: WELLFND1:1
  for X being set, f, g being Function
@@ -46,20 +56,34 @@ theorem :: WELLFND1:2
   st for f, g being Function st f in X & g in X holds f tolerates g
    holds union X is Function;
 
-scheme PFSeparation {X, Y() -> set, P[set]}:
+scheme :: WELLFND1:sch 1
+ PFSeparation {X, Y() -> set, P[set]}:
  ex PFS being Subset of PFuncs(X(), Y()) st
-  for pfs being PartFunc of X(), Y() holds pfs in PFS iff P[pfs];
+  for pfs being PartFunc of X(), Y() holds pfs in PFS iff P[pfs]
+proof defpred p[set] means P[$1];
+     consider fs being Subset of PFuncs (X(), Y()) such that
+A1: for f being set holds f in fs iff f in PFuncs(X(), Y()) & p[f]
+                                            from SUBSET_1:sch 1;
+ take fs;
+ let pfs be PartFunc of X(), Y();
+       pfs in PFuncs(X(), Y()) by PARTFUN1:119;
+ hence thesis by A1;
+end;
 
 :: Cardinals ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition
+registration
  let X be set;
  cluster nextcard X -> non empty;
+ coherence by CARD_1:def 6;
 end;
 
-definition
+
+registration
  cluster regular Aleph;
+ existence by CARD_5:42;
 end;
+
 
 theorem :: WELLFND1:3
  for M being regular Aleph, X being set
@@ -80,6 +104,7 @@ definition
    st x in X & [y, x] in the InternalRel of R holds y in X;
 end;
 
+
 theorem :: WELLFND1:5
  for R being RelStr, X being Subset of R, x being set
   st X is lower & x in X holds (the InternalRel of R)-Seg x c= X;
@@ -99,9 +124,26 @@ definition
  the InternalRel of R is_well_founded_in the carrier of R;
 end;
 
-definition
+
+registration
  cluster non empty well_founded RelStr;
+ existence proof
+     reconsider er = {} as Relation of {{}} by RELSET_1:25;
+  take R = RelStr(#{{}}, er#);
+  thus R is non empty;
+  let Y be set;
+  assume Y c= the carrier of R & Y <> {};
+then A1: Y = {{}} by ZFMISC_1:39;
+  take e = {};
+  thus e in Y by A1,TARSKI:def 1;
+  assume (the InternalRel of R)-Seg e /\ Y <> {};
+   then consider x being set such that
+A2: x in (the InternalRel of R)-Seg e /\ Y by XBOOLE_0:def 1;
+       x in (the InternalRel of R)-Seg e & x in Y by A2,XBOOLE_0:def 3;
+  hence contradiction by WELLORD1:def 1;
+ end;
 end;
+
 
 definition
  let R be RelStr, X be Subset of R;
@@ -110,10 +152,17 @@ definition
  the InternalRel of R is_well_founded_in X;
 end;
 
-definition
+
+registration
  let R be RelStr;
  cluster well_founded Subset of R;
+ existence proof {} c= the carrier of R by XBOOLE_1:2;
+  then reconsider e = {} as Subset of R;
+  take e; let Y be set; assume Y c= e & Y <> {};
+  hence thesis by XBOOLE_1:3;
+ end;
 end;
+
 
 definition
  let R be RelStr;
@@ -122,10 +171,47 @@ definition
   it = union {S where S is Subset of R : S is well_founded lower};
 end;
 
-definition
+
+registration
  let R be RelStr;
  cluster well_founded-Part R -> lower well_founded;
+ coherence proof
+   set wfp = well_founded-Part R,
+       r = the InternalRel of R,
+       IT = {S where S is Subset of R : S is well_founded lower};
+A1: wfp = union IT by Def4;
+  hereby let x, y be set; assume
+  A2: x in wfp & [y, x] in r;
+       then consider Y being set such that
+  A3: x in Y & Y in IT by A1,TARSKI:def 4;
+       consider S being Subset of R such that
+  A4: Y = S & S is well_founded lower by A3;
+         y in S by A2,A3,A4,Def1;
+   hence y in wfp by A1,A3,A4,TARSKI:def 4;
+  end;
+  let Y be set; assume
+A5: Y c= wfp & Y <> {};
+     then consider y being set such that
+A6: y in Y by XBOOLE_0:def 1;
+     consider YY being set such that
+A7: y in YY & YY in IT by A1,A5,A6,TARSKI:def 4;
+     consider S being Subset of R such that
+A8: YY = S & S is well_founded lower by A7;
+A9: r is_well_founded_in S by A8,Def3;
+   set YS = Y /\ S;
+       YS c= S & YS <> {} by A6,A7,A8,XBOOLE_0:def 3,XBOOLE_1:17;
+     then consider a being set such that
+A10: a in YS & r-Seg a misses YS by A9,WELLORD1:def 3;
+A11: a in Y & a in S by A10,XBOOLE_0:def 3;
+     then r-Seg a c= S by A8,Th5;
+then A12:   r-Seg a /\ Y = r-Seg a /\ S /\ Y by XBOOLE_1:28
+                 .= r-Seg a /\ YS by XBOOLE_1:16;
+       r-Seg a /\ YS = {} by A10,XBOOLE_0:def 7;
+     then r-Seg a misses Y by A12,XBOOLE_0:def 7;
+  hence thesis by A11;
+ end;
 end;
+
 
 theorem :: WELLFND1:7
  for R being non empty RelStr, x be Element of R
@@ -147,7 +233,8 @@ theorem :: WELLFND1:10
 
 :: Well-founded induction :::::::::::::::::::::::::::::::::::::::::::::
 
-scheme WFMin {R() -> non empty RelStr,
+scheme :: WELLFND1:sch 2
+ WFMin {R() -> non empty RelStr,
               x() -> Element of R(),
               P[set]}:
  ex x being Element of R() st P[x] &
@@ -155,7 +242,26 @@ scheme WFMin {R() -> non empty RelStr,
         st x <> y & P[y] & [y,x] in the InternalRel of R()
 provided
  P[x()] and
- R() is well_founded;
+ R() is well_founded
+proof defpred p[set] means P[$1];
+   set c = the carrier of R(),
+       r = the InternalRel of R(),
+       Z = {x where x is Element of c: p[x]};
+A3: Z is Subset of c from DOMAIN_1:sch 7;
+       x() in Z by A1;
+     then reconsider Z as non empty Subset of c by A3;
+       r is_well_founded_in c by A2,Def2;
+     then consider a being set such that
+A4: a in Z & r-Seg a misses Z by WELLORD1:def 3;
+     reconsider a as Element of R() by A4;
+ take a;
+       ex a' being Element of c st a' = a & P[a'] by A4;
+ hence P[a];
+ given y being Element of R() such that
+A5: a <> y & P[y] & [y,a] in r;
+       y in Z & y in r-Seg a by A5,WELLORD1:def 1;
+ hence contradiction by A4,XBOOLE_0:3;
+end;
 
 theorem :: WELLFND1:11  :: WF iff WFInduction
 for R being non empty RelStr holds
@@ -165,7 +271,8 @@ for R being non empty RelStr holds
       st (the InternalRel of R)-Seg x c= S holds x in S
    holds the carrier of R c= S;
 
-scheme WFInduction {R() -> non empty RelStr, P[set]}:
+scheme :: WELLFND1:sch 3
+ WFInduction {R() -> non empty RelStr, P[set]}:
  for x being Element of R() holds P[x]
 provided
  for x being Element of R()
@@ -173,7 +280,30 @@ provided
           st y <> x & [y,x] in the InternalRel of R() holds P[y]
        holds P[x]
     and
- R() is well_founded;
+ R() is well_founded
+proof
+   set c = the carrier of R(),
+       r = the InternalRel of R(),
+       Z = {x where x is Element of c: P[x]};
+       now let x be Element of c such that
+     A3: r-Seg x c= Z;
+          reconsider x' = x as Element of R();
+            now let y' be Element of R(); assume
+                 y' <> x' & [y',x'] in r;
+               then y' in r-Seg x' by WELLORD1:def 1; then y' in Z by A3;
+               then consider y being Element of c such that
+          A4: y = y' & P[y];
+           thus P[y'] by A4;
+          end; then P[x'] by A1;
+      hence x in Z;
+     end;
+then A5: c c= Z by A2,Th11;
+ let x be Element of R();
+       x in c; then x in Z by A5;
+     then consider x' being Element of c such that
+A6: x = x' & P[x'];
+ thus thesis by A6;
+end;
 
 :: Well-foundedness and recursive definitions :::::::::::::::::::::::::
 
@@ -187,6 +317,7 @@ definition
   for x being Element of R
    holds F.x = H.[x, F|(the InternalRel of R)-Seg x];
 end;
+
 
 theorem :: WELLFND1:12 :: Well foundedness and existence
   for R being non empty RelStr holds
@@ -228,6 +359,7 @@ definition
  for n being Nat
   holds f.(n+1) <> f.n & [f.(n+1), f.n] in the InternalRel of R;
 end;
+
 
 theorem :: WELLFND1:15 :: omega chains
    for R being non empty RelStr holds

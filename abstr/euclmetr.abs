@@ -9,7 +9,7 @@ environ
  vocabulary ANALMETR, SYMSP_1, AFF_2, VECTSP_1, TRANSGEO, ANALOAF, DIRAF,
       AFF_1, INCSP_1, CONAFFM, CONMETR, PAPDESAF, RLVECT_1, ARYTM_1, FUNCT_3,
       RELAT_1, PARSP_1, EUCLMETR;
- notation SUBSET_1, STRUCT_0, REAL_1, RLVECT_1, ANALOAF, DIRAF, AFF_1,
+ notation SUBSET_1, STRUCT_0, REAL_1, RLVECT_1, ANALOAF, DIRAF, AFF_1, AFF_2,
       ANALMETR, GEOMTRAP, PAPDESAF, CONMETR, CONAFFM;
  constructors AFF_2, TRANSLAC, REAL_1, AFF_1, GEOMTRAP, CONMETR, CONAFFM,
       MEMBERED, XBOOLE_0;
@@ -25,30 +25,36 @@ definition let IT be OrtAfSp;
 for a,b,c,d being Element
  of the carrier of IT st a,b _|_ c,d & b,c _|_ a,d holds b,d _|_ a,c; end;
 
+
 definition let IT be OrtAfSp;
  attr IT is Pappian means
 :: EUCLMETR:def 2
 Af(IT) is Pappian; end;
+
 
 definition let IT be OrtAfSp;
  attr IT is Desarguesian means
 :: EUCLMETR:def 3
   Af(IT) is Desarguesian; end;
 
+
 definition let IT be OrtAfSp;
  attr IT is Fanoian means
 :: EUCLMETR:def 4
 Af(IT) is Fanoian; end;
+
 
 definition let IT be OrtAfSp;
  attr IT is Moufangian means
 :: EUCLMETR:def 5
   Af(IT) is Moufangian; end;
 
+
 definition let IT be OrtAfSp;
  attr IT is translation means
 :: EUCLMETR:def 6
   Af(IT) is translational; end;
+
 
 definition let IT be OrtAfSp;
  attr IT is Homogeneous means
@@ -58,6 +64,7 @@ for o,a,a1,b,b1,c,c1 being
  a,b _|_ a1,b1 & a,c _|_ a1,c1 & not o,c // o,a & not o,a // o,b holds b,c _|_
  b1,c1;
  end;
+
 
 reserve MS for OrtAfPl;
 reserve MP for OrtAfSp;
@@ -153,65 +160,92 @@ for o,a,a1,b,b1,c,c1 being Element of MS st
 theorem :: EUCLMETR:23
 Gen w,y & MS = AMSpace(V,w,y) implies MS is Homogeneous;
 
-definition cluster Euclidean Pappian Desarguesian Homogeneous translation
- Fanoian Moufangian OrtAfPl; end;
+registration cluster Euclidean Pappian Desarguesian Homogeneous translation
+ Fanoian Moufangian OrtAfPl;
+existence proof consider V such that A1: ex w,y st Gen w,y by ANALMETR:7;
+ consider w,y such that A2: Gen w,y by A1;
+ reconsider MS=AMSpace(V,w,y) as OrtAfPl by A2,ANALMETR:46; take MS;
+   LIN_holds_in MS by A2,Th21; then A3: 3H_holds_in MS by CONAFFM:6;
+   (for a,b being Real st a*w + b*y = 0.V holds a=0 & b=0) & (for u being
+VECTOR
+  of V ex a,b being Real st u = a*w + b*y) by A2,ANALMETR:def 1;
+  then reconsider OAS=OASpace(V) as OAffinSpace by ANALOAF:38;
+ A4: Af(MS)=Lambda(OAS) by ANALMETR:30;
+ then A5: Af(MS) is Pappian by PAPDESAF:19;
+ A6: Af(MS) is Desarguesian by A4,PAPDESAF:20;
+ A7: Af(MS) is Moufangian by A4,PAPDESAF:22;
+   Af(MS) is translational by A4,PAPDESAF:23;
+hence thesis by A2,A3,A4,A5,A6,A7,Def2,Def3,Def4,Def5,Def6,Th8,Th23; end; end;
 
-definition cluster Euclidean Pappian Desarguesian Homogeneous translation
- Fanoian Moufangian OrtAfSp; end;
+
+registration cluster Euclidean Pappian Desarguesian Homogeneous translation
+ Fanoian Moufangian OrtAfSp;
+existence proof consider MS being Euclidean Pappian Desarguesian Homogeneous
+translation Fanoian Moufangian OrtAfPl;
+   MS is Euclidean Pappian Desarguesian Homogeneous translation
+Fanoian Moufangian; hence thesis; end; end;
+
 
 theorem :: EUCLMETR:24
 Gen w,y & MS=AMSpace(V,w,y) implies MS is Euclidean Pappian
 Desarguesian Homogeneous translation Fanoian Moufangian OrtAfPl;
 
-definition let MS be Pappian OrtAfPl;
- cluster Af(MS) -> Pappian;
+registration let MS be Pappian OrtAfPl;
+ cluster Af(MS) -> Pappian; correctness by Def2; end;
 
- end;
 
-definition let MS be Desarguesian OrtAfPl;
+registration let MS be Desarguesian OrtAfPl;
+ cluster Af(MS) -> Desarguesian; correctness by Def3; end;
+
+
+registration let MS be Moufangian OrtAfPl;
+ cluster Af(MS) -> Moufangian; correctness by Def5; end;
+
+
+registration let MS be translation OrtAfPl;
+ cluster Af(MS) -> translational; correctness by Def6; end;
+
+
+registration let MS be Fanoian OrtAfPl;
+ cluster Af(MS) -> Fanoian; correctness by Def4; end;
+
+
+registration let MS be Homogeneous OrtAfPl;
  cluster Af(MS) -> Desarguesian;
+correctness proof MS is Desarguesian by Th14;hence thesis by Def3; end; end;
 
- end;
 
-definition let MS be Moufangian OrtAfPl;
+registration let MS be Euclidean Desarguesian OrtAfPl;
+ cluster Af(MS) -> Pappian;
+correctness proof MS is Pappian by Th15;hence thesis by Def2; end; end;
+
+
+registration let MS be Pappian OrtAfSp;
+ cluster Af(MS) -> Pappian;
+  correctness by Def2;
+end;
+
+
+registration let MS be Desarguesian OrtAfSp;
+ cluster Af(MS) -> Desarguesian;
+  correctness by Def3;
+end;
+
+
+registration let MS be Moufangian OrtAfSp;
  cluster Af(MS) -> Moufangian;
+  correctness by Def5;
+end;
 
- end;
 
-definition let MS be translation OrtAfPl;
+registration let MS be translation OrtAfSp;
  cluster Af(MS) -> translational;
+  correctness by Def6;
+end;
 
- end;
 
-definition let MS be Fanoian OrtAfPl;
+registration let MS be Fanoian OrtAfSp;
  cluster Af(MS) -> Fanoian;
-
- end;
-
-definition let MS be Homogeneous OrtAfPl;
- cluster Af(MS) -> Desarguesian;
- end;
-
-definition let MS be Euclidean Desarguesian OrtAfPl;
- cluster Af(MS) -> Pappian;
- end;
-
-definition let MS be Pappian OrtAfSp;
- cluster Af(MS) -> Pappian;
+  correctness by Def4;
 end;
 
-definition let MS be Desarguesian OrtAfSp;
- cluster Af(MS) -> Desarguesian;
-end;
-
-definition let MS be Moufangian OrtAfSp;
- cluster Af(MS) -> Moufangian;
-end;
-
-definition let MS be translation OrtAfSp;
- cluster Af(MS) -> translational;
-end;
-
-definition let MS be Fanoian OrtAfSp;
- cluster Af(MS) -> Fanoian;
-end;

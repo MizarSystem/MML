@@ -11,8 +11,6 @@ NUMBERS
 XCMPLX_0
 NAT_1
 #
-Ind_from_1
-#
 ;
 M4 W1 ;K52 ;K56 ;;P1 B1 ;P1 N1 ;M4 W1 ;K52 ;K56 ;;ª&P1 B1 ;ªP1 K64 B1 N1 ;;;;
 #

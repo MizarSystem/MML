@@ -39,15 +39,22 @@ theorem :: WAYBEL_7:5
  for L being bounded antisymmetric (non empty RelStr) holds
   L is trivial iff Top L = Bottom L;
 
-definition
+registration
  let X be set;
  cluster BoolePoset X -> Boolean;
+ coherence;
 end;
 
-definition
+
+registration
  let X be non empty set;
  cluster BoolePoset X -> non trivial;
+ coherence
+  proof Top BoolePoset X = X & Bottom BoolePoset X = {} by YELLOW_1:18,19;
+   hence thesis by Th5;
+  end;
 end;
+
 
 canceled 2;
 
@@ -55,22 +62,68 @@ theorem :: WAYBEL_7:8
  for L being lower-bounded (non empty Poset), F being Filter of L holds
   F is proper iff not Bottom L in F;
 
-definition
+registration
  cluster non trivial Boolean strict LATTICE;
+ existence
+  proof consider X being non empty set;
+   take BoolePoset X; thus thesis;
+  end;
 end;
 
-definition let X be set;
+
+registration let X be set;
  cluster finite non empty Subset-Family of X;
+existence
+  proof
+    take {{}};
+      {{}} c= bool X
+    proof
+      let a be set;
+      assume a in {{}};
+      then a = {} by TARSKI:def 1;
+      then a c= X by XBOOLE_1:2;
+      hence thesis;
+    end; hence thesis by SETFAM_1:def 7;
+  end;
 end;
 
-definition let S be 1-sorted;
+
+registration let S be 1-sorted;
  cluster finite non empty Subset-Family of S;
+existence
+  proof
+    take {{}};
+      {{}} c= bool the carrier of S
+    proof
+      let a be set;
+      assume a in {{}};
+      then a = {} by TARSKI:def 1;
+      then a c= the carrier of S by XBOOLE_1:2;
+      hence thesis;
+    end;
+    then {{}} is non empty Subset-Family of S by SETFAM_1:def 7
+;
+    hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let L be non trivial upper-bounded (non empty Poset);
  cluster proper Filter of L;
+ existence
+  proof take F = uparrow Top L;
+   assume F is not proper;
+then A1:  F = the carrier of L by TEX_2:5;
+      now let x,y be Element of L;
+        F = {Top L} by WAYBEL_4:24;
+      then x = Top L & y = Top L by A1,TARSKI:def 1;
+     hence x = y;
+    end;
+   hence thesis by REALSET1:def 20;
+  end;
 end;
+
 
 theorem :: WAYBEL_7:9
  for X being set, a being Element of BoolePoset X holds 'not' a = X \ a;
@@ -112,15 +165,22 @@ definition
   for x,y being Element of L st x"/\"y in I holds x in I or y in I;
 end;
 
+
 theorem :: WAYBEL_7:16
  for L being with_infima Poset, I being Ideal of L holds I is prime iff
    for A being finite non empty Subset of L st inf A in I
     ex a being Element of L st a in A & a in I;
 
-definition
+registration
  let L be LATTICE;
  cluster prime Ideal of L;
+ existence
+  proof take [#]L; let x,y be Element of L;
+      [#]L = the carrier of L by PRE_TOPC:12;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL_7:17
    for L1, L2 being LATTICE st the RelStr of L1 = the RelStr of L2
@@ -135,15 +195,22 @@ definition
   for x,y being Element of L st x"\/"y in F holds x in F or y in F;
 end;
 
+
 theorem :: WAYBEL_7:18
    for L being with_suprema Poset, F being Filter of L holds F is prime iff
    for A being finite non empty Subset of L st sup A in F
     ex a being Element of L st a in A & a in F;
 
-definition
+registration
  let L be LATTICE;
  cluster prime Filter of L;
+ existence
+  proof take [#]L; let x,y be Element of L;
+      [#]L = the carrier of L by PRE_TOPC:12;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL_7:19
  for L1, L2 being LATTICE st the RelStr of L1 = the RelStr of L2
@@ -186,9 +253,11 @@ definition
   for G being Filter of L st F c= G holds F = G or G = the carrier of L;
 end;
 
-definition
+
+registration
  let L be non empty Poset;
  cluster ultra -> proper Filter of L;
+ coherence by Def3;
 end;
 
 :: Remark 3.18: (1)+proper iff (3)
@@ -232,10 +301,18 @@ definition
    for A being Subset of T st A is open & x in A holds A in F;
 end;
 
-definition
+
+registration
  let X be non empty set;
  cluster ultra Filter of BoolePoset X;
+ existence
+  proof
+   consider F being proper Filter of BoolePoset X;
+      ex G being Filter of BoolePoset X st F c= G & G is ultra by Th30;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL_7:31
  for T being non empty TopSpace
@@ -302,6 +379,7 @@ definition  :: Definition 3.23
   ex P being prime Ideal of L st p = sup P;
 end;
 
+
 theorem :: WAYBEL_7:38
  for L being LATTICE for p being Element of L st p is prime
   holds p is pseudoprime;
@@ -352,12 +430,22 @@ definition
 y] in R;
 end;
 
-definition
+
+registration
  let L be lower-bounded sup-Semilattice;
  let R be auxiliary Relation of L;
  let x be Element of L;
  cluster R-above x -> upper;
+ coherence
+  proof let y,z be Element of L; assume
+A1:  y in R-above x & y <= z;
+    then R is auxiliary(ii) &
+    x <= x & [x,y] in R by WAYBEL_4:14;
+    then [x,z] in R by A1,WAYBEL_4:def 5;
+   hence thesis by WAYBEL_4:14;
+  end;
 end;
+
 
 theorem :: WAYBEL_7:44 :: Lemma 3.25: (1) iff (2)-[non empty]
    for L being lower-bounded LATTICE, R being auxiliary Relation of L holds

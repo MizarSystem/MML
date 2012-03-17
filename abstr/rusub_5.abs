@@ -29,6 +29,7 @@ let V be non empty RLSStruct, M,N be Affine Subset of V;
   ex v being VECTOR of V st M = N + {v};
 end;
 
+
 theorem :: RUSUB_5:1
   for V being right_zeroed (non empty RLSStruct), M be Affine Subset of V holds
  M is_parallel_to M;
@@ -53,6 +54,7 @@ let V be non empty LoopStr,
 
   {u - v where u,v is Element of V: u in M & v in N};
 end;
+
 
 theorem :: RUSUB_5:4
 for V being RealLinearSpace, M,N being Affine Subset of V holds
@@ -151,6 +153,7 @@ let V be RealUnitarySpace, W be Subspace of V;
    for w being VECTOR of V st w in W holds w, v are_orthogonal};
 end;
 
+
 definition
 let V be RealUnitarySpace, M be non empty Subset of V;
   func Ort_Comp M -> strict Subspace of V means
@@ -159,6 +162,7 @@ let V be RealUnitarySpace, M be non empty Subset of V;
   the carrier of it = {v where v is VECTOR of V :
    for w being VECTOR of V st w in M holds w, v are_orthogonal};
 end;
+
 
 theorem :: RUSUB_5:21
   for V being RealUnitarySpace, W being Subspace of V holds
@@ -214,9 +218,19 @@ theorem :: RUSUB_5:32
 
 begin  :: Topology of Real Unitary Space
 
-scheme SubFamExU {A() -> UNITSTR, P[Subset of A()]}:
+scheme :: RUSUB_5:sch 1
+ SubFamExU {A() -> UNITSTR, P[Subset of A()]}:
    ex F being Subset-Family of A() st
-   for B being Subset of A() holds B in F iff P[B];
+   for B being Subset of A() holds B in F iff P[B]
+proof
+  defpred Q[Subset of A()] means P[$1];
+   consider F being Subset-Family of A() such that
+A1: for B being Subset of A() holds B in F iff Q[B]
+     from SETFAM_1:sch 1;
+   reconsider F as Subset-Family of A();
+   take F;
+   thus thesis by A1;
+end;
 
 definition
 let V be RealUnitarySpace;
@@ -226,6 +240,7 @@ for M being Subset of V holds M in it iff
  for x being Point of V st x in M holds
   ex r being Real st r>0 & Ball(x,r) c= M;
 end;
+
 
 theorem :: RUSUB_5:33
 for V being RealUnitarySpace, v being Point of V, r,p being Real st
@@ -273,15 +288,29 @@ definition
   TopStruct (#the carrier of V,Family_open_set(V)#);
 end;
 
-definition
+
+registration
   let V be RealUnitarySpace;
   cluster TopUnitSpace V -> TopSpace-like;
+coherence
+proof
+     TopUnitSpace V=TopStruct(# the carrier of V,Family_open_set(V) #)
+   by Def6;
+   hence thesis by Th41;
+end;
 end;
 
-definition
+
+registration
 let V be RealUnitarySpace;
   cluster TopUnitSpace V -> non empty;
+coherence
+proof
+     TopUnitSpace V=TopStruct (#the carrier of V,Family_open_set(V)#) by Def6;
+   hence thesis;
 end;
+end;
+
 
 theorem :: RUSUB_5:42
  for V being RealUnitarySpace, M being Subset of TopUnitSpace V st

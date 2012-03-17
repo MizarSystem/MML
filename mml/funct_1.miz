@@ -25,7 +25,8 @@ definition let X be set;
 :Def1: for x,y1,y2 st [x,y1] in X & [x,y2] in X holds y1 = y2;
 end;
 
-definition
+
+registration
  cluster Relation-like Function-like set;
  existence
   proof take {};
@@ -34,11 +35,13 @@ definition
   end;
 end;
 
+
 definition
  mode Function is Function-like Relation-like set;
 end;
 
-definition
+
+registration
  cluster empty -> Function-like set;
  coherence
   proof let f be set;
@@ -46,6 +49,7 @@ definition
    hence for x,y1,y2 st [x,y1] in f & [x,y2] in f holds y1 = y2;
   end;
 end;
+
 
 reserve f,g,g1,g2,h for Function,
         R,S for Relation;
@@ -62,14 +66,14 @@ scheme GraphFunc{A()->set,P[set,set]}:
  ex f st for x,y holds [x,y] in f iff x in A() & P[x,y]
 provided
 A1: for x,y1,y2 st P[x,y1] & P[x,y2] holds y1 = y2
-  proof
+proof
    defpred R[set,set] means P[$1,$2];
 A2: for x,y1,y2 st R[x,y1] & R[x,y2] holds y1 = y2 by A1;
     consider Y such that
-A3:   for y holds y in Y iff ex x st x in A() & R[x,y] from Fraenkel(A2);
+A3:   for y holds y in Y iff ex x st x in A() & R[x,y] from TARSKI:sch 1(A2);
    defpred R[set] means ex x,y st [x,y] = $1 & P[x,y];
    consider F being set such that
-A4: p in F iff p in [:A(),Y:] & R[p] from Separation;
+A4: p in F iff p in [:A(),Y:] & R[p] from XBOOLE_0:sch 1;
      now
      thus p in F implies ex x,y st [x,y] = p
       proof p in F implies ex x,y st [x,y] = p & P[x,y] by A4;
@@ -117,6 +121,7 @@ definition let f,x;
   uniqueness by Def1;
   consistency;
 end;
+
 
 canceled 5;
 
@@ -199,6 +204,7 @@ A8:  [x,y] in f by RELAT_1:def 5;
  end;
 end;
 
+
 canceled 2;
 
 theorem
@@ -232,7 +238,7 @@ scheme FuncEx{A()->set,P[set,set]}:
 provided
 A1: for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1 = y2 and
 A2: for x st x in A() ex y st P[x,y]
-  proof
+proof
    defpred R[set,set] means $1 in A() & P[$1,$2];
 A3: for x,y1,y2 st R[x,y1] & R[x,y2] holds y1 = y2 by A1;
    consider f being Function such that
@@ -266,7 +272,7 @@ A9:   P[x,y] by A2;
 
 scheme Lambda{A()->set,F(set)->set}:
  ex f being Function st dom f = A() & for x st x in A() holds f.x = F(x)
-  proof
+proof
    deffunc G(set) = F($1);
    defpred P[set,set] means $2 = G($1);
 A1:  for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1 = y2;
@@ -380,12 +386,12 @@ A1:  for y st y in Y ex x st x in dom f & y = f.x;
   hence y in rng f by Def5;
  end;
 
-definition let f,g;
- redefine func f*g;
- synonym g*f;
-end;
+notation let f,g;
+ synonym g*f for f*g;
+ end;
 
-definition let f,g;
+
+registration let f,g;
  cluster g*f -> Function-like;
  coherence
   proof
@@ -400,6 +406,7 @@ A2:  [x,z2] in f & [z2,y2] in g by RELAT_1:def 8;
    hence y1 = y2 by A1,A2,Def1;
   end;
 end;
+
 
 theorem
    for h st
@@ -487,10 +494,12 @@ A1:  x in dom f;
   suppose f.x in dom g;
    then x in dom(g*f) by A1,Th21;
    hence (g*f).x = g.(f.x) by Th22;
+  end;
   suppose
 A2:  not f.x in dom g;
    then not x in dom(g*f) by Th21;
    hence (g*f).x = {} by Def4 .= g.(f.x) by A2,Def4;
+ end;
  end;
 
 canceled;
@@ -562,7 +571,7 @@ A12:     x in dom f;
   hence thesis by A1,XBOOLE_0:def 10;
  end;
 
-definition let X;
+registration let X;
  cluster id X -> Function-like;
  coherence
   proof let x,y1,y2;
@@ -571,6 +580,7 @@ definition let X;
    hence y1 = y2;
   end;
 end;
+
 
 theorem Th34:
    f = id X iff dom f = X & for x st x in X holds f.x = x
@@ -695,6 +705,7 @@ definition let f;
  attr f is one-to-one means
 :Def8: for x1,x2 st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1 = x2;
 end;
+
 
 canceled;
 
@@ -869,7 +880,7 @@ A1:   g*f = id dom f;
    hence f is one-to-one by Th47;
  end;
 
-definition
+registration
   cluster empty Function;
  existence
   proof
@@ -878,7 +889,8 @@ definition
   end;
 end;
 
-definition
+
+registration
  cluster empty -> one-to-one Function;
  coherence
   proof let f be Function;
@@ -889,7 +901,8 @@ A1:  f is empty;
   end;
 end;
 
-definition
+
+registration
  cluster one-to-one Function;
  existence
   proof consider f being empty Function;
@@ -898,7 +911,8 @@ definition
   end;
 end;
 
-definition let f be one-to-one Function;
+
+registration let f be one-to-one Function;
  cluster f~ -> Function-like;
  coherence
   proof let x,y1,y2;
@@ -909,6 +923,7 @@ definition let f be one-to-one Function;
    hence y1 = y2 by A2,Def8;
   end;
 end;
+
 
 definition let f;
  assume
@@ -921,6 +936,7 @@ A1:  f is one-to-one;
    hence f~ is Function;
   end;
 end;
+
 
 theorem Th54:
  f is one-to-one implies
@@ -1197,7 +1213,7 @@ A1:    id X is one-to-one by Th52;
   hence thesis by Th44;
  end;
 
-definition let f,X;
+registration let f,X;
  cluster f|X -> Function-like;
   coherence
  proof
@@ -1207,6 +1223,7 @@ definition let f,X;
   hence y1 = y2 by Def1;
  end;
 end;
+
 
 theorem Th68:
    g = f|X iff dom g = dom f /\ X & for x st x in dom g holds g.x = f.x
@@ -1273,10 +1290,12 @@ A1: x in X;
   suppose x in dom f;
    then x in dom(f|X) by A1,Lm2;
   hence thesis by Th68;
+  end;
   suppose
 A2:   not x in dom f;
    then not x in dom(f|X) by Lm2;
   hence (f|X).x = {} by Def4 .= f.x by A2,Def4;
+ end;
  end;
 
 theorem
@@ -1313,7 +1332,7 @@ A2:  x1 in dom(f|X) & x2 in dom(f|X);
   hence thesis by A1,Def8;
 end;
 
-definition let Y,f;
+registration let Y,f;
  cluster Y|f -> Function-like;
   coherence
  proof
@@ -1323,6 +1342,7 @@ definition let Y,f;
   hence y1 = y2 by Def1;
  end;
 end;
+
 
 theorem Th85:
  g = Y|f iff (for x holds x in dom g iff x in dom f & f.x in Y) &
@@ -1461,6 +1481,7 @@ A14:   x in dom f by A12,RELAT_1:def 4;
   hence Y = f.:X by RELAT_1:def 13;
  end;
 end;
+
 
 canceled 17;
 
@@ -1678,6 +1699,7 @@ A10:   x in dom f by A8,RELAT_1:def 4;
   hence X = f"Y by RELAT_1:def 14;
  end;
 end;
+
 
 canceled 10;
 

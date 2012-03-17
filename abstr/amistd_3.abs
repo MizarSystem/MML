@@ -1,6 +1,6 @@
 :: A Tree of Execution of a Macroinstruction
 ::  by Artur Korni{\l}owicz
-:: 
+::
 :: Received December 10, 2003
 :: Copyright (c) 2003 Association of Mizar Users
 
@@ -33,15 +33,34 @@ reserve x, y, X for set,
         O for Ordinal,
         R, S for Relation;
 
-definition
+registration
   let D be set, f be PartFunc of D,NAT, n be set;
   cluster f.n -> natural;
+coherence
+proof
+  per cases;
+  suppose n in dom f;
+  then reconsider a = f.n as Nat by PARTFUN1:27;
+  a is natural;
+  hence thesis;
+  end;
+  suppose not n in dom f;
+  hence thesis by FUNCT_1:def 4;
+end;
+end;
 end;
 
-definition
+
+registration
   let R be empty Relation, X be set;
   cluster R|X -> empty;
+coherence
+proof
+  dom R misses X by XBOOLE_1:65;
+  hence thesis by RELAT_1:95;
 end;
+end;
+
 
 theorem :: AMISTD_3:1
   dom R = {x} & rng R = {y} implies R = x .--> y;
@@ -49,39 +68,74 @@ theorem :: AMISTD_3:1
 theorem :: AMISTD_3:2
   field {[x,x]} = {x};
 
-definition
+registration
   let X be infinite set, a be set;
   cluster X --> a -> infinite;
+coherence
+proof
+  assume X --> a is finite;
+  then reconsider f = X --> a as finite Relation;
+  dom f is finite;
+  hence thesis by FUNCOP_1:19;
+end;
 end;
 
-definition
+
+registration
   cluster infinite Function;
+existence
+proof
+  take NAT --> 0;
+  thus thesis;
+end;
 end;
 
-definition
+
+registration
   let R be finite Relation;
   cluster field R -> finite;
+coherence
+proof
+   field R = dom R \/ rng R by RELAT_1:def 6;
+   hence thesis;
 end;
+end;
+
 
 theorem :: AMISTD_3:3
   field R is finite implies R is finite;
 
-definition
+registration
   let R be infinite Relation;
   cluster field R -> infinite;
+coherence by Th3;
 end;
+
 
 theorem :: AMISTD_3:4
   dom R is finite & rng R is finite implies R is finite;
 
-definition
+registration
   cluster RelIncl {} -> empty;
+coherence
+proof
+  for Y,Z being set st Y in {} & Z in {} holds [Y,Z] in {} iff Y c= Z;
+  hence thesis by TOLER_1:1,WELLORD2:def 1;
+end;
 end;
 
-definition
+
+registration
   let X be non empty set;
   cluster RelIncl X -> non empty;
+coherence
+proof
+  consider a being Element of X;
+  [a,a] in RelIncl X by WELLORD2:def 1;
+  hence thesis;
 end;
+end;
+
 
 theorem :: AMISTD_3:5
   RelIncl {x} = {[x,x]};
@@ -89,18 +143,26 @@ theorem :: AMISTD_3:5
 theorem :: AMISTD_3:6
   RelIncl X c= [:X,X:];
 
-definition
+registration
   let X be finite set;
   cluster RelIncl X -> finite;
+coherence
+proof
+  RelIncl X c= [:X,X:] by Th6;
+  hence thesis by FINSET_1:13;
 end;
+end;
+
 
 theorem :: AMISTD_3:7
   RelIncl X is finite implies X is finite;
 
-definition
+registration
   let X be infinite set;
   cluster RelIncl X -> infinite;
+coherence by Th7;
 end;
+
 
 theorem :: AMISTD_3:8
   R,S are_isomorphic & R is well-ordering implies S is well-ordering;
@@ -114,9 +176,15 @@ theorem :: AMISTD_3:10
 theorem :: AMISTD_3:11
   {[x,x]}, {[y,y]} are_isomorphic;
 
-definition
+registration
   cluster order_type_of {} -> empty;
+coherence
+proof
+  {},RelIncl {} are_isomorphic by WELLORD1:48;
+  hence thesis by ORDERS_2:21,WELLORD2:def 2;
 end;
+end;
+
 
 theorem :: AMISTD_3:12
   order_type_of RelIncl O = O;
@@ -132,22 +200,66 @@ theorem :: AMISTD_3:15
   canonical_isomorphism_of (RelIncl order_type_of RelIncl {x}, RelIncl {x})
     = 0 .--> x;
 
-definition
+registration
   let O be Ordinal,
       X be Subset of O,
       n be set;
   cluster canonical_isomorphism_of
               (RelIncl order_type_of RelIncl X,RelIncl X).n
           -> ordinal;
+coherence
+proof
+  consider phi being Ordinal-Sequence such that
+A1:phi = canonical_isomorphism_of(RelIncl order_type_of RelIncl X, RelIncl X) &
+   phi is increasing & dom phi = order_type_of RelIncl X and
+A2:rng phi = X by CARD_5:14;
+  per cases;
+  suppose n in dom phi;
+  then phi.n in rng phi by FUNCT_1:def 5;
+  hence thesis by A1,A2,ORDINAL1:23;
+  end;
+  suppose not n in dom phi;
+  hence thesis by A1,FUNCT_1:def 4;
+end;
+end;
 end;
 
-definition
+
+registration
   let X be natural-membered set,
       n be set;
   cluster canonical_isomorphism_of
               (RelIncl order_type_of RelIncl X,RelIncl X).n
           -> natural;
+coherence
+proof
+  X c= NAT
+  proof
+    let x be set;
+    assume x in X;
+    then x is natural by MEMBERED:def 5;
+    hence thesis by ORDINAL2:def 21;
+  end;
+  then reconsider X as Subset of NAT;
+  consider phi being Ordinal-Sequence such that
+A1:phi = canonical_isomorphism_of(RelIncl order_type_of RelIncl X, RelIncl X) &
+   phi is increasing & dom phi = order_type_of RelIncl X and
+A2:rng phi = X by CARD_5:14;
+  per cases;
+  suppose
+A3: n in dom phi;
+  then
+A4:phi.n in rng phi by FUNCT_1:def 5;
+  reconsider a = phi.n as Element of X by A2,A3,FUNCT_1:def 5;
+  a is Nat by A2,A4;
+  hence thesis by A1;
+  end;
+  suppose not n in dom phi;
+  hence thesis by A1,FUNCT_1:def 4;
 end;
+end;
+end;
+
 
 :: Trees
 
@@ -168,16 +280,103 @@ definition
   { k |-> 0 where k is Nat: not contradiction };
 end;
 
-definition
+
+registration
   cluster TrivialInfiniteTree -> non empty Tree-like;
+coherence
+proof
+  set X = TrivialInfiniteTree;
+  0 |-> 0 in X by Def1;
+  hence X is non empty;
+  thus X c= NAT*
+  proof
+    let x be set;
+    assume x in X;
+    then ex k being Nat st x = k |-> 0 by Def1;
+    then x is FinSequence of NAT by FINSEQ_2:77;
+    hence thesis by FINSEQ_1:def 11;
+  end;
+  thus for p being FinSequence of NAT st p in X holds ProperPrefixes p c= X
+  proof
+    let p be FinSequence of NAT;
+    assume p in X;
+    then consider m being Nat such that
+A1:   p = m |-> 0 by Def1;
+    let x be set;
+    assume
+A2:   x in ProperPrefixes p;
+    then reconsider x as FinSequence by TREES_1:35;
+A3: len x = len (len x |-> 0) by FINSEQ_2:69;
+    for k being Nat st 1 <= k & k <= len x holds x.k = (len x |-> 0).k
+    proof
+      let k be Nat;
+      assume 1 <= k & k <= len x;
+      then
+A4:   k in dom x by FINSEQ_3:27;
+      then
+A5:   k in Seg len x by FINSEQ_1:def 3;
+      len x < len p by A2,TREES_1:37;
+      then Seg len x c= Seg len p by FINSEQ_1:7;
+      then k in Seg len p by A5;
+      then
+A6:   k in Seg m by A1,FINSEQ_2:69;
+      x is_a_proper_prefix_of p by A2,TREES_1:36;
+      then
+A7:   x c= p by XBOOLE_0:def 8;
+      thus (len x |-> 0).k = 0 by A5,FINSEQ_2:70
+         .= p.k by A1,A6,FINSEQ_2:70
+         .= x.k by A4,A7,GRFUNC_1:8;
+    end;
+    then x = len x |-> 0 by A3,FINSEQ_1:18;
+    hence thesis by Def1;
+  end;
+  let p be FinSequence of NAT,
+      m, n be Nat;
+  assume p^<*m*> in X;
+  then consider k being Nat such that
+A8: p^<*m*> = k |-> 0 by Def1;
+  assume
+A9:  n <= m;
+A10: len (p^<*m*>) = len p + 1 by FINSEQ_2:19;
+A11: len (p^<*m*>) = k by A8,FINSEQ_2:69;
+A12: (p^<*m*>).len (p^<*m*>) = m by A10,FINSEQ_1:59;
+  0 = k or 0 < k by NAT_1:18;
+  then 0+1 <= k by A8,NAT_1:38,FINSEQ_2:72;
+  then k in Seg k by FINSEQ_1:3;
+  then
+A13: m = 0 by A12,A8,A11,FINSEQ_2:70;
+A14: len (p^<*n*>) = len (len (p^<*n*>) |-> 0) by FINSEQ_2:69;
+  for z being Nat st 1 <= z & z <= len (p^<*n*>) holds
+    (len (p^<*n*>) |-> 0).z = (p^<*n*>).z
+  proof
+    let z be Nat;
+    assume that
+A15:   1 <= z and
+A16:   z <= len (p^<*n*>);
+    z in dom (p^<*n*>) by A15,A16,FINSEQ_3:27;
+    then
+A17: z in Seg len (p^<*n*>) by FINSEQ_1:def 3;
+    len (p^<*n*>) = len p + 1 by FINSEQ_2:19;
+    then
+A18: z in Seg k by A15,A16,A11,A10,FINSEQ_1:3;
+    thus (len (p^<*n*>) |-> 0).z = 0 by A17,FINSEQ_2:70
+      .= (p^<*m*>).z by A8,A18,FINSEQ_2:70
+      .= (p^<*n*>).z by A13,A9,NAT_1:19;
+  end;
+  then len (p^<*n*>) |-> 0 = p^<*n*> by A14,FINSEQ_1:18;
+  hence p^<*n*> in X by Def1;
 end;
+end;
+
 
 theorem :: AMISTD_3:19
   NAT,TrivialInfiniteTree are_equipotent;
 
-definition
+registration
   cluster TrivialInfiniteTree -> infinite;
+coherence by Th19,CARD_1:68;
 end;
+
 
 theorem :: AMISTD_3:20
   for n being Nat holds TrivialInfiniteTree-level n = { n |-> 0 };
@@ -207,6 +406,7 @@ definition
      it = il.(S, min M);
 end;
 
+
 theorem :: AMISTD_3:21
   for F being non empty programmed FinPartState of S holds
    FirstLoc F in dom F;
@@ -235,24 +435,42 @@ definition
   {locnum l where l is Instruction-Location of S : l in F};
 end;
 
+
 theorem :: AMISTD_3:25
   locnum l1 in LocNums F iff l1 in F;
 
-definition
+registration
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
           (non empty non void AMI-Struct over N)),
      F be empty Subset of the Instruction-Locations of S;
  cluster LocNums F -> empty;
+coherence
+proof
+A1:LocNums F =
+  {locnum l where l is Instruction-Location of S : l in F} by Def3;
+  assume LocNums F is non empty;
+  then consider x being set such that
+A2:  x in LocNums F by XBOOLE_0:def 1;
+  ex l being Instruction-Location of S st x = locnum l & l in F by A1,A2;
+  hence thesis;
+end;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
           (non empty non void AMI-Struct over N)),
      F be non empty Subset of the Instruction-Locations of S;
  cluster LocNums F -> non empty;
+coherence
+proof
+  ex l being Instruction-Location of S st l in F by SUBSET_1:10;
+  hence thesis by Th25;
 end;
+end;
+
 
 theorem :: AMISTD_3:26
   F = {il.(S,n)} implies LocNums F = {n};
@@ -286,16 +504,42 @@ definition
                    RelIncl LocNums M).m);
 end;
 
+
 theorem :: AMISTD_3:31
   F = {il.(S,n)} implies LocSeq F = 0 .--> il.(S,n);
 
-definition
+registration
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
            (non empty non void AMI-Struct over N)),
       M be Subset of the Instruction-Locations of S;
   cluster LocSeq M -> one-to-one;
+coherence
+proof
+  set f = LocSeq M;
+  set X = LocNums M;
+  set C = canonical_isomorphism_of (RelIncl order_type_of RelIncl X,RelIncl X);
+  let x1,x2 be set such that
+A1: x1 in dom f and
+A2: x2 in dom f and
+A3: f.x1 = f.x2;
+A4: dom f = Card M by Def4;
+  then
+A5: f.x1 = il.(S,C.x1) by A1,Def4;
+  f.x2 = il.(S,C.x2) by A2,A4,Def4;
+  then
+A6:C.x1 = C.x2 by A3,A5,AMISTD_1:25;
+  consider phi being Ordinal-Sequence such that
+A7:phi = C
+   and
+A8: phi is increasing and
+A9: dom phi = order_type_of RelIncl X and rng phi = X by CARD_5:14;
+A10:phi is one-to-one by A8,CARD_5:20;
+  Card M c= order_type_of RelIncl X by Th28;
+  hence x1 = x2 by A7,A6,A10,A1,A2,A4,A9,FUNCT_1:def 8;
 end;
+end;
+
 
 :: Tree of Execution
 
@@ -313,6 +557,7 @@ definition
      for m being Nat st m in Card NIC(pi(M,it.t),it.t) holds
       it.(t^<*m*>) = (LocSeq NIC(pi(M,it.t),it.t)).m;
 end;
+
 
 theorem :: AMISTD_3:32
   for S being standard halting realistic

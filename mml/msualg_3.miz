@@ -44,10 +44,12 @@ definition let I be non empty set,
 coherence by MSUALG_1:def 2;
 end;
 
+
 definition let S; let U1,U2 be MSAlgebra over S;
 mode ManySortedFunction of U1,U2 is
      ManySortedFunction of the Sorts of U1, the Sorts of U2;
 end;
+
 
 definition let I be set,A be ManySortedSet of I;
 func id A -> ManySortedFunction of A,A means :Def1:
@@ -56,7 +58,8 @@ existence
  proof
   deffunc F(set)=id (A.$1);
   consider f being Function such that
-      A1: dom f = I & for i be set st i in I holds f.i = F(i) from Lambda;
+      A1: dom f = I & for i be set st i in I holds f.i = F(i) from
+FUNCT_1:sch 3;
   reconsider f as ManySortedSet of I by A1,PBOOLE:def 3;
     for x be set st x in dom f holds f.x is Function
    proof
@@ -94,12 +97,14 @@ uniqueness
  end;
 end;
 
+
 definition let IT be Function;
 attr IT is "1-1" means :Def2:
 for i be set, f be Function st i in dom IT & IT.i = f holds f is one-to-one;
 end;
 
-definition let I be set;
+
+registration let I be set;
 cluster "1-1" ManySortedFunction of I;
 existence
  proof
@@ -112,6 +117,7 @@ existence
   hence thesis;
  end;
 end;
+
 
 theorem Th1:
 for I be set,F be ManySortedFunction of I holds
@@ -135,6 +141,7 @@ attr IT is "onto" means :Def3:
 for i be set st i in I holds rng(IT.i) = B.i;
 end;
 
+
 definition
  let F,G be Function-yielding Function;
  func G**F -> Function-yielding Function means :Def4:
@@ -146,7 +153,7 @@ definition
    A1: for i be set st i in dom F /\ dom G ex u be set st P[i,u];
    consider H being Function such that
    A2: dom H = dom F /\ dom G & for i be set st i in dom F /\ dom G holds
-       P[i,H.i] from NonUniqFuncEx(A1);
+       P[i,H.i] from ZFREFLE1:sch 1(A1);
      for x be set st x in dom H holds H.x is Function
     proof
      let x be set;
@@ -179,6 +186,7 @@ definition
    hence thesis by A4,A5,FUNCT_1:9;
   end;
 end;
+
 
 theorem Th2:
  for I be set, A,B,C be ManySortedSet of I,
@@ -226,6 +234,7 @@ definition let I be set,
   end;
 end;
 
+
 theorem
   for I be set,A,B be ManySortedSet of I,
   F be ManySortedFunction of A,B holds F**(id A) = F
@@ -246,8 +255,10 @@ theorem
       B.i = {} implies A.i = {};
     then dom f = A.i by FUNCT_2:def 1;
    hence G.i = F.i by A2,FUNCT_1:42;
+   end;
    suppose B.i = {} & A.i <> {}; then f = {} by FUNCT_2:def 1;
    hence G.i = F.i by A2,RELAT_1:62;
+  end;
   end;
   hence thesis by PBOOLE:3;
  end;
@@ -272,8 +283,10 @@ A3:    G.i = g * f by A1,Th2;
       per cases; suppose
          B.i = {} implies A.i = {};
       hence G.i = F.i by A2,A3,FUNCT_2:23;
+      end;
       suppose B.i = {} & A.i <> {}; then f = {} by FUNCT_2:def 1;
       hence G.i = F.i by A3,RELAT_1:62;
+     end;
      end;
      hence (id B)**F = F by PBOOLE:3;
   end;
@@ -289,7 +302,8 @@ existence
   defpred P[set,set] means $2 = (F.$1)";
   A2: for i be set st i in I ex u be set st P[i,u];
   consider H being Function such that
-  A3: dom H = I & for i be set st i in I holds P[i,H.i] from NonUniqFuncEx(A2);
+  A3: dom H = I & for i be set st i in I holds P[i,H.i] from ZFREFLE1:sch 1
+(A2);
   reconsider H as ManySortedSet of I by A3,PBOOLE:def 3;
     for x be set st x in dom H holds H.x is Function
    proof
@@ -332,6 +346,7 @@ uniqueness
   hence thesis by PBOOLE:3;
  end;
 end;
+
 
 theorem Th5:
 for I be set,A,B be non-empty ManySortedSet of I,
@@ -380,7 +395,7 @@ existence
   defpred P[set,set] means $2 = (F.$1).:(A.$1);
   A1: for i be set st i in I ex u be set st P[i,u];
   consider g being Function such that A2: dom g = I & for i be set st i in I
-    holds P[i,g.i] from NonUniqFuncEx(A1);
+    holds P[i,g.i] from ZFREFLE1:sch 1(A1);
   reconsider g as ManySortedSet of I by A2,PBOOLE:def 3;
   take g;
   thus thesis by A2;
@@ -402,6 +417,7 @@ uniqueness
  end;
 end;
 
+
 Lm1:
 now let S; let U1 be MSAlgebra over S; let o;
  let x be set; assume x in Args(o,U1);
@@ -414,10 +430,11 @@ now let S; let U1 be MSAlgebra over S; let o;
 end;
 
 
-definition let S; let U1 be non-empty MSAlgebra over S; let o;
+registration let S; let U1 be non-empty MSAlgebra over S; let o;
 cluster -> Function-like Relation-like Element of Args(o,U1);
 coherence by Lm1;
 end;
+
 
 begin
 
@@ -552,6 +569,7 @@ the_arity_of o))
  correctness;
 end;
 
+
 Lm2:
 now let S; let U1,U2 be MSAlgebra over S; let o;
     let F be ManySortedFunction of U1,U2;
@@ -652,7 +670,7 @@ then A27:   (F*the_arity_of o).n = F.((the_arity_of o).n) by FUNCT_1:22
    hence u = F#x by A5,A8,A24,FUNCT_1:9;
 end;
 
-definition let S; let U1 be non-empty MSAlgebra over S; let o;
+registration let S; let U1 be non-empty MSAlgebra over S; let o;
  cluster Function-like Relation-like Element of Args(o,U1);
  existence
   proof consider x being Element of Args(o,U1);
@@ -660,6 +678,7 @@ definition let S; let U1 be non-empty MSAlgebra over S; let o;
    hence thesis;
   end;
 end;
+
 
 definition let S; let U1,U2 be non-empty MSAlgebra over S; let o;
            let F be ManySortedFunction of U1,U2;
@@ -670,6 +689,7 @@ redefine func F # x -> Function-like Relation-like Element of Args(o,U2 )
  coherence;
  compatibility by Lm2;
 end;
+
 
 theorem Th7:
 for S,o for U1 being MSAlgebra over S st Args(o,U1) <> {}
@@ -763,6 +783,7 @@ for x be Element of Args(o,U1) holds
     (F.(the_result_sort_of o)).(Den(o,U1).x) = Den(o,U2).(F#x);
 end;
 
+
 theorem Th9:
 for U1 being MSAlgebra over S holds
 id (the Sorts of U1) is_homomorphism U1,U1
@@ -793,10 +814,12 @@ of S)
   then Den(o,U1).x in rng Den(o,U1) by A1,FUNCT_1:def 5;
 hence (F.(the_result_sort_of o)).(Den(o,U1).x) = Den(o,U1).(F#x)
          by A2,A3,A6,A7,FUNCT_1:35;
+  end;
   suppose Result(o,U1) = {};
    then dom Den(o,U1) = {} & dom (F.r) = {} by A1,A6,FUNCT_2:def 1,RELAT_1:60;
    then Den(o,U1).x = {} & (F.r).{} = {} by FUNCT_1:def 4;
   hence thesis by A1,Th7;
+ end;
  end;
 
 theorem Th10:
@@ -836,6 +859,7 @@ definition let S; let U1,U2 be MSAlgebra over S;
 pred F is_epimorphism U1,U2 means :Def10:
      F is_homomorphism U1,U2 & F is "onto";
 end;
+
 
 theorem Th11:
 for U1,U2,U3 being non-empty MSAlgebra over S
@@ -877,6 +901,7 @@ pred F is_monomorphism U1,U2 means :Def11:
      F is_homomorphism U1,U2 & F is "1-1";
 end;
 
+
 theorem Th12:
 for U1,U2,U3 being non-empty MSAlgebra over S
 for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U2,U3 st
@@ -916,6 +941,7 @@ pred F is_isomorphism U1,U2 means :Def12:
      F is_epimorphism U1,U2 & F is_monomorphism U1,U2;
 end;
 
+
 theorem Th13:
 for F be ManySortedFunction of U1,U2 holds
 F is_isomorphism U1,U2 iff
@@ -954,7 +980,7 @@ Lm3:
       deffunc G(set)=(F#x).$1;
       consider f being Function such that A3: dom f = dom (the_arity_of o) &
       for n be set st n in dom (the_arity_of o) holds f.n = G(n)
-      from Lambda;
+      from FUNCT_1:sch 3;
       A4: dom (F#x) = dom (the_arity_of o) by Th6;
       then A5: f = (F#x) by A3,FUNCT_1:9;
       reconsider f as Element of Args(o,U1) by A3,A4,FUNCT_1:9;
@@ -1056,6 +1082,7 @@ pred U1,U2 are_isomorphic means :Def13:
  ex F be ManySortedFunction of U1,U2 st F is_isomorphism U1,U2;
 end;
 
+
 theorem Th16:
 for U1 being MSAlgebra over S holds
   id the Sorts of U1 is_isomorphism U1,U1 & U1,U1 are_isomorphic
@@ -1091,6 +1118,7 @@ definition let S; let U1, U2 be MSAlgebra over S;
  redefine pred U1, U2 are_isomorphic;
  reflexivity by Th16;
 end;
+
 
 theorem
    for U1,U2 being non-empty MSAlgebra over S holds
@@ -1215,7 +1243,7 @@ def 3;
        end;
       consider f be Function such that
       A23: dom f = dom a &
-      for y be set st y in dom a holds P[y,f.y] from NonUniqFuncEx(A18);
+      for y be set st y in dom a holds P[y,f.y] from ZFREFLE1:sch 1(A18);
       A24: Args(o,U1) = product (S1 * ao) by PRALG_2:10;
       A25: dom f = dom ao by A15,A16,A17,A23,RELAT_1:46;
         dom S1 = the carrier of S by PBOOLE:def 3;
@@ -1276,6 +1304,7 @@ def 3;
  end;
 uniqueness by MSUALG_2:10;
 end;
+
 
 
 theorem

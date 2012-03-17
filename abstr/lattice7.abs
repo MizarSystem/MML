@@ -30,10 +30,17 @@ definition
     for x be Element of L st x in A holds x in B;
 end;
 
-definition
+
+registration
 let L be LATTICE;
 cluster non empty Chain of L;
+existence
+ proof
+    {Bottom L} is Chain of L by ORDERS_1:35;
+  hence thesis;
+ end;
 end;
+
 
 definition
 let L be LATTICE;
@@ -42,6 +49,7 @@ mode Chain of x,y -> non empty Chain of L means
 :: LATTICE7:def 2
  x in it & y in it & for z be Element of L st z in it holds x <= z & z <= y;
 end;
+
 
 theorem :: LATTICE7:1
 for L be LATTICE
@@ -58,6 +66,7 @@ func height(x) -> Nat means
  (ex A be Chain of Bottom L,x st it= card A) &
   for A be Chain of Bottom L,x holds card A <= it;
 end;
+
 
 theorem :: LATTICE7:2
 for L be finite LATTICE
@@ -95,20 +104,92 @@ for L be non empty finite LATTICE
  for x be Element of L holds
   height (x) >= 1;
 
-scheme LattInd
+scheme :: LATTICE7:sch 1
+ LattInd
  { L() -> finite LATTICE, P[set]}:
   for x be Element of L() holds P[x]
    provided
    for x be Element of L()
      st for b be Element of L() st b < x
       holds P[b]
-       holds P[x];
+       holds P[x]
+proof
+
+let x be Element of L();
+
+defpred Q[Nat] means
+  for x be Element of L() st height(x) <= $1
+   holds P[x];
+
+A2: for n be Nat holds Q[n]
+ proof
+A3: Q[0]
+  proof
+     for x be Element of L() st height(x) <= 0 holds P[x]
+    proof
+     let x be Element of L();
+     assume (height(x) <= 0) & not P[x];
+     then height(x) < 0 + 1 by NAT_1:38;
+     hence contradiction by Th7;
+    end;
+   hence thesis;
+  end;
+A4: for n be Nat st Q[n] holds Q[n+1]
+    proof
+     let n be Nat;
+     assume A5: Q[n];
+       for x be Element of L() st height(x) <= n+1 holds P[x]
+      proof
+       let x be Element of L();
+       assume height(x) <= n+1;
+then A6:    height(x) = n+1 or height(x) <= n by NAT_1:26;
+       per cases by A5,A6;
+       suppose A7: height(x) = n+1;
+         for y be Element of L() st y < x holds P[y]
+        proof
+         let y be Element of L();
+         assume y < x;
+         then height(y) < height(x) by Th2;
+         then height(y) <= n by A7,NAT_1:38;
+         hence thesis by A5;
+        end;
+       hence thesis by A1;
+       end;
+       suppose P[x];
+       hence thesis;
+      end;
+      end;
+     hence thesis;
+    end;
+  thus thesis from NAT_1:sch 1 (A3,A4);
+ end;
+  ( for x be Element of L() st height(x) <= height(x) holds P[x] ) implies
+ (for x be Element of L() holds P[x])
+  proof
+   assume A8: (for x be Element of L() st height(x) <= height(x) holds P[x])
+     & not (for x be Element of L() holds P[x]);
+    then consider x be Element of L() such that A9: not P[x];
+      height(x) <= height(x) implies P[x] by A8;
+   hence contradiction by A9;
+  end;
+hence thesis by A2;
+end;
 
 begin :: Join irreducible elements in a finite distributive lattice
 
-definition
+registration
 cluster distributive finite LATTICE;
+existence
+ proof
+  consider s being set;
+  set D = {s};
+  consider R being Order of D;
+  reconsider A = RelStr (#D,R#) as with_infima with_suprema Poset;
+  take A;
+  thus thesis;
+ end;
 end;
+
 
 definition
 let L be LATTICE;
@@ -117,6 +198,7 @@ pred x <(1) y means
 :: LATTICE7:def 4
   x < y & not (ex z be Element of L st x < z & z < y);
 end;
+
 
 theorem :: LATTICE7:8
 for L be finite LATTICE
@@ -132,6 +214,7 @@ func max(A) -> Element of L means
  (for x be Element of L st x in A holds x <= it) & it in A;
 end;
 
+
 theorem :: LATTICE7:9
 for L be finite LATTICE
  for y be Element of L st y <> Bottom L holds
@@ -144,6 +227,7 @@ func Join-IRR L -> Subset of L equals
            {a where a is Element of L: a<>Bottom L &
                for b,c be Element of L holds a= b"\/"c implies a=b or a=c};
 end;
+
 
 theorem :: LATTICE7:10
 for L be LATTICE
@@ -172,6 +256,7 @@ func LOWER(P) -> non empty set equals
 {X where X is Subset of P:X is lower};
  end;
 
+
 theorem :: LATTICE7:13
 for L be distributive finite LATTICE
  ex r be map of L, InclPoset LOWER(subrelstr Join-IRR L) st
@@ -189,14 +274,86 @@ definition
 it includes_lattice_of it;
 end;
 
-definition
+
+registration
 cluster non empty Ring_of_sets;
+
+existence
+ proof
+  take A={{}};
+    A includes_lattice_of A
+   proof
+    let a,b be set;
+    assume a in A & b in A;
+then a={} & b={} by TARSKI:def 1;
+    hence thesis by TARSKI:def 1;
+   end;
+  hence thesis by Def8;
+ end;
 end;
 
-definition
+registration
  let X be non empty Ring_of_sets;
  cluster InclPoset X -> with_suprema with_infima distributive;
+
+ coherence
+  proof
+
+A1: X includes_lattice_of X by Def8;
+A2: InclPoset X is LATTICE
+    proof
+A3:  InclPoset X is with_infima
+       proof
+          for x,y be set st (x in X & y in X) holds x /\ y in
+ X by A1,COHSP_1:def 8;
+        hence thesis by YELLOW_1:12;
+       end;
+       InclPoset X is with_suprema
+       proof
+          for x,y be set st (x in X & y in X) holds x \/ y in
+ X by A1,COHSP_1:def 8;
+        hence thesis by YELLOW_1:11;
+       end;
+     hence thesis by A3;
+    end;
+
+     InclPoset X is distributive
+    proof
+     let x,y,z be Element of InclPoset X;
+A4:    x /\ (y \/ z) = x /\ y \/ x /\ z by XBOOLE_1:23;
+        x in the carrier of InclPoset X;
+then A5:   x in X by YELLOW_1:1;
+        y in the carrier of InclPoset X;
+then A6:   y in X by YELLOW_1:1;
+        z in the carrier of InclPoset X;
+then A7:   z in X by YELLOW_1:1;
+then A8:    y \/ z in X by A1,A6,COHSP_1:def 8;
+then y \/ z in the carrier of InclPoset X by YELLOW_1:1;
+      then reconsider r = y \/ z as Element of InclPoset X;
+        r in the carrier of InclPoset X;
+      then r in X by YELLOW_1:1;
+      then x /\ r in X by A1,A5,COHSP_1:def 8;
+   then x "/\" r = x /\ r by YELLOW_1:9;
+then A9:   x /\ (y \/ z) = x "/\" (y "\/" z) by A8,YELLOW_1:8;
+A10:    x /\ y in X by A1,A5,A6,COHSP_1:def 8;
+then A11:    x /\ y in the carrier of InclPoset X by YELLOW_1:1;
+A12:    x "/\" y = x /\ y by A10,YELLOW_1:9;
+A13:    x /\ z in X by A1,A5,A7,COHSP_1:def 8;
+then x /\ z in the carrier of InclPoset X by YELLOW_1:1;
+      then reconsider r1 = x /\ y, r2 = x /\ z as Element of InclPoset X
+       by A11;
+A14:   x "/\" z = x /\ z by A13,YELLOW_1:9;
+        r2 in the carrier of InclPoset X;
+then A15:   r2 in X by YELLOW_1:1;
+        r1 in the carrier of InclPoset X;
+      then r1 in X by YELLOW_1:1;
+      then r1 \/ r2 in X by A1,A15,COHSP_1:def 8;
+     hence thesis by A4,A9,A12,A14,YELLOW_1:8;
+    end;
+   hence thesis by A2;
+  end;
 end;
+
 
 theorem :: LATTICE7:15
 for L be finite LATTICE holds

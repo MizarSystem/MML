@@ -12,8 +12,6 @@ RELSET_1
 FUNCT_2
 COMSEQ_1
 #
-CompSeqChoice
-#
 ;
 ªM6 V4 ;V16 K56 ;K53 ;;K56 ;K53 ;;ªM4 K52 ;K56 ;;P1 B2 K76 B1 B2 ;;M4 K52 ;K56 ;;ªM3 K53 ;;ªP1 B1 B2 ;;
 #

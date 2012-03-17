@@ -12,15 +12,6 @@ XCMPLX_0
 XREAL_0
 NAT_1
 #
-Ind
-Nat_Ind
-Def_by_Ind
-Comp_Ind
-Min
-Max
-Regr
-Euklides
-#
 ;
 M4 K52 ;K56 ;;P1 B1 ;P1 N0 ;M4 K52 ;K56 ;;ª&P1 B1 ;ªP1 K64 B1 N1 ;;;;
 #
@@ -31,18 +22,18 @@ M4 K52 ;K56 ;;M4 K52 ;K56 ;;;
 &M4 K52 ;K56 ;;ªM4 K52 ;K56 ;;ªP1 B1 B2 ;M4 K52 ;K56 ;;M4 K52 ;K56 ;;M4 K52 ;K56 ;;ª&P1 B1 B2 ;P1 B1 B3 ;ªR1 B2 B3 ;;;M4 K52 ;K56 ;;M4 K52 ;K56 ;;&ª&P1 B1 B2 ;ª&R1 B1 N0 ;R1 B2 F1 ;;;M4 K52 ;K56 ;;M4 K52 ;K56 ;;ª&R1 B1 K64 B3 N1 ;;P1 B3 B4 ;R1 B2 F2 B1 B4 ;;;;ª&ª&ª&R1 B1 N0 ;R1 B2 F1 ;;;M4 K52 ;K56 ;;M4 K52 ;K56 ;;ª&R1 B1 K64 B3 N1 ;;P1 B3 B4 ;R1 B2 F2 B1 B4 ;;;;ªP1 B1 B2 ;;;;
 #
 ;
-M4 K52 ;K56 ;;P1 B1 ;M4 K52 ;K56 ;;ª&M4 K52 ;K56 ;;ª&ªR11 B1 B2 ;ªP1 B2 ;;ªP1 B1 ;;;
+M4 K52 ;K56 ;;P1 B1 ;M4 K52 ;K56 ;;ª&M4 K52 ;K56 ;;ª&ªR12 B1 B2 ;ªP1 B2 ;;ªP1 B1 ;;;
 #
 ;
-ªM4 K52 ;K56 ;;ª&P1 B1 ;M4 K52 ;K56 ;;ª&P1 B2 ;ªR11 B1 B2 ;;;ªM4 K52 ;K56 ;;ªP1 B1 ;;
+ªM4 K52 ;K56 ;;ª&P1 B1 ;M4 K52 ;K56 ;;ª&P1 B2 ;ªR12 B1 B2 ;;;ªM4 K52 ;K56 ;;ªP1 B1 ;;
 #
 M4 K52 ;K56 ;;;
-ªM4 K52 ;K56 ;;ª&P1 B1 ;M4 K52 ;K56 ;;ª&P1 B2 ;ªR11 B2 B1 ;;;M4 K52 ;K56 ;;ª&P1 B1 ;ªR11 B1 F1 ;;;ªM4 K52 ;K56 ;;ªP1 B1 ;;
+ªM4 K52 ;K56 ;;ª&P1 B1 ;M4 K52 ;K56 ;;ª&P1 B2 ;ªR12 B2 B1 ;;;M4 K52 ;K56 ;;ª&P1 B1 ;ªR12 B1 F1 ;;;ªM4 K52 ;K56 ;;ªP1 B1 ;;
 #
 ;
-P1 N0 ;ªM4 K52 ;K56 ;;ªP1 B1 ;M4 K52 ;K56 ;;ª&ªR1 B1 N0 ;P1 B1 ;M4 K52 ;K56 ;;ª&ªR11 B1 B2 ;P1 B2 ;;;;
+P1 N0 ;ªM4 K52 ;K56 ;;ªP1 B1 ;M4 K52 ;K56 ;;ª&ªR1 B1 N0 ;P1 B1 ;M4 K52 ;K56 ;;ª&ªR12 B1 B2 ;P1 B2 ;;;;
 #
 M4 K52 ;K56 ;;M4 K52 ;K56 ;;M4 K52 ;K56 ;;;
-ªM4 K52 ;K56 ;;ª&R1 F1 B1 ;K69 F2 ;F3 ;;;R1 F1 K64 B1 N1 ;;N0 ;;&ªR11 F3 ;N0 ;ªR11 F2 ;F3 ;;;&R1 F1 N0 ;F2 ;;R1 F1 N1 ;F3 ;;;M4 K52 ;K56 ;;R1 F1 K64 B1 N2 ;;K67 F1 B1 ;F1 K64 B1 N1 ;;;;;
+ªM4 K52 ;K56 ;;ª&R1 F1 B1 ;K69 F2 ;F3 ;;;R1 F1 K64 B1 N1 ;;N0 ;;&ªR12 F3 ;N0 ;ªR12 F2 ;F3 ;;;&R1 F1 N0 ;F2 ;;R1 F1 N1 ;F3 ;;;M4 K52 ;K56 ;;R1 F1 K64 B1 N2 ;;K67 F1 B1 ;F1 K64 B1 N1 ;;;;;
 #
 !

@@ -1,6 +1,6 @@
 :: Little {B}ezout Theorem (Factor Theorem)
 ::  by Piotr Rudnicki
-:: 
+::
 :: Received December 30, 2003
 :: Copyright (c) 2003 Association of Mizar Users
 
@@ -41,12 +41,46 @@ for f being FinSequence of NAT
   holds Sum f = len f iff f = (len f) |-> 1;
 
 :: Stolen from POLYNOM2
-scheme IndFinSeq0 { F() -> FinSequence, P[set, set]} :
+scheme :: UPROOTS:sch 1
+ IndFinSeq0 { F() -> FinSequence, P[set, set]} :
 for i being Nat st 1 <= i & i <= len F() holds P[i, F().i]
 provided
   P[1, F().1] and
   for i being Nat st 1 <= i & i < len F()
-      holds P[i, F().i] implies P[i+1, F().(i+1)];
+      holds P[i, F().i] implies P[i+1, F().(i+1)]
+proof
+defpred Q[Nat] means 1 <= $1 & $1 <= len F() & not(P[$1, F().($1)]);
+assume not(for i being Nat st 1 <= i & i <= len F() holds P[i, F().i]);
+then A3: ex k being Nat st Q[k];
+consider k being Nat such that
+A4: Q[k] & for k' being Nat st Q[k'] holds k <= k' from NAT_1:sch 5(A3);
+ per cases;
+ suppose k = 1;
+  hence thesis by A1,A4;
+ end;
+ suppose A5: k <> 1;
+    1 - 1 <= k - 1 by A4,REAL_1:49;
+  then reconsider k' = k - 1 as Nat by INT_1:16;
+  A6: (k - 1) + 1 = (k + (-1)) + 1 by XCMPLX_0:def 8
+                  .= k + ((-1) + 1) by XCMPLX_1:1
+                  .= k + 0;
+  A7: k' <= k' + 1 by NAT_1:29;
+    k' <> k' + 1
+    proof
+    assume A8: k' = k' + 1;
+      (k' + 1) - k' = (k' + 1) + (-k') by XCMPLX_0:def 8
+                 .= 1 + (k' + (-k')) by XCMPLX_1:1
+                 .= 1 + 0 by XCMPLX_0:def 6;
+    hence thesis by A8,XCMPLX_1:14;
+    end;
+  then A9: k' < k by A6,A7,REAL_1:def 5;
+  then A10: not(Q[k']) by A4;
+    1 < k by A4,A5,REAL_1:def 5;
+  then A11: 1 <= k' by A6,NAT_1:38;
+    k' < len F() by A4,A9,AXIOMS:22;
+  hence thesis by A2,A4,A6,A10,A11;
+end;
+end;
 
 theorem :: UPROOTS:3  :: thsum2:
 for L be add-associative right_zeroed right_complementable (non empty LoopStr),
@@ -68,6 +102,7 @@ definition
        st f.i = x holds f.(i+1) = [choose x`2, x`2 \ {choose x`2}]) &
     for i being Nat st i in dom it holds it.i = (f.i)`1;
 end;
+
 
 theorem :: UPROOTS:4  :: CFS0:
 for A being finite set holds canFS(A) is one-to-one;
@@ -117,6 +152,7 @@ definition
   ex f being FinSequence of NAT st it = Sum f & f = b*canFS(support b);
 end;
 
+
 theorem :: UPROOTS:13  :: BAGDEG0:
 for A being set, b being bag of A holds b = EmptyBag A iff degree b = 0;
 
@@ -147,20 +183,38 @@ definition
    p <> 0_. L;
 end;
 
+
 theorem :: UPROOTS:18  :: lenNZ
 for L being non empty ZeroStr, p being Polynomial of L
  holds p is non-zero iff len p > 0;
 
 
-definition
+registration
   let L be non trivial (non empty ZeroStr);
   cluster non-zero Polynomial of L;
+  existence proof
+   consider a being Element of (the carrier of L)\{0.L};
+   the carrier of L is non trivial by REALSET1:def 13;
+   then (the carrier of L)\{0.L} is non empty by REALSET1:32;
+   then A1: a in the carrier of L & not(a in {0.L}) by XBOOLE_0:def 4;
+   then reconsider a as Element of L;
+   take p = <%a%>;
+   p.0 = a & (0_. L).0 = 0.L by POLYNOM3:28, POLYNOM5:33; then
+   p <> 0_. L by A1, TARSKI:def 1;
+ hence thesis by LNZ;
+ end;
 end;
 
-definition
+
+registration
   let L be non degenerated non empty multLoopStr_0, x be Element of L;
   cluster <%x, 1_ L%> -> non-zero;
+  correctness proof 0.L <> 1_ L by VECTSP_1:def 21;
+   then len <%x, 1_ L%> = 2 by POLYNOM5:41;
+   hence thesis by lenNZ;
+  end;
 end;
+
 
 theorem :: UPROOTS:19
 for L being non empty ZeroStr, p being Polynomial of L
@@ -175,11 +229,13 @@ for L be add-associative right_zeroed right_complementable
          right-distributive (non empty doubleLoopStr),
     p be Polynomial of L holds p*'(0_.(L)) = 0_.(L);
 
-definition
+registration
   cluster algebraic-closed add-associative right_zeroed right_complementable
      Abelian commutative associative distributive domRing-like
      non degenerated (well-unital (non empty doubleLoopStr));
+   existence proof take F_Complex; thus thesis; end;
 end;
+
 
 theorem :: UPROOTS:22  :: pintdom:
 for L being add-associative right_zeroed right_complementable distributive
@@ -187,16 +243,29 @@ for L being add-associative right_zeroed right_complementable distributive
     p, q being Polynomial of L
  st p*'q = 0_. L holds p = 0_. L or q = 0_. L;
 
-definition
+registration
   let L be add-associative right_zeroed right_complementable distributive
            domRing-like (non empty doubleLoopStr);
   cluster Polynom-Ring L -> domRing-like;
+  correctness proof   set PRL = Polynom-Ring L;
+    let x, y be Element of PRL;
+    reconsider xp = x, yp = y as Polynomial of L by POLYNOM3:def 12;
+  Z: 0_. L = 0.PRL  by POLYNOM3:def 12;
+    assume x*y = 0.PRL; then xp*'yp = 0_. L by Z, POLYNOM3:def 12;
+   hence x = 0.PRL or y = 0.PRL by Z, pintdom;
+  end;
 end;
 
-definition
+
+registration
   let L be domRing, p, q be non-zero Polynomial of L;
   cluster p*'q -> non-zero;
+  correctness proof p <> 0_. L & q <> 0_. L by LNZ;
+   then p*'q <> 0_. L by pintdom;
+   hence thesis by LNZ;
+  end;
 end;
+
 
 theorem :: UPROOTS:23 :: pcomring0:
 for L being non degenerated comRing, p, q being Polynomial of L
@@ -295,10 +364,16 @@ theorem :: UPROOTS:40  :: pexp2
 for L being non degenerated comRing, x being Element of L, i being Nat
  holds len (<%x, 1_ L%>`^i) = i+1;
 
-definition
+registration
   let L be non degenerated comRing, x be Element of L, n be Nat;
   cluster <%x, 1_ L%>`^n -> non-zero;
+  correctness proof len (<%x, 1_ L%>`^n) = n+1 by pexp2; then
+   len (<%x, 1_ L%>`^n) <> 0; then
+   len (<%x, 1_ L%>`^n) > 0 by NAT_1:19;
+   hence thesis by lenNZ;
+  end;
 end;
+
 
 theorem :: UPROOTS:41  :: pexp3
 for L being non degenerated comRing, x being Element of L,
@@ -320,6 +395,7 @@ definition
 :: UPROOTS:def 5
     for i being Nat holds it.i = p.(n + i);
 end;
+
 
 theorem :: UPROOTS:43  :: PS0:
 for L being non empty ZeroStr,p being Polynomial of L holds poly_shift(p,0) = p
@@ -354,6 +430,7 @@ definition
   otherwise it = 0_. L;
 end;
 
+
 theorem :: UPROOTS:48  :: pqlen:
 for L being non degenerated comRing,
     r being Element of L, p being non-zero Polynomial of L
@@ -375,17 +452,20 @@ for L being non degenerated comRing,
     r being Element of L, p being Polynomial of L
  st r is_a_root_of p holds p = <%-r,1_ L%>*'poly_quotient(p,r);
 
-theorem :: UPROOTS:52   :: Factor theorem (Bezout)
+theorem :: UPROOTS:52 :: Factor theorem (Bezout)
+::>            *601
 for L being non degenerated comRing,
     r being Element of L, p, q being Polynomial of L
  st p = <%-r,1_ L%>*'q holds r is_a_root_of p;
 
 begin :: Polynomials defined by roots
 
-definition  :: It is not true for a comRing. Who knows an example?
+registration  :: It is not true for a comRing. Who knows an example?
   let L be domRing, p be non-zero Polynomial of L;
   cluster Roots p -> finite;
+  correctness by BZBL;
 end;
+
 
 definition
   let L be non degenerated comRing, x be Element of L,
@@ -397,6 +477,7 @@ definition
                       st p = (<%-x, 1_ L%>`^k) *' q} &
       it = max F;
 end;
+
 
 theorem :: UPROOTS:53  :: MULTI1:
 for L being non degenerated comRing,
@@ -414,6 +495,7 @@ definition
    support it = Roots p &
    for x being Element of L holds it.x = multiplicity(p,x);
 end;
+
 
 theorem :: UPROOTS:55  :: BR1e:
 for L being domRing, x being Element of L
@@ -449,6 +531,7 @@ definition
     for i being Nat st i in dom it holds it.i = <% -c, 1_ L%>;
 end;
 
+
 definition
   let L be add-associative right_zeroed right_complementable distributive
                                                 (non empty doubleLoopStr),
@@ -461,6 +544,7 @@ definition
      (for i being Nat st i in dom f holds f.i = fpoly_mult_root(s/.i,b.(s/.i)))
    & it = Product FlattenSeq f;
 end;
+
 
 theorem :: UPROOTS:61  :: poly1:
 for L being Abelian add-associative right_zeroed right_complementable

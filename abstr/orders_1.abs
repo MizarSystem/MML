@@ -39,6 +39,7 @@ end;
 
 
 
+
 reserve D,D1 for non empty set;
 
 definition let D be set;
@@ -47,9 +48,17 @@ definition let D be set;
     bool D \ {{}};
 end;
 
-definition let D;
+
+registration let D;
  cluster BOOL D -> non empty;
+ coherence
+  proof
+       D in bool D & not D in {{}} by TARSKI:def 1,ZFMISC_1:def 1;
+     then bool D \ {{}} is non empty by XBOOLE_0:def 4;
+     hence thesis by Def2;
+  end;
 end;
+
 
 canceled 3;
 
@@ -74,6 +83,7 @@ reserve P for Relation;
 definition let X;
  mode Order of X is total reflexive antisymmetric transitive Relation of X;
 end;
+
 
 reserve O for Order of X;
 
@@ -101,11 +111,14 @@ definition
   #);
 end;
 
-definition
+
+registration
  let X be non empty set;
  let R be Relation of X;
  cluster RelStr(#X,R#) -> non empty;
+ coherence proof thus the carrier of RelStr(#X,R#) is non empty; end;
 end;
+
 
 definition let A be RelStr;
  attr A is reflexive means
@@ -122,23 +135,62 @@ definition let A be RelStr;
   the InternalRel of A is_antisymmetric_in the carrier of A;
 end;
 
-definition
+
+registration
  cluster non empty reflexive transitive antisymmetric strict RelStr;
+ existence
+  proof consider A being non empty set;
+    consider R being Order of A;
+   take L = RelStr(#A,R#);
+   thus the carrier of L is non empty;
+A1:  field R = the carrier of L by Lm3;
+   hence the InternalRel of L is_reflexive_in the carrier of L
+                     by RELAT_2:def 9;
+   thus the InternalRel of L is_transitive_in the carrier of L
+                                by A1,RELAT_2:def 16;
+   thus the InternalRel of L is_antisymmetric_in the carrier of L
+                                                by A1,RELAT_2:def 12;
+   thus thesis;
+  end;
 end;
+
 
 definition
  mode Poset is reflexive transitive antisymmetric RelStr;
 end;
 
-definition let A be Poset;
+registration let A be Poset;
  cluster the InternalRel of A -> total reflexive antisymmetric transitive;
+ coherence
+  proof set R = the InternalRel of A;
+A1:  R is_reflexive_in the carrier of A by Def4;
+A2:  field R = the carrier of A by A1,Lm4;
+    dom R = the carrier of A by A1,Lm4;
+   hence the InternalRel of A is total by PARTFUN1:def 4;
+    the InternalRel of A is_reflexive_in the carrier of A by Def4;
+   hence the InternalRel of A is reflexive by A2,RELAT_2:def 9;
+    the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
+   hence the InternalRel of A is antisymmetric by A2,RELAT_2:def 12;
+    the InternalRel of A is_transitive_in the carrier of A by Def5;
+   hence the InternalRel of A is transitive by A2,RELAT_2:def 16;
+  end;
 end;
 
-definition
+
+registration
  let X be set;
  let O be Order of X;
  cluster RelStr(#X,O#) -> reflexive transitive antisymmetric;
+ coherence
+  proof set A = RelStr(#X,O#);
+    field O = X by Lm3;
+   hence the InternalRel of A is_reflexive_in the carrier of A &
+    the InternalRel of A is_transitive_in the carrier of A &
+    the InternalRel of A is_antisymmetric_in the carrier of A
+          by RELAT_2:def 9,def 12,def 16;
+  end;
 end;
+
 
 reserve A for non empty Poset;
 
@@ -151,16 +203,20 @@ definition let A be RelStr; let a1,a2 be Element of A;
  pred a1 <= a2 means
 :: ORDERS_1:def 9
    [a1,a2] in the InternalRel of A;
- synonym a2 >= a1;
-end;
+ end;
+notation let A be RelStr; let a1,a2 be Element of A;
+ synonym a2 >= a1 for a1 <= a2 ; end;
+
 
 definition let A be RelStr; let a1,a2 be Element of A;
  pred a1 < a2 means
 :: ORDERS_1:def 10
    a1 <= a2 & a1 <> a2;
  irreflexivity;
- synonym a2 > a1;
-end;
+ end;
+notation let A be RelStr; let a1,a2 be Element of A;
+ synonym a2 > a1 for a1 < a2 ; end;
+
 
 canceled 9;
 
@@ -173,6 +229,7 @@ definition let A be reflexive non empty RelStr;
  redefine pred a1 <= a2;
  reflexivity;
 end;
+
 
 theorem :: ORDERS_1:25
  for A being antisymmetric RelStr,
@@ -219,17 +276,23 @@ definition let A be RelStr;
    the InternalRel of A is_strongly_connected_in IT;
 end;
 
-definition let A be RelStr;
+
+registration let A be RelStr;
  cluster {}A -> strongly_connected;
+ coherence proof let x1,x2; thus thesis; end;
 end;
 
-definition let A be RelStr;
+
+registration let A be RelStr;
  cluster strongly_connected Subset of A;
+ existence proof take {}A; thus thesis; end;
 end;
+
 
 definition let A be RelStr;
  mode Chain of A is strongly_connected Subset of A;
 end;
+
 
 
 
@@ -270,11 +333,13 @@ definition let A; let S;
     {a1 : for a2 st a2 in S holds a2 < a1};
 end;
 
+
 definition let A; let S;
  func LowerCone(S) -> Subset of A equals
 :: ORDERS_1:def 13
     {a1 : for a2 st a2 in S holds a1 < a2};
 end;
+
 
 canceled 2;
 
@@ -318,12 +383,14 @@ definition let A; let S; let a;
     LowerCone{a} /\ S;
 end;
 
+
 definition let A; let S;
  mode Initial_Segm of S -> Subset of A means
 :: ORDERS_1:def 15
    ex a st a in S & it = InitSegm(S,a) if S <> {}
         otherwise it = {};
 end;
+
 
 reserve I for Initial_Segm of S;
 
@@ -399,6 +466,7 @@ definition let A; let f;
         for a st a in it holds f.UpperCone(InitSegm(it,a)) = a;
 end;
 
+
 reserve fC,fC1,fC2 for Chain of f;
 
 canceled 4;
@@ -431,8 +499,15 @@ definition let A; let f;
    x in it iff x is Chain of f;
 end;
 
-definition let A; let f;
+
+registration let A; let f;
  cluster Chains f -> non empty;
+ coherence
+  proof
+    consider x being Chain of f;
+      x in Chains f by Def17;
+    hence thesis;
+  end;
 end;
 
 canceled 2;

@@ -5,8 +5,6 @@ ZFMISC_1
 SUBSET_1
 SETFAM_1
 #
-DomsetFamEx
-#
 M1 ;;
 ªM5 W1 ;F1 ;;ªM1 ;&ª&R2 B2 B1 ;ª&R3 B2 F1 ;;P1 B2 ;;;ª&R3 B2 F1 ;;P1 B2 ;ªR2 B2 B1 ;;;ªM1 ;ª&R3 B1 F1 ;;P1 B1 ;;;
 #

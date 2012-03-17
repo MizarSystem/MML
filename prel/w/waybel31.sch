@@ -14,9 +14,6 @@ ORDERS_1
 YELLOW_0
 WAYBEL_0
 #
-UparrowUnion
-DownarrowUnion
-#
 G4 ;;
 ùM7 U1 F1 ;;;™&R1 B1 ËM2 K22 U1 F1 ;;;;;B2 P1 B2 ;;™R1 K91 F1 ;K71 F1 ;B1 ;;K3 ËM2 K22 U1 F1 ;;;;;K91 F1 ;B2 ;P1 B2 ;;;;;
 #

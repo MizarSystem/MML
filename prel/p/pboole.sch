@@ -21,9 +21,6 @@ VECTSP_1
 MATRIX_1
 PBOOLE
 #
-Kuratowski_Function
-PSeparation
-#
 M1 ;M1 ;;
 ªM16 F1 ;;ªM1 ;ª&R2 B2 F1 ;;ªR2 K20 B1 B2 ;F2 B2 ;;;M1 ;ª&R2 B1 F1 ;;R1 F2 B1 ;K5 ;;;;
 #

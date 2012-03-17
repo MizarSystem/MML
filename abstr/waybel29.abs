@@ -13,15 +13,15 @@ environ
       TSP_1, BHSP_3, YELLOW_9, YELLOW16, WAYBEL_3, PBOOLE, CARD_3, FINSET_1,
       FUNCT_4, RELAT_2, WAYBEL25, PRELAMB, YELLOW_1, T_0TOPSP, CONNSP_2,
       WELLORD1, LATTICE5, WAYBEL18, FUNCT_3, PROB_1, PRALG_2, RLVECT_2,
-      WELLORD2, TOPS_1, YELLOW_6, WAYBEL29, RLVECT_3;
+      WELLORD2, TOPS_1, YELLOW_6, WAYBEL29, RLVECT_3, ZF_LANG;
  notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1,
-      FUNCT_1, PARTFUN1, RELSET_1, FUNCT_3, FINSET_1, CARD_3, STRUCT_0,
-      PRE_TOPC, TOPS_1, GRCAT_1, T_0TOPSP, TSP_1, CONNSP_2, CANTOR_1, FUNCT_4,
-      FUNCT_5, FUNCT_7, MONOID_0, PBOOLE, PRALG_1, PRALG_2, WELLORD1, ORDERS_1,
-      LATTICE3, TOPS_2, YELLOW_0, WAYBEL_0, YELLOW_1, FUNCT_2, WAYBEL_1,
-      YELLOW_3, WAYBEL_3, WAYBEL_5, WAYBEL_9, YELLOW_6, WAYBEL11, YELLOW_9,
-      BORSUK_1, WAYBEL18, WAYBEL19, WAYBEL24, WAYBEL25, YELLOW16, WAYBEL26,
-      WAYBEL27;
+      RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, FINSET_1, CARD_3,
+      STRUCT_0, PRE_TOPC, TOPS_1, GRCAT_1, T_0TOPSP, TSP_1, CONNSP_2, CANTOR_1,
+      FUNCT_4, FUNCT_5, FUNCT_7, MONOID_0, PBOOLE, PRALG_1, PRALG_2, WELLORD1,
+      ORDERS_1, LATTICE3, ORDERS_3, TOPS_2, YELLOW_0, WAYBEL_0, YELLOW_1,
+      YELLOW_2, WAYBEL_1, YELLOW_3, WAYBEL_3, WAYBEL_5, WAYBEL_9, YELLOW_6,
+      WAYBEL11, YELLOW_9, BORSUK_1, WAYBEL18, WAYBEL19, WAYBEL24, WAYBEL25,
+      YELLOW16, WAYBEL26, WAYBEL27;
  constructors ENUMSET1, ORDERS_3, WAYBEL_5, WAYBEL_1, WAYBEL17, QUANTAL1,
       GRCAT_1, CANTOR_1, TOPS_1, TOPS_2, YELLOW_9, TOLER_1, PRALG_3, FUNCT_7,
       WAYBEL18, WAYBEL24, YELLOW16, WAYBEL26, WAYBEL27, T_0TOPSP, MONOID_0,
@@ -114,19 +114,41 @@ theorem :: WAYBEL29:13
  st the TopRelStr of T1 = the TopRelStr of T2
  holds ContMaps(S1,T1) = ContMaps(S2,T2);
 
-definition
+registration
  cluster Scott -> injective T_0 (complete continuous TopLattice);
+ coherence
+  proof let T be complete continuous TopLattice; assume
+      T is Scott;
+    then T is Scott TopAugmentation of T by YELLOW_9:44;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster Scott continuous complete TopLattice;
+ existence
+  proof
+   consider L being continuous complete LATTICE;
+   consider T being Scott TopAugmentation of L;
+   take T;
+   thus T is Scott continuous complete;
+  end;
 end;
 
-definition
+
+registration
  let X be non empty TopSpace;
  let L be Scott up-complete (non empty TopPoset);
  cluster ContMaps(X, L) -> up-complete;
+ coherence
+  proof
+      ContMaps(X, L) is full directed-sups-inheriting SubRelStr of
+      L|^the carrier of X by Th12,WAYBEL24:def 3;
+   hence thesis by YELLOW16:5;
+  end;
 end;
+
 
 theorem :: WAYBEL29:14
  for I being non empty set
@@ -141,32 +163,184 @@ theorem :: WAYBEL29:15 :: stolen (generalized) from WAYBEL_3:33
  for x,y being Element of product J holds
    x << y
   iff
-   (for i being Element of I holds x.i << y.i) &
+   (for i being Element of I holds x .i << y.i) &
    (ex K being finite Subset of I st
-      for i being Element of I st not i in K holds x.i = Bottom (J.i));
+      for i being Element of I st not i in K holds x .i = Bottom (J.i));
 
-definition
+registration
  let X be set;
  let L be lower-bounded (non empty reflexive antisymmetric RelStr);
  cluster L|^X -> lower-bounded;
+ coherence
+  proof
+A1:  the carrier of L|^X = Funcs(X, the carrier of L) by YELLOW_1:28;
+      dom (X --> Bottom L) = X & rng (X --> Bottom L) c= the carrier of L
+     by FUNCT_2:def 1;
+    then X --> Bottom L in the carrier of L|^X by A1,FUNCT_2:def 2;
+   then reconsider f = X --> Bottom L as Element of L|^X;
+   take f; let g be Element of L|^X;
+   per cases; suppose X is empty;
+    then L|^X = RelStr (#{{}}, id {{}}#) by YELLOW_1:27;
+    then f <= f & f = {} & g = {} by TARSKI:def 1;
+   hence thesis;
+   end;
+   suppose X is non empty;
+   then reconsider X as non empty set;
+   reconsider f, g as Element of L|^X;
+      now let x be Element of X;
+        f.x = Bottom L & L is lower-bounded by FUNCOP_1:13;
+     hence f.x <= g.x by YELLOW_0:44;
+    end;
+   hence thesis by WAYBEL27:14;
+  end;
+  end;
 end;
 
-definition
+
+registration
  let X be non empty TopSpace;
  let L be lower-bounded (non empty TopPoset);
  cluster ContMaps(X, L) -> lower-bounded;
+ coherence
+  proof
+      X --> Bottom L is continuous map of X, L by BORSUK_1:36;
+   then reconsider f = X --> Bottom L as Element of ContMaps(X, L) by WAYBEL24:
+21;
+   take f; let g be Element of ContMaps(X, L);
+A1:  ContMaps(X, L) is full SubRelStr of L|^the carrier of X
+     by WAYBEL24:def 3;
+   then reconsider a = g as Element of L|^the carrier of X by YELLOW_0:59;
+A2:  the TopStruct of Omega X = the TopStruct of X by WAYBEL25:def 2;
+    then (Omega X) --> Bottom L = (the carrier of X) --> Bottom L by BORSUK_1:
+def 3
+                    .= X --> Bottom L by BORSUK_1:def 3;
+    then a >= Bottom (L|^the carrier of X) & Bottom (L|^the carrier of X) = f
+     by A2,WAYBEL24:33,YELLOW_0:44;
+   hence thesis by A1,YELLOW_0:61;
+  end;
 end;
 
-definition
+
+registration
  let L be up-complete (non empty Poset);
  cluster -> up-complete TopAugmentation of L;
+ coherence
+  proof let S be TopAugmentation of L;
+      the RelStr of L = the RelStr of S by YELLOW_9:def 4;
+   hence thesis by WAYBEL_8:15;
+  end;
  cluster Scott -> correct TopAugmentation of L;
+ coherence
+  proof
+   let IT be TopAugmentation of L;
+   assume A1: IT is Scott;
+   then [#]IT is open by WAYBEL11:def 4;
+   then [#]IT in the topology of IT by PRE_TOPC:def 5;
+   hence the carrier of IT in the topology of IT by PRE_TOPC:12;
+   thus for a being Subset-Family of IT
+   st a c= the topology of IT
+   holds union a in the topology of IT
+    proof
+     let a be Subset-Family of IT;
+     assume A2: a c= the topology of IT;
+       now let X be Subset of IT;
+     assume X in a; then X is open by A2,PRE_TOPC:def 5;
+     hence X is upper by A1,WAYBEL11:def 4;
+     end;
+then A3:  union a is upper by WAYBEL_0:28;
+       union a is inaccessible
+      proof
+       let D be non empty directed Subset of IT;
+       assume sup D in union a; then consider A being set such that
+A4:     sup D in A & A in a by TARSKI:def 4;
+       reconsider A as Subset of IT by A4;
+         A is open by A2,A4,PRE_TOPC:def 5;
+       then A is inaccessible by A1,WAYBEL11:def 4;
+       then D meets A by A4,WAYBEL11:def 1; then consider x being set such
+that
+       A5: x in D & x in A by XBOOLE_0:3;
+         x in D & x in union a by A4,A5,TARSKI:def 4;
+       hence D meets union a by XBOOLE_0:3;
+      end;
+     then union a is open by A1,A3,WAYBEL11:def 4;
+     hence union a in the topology of IT by PRE_TOPC:def 5;
+    end;
+   thus for a,b being Subset of IT st
+   a in the topology of IT & b in the topology of IT
+   holds a /\ b in the topology of IT
+    proof
+     let a,b be Subset of IT;
+     assume A6: a in the topology of IT & b in the topology of IT;
+     reconsider a1=a,b1=b as Subset of IT;
+       a1 is open & b1 is open by A6,PRE_TOPC:def 5;
+then A7:  a1 is upper inaccessible & b1 is upper inaccessible
+     by A1,WAYBEL11:def 4;
+then A8:  a /\ b is upper by WAYBEL_0:29;
+       a /\ b is inaccessible
+      proof
+       let D be non empty directed Subset of IT;
+       assume sup D in a /\ b;
+       then sup D in a1 & sup D in b1 by XBOOLE_0:def 3;
+then A9:    D meets a1 & D meets b1 by A7,WAYBEL11:def 1;
+       then consider d1 being set such that
+A10:    d1 in D & d1 in a1 by XBOOLE_0:3;
+       consider d2 being set such that
+A11:    d2 in D & d2 in b1 by A9,XBOOLE_0:3;
+       reconsider d1,d2 as Element of IT by A10,A11;
+       consider z being Element of IT such that
+A12:     z in D & d1 <= z & d2 <= z by A10,A11,WAYBEL_0:def 1;
+         z in a1 & z in b1 by A7,A10,A11,A12,WAYBEL_0:def 20;
+       then z in a /\ b by XBOOLE_0:def 3;
+       hence D meets a /\ b by A12,XBOOLE_0:3;
+      end;
+     then a /\ b is open by A1,A8,WAYBEL11:def 4;
+     hence a /\ b in the topology of IT by PRE_TOPC:def 5;
+    end;
+  end;
 end;
 
-definition
+
+registration
  let L be up-complete (non empty Poset);
  cluster strict Scott TopAugmentation of L;
+ existence
+  proof
+   set T = {S where S is Subset of L : S is upper inaccessible};
+     T c= bool the carrier of L
+    proof
+     let x be set; assume x in T; then consider S being Subset of L such that
+A1:   x=S & S is upper inaccessible;
+     thus x in bool the carrier of L by A1;
+    end;
+   then reconsider T as Subset-Family of L by SETFAM_1:def 7;
+   set SL=TopRelStr(#the carrier of L, the InternalRel of L, T#);
+A2: the RelStr of L = the RelStr of SL;
+   then reconsider SL as TopAugmentation of L by YELLOW_9:def 4;
+   take SL;
+     for S being Subset of SL holds
+   S is open iff S is inaccessible upper
+    proof
+     let S be Subset of SL;
+     thus S is open implies S is inaccessible upper
+      proof
+       assume S is open; then S in T by PRE_TOPC:def 5;
+       then consider S1 being Subset of L such that
+A3:    S1=S & S1 is upper inaccessible;
+       thus S is inaccessible upper by A2,A3,WAYBEL_0:25,YELLOW_9:47;
+      end;
+     thus S is inaccessible upper implies S is open
+      proof
+       reconsider S1=S as Subset of L;
+       assume S is inaccessible upper;
+       then S1 is inaccessible upper by A2,WAYBEL_0:25,YELLOW_9:47;
+       then S in the topology of SL;
+       hence S is open by PRE_TOPC:def 5;
+      end;
+    end;
+   hence SL is strict Scott by WAYBEL11:def 4;
+  end;
 end;
+
 
 canceled;
 
@@ -188,6 +362,7 @@ definition
   not contradiction;
 end;
 
+
 theorem :: WAYBEL29:19
  for S being Scott up-complete (non empty TopPoset)
   holds Sigma S = the TopRelStr of S;
@@ -206,11 +381,22 @@ definition
   f;
 end;
 
-definition
+
+registration
  let S,T be up-complete (non empty Poset);
  let f be directed-sups-preserving map of S,T;
  cluster Sigma f -> continuous;
+ coherence
+  proof
+A1:  the RelStr of Sigma S = the RelStr of S &
+    the RelStr of Sigma T = the RelStr of T by YELLOW_9:def 4;
+      f = Sigma f by Def2;
+    then Sigma f is directed-sups-preserving map of Sigma S, Sigma T
+     by A1,WAYBEL21:6;
+   hence thesis by WAYBEL17:29;
+  end;
 end;
+
 
 theorem :: WAYBEL29:21
    for S, T being up-complete (non empty Poset)
@@ -243,69 +429,187 @@ definition let X be non empty TopSpace;
   for g being continuous map of X, Sierpinski_Space holds it.g = g"{1};
 end;
 
+
 theorem :: WAYBEL29:23
    for X being non empty TopSpace
  for V being open Subset of X
   holds (alpha X)".V = chi(V, the carrier of X);
 
-definition
+registration
  let X be non empty TopSpace;
  cluster alpha X -> isomorphic;
+ coherence
+  proof
+   consider f be map of InclPoset the topology of X,
+     oContMaps(X, Sierpinski_Space) such that
+A1:  f is isomorphic and
+A2:  for V being open Subset of X holds f.V = chi(V, the carrier of X)
+     by WAYBEL26:5;
+      [#]oContMaps(X, Sierpinski_Space)
+     = the carrier of oContMaps(X, Sierpinski_Space) by PRE_TOPC:12;
+then A3:  f is one-to-one & rng f = [#]oContMaps(X, Sierpinski_Space)
+     by A1,WAYBEL_0:66;
+then A4:  f" = f qua Function" by TOPS_2:def 4;
+A5:  the topology of Sierpinski_Space = {{}, {1}, {0,1}} &
+    the carrier of Sierpinski_Space = {0, 1} by WAYBEL18:def 9;
+    then {1} in the topology of Sierpinski_Space by ENUMSET1:14;
+   then reconsider A = {1} as open Subset of Sierpinski_Space
+     by PRE_TOPC:def 5;
+A6:  the carrier of InclPoset the topology of X = the topology of X
+     by YELLOW_1:1;
+      now let x be Element of oContMaps(X, Sierpinski_Space);
+     reconsider g = x as continuous map of X, Sierpinski_Space by WAYBEL26:2;
+A7:    g"A is open by TOPS_2:55;
+then A8:    g"A in the topology of X by PRE_TOPC:def 5;
+A9:    f.(g"A) = chi(g"A, the carrier of X) by A2,A7 .= x by A5,FUNCT_3:49;
+     thus (alpha X).x = g"A by Def4 .= f".x by A3,A4,A6,A8,A9,FUNCT_2:32;
+    end;
+    then alpha X = f" by YELLOW_2:9;
+   hence thesis by A1,A4,WAYBEL_0:68;
+  end;
 end;
 
-definition
+
+registration
  let X be non empty TopSpace;
  cluster (alpha X)" -> isomorphic;
+ coherence by YELLOW14:11;
 end;
 
-definition
+
+registration
  let S be injective T_0-TopSpace;
  cluster Omega S -> Scott;
+ coherence
+  proof consider T being strict Scott TopAugmentation of Omega S;
+A1:  the RelStr of T = the RelStr of Omega S by YELLOW_9:def 4;
+      the TopStruct of T = the TopStruct of S by WAYBEL25:37
+                      .= the TopStruct of Omega S by WAYBEL25:def 2;
+   hence thesis by A1;
+  end;
 end;
 
-definition
+
+registration
  let X be non empty TopSpace;
  cluster oContMaps(X, Sierpinski_Space) -> complete;
+ coherence
+  proof
+      InclPoset the topology of X, oContMaps(X, Sierpinski_Space)
+are_isomorphic
+     by WAYBEL26:6;
+   hence thesis by WAYBEL20:18;
+  end;
 end;
+
 
 theorem :: WAYBEL29:24
    Omega Sierpinski_Space = Sigma BoolePoset 1;
 
-definition
+registration
  let M be non empty set;
  let S be injective T_0-TopSpace;
- cluster M-TOP_prod (M --> S) -> injective;
+ cluster M-TOP_prod (M => S) -> injective;
+ coherence
+  proof
+      for m being Element of M holds (M => S).m is injective by FUNCOP_1:13;
+   hence thesis by WAYBEL18:8;
+  end;
 end;
+
 
 theorem :: WAYBEL29:25
    for M being non empty set, L being complete continuous LATTICE holds
-  Omega (M-TOP_prod (M --> Sigma L)) = Sigma (M-POS_prod (M --> L));
+  Omega (M-TOP_prod (M => Sigma L)) = Sigma (M-POS_prod (M => L));
 
 theorem :: WAYBEL29:26
    for M being non empty set, T being injective T_0-TopSpace holds
-  Omega (M-TOP_prod (M --> T)) = Sigma (M-POS_prod (M --> Omega T));
+  Omega (M-TOP_prod (M => T)) = Sigma (M-POS_prod (M => Omega T));
 
 definition
  let M be non empty set;
  let X,Y be non empty TopSpace;
  func commute(X, M, Y) ->
-   map of oContMaps(X, M-TOP_prod (M --> Y)), oContMaps(X, Y)|^M means
+   map of oContMaps(X, M-TOP_prod (M => Y)), oContMaps(X, Y)|^M means
 :: WAYBEL29:def 5
 
-  for f being continuous map of X, M-TOP_prod (M --> Y)
+  for f being continuous map of X, M-TOP_prod (M => Y)
    holds it.f = commute f;
 end;
 
-definition
+
+registration
  let M be non empty set;
  let X,Y be non empty TopSpace;
  cluster commute(X,M,Y) -> one-to-one onto;
+ correctness
+  proof set f = commute(X,M,Y);
+      Carrier (M => Y) = M => the carrier of Y by WAYBEL26:31;
+    then the carrier of M-TOP_prod (M => Y)
+      = product (M => the carrier of Y) by WAYBEL18:def 3
+     .= Funcs(M, the carrier of Y) by CARD_3:20;
+then A1:  the carrier of oContMaps(X, M-TOP_prod (M => Y))
+     c= Funcs(the carrier of X, Funcs(M, the carrier of Y)) by WAYBEL26:33;
+      now
+    thus the carrier of oContMaps(X, Y)|^M <> {};
+     let x1,x2 be set; assume
+A2:    x1 in the carrier of oContMaps(X, M-TOP_prod (M => Y)) &
+      x2 in the carrier of oContMaps(X, M-TOP_prod (M => Y));
+     then reconsider a1 = x1, a2 = x2 as
+       Element of oContMaps(X, M-TOP_prod (M => Y));
+     reconsider f1 = a1, f2 = a2 as continuous map of X, M-TOP_prod (M => Y)
+       by WAYBEL26:2;
+     assume f.x1 = f.x2;
+      then commute f1 = f.x2 by Def5 .= commute f2 by Def5;
+      then f1 = commute commute f2 by A1,A2,PRALG_2:6;
+     hence x1 = x2 by A1,A2,PRALG_2:6;
+    end;
+   hence commute(X,M,Y) is one-to-one by FUNCT_2:25;
+      rng f = the carrier of oContMaps(X, Y)|^M
+     proof thus rng f c= the carrier of oContMaps(X, Y)|^M;
+      let x be set; assume
+A3:     x in the carrier of oContMaps(X, Y)|^M;
+      then reconsider x as Element of oContMaps(X, Y)|^M;
+A4:     the carrier of oContMaps(X, Y)
+         c= Funcs(the carrier of X, the carrier of Y) &
+       the carrier of oContMaps(X, Y)|^M
+         = Funcs(M, the carrier of oContMaps(X, Y))
+          by WAYBEL26:33,YELLOW_1:28;
+then A5:    the carrier of oContMaps(X, Y)|^M
+         c= Funcs(M, Funcs(the carrier of X, the carrier of Y))
+          by FUNCT_5:63;
+      reconsider x as Function of M, the carrier of oContMaps(X, Y)
+        by A4,FUNCT_2:121;
+      reconsider g = commute x as continuous map of X, M-TOP_prod(M => Y)
+        by WAYBEL26:34;
+      reconsider y = g as
+        Element of oContMaps(X, M-TOP_prod(M => Y)) by WAYBEL26:2;
+         commute commute x = x by A3,A5,PRALG_2:6;
+       then f.y = x & dom f = the carrier of oContMaps(X, M-TOP_prod(M => Y))
+        by Def5,FUNCT_2:def 1;
+      hence thesis by FUNCT_1:def 5;
+     end;
+   hence thesis by FUNCT_2:def 3;
+  end;
 end;
 
-definition
+
+registration
  let M be non empty set;
  let X be non empty TopSpace;
  cluster commute(X, M, Sierpinski_Space) -> isomorphic;
+ correctness
+  proof
+      M-POS_prod (M => oContMaps(X, Sierpinski_Space))
+      = oContMaps(X, Sierpinski_Space)|^M by YELLOW_1:def 5;
+   then consider f1 being map of
+      oContMaps(X, M-TOP_prod (M => Sierpinski_Space)),
+      oContMaps(X, Sierpinski_Space)|^M such that
+A1: f1 is isomorphic and
+A2: for f being continuous map of X, M-TOP_prod (M => Sierpinski_Space)
+      holds f1.f = commute f by WAYBEL26:35;
+   thus thesis by A1,A2,Def5;
+  end;
 end;
 
 theorem :: WAYBEL29:27

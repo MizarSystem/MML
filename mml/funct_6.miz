@@ -584,7 +584,7 @@ begin
     proof
       defpred P[set] means $1 is Function;
       ex Y being set st for x being set holds
-      x in Y iff x in X & P[x] from Separation;
+      x in Y iff x in X & P[x] from XBOOLE_0:sch 1;
       hence thesis;
     end;
     uniqueness
@@ -593,9 +593,10 @@ begin
      let X1,X2 be set such that
 A1:    for x being set holds x in X1 iff P[x] and
 A2:    for x being set holds x in X2 iff P[x];
-      thus X1 = X2 from Extensionality(A1,A2);
+      thus X1 = X2 from XBOOLE_0:sch 2(A1,A2);
      end;
  end;
+
 
 theorem
  Th27: SubFuncs X c= X
@@ -646,7 +647,7 @@ Def2:
    proof
      deffunc F(set) = proj1 (f.$1);
      ex F be Function st dom F = f"SubFuncs rng f &
-     for x st x in f"SubFuncs rng f holds F.x = F(x) from Lambda;
+     for x st x in f"SubFuncs rng f holds F.x = F(x) from FUNCT_1:sch 3;
      hence thesis;
    end;
    uniqueness
@@ -669,7 +670,7 @@ Def3:
    proof
      deffunc F(set) = proj2 (f.$1);
      ex F be Function st dom F = f"SubFuncs rng f &
-     for x st x in f"SubFuncs rng f holds F.x = F(x) from Lambda;
+     for x st x in f"SubFuncs rng f holds F.x = F(x) from FUNCT_1:sch 3;
      hence thesis;
    end;
    uniqueness
@@ -688,6 +689,7 @@ A8:   for x st x in f"SubFuncs rng f holds f2.x = proj2 (f.x);
     meet rng f;
     correctness;
  end;
+
 
 theorem
  Th31: x in dom f & g = f.x implies
@@ -913,6 +915,7 @@ Def5:
    correctness;
  end;
 
+
 theorem
  Th44: x in dom f & g = f.x & y in dom g implies f..(x,y) = g.y
   proof assume x in dom f & g = f.x & y in dom g;
@@ -962,6 +965,7 @@ begin
     curry ((uncurry' f)|[:meet doms f, dom f:]);
     correctness;
  end;
+
 
 theorem
  Th49: dom <:f:> = meet doms f & rng <:f:> c= product rngs f
@@ -1160,13 +1164,13 @@ A2:      x = g & dom g = dom doms f &
         deffunc F(set) = (uncurry f).[$1,g.$1];
         consider h such that
 A3:      dom h = f"SubFuncs rng f &
-          for z st z in f"SubFuncs rng f holds h.z = F(z) from Lambda;
+          for z st z in f"SubFuncs rng f holds h.z = F(z) from FUNCT_1:sch 3;
         reconsider y = h as set;
         take y, g, h; thus thesis by A2,A3;
        end;
      consider F being Function such that
 A4:    dom F = product doms f & for x st x in product doms f holds P[x,F.x]
-         from NonUniqFuncEx(A1);
+         from ZFREFLE1:sch 1(A1);
      take F; thus dom F = product doms f by A4; let g;
      assume g in product doms f;
       then ex g1,h being Function st g = g1 & F.g = h & dom h = f"SubFuncs rng
@@ -1205,6 +1209,7 @@ A12;
      hence thesis by A5,A7,FUNCT_1:9;
     end;
  end;
+
 
 theorem
    g in product doms f & x in dom g implies (Frege f)..(g,x) = f..(x,g.x)
@@ -1277,7 +1282,7 @@ A2: dom rngs f = f"SubFuncs rng f & dom doms f = f"SubFuncs rng f &
    defpred P[set,set] means ex f1 st f1 = f.$1 & f1.$2 = g.$1;
    consider h such that
 A3:  dom h = f"SubFuncs rng f & for x st x in f"SubFuncs rng f for y holds
-     y in h.x iff y in F(x) & P[x,y] from FuncSeparation;
+     y in h.x iff y in F(x) & P[x,y] from CARD_3:sch 4;
 A4:  now let X; assume X in rng h;
      then consider x such that
 A5:   x in dom h & X = h.x by FUNCT_1:def 5;
@@ -1380,14 +1385,14 @@ then A9:    dom g = (doms f).z & z in f"SubFuncs rng f by A8,Th31,FUNCT_1:def
       consider h1 being Function such that
 A10:     dom h1 = f"SubFuncs rng f & for a st a in f"SubFuncs rng f holds
         (P[a] implies h1.a = F(a)) & (not P[a] implies h1.a = G(a))
-          from LambdaC;
+          from PARTFUN1:sch 1;
       deffunc F(set) = y;
       deffunc G(set) = h.$1;
       defpred P[set] means $1 = z;
       consider h2 being Function such that
 A11:     dom h2 = f"SubFuncs rng f & for a st a in f"SubFuncs rng f holds
         (P[a] implies h2.a = F(a)) & (not P[a] implies h2.a = G(a))
-         from LambdaC;
+         from PARTFUN1:sch 1;
       assume
 A12:     x in dom g & y in dom g & g.x = g.y;
          now let a; assume a in dom doms f;
@@ -1416,10 +1421,12 @@ then A18:      g2.a = (uncurry f).[a,h2.a] & g1.a = (uncurry f).[a,h1.a] by A14
         per cases;
          suppose a <> z; then h1.a = h.a & h2.a = h.a by A10,A11,A17;
           hence g1.a = g2.a by A18;
+         end;
          suppose
 A19:        a = z; then h1.a = x & h2.a = y by A10,A11,A17;
            then g1.a = g.x & g2.a = g.y by A8,A12,A18,A19,FUNCT_5:45;
           hence g1.a = g2.a by A12;
+       end;
        end;
        then g1 = g2 by A14,A16,FUNCT_1:9;
        then h1 = h2 & h1.z = x & h2.z = y by A7,A9,A10,A11,A13,A14,A15,A16;
@@ -1680,7 +1687,7 @@ A2:  for x st x in X ex y st P[x,y]
       hence thesis;
      end;
    consider h such that
-A3:  dom h = X & for x st x in X holds P[x,h.x] from NonUniqFuncEx(A2);
+A3:  dom h = X & for x st x in X holds P[x,h.x] from ZFREFLE1:sch 1(A2);
       now let x; assume x in rng h;
      then consider a such that
 A4:   a in X & x = h.a by A3,FUNCT_1:def 5;
@@ -1714,6 +1721,7 @@ A10:    x in X & {} = h.x by A3,FUNCT_1:def 5;
        then {} in rng f & {} in rng g by A1,A10,FUNCT_1:def 5,RELAT_1:60;
        then product f = {} & product g = {} by CARD_3:37;
       hence thesis;
+     end;
      suppose
 A11:    not {} in rng h;
 A12:       now let f1; assume f1 in rng h;
@@ -1725,6 +1733,7 @@ A13:      x in X & f1 = h.x by A3,FUNCT_1:def 5;
        end;
       thus thesis proof take Frege h;
       thus thesis by A7,A9,A11,A12,Def7,Th58,Th59; end;
+    end;
     end;
    hence thesis;
   end;
@@ -1754,7 +1763,7 @@ A6:    x = f1; f1*(h") = f1*(h");
      end;
    consider F being Function such that
 A7:  dom F = product (g*h) & for x st x in product (g*h) holds
-     P[x,F.x] from NonUniqFuncEx(A5);
+     P[x,F.x] from ZFREFLE1:sch 1(A5);
 A8:  rng (h") = X & (h")" = h & dom (h") = rng h & (h") is one-to-one &
     (g*h)*(h") = g*(h*(h")) & h*(h") = id dom g & g*id dom g = g
      by A1,FUNCT_1:42,55,61,62,65,RELAT_1:55;
@@ -1835,7 +1844,7 @@ begin
    proof
      deffunc F(set) = Funcs(f.$1,X);
      ex F be Function st dom F = dom f &
-     for x st x in dom f holds F.x = F(x) from Lambda;
+     for x st x in dom f holds F.x = F(x) from FUNCT_1:sch 3;
      hence thesis;
    end;
    uniqueness
@@ -1849,6 +1858,7 @@ A2:   dom f2 = dom f & for x st x in dom f holds f2.x = Funcs(f.x,X);
      hence thesis by A1,A2,FUNCT_1:9;
     end;
  end;
+
 
 theorem
    not {} in rng f implies Funcs(f,{}) = dom f --> {}
@@ -1936,12 +1946,12 @@ A2:    x = g & dom g = Union disjoin f & rng g c= X by FUNCT_2:def 2;
      deffunc G(set) = (curry' g).$1;
          ex h st dom h = dom f & for y st y in dom f holds
         (P[y] implies h.y = F(y)) & (not P[y] implies h.y = G(y))
-         from LambdaC;
+         from PARTFUN1:sch 1;
       hence thesis by A2;
      end;
    consider F being Function such that
 A3:  dom F = Funcs(Union disjoin f, X) & for x st x in
-     Funcs(Union disjoin f, X) holds P[x,F.x] from NonUniqFuncEx(A1);
+     Funcs(Union disjoin f, X) holds P[x,F.x] from ZFREFLE1:sch 1(A1);
    take F;
    thus F is one-to-one
      proof let x,y; assume
@@ -2138,7 +2148,7 @@ Def9:
    proof
      deffunc F(set) = Funcs(X,f.$1);
      ex F be Function st
-     dom F = dom f & for x st x in dom f holds F.x = F(x) from Lambda;
+     dom F = dom f & for x st x in dom f holds F.x = F(x) from FUNCT_1:sch 3;
      hence thesis;
    end;
    uniqueness
@@ -2152,6 +2162,7 @@ A2:   dom f2 = dom f & for x st x in dom f holds f2.x = Funcs(X,f.x);
      hence thesis by A1,A2,FUNCT_1:9;
     end;
  end;
+
 
  Lm5: f <> {} & X <> {} implies
  product Funcs(X,f),Funcs(X,product f) are_equipotent
@@ -2168,7 +2179,7 @@ A2:  for x st x in product Funcs(X,f) ex y st P[x,y]
      end;
    consider F being Function such that
 A3:  dom F = product Funcs(X,f) & for x st x in product Funcs(X,f) holds
-     P[x,F.x] from NonUniqFuncEx(A2);
+     P[x,F.x] from ZFREFLE1:sch 1(A2);
 A4: g in product Funcs(X,f) implies dom <:g:> = X & SubFuncs rng g = rng g &
       rng <:g:> c= product f
      proof assume g in product Funcs(X,f);

@@ -7,12 +7,6 @@ ZFMISC_1
 SUBSET_1
 RELSET_1
 #
-LambdaC
-PartFuncEx
-LambdaR
-PartFuncEx2
-LambdaR2
-#
 M1 ;M1 ;M1 ;;
 ªM1 V1 ;V3 ;;ª&R1 K5 B1 ;F1 ;;M1 ;ª&R2 B2 F1 ;;ª&ª&P1 B2 ;ªR1 K15 B1 B2 ;F2 B2 ;;;ª&ªP1 B2 ;ªR1 K15 B1 B2 ;F3 B2 ;;;;;;;
 #

@@ -38,35 +38,66 @@ theorem :: AMISTD_1:1
 theorem :: AMISTD_1:2
    max {n} = n;
 
-definition
+registration
  cluster non trivial FinSequence;
+ existence
+  proof
+   take <*0,0*>;
+   thus thesis;
+  end;
 end;
+
 
 theorem :: AMISTD_1:3
  for f being trivial FinSequence of D holds
   f is empty or ex x being Element of D st f = <*x*>;
 
-definition
+registration
  cluster -> with_non-empty_elements Relation;
+ coherence proof
+  let r be Relation;
+  assume {} in r;
+  then ex x,y being set st {} = [x,y] by RELAT_1:def 1;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: AMISTD_1:4
     id X is bijective;
 
-definition
+registration
   let A be finite set, B be set;
  cluster A --> B -> finite;
+coherence
+  proof
+      dom (A --> B) = A by FUNCOP_1:19;
+    hence thesis by AMI_1:21;
+  end;
 end;
 
-definition let x, y be set;
+
+registration let x, y be set;
  cluster x .--> y -> trivial;
+ coherence
+  proof
+    x .--> y = {[x,y]} by AMI_1:19;
+    hence thesis;
+  end;
 end;
+
 
 begin :: Restricted concatenation
 
-definition let f1 be non empty FinSequence, f2 be FinSequence;
+registration let f1 be non empty FinSequence, f2 be FinSequence;
  cluster f1^'f2 -> non empty;
+ coherence
+  proof
+      f1^'f2 = f1^(2, len f2)-cut f2 by GRAPH_2:def 2;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: AMISTD_1:5
  for f1 being non empty FinSequence of D, f2 being FinSequence of D
@@ -105,36 +136,74 @@ theorem :: AMISTD_1:11
      s being State of S
   holds s +* ((the Instruction-Locations of S) --> I) is State of S;
 
-definition
+registration
   let N be set, S be AMI-Struct over N;
  cluster empty -> programmed FinPartState of S;
+coherence
+  proof
+    let F be FinPartState of S;
+    assume F is empty;
+    then reconsider G = F as empty Function;
+      dom G c= the Instruction-Locations of S by XBOOLE_1:2;
+    hence dom F c= the Instruction-Locations of S;
+  end;
 end;
 
-definition
+
+registration
   let N be set, S be AMI-Struct over N;
  cluster empty FinPartState of S;
+existence
+  proof
+    reconsider a = {} as Element of sproduct the Object-Kind of S by AMI_1:26;
+    take a;
+    thus a is finite empty;
+  end;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set,
      S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
  cluster non empty trivial programmed FinPartState of S;
+ existence proof
+    consider l being Instruction-Location of S, I being Instruction of S;
+    take l .--> I;
+    thus thesis;
+ end;
 end;
 
-definition let N be with_non-empty_elements set,
+
+registration let N be with_non-empty_elements set,
                S be non void AMI-Struct over N,
                i be Element of the Instructions of S,
                s be State of S;
  cluster ((the Execution of S).i).s -> Function-like Relation-like;
+coherence
+  proof
+    reconsider A =(the Execution of S).i as Function of
+      product the Object-Kind of S, product the Object-Kind of S
+       by FUNCT_2:121;
+      A.s in product the Object-Kind of S;
+    hence thesis;
+  end;
 
 end;
 
-definition
+registration
  let N be with_non-empty_elements set;
  let S be steady-programmed IC-Ins-separated definite
           (non empty non void AMI-Struct over N);
   cluster non empty trivial autonomic programmed FinPartState of S;
+existence
+  proof
+    consider l being Instruction-Location of S;
+    consider I being Instruction of S;
+    take l.-->I;
+    thus thesis by Lm1;
+  end;
 end;
+
 
 theorem :: AMISTD_1:12
    for S being steady-programmed IC-Ins-separated definite
@@ -148,10 +217,12 @@ theorem :: AMISTD_1:13
        (non empty non void AMI-Struct over N)
   holds S is programmable;
 
-definition let N be with_non-empty_elements set;
+registration let N be with_non-empty_elements set;
  cluster steady-programmed -> programmable
          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+coherence by Th13;
 end;
+
 
 definition
  let N be with_non-empty_elements set;
@@ -165,6 +236,7 @@ definition
        st InsCode I = T & o <> IC S holds Exec(I, s).o = s.o;
 end;
 
+
 definition
  let N be with_non-empty_elements set;
  let S be non empty non void AMI-Struct over N;
@@ -174,6 +246,7 @@ definition
     InsCode I is jump-only;
 end;
 
+
 definition
   let N,S,l;
   let i be Element of the Instructions of S;
@@ -182,14 +255,24 @@ definition
   { IC Following s : IC s = l & s.l = i };
 end;
 
-definition
+registration
   let N be with_non-empty_elements set,
       S be realistic IC-Ins-separated definite
         (non empty non void AMI-Struct over N),
       i be Element of the Instructions of S,
       l be Instruction-Location of S;
   cluster NIC(i,l) -> non empty;
+coherence
+  proof
+    consider s being State of S;
+      ObjectKind IC S = the Instruction-Locations of S &
+      ObjectKind l = the Instructions of S by AMI_1:def 11,def 14;
+    then reconsider f = (IC S,l) --> (l,i) as FinPartState of S by AMI_1:58;
+      IC Following (s +* f) in NIC(i,l) by Lm2;
+    hence thesis;
+  end;
 end;
+
 
 definition let N,S,i;
  func JUMP i -> Subset of the Instruction-Locations of S equals
@@ -197,11 +280,13 @@ definition let N,S,i;
  meet { NIC(i,l) : not contradiction };
 end;
 
+
 definition let N,S,l;
  func SUCC l -> Subset of the Instruction-Locations of S equals
 :: AMISTD_1:def 7
  union { NIC(i,l) \ JUMP i : not contradiction };
 end;
+
 
 theorem :: AMISTD_1:14
  for i being Element of the Instructions of S
@@ -228,6 +313,7 @@ definition let N,S,l1,l2;
  reflexivity;
 end;
 
+
 theorem :: AMISTD_1:16
    l1 <= l2 & l2 <= l3 implies l1 <= l3;
 
@@ -238,6 +324,7 @@ definition
     for l1, l2 st l1 <= l2 & l2 <= l1 holds l1 = l2;
 end;
 
+
 definition
  let N, S;
  attr S is standard means
@@ -246,6 +333,7 @@ definition
  ex f being Function of NAT, the Instruction-Locations of S st
   f is bijective & for m, n being Nat holds m <= n iff f.m <= f.n;
 end;
+
 
 theorem :: AMISTD_1:17
  for f1, f2 being Function of NAT, the Instruction-Locations of S
@@ -288,20 +376,129 @@ definition
       = ({[1,0]} --> f) +* ({[0,0]} --> id product the Object-Kind of it);
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  cluster the Instruction-Locations of STC N -> infinite;
+ coherence by Def11,CARD_4:15;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  cluster STC N -> non empty non void;
+ coherence
+   proof
+     thus the carrier of STC N is non empty by Def11;
+     thus the Instruction-Locations of STC N is non empty;
+   end;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  cluster STC N -> IC-Ins-separated definite realistic steady-programmed
                   data-oriented;
+ coherence
+ proof
+   set IT = STC N;
+A1:  the carrier of IT = NAT \/ {NAT} &
+    the Instruction-Counter of IT = NAT &
+    the Instruction-Locations of IT = NAT &
+    the Instructions of IT = III &
+    the Object-Kind of IT =
+     (NAT --> III)+*({NAT}-->NAT) by Def11;
+   set Ok = the Object-Kind of IT;
+             dom ({NAT}-->NAT) = {NAT} by FUNCOP_1:19;
+       then A2: NAT in dom ({NAT}-->NAT) by TARSKI:def 1;
+       A3: NAT in {NAT} by TARSKI:def 1;
+   A4: Ok.NAT = ((NAT --> III)+*({NAT}-->NAT)).NAT by Def11
+             .= ({NAT}-->NAT).NAT by A2,FUNCT_4:14
+             .= NAT by A3,FUNCOP_1:13;
+  thus
+A5:  STC N is IC-Ins-separated
+  proof
+   thus ObjectKind IC IT
+     = (the Object-Kind of IT).IC IT by AMI_1:def 6
+    .= the Instruction-Locations of IT by A1,A4,AMI_1:def 5;
+  end;
+  thus STC N is definite
+  proof
+  let l be Instruction-Location of IT;
+    l in NAT by A1;
+      then l <> NAT & dom ({NAT}-->NAT) = {NAT} by FUNCOP_1:19;
+  then A6: not l in dom ({NAT}-->NAT) by TARSKI:def 1;
+    thus ObjectKind l = Ok.l by AMI_1:def 6
+     .= ((NAT --> III)+*({NAT}-->NAT)).l by Def11
+     .= (NAT --> III).l by A6,FUNCT_4:12
+     .= the Instructions of IT by A1,FUNCOP_1:13;
+  end;
+  thus IT is realistic
+  proof
+    assume the Instructions of IT = the Instruction-Locations of IT;
+    hence thesis by Def11;
+  end;
+  thus IT is steady-programmed
+  proof
+    consider f being Function of product the Object-Kind of IT,
+                               product the Object-Kind of IT such that
+A7:     for s being Element of product the Object-Kind of IT
+           holds f.s = s+*({NAT}-->succ(s.NAT)) and
+A8:  the Execution of IT
+      = ({[1,0]} --> f) +* ({[0,0]} --> id product the Object-Kind of IT)
+        by Def11;
+     let s be State of IT,
+         i be Instruction of IT,
+         l be Instruction-Location of IT;
+       l in NAT by A1;
+     then l <> NAT;
+     then not l in {NAT} by TARSKI:def 1;
+then A9:  not l in dom ({NAT}-->succ(s.NAT)) by FUNCOP_1:19;
+     per cases by A1,TARSKI:def 2;
+     suppose
+A10:    i = [1,0];
+then A11:  i in {[1,0]} by TARSKI:def 1;
+       now
+       assume i in dom ({[0,0]} --> id product the Object-Kind of IT);
+       then i in {[0,0]} by FUNCOP_1:19;
+       then i = [0,0] by TARSKI:def 1;
+       hence contradiction by A10,ZFMISC_1:33;
+     end;
+then A12:  (the Execution of IT).i = ({[1,0]} --> f).i by A8,FUNCT_4:12
+        .= f by A11,FUNCOP_1:13;
+     thus Exec(i,s).l = (((the Execution of IT).i).s).l by AMI_1:def 7
+      .= (s+*({NAT}-->succ(s.NAT))).l by A7,A12
+      .= s.l by A9,FUNCT_4:12;
+     end;
+     suppose i = [0,0];
+then A13:  i in {[0,0]} by TARSKI:def 1;
+     then i in dom ({[0,0]} --> id product the Object-Kind of IT) by FUNCOP_1:
+19;
+      then A14:  (the Execution of IT).i =
+          ({[0,0]} --> id product the Object-Kind of IT).i
+          by A8,FUNCT_4:14
+        .= id product the Object-Kind of IT by A13,FUNCOP_1:13;
+     thus Exec(i,s).l = (((the Execution of IT).i).s).l by AMI_1:def 7
+      .= s.l by A14,FUNCT_1:35;
+   end;
+   end;
+   let a be set;
+   assume
+A15:  a in Ok"{ the Instructions of IT };
+    then Ok.a in { the Instructions of IT } by FUNCT_1:def 13;
+then A16: Ok.a = the Instructions of IT by TARSKI:def 1;
+   per cases by A1,A15,XBOOLE_0:def 2;
+   suppose a in NAT;
+   hence a in the Instruction-Locations of IT by Def11;
+   end;
+   suppose a in {NAT};
+    then a = NAT by TARSKI:def 1;
+    then Ok.a = Ok.IC IT by A1,AMI_1:def 5
+        .= ObjectKind IC IT by AMI_1:def 6
+        .= the Instruction-Locations of IT by A5,AMI_1:def 11;
+    hence a in the Instruction-Locations of IT by A16,Def11;
+ end;
+ end;
 end;
 
 theorem :: AMISTD_1:20
@@ -322,21 +519,63 @@ theorem :: AMISTD_1:24
  for l being Instruction-Location of STC N
   st l = z holds SUCC l = {z, z+1};
 
-definition
+registration
  let N be with_non-empty_elements set;
  cluster STC N -> standard;
+ coherence
+ proof
+   set M = STC N;
+A1: the Instruction-Locations of M = NAT by Def11;
+   then reconsider f = id NAT as Function of NAT, the Instruction-Locations of
+M;
+     now let k be Nat;
+        f.k = k by FUNCT_1:35;
+   then A2: f.(k+1) = k+1 & SUCC (f.k) = {k,k+1} by Th24,FUNCT_1:35;
+    hence f.(k+1) in SUCC (f.k) by TARSKI:def 2;
+    let j be Nat; assume f.j in SUCC (f.k);
+    then f.j = k or f.j = k+1 by A2,TARSKI:def 2;
+    then j = k+1 or j = k by FUNCT_1:35;
+    hence k <= j by NAT_1:29;
+   end;
+  hence M is standard by A1,Th19;
+ end;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  cluster STC N -> halting;
+ coherence
+ proof
+   set M = STC N;
+A1: the Instructions of M = III by Def11;
+     [0,0] in III by TARSKI:def 2;
+   then reconsider I = [0,0] as Instruction of M by A1;
+   take I;
+     InsCode I = I`1 by AMI_5:def 1
+            .= 0 by MCART_1:def 1;
+   hence I is halting by Th20;
+   let J be Instruction of M;
+   assume J is halting;
+   then InsCode J <> 1 by Th21;
+   then InsCode J = 0 by Th22;
+then A2:J`1 = 0 by AMI_5:def 1;
+     J = [1,0] or J = [0,0] by A1,TARSKI:def 2;
+   hence I = J by A2,MCART_1:def 1;
+ end;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  cluster standard halting realistic steady-programmed programmable
          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+ existence proof
+   take STC N;
+   thus thesis;
+ end;
 end;
+
 
 reserve
   T for standard (IC-Ins-separated definite
@@ -353,6 +592,7 @@ definition
    f is bijective & (for m, n being Nat holds m <= n iff f.m <= f.n) &
    it = f.k;
 end;
+
 
 theorem :: AMISTD_1:25
  for k1, k2 being natural number st il.(T,k1) = il.(T,k2) holds k1 = k2;
@@ -371,6 +611,7 @@ definition
   il.(S,it) = l;
 end;
 
+
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
@@ -378,6 +619,7 @@ definition
      l be Instruction-Location of S;
  redefine func locnum l -> Nat;
 end;
+
 
 theorem :: AMISTD_1:27
  for l1, l2 being Instruction-Location of T
@@ -393,10 +635,12 @@ theorem :: AMISTD_1:29
 theorem :: AMISTD_1:30
  S is standard implies S is InsLoc-antisymmetric;
 
-definition let N;
+registration let N;
  cluster standard -> InsLoc-antisymmetric
           (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+coherence by Th30;
 end;
+
 
 definition
    let N be with_non-empty_elements set,
@@ -408,6 +652,7 @@ definition
 :: AMISTD_1:def 14
   il.(S,locnum f + k);
 end;
+
 
 theorem :: AMISTD_1:31
    for f being Instruction-Location of T holds f + 0 = f;
@@ -429,6 +674,7 @@ definition
 :: AMISTD_1:def 15
   f + 1;
 end;
+
 
 theorem :: AMISTD_1:34
  for f being Instruction-Location of T
@@ -468,6 +714,7 @@ definition
     for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
 end;
 
+
 theorem :: AMISTD_1:41
  for S being standard realistic
        (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
@@ -481,13 +728,16 @@ theorem :: AMISTD_1:42
      i being Instruction of S st i is sequential
   holds i is non halting;
 
-definition
+registration
  let N;
  let S be realistic standard
        (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster sequential -> non halting Instruction of S;
+coherence by Th42;
  cluster halting -> non sequential Instruction of S;
+coherence by Th42;
 end;
+
 
 theorem :: AMISTD_1:43
   for i being Instruction of T st JUMP i is non empty holds i is non sequential
@@ -510,6 +760,7 @@ definition
   for k being Nat holds IC (Computation s).k in dom F;
 end;
 
+
 definition
  let N be with_non-empty_elements set;
  let S be standard (IC-Ins-separated definite
@@ -520,6 +771,7 @@ definition
     for s being State of S st F c= s & IC s = il.(S,0)
   for k being Nat holds IC (Computation s).k in dom F;
 end;
+
 
 theorem :: AMISTD_1:44
  for S being standard steady-programmed
@@ -533,12 +785,14 @@ theorem :: AMISTD_1:45
      F being FinPartState of S
  st F is closed holds F is really-closed;
 
-definition
+registration
  let N be with_non-empty_elements set,
      S be IC-Ins-separated definite steady-programmed
           (non empty non void AMI-Struct over N);
  cluster closed -> really-closed FinPartState of S;
+coherence by Th45;
 end;
+
 
 theorem :: AMISTD_1:46
  for S being standard realistic halting
@@ -555,24 +809,33 @@ definition
   holds for m being Instruction-Location of S st m <= l holds m in dom F;
 end;
 
+
 theorem :: AMISTD_1:47
  for F being empty FinPartState of S holds F is lower;
 
-definition
+registration
   let N be with_non-empty_elements set,
       S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
  cluster empty -> lower FinPartState of S;
+coherence by Th47;
 end;
+
 
 theorem :: AMISTD_1:48
  for i being Element of the Instructions of T holds il.(T,0) .--> i is lower;
 
-definition
+registration
  let N be with_non-empty_elements set;
  let S be standard (IC-Ins-separated definite
         (non empty non void AMI-Struct over N));
  cluster lower non empty trivial programmed FinPartState of S;
+ existence proof
+  consider i being Instruction of S;
+  take il.(S,0).--> i;
+  thus thesis by Th48;
+ end;
 end;
+
 
 theorem :: AMISTD_1:49
  for F being lower non empty programmed FinPartState of T
@@ -594,6 +857,7 @@ definition
                         : l in dom F } &
      it = il.(S, max M);
 end;
+
 
 theorem :: AMISTD_1:51
  for F being non empty programmed FinPartState of T
@@ -617,12 +881,21 @@ theorem :: AMISTD_1:55
  for F being lower non empty programmed FinPartState of T
   holds LastLoc F = il.(T, card F -' 1);
 
-definition
+registration
  let N be with_non-empty_elements set,
      S be standard steady-programmed (IC-Ins-separated
        definite (non empty non void AMI-Struct over N));
  cluster really-closed lower non empty programmed -> para-closed
                                                      FinPartState of S;
+coherence
+  proof
+    let F be FinPartState of S;
+    assume
+A1:   F is really-closed;
+    assume F is lower non empty programmed;
+    then il.(S,0) in dom F by Th49;
+    hence thesis by A1,Th44;
+  end;
 end;
 
 definition
@@ -639,36 +912,78 @@ definition
    holds f = LastLoc F;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  let S be standard halting (IC-Ins-separated definite
        (non empty non void AMI-Struct over N));
  cluster halt-ending unique-halt trivial (lower non empty programmed
          FinPartState of S);
+existence
+  proof
+    reconsider F = il.(S,0) .--> halt S
+      as lower non empty programmed FinPartState of S by Th48;
+    take F;
+    thus F.(LastLoc F) = halt S by Lm7;
+    thus for f being Instruction-Location of S st F.f = halt S & f in dom F
+      holds f = LastLoc F by Lm7;
+    thus F is trivial;
+  end;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  let S be standard halting realistic (IC-Ins-separated
        definite (non empty non void AMI-Struct over N));
  cluster trivial closed lower non empty programmed FinPartState of S;
+existence
+  proof
+    reconsider F = il.(S,0) .--> halt S
+      as lower non empty programmed FinPartState of S by Th48;
+    take F;
+    thus thesis by Th46;
+  end;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  let S be standard halting realistic (IC-Ins-separated
        definite (non empty non void AMI-Struct over N));
  cluster halt-ending unique-halt trivial closed (lower non empty programmed
          FinPartState of S);
+existence
+  proof
+    reconsider F = il.(S,0) .--> halt S
+      as lower non empty programmed FinPartState of S by Th48;
+    take F;
+    thus F.(LastLoc F) = halt S by Lm7;
+    thus for f being Instruction-Location of S st F.f = halt S & f in dom F
+      holds f = LastLoc F by Lm7;
+    thus F is trivial closed by Th46;
+  end;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  let S be standard halting realistic steady-programmed
           (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster halt-ending unique-halt autonomic trivial closed
          (lower non empty programmed FinPartState of S);
+existence
+  proof
+    reconsider F = il.(S,0) .--> halt S
+      as lower non empty programmed FinPartState of S by Th48;
+    take F;
+    thus F.(LastLoc F) = halt S by Lm7;
+    thus for f being Instruction-Location of S st F.f = halt S & f in dom F
+      holds f = LastLoc F by Lm7;
+    thus F is autonomic trivial closed by Lm1,Th46;
+  end;
 end;
+
 
 definition
  let N be with_non-empty_elements set;
@@ -679,9 +994,25 @@ definition
  canceled;
 end;
 
-definition
+
+registration
  let N be with_non-empty_elements set;
  let S be standard realistic halting
           (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster closed pre-Macro of S;
+existence
+  proof
+    reconsider F = il.(S,0) .--> halt S
+      as lower non empty programmed FinPartState of S by Th48;
+      F is halt-ending unique-halt
+    proof
+      thus F.(LastLoc F) = halt S &
+       for l being Instruction-Location of S st F.l = halt S & l in dom F
+         holds l = LastLoc F by Lm7;
+    end;
+    then reconsider F as pre-Macro of S;
+    take F;
+    thus F is closed by Th46;
+  end;
 end;
+

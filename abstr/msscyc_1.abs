@@ -45,15 +45,16 @@ reserve G for Graph,
           p is_vertex_seq_of it;
  end;
 
+
 theorem :: MSSCYC_1:2
    for p,q being FinSequence st n<=len p
   holds (1,n)-cut p = (1,n)-cut (p^q);
 
-definition let G be Graph;
+notation let G be Graph;
   let IT be Chain of G;
- redefine attr IT is oriented;
- synonym IT is directed;
-end;
+ synonym IT is directed for IT is oriented;
+ end;
+
 
 definition let G be Graph;
  let IT be Chain of G;
@@ -63,27 +64,98 @@ definition let G be Graph;
         p is_vertex_seq_of IT & p.1 = p.(len p);
 end;
 
+
 definition let IT be Graph;
  attr IT is empty means
 :: MSSCYC_1:def 3
  the Edges of IT is empty;
 end;
 
-definition
+
+registration
  cluster empty Graph;
+ existence proof
+  set V = {1}, E = {};
+  consider S, T being Function of E, V;
+  reconsider G = MultiGraphStruct (# V, E, S, T #) as Graph by GRAPH_1:def 1;
+  take G;
+  thus the Edges of G is empty;
+ end;
 end;
+
 
 theorem :: MSSCYC_1:3
 for G being Graph holds
  rng (the Source of G) \/ rng (the Target of G) c= the Vertices of G;
 
-definition
+registration
   cluster finite simple connected non empty strict Graph;
+existence proof
+ set V = {1,2}, E = {1};
+A1:  1 in E by TARSKI:def 1;
+  1 in V & 2 in V by TARSKI:def 2;
+ then reconsider S = E --> 1, T = E --> 2 as Function of E, V by FUNCOP_1:57;
+ reconsider G = MultiGraphStruct(# V, E, S, T #) as Graph by GRAPH_1:def 1;
+
+A2: S.1 = 1 & T.1 = 2 by A1,FUNCOP_1:13;
+ take G;
+ thus G is finite by GRAPH_1:def 8;
+ thus G is simple proof given x be set such that
+A3: x in the Edges of G & (the Source of G).x = (the Target of G).x;
+    x = 1 by A3,TARSKI:def 1;
+  hence contradiction by A2,A3;
+ end;
+ thus G is connected proof given G1, G2 being Graph such that
+A4: (the Vertices of G1) misses (the Vertices of G2) & G is_sum_of G1, G2;
+  set MSG = the MultiGraphStruct of G;
+A5:  (the Target of G1) tolerates (the Target of G2) &
+    (the Source of G1) tolerates (the Source of G2) &
+    the MultiGraphStruct of G = G1 \/ G2 by A4,GRAPH_1:def 3;
+then A6:  the Vertices of MSG = (the Vertices of G1) \/ (the Vertices of G2) &
+    the Edges of MSG = (the Edges of G1) \/ (the Edges of G2) by GRAPH_1:def 2;
+    set E1 = the Edges of G1, E2 = the Edges of G2;
+    set S1 = the Source of G1, S2 = the Source of G2;
+    set T1 = the Target of G1, T2 = the Target of G2;
+    set V1 = the Vertices of G1, V2 = the Vertices of G2;
+A7: rng S1 \/ rng T1 c= V1 by Th3;
+A8: rng S2 \/ rng T2 c= V2 by Th3;
+   per cases by A6,ZFMISC_1:43;
+   suppose A9: E1 = E & E2 = E;
+    then S1.1 = S.1 & S2.1 = S.1 by A1,A5,GRAPH_1:def 2;
+    then 1 in rng S1 & 1 in rng S2 by A1,A2,A9,FUNCT_2:6;
+    then 1 in rng S1 \/ rng T1 & 1 in rng S2 \/ rng T2 by XBOOLE_0:def 2;
+    hence contradiction by A4,A7,A8,XBOOLE_0:3;
+   end;
+   suppose A10: E1 = E & E2 = {};
+    then S1.1 = S.1 & T1.1 = T.1 by A1,A5,GRAPH_1:def 2;
+    then 1 in rng S1 & 2 in rng T1 by A1,A2,A10,FUNCT_2:6;
+    then 1 in rng S1 \/ rng T1 & 2 in rng S1 \/ rng T1 by XBOOLE_0:def 2;
+    then V c=V1 & V1 c=V by A6,A7,XBOOLE_1:7,ZFMISC_1:38; then V = V1 by
+XBOOLE_0:def 10;
+    then V2 c= V2 & V2 c=V1 by A6,XBOOLE_1:7;
+    hence contradiction by A4,XBOOLE_1:67;
+   end;
+   suppose A11: E1 = {} & E2 = E;
+    then S2.1 = S.1 & T2.1 = T.1 by A1,A5,GRAPH_1:def 2;
+    then 1 in rng S2 & 2 in rng T2 by A1,A2,A11,FUNCT_2:6;
+    then 1 in rng S2 \/ rng T2 & 2 in rng S2 \/ rng T2 by XBOOLE_0:def 2;
+    then V c=V2 & V2 c=V by A6,A8,XBOOLE_1:7,ZFMISC_1:38; then V = V2 by
+XBOOLE_0:def 10;
+    then V1 c= V1 & V1 c=V2 by A6,XBOOLE_1:7;
+    hence contradiction by A4,XBOOLE_1:67;
+ end;
+ end;
+ thus G is non empty by Def3;
+ thus thesis;
+end;
 end;
 
-definition let G be non empty Graph;
+
+registration let G be non empty Graph;
  cluster the Edges of G -> non empty;
+ coherence by Def3;
 end;
+
 
 theorem :: MSSCYC_1:4
 for e being set
@@ -97,8 +169,18 @@ for e being set st e in the Edges of G
 
 reserve G for non empty Graph;
 
-definition let G;
+registration let G;
  cluster directed non empty one-to-one Chain of G;
+ existence proof
+  consider e being Element of the Edges of G;
+  reconsider c = <*e*> as directed Chain of G by Th5;
+  take c;
+  thus c is directed;
+  thus c is non empty;
+  let n, m be Nat; assume
+A1: 1 <= n & n < m & m <= len c; then 1 < m by AXIOMS:22;
+  hence thesis by A1,FINSEQ_1:56;
+ end;
 end;
 
 theorem :: MSSCYC_1:6
@@ -122,9 +204,13 @@ theorem :: MSSCYC_1:10
 for oc being non empty directed Chain of G holds
  len vertex-seq oc = len oc +1;
 
-definition let G; let oc be directed non empty Chain of G;
+registration let G; let oc be directed non empty Chain of G;
  cluster vertex-seq oc -> non empty;
+ coherence proof len vertex-seq oc = len oc +1 by Th10; then len vertex-seq
+oc <> 0 by NAT_1:29;
+ hence thesis by FINSEQ_1:25; end;
 end;
+
 
 theorem :: MSSCYC_1:11
 for oc being directed non empty Chain of G, n
@@ -169,12 +255,24 @@ definition let IT be Graph;
 :: MSSCYC_1:def 4
  for dc being directed Chain of IT st dc is non empty
   holds dc is non cyclic;
- antonym IT is with_directed_cycle;
+ end;
+notation let IT be Graph;
+ antonym IT is with_directed_cycle for IT is directed_cycle-less ; end;
+
+
+registration
+ cluster empty -> directed_cycle-less Graph;
+ coherence proof let G be Graph; assume
+A1: G is empty;
+  let c be directed Chain of G; assume
+      c is non empty; then 1 in dom c by FINSEQ_5:6;
+then A2: c.1 in rng c by FUNCT_1:def 5;
+     c is FinSequence of the Edges of G by Def1;
+   then rng c c= the Edges of G by FINSEQ_1:def 4;
+  hence thesis by A1,A2,Def3;
+ end;
 end;
 
-definition
- cluster empty -> directed_cycle-less Graph;
-end;
 
 definition let IT be Graph;
  attr IT is well-founded means
@@ -184,33 +282,121 @@ definition let IT be Graph;
     st c is non empty & (vertex-seq c).(len c +1) = v holds len c <= n;
 end;
 
-definition let G be empty Graph;
+
+registration let G be empty Graph;
  cluster -> empty Chain of G;
+ coherence proof let c be Chain of G; assume
+     c is non empty; then 1 in dom c by FINSEQ_5:6;
+then A1: c.1 in rng c by FUNCT_1:def 5;
+     c is FinSequence of the Edges of G by Def1;
+   then rng c c= the Edges of G by FINSEQ_1:def 4;
+   hence thesis by A1,Def3;
+ end;
 end;
 
-definition
+
+registration
  cluster empty -> well-founded Graph;
+ coherence proof let G be Graph; assume G is empty;
+  then reconsider G' = G as empty Graph;
+  let v be Element of the Vertices of G;
+  take 0;
+  let c be directed Chain of G;
+  reconsider c as Chain of G';
+    c is empty;
+  hence thesis;
+ end;
 end;
 
-definition
+
+registration
  cluster non well-founded -> non empty Graph;
+ coherence proof let G be Graph; assume
+A1: G is non well-founded; assume G is empty; then reconsider G as empty Graph
+;
+     G is well-founded;
+ hence contradiction by A1;
+end;
 end;
 
-definition
+
+registration
  cluster well-founded Graph;
+ existence proof consider G being empty Graph; G is well-founded;
+  hence thesis;
+ end;
 end;
 
-definition
+
+registration
  cluster well-founded -> directed_cycle-less Graph;
+ coherence proof let G be Graph;
+ per cases;
+ suppose G is empty; then reconsider G as empty Graph; G is
+directed_cycle-less;
+  hence thesis;
+ end;
+ suppose G is non empty; then reconsider G'=G as non empty Graph; assume that
+A1: G is well-founded and
+A2: G is non directed_cycle-less;
+   consider dc being directed Chain of G' such that
+A3: dc is non empty & dc is cyclic by A2,Def4;
+   set p = vertex-seq dc;
+     len p = len dc +1 by A3,Th10; then 1<=len p by NAT_1:29;
+   then 1 in dom p by FINSEQ_3:27;
+   then reconsider v = p.1 as Element of the Vertices of G by FINSEQ_2:13;
+   consider n such that
+A4:  for c being directed Chain of G'
+     st c is non empty & (vertex-seq c).(len c +1) = v holds len c <= n
+                                                                by A1,Def5;
+   consider ch being directed Chain of G' such that
+A5: len ch = n+1 & ch^dc is directed non empty Chain of G' by A3,Th18; n+1<>0
+by NAT_1:29;
+   then reconsider ch as directed non empty Chain of G' by A5,FINSEQ_1:25;
+   reconsider cc = ch^dc as directed non empty Chain of G' by A5;
+     (vertex-seq dc).1 = (vertex-seq dc).(len dc +1) by A3,Th17;
+   then (vertex-seq cc).(len cc +1) = v by A3,Th16;
+then A6: len cc <=n by A4;
+     len cc = n+1 + len dc by A5,FINSEQ_1:35; then n+1<=len cc by NAT_1:29;
+  hence contradiction by A6,NAT_1:38;
+ end;
+ end;
 end;
 
-definition
+
+registration
  cluster non well-founded Graph;
+ existence proof
+ set V = {1}, E = {1};
+A1:  1 in E by TARSKI:def 1;
+   1 in V by TARSKI:def 1;
+ then reconsider S = E --> 1, T = E --> 1 as Function of E, V by FUNCOP_1:57;
+ reconsider G = MultiGraphStruct(# V, E, S, T #) as Graph by GRAPH_1:def 1;
+ reconsider v = 1 as Element of the Vertices of G by TARSKI:def 1;
+A2: S.1 = 1 & T.1 = 1 by A1,FUNCOP_1:13;
+A3: G is with_directed_cycle proof
+  reconsider dc = <*1*> as directed Chain of G by A1,Th5;
+  take dc;
+  thus dc is non empty;
+A4: <*v,v*> is_vertex_seq_of dc by A2,Th4;
+    <*v,v*>.1 = v & <*v,v*>.2 = v & len <*v,v*> = 2 by FINSEQ_1:61;
+  hence dc is cyclic by A4,Def2;
+ end;
+  take G; assume G is well-founded; then reconsider G as well-founded Graph;
+     G is directed_cycle-less;
+  hence contradiction by A3;
+ end;
 end;
 
-definition
+
+registration
  cluster directed_cycle-less Graph;
+ existence proof consider G being well-founded Graph;
+    G is directed_cycle-less;
+  hence thesis;
+ end;
 end;
+
 
 theorem :: MSSCYC_1:19
   for t being DecoratedTree, p being Node of t, k being Nat
@@ -231,11 +417,50 @@ theorem :: MSSCYC_1:21
      B being MSSubset of A
   st G c= B holds B is GeneratorSet of A;
 
-definition
+registration
  let S be non void non empty ManySortedSign,
      A be finitely-generated (non-empty MSAlgebra over S);
  cluster non-empty locally-finite GeneratorSet of A;
+ existence
+  proof
+  consider G being GeneratorSet of A such that
+A1: G is locally-finite by MSAFREE2:def 10;
+  consider B being ManySortedSet of the carrier of S such that
+A2: B in the Sorts of A by PBOOLE:146;
+  deffunc F(set) = {B.$1};
+  consider C being ManySortedSet of the carrier of S such that
+A3: for i being set st i in the carrier of S holds C.i = F(i) from
+MSUALG_1:sch 2;
+     now let i be set; assume i in the carrier of S;
+    then C.i = {B.i} by A3;
+    hence C.i is non empty;
+   end;
+then A4: C is non-empty by PBOOLE:def 16;
+  set H = G \/ C;
+  A5: C c= H by PBOOLE:16;
+A6: G c= the Sorts of A by MSUALG_2:def 1;
+     now let i be set; assume
+   A7: i in the carrier of S;
+     then B.i in (the Sorts of A).i by A2,PBOOLE:def 4;
+     then {B.i} c= (the Sorts of A).i by ZFMISC_1:37;
+    hence C.i c= (the Sorts of A).i by A3,A7;
+   end;
+   then C c= the Sorts of A by PBOOLE:def 5;
+   then G \/ C c= the Sorts of A by A6,PBOOLE:18;
+  then reconsider H as non-empty MSSubset of A by A4,A5,MSUALG_2:def 1,PBOOLE:
+143;
+    G c= H by PBOOLE:16;
+  then reconsider H as GeneratorSet of A by Th21;
+  take H;
+  thus H is non-empty;
+  let i be set; assume
+A8: i in the carrier of S;
+then A9: G.i is finite by A1,PRE_CIRC:def 3; A10: C.i = {B.i} by A3,A8;
+     H.i = G.i \/ C.i by A8,PBOOLE:def 7;
+  hence H.i is finite by A9,A10,FINSET_1:14;
+  end;
 end;
+
 
 theorem :: MSSCYC_1:22
  for S being non void non empty ManySortedSign,
@@ -251,12 +476,48 @@ theorem :: MSSCYC_1:23
   st A is non locally-finite
    holds FreeMSA X is non locally-finite;
 
-definition
+registration
  let S be non void non empty ManySortedSign,
      X be non-empty locally-finite ManySortedSet of the carrier of S,
      v be SortSymbol of S;
  cluster FreeGen(v, X) -> finite;
+ coherence
+  proof
+A1: X.v,FreeGen(v, X) are_equipotent proof
+   set Z = {[a, root-tree[a,v]] where a is Element of X.v: not contradiction};
+   take Z;
+   hereby let x be set such that
+   A2: x in X.v;
+      reconsider y = root-tree [x, v] as set;
+    take y;
+    thus y in FreeGen(v,X) by A2,MSAFREE:def 17;
+    thus [x,y] in Z by A2;
+   end;
+   hereby let y be set; assume
+      y in FreeGen(v, X);
+       then consider x being set such that
+   A3: x in X.v & y = root-tree [x,v] by MSAFREE:def 17;
+    take x;
+    thus x in X.v by A3;
+    thus [x,y] in Z by A3;
+   end;
+   let x,y,z,u be set; assume
+A4: [x,y] in Z & [z,u] in Z;
+    then consider a being Element of X.v such that
+A5: [x,y] = [a, root-tree[a,v]];
+    consider b being Element of X.v such that
+A6: [z,u] = [b, root-tree[b,v]] by A4;
+A7: x = a & y = root-tree[a,v] & z = b & u = root-tree[b,v]
+                                                       by A5,A6,ZFMISC_1:33;
+   hence x = z implies y = u;
+   assume y = u; then [a,v] = [b,v] by A7,TREES_4:4;
+   hence x = z by A7,ZFMISC_1:33;
+   end;
+    X.v is finite by PRE_CIRC:def 3;
+ hence FreeGen(v, X) is finite by A1,CARD_1:68;
+  end;
 end;
+
 
 canceled;
 
@@ -271,6 +532,7 @@ definition let IT be non void non empty ManySortedSign;
  for s being SortSymbol of IT holds
   {o where o is OperSymbol of IT: the_result_sort_of o = s} is finite;
 end;
+
 
 theorem :: MSSCYC_1:26
    for S being non void non empty ManySortedSign,

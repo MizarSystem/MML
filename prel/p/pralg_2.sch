@@ -21,8 +21,6 @@ VECTSP_1
 MATRIX_1
 PBOOLE
 #
-LambdaDMS
-#
 M1 W1 ;;M1 ;;
 ªM16 F1 ;;ªM2 F1 ;;R1 K28 B1 B2 ;F2 B2 ;;;
 #

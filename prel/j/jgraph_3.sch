@@ -23,9 +23,6 @@ BINOP_1
 METRIC_1
 EUCLID
 #
-TopIncl
-TopInter
-#
 ;
 R3 èM3 U1 K168 N2 ;;;;B1 &P1 B1 ;ªR1 B1 K169 N2 ;;;K8 U1 K168 N2 ;;K110 K168 N2 ;K169 N2 ;;;;;
 #

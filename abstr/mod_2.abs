@@ -37,6 +37,7 @@ definition let R;
    VectSpStr (#{{}},op2,op0,pr2(the carrier of R,{{}})#);
 end;
 
+
 theorem :: MOD_2:1
   for x being Vector of TrivialLMod(R) holds x = 0.TrivialLMod(R);
 
@@ -49,6 +50,7 @@ definition let R be non empty doubleLoopStr;
   (for x,y being Vector of G holds f.(x+y) = f.x+f.y)
         & for a being Scalar of R, x being Vector of G holds f.(a*x) = a*f.x;
 end;
+
 
 canceled 2;
 
@@ -80,6 +82,7 @@ definition let R;
                                 Fun -> map of the Dom, the Cod #);
 end;
 
+
 reserve f for LModMorphismStr over R;
 
 definition let R,f;
@@ -91,11 +94,13 @@ definition let R,f;
    the Cod of f;
 end;
 
+
 definition let R,f;
  func fun(f) -> map of dom(f),cod(f) equals
 :: MOD_2:def 8
    the Fun of f;
 end;
+
 
 theorem :: MOD_2:9
   for f0 being map of G1,G2 st f = LModMorphismStr(#G1,G2,f0#)
@@ -114,20 +119,40 @@ definition let R;
   fun(IT) is linear;
 end;
 
-definition let R;
+
+registration let R;
  cluster strict LModMorphism-like LModMorphismStr over R;
+ existence
+  proof
+    consider G,H;
+    set z = ZERO(G,H);
+      dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H) by Lm3;
+    then fun(z) is linear by Th8;
+    then z is LModMorphism-like by Def10;
+   hence thesis;
+  end;
 end;
+
 
 definition let R;
  mode LModMorphism of R is LModMorphism-like LModMorphismStr over R;
 end;
 
+
 theorem :: MOD_2:10
  for F being LModMorphism of R holds the Fun of F is linear;
 
-definition let R,G,H;
+registration let R,G,H;
  cluster ZERO(G,H) -> LModMorphism-like;
+ coherence
+  proof
+    set z = ZERO(G,H);
+      dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H) by Lm3;
+    then fun(z) is linear by Th8;
+    hence thesis by Def10;
+  end;
 end;
+
 
 definition let R,G,H;
  mode Morphism of G,H -> LModMorphism of R means
@@ -135,9 +160,18 @@ definition let R,G,H;
   dom(it) = G & cod(it) = H;
 end;
 
-definition let R,G,H;
+
+registration let R,G,H;
  cluster strict Morphism of G,H;
+  existence
+   proof
+       dom(ZERO(G,H)) = G & cod(ZERO(G,H)) = H by Lm3;
+     then reconsider z = ZERO(G,H) as Morphism of G,H by Def11;
+    take z;
+    thus thesis;
+   end;
 end;
+
 
 theorem :: MOD_2:11
  for f being LModMorphismStr over R holds
@@ -156,9 +190,11 @@ definition let R,G;
    LModMorphismStr(# G,G,id G#);
 end;
 
+
 definition let R,G,H;
  redefine func ZERO(G,H) -> strict Morphism of G,H;
 end;
+
 
 theorem :: MOD_2:14
  for F being Morphism of G,H ex f being map of G,H
@@ -194,6 +230,7 @@ definition let R; let G,F be LModMorphism of R;
        holds it = LModMorphismStr(#G1,G3,g*f#);
 end;
 
+
 canceled;
 
 theorem :: MOD_2:20
@@ -208,6 +245,7 @@ definition let R,G1,G2,G3;
 :: MOD_2:def 14
    G*F;
 end;
+
 
 theorem :: MOD_2:21
  for G being Morphism of G2,G3,
@@ -246,9 +284,11 @@ G1,G3,g*f#);
 & (for f being strict LModMorphism of R st cod f = G holds (ID G)*f = f)
 & (for g being strict LModMorphism of R st dom g = G holds g*(ID G) = g);
 
-definition let x,y,z;
+registration let x,y,z;
  cluster {x,y,z} -> non empty;
+  coherence by ENUMSET1:def 1;
 end;
+
 
 canceled;
 
@@ -287,6 +327,7 @@ definition let a;
            1 if a = 2 & b = 2;
 end;
 
+
 definition
  func add3 -> BinOp of {0,1,2} means
 :: MOD_2:def 18
@@ -305,15 +346,22 @@ definition
     0;
 end;
 
+
 definition
  func Z3 -> strict doubleLoopStr equals
 :: MOD_2:def 23
    doubleLoopStr (#{0,1,2},add3,mult3,unit3,zero3#);
 end;
 
-definition
+
+registration
  cluster Z3 -> non empty;
+ coherence
+  proof
+    thus the carrier of Z3 is non empty by Def23;
+  end;
 end;
+
 
 canceled;
 
@@ -325,9 +373,53 @@ theorem :: MOD_2:32
   & the add of Z3 = add3
   & the mult of Z3 = mult3;
 
-definition
+registration
  cluster Z3 -> add-associative right_zeroed right_complementable;
+ coherence
+  proof
+    thus Z3 is add-associative
+    proof
+      let x,y,z be Element of Z3;
+      reconsider X=x,Y=y,Z=z as Element of {0,1,2} by Def23;
+      thus (x+y)+z = (X+Y)+Z by Lm8
+                  .= X+(Y+Z) by Lm4,Lm9
+                  .= x+(y+z) by Lm8;
+    end;
+    thus Z3 is right_zeroed
+    proof
+      let x be Element of Z3;
+      reconsider X=x,a=0 as Element of {0,1,2} by Def23,ENUMSET1:14;
+      thus x+0.Z3 = X+a by Lm7,Th32
+        .= x by Lm9;
+    end;
+    let x be Element of Z3;
+    reconsider x' = x as Element of {0,1,2} by Def23;
+    reconsider y = compl3.x' as Element of Z3 by Def23;
+    reconsider y' = y as Element of {0,1,2};
+    take y;
+A1:  y' = -x' by Def20;
+    thus x + y = 0.Z3
+    proof
+      per cases by Def23,ENUMSET1:13;
+      suppose A2:x = 0;
+then A3:    y' = 0 by A1,Def15;
+      thus x+y = x'+y' by Lm7
+              .= 0.Z3 by A2,A3,Def16,Th32;
+      end;
+      suppose A4:x = 1;
+then A5:    y' = 2 by A1,Def15;
+      thus x+y = x'+y' by Lm7
+              .= 0.Z3 by A4,A5,Def16,Th32;
+      end;
+      suppose A6:x = 2;
+then A7:    y' = 1 by A1,Def15;
+      thus x+y = x'+y' by Lm7
+              .= 0.Z3 by A6,A7,Def16,Th32;
+    end;
+    end;
+  end;
 end;
+
 
 theorem :: MOD_2:33
  for x,y being Scalar of Z3, X,Y being Element of {0,1,2}
@@ -372,9 +464,10 @@ theorem :: MOD_2:36
 theorem :: MOD_2:37
  Z3 is Fanoian Field;
 
-definition
+registration
  cluster Z3 -> Fanoian add-associative right_zeroed right_complementable
     Abelian commutative associative left_unital distributive Field-like;
+ coherence by Th37;
 end;
 
 theorem :: MOD_2:38

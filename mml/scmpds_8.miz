@@ -60,7 +60,7 @@ definition
   consider s being State of SCMPDS such that
 A1: IC s = inspos 0 &
   for i being Nat holds
-    s.inspos i = U(i) & s.DataLoc(i,0) = V(i) from SCMPDSEx;
+    s.inspos i = U(i) & s.DataLoc(i,0) = V(i) from SCMPDS_4:sch 1;
     take s;
       now
       let x be set;
@@ -112,6 +112,7 @@ A7: now
      hence s1=s2 by A6,A7,SCMPDS_2:54;
  end;
 end;
+
 
 theorem Th2:
  for t1,t2 being State of SCMPDS st t1|SCM-Data-Loc=t2|SCM-Data-Loc
@@ -172,13 +173,15 @@ A1: now let s be State of SCMPDS;
         reconsider y=0 as Element of NAT;
         take y;
         thus P[s,y] by A2;
+       end;
        suppose A3: s.a > 0;
         then reconsider y=s.a as Element of NAT by INT_1:16;
         take y;
         thus P[s,y] by A3;
    end;
+   end;
   ex f be Function of product the Object-Kind of SCMPDS,NAT st
-     for s being State of SCMPDS holds P[s,f.s] from FuncExD(A1);
+     for s being State of SCMPDS holds P[s,f.s] from FUNCT_2:sch 3(A1);
    then consider f be Function of product the Object-Kind of SCMPDS,NAT
    such that
 A4: for s holds P[s,f.s];
@@ -199,7 +202,8 @@ definition
  coherence;
 end;
 
-definition
+
+registration
    let I be shiftable Program-block,a be Int_position,i be Integer;
    cluster while<0(a,i,I) -> shiftable;
    correctness
@@ -216,7 +220,8 @@ then A2:  card PF+ -(card I+1) =0 by XCMPLX_0:def 6;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block, a be Int_position,i be Integer;
    cluster while<0(a,i,I) -> No-StopCode;
    correctness
@@ -227,6 +232,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem Th6:
  for a be Int_position,i be Integer,I be Program-block holds
@@ -340,9 +346,11 @@ then A11: CurInstr s4 = halt SCMPDS by A10,AMI_1:def 17;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
          hence IC C3.k in dom pWHL by A9,A10,A11,AMI_1:52;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pWHL by A2,SCMPDS_4:75;
+     end;
      end;
      hence WHL is_closed_on s by SCMPDS_6:def 2;
        s3 is halting by A11,AMI_1:def 20;
@@ -419,6 +427,7 @@ then A20:    not x in dom SAl by A18,TARSKI:def 1;
        .= s3.x by A4,A19,SCMPDS_2:69
        .= s.x by A19,SCMPDS_5:19
        .= (s +* SAl).x by A20,FUNCT_4:12;
+      end;
       suppose
 A21:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A7,AMI_1:48,AMI_5:25
@@ -427,8 +436,10 @@ A21:    x = IC SCMPDS;
            IExec(WHL,s).x = s4.x by A14,A16,FUNCT_4:12
        .= inspos(card I + 2) by A11,A21,AMI_1:def 15
        .= (s +* SAl).x by A21,SCMPDS_7:12;
+       end;
        suppose x is Instruction-Location of SCMPDS;
        hence IExec(WHL,s).x = (s +* SAl).x by SCMPDS_6:27;
+    end;
     end;
     hence IExec(WHL,s) = s +* SAl by A15,FUNCT_1:9;
 end;
@@ -522,6 +533,7 @@ A7:  for k be Nat st Q[k] holds Q[k + 1]
         per cases;
         suppose t.b >= 0;
           hence WHL is_closed_on t & WHL is_halting_on t by A11,Th9;
+        end;
         suppose A12: t.b < 0;
         set t2 = t +* IsI,
             t3 = t +* iWHL,
@@ -627,6 +639,7 @@ A47:    t7 +* iWHL=t7 by A42,SCMPDS_7:37;
                  suppose k=0;
                  hence IC (Computation t3).k in dom pWHL by A18,A19,AMI_1:def
 19;
+                 end;
                  suppose k<>0;
                   then consider kn be Nat such that
               A50: k=kn+1 by NAT_1:22;
@@ -647,25 +660,31 @@ A47:    t7 +* iWHL=t7 by A42,SCMPDS_7:37;
                   .=inspos (lm+1) by SCMPDS_3:def 3;
                   hence IC (Computation t3).k in dom pWHL by A55,SCMPDS_4:1;
                end;
+               end;
+              end;
               suppose A56:k=m3;
                  l1 in dom pWHL by A30,SCMPDS_6:18;
                hence IC (Computation t3).k in dom pWHL by A1,A14,A16,A17,A25,
 A27,A33,A39,A56,SCMPDS_7:36;
             end;
+            end;
+          end;
           suppose k >= m3+1;
           then consider nn be Nat such that
          A57: k=m3+1+nn by NAT_1:28;
                C3.k=(Computation (t7 +* iWHL)).nn by A47,A57,AMI_1:51;
            hence IC (Computation t3).k in dom pWHL by A46,SCMPDS_6:def 2;
        end;
+       end;
        hence WHL is_closed_on t by SCMPDS_6:def 2;
          t7 is halting by A46,A47,SCMPDS_6:def 3;
        then t3 is halting by SCM_1:27;
        hence WHL is_halting_on t by SCMPDS_6:def 3;
      end;
+     end;
      hence Q[k+1];
      end;
-A58:  for k being Nat holds Q[k] from Ind(A5,A7);
+A58:  for k being Nat holds Q[k] from NAT_1:sch 1(A5,A7);
      set n=F(Dstate s());
      A59: Q[n] by A58;
      thus F(s())=F(s()) or P[s()];
@@ -909,6 +928,7 @@ A7:  for k be Nat st P[k] holds P[k + 1]
         suppose t.b >= 0;
         hence WHL is_closed_on t & WHL is_halting_on t
          by A11,Th9;
+        end;
         suppose A12: t.b < 0;
         set t2 = t +* IsI,
             t3 = t +* iWHL,
@@ -1024,6 +1044,7 @@ A51:    t7 +* iWHL=t7 by A43,SCMPDS_7:37;
                  suppose k=0;
                  hence IC (Computation t3).k in dom pWHL by A18,A19,AMI_1:def
 19;
+                 end;
                  suppose k<>0;
                   then consider kn be Nat such that
               A54: k=kn+1 by NAT_1:22;
@@ -1044,25 +1065,31 @@ A51:    t7 +* iWHL=t7 by A43,SCMPDS_7:37;
                   .=inspos (lm+1) by SCMPDS_3:def 3;
                   hence IC (Computation t3).k in dom pWHL by A59,SCMPDS_4:1;
                end;
+               end;
+              end;
               suppose A60:k=m3;
                  l1 in dom pWHL by A31,SCMPDS_6:18;
                hence IC (Computation t3).k in dom pWHL by A1,A14,A16,A17,A25,
 A27,A34,A40,A60,SCMPDS_7:36;
             end;
+            end;
+          end;
           suppose k >= m3+1;
           then consider nn be Nat such that
          A61: k=m3+1+nn by NAT_1:28;
                C3.k=(Computation (t7 +* iWHL)).nn by A51,A61,AMI_1:51;
            hence IC (Computation t3).k in dom pWHL by A50,SCMPDS_6:def 2;
        end;
+       end;
        hence WHL is_closed_on t by SCMPDS_6:def 2;
          t7 is halting by A50,A51,SCMPDS_6:def 3;
        then t3 is halting by SCM_1:27;
        hence WHL is_halting_on t by SCMPDS_6:def 3;
      end;
+     end;
      hence P[k+1];
      end;
-A62:  for k being Nat holds P[k] from Ind(A4,A7);
+A62:  for k being Nat holds P[k] from NAT_1:sch 1(A4,A7);
      set n=f.Dstate(s);
      A63: P[n] by A62;
    for x be Int_position st x in X holds s.x=s.x;
@@ -1189,6 +1216,7 @@ A6:  for k be Nat st P[k] holds P[k + 1]
         suppose t.b >= 0;
         hence WHL is_closed_on t & WHL is_halting_on t
          by A10,Th9;
+        end;
         suppose A11: t.b < 0;
         set t2 = t +* IsI,
             t3 = t +* iWHL,
@@ -1303,6 +1331,7 @@ A50:    t7 +* iWHL=t7 by A42,SCMPDS_7:37;
                  suppose k=0;
                  hence IC (Computation t3).k in dom pWHL by A17,A18,AMI_1:def
 19;
+                 end;
                  suppose k<>0;
                   then consider kn be Nat such that
               A53: k=kn+1 by NAT_1:22;
@@ -1323,34 +1352,42 @@ A50:    t7 +* iWHL=t7 by A42,SCMPDS_7:37;
                   .=inspos (lm+1) by SCMPDS_3:def 3;
                   hence IC (Computation t3).k in dom pWHL by A58,SCMPDS_4:1;
                end;
+               end;
+              end;
               suppose A59:k=m3;
                  l1 in dom pWHL by A31,SCMPDS_6:18;
                hence IC (Computation t3).k in dom pWHL by A1,A13,A15,A16,A24,
 A26,A34,A39,A59,SCMPDS_7:36;
             end;
+            end;
+          end;
           suppose k >= m3+1;
           then consider nn be Nat such that
          A60: k=m3+1+nn by NAT_1:28;
                C3.k=(Computation (t7 +* iWHL)).nn by A50,A60,AMI_1:51;
            hence IC (Computation t3).k in dom pWHL by A49,SCMPDS_6:def 2;
        end;
+       end;
        hence WHL is_closed_on t by SCMPDS_6:def 2;
          t7 is halting by A49,A50,SCMPDS_6:def 3;
        then t3 is halting by SCM_1:27;
        hence WHL is_halting_on t by SCMPDS_6:def 3;
      end;
+     end;
      hence P[k+1];
      end;
-A61:  for k being Nat holds P[k] from Ind(A3,A6);
+A61:  for k being Nat holds P[k] from NAT_1:sch 1(A3,A6);
      per cases;
      suppose s.b >= 0;
        hence WHL is_closed_on s & WHL is_halting_on s by Th9;
+     end;
      suppose s.b <0;
         then -s.b > 0 by REAL_1:66;
         then reconsider n=-s.b as Nat by INT_1:16;
        A62: P[n] by A61;
          for x be Int_position st x in X holds s.x=s.x;
        hence WHL is_closed_on s & WHL is_halting_on s by A62;
+end;
 end;
 
 theorem
@@ -1532,7 +1569,8 @@ definition
  coherence;
 end;
 
-definition
+
+registration
    let I be shiftable Program-block,a be Int_position,i be Integer;
    cluster while>0(a,i,I) -> shiftable;
    correctness
@@ -1549,7 +1587,8 @@ then A2:  card PF+ -(card I+1) =0 by XCMPLX_0:def 6;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block,a be Int_position,i be Integer;
    cluster while>0(a,i,I) -> No-StopCode;
    correctness
@@ -1560,6 +1599,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem Th17:
  for a be Int_position,i be Integer,I be Program-block holds
@@ -1673,9 +1713,11 @@ then A11: CurInstr s4 = halt SCMPDS by A10,AMI_1:def 17;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
          hence IC C3.k in dom pWHL by A9,A10,A11,AMI_1:52;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pWHL by A2,SCMPDS_4:75;
+     end;
      end;
      hence WHL is_closed_on s by SCMPDS_6:def 2;
        s3 is halting by A11,AMI_1:def 20;
@@ -1752,6 +1794,7 @@ then A20:    not x in dom SAl by A18,TARSKI:def 1;
        .= s3.x by A4,A19,SCMPDS_2:68
        .= s.x by A19,SCMPDS_5:19
        .= (s +* SAl).x by A20,FUNCT_4:12;
+      end;
       suppose
 A21:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A7,AMI_1:48,AMI_5:25
@@ -1760,8 +1803,10 @@ A21:    x = IC SCMPDS;
            IExec(WHL,s).x = s4.x by A14,A16,FUNCT_4:12
        .= inspos(card I + 2) by A11,A21,AMI_1:def 15
        .= (s +* SAl).x by A21,SCMPDS_7:12;
+       end;
        suppose x is Instruction-Location of SCMPDS;
        hence IExec(WHL,s).x = (s +* SAl).x by SCMPDS_6:27;
+    end;
     end;
     hence IExec(WHL,s) = s +* SAl by A15,FUNCT_1:9;
 end;
@@ -1854,6 +1899,7 @@ A7:  for k be Nat st Q[k] holds Q[k + 1]
         per cases;
         suppose t.b <= 0;
           hence WHL is_closed_on t & WHL is_halting_on t by A11,Th20;
+        end;
         suppose A12: t.b > 0;
         set t2 = t +* IsI,
             t3 = t +* iWHL,
@@ -1959,6 +2005,7 @@ A47:    t7 +* iWHL=t7 by A42,SCMPDS_7:37;
                  suppose k=0;
                  hence IC (Computation t3).k in dom pWHL by A18,A19,AMI_1:def
 19;
+                 end;
                  suppose k<>0;
                   then consider kn be Nat such that
               A50: k=kn+1 by NAT_1:22;
@@ -1979,25 +2026,31 @@ A47:    t7 +* iWHL=t7 by A42,SCMPDS_7:37;
                   .=inspos (lm+1) by SCMPDS_3:def 3;
                   hence IC (Computation t3).k in dom pWHL by A55,SCMPDS_4:1;
                end;
+               end;
+              end;
               suppose A56:k=m3;
                  l1 in dom pWHL by A30,SCMPDS_6:18;
                hence IC (Computation t3).k in dom pWHL by A1,A14,A16,A17,A25,
 A27,A33,A39,A56,SCMPDS_7:36;
             end;
+            end;
+          end;
           suppose k >= m3+1;
           then consider nn be Nat such that
          A57: k=m3+1+nn by NAT_1:28;
                C3.k=(Computation (t7 +* iWHL)).nn by A47,A57,AMI_1:51;
            hence IC (Computation t3).k in dom pWHL by A46,SCMPDS_6:def 2;
        end;
+       end;
        hence WHL is_closed_on t by SCMPDS_6:def 2;
          t7 is halting by A46,A47,SCMPDS_6:def 3;
        then t3 is halting by SCM_1:27;
        hence WHL is_halting_on t by SCMPDS_6:def 3;
      end;
+     end;
      hence Q[k+1];
      end;
-A58:  for k being Nat holds Q[k] from Ind(A5,A7);
+A58:  for k being Nat holds Q[k] from NAT_1:sch 1(A5,A7);
      set n=F(Dstate s());
      A59: Q[n] by A58;
      thus F(s())=F(s()) or P[s()];
@@ -2248,6 +2301,7 @@ A8:  for k be Nat st P[k] holds P[k + 1]
         per cases;
         suppose t.b <= 0;
           hence WHL is_closed_on t & WHL is_halting_on t by A13,Th20;
+        end;
         suppose A14: t.b > 0;
         set t2 = t +* IsI,
             t3 = t +* iWHL,
@@ -2371,6 +2425,7 @@ A54:    t7 +* iWHL=t7 by A44,SCMPDS_7:37;
                  suppose k=0;
                  hence IC (Computation t3).k in dom pWHL by A20,A21,AMI_1:def
 19;
+                 end;
                  suppose k<>0;
                   then consider kn be Nat such that
               A57: k=kn+1 by NAT_1:22;
@@ -2391,25 +2446,31 @@ A54:    t7 +* iWHL=t7 by A44,SCMPDS_7:37;
                   .=inspos (lm+1) by SCMPDS_3:def 3;
                   hence IC (Computation t3).k in dom pWHL by A62,SCMPDS_4:1;
                end;
+               end;
+              end;
               suppose A63:k=m3;
                  l1 in dom pWHL by A32,SCMPDS_6:18;
                hence IC (Computation t3).k in dom pWHL by A1,A16,A18,A19,A27,
 A29,A35,A41,A63,SCMPDS_7:36;
             end;
+            end;
+          end;
           suppose k >= m3+1;
           then consider nn be Nat such that
          A64: k=m3+1+nn by NAT_1:28;
                C3.k=(Computation (t7 +* iWHL)).nn by A54,A64,AMI_1:51;
            hence IC (Computation t3).k in dom pWHL by A53,SCMPDS_6:def 2;
        end;
+       end;
        hence WHL is_closed_on t by SCMPDS_6:def 2;
          t7 is halting by A53,A54,SCMPDS_6:def 3;
        then t3 is halting by SCM_1:27;
        hence WHL is_halting_on t by SCMPDS_6:def 3;
      end;
+     end;
      hence P[k+1];
      end;
-A65:  for k being Nat holds P[k] from Ind(A5,A8);
+A65:  for k being Nat holds P[k] from NAT_1:sch 1(A5,A8);
      set n=f.Dstate(s);
      A66: P[n] by A65;
        for x st x in Y holds s.x=s.x;

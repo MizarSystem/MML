@@ -17,9 +17,6 @@ SETFAM_1
 STRUCT_0
 RLVECT_1
 #
-SubFamExRLS
-SubFamExRLS2
-#
 G4 ;;
 ªM10 U1 F1 ;;;ªM3 K40 U1 F1 ;;;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;
 #

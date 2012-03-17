@@ -38,6 +38,7 @@ definition let T,T1;
       or ex p,r st p in P & r in T1 & q = p^r;
 end;
 
+
 theorem :: TREES_A:2
   P <> {} implies tree(T,P,T1) =
     {t1 where t1 is Element of T :
@@ -75,13 +76,28 @@ canceled;
 theorem :: TREES_A:9
      p in P implies T1 = tree(T,P,T1)|p;
 
-definition let T;
+registration let T;
   cluster non empty AntiChain_of_Prefixes of T;
+existence
+  proof
+    consider w being Element of T;
+    consider X being set such that A1: X = {w};
+A2: X is AntiChain_of_Prefixes-like by A1,TREES_1:70;
+      X c= T
+      proof let x be set; assume x in X; then x = w by A1,TARSKI:def 1;
+        hence x in T;
+      end;
+    then reconsider X as AntiChain_of_Prefixes of T by A2,TREES_1:def 14;
+    take X;
+    thus thesis by A1;
+  end;
 end;
+
 
 definition let T; let t be Element of T;
   redefine func {t} -> non empty AntiChain_of_Prefixes of T;
 end;
+
 
 theorem :: TREES_A:10
   tree(T,{t},T1) = T with-replacement (t,T1);
@@ -101,6 +117,7 @@ definition let T,P,T1;
     (for p st p in P holds not p is_a_prefix_of q & it.q = T.q)
     or ex p,r st p in P & r in dom T1 & q = p^r & it.q = T1.r;
 end;
+
 
 canceled 2;
 
@@ -151,4 +168,5 @@ definition let D,T,P,T1;
 :: TREES_A:def 3
       tree(T,P,T1);
 end;
+
 

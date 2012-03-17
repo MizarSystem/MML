@@ -28,12 +28,23 @@ begin
  reserve Rseq,Rseq1,Rseq2 for Real_Sequence;
  reserve k, n, m, m1, m2 for Nat;
 
-scheme Rec_Func_Ex_RUS{ X() -> RealUnitarySpace,
+scheme :: BHSP_4:sch 1
+ Rec_Func_Ex_RUS{ X() -> RealUnitarySpace,
                      z() -> Point of X(),
                      G(Nat, Point of X()) -> Point of X()}:
 ex f being Function of NAT, the carrier of X() st
 f.0 = z() & for n being Element of NAT,
-x being Point of X() st x = f.n holds f.(n + 1) = G(n,x);
+x being Point of X() st x = f.n holds f.(n + 1) = G(n,x)
+proof
+   deffunc _G(Nat,Point of X()) = G($1,$2);
+  consider f being Function of NAT, the carrier of X() such that
+  A1: f.0 = z() &
+      for n being Element of NAT holds f.(n+1) = _G(n,f.n) from RECDEF_1:sch 4;
+  take f;
+  thus f.0 = z() by A1;
+  thus for n being Nat, x being Point of X() st x = f.n
+  holds f.(n+1) = G(n,x) by A1;
+end;
 
 definition
           let X;
@@ -43,6 +54,7 @@ definition
       it.0 = seq.0 &
           for n holds it.(n + 1) = it.n + seq.(n + 1);
 end;
+
 
 theorem :: BHSP_4:1
     Partial_Sums(seq1) + Partial_Sums(seq2) =
@@ -73,6 +85,7 @@ definition let X;
 :: BHSP_4:def 3
     lim Partial_Sums(seq);
 end;
+
 
 theorem :: BHSP_4:6
       seq1 is summable & seq2 is summable implies seq1 + seq2 is summable
@@ -115,6 +128,7 @@ definition
     Partial_Sums(seq).n;
 end;
 
+
 canceled;
 
 theorem :: BHSP_4:16
@@ -142,6 +156,7 @@ definition
     Sum(seq, n) - Sum(seq, m);
 end;
 
+
 canceled;
 
 theorem :: BHSP_4:23
@@ -167,6 +182,7 @@ definition
     Partial_Sums(Rseq).n;
 end;
 
+
 definition
           let Rseq, n,m;
           func Sum(Rseq, n, m) -> Real equals
@@ -174,12 +190,14 @@ definition
     Sum(Rseq, n) - Sum(Rseq, m);
 end;
 
+
 definition
           let X, seq;
           attr seq is absolutely_summable means
 :: BHSP_4:def 8
  ||.seq.|| is summable;
 end;
+
 
 theorem :: BHSP_4:27
        seq1 is absolutely_summable & seq2 is absolutely_summable implies
@@ -262,6 +280,7 @@ definition
     for n holds it.n = Rseq.n * seq.n;
 end;
 
+
 theorem :: BHSP_4:45
        Rseq * (seq1 + seq2) = Rseq * seq1 + Rseq * seq2;
 
@@ -294,8 +313,11 @@ definition
 :: BHSP_4:def 10
    for r st r > 0 ex k st for n, m st ( n >= k & m >= k )
           holds abs((Rseq.n - Rseq.m)) < r;
-  synonym Rseq is_Cauchy_sequence;
-end;
+  end;
+notation
+          let Rseq;
+          synonym Rseq is_Cauchy_sequence for Rseq is Cauchy ; end;
+
 
 theorem :: BHSP_4:53
         X is_Hilbert_space implies

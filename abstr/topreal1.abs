@@ -29,10 +29,48 @@ reserve a,m for natural number;
 
 :: PRELIMINARIES
 
-scheme Fraenkel_Alt {A() -> non empty set, P[set], Q[set]}:
+scheme :: TOPREAL1:sch 1
+ Fraenkel_Alt {A() -> non empty set, P[set], Q[set]}:
  {v where v is Element of A(): P[v] or Q[v]} =
   {v1 where v1 is Element of A(): P[v1]} \/
-   {v2 where v2 is Element of A(): Q[v2]};
+   {v2 where v2 is Element of A(): Q[v2]}
+proof
+ set X = {v where v is Element of A(): P[v] or Q[v]},
+     Y = {v1 where v1 is Element of A(): P[v1]},
+     Z = {v2 where v2 is Element of A(): Q[v2]};
+     now let x be set;
+    thus x in X implies x in Y \/ Z
+     proof
+      assume x in X;
+      then consider v being Element of A() such that
+     A1: x = v and A2: P[v] or Q[v];
+         now per cases by A2;
+        suppose P[v];
+         then x in Y by A1;
+         hence x in Y \/ Z by XBOOLE_0:def 2;
+        end;
+        suppose Q[v];
+         then x in Z by A1;
+         hence x in Y \/ Z by XBOOLE_0:def 2;
+       end;
+       end;
+      hence x in Y \/ Z;
+     end;
+    assume A3: x in Y \/ Z;
+       now per cases by A3,XBOOLE_0:def 2;
+      suppose x in Y;
+       then ex v being Element of A() st x = v & P[v];
+       hence x in X;
+      end;
+      suppose x in Z;
+       then ex v being Element of A() st x = v & Q[v];
+       hence x in X;
+     end;
+     end;
+    hence x in X;
+   end;
+  hence thesis by TARSKI:2;
+ end;
 
 reserve D for set, p for FinSequence of D;
 
@@ -42,9 +80,15 @@ definition let D, p, m;
    p|Seg m;
 end;
 
-definition let D be set, f be FinSequence of D;
+
+registration let D be set, f be FinSequence of D;
  cluster f|0 -> empty;
+  coherence
+ proof f|0 = f|(Seg 0) by Def1;
+  hence f|0 is empty by FINSEQ_1:4,RELAT_1:110;
+ end;
 end;
+
 
 theorem :: TOPREAL1:1
  a in dom(p|m) implies (p|m)/.a = p/.a;
@@ -59,6 +103,7 @@ definition let T be 1-sorted;
  mode FinSequence of T is FinSequence of the carrier of T;
 end;
 
+
 :: PROPER TEXT
 
 reserve p,p1,p2,q1,q2 for Point of TOP-REAL 2,
@@ -72,6 +117,7 @@ reserve p,p1,p2,q1,q2 for Point of TOP-REAL 2,
     ex f being map of I[01], (TOP-REAL n)|P st
                      f is_homeomorphism & f.0 = p1 & f.1 = p2;
  end;
+
 
 theorem :: TOPREAL1:4
   for P being Subset of TOP-REAL n,
@@ -93,15 +139,27 @@ theorem :: TOPREAL1:5
                         p`1 = 1 & p`2 <= 1 & p`2 >= 0};
  end;
 
+
  definition let n; let p1,p2 be Point of TOP-REAL n;
    func LSeg(p1,p2) -> Subset of TOP-REAL n equals
 :: TOPREAL1:def 4
  { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 };
  end;
 
-definition let n; let p1,p2 be Point of TOP-REAL n;
+
+registration let n; let p1,p2 be Point of TOP-REAL n;
  cluster LSeg(p1,p2) -> non empty;
+ coherence
+  proof
+A1: LSeg(p1,p2) = { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 }
+       by Def4;
+      1 - 0 = 1 & 1 * p1 = p1 & 0 * p2 = 0.REAL n & p1 + 0.REAL n = p1
+      by EUCLID:31,33;
+    then p1 in LSeg(p1,p2) by A1;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: TOPREAL1:6
   for p1,p2 being Point of TOP-REAL n holds p1 in LSeg(p1,p2) & p2 in
@@ -171,9 +229,11 @@ theorem :: TOPREAL1:20
  R^2-unit_square = (LSeg(|[ 0,0 ]|, |[ 0,1 ]|) \/ LSeg(|[ 0,1 ]|, |[ 1,1 ]|))
  \/ (LSeg(|[ 0,0 ]|, |[ 1,0 ]|) \/ LSeg(|[ 1,0 ]|, |[ 1,1 ]|));
 
-definition
+registration
  cluster R^2-unit_square -> non empty;
+coherence by Th20;
 end;
+
 
 theorem :: TOPREAL1:21
    LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,1]|,|[1,1]|) = {|[0,1]|};
@@ -200,6 +260,7 @@ definition let n; let f be FinSequence of TOP-REAL n; let i;
          otherwise {};
 end;
 
+
 theorem :: TOPREAL1:27
  for f being FinSequence of TOP-REAL n st 1 <= i & i+1 <= len f
   holds f/.i in LSeg(f,i) & f/.(i+1) in LSeg(f,i);
@@ -209,6 +270,7 @@ definition let n; let f be FinSequence of TOP-REAL n;
 :: TOPREAL1:def 6
    union { LSeg(f,i) : 1 <= i & i+1 <= len f };
 end;
+
 
 theorem :: TOPREAL1:28
  for f being FinSequence of TOP-REAL n
@@ -231,14 +293,17 @@ definition let IT be FinSequence of TOP-REAL 2;
  for i,j st i+1 < j holds LSeg(IT,i) misses LSeg(IT,j);
 end;
 
+
 reserve f,f1,f2,h for FinSequence of TOP-REAL 2;
 
 definition let f;
  attr f is being_S-Seq means
 :: TOPREAL1:def 10
   f is one-to-one & len f >= 2 & f is unfolded s.n.c. special;
-  synonym f is_S-Seq;
-end;
+  end;
+notation let f;
+ synonym f is_S-Seq for f is being_S-Seq ; end;
+
 
 theorem :: TOPREAL1:30
  ex f1,f2 st f1 is_S-Seq & f2 is_S-Seq & R^2-unit_square = L~f1 \/ L~f2 &
@@ -253,15 +318,19 @@ theorem :: TOPREAL1:31
 :: TOPREAL1:def 11
 
    ex f st f is_S-Seq & P = L~f;
-  synonym P is_S-P_arc;
- end;
+  end;
+notation let P be Subset of TOP-REAL 2;
+  synonym P is_S-P_arc for P is being_S-P_arc ; end;
+
 
 theorem :: TOPREAL1:32
 P1 is_S-P_arc implies P1 <> {};
 
- definition
+ registration
   cluster being_S-P_arc -> non empty Subset of TOP-REAL 2;
+ coherence by Th32;
  end;
+
 
 canceled;
 

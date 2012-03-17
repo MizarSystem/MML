@@ -27,8 +27,23 @@ environ
 
 begin
 
-scheme FraenkelFinIm{ A() -> finite non empty set, F(set) -> set, P[set] }:
- { F(x) where x is Element of A() : P[x] } is finite;
+scheme :: PRE_CIRC:sch 1
+ FraenkelFinIm{ A() -> finite non empty set, F(set) -> set, P[set] }:
+ { F(x) where x is Element of A() : P[x] } is finite
+proof
+A1: A() is finite;
+ deffunc G(Element of A()) = F($1);
+ set B = { G(x) where x is Element of A() : x in A() };
+A2: B is finite from FRAENKEL:sch 21(A1);
+   { F(x) where x is Element of A() : P[x] } c= B
+  proof let a be set;
+   assume a in { F(x) where x is Element of A() : P[x] };
+    then consider b being Element of A() such that
+A3:   F(b) = a and P[b];
+   thus thesis by A3;
+  end;
+ hence thesis by A2,FINSET_1:13;
+end;
 
 canceled;
 
@@ -43,22 +58,36 @@ theorem :: PRE_CIRC:4
     for f, g, h being Function st f c= g & dom f misses dom h
     holds f c= g +* h;
 
-definition
+registration
  cluster finite non empty natural-membered set;
+ existence
+  proof
+    consider A being finite non empty Subset of NAT;
+   take A;
+   thus A is finite non empty natural-membered;
+  end;
 end;
 
+
+notation let A be finite non empty real-membered set;
+   synonym max A for upper_bound A ;
+end;
 definition let A be finite non empty real-membered set;
- redefine func upper_bound A -> real number means
+ redefine func max A -> real number means
 :: PRE_CIRC:def 1
  it in A & for k being real number st k in A holds k <= it;
- synonym max A;
+ end;
+
+
+registration
+  let X be finite non empty natural-membered set;
+  cluster max X -> natural;
+  coherence
+    proof max X in X by Def1;
+      hence max X is natural by MEMBERED:def 5;
+    end;
 end;
 
-definition
-  let X be finite non empty natural-membered set;
-  canceled;
-  cluster max X -> natural;
-end;
 
 begin
 ::---------------------------------------------------------------------------
@@ -72,40 +101,89 @@ theorem :: PRE_CIRC:5
 reserve i,j,x,y for set,
         g for Function;
 
-scheme
-  MSSLambda2Part { I() -> set, P [set], F, G (set) -> set }:
+scheme :: PRE_CIRC:sch 2
+ MSSLambda2Part { I() -> set, P [set], F, G (set) -> set }:
     ex f being ManySortedSet of I() st
       for i being Element of I() st i in I()
-        holds (P[i] implies f.i = F(i)) & (not P[i] implies f.i = G(i));
+        holds (P[i] implies f.i = F(i)) & (not P[i] implies f.i = G(i))
+proof
+     defpred Q[set,set] means
+      (P[$1] implies $2 = F($1)) & (not P[$1] implies $2 = G($1));
+A1:    now let i such that i in I();
+       thus ex j st Q[i,j]
+        proof
+         per cases;
+         suppose A2: P[i]; take F(i); thus thesis by A2;
+         end;
+         suppose A3: not P[i]; take G(i); thus thesis by A3;
+        end;
+        end;
+      end;
+      consider f being ManySortedSet of I() such that
+A4:     for i st i in I() holds Q[i,f.i] from MSUALG_1:sch 1(A1);
+
+      take f;
+      thus thesis by A4;
+    end;
 
 definition
   let I be set;
    let IT be ManySortedSet of I;
+  canceled;
   attr IT is locally-finite means
 :: PRE_CIRC:def 3
 
       for i being set st i in I holds IT.i is finite;
 end;
 
-definition
+
+registration
   let I be set;
   cluster non-empty locally-finite ManySortedSet of I;
+  existence
+    proof
+      reconsider f = I --> {{}} as Function;
+        dom f = I by FUNCOP_1:19;
+      then reconsider f as ManySortedSet of I by PBOOLE:def 3;
+      take f;
+      thus f is non-empty
+        proof
+          let i be set;
+          assume i in I;
+          hence f.i is non empty by FUNCOP_1:13;
+        end;
+      thus f is locally-finite
+        proof
+          let i be set;
+          assume i in I;
+          hence f.i is finite by FUNCOP_1:13;
+        end;
+    end;
 end;
+
 
 definition
   let I, A be set;
   redefine func I --> A -> ManySortedSet of I;
 end;
 
+
 definition
   let I be set, M be ManySortedSet of I, A be Subset of I;
   redefine func M | A -> ManySortedSet of A;
 end;
 
-definition
+
+registration
   let M be non-empty Function, A be set;
   cluster M | A -> non-empty;
+  coherence
+    proof
+        rng(M|A) c= rng M by FUNCT_1:76;
+      hence not {} in rng(M|A) by RELAT_1:def 9;
+    end;
 end;
+
 
 theorem :: PRE_CIRC:6
   for I being non empty set, B being non-empty ManySortedSet of I
@@ -120,8 +198,8 @@ theorem :: PRE_CIRC:8
     F being ManySortedFunction of (I --> A), B
     holds dom commute F = A;
 
-scheme
-  LambdaRecCorrD {D() -> non empty set,
+scheme :: PRE_CIRC:sch 3
+ LambdaRecCorrD {D() -> non empty set,
                   A() -> Element of D(),
                   F(Nat, Element of D()) -> Element of D() } :
     (ex f being Function of NAT, D() st f.0 = A()
@@ -129,26 +207,66 @@ scheme
       & for f1, f2 being Function of NAT, D() st (f1.0 = A()
           & for i being Nat holds f1.(i+1) = F(i, f1.i))
           & (f2.0 = A() & for i being Nat holds f2.(i+1) = F(i,f2.i))
-          holds f1 = f2;
+          holds f1 = f2
+proof
+    deffunc G(Nat,Element of D()) = F($1,$2);
+    thus ex f being Function of NAT, D() st f.0 = A()
+      & for i being Nat holds f.(i+1) = G(i,f.i) from RECDEF_1:sch 4;
+     let f1, f2 be Function of NAT, D() such that
+A1:   f1.0 = A() & for i being Nat holds f1.(i+1) = G(i,f1.i) and
+A2:   f2.0 = A() & for i being Nat holds f2.(i+1) = G(i,f2.i);
+     thus f1 = f2 from RECDEF_1:sch 12(A1,A2);
+    end;
 
-scheme
-  LambdaMSFD{J() -> non empty set, I() -> Subset of J(),
+scheme :: PRE_CIRC:sch 4
+ LambdaMSFD{J() -> non empty set, I() -> Subset of J(),
     A, B() -> ManySortedSet of I(), F(set) -> set } :
     ex f being ManySortedFunction of A(), B() st
       for i being Element of J() st i in I() holds f.i = F(i)
   provided
   for i being Element of J() st i in I()
-     holds F(i) is Function of A().i, B().i;
+     holds F(i) is Function of A().i, B().i
+proof
+      deffunc G(set) = F($1);
+      consider f being ManySortedSet of I() such that
+A2:     for i st i in I() holds f.i = G(i) from MSUALG_1:sch 2;
+        f is Function-yielding
+       proof let i;
+        assume i in dom f;
+         then A3:       i in I() by PBOOLE:def 3;
+         then F(i) is Function by A1;
+        hence thesis by A2,A3;
+       end;
+      then reconsider f as ManySortedFunction of I();
+        f is ManySortedFunction of A(), B()
+       proof let i;
+        assume
+A4:      i in I();
+         then F(i) is Function of A().i, B().i by A1;
+        hence thesis by A2,A4;
+       end;
+      then reconsider f as ManySortedFunction of A(), B();
+     take f;
+     thus thesis by A2;
+    end;
 
-definition
+registration
   let F be non-empty Function, f be Function;
   cluster F * f -> non-empty;
+  coherence
+    proof
+      rng(F*f) c= rng F by RELAT_1:45;
+      hence not {} in rng(F*f) by RELAT_1:def 9;
+    end;
 end;
 
-definition
+
+registration
   let I be set, MSS be non-empty ManySortedSet of I;
   cluster -> Function-like Relation-like Element of (product MSS);
+  coherence;
 end;
+
 
 theorem :: PRE_CIRC:9
     for I being set, f being non-empty ManySortedSet of I, g being Function,
@@ -181,24 +299,44 @@ reserve T,T1 for finite Tree,
         t,p for Element of T,
         t1 for Element of T1;
 
-definition
+registration
   let D be non empty set;
   cluster -> finite Element of FinTrees D;
+  coherence
+    proof
+      let t be Element of FinTrees D;
+        dom t is finite;
+      hence t is finite by AMI_1:21;
+    end;
 end;
 
-definition
+
+registration
   let T be finite DecoratedTree, t be Element of dom T;
   cluster T|t -> finite;
+  coherence
+    proof
+       dom(T|t) = (dom T)|t by TREES_2:def 11;
+     hence thesis by AMI_1:21;
+    end;
 end;
+
 
 theorem :: PRE_CIRC:13
   T|p,{ t : p is_a_prefix_of t } are_equipotent;
 
-definition
+registration
   let T be finite DecoratedTree, t be Element of dom T;
   let T1 be finite DecoratedTree;
   cluster T with-replacement (t,T1) -> finite;
+  coherence
+    proof
+        dom (T with-replacement (t,T1)) =
+        dom T with-replacement (t,dom T1) by TREES_2:def 12;
+     hence thesis by AMI_1:21;
+    end;
 end;
+
 
 theorem :: PRE_CIRC:14
   T with-replacement (p,T1) =
@@ -248,9 +386,15 @@ theorem :: PRE_CIRC:23
     p being Element of dom T
     holds card(T with-replacement (p,T1)) + card (T|p) = card T + card T1;
 
-definition let x be set;
+registration let x be set;
  cluster root-tree x -> finite;
+ coherence
+  proof
+      root-tree x = {[{},x]} by TREES_4:6;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: PRE_CIRC:24
    for x being set

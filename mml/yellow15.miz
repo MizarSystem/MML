@@ -42,7 +42,7 @@ begin  :: Preliminaries
    provided
     A1: for i be Nat st i in Seg i() holds
      (C[i] implies F(i) in D()) & (not C[i] implies G(i) in D())
-   proof
+proof
      defpred c[set] means C[$1];
      deffunc f(set) = F($1);
      deffunc g(set) = G($1);
@@ -51,7 +51,8 @@ begin  :: Preliminaries
     consider p be Function of Seg i(),D() such that
      A3: for x be set st x in Seg i() holds
      (c[x] implies p.x = f(x)) & (not c[x] implies p.x = g(x))
-                                                           from Lambda1C(A2);
+                                                           from FUNCT_2:sch 9
+(A2);
     A4: dom p = Seg i() by FUNCT_2:def 1;
     then reconsider p as FinSequence by FINSEQ_1:def 2;
       rng p c= D() by RELSET_1:12;
@@ -71,10 +72,12 @@ begin  :: Preliminaries
    end;
   end;
 
-  definition
+
+  registration
    cluster BOOLEAN -> finite;
    coherence by MARGREL1:def 12;
   end;
+
 
 canceled;
 
@@ -94,15 +97,19 @@ canceled;
        hence (i |-> D).x is finite by FINSEQ_2:70;
       end;
       hence i-tuples_on D is finite by A1,MSSCYC_1:1;
+     end;
      suppose A2: D is empty;
         now per cases;
        suppose i <> 0;
         hence i-tuples_on D is finite by A2,CATALG_1:7;
+       end;
        suppose i = 0;
         then i-tuples_on D = { <*>D } by FINSEQ_2:112;
         hence i-tuples_on D is finite;
       end;
+      end;
       hence i-tuples_on D is finite;
+   end;
    end;
 
   theorem Th3:
@@ -116,13 +123,14 @@ canceled;
     hence S is finite by FINSET_1:13;
    end;
 
-  definition
+  registration
    let T be finite set;
    cluster -> finite Subset-Family of T;
    coherence by Th3;
   end;
 
-  definition
+
+  registration
    let T be finite 1-sorted;
    cluster -> finite Subset-Family of T;
    coherence
@@ -131,6 +139,7 @@ canceled;
     hence thesis by Th3;
    end;
   end;
+
 
   theorem Th4:
    for X be non trivial set
@@ -172,7 +181,7 @@ begin  :: Components
    proof deffunc F(Nat) = IFEQ(q.$1,TRUE,p.$1,X\p.$1);
     consider r be FinSequence such that
      A1: len r = len p and
-     A2: for i be Nat st i in Seg len p holds r.i = F(i) from SeqLambda;
+     A2: for i be Nat st i in Seg len p holds r.i = F(i) from FINSEQ_1:sch 2;
       rng r c= bool X
     proof
      let z be set;
@@ -187,10 +196,12 @@ begin  :: Components
       suppose q.i = TRUE;
        then z = p.i by A6,CQC_LANG:def 1;
        hence z in bool X by A7,FINSEQ_2:13;
+      end;
       suppose q.i <> TRUE;
        then z = X\p.i by A6,CQC_LANG:def 1;
        then z c= X by XBOOLE_1:36;
        hence z in bool X;
+     end;
      end;
      hence z in bool X;
     end;
@@ -215,6 +226,7 @@ begin  :: Components
     hence r1 = r2 by A8,A10,FINSEQ_2:10;
    end;
   end;
+
 
   theorem Th5:
    for X be set
@@ -247,12 +259,14 @@ begin  :: Components
      suppose i in dom p;
       hence MergeSequence(p,q).i = IFEQ(q.i,TRUE,p.i,X\p.i) by Def1
          .= p.i by A1,CQC_LANG:def 1;
+     end;
      suppose A2: not i in dom p;
         dom p = Seg len p by FINSEQ_1:def 3
            .= Seg len MergeSequence(p,q) by Def1
            .= dom MergeSequence(p,q) by FINSEQ_1:def 3;
       hence MergeSequence(p,q).i = {} by A2,FUNCT_1:def 4
          .= p.i by A2,FUNCT_1:def 4;
+    end;
     end;
     hence thesis;
    end;
@@ -476,13 +490,14 @@ begin  :: Components
     hence thesis by SETFAM_1:def 7;
    end;
 
-definition
+registration
  cluster -> boolean-valued FinSequence of BOOLEAN;
  coherence
   proof let f be FinSequence of BOOLEAN;
    thus rng f c= BOOLEAN by FINSEQ_1:def 4;
   end;
 end;
+
 
   definition
    let X be set;
@@ -525,7 +540,7 @@ end;
      A9: rng p2 = Y and
      A10: C2 = { Intersect (rng MergeSequence(p2,q)) where
       q is FinSequence of BOOLEAN : len q = len p2 } by A4;
-      now 
+      now
       A12: p1 is one-to-one by A5,A6,FINSEQ_4:77;
       A13: p2 is one-to-one by A8,A9,FINSEQ_4:77;
         now let P be Subset of X;
@@ -597,6 +612,7 @@ end;
               .= (id(rng p1)*p1).j by A6,A9,A13,FUNCT_1:61
               .= p1.j by FUNCT_1:42
               .= z by A32,A40,Th6;
+          end;
           suppose not q.j = TRUE;
            then A41: q.j = FALSE by MARGREL1:39;
            hence MergeSequence(p2,q1).((p2"*p1).j) =
@@ -606,6 +622,7 @@ end;
               .= X\(id(rng p1)*p1).j by A6,A9,A13,FUNCT_1:61
               .= X\p1.j by FUNCT_1:42
               .= z by A32,A34,A41,Th7;
+         end;
          end;
          hence z in rng MergeSequence(p2,q1) by A37,FUNCT_1:def 5;
         end;
@@ -638,6 +655,7 @@ end;
               .= (id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:61
               .= p2.j by FUNCT_1:42
               .= z by A43,A51,Th6;
+          end;
           suppose not q1.j = TRUE;
            then A52: q1.j = FALSE by MARGREL1:39;
            hence MergeSequence(p1,q).((p1"*p2).j) = X\p1.pj by A47,A50,Th7
@@ -646,6 +664,7 @@ end;
               .= X\(id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:61
               .= X\p2.j by FUNCT_1:42
               .= z by A43,A45,A52,Th7;
+         end;
          end;
          hence z in rng MergeSequence(p1,q) by A48,FUNCT_1:def 5;
         end;
@@ -721,6 +740,7 @@ end;
               .= (id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:61
               .= p2.j by FUNCT_1:42
               .= z by A71,A79,Th6;
+          end;
           suppose not q.j = TRUE;
            then A80: q.j = FALSE by MARGREL1:39;
            hence MergeSequence(p1,q1).((p1"*p2).j) =
@@ -730,6 +750,7 @@ end;
               .= X\(id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:61
               .= X\p2.j by FUNCT_1:42
               .= z by A71,A73,A80,Th7;
+         end;
          end;
          hence z in rng MergeSequence(p1,q1) by A76,FUNCT_1:def 5;
         end;
@@ -762,6 +783,7 @@ end;
               .= (id(rng p1)*p1).j by A6,A9,A13,FUNCT_1:61
               .= p1.j by FUNCT_1:42
               .= z by A82,A90,Th6;
+          end;
           suppose not q1.j = TRUE;
            then A91: q1.j = FALSE by MARGREL1:39;
            hence MergeSequence(p2,q).((p2"*p1).j) = X\p2.pj by A86,A89,Th7
@@ -770,6 +792,7 @@ end;
               .= X\(id(rng p1)*p1).j by A6,A9,A13,FUNCT_1:61
               .= X\p1.j by FUNCT_1:42
               .= z by A82,A84,A91,Th7;
+         end;
          end;
          hence z in rng MergeSequence(p2,q) by A87,FUNCT_1:def 5;
         end;
@@ -784,7 +807,8 @@ end;
    end;
   end;
 
-  definition
+
+  registration
    let X be set;
    let Y be finite Subset-Family of X;
    cluster Components(Y) -> finite;
@@ -798,7 +822,7 @@ end;
     A2: len p-tuples_on BOOLEAN is finite by Th2;
      deffunc F(Element of BOOLEAN*) = Intersect (rng MergeSequence(p,$1));
     A3: { F(q) where q is Element of BOOLEAN* :
-     q in len p-tuples_on BOOLEAN } is finite from FraenkelFin(A2);
+     q in len p-tuples_on BOOLEAN } is finite from FRAENKEL:sch 21(A2);
       Components(Y) c= { Intersect (rng MergeSequence(p,q))
      where q is Element of BOOLEAN* : q in len p-tuples_on BOOLEAN }
     proof
@@ -815,6 +839,7 @@ end;
     hence thesis by A3,FINSET_1:13;
    end;
   end;
+
 
   theorem Th17:
    for X be set
@@ -879,7 +904,7 @@ end;
       A7: V = Intersect (rng MergeSequence(p,q)) and
       A8: len q = len p by A4;
      A9: p is one-to-one by A2,A3,FINSEQ_4:77;
-       now 
+       now
        A11: p1 is FinSequence of rng p by A1,A3,A5,FINSEQ_1:def 4;
          dom p = dom q by A8,FINSEQ_3:31;
        then A12: q is Function of dom p,BOOLEAN by FINSEQ_2:30;
@@ -931,6 +956,7 @@ end;
            .= ((id rng p)*p1).i by A9,FUNCT_1:61
            .= p1.i by A22,A23,FUNCT_2:23
            .= z by A16,A21,A26,Th6;
+       end;
        suppose q.j <> TRUE;
         then A27: q.j = FALSE by MARGREL1:39;
         hence MergeSequence(p,q).j = X\p.j by A24,Th7
@@ -939,6 +965,7 @@ end;
            .= X\((id rng p)*p1).i by A9,FUNCT_1:61
            .= X\p1.i by A22,A23,FUNCT_2:23
            .= z by A16,A17,A21,A27,Th7;
+      end;
       end;
         j in dom MergeSequence(p,q) by A20,Th5;
       hence z in rng MergeSequence(p,q) by A25,FUNCT_1:def 5;
@@ -986,10 +1013,12 @@ end;
        suppose A10: z in p.i;
         then q.i = TRUE by A5,A6,A9;
         hence z in Z by A7,A10,Th6;
+       end;
        suppose A11: not z in p.i;
         then q.i = FALSE by A5,A6,A9;
         then MergeSequence(p,q).i = X\p.i by A6,A8,Th7;
         hence z in Z by A1,A7,A11,XBOOLE_0:def 4;
+      end;
       end;
       hence z in Z;
      end;
@@ -1049,6 +1078,7 @@ end;
         hence contradiction by A11,A12,XBOOLE_0:def 4;
        end;
        hence MergeSequence(p,q1).i = MergeSequence(p,q2).i by A12,Th6;
+      end;
       suppose not q1.i = TRUE;
        then q1.i = FALSE by MARGREL1:39;
        then A13: MergeSequence(p,q1).i = X\p.i by A10,Th7;
@@ -1061,6 +1091,7 @@ end;
        end;
        hence MergeSequence(p,q1).i = MergeSequence(p,q2).i by A10,A13,Th7;
      end;
+     end;
      hence MergeSequence(p,q1).i = MergeSequence(p,q2).i;
     end;
     hence contradiction by A3,A5,A6,A9,FINSEQ_2:10;
@@ -1072,6 +1103,7 @@ end;
    attr Y is in_general_position means :Def3:
     not {} in Components(Y);
   end;
+
 
   theorem
      for X be set
@@ -1178,6 +1210,7 @@ end;
            .= (p1*(p1"*p)).i by RELAT_1:55
            .= p1.j by A27,FUNCT_1:23
            .= MergeSequence(p1,q1).j by A33,A34,Th6;
+       end;
        suppose not q.i = TRUE;
         then A35: q.i = FALSE by MARGREL1:39;
         hence z = X\p.i by A25,A26,Th7
@@ -1186,6 +1219,7 @@ end;
            .= X\(p1*(p1"*p)).i by RELAT_1:55
            .= X\p1.j by A27,FUNCT_1:23
            .= MergeSequence(p1,q1).j by A32,A33,A35,Th7;
+      end;
       end;
       hence z in rng MergeSequence(p1,q1) by A30,FUNCT_1:def 5;
      end;
@@ -1258,11 +1292,12 @@ begin  :: About basis of Topological Spaces
     hence [#]L is with_top by WAYBEL23:def 9;
    end;
 
-  definition
+  registration
    let L be non empty RelStr;
    cluster [#]L -> infs-closed sups-closed with_bottom with_top;
    coherence by Th24,Th25;
   end;
+
 
   theorem
      for L be continuous sup-Semilattice holds
@@ -1318,8 +1353,10 @@ begin  :: About basis of Topological Spaces
        now per cases;
       suppose rng p is empty;
        hence ex_sup_of rng p,L by YELLOW_0:42;
+      end;
       suppose rng p is non empty;
        hence ex_sup_of rng p,L by A4,YELLOW_0:54;
+     end;
      end;
      then "\/"(rng p,L) in { "\/"(Y,L) where Y is finite Subset of B1 :
       ex_sup_of Y,L} by A3;
@@ -1329,7 +1366,7 @@ begin  :: About basis of Topological Spaces
      thus thesis;
     end;
     consider f be Function of B1*,finsups B1 such that
-     A5: for p be Element of B1* holds P[p, f.p] from FuncExD(A2);
+     A5: for p be Element of B1* holds P[p, f.p] from FUNCT_2:sch 3(A2);
       B c= finsups B
     proof
      let z be set;
@@ -1387,7 +1424,7 @@ begin  :: About basis of Topological Spaces
      thus u = [#]T \ Cl {e};
     end;
     consider f be Function of the carrier of T, the topology of T such that
-     A2: for e be Element of T holds P[e, f.e] from FuncExD(A1);
+     A2: for e be Element of T holds P[e, f.e] from FUNCT_2:sch 3(A1);
     A3: dom f = the carrier of T &
         rng f c= the topology of T by FUNCT_2:def 1,RELSET_1:12;
       f is one-to-one
@@ -1457,6 +1494,7 @@ begin  :: About basis of Topological Spaces
        now per cases;
       suppose q.i = TRUE;
        hence MergeSequence(p,q).i = b by A17,Th6;
+      end;
       suppose not q.i = TRUE;
        then q.i = FALSE by MARGREL1:39;
        then A19: MergeSequence(p,q).i = (the carrier of T) \ b
@@ -1464,6 +1502,7 @@ begin  :: About basis of Topological Spaces
          MergeSequence(p,q).i in rng MergeSequence(p,q) by A18,FUNCT_1:def 5;
        then Y c= (the carrier of T) \ b by A14,A19,MSSUBFAM:2;
        hence MergeSequence(p,q).i = b by A5,A11,XBOOLE_0:def 4;
+     end;
      end;
      then b in rng MergeSequence(p,q) by A18,FUNCT_1:def 5;
      hence z in b by A14,A15,CANTOR_1:10;
@@ -1505,11 +1544,13 @@ begin  :: About basis of Topological Spaces
       then Y meets X by XBOOLE_0:4;
       then X c= Y by A3,A8,Th30;
       hence contradiction by A6,A10;
+     end;
      suppose A11: y in Y & not x in Y;
       then y in Y /\ X by A6,XBOOLE_0:def 3;
       then Y meets X by XBOOLE_0:4;
       then X c= Y by A3,A8,Th30;
       hence contradiction by A5,A11;
+    end;
     end;
     hence contradiction;
    end;
@@ -1550,7 +1591,7 @@ begin  :: About basis of Topological Spaces
       the carrier of T is finite by A1,GROUP_1:def 13;
     then reconsider tT = the topology of T as finite non empty set by Th3;
     defpred P[set] means x in $1; deffunc F(set) = $1;
-      { F(A) where A is Element of tT : P[A] } is finite from FraenkelFinIm;
+      { F(A) where A is Element of tT : P[A] } is finite from PRE_CIRC:sch 1;
     then A5: meet sfA is open by A4,TOPS_2:27;
       the carrier of T is Element of the topology of T by PRE_TOPC:def 1;
     then A6: the carrier of T in sfA;

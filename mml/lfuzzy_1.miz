@@ -1,6 +1,6 @@
 :: Transitive Closure of Fuzzy Relations
 ::  by Takashi Mitsuishi and Grzegorz Bancerek
-:: 
+::
 :: Received November 23, 2003
 :: Copyright (c) 2003 Association of Mizar Users
 
@@ -36,26 +36,33 @@ Th7:
 for a,b,c,d being real number st a <= b & c <= d holds min(a,c) <= min(b,d)
   proof
    let a,b,c,d be real number;
-   assume 
+   assume
 A1:a <= b & c <= d;
    reconsider a,b,c,d as Element of REAL by XREAL_0:def 1;
    a <= b & c <= d by A1;
    hence thesis by FUZZY_1:44;
   end;
 
-definition
+registration
   let X be non empty set;
   cluster -> real-yielding Membership_Func of X;
   coherence;
 end;
 
+
 definition
   let f,g be real-yielding Function;
   pred f is_less_than g means:Def0:
    dom f c= dom g &
-   for x being set st x in dom f holds f.x <= g.x;   
+   for x being set st x in dom f holds f.x <= g.x;
 end;
 
+
+notation
+ let X be non empty set;
+ let f,g be Membership_Func of X;
+ synonym f c= g for f is_less_than g ;
+end;
 definition
  let X be non empty set;
  let f,g be Membership_Func of X;
@@ -67,24 +74,24 @@ definition
     proof
      hereby assume
 AA:     f is_less_than g;
-     thus for x being Element of X holds f.x <= g.x 
+     thus for x being Element of X holds f.x <= g.x
       proof
        let x be Element of X;
-       dom f = X by FUZZY_1:def 1;      
+       dom f = X by FUZZY_1:def 1;
        hence thesis by AA,Def0;
       end;
      end;
-     assume 
+     assume
 A4:  for x being Element of X holds f.x <= g.x;
 A3:  dom f = X & dom g = X by FUZZY_1:def 1;
      for x being set st x in dom f holds f.x <= g.x by A4;
      hence f is_less_than g by A3,Def0;
     end;
   end;
-  synonym f c= g;
-end;
+  end;
 
-definition                        
+
+definition
  let X,Y be non empty set;
  let f,g be RMembership_Func of X,Y;
  redefine pred f is_less_than g means :Def2:
@@ -104,7 +111,7 @@ AA:  f is_less_than g;
        hence thesis by AA,Def0;
       end;
      end;
-     assume 
+     assume
  A4: for x being Element of X, y being Element of Y holds f. [x,y] <= g. [x,y];
  A3: dom f = [:X,Y:] & dom g = [:X,Y:] by FUZZY_1:def 1;
      for c being set st c in dom f holds f.c <= g.c
@@ -112,7 +119,7 @@ AA:  f is_less_than g;
        let c be set;
        assume
  A:    c in dom f;
-       consider x,y being set such that  
+       consider x,y being set such that
  A6:   [x,y] = c by A, ZFMISC_1:102;
        reconsider x as Element of X by ZFMISC_1:106,A6,A;
        reconsider y as Element of Y by ZFMISC_1:106,A6,A;
@@ -124,8 +131,9 @@ AA:  f is_less_than g;
   end;
 end;
 
+
 theorem Th1_0:
-  for R,S being Membership_Func of X 
+  for R,S being Membership_Func of X
    st for x being Element of X holds R.x = S.x
    holds R = S
     proof
@@ -135,7 +143,7 @@ A5:   for x being Element of X holds R.x = S.x;
 A4:   dom R = X & dom S = X by FUZZY_1:def 1;
       for x being Element of X st x in dom R holds R.x = S.x by A5;
       hence R = S by A4,PARTFUN1:34;
-    end; 
+    end;
 
 theorem Th1:
 for R,S being RMembership_Func of X,Y
@@ -157,7 +165,7 @@ Z1:     [x,y] in dom R;
      hence thesis;
     end;
    hence R = S by A4,PARTFUN1:35;
-  end; 
+  end;
 
 theorem FUZZY13:
   for R,S being Membership_Func of X holds
@@ -217,7 +225,7 @@ AS:   R c= S & T c= U;
       for c being Element of [:X,Z:] holds (R(#)T).c <= (S(#)U).c
         proof
           let c be Element of [:X,Z:];
-          consider x,z being set such that 
+          consider x,z being set such that
 A3:       [x,z] = c by ZFMISC_1:102;
 A1:       x in X & z in Z by ZFMISC_1:106,A3;
           for y be set st y in Y holds
@@ -241,6 +249,7 @@ definition
   redefine func max(f,g);
   commutativity by FUZZY_1:7;
 end;
+
 
 theorem
  for f,g being Membership_Func of X holds min(f,g) c= f
@@ -267,6 +276,7 @@ definition
    Imf(X,X) c= R;
 end;
 
+
 definition
  let X be non empty set;
  let R be RMembership_Func of X,X;
@@ -281,26 +291,28 @@ A3:    Imf(X,X) c= R by Def3;
     thus for x being Element of X holds R. [x,x] = 1
      proof
       let x be Element of X;
-      Imf(X,X). [x,x] <= R. [x,x] & Imf(X,X). [x,x] = 1 
+      Imf(X,X). [x,x] <= R. [x,x] & Imf(X,X). [x,x] = 1
         by Def2,A3,FUZZY_4:def 6;
       then
       R. [x,x] <= 1 & R. [x,x] >= 1 by FUZZY_4:4;
       hence thesis by AXIOMS:21;
      end;
     end;
-    assume 
+    assume
 A0: for x being Element of X holds R. [x,x] = 1;
     for x,y being Element of X holds Imf(X,X). [x,y] <= R. [x,y]
        proof
         let x,y be Element of X;
         per cases;
-        suppose 
+        suppose
 A1:     x = y;
 A2:     Imf(X,X). [x,y] = 1 by A1,FUZZY_4:def 6;
         thus thesis by A1,A2,A0;
+        end;
         suppose not x=y;then
-        Imf(X,X). [x,y] = 0 by FUZZY_4:def 6;    
-        hence thesis by FUZZY_4:4;    
+        Imf(X,X). [x,y] = 0 by FUZZY_4:def 6;
+        hence thesis by FUZZY_4:4;
+       end;
        end;
       then Imf(X,X) c= R by Def2;
      hence R is reflexive by Def3;
@@ -308,12 +320,14 @@ A2:     Imf(X,X). [x,y] = 1 by A1,FUZZY_4:def 6;
  end;
 end;
 
+
 definition
  let X be non empty set;
  let R be RMembership_Func of X,X;
  attr R is symmetric means :Def5:
   converse R = R;
 end;
+
 
 definition
  let X be non empty set;
@@ -328,8 +342,8 @@ definition
    converse R = R by Def5;
    hence for x,y being Element of X holds R. [x,y] = R. [y,x]
    by FUZZY_4:def 1;
-   end;      
-   assume 
+   end;
+   assume
 A3:for x,y being Element of X holds R. [x,y] = R. [y,x];
 A4:dom converse R = [:X,X:] & dom R = [:X,X:] by FUZZY_1:def 1;
    for x,y being set st [x,y] in dom R holds (converse R). [x,y] = R. [x,y]
@@ -346,6 +360,7 @@ A4:dom converse R = [:X,X:] & dom R = [:X,X:] by FUZZY_1:def 1;
   end;
 end;
 
+
 definition
  let X be non empty set;
  let R be RMembership_Func of X,X;
@@ -353,12 +368,13 @@ definition
   R (#) R c= R;
 end;
 
+
 Th2:
   for X,Y,Z being non empty set
   for R being RMembership_Func of X,Y
   for S being RMembership_Func of Y,Z
   for x being Element of X, z being Element of Z
-   holds  
+   holds
    rng min(R,S,x,z) =
          {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction} &
    rng min(R,S,x,z) <> {}
@@ -379,7 +395,7 @@ C2:  Y = dom min(R,S,x,z)
        consider y being Element of Y such that
 C9:    c = R. [x,y] "/\" S. [y,z];
        c   = min(R. [x,y], S. [y,z] qua real number) by LFUZZY_0:5,C9
-        .= min(R,S,x,z).y by FUZZY_4:def 3;          
+        .= min(R,S,x,z).y by FUZZY_4:def 3;
        hence c in rng min(R,S,x,z) by C2,PARTFUN1:27;
        end;
        assume c in rng min(R,S,x,z);then
@@ -400,7 +416,7 @@ C3:    y in dom min(R,S,x,z) & c = min(R,S,x,z).y by PARTFUN1:26;
          end;
         hence thesis;
        end;
-    end;    
+    end;
 
 definition
  let X be non empty set;
@@ -409,29 +425,29 @@ definition
   for x,y,z being Element of X holds R. [x,y] "/\" R. [y,z] <<= R. [x,z];
  compatibility
   proof
-   thus R is transitive iff 
+   thus R is transitive iff
    for x,y,z being Element of X holds R. [x,y] "/\" R. [y,z] <<= R. [x,z]
     proof
      hereby assume
      R is transitive;then
 AS:     R (#) R c= R by Def7;
-     thus 
+     thus
      for x,y,z being Element of X holds R. [x,y] "/\" R. [y,z] <<= R. [x,z]
       proof
-       let x,y,z be Element of X;       
-       R. [x,y] "/\" R. [y,z] in {R. [x,y'] "/\" R. [y',z] 
+       let x,y,z be Element of X;
+       R. [x,y] "/\" R. [y,z] in {R. [x,y'] "/\" R. [y',z]
          where y' is Element of X: not contradiction};then
-       R. [x,y] "/\" R. [y,z] <<= 
-         "\/"({R. [x,y'] "/\" R. [y',z] where y' is Element of X: 
+       R. [x,y] "/\" R. [y,z] <<=
+         "\/"({R. [x,y'] "/\" R. [y',z] where y' is Element of X:
            not contradiction}, RealPoset [. 0,1 .]) by YELLOW_2:24;
-       then 
+       then
        R. [x,y] "/\" R. [y,z] <<= (R (#) R). [x,z] by LFUZZY_0:22;
        then
        R. [x,y] "/\" R. [y,z] <= (R (#) R). [x,z] &
        (R (#) R). [x,z] <= R. [x,z] by LFUZZY_0:3,AS,Def2;
        then
-       R. [x,y] "/\" R. [y,z] <= R. [x,z] by AXIOMS:22;       
-       hence thesis by LFUZZY_0:3;      
+       R. [x,y] "/\" R. [y,z] <= R. [x,z] by AXIOMS:22;
+       hence thesis by LFUZZY_0:3;
       end;
      end;
      assume
@@ -457,11 +473,12 @@ A4:      r = R. [x,y] "/\" R. [y,z];
         end;
        then
        upper_bound W <= R. [x,z] by A3,TOPMETR3:1;
-       hence thesis by  FUZZY_4:def 4;        
+       hence thesis by  FUZZY_4:def 4;
       end;
     end;
   end;
 end;
+
 
 definition
   let X be non empty set;
@@ -471,6 +488,7 @@ definition
      R. [x,y] <> 0 & R. [y,x] <> 0 implies x = y;
 end;
 
+
 definition
  let X be non empty set;
  let R be RMembership_Func of X,X;
@@ -479,16 +497,17 @@ definition
    R. [x,y] <> 0 & x <> y implies R. [y,x] = 0;
 compatibility
   proof
-    (for x,y being Element of X holds 
+    (for x,y being Element of X holds
        R. [x,y] <> 0 & x <> y implies R. [y,x] = 0)
     implies
-     for x,y being Element of X holds 
+     for x,y being Element of X holds
        R. [x,y] <> 0 & R. [y,x] <> 0 implies x = y;
     hence thesis by Def9;
   end;
 end;
 
-definition
+
+registration
  let X;
  cluster Imf(X,X) -> symmetric transitive reflexive antisymmetric;
  coherence
@@ -501,13 +520,15 @@ definition
 A1:     x=y;
         thus Imf(X,X). [x,y]
         = Imf(X,X). [y,x] by A1;
+        end;
         suppose
 A2:     not x=y;
         thus Imf(X,X). [x,y]
         = 0 by FUZZY_4:def 6,A2
-        .= Imf(X,X). [y,x] by A2,FUZZY_4:def 6;        
+        .= Imf(X,X). [y,x] by A2,FUZZY_4:def 6;
     end;
-   thus Imf(X,X) is transitive 
+    end;
+   thus Imf(X,X) is transitive
     proof
         let x,y,z be Element of X;
         per cases;
@@ -523,7 +544,8 @@ A11:     x = y;
          .= 1 by FUZZY_4:def 6, A11, A1;then
          Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
          <= Imf(X,X). [x,z] by FUZZY_4:def 6,A1;
-         hence thesis by LFUZZY_0:3;         
+         hence thesis by LFUZZY_0:3;
+         end;
          suppose
 A12:     not x=y;
            Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
@@ -535,6 +557,8 @@ A12:     not x=y;
            Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
          by FUZZY_4:def 6,A1;
            hence thesis by LFUZZY_0:3;
+        end;
+        end;
         end;
         suppose
 A2:     not x=z;
@@ -551,6 +575,7 @@ A21:       x=y;
            Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
          by FUZZY_4:def 6,A2;
            hence thesis by LFUZZY_0:3;
+           end;
            suppose
 A22:       x <> y;
            thus thesis
@@ -566,6 +591,7 @@ A221:         y=z;
               Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
             by FUZZY_4:def 6,A2;
               hence thesis by LFUZZY_0:3;
+              end;
               suppose
 A222:         y <> z;
               Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
@@ -576,19 +602,23 @@ A222:         y <> z;
               Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
             by FUZZY_4:def 6,A2;
               hence thesis by LFUZZY_0:3;
-            end;         
+            end;
+            end;
          end;
+         end;
+    end;
     end;
    thus Imf(X,X) is reflexive
     proof
      thus for x being Element of X holds Imf(X,X). [x,x] = 1 by FUZZY_4:def 6;
     end;
-   thus for x,y being Element of X holds 
+   thus for x,y being Element of X holds
     Imf(X,X). [x,y] <> 0 & x <> y implies Imf(X,X). [y,x] = 0 by FUZZY_4:def 6;
   end;
 end;
 
-definition
+
+registration
  let X;
  cluster reflexive transitive symmetric antisymmetric RMembership_Func of X,X;
  existence
@@ -597,8 +627,9 @@ definition
   end;
 end;
 
+
 theorem Th4:
-for R,S being RMembership_Func of X,X holds 
+for R,S being RMembership_Func of X,X holds
 R is symmetric & S is symmetric implies converse min(R,S) = min(R,S)
  proof
   let R,S be RMembership_Func of X,X;
@@ -608,8 +639,8 @@ thus thesis by A1,FUZZY_4:11;
  end;
 
 theorem Th5:
-for R,S being RMembership_Func of X,X holds 
-R is symmetric & S is symmetric implies converse max(R,S) = max(R,S) 
+for R,S being RMembership_Func of X,X holds
+R is symmetric & S is symmetric implies converse max(R,S) = max(R,S)
  proof
   let R,S be RMembership_Func of X,X;
   assume R is symmetric & S is symmetric;then
@@ -617,7 +648,7 @@ A1:converse R = R & converse S =S by Def5;
   thus thesis by FUZZY_4:9,A1;
  end;
 
-definition
+registration
   let X;
   let R,S be symmetric RMembership_Func of X,X;
   cluster min(R,S) -> symmetric;
@@ -634,6 +665,7 @@ definition
    end;
 end;
 
+
 theorem Th6:
 for R,S being RMembership_Func of X,X holds
 R is transitive & S is transitive implies min(R,S) (#) min(R,S) c= min(R,S)
@@ -644,39 +676,39 @@ Z1:   R(#)R c= R & S(#)S c= S by Def7;
      let x be Element of X, y be Element of X;
 A2:  (min(R,S) (#) min(R,S)). [x,y]
        <= min(min(R,S) (#) R, min(R,S) (#) S). [x,y] by FUZZY_4:23;
-     min(min(R,S) (#) R, min(R,S) (#) S). [x,y] 
-     = min((min(R,S) (#) R). [x,y], (min(R,S) (#) S). [x,y]) &     
+     min(min(R,S) (#) R, min(R,S) (#) S). [x,y]
+     = min((min(R,S) (#) R). [x,y], (min(R,S) (#) S). [x,y]) &
      (min(R,S) (#) R). [x,y] <= min(R(#)R, S(#)R). [x,y] &
-     (min(R,S) (#) S). [x,y] <= min(R(#)S, S(#)S). [x,y] 
+     (min(R,S) (#) S). [x,y] <= min(R(#)S, S(#)S). [x,y]
            by FUZZY_1:def 5,FUZZY_4:25;
      then
-     min(min(R,S) (#) R, min(R,S) (#) S). [x,y] 
+     min(min(R,S) (#) R, min(R,S) (#) S). [x,y]
      <= min(min(R(#)R, S(#)R). [x,y],min(R(#)S, S(#)S). [x,y]) by Th7;
      then
-A4:     (min(R,S) (#) min(R,S)). [x,y] 
-     <= min(min(R(#)R, S(#)R). [x,y],min(R(#)S, S(#)S). [x,y]) 
+A4:     (min(R,S) (#) min(R,S)). [x,y]
+     <= min(min(R(#)R, S(#)R). [x,y],min(R(#)S, S(#)S). [x,y])
       by A2,AXIOMS:22;
      min(R(#)R, S(#)R). [x,y] = min((R(#)R). [x,y], (S(#)R). [x,y]) &
-     min(R(#)S, S(#)S). [x,y] = min((S(#)S). [x,y], (R(#)S). [x,y]) 
+     min(R(#)S, S(#)S). [x,y] = min((S(#)S). [x,y], (R(#)S). [x,y])
      by FUZZY_1:def 5;
      then
-      min(R(#)R, S(#)R). [x,y] <= (R(#)R). [x,y] & 
+      min(R(#)R, S(#)R). [x,y] <= (R(#)R). [x,y] &
      min(R(#)S, S(#)S). [x,y] <= (S(#)S). [x,y] &
      (R(#)R). [x,y] <= R. [x,y] & (S(#)S). [x,y] <= S. [x,y]
    by Z1,Def2,SQUARE_1:35;
      then
-     min(R(#)R, S(#)R). [x,y] <= R. [x,y] & 
+     min(R(#)R, S(#)R). [x,y] <= R. [x,y] &
      min(R(#)S, S(#)S). [x,y] <= S. [x,y] by AXIOMS:22;
      then
-     min(min(R(#)R, S(#)R). [x,y],min(R(#)S, S(#)S). [x,y]) 
+     min(min(R(#)R, S(#)R). [x,y],min(R(#)S, S(#)S). [x,y])
      <= min(R. [x,y], S. [x,y]) by Th7;
      then
-     (min(R,S) (#) min(R,S)). [x,y] <= min(R. [x,y], S. [x,y]) 
+     (min(R,S) (#) min(R,S)). [x,y] <= min(R. [x,y], S. [x,y])
      by A4,AXIOMS:22;
-     hence thesis by FUZZY_1:def 5;     
+     hence thesis by FUZZY_1:def 5;
   end;
 
-definition
+registration
  let X;
  let R,S be transitive RMembership_Func of X,X;
  cluster min(R,S) -> transitive;
@@ -687,14 +719,16 @@ definition
   end;
 end;
 
+
 definition let A be set, X be non empty set;
 redefine func chi(A,X) -> Membership_Func of X;
-coherence 
+coherence
    proof
-    dom chi(A,X) = X & rng chi(A,X) c= [. 0,1 .] by FUZZY_1:1,FUNCT_3:def 3;   
+    dom chi(A,X) = X & rng chi(A,X) c= [. 0,1 .] by FUZZY_1:1,FUNCT_3:def 3;
     hence chi(A,X) is Membership_Func of X by FUZZY_1:def 1;
    end;
 end;
+
 
 theorem
 for r being Relation of X st r is_reflexive_in X
@@ -707,19 +741,19 @@ A1:r is_reflexive_in X;
     proof
      let x be Element of X;
      [x,x] in r by RELAT_2:def 1,A1;
-     hence thesis by FUNCT_3:def 3;     
+     hence thesis by FUNCT_3:def 3;
     end;
    hence thesis by Def4;
   end;
-  
+
 theorem
 for r being Relation of X st r is antisymmetric
 holds chi(r,[:X,X:]) is antisymmetric
   proof
    let r be Relation of X;
    assume r is antisymmetric;then
-A1:r is_antisymmetric_in field r by RELAT_2:def 12;   
-   for x,y being Element of X holds  
+A1:r is_antisymmetric_in field r by RELAT_2:def 12;
+   for x,y being Element of X holds
    chi(r,[:X,X:]). [x,y] <> 0 & chi(r,[:X,X:]). [y,x] <> 0 implies x = y
     proof
      let x,y be Element of X;
@@ -744,16 +778,18 @@ A2:  (x in field r & y in field r & [x,y] in r implies [y,x] in r) &
      (x in field r & y in field r & [y,x] in r implies [x,y] in r)
                by RELAT_2:def 3,A1;
      per cases;
-     suppose 
+     suppose
 A3:  [x,y] in r;
      chi(r,[:X,X:]). [x,y] = 1 & chi(r,[:X,X:]). [y,x] = 1 by A2,
      RELAT_1:30,A3,FUNCT_3:def 3;
      hence thesis;
+     end;
      suppose
 A4:  not [x,y] in r;
      not [y,x] in r by A2,RELAT_1:30,A4; then
      chi(r,[:X,X:]). [x,y] = 0 & chi(r,[:X,X:]). [y,x] = 0 by A4,FUNCT_3:def 3;
      hence thesis;
+  end;
   end;
 
 theorem
@@ -767,59 +803,65 @@ A1:r is_transitive_in field r by RELAT_2:def 16;
 A2:  x in field r & y in field r & z in field r & [x,y] in r & [y,z] in r
        implies [x,z] in r by RELAT_2:def 8,A1;
       per cases;
-       suppose 
+       suppose
 B1:    [x,y] in r;
        thus thesis
         proof
         per cases;
-         suppose 
+         suppose
 B2:      [y,z] in r;
-         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z] 
-         = min(chi(r,[:X,X:]). [x,y] , chi(r,[:X,X:]). [y,z]) by LFUZZY_0:5 
+         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z]
+         = min(chi(r,[:X,X:]). [x,y] , chi(r,[:X,X:]). [y,z]) by LFUZZY_0:5
          .= min(1,chi(r,[:X,X:]). [y,z]) by B1,FUNCT_3:def 3
          .= min(1,1) by B2,FUNCT_3:def 3
          .= chi(r,[:X,X:]). [x,z] by RELAT_1:30,B1,B2,A2,FUNCT_3:def 3;
          hence thesis by LFUZZY_0:3;
-         suppose 
+         end;
+         suppose
 B3:      not [y,z] in r;
-         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z] 
-         = min(chi(r,[:X,X:]). [x,y] , chi(r,[:X,X:]). [y,z]) by LFUZZY_0:5 
+         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z]
+         = min(chi(r,[:X,X:]). [x,y] , chi(r,[:X,X:]). [y,z]) by LFUZZY_0:5
          .= min(1,chi(r,[:X,X:]). [y,z]) by B1,FUNCT_3:def 3
          .= min(1,0) by B3,FUNCT_3:def 3
          .= 0 by SQUARE_1:def 1;
          then
-         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z] 
+         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z]
             <= chi(r,[:X,X:]). [x,z] by FUZZY_2:1;
          hence thesis by LFUZZY_0:3;
         end;
-       suppose 
+        end;
+       end;
+       suppose
 B4:    not [x,y] in r;
        thus thesis
         proof
         per cases;
-         suppose 
+         suppose
 B5:      [y,z] in r;
-         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z] 
-         = min(chi(r,[:X,X:]). [x,y] , chi(r,[:X,X:]). [y,z]) by LFUZZY_0:5 
+         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z]
+         = min(chi(r,[:X,X:]). [x,y] , chi(r,[:X,X:]). [y,z]) by LFUZZY_0:5
          .= min(0,chi(r,[:X,X:]). [y,z]) by B4,FUNCT_3:def 3
          .= min(0,1) by B5,FUNCT_3:def 3
          .= 0 by SQUARE_1:def 1;
          then
-         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z] 
+         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z]
             <= chi(r,[:X,X:]). [x,z] by FUZZY_2:1;
          hence thesis by LFUZZY_0:3;
-         suppose 
+         end;
+         suppose
 B6:      not [y,z] in r;
-         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z] 
-         = min(chi(r,[:X,X:]). [x,y] , chi(r,[:X,X:]). [y,z]) by LFUZZY_0:5 
+         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z]
+         = min(chi(r,[:X,X:]). [x,y] , chi(r,[:X,X:]). [y,z]) by LFUZZY_0:5
          .= min(0,chi(r,[:X,X:]). [y,z]) by B4,FUNCT_3:def 3
          .= min(0,0) by B6,FUNCT_3:def 3
          .= 0;
          then
-         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z] 
+         chi(r,[:X,X:]). [x,y] "/\" chi(r,[:X,X:]). [y,z]
             <= chi(r,[:X,X:]). [x,z] by FUZZY_2:1;
          hence thesis by LFUZZY_0:3;
-        end;     
+        end;
+        end;
+  end;
   end;
 
 theorem
@@ -836,12 +878,12 @@ theorem
        let x,y be Element of X;
        thus thesis by FUZZY_4:32;
     end;
-   thus Zmf(X,X) is transitive 
+   thus Zmf(X,X) is transitive
     proof
        let x,y,z be Element of X;
-A1:    Zmf(X,X). [x,y] "/\" Zmf(X,X). [y,z] 
+A1:    Zmf(X,X). [x,y] "/\" Zmf(X,X). [y,z]
        = min(Zmf(X,X). [x,y], Zmf(X,X). [y,z]) by LFUZZY_0:5
-       .= min(0, Zmf(X,X). [y,z]) by FUZZY_4:32 
+       .= min(0, Zmf(X,X). [y,z]) by FUZZY_4:32
        .= min(0,0) by FUZZY_4:32
        .= 0;
        Zmf(X,X). [x,z] = 0 by FUZZY_4:32;
@@ -859,7 +901,7 @@ Umf(X,X) is symmetric transitive reflexive
         = 1 by FUZZY_4:31
         .= Umf(X,X). [y,x] by FUZZY_4:31;
     end;
-   thus Umf(X,X) is transitive 
+   thus Umf(X,X) is transitive
     proof
         let x,y,z be Element of X;
         Umf(X,X). [x,y] "/\" Umf(X,X). [y,z]
@@ -896,7 +938,7 @@ for R being RMembership_Func of X,X holds min(R,converse R) is symmetric
    let R be RMembership_Func of X,X;
    set S = min(R,converse R);
    let x,y be Element of X;
-   thus 
+   thus
      S. [x,y] = min(R. [x,y], (converse R). [x,y]) by FUZZY_1:def 5
        .= min(R. [x,y], R. [y,x]) by FUZZY_4:def 1
        .= min((converse R). [y,x], R. [y,x]) by FUZZY_4:def 1
@@ -904,40 +946,40 @@ for R being RMembership_Func of X,X holds min(R,converse R) is symmetric
   end;
 
 theorem
-for R being RMembership_Func of X,X 
+for R being RMembership_Func of X,X
 for R' being RMembership_Func of X,X
  st R' is symmetric & R c= R'
  holds max(R, converse R) c= R'
   proof
    let R be RMembership_Func of X,X;
    let T be RMembership_Func of X,X;
-   assume 
+   assume
 AB0:     T is symmetric & R c= T;
        let x,y be Element of X;
 A6:    R. [x,y] <= T. [x,y] & R. [y,x] <= T. [y,x] by AB0,Def1;
        then
        R. [y,x] <= T. [x,y] by AB0,Def6;
-       then       
+       then
        max(R. [x,y], R. [y,x]) <= T. [x,y] by A6,SQUARE_1:50; then
        max(R. [x,y], (converse R). [x,y]) <= T. [x,y] by FUZZY_4:def 1;
-       hence thesis by FUZZY_1:def 6;        
+       hence thesis by FUZZY_1:def 6;
   end;
 
 theorem
-for R being RMembership_Func of X,X 
+for R being RMembership_Func of X,X
 for R' being RMembership_Func of X,X
  st R' is symmetric & R' c= R
  holds R' c= min(R, converse R)
   proof
    let R be RMembership_Func of X,X;
    let T be RMembership_Func of X,X;
-   assume 
+   assume
 AB0:     T is symmetric & T c= R;
        let x,y be Element of X;
 A6:    T. [x,y] <= R. [x,y] & T. [y,x] <= R. [y,x] by AB0,Def1;
        then
        T. [x,y] <= R. [y,x] by AB0,Def6;
-       then       
+       then
        T. [x,y] <= min(R. [x,y], R. [y,x]) by A6,SQUARE_1:39; then
        T. [x,y] <= min(R. [x,y], (converse R). [x,y]) by FUZZY_4:def 1;
        hence thesis by FUZZY_1:def 5;
@@ -958,12 +1000,12 @@ definition
      proof
        set D = the carrier of FuzzyLattice [:X,X:];
        defpred P[set,set,set] means
-       ex Q being Element of D st $2 = Q & $3 = @Q (#) R;       
+       ex Q being Element of D st $2 = Q & $3 = @Q (#) R;
 A1:    for k being Element of NAT for x being Element of D
        ex y being Element of D st P[k,x,y]
         proof
           let k be Element of NAT;
-          let Q be Element of D;          
+          let Q be Element of D;
           set y = @Q (#) R;
           reconsider y' = ([:X,X:],y)@ as Element of D;
           take y';
@@ -972,7 +1014,8 @@ A1:    for k being Element of NAT for x being Element of D
         end;
        consider F being Function of NAT,D such that
 A2:    F.0 = ([:X,X:],Imf(X,X))@ &
-       for k being Element of NAT holds P[k,F.k,F.(k+1)] from RecExD(A1);
+       for k being Element of NAT holds P[k,F.k,F.(k+1)] from RECDEF_1:sch 2
+(A1);
        Funcs([:X,X:],[. 0,1 .]) = the carrier of FuzzyLattice [:X,X:]
          by LFUZZY_0:14;then
        reconsider F as Function of NAT,Funcs([:X,X:],[. 0,1 .]);
@@ -1001,7 +1044,7 @@ A2:    F.0 = ([:X,X:],Imf(X,X))@ &
              P[n,F.n,F.(n+1)] by A2;
              hence F.(k + 1) = Q (#) R;
            end;
-        end;   
+        end;
      end;
     uniqueness
      proof
@@ -1026,11 +1069,12 @@ A6:        G.k = Q & G.(k + 1) = Q (#) R by A4;
            consider Q' being RMembership_Func of X,X such that
 A7:        F.k = Q' & F.(k + 1) = Q' (#) R by A3;
            thus F.(k + 1) = G.(k+1) by A6,A7,A5;
-        end;       
-       for k being natural number holds P[k] from Nat_Ind(A1,A2);
+        end;
+       for k being natural number holds P[k] from NAT_1:sch 2(A1,A2);
        hence S=T by A3,A4;
-     end;    
+     end;
 end;
+
 
 reserve X for non empty set;
 reserve R for RMembership_Func of X,X;
@@ -1051,7 +1095,7 @@ A2:       (Imf(X,X) (#) R). [x,y] =
            where z is Element of X: not contradiction}, RealPoset [. 0,1 .])
             by LFUZZY_0:22;
           set S = {Imf(X,X). [x,z] "/\" R. [z,y]
-           where z is Element of X: not contradiction};           
+           where z is Element of X: not contradiction};
 A3:       R. [x,y] is_>=_than S
             proof
               for c being Element of RealPoset [. 0,1 .] st c in S holds
@@ -1065,10 +1109,11 @@ A4:               c = Imf(X,X). [x,z] "/\" R. [z,y];
                   suppose
 A5:                  x = z;
 A6:               R. [z,y] <= 1 by FUZZY_4:4;
-                  c = min(Imf(X,X). [x,z],R. [z,y]) by LFUZZY_0:5,A4           
+                  c = min(Imf(X,X). [x,z],R. [z,y]) by LFUZZY_0:5,A4
                   .= min(R. [z,y],1) by   A5,FUZZY_4:def 6
                   .= R. [x,y] by A5,SQUARE_1:def 1,A6;
                   hence thesis by LFUZZY_0:3;
+                  end;
                   suppose
 A7:                  x <> z;
 A8:               0 <= R. [z,y] by FUZZY_4:4;
@@ -1078,6 +1123,7 @@ A8:               0 <= R. [z,y] by FUZZY_4:4;
                   then
                   c <= R. [x,y] by FUZZY_4:4;
                   hence thesis by LFUZZY_0:3;
+                end;
                 end;
               hence thesis by LATTICE3:def 9;
             end;
@@ -1089,7 +1135,7 @@ A8:               0 <= R. [z,y] by FUZZY_4:4;
 A10:          R. [x,y] <= 1 by FUZZY_4:4;
               Imf(X,X). [x,x] "/\" R. [x,y]
                = min(Imf(X,X). [x,x], R. [x,y]) by LFUZZY_0:5
-              .= min(1, R. [x,y]) by FUZZY_4:def 6                  
+              .= min(1, R. [x,y]) by FUZZY_4:def 6
               .= R. [x,y] by SQUARE_1:def 1,A10;
               then
               R. [x,y] in S;
@@ -1099,14 +1145,14 @@ A10:          R. [x,y] <= 1 by FUZZY_4:4;
         end;
       hence thesis by PARTFUN1:35,A1;
     end;
-    
+
 theorem th16:
   R (#) Imf(X,X) = R
     proof
 A1:   dom (R (#) Imf(X,X)) = [:X,X:] by FUZZY_1:def 1
       .= dom R by FUZZY_1:def 1;
       for x,y being set st [x,y] in dom (R (#) Imf(X,X))
-      holds (R (#) Imf(X,X)). [x,y] = R. [x,y]  
+      holds (R (#) Imf(X,X)). [x,y] = R. [x,y]
         proof
           let x,y be set;
           assume [x,y] in dom (R (#) Imf(X,X));then
@@ -1116,7 +1162,7 @@ A2:       (R (#) Imf(X,X)). [x,y] =
            where z is Element of X: not contradiction}, RealPoset [. 0,1 .])
             by LFUZZY_0:22;
           set S = {R. [x,z] "/\" Imf(X,X). [z,y]
-           where z is Element of X: not contradiction};           
+           where z is Element of X: not contradiction};
 A3:       R. [x,y] is_>=_than S
             proof
               for c being Element of RealPoset [. 0,1 .] st c in S holds
@@ -1130,10 +1176,11 @@ A4:               c = R. [x,z] "/\" Imf(X,X). [z,y];
                   suppose
 A5:                  y = z;
 A6:               R. [x,z] <= 1 by FUZZY_4:4;
-                  c = min(R. [x,z],Imf(X,X). [z,y]) by LFUZZY_0:5 ,A4          
-                  .= min(R. [x,z],1) by A5,FUZZY_4:def 6                  
+                  c = min(R. [x,z],Imf(X,X). [z,y]) by LFUZZY_0:5 ,A4
+                  .= min(R. [x,z],1) by A5,FUZZY_4:def 6
                   .= R. [x,y] by SQUARE_1:def 1,A6,A5;
                   hence thesis by LFUZZY_0:3;
+                  end;
                   suppose
 A7:               not y = z;
 A8:               0 <= R. [x,z] by FUZZY_4:4;
@@ -1144,6 +1191,7 @@ A8:               0 <= R. [x,z] by FUZZY_4:4;
                   c <= R. [x,y] by FUZZY_4:4;
                   hence thesis by LFUZZY_0:3;
                 end;
+                end;
               hence thesis by LATTICE3:def 9;
             end;
           for b being Element of RealPoset [. 0,1 .]
@@ -1152,13 +1200,13 @@ A8:               0 <= R. [x,z] by FUZZY_4:4;
               let b be Element of RealPoset [. 0,1 .];
               assume AA:b is_>=_than S;
 A10:          R. [x,y] <= 1 by FUZZY_4:4;
-              R. [x,y] "/\" Imf(X,X). [y,y]  
+              R. [x,y] "/\" Imf(X,X). [y,y]
                = min(R. [x,y],Imf(X,X). [y,y]) by LFUZZY_0:5
-              .= min( R. [x,y],1) by FUZZY_4:def 6                  
+              .= min( R. [x,y],1) by FUZZY_4:def 6
               .= R. [x,y] by SQUARE_1:def 1,A10;
               then
               R. [x,y] in S;
-              hence thesis by AA,LATTICE3:def 9;           
+              hence thesis by AA,LATTICE3:def 9;
             end;
           hence thesis by A3,YELLOW_0:32,A2;
         end;
@@ -1194,7 +1242,7 @@ theorem th17:
       consider f being Function of NAT,Funcs([:X,X:],[. 0,1 .]) such that
 A1:   (n+1) iter R = f.(n+1) & f.0 = Imf(X,X) and
 A2:   for k being natural number ex Q being RMembership_Func of X,X st
-      f.k = Q & f.(k + 1) = Q (#) R by Def11;      
+      f.k = Q & f.(k + 1) = Q (#) R by Def11;
       ex Q being RMembership_Func of X,X st f.n = Q & f.(n + 1) = Q(#)R by A2;
       hence thesis by A1,A2,Def11;
     end;
@@ -1219,8 +1267,8 @@ A1:       (m+n) iter R = (m iter R) (#) (n iter R);
           .= ((m+n)+1) iter R by th17
           .= (m+(n+1)) iter R by XCMPLX_1:1;
         end;
-        for m being natural number holds P[m] from Nat_Ind(A2,A3);
-        hence thesis;      
+        for m being natural number holds P[m] from NAT_1:sch 2(A2,A3);
+        hence thesis;
     end;
 
 theorem
@@ -1247,22 +1295,23 @@ A4:          ((m+1)*n) iter R
           .= (m iter (n iter R)) (#) (n iter R) by th20;
           hence thesis by A4;
         end;
-      for m being natural number holds P[m] from Nat_Ind(A1,A2);
+      for m being natural number holds P[m] from NAT_1:sch 2(A1,A2);
       hence thesis;
-    end;  
+    end;
 
 definition
   let X be non empty set;
   let R be RMembership_Func of X,X;
   func TrCl R -> RMembership_Func of X,X equals :Def12:
   "\/"({n iter R where n is Nat : n > 0},FuzzyLattice [:X,X:]);
-  coherence  
+  coherence
     proof
       set S = "\/"({n iter R where n is Nat : n > 0},FuzzyLattice [:X,X:]);
       S = @S by LFUZZY_0:def 5;
-      hence S is RMembership_Func of X,X;      
+      hence S is RMembership_Func of X,X;
     end;
 end;
+
 
 theorem lemma:
   for x,y being Element of X holds
@@ -1306,7 +1355,7 @@ theorem th35:
        proof
        let c be Element of [: X,X :];
        set Q = {n iter R where n is Nat : n > 0};
-       consider x,y being set such that 
+       consider x,y being set such that
 A3:    [x,y] = c by ZFMISC_1:102;
        reconsider x,y as Element of X by ZFMISC_1:106,A3;
 A4:    (TrCl R). [x,y]   = "\/"(pi(Q, [x,y]), RealPoset [. 0,1 .]) by lemma;
@@ -1315,7 +1364,7 @@ A4:    (TrCl R). [x,y]   = "\/"(pi(Q, [x,y]), RealPoset [. 0,1 .]) by lemma;
        R. [x,y] in pi(Q, [x,y]) by CARD_3:def 6;
        then
        R. [x,y] <<= (TrCl R). [x,y] by A4,YELLOW_2:24;
-       hence thesis by LFUZZY_0:3,A3;        
+       hence thesis by LFUZZY_0:3,A3;
       end;
      hence thesis by Def1;
     end;
@@ -1330,7 +1379,7 @@ A1:      n' > 0;
         proof
        let c be Element of [: X,X :];
        set Q = {n iter R where n is Nat : n > 0};
-       consider x,y being set such that 
+       consider x,y being set such that
 A3:    [x,y] = c by ZFMISC_1:102;
        reconsider x,y as Element of X by ZFMISC_1:106,A3;
 A4:    (TrCl R). [x,y]   = "\/"(pi(Q, [x,y]), RealPoset [. 0,1 .]) by lemma;
@@ -1339,7 +1388,7 @@ A4:    (TrCl R). [x,y]   = "\/"(pi(Q, [x,y]), RealPoset [. 0,1 .]) by lemma;
        (n' iter R). [x,y] in pi(Q, [x,y]) by CARD_3:def 6;
        then
        (n' iter R). [x,y] <<= (TrCl R). [x,y] by A4,YELLOW_2:24;
-       hence thesis by LFUZZY_0:3,A3;        
+       hence thesis by LFUZZY_0:3,A3;
       end;
      hence thesis by Def1;
     end;
@@ -1393,9 +1442,9 @@ th23:
       then
 A1:   for y being Element of X holds F(y) = G(y);
       thus {F(y) where y is Element of X: P[y]}
-      = {G(y') where y' is Element of X: P[y']} from FraenkelF'(A1);
+      = {G(y') where y' is Element of X: P[y']} from FRAENKEL:sch 5(A1);
     end;
-    
+
 theorem LFUZZY015:
   for R being complete Heyting LATTICE,
   X being Subset of R,
@@ -1446,7 +1495,7 @@ A1:       FuzzyLattice [:X,X:]
       then
 A1:   for y being Element of X holds F(y) = G (y);
       {F(y) where y is Element of X:P[y]}
-      = {G(y) where y is Element of X:P[y]} from FraenkelF'(A1);
+      = {G(y) where y is Element of X:P[y]} from FRAENKEL:sch 5(A1);
       hence thesis;
     end;
 
@@ -1503,7 +1552,7 @@ A4:               a = R. [x,y] "/\" r. [y,z] & r in Q;
         end;then
 A1:   for y being Element of X holds F(y) = G (y);
       thus {F(y) where y is Element of X:P[y]}
-      = {G(y) where y is Element of X:P[y]} from FraenkelF'(A1);
+      = {G(y) where y is Element of X:P[y]} from FRAENKEL:sch 5(A1);
     end;
 
 th26:
@@ -1544,7 +1593,7 @@ th26:
                deffunc g(Element of X) = R. [x,$1] "/\" @r. [$1,z];
 A2:            for y being Element of X holds f(y) = g(y) by LFUZZY_0:def 5;
                thus {f(y)  where y is Element of X:P[y]}
-               ={g(y) where y is Element of X:P[y]} from FraenkelF'(A2);
+               ={g(y) where y is Element of X:P[y]} from FRAENKEL:sch 5(A2);
              end;
            hence thesis;
          end;
@@ -1552,9 +1601,9 @@ A2:            for y being Element of X holds f(y) = g(y) by LFUZZY_0:def 5;
 A1:    for r being Element of FL st P[r] holds F(r) = G(r);
        thus {F(r) where r is Element of FuzzyLattice [:X,X:]: P[r] }
        = {G(r) where r is Element of FuzzyLattice [:X,X:]: P[r]}
-       from FraenkelF'R(A1);
+       from FRAENKEL:sch 6(A1);
      end;
-     
+
 th27:
   for R being RMembership_Func of X,X,
   Q being Subset of FuzzyLattice [:X,X:],
@@ -1576,9 +1625,9 @@ th27:
 A1:    for r being Element of FL st P[r] holds F(r) = G(r) by LFUZZY_0:22;
        thus {F(r) where r is Element of FuzzyLattice [:X,X:]:P[r]}
        = {G(r) where r is Element of FuzzyLattice [:X,X:]: P[r]}
-         from FraenkelF'R(A1);        
+         from FRAENKEL:sch 6(A1);
     end;
-    
+
 th28:
   for R being RMembership_Func of X,X,
   Q being Subset of FuzzyLattice [:X,X:],
@@ -1613,7 +1662,7 @@ A3:           f = R (#) @r & r in Q by A2;
            thus b in A by A2,A3;
          end;
     end;
-    
+
 th29:
   for R being RMembership_Func of X,X,
   Q being Subset of FuzzyLattice [:X,X:],
@@ -1641,7 +1690,7 @@ A1:    for y being Element of X, r being Element of FL st P[y] & Q[r]
                                   where y is Element of X: P[y] }, RP)
            = "\/"({ "\/"({F2(y',r') where y' is Element of X: P[y']}, RP)
                            where r' is Element of FL: Q[r'] }, RP)
-                           from SupCommutativity(A1);       
+                           from LFUZZY_0:sch 5(A1);
     end;
 
 theorem th30:
@@ -1696,11 +1745,11 @@ A4:          t = (R(#)@r) & r in Q;
          .= "\/"({(R(#)@r). [x,z] where r is Element of FL: r in Q},RP) by th27
          .= "\/"(pi({(R(#)@r) where r is Element of FL: r in Q}, [x,z]),RP)
          by th28
-         .= F. [x,z] by th22,AA;         
+         .= F. [x,z] by th22,AA;
        end;
      hence thesis by Th1;
    end;
-   
+
 theorem th31:
   for R being RMembership_Func of X,X,
   Q being Subset of FuzzyLattice [:X,X:] holds
@@ -1731,7 +1780,7 @@ A4:          t = (@r(#)R) & r in Q;
              hence t in the carrier of FuzzyLattice [:X,X:] by A4;
            end;
 B1:      {(@("\/"(Q,FL))). [x,y] "/\" R. [y,z] where y is Element of X:
-               not contradiction}         
+               not contradiction}
          = {"\/"(pi(Q, [x,y]), RP) "/\" R. [y,z] where y is Element of X:
                not contradiction}
           proof
@@ -1752,7 +1801,8 @@ B1:      {(@("\/"(Q,FL))). [x,y] "/\" R. [y,z] where y is Element of X:
              then
 B11:         for y being Element of X holds F(y) = G(y);
              thus {F(y) where y is Element of X: P[y]}
-              = {G(y') where y' is Element of X: P[y']} from FraenkelF'(B11);
+              = {G(y') where y' is Element of X: P[y']} from FRAENKEL:sch 5
+(B11);
            end;
 B2:      {"\/"(pi(Q, [x,y]), RP) "/\" R. [y,z]
              where y is Element of X:not contradiction}
@@ -1781,7 +1831,7 @@ B21:           FuzzyLattice [:X,X:]
             then
 B22:        for y being Element of X holds F(y) = G (y);
             {F(y) where y is Element of X:P[y]}
-            = {G(y') where y' is Element of X:P[y']} from FraenkelF'(B22);
+            = {G(y') where y' is Element of X:P[y']} from FRAENKEL:sch 5(B22);
             hence thesis;
           end;
 B3:      {"\/"({b "/\" R. [y,z] where b is Element of RP:b in pi(Q,[x,y])} ,RP)
@@ -1828,8 +1878,8 @@ A4:               a = r. [x,y] "/\" R. [y,z] & r in Q;
         end;then
 A1:   for y being Element of X holds F(y) = G (y);
       thus {F(y) where y is Element of X:P[y]}
-      = {G(y) where y is Element of X:P[y]} from FraenkelF'(A1);
-    end;    
+      = {G(y) where y is Element of X:P[y]} from FRAENKEL:sch 5(A1);
+    end;
 B4:      "\/"({"\/"({r. [x,y] "/\" R. [y,z]
          where r is Element of FL: r in Q} ,RP)
          where y is Element of X:not contradiction},RP)
@@ -1849,7 +1899,7 @@ A1:    for y being Element of X, r being Element of FL st P[y] & Q[r]
                                   where y is Element of X: P[y] }, RP)
            = "\/"({ "\/"({F2(y',r') where y' is Element of X: P[y']}, RP)
                            where r' is Element of FL: Q[r'] }, RP)
-                           from SupCommutativity(A1);       
+                           from LFUZZY_0:sch 5(A1);
     end;
 B5:      {"\/"({r. [x,y] "/\" R. [y,z]
          where y is Element of X:not contradiction} ,RP)
@@ -1881,7 +1931,7 @@ B5:      {"\/"({r. [x,y] "/\" R. [y,z]
                deffunc g(Element of X) = @r. [x,$1] "/\" R. [$1,z];
 A2:            for y being Element of X holds f(y) = g(y) by LFUZZY_0:def 5;
                thus {f(y)  where y is Element of X:P[y]}
-               ={g(y) where y is Element of X:P[y]} from FraenkelF'(A2);
+               ={g(y) where y is Element of X:P[y]} from FRAENKEL:sch 5(A2);
              end;
            hence thesis;
          end;
@@ -1889,7 +1939,7 @@ A2:            for y being Element of X holds f(y) = g(y) by LFUZZY_0:def 5;
 A1:    for r being Element of FL st P[r] holds F(r) = G(r);
        thus {F(r)  where r is Element of FuzzyLattice [:X,X:]: P[r] }
        = {G(r) where r is Element of FuzzyLattice [:X,X:]: P[r]}
-       from FraenkelF'R(A1);
+       from FRAENKEL:sch 6(A1);
      end;
 B6:      {"\/"({@r. [x,y] "/\" R. [y,z] where
              y is Element of X:not contradiction} ,RP)
@@ -1904,7 +1954,7 @@ B6:      {"\/"({@r. [x,y] "/\" R. [y,z] where
 A1:    for r being Element of FL st P[r] holds F(r) = G(r) by LFUZZY_0:22;
        thus {F(r) where r is Element of FuzzyLattice [:X,X:]:P[r]}
        = {G(r) where r is Element of FuzzyLattice [:X,X:]: P[r]}
-         from FraenkelF'R(A1);        
+         from FRAENKEL:sch 6(A1);
     end;
 B7:      {(@r(#)R). [x,z] where r is Element of FL: r in Q}
          = pi({(@r(#)R) where r is Element of FL: r in Q}, [x,z])
@@ -1935,7 +1985,7 @@ A3:           f = (@r(#)R) & r in Q by A2;
          thus (@("\/"(Q,FL)) (#) R). [x,z]
          = "\/"({(@("\/"(Q,FL))). [x,y] "/\" R. [y,z] where y is Element of X:
                not contradiction},RP) by LFUZZY_0:22
-         .= F. [x,z] by B1,B2,B3,B4,B5,B6,B7,th22,ZZ;        
+         .= F. [x,z] by B1,B2,B3,B4,B5,B6,B7,th22,ZZ;
        end;
      hence thesis by Th1;
    end;
@@ -1973,7 +2023,7 @@ A31:          a = @r (#) (TrCl R) & r in Q;
               a = @r (#) @"\/"(Q,FL) by A1,Def12,A31
               .= "\/"({@r (#) @s where s is Element of FL:s in Q},FL)
                 by AA,th30;
-              hence thesis by A31;              
+              hence thesis by A31;
             end;
           thus B c= A
             proof
@@ -2018,7 +2068,7 @@ A57:          (i iter R) = ([:X,X:],(i iter R))@ &
               @r = r & @s = s by LFUZZY_0:def 5;
               hence thesis by A56,A55;
             end;
-        end;    
+        end;
       deffunc f(Element of FL,Element of FL) = ([:X,X:],@$1 (#) @$2)@;
       defpred P[Element of FL] means $1 in Q;
       defpred R[Element of FL] means $1 in Q;
@@ -2046,16 +2096,18 @@ A6:   {"\/"({@r (#) @s where s is Element of FL : s in Q},FL)
 A62:              for s being Element of FL holds f(s) = g(s)
                     by LFUZZY_0:def 6;
                   {f(s) where s is Element of FL : P[s]} =
-                  {g(s) where s is Element of FL : P[s]} from FraenkelF'(A62);
+                  {g(s) where s is Element of FL : P[s]} from FRAENKEL:sch 5
+(A62);
                   hence thesis;
                 end;
               hence thesis;
             end;then
 A61:      for r being Element of FL holds F(r) = G(r);
           {F(r) where r is Element of FL : P[r]}
-          = {G(r)     where r is Element of FL : P[r]} from FraenkelF'(A61);
+          = {G(r)     where r is Element of FL : P[r]} from FRAENKEL:sch 5
+(A61);
           hence thesis;
-        end;                           
+        end;
 A7:   {([:X,X:],@r (#) @s)@  where r is Element of FL,
          s is Element of FL:r in Q & s in Q}
       = {@r (#) @s  where r is Element of FL,
@@ -2068,7 +2120,7 @@ A71:      for r being Element of FL, s being Element of FL holds
           F(r,s) = G(r,s) by LFUZZY_0:def 6;
           {F(r,s) where r is Element of FL,s is Element of FL:P[r,s]}
           ={G(r,s) where r is Element of FL,s is Element of FL:P[r,s]}
-          from  FraenkelF''(A71);
+          from  FRAENKEL:sch 7(A71);
           hence thesis;
         end;
       thus (TrCl R)(#)(TrCl R)
@@ -2076,12 +2128,12 @@ A71:      for r being Element of FL, s being Element of FL holds
       .= "\/"({"\/"({f(r,s) where s is Element of FL:R[s]},FL)
                            where r is Element of FL :P[r]},FL) by A6,A3,AA,th31
       .= "\/"({f(r,s) where r is Element of FL, s is Element of FL:
-               P[r] & R[s]},FL) from SupDistributivity
+               P[r] & R[s]},FL) from LFUZZY_0:sch 1
       .= "\/"({(i iter R) (#) (j iter R)  where i is Nat, j is Nat:
                i > 0 & j > 0},FL) by A5,A7;
     end;
-    
-definition
+
+registration
   let X be non empty set;
   let R be RMembership_Func of X,X;
   cluster TrCl R -> transitive;
@@ -2100,7 +2152,7 @@ AA:          A c= the carrier of FuzzyLattice [:X,X:]
              assume t in A;then
              consider i,j being Nat such that
 A4:          t = (i iter R) (#) (j iter R) & i > 0 & j >0;
-             ([:X,X:],((i iter R) (#) (j iter R)))@ = 
+             ([:X,X:],((i iter R) (#) (j iter R)))@ =
              (i iter R) (#) (j iter R) by LFUZZY_0:def 6;
              hence t in the carrier of FuzzyLattice [:X,X:] by A4;
            end;
@@ -2128,12 +2180,13 @@ C4:               f = (i+j) iter R by C2,th19;
             end;
           then
           "\/"(pi(A,c),RP) <<= (TrCl R).c by YELLOW_0:32;
-          hence thesis by B2,LFUZZY_0:3;          
+          hence thesis by B2,LFUZZY_0:3;
         end;
       then (TrCl R)(#)(TrCl R) c= (TrCl R) by Def1;
       hence thesis by Def7;
-    end;    
+    end;
 end;
+
 
 theorem th36:
   for R being RMembership_Func of X,X, n being natural number
@@ -2146,7 +2199,7 @@ A1:   R is transitive & n > 0; then
 A6:   R (#) R c= R by Def7;
       defpred P[Nat] means $1 iter R c= R;
       reconsider n as non empty Nat by A1,ORDINAL2:def 21;
-      1 iter R = R by th20;then      
+      1 iter R = R by th20;then
 A2:   P[1] by FUZZY14;
 A3:   for k being non empty Nat st P[k] holds P[k+1]
         proof
@@ -2155,9 +2208,9 @@ A4:       P[k];
           R c= R by FUZZY14;then
           k iter R (#) R c= R(#)R by A4,FUZZY430;then
           (k+1) iter R c= R(#)R by th17;
-          hence thesis by A6,FUZZY15;          
+          hence thesis by A6,FUZZY15;
         end;
-      for k being non empty Nat holds P[k] from Ind_from_1(A2,A3);
+      for k being non empty Nat holds P[k] from BINARITH:sch 1(A2,A3);
       then P[n];
       hence thesis;
     end;
@@ -2177,14 +2230,14 @@ A1:  R c= TrCl R by th35;
              let c be Element of [:X,X:];
              set Q = {n iter R where n is Nat : n > 0},
              FL = FuzzyLattice [:X,X:],
-             RP = RealPoset [. 0,1 .]; 
+             RP = RealPoset [. 0,1 .];
 AS:          Q c= the carrier of FuzzyLattice [:X,X:]
                proof
                let t be set;
                assume t in Q;then
                consider i being Nat such that
 A4:            t = (i iter R)  & i > 0;
-               ([:X,X:],(i iter R))@ = 
+               ([:X,X:],(i iter R))@ =
                (i iter R) by LFUZZY_0:def 6;
                hence t in the carrier of FuzzyLattice [:X,X:] by A4;
                end;
@@ -2199,11 +2252,11 @@ A2:              f in Q & b = f.c by CARD_3:def 6;
 A3:              f = n iter R & n>0 by A2;
                  n iter R c= R by A0,A3,th36;then
                  (n iter R).c <= R.c by Def1;
-                 hence thesis by LFUZZY_0:3,A2,A3;                 
+                 hence thesis by LFUZZY_0:3,A2,A3;
                end;then
              R.c is_>=_than pi(Q,c) by LATTICE3:def 9;then
              (TrCl R).c <<= R.c by YELLOW_0:32,A5;
-             hence thesis by LFUZZY_0:3; 
+             hence thesis by LFUZZY_0:3;
            end;
          hence thesis by Def1;
        end;
@@ -2229,7 +2282,7 @@ AA:       P[k];
          by th17;
           hence thesis by AA,FUZZY430,A0;
         end;
-      for k being natural number holds P[k] from  Nat_Ind(A1,A3);
+      for k being natural number holds P[k] from  NAT_1:sch 2(A1,A3);
       hence thesis;
     end;
 

@@ -32,7 +32,8 @@ definition let IT be RelStr;
   the InternalRel of IT = id (the carrier of IT);
 end;
 
-definition
+
+registration
   cluster strict discrete non empty Poset;
  existence
  proof
@@ -54,6 +55,7 @@ definition
   end;
 end;
 
+
 Lm1:
   for P be empty RelStr holds the InternalRel of P = {}
  proof
@@ -62,7 +64,7 @@ Lm1:
   hence the InternalRel of P = {} by RELSET_1:26;
  end;
 
-definition
+registration
   cluster RelStr (#{},id {}#) -> empty;
   coherence by STRUCT_0:def 1;
 
@@ -70,6 +72,7 @@ definition
   cluster the InternalRel of P -> empty;
   coherence by Lm1;
 end;
+
 
 Lm2:
   for P be RelStr st P is empty holds P is discrete
@@ -81,10 +84,11 @@ then A2: the carrier of P = {} by STRUCT_0:def 1;
     hence P is discrete by A2,Def1,RELAT_1:81;
   end;
 
-definition
+registration
   cluster empty -> discrete RelStr;
   coherence by Lm2;
 end;
+
 
 definition let P be RelStr;
   let IT be Subset of P;
@@ -93,14 +97,19 @@ definition let P be RelStr;
   & IT = A \/ B & A misses B &
     the InternalRel of P =
      (the InternalRel of P) |_2 A \/ (the InternalRel of P) |_2 B;
-  antonym IT is connected;
-end;
+  end;
+notation let P be RelStr;
+  let IT be Subset of P;
+  antonym IT is connected for IT is disconnected ; end;
+
 
 definition let IT be RelStr;
   attr IT is disconnected means :Def3:
    [#] IT is disconnected;
-  antonym IT is connected;
-end;
+  end;
+notation let IT be RelStr;
+  antonym IT is connected for IT is disconnected ; end;
+
 
 reserve T for non empty RelStr,
         a for Element of T;
@@ -216,6 +225,7 @@ A9:  x1 = x2 by A7,A8,RELAT_1:def 10;
 then A10:  [x1,x1] in [:A,A:] by ZFMISC_1:106;
        [:A,A:] c= ([:A,A:] \/ [:B,B:]) by XBOOLE_1:7;
      hence thesis by A8,A9,A10;
+     end;
      suppose A11: not x1 in A;
        x1 in the carrier of DP by A7,A8,RELAT_1:def 10;
      then x1 in (the carrier of DP) \ A by A11,XBOOLE_0:def 4;
@@ -224,6 +234,7 @@ then A10:  [x1,x1] in [:A,A:] by ZFMISC_1:106;
 then A12:  [x1,x1] in [:B,B:] by ZFMISC_1:106;
        [:B,B:] c= ([:A,A:] \/ [:B,B:]) by XBOOLE_1:7;
      hence thesis by A8,A9,A12;
+    end;
     end;
     then the InternalRel of DP = ((the InternalRel of DP) /\
        ([:A,A:] \/ [:B,B:])) by XBOOLE_1:28;
@@ -237,7 +248,7 @@ then A13: the InternalRel of DP = (the InternalRel of DP) |_2 A
     hence thesis by Def3;
   end;
 
-definition
+registration
   cluster strict connected (non empty Poset);
   existence
   proof
@@ -271,6 +282,7 @@ definition
   end;
 end;
 
+
 begin  :: Category of Posets
 
 definition let IT be set;
@@ -278,7 +290,8 @@ definition let IT be set;
    for a be set st a in IT holds a is non empty Poset;
 end;
 
-definition
+
+registration
   cluster non empty POSet_set-like set;
   existence
   proof
@@ -290,14 +303,17 @@ A1:  for a be set st a in A holds a is non empty Poset by TARSKI:def 1;
   end;
 end;
 
+
 definition
   mode POSet_set is POSet_set-like set;
 end;
+
 
 definition let P be non empty POSet_set;
   redefine mode Element of P -> non empty Poset;
   coherence by Def4;
 end;
+
 
 definition
  let L1,L2 be RelStr;
@@ -306,6 +322,7 @@ definition
   for x,y being Element of L1 st x <= y
    for a,b being Element of L2 st a = f.x & b = f.y holds a <= b;
 end;
+
 
 Lm3:
   for A,B,C be non empty RelStr
@@ -355,7 +372,7 @@ proof
   consider AB be set such that
 A1: for a be set holds a in AB iff
     a in Funcs (the carrier of A, the carrier of B) & P[a]
-     from Separation;
+     from XBOOLE_0:sch 1;
   take AB;
   thus a in AB iff
     ex f be map of A, B st a = f &
@@ -411,6 +428,7 @@ A7:   A1 c= A2
 end;
 end;
 
+
 theorem Th6:
 for A,B,C be non empty RelStr
  for f,g be Function st f in MonFuncs (A,B) & g in MonFuncs (B,C) holds
@@ -442,10 +460,11 @@ A2: IT' in Funcs (the carrier of T, the carrier of T) by FUNCT_2:12;
    hence thesis by A1,A2,Def6;
   end;
 
-definition let T;
+registration let T;
   cluster MonFuncs (T,T) -> non empty;
   coherence by Th7;
 end;
+
 
 definition let X be set;
   func Carr X -> set means :Def7:
@@ -456,7 +475,7 @@ definition let X be set;
       $2 = the carrier of s;
 A1:  for x,y,z be set st P[x,y] & P[x,z] holds y = z;
     consider CX be set such that A2: for x be set holds
-    x in CX iff ex y be set st y in X & P[y,x] from Fraenkel(A1);
+    x in CX iff ex y be set st y in X & P[y,x] from TARSKI:sch 1(A1);
     take CX;
     let x be set;
       x in CX iff ex s be 1-sorted st s in X & x = the carrier of s
@@ -504,13 +523,15 @@ A6:        y in X & s = y & x = the carrier of s by A5;
   end;
 end;
 
+
 Lm5:
   the carrier of A in Carr P by Def7;
 
-definition let P;
+registration let P;
   cluster Carr P -> non empty;
   coherence by Lm5;
 end;
+
 
 theorem
     for f be 1-sorted holds Carr {f} = {the carrier of f}
@@ -547,8 +568,10 @@ A1:      s in {f,g} & a = the carrier of s by Def7;
       per cases by A1,TARSKI:def 2;
       suppose s = f;
       hence thesis by A1,TARSKI:def 2;
+      end;
       suppose s = g;
       hence thesis by A1,TARSKI:def 2;
+    end;
     end;
     thus {the carrier of f, the carrier of g} c= Carr {f,g}
     proof
@@ -558,8 +581,10 @@ A3:    f in {f,g} & g in {f,g} by TARSKI:def 2;
       per cases by A2,TARSKI:def 2;
       suppose a = the carrier of f;
       hence a in Carr {f,g} by A3,Def7;
+      end;
       suppose a = the carrier of g;
       hence a in Carr {f,g} by A3,Def7;
+    end;
     end;
   end;
 
@@ -587,7 +612,7 @@ theorem Th11:
  thus thesis by A1;
 end;
 
-definition let A,B be non empty Poset;
+registration let A,B be non empty Poset;
   cluster MonFuncs (A,B) -> functional;
   coherence
   proof
@@ -597,6 +622,7 @@ definition let A,B be non empty Poset;
     hence thesis;
   end;
 end;
+
 
 definition let P be non empty POSet_set;
   func POSCat P -> strict with_triple-like_morphisms Category means
@@ -682,7 +708,7 @@ A8:  for a,b,c,d be Element of P, f,g,h be Element of Funcs Carr P st
    for m1,m2 be (Morphism of C), a1,a2,a3 be Element of P,
    f1,f2 be Element of Funcs (Carr P) st
    m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
-    holds m2*m1 = [[a1,a3], F(f2,f1)] from CatEx(A1,A4,A8);
+    holds m2*m1 = [[a1,a3], F(f2,f1)] from CAT_5:sch 1(A1,A4,A8);
    hence thesis;
 end;
 uniqueness
@@ -754,9 +780,10 @@ A11:   f in MonFuncs (a,a) by Th7;
     f1,f2 be Element of Funcs Carr P st
     m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
     holds m2*m1 = [[a1,a3], F(f2,f1)]
-    holds C1 = C2 from CatUniq(A9);
+    holds C1 = C2 from CAT_5:sch 2(A9);
   end;
 end;
+
 
 begin   :: Alternative Category of Posets
 
@@ -770,14 +797,14 @@ scheme AltCatEx
    provided
 A1: for i,j,k be Element of A() for f,g be Function st
      f in F(i,j) & g in F(j,k) holds g * f in F (i,k)
-  proof
+proof
     deffunc G(set,set) = F($1,$2);
     consider M be ManySortedSet of [:A(),A():] such that
-A2:   for i,j be Element of A() holds M.(i,j) = G(i,j) from MSSLambda2D;
+A2:   for i,j be Element of A() holds M.(i,j) = G(i,j) from ALTCAT_1:sch 2;
     deffunc H(set,set,set) = FuncComp(G($1,$2),G($2,$3));
     consider c be ManySortedSet of [:A(),A(),A():] such that
 A3:   for i,j,k be Element of A() holds
-      c.(i,j,k) = H(i,j,k) from MSSLambda3D;
+      c.(i,j,k) = H(i,j,k) from ALTCAT_1:sch 4;
       c is Function-yielding
     proof let i be set;
      assume i in dom c;
@@ -857,7 +884,7 @@ scheme AltCatUniq
    for i,j,k be Element of A() holds
     (the Comp of C2).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) )
     holds C1 = C2
-  proof
+proof
     let C1,C2 be strict AltCatStr; assume that
 A1:   the carrier of C1 = A() &
    for i,j be Element of A() holds (the Arrows of C1).(i,j) = F (i,j) &
@@ -915,7 +942,8 @@ A1:for i,j,k be Element of P for f,g be Function st f in F(i,j) &
   end;
 end;
 
-definition let P be non empty POSet_set;
+
+registration let P be non empty POSet_set;
   cluster POSAltCat P -> transitive non empty;
   coherence
   proof
@@ -950,7 +978,8 @@ definition let P be non empty POSet_set;
   end;
 end;
 
-definition let P be non empty POSet_set;
+
+registration let P be non empty POSet_set;
   cluster POSAltCat P -> associative with_units;
   coherence
   proof
@@ -1047,6 +1076,7 @@ A25:  C.(i,i,j) = FuncComp ( MonFuncs (i',i') , MonFuncs (i',j') ) by Def9;
    end;
   end;
 end;
+
 
 theorem
    for o1,o2 be object of POSAltCat P, A,B be Element of P st o1 = A & o2 = B

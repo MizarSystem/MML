@@ -32,6 +32,7 @@ definition let A1 be set, B1 be non empty set,
  redefine func f|Y1 -> Function of Y1,B1;
 end;
 
+
 theorem :: NATTRA_1:1
  [:f,g:]|[:Y1,Y2:] = [:f|Y1,g|Y2:];
 
@@ -40,6 +41,7 @@ definition let A,B be non empty set;
   let f be PartFunc of [:A1,A1:],A1; let g be PartFunc of [:B1,B1:],B1;
  redefine func |:f,g:| -> PartFunc of [:[:A1,B1:],[:A1,B1:]:],[:A1,B1:];
 end;
+
 
 theorem :: NATTRA_1:2
  for f being PartFunc of [:A1,A1:],A1, g being PartFunc of [:A2,A2:],A2
@@ -51,12 +53,26 @@ theorem :: NATTRA_1:2
          F,F1,F2,F3 for Functor of A,B,
          G for Functor of B,C;
 
-scheme M_Choice{A()-> non empty set, B()-> non empty set,
+scheme :: NATTRA_1:sch 1
+ M_Choice{A()-> non empty set, B()-> non empty set,
                   F(set) -> set}:
 ex t being Function of A(),B() st
   for a being Element of A() holds t.a in F(a)
 provided
- for a being Element of A() holds B() meets F(a);
+ for a being Element of A() holds B() meets F(a)
+proof
+   defpred _P[set,set] means $2 in F($1);
+A2: for e being set st e in A() ex u being set st u in B() & _P[e,u]
+ proof let e be set; assume e in A(); then B() meets F(e) by A1;
+  hence thesis by XBOOLE_0:3;
+ end;
+ consider t being Function such that
+A3:  dom t = A() & rng t c= B() and
+A4:  for e being set st e in A() holds _P[e,t.e] from COMPTS_1:sch 1(A2);
+ reconsider t as Function of A(),B() by A3,FUNCT_2:def 1,RELSET_1:11;
+ take t; let a be Element of A();
+ thus t.a in F(a) by A4;
+end;
 
 theorem :: NATTRA_1:3
  for a being Object of A, m being Morphism of a,a holds m in Hom(a,a);
@@ -107,6 +123,7 @@ definition let A,B,F; let a,b be Object of A such that
   F.f;
 end;
 
+
 theorem :: NATTRA_1:11
    for a,b being Object of A st Hom(a,b) <> {}
   for f being Morphism of a,b holds (G*F).f = G.(F.f);
@@ -149,6 +166,7 @@ definition let A,B,F1,F2;
  reflexivity;
 end;
 
+
 canceled;
 
 theorem :: NATTRA_1:19
@@ -163,11 +181,13 @@ definition let A,B,F1,F2;
  for a being Object of A holds it.a is Morphism of F1.a,F2.a;
 end;
 
+
 definition let A,B; let F be Functor of A,B;
  func id F ->transformation of F,F means
 :: NATTRA_1:def 4
  for a being Object of A holds it.a = id (F.a);
 end;
+
 
 definition let A,B,F1,F2;
  assume  F1 is_transformable_to F2;
@@ -176,6 +196,7 @@ definition let A,B,F1,F2;
 :: NATTRA_1:def 5
   t.a;
 end;
+
 
 definition let A,B,F,F1,F2;
  assume that
@@ -187,6 +208,7 @@ definition let A,B,F,F1,F2;
 :: NATTRA_1:def 6
  for a being Object of A holds it.a = (t2.a)*(t1.a);
 end;
+
 
 theorem :: NATTRA_1:20
  F1 is_transformable_to F2 implies
@@ -235,9 +257,11 @@ definition let A,B,F1,F2;
    for f being Morphism of a,b holds it.b*F1.f = F2.f*it.a;
 end;
 
+
 definition let A,B,F;
  redefine func id F -> natural_transformation of F,F;
 end;
+
 
 definition let A,B,F,F1,F2 such that
  F is_naturally_transformable_to F1 and
@@ -248,6 +272,7 @@ definition let A,B,F,F1,F2 such that
 :: NATTRA_1:def 9
   t2`*`t1;
 end;
+
 
 theorem :: NATTRA_1:26
  F1 is_naturally_transformable_to F2 implies
@@ -281,14 +306,16 @@ definition let A,B,F1,F2;
  for a being Object of A holds IT.a is invertible;
 end;
 
+
 definition let A,B,F1,F2;
  pred F1,F2 are_naturally_equivalent means
 :: NATTRA_1:def 11
  F1 is_naturally_transformable_to F2 &
   ex t being natural_transformation of F1,F2 st t is invertible;
  reflexivity;
- synonym F1 ~= F2;
-end;
+ end;
+notation let A,B,F1,F2;
+ synonym F1 ~= F2 for F1,F2 are_naturally_equivalent ; end;
 
 definition let A,B,F1,F2 such that
  F1 is_transformable_to F2;
@@ -306,6 +333,7 @@ definition let A,B,F1,F2,t1 such that
 :: NATTRA_1:def 13
   (t1 qua transformation of F1,F2)";
 end;
+
 
 canceled;
 
@@ -327,6 +355,7 @@ F1,F2 are_naturally_equivalent;
  it is invertible;
 end;
 
+
 theorem :: NATTRA_1:33
    id F is natural_equivalence of F,F;
 
@@ -346,6 +375,7 @@ definition let A,B;
    st x = [[F1,F2],t] & F1 is_naturally_transformable_to F2;
 end;
 
+
 definition let A,B;
  func NatTrans(A,B) -> NatTrans-DOMAIN of A,B means
 :: NATTRA_1:def 16
@@ -354,6 +384,7 @@ definition let A,B;
    st x = [[F1,F2],t] & F1 is_naturally_transformable_to F2;
 end;
 
+
 definition let A1,B1,A2,B2 be non empty set,
      f1 be Function of A1,B1,
      f2 be Function of A2,B2;
@@ -361,6 +392,7 @@ definition let A1,B1,A2,B2 be non empty set,
 :: NATTRA_1:def 17
      A1 = A2 & for a being Element of A1 holds f1.a = f2.a;
 end;
+
 
 theorem :: NATTRA_1:35
  F1 is_naturally_transformable_to F2 iff [[F1,F2],t1] in NatTrans(A,B);
@@ -378,6 +410,7 @@ definition let A,B;
       (the Comp of it).[g,f] = [[F,F2],t1`*`t]) &
    for a being Object of it, F st F = a holds id a = [[F,F],id F];
 end;
+
 
 :: As immediate consequences of the definition we get
 
@@ -411,9 +444,19 @@ definition let C be Category;
  for f being Morphism of C ex a being Object of C st f = id a;
 end;
 
-definition
+
+registration
  cluster discrete Category;
+existence
+  proof consider o,m;
+   take 1Cat(o,m);
+   let f be Morphism of 1Cat(o,m);
+    consider a being Object of 1Cat(o,m);
+   take a;
+   thus f = m by CAT_1:35 .= id a by CAT_1:35;
+  end;
 end;
+
 
 canceled;
 
@@ -446,9 +489,15 @@ for A being discrete Category, B being Category, F being Functor of B,A,
 theorem :: NATTRA_1:51
    A is discrete implies Functors(B,A) is discrete;
 
-definition let C be Category;
+registration let C be Category;
  cluster strict discrete Subcategory of C;
+ existence
+  proof consider c being Object of C;
+    reconsider A =1Cat(c,id c) as Subcategory of C by Th7;
+   take A; thus thesis by Th46;
+  end;
 end;
+
 
 definition let C;
  func IdCat(C) -> strict discrete Subcategory of C means
@@ -456,6 +505,7 @@ definition let C;
  the Objects of it = the Objects of C &
   the Morphisms of it = { id a where a is Object of C: not contradiction};
 end;
+
 
 theorem :: NATTRA_1:52
  for C being strict Category holds C is discrete implies IdCat(C) = C;

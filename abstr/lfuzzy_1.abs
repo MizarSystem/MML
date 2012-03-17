@@ -1,6 +1,6 @@
 :: Transitive Closure of Fuzzy Relations
 ::  by Takashi Mitsuishi and Grzegorz Bancerek
-:: 
+::
 :: Received November 23, 2003
 :: Copyright (c) 2003 Association of Mizar Users
 
@@ -27,10 +27,12 @@ begin :: Inclusion of fuzzy relations
 
  reserve X, Y, Z for non empty set;
 
-definition
+registration
   let X be non empty set;
   cluster -> real-yielding Membership_Func of X;
+  coherence;
 end;
+
 
 definition
   let f,g be real-yielding Function;
@@ -40,14 +42,20 @@ definition
    for x being set st x in dom f holds f.x <= g.x;
 end;
 
+
+notation
+ let X be non empty set;
+ let f,g be Membership_Func of X;
+ synonym f c= g for f is_less_than g ;
+end;
 definition
  let X be non empty set;
  let f,g be Membership_Func of X;
  redefine pred f is_less_than g means
 :: LFUZZY_1:def 2
   for x being Element of X holds f.x <= g.x;
-  synonym f c= g;
-end;
+  end;
+
 
 definition
  let X,Y be non empty set;
@@ -56,6 +64,7 @@ definition
 :: LFUZZY_1:def 3
   for x being Element of X, y being Element of Y holds f. [x,y] <= g. [x,y];
 end;
+
 
 theorem :: LFUZZY_1:1
   for R,S being Membership_Func of X
@@ -93,6 +102,7 @@ definition
   commutativity;
 end;
 
+
 theorem :: LFUZZY_1:7
  for f,g being Membership_Func of X holds min(f,g) c= f;
 
@@ -109,6 +119,7 @@ definition
    Imf(X,X) c= R;
 end;
 
+
 definition
  let X be non empty set;
  let R be RMembership_Func of X,X;
@@ -116,6 +127,7 @@ definition
 :: LFUZZY_1:def 5
   for x being Element of X holds R. [x,x] = 1;
 end;
+
 
 definition
  let X be non empty set;
@@ -125,6 +137,7 @@ definition
   converse R = R;
 end;
 
+
 definition
  let X be non empty set;
  let R be RMembership_Func of X,X;
@@ -132,6 +145,7 @@ definition
 :: LFUZZY_1:def 7
   for x,y being Element of X holds R. [x,y] = R. [y,x];
 end;
+
 
 definition
  let X be non empty set;
@@ -149,6 +163,7 @@ definition
   for x,y,z being Element of X holds R. [x,y] "/\" R. [y,z] <<= R. [x,z];
 end;
 
+
 definition
   let X be non empty set;
   let R be RMembership_Func of X,X;
@@ -157,6 +172,7 @@ definition
    for x,y being Element of X holds
      R. [x,y] <> 0 & R. [y,x] <> 0 implies x = y;
 end;
+
 
 definition
  let X be non empty set;
@@ -167,15 +183,127 @@ definition
    R. [x,y] <> 0 & x <> y implies R. [y,x] = 0;
 end;
 
-definition
+
+registration
  let X;
  cluster Imf(X,X) -> symmetric transitive reflexive antisymmetric;
+ coherence
+  proof
+   thus Imf(X,X) is symmetric
+    proof
+        let x,y be Element of X;
+        per cases;
+        suppose
+A1:     x=y;
+        thus Imf(X,X). [x,y]
+        = Imf(X,X). [y,x] by A1;
+        end;
+        suppose
+A2:     not x=y;
+        thus Imf(X,X). [x,y]
+        = 0 by FUZZY_4:def 6,A2
+        .= Imf(X,X). [y,x] by A2,FUZZY_4:def 6;
+    end;
+    end;
+   thus Imf(X,X) is transitive
+    proof
+        let x,y,z be Element of X;
+        per cases;
+        suppose
+A1:     x = z;
+        thus thesis
+        proof
+         per cases;
+         suppose
+A11:     x = y;
+         Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
+          = min(Imf(X,X). [x,y], Imf(X,X). [y,z]) by LFUZZY_0:5
+         .= 1 by FUZZY_4:def 6, A11, A1;then
+         Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
+         <= Imf(X,X). [x,z] by FUZZY_4:def 6,A1;
+         hence thesis by LFUZZY_0:3;
+         end;
+         suppose
+A12:     not x=y;
+           Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
+            = min(Imf(X,X). [x,y],Imf(X,X). [y,z]) by LFUZZY_0:5
+           .= min(Imf(X,X). [x,y],0) by FUZZY_4:def 6,A12,A1
+           .= min(0,0) by FUZZY_4:def 6,A12
+           .= 0;then
+           Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= 1;then
+           Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
+         by FUZZY_4:def 6,A1;
+           hence thesis by LFUZZY_0:3;
+        end;
+        end;
+        end;
+        suppose
+A2:     not x=z;
+        thus thesis
+         proof
+           per cases;
+           suppose
+A21:       x=y;
+           Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
+            = min(Imf(X,X). [x,y],Imf(X,X). [y,z]) by LFUZZY_0:5
+           .= min(Imf(X,X). [x,y],0) by FUZZY_4:def 6,A21,A2
+           .= min(1,0) by FUZZY_4:def 6,A21
+           .= 0 by SQUARE_1:def 1;then
+           Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
+         by FUZZY_4:def 6,A2;
+           hence thesis by LFUZZY_0:3;
+           end;
+           suppose
+A22:       x <> y;
+           thus thesis
+            proof
+              per cases;
+              suppose
+A221:         y=z;
+              Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
+              = min(Imf(X,X). [x,y],Imf(X,X). [y,z]) by LFUZZY_0:5
+              .= min(Imf(X,X). [x,y],1) by FUZZY_4:def 6,A221
+              .= min(0,1) by FUZZY_4:def 6,A22
+              .= 0 by SQUARE_1:def 1;then
+              Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
+            by FUZZY_4:def 6,A2;
+              hence thesis by LFUZZY_0:3;
+              end;
+              suppose
+A222:         y <> z;
+              Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
+              = min(Imf(X,X). [x,y],Imf(X,X). [y,z]) by LFUZZY_0:5
+              .= min(Imf(X,X). [x,y],0) by FUZZY_4:def 6,A222
+              .= min(0,0) by FUZZY_4:def 6,A22
+              .= 0;then
+              Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
+            by FUZZY_4:def 6,A2;
+              hence thesis by LFUZZY_0:3;
+            end;
+            end;
+         end;
+         end;
+    end;
+    end;
+   thus Imf(X,X) is reflexive
+    proof
+     thus for x being Element of X holds Imf(X,X). [x,x] = 1 by FUZZY_4:def 6;
+    end;
+   thus for x,y being Element of X holds
+    Imf(X,X). [x,y] <> 0 & x <> y implies Imf(X,X). [y,x] = 0 by FUZZY_4:def 6;
+  end;
 end;
 
-definition
+
+registration
  let X;
  cluster reflexive transitive symmetric antisymmetric RMembership_Func of X,X;
+ existence
+  proof
+   take Imf(X,X); thus thesis;
+  end;
 end;
+
 
 theorem :: LFUZZY_1:9
 for R,S being RMembership_Func of X,X holds
@@ -185,26 +313,44 @@ theorem :: LFUZZY_1:10
 for R,S being RMembership_Func of X,X holds
 R is symmetric & S is symmetric implies converse max(R,S) = max(R,S);
 
-definition
+registration
   let X;
   let R,S be symmetric RMembership_Func of X,X;
   cluster min(R,S) -> symmetric;
+  coherence
+   proof
+     converse min(R,S) = min(R,S) by Th4;
+     hence thesis by Def5;
+   end;
   cluster max(R,S) -> symmetric;
+  coherence
+   proof
+     converse max(R,S) = max(R,S) by Th5;
+     hence thesis by Def5;
+   end;
 end;
+
 
 theorem :: LFUZZY_1:11
 for R,S being RMembership_Func of X,X holds
 R is transitive & S is transitive implies min(R,S) (#) min(R,S) c= min(R,S);
 
-definition
+registration
  let X;
  let R,S be transitive RMembership_Func of X,X;
  cluster min(R,S) -> transitive;
+ coherence
+  proof
+    min(R,S) (#) min(R,S) c= min(R,S) by Th6;
+    hence thesis by Def7;
+  end;
 end;
+
 
 definition let A be set, X be non empty set;
 redefine func chi(A,X) -> Membership_Func of X;
 end;
+
 
 theorem :: LFUZZY_1:12
 for r being Relation of X st r is_reflexive_in X
@@ -260,6 +406,7 @@ definition
    F.k = Q & F.(k + 1) = Q (#) R;
 end;
 
+
 reserve X for non empty set;
 reserve R for RMembership_Func of X,X;
 
@@ -291,6 +438,7 @@ definition
 :: LFUZZY_1:def 13
   "\/"({n iter R where n is Nat : n > 0},FuzzyLattice [:X,X:]);
 end;
+
 
 theorem :: LFUZZY_1:29
   for x,y being Element of X holds
@@ -334,11 +482,60 @@ theorem :: LFUZZY_1:36
   = "\/"({(i iter R) (#) (j iter R)
        where i is Nat, j is Nat:i > 0 & j > 0},FuzzyLattice [:X,X:]);
 
-definition
+registration
   let X be non empty set;
   let R be RMembership_Func of X,X;
   cluster TrCl R -> transitive;
+  coherence
+    proof
+      set FL = FuzzyLattice [:X,X:], RP = RealPoset [. 0,1 .],
+      A = {(i iter R) (#) (j iter R)
+                   where i is Nat, j is Nat:i > 0 & j > 0};
+      for c being Element of [:X,X:] holds
+      ((TrCl R)(#)(TrCl R)).c <= (TrCl R).c
+        proof
+          let c be Element of [:X,X:];
+AA:          A c= the carrier of FuzzyLattice [:X,X:]
+           proof
+             let t be set;
+             assume t in A;then
+             consider i,j being Nat such that
+A4:          t = (i iter R) (#) (j iter R) & i > 0 & j >0;
+             ([:X,X:],((i iter R) (#) (j iter R)))@ =
+             (i iter R) (#) (j iter R) by LFUZZY_0:def 6;
+             hence t in the carrier of FuzzyLattice [:X,X:] by A4;
+           end;
+B2:          ((TrCl R)(#)(TrCl R)).c
+          = "\/"(A,FL).c by th32
+          .= "\/"(pi(A,c),RP) by AA,th22;
+          (TrCl R).c is_>=_than pi(A,c)
+            proof
+              for b being Element of RP st b in pi(A,c) holds b <<= (TrCl R).c
+                proof
+                  let b be Element of RP;
+                  assume b in pi(A,c);then
+                  consider f be Function such that
+C1:               f in A & b = f.c by CARD_3:def 6;
+                  consider i,j being Nat such that
+C2:               f = (i iter R) (#) (j iter R) & i > 0 & j > 0 by C1;
+C3:               i+j > 0 by ANALOAF:2,C2;
+C4:               f = (i+j) iter R by C2,th19;
+                  reconsider f as RMembership_Func of X,X by C2;
+                  f c= TrCl R by th33,C3,C4;then
+                  f.c <= (TrCl R).c by Def1;
+                  hence thesis by C1,LFUZZY_0:3;
+                end;
+              hence thesis by LATTICE3:def 9;
+            end;
+          then
+          "\/"(pi(A,c),RP) <<= (TrCl R).c by YELLOW_0:32;
+          hence thesis by B2,LFUZZY_0:3;
+        end;
+      then (TrCl R)(#)(TrCl R) c= (TrCl R) by Def1;
+      hence thesis by Def7;
+    end;
 end;
+
 
 theorem :: LFUZZY_1:37
   for R being RMembership_Func of X,X, n being natural number

@@ -150,10 +150,13 @@ theorem :: AMI_5:31
 theorem :: AMI_5:32
  the Instruction-Locations of SCM is not finite;
 
-definition
+registration
   cluster SCM-Data-Loc -> infinite;
+coherence by Th31;
   cluster the Instruction-Locations of SCM -> infinite;
+coherence by Th32;
 end;
+
 
 theorem :: AMI_5:33
  SCM-Data-Loc misses SCM-Instr-Loc;
@@ -175,10 +178,17 @@ definition
   I `1;
 end;
 
-definition
+
+registration
  let I be Instruction of SCM;
  cluster InsCode I -> natural;
+ coherence
+  proof
+     InsCode I in Segm 9 by AMI_3:def 1;
+   hence thesis by ORDINAL2:def 21;
+  end;
 end;
+
 
 definition
  let I be Instruction of SCM;
@@ -188,6 +198,7 @@ definition
   I;
 end;
 
+
 definition
  let loc be Element of SCM-Instr-Loc;
  func loc@ -> Instruction-Location of SCM equals
@@ -196,6 +207,7 @@ definition
   loc;
 end;
 
+
 definition
  let loc be Element of SCM-Data-Loc;
  func loc@ -> Data-Location equals
@@ -203,6 +215,7 @@ definition
 
  loc;
 end;
+
 
 theorem :: AMI_5:36
  for l being Instruction of SCM holds
@@ -326,6 +339,7 @@ definition let N,S;
     p.loc;
 end;
 
+
 theorem :: AMI_5:61
  for N being set, S being AMI-Struct over N
  for x being set, p being FinPartState of S st x c= p
@@ -339,6 +353,7 @@ definition let N be set; let S be AMI-Struct over N;
   p | the Instruction-Locations of S;
 end;
 
+
 definition let N be set; let S be non empty AMI-Struct over N;
  let p be FinPartState of S;
  func DataPart p -> FinPartState of S equals
@@ -346,6 +361,7 @@ definition let N be set; let S be non empty AMI-Struct over N;
 
   p | ((the carrier of S) \ ({IC S} \/ the Instruction-Locations of S));
 end;
+
 
 definition let N be set, S be non empty AMI-Struct over N;
  let IT be FinPartState of S;
@@ -355,9 +371,19 @@ definition let N be set, S be non empty AMI-Struct over N;
  dom IT misses {IC S} \/ the Instruction-Locations of S;
 end;
 
-definition let N be set, S be non empty AMI-Struct over N;
+registration let N be set, S be non empty AMI-Struct over N;
  cluster data-only FinPartState of S;
+ existence
+  proof
+   consider p being FinPartState of S;
+      {} c= p by XBOOLE_1:2;
+   then reconsider p = {} as FinPartState of S by Th61;
+   take p;
+   thus dom p misses {IC S} \/ the Instruction-Locations of S by RELAT_1:60,
+XBOOLE_1:65;
+  end;
 end;
+
 
 theorem :: AMI_5:62
  for N being set, S being non empty AMI-Struct over N
@@ -440,6 +466,7 @@ definition let N,S;let IT be PartFunc of FinPartSt S,FinPartSt S;
     q is data-only;
 end;
 
+
 theorem :: AMI_5:76
    for S being IC-Ins-separated definite realistic
      (non empty non void AMI-Struct over N)
@@ -451,6 +478,7 @@ definition let N; let S be non void AMI-Struct over N;
  let p be FinPartState of S;
  redefine func s +* p -> State of S;
 end;
+
 
 theorem :: AMI_5:77
     for i being Instruction of SCM,
@@ -492,9 +520,33 @@ theorem :: AMI_5:83
  for p being autonomic FinPartState of SCM st DataPart p <> {}
  holds IC SCM in dom p;
 
-definition
+registration
  cluster autonomic non programmed FinPartState of SCM;
+ existence
+  proof
+   take p = (Start-At il.0) +* Euclide-Algorithm +* (dl.0,dl.1) --> (1,1);
+     (dl.0,dl.1) --> (1,1) in dom Euclide-Function by AMI_4:11;
+   then consider s being FinPartState of SCM such that
+ A1: (dl.0,dl.1) --> (1,1) = s and
+ A2: (Start-At il.0) +* Euclide-Algorithm +* s is pre-program of SCM and
+       Euclide-Function.s c= Result((Start-At il.0) +* Euclide-Algorithm +* s)
+       by AMI_1:def 29,AMI_4:13;
+   thus p is autonomic by A1,A2;
+   take IC SCM;
+A3: dom p = dom ((Start-At il.0) +* Euclide-Algorithm) \/
+           dom((dl.0,dl.1) --> (1,1)) by FUNCT_4:def 1;
+A4: dom ((Start-At il.0) +* Euclide-Algorithm)
+          = dom (Start-At il.0) \/ dom (Euclide-Algorithm) by FUNCT_4:def 1;
+     dom (Start-At il.0) = {IC SCM} by AMI_3:34;
+   then IC SCM in dom (Start-At il.0) by TARSKI:def 1;
+   then IC SCM in dom ((Start-At il.0) +* Euclide-Algorithm) by A4,XBOOLE_0:def
+2;
+   hence IC SCM in dom p by A3,XBOOLE_0:def 2;
+   assume IC SCM in the Instruction-Locations of SCM;
+   hence contradiction by Th19,SCM_1:7;
+  end;
 end;
+
 
 theorem :: AMI_5:84
  for p being autonomic non programmed FinPartState of SCM holds

@@ -52,19 +52,41 @@ definition let X be set;
 redefine func bool X -> non empty Subset-Family of X;
 end;
 
+
 definition let D be set;
  func 1TopSp D -> TopStruct equals
 :: PCOMPS_1:def 1
   TopStruct (# D, bool D #);
 end;
 
-definition let D be set;
+
+registration let D be set;
  cluster 1TopSp D -> strict TopSpace-like;
+ coherence
+  proof
+  set T = TopStruct (# D, bool D #);
+A1:  1TopSp D = T by Def1;
+   hence 1TopSp D is strict;
+  A2: the carrier of T in the topology of T by ZFMISC_1:def 1;
+  A3: for X being Subset-Family of T st X c= the topology of T
+       holds union X in the topology of T;
+     for p,q being Subset of T st
+      p in the topology of T & q in the topology of T
+       holds p /\ q in the topology of T;
+  hence thesis by A1,A2,A3,PRE_TOPC:def 1;
+  end;
 end;
 
-definition let D be non empty set;
+
+registration let D be non empty set;
  cluster 1TopSp D -> non empty;
+ coherence
+  proof
+     1TopSp D = TopStruct (# D, bool D #) by Def1;
+   hence 1TopSp D is non empty;
+  end;
 end;
+
 
 reserve a for set;
 
@@ -98,6 +120,7 @@ theorem :: PCOMPS_1:10
  IT & V meets W } is finite;
  end;
 
+
 theorem :: PCOMPS_1:11
  for W holds { V : V in FX & V meets W} c= FX;
 
@@ -113,6 +136,7 @@ definition let T be TopStruct, FX be Subset-Family of T;
    for Z being Subset of T holds
   Z in it iff ex W being Subset of T st Z = Cl W & W in FX;
 end;
+
 
 theorem :: PCOMPS_1:14
    clf FX is closed;
@@ -137,14 +161,23 @@ theorem :: PCOMPS_1:19
 theorem :: PCOMPS_1:20
   FX is_finer_than clf FX;
 
-scheme Lambda1top{T()->TopSpace,
+scheme :: PCOMPS_1:sch 1
+ Lambda1top{T()->TopSpace,
                   X()->Subset-Family of T(),
                   Y()->Subset-Family of T(),
                   F(set)->Subset of T()}:
  ex f being Function of X(),Y() st for Z being Subset of T()
                st Z in X() holds f.Z = F(Z)
 provided
- for Z being Subset of T() st Z in X() holds F(Z) in Y();
+ for Z being Subset of T() st Z in X() holds F(Z) in Y()
+proof
+deffunc G(set) = F($1);
+A2:for x be set st x in X() holds G(x) in Y() by A1;
+consider f being Function of X(),Y() such that
+      A3: for x be set st x in X() holds f.x = G(x) from FUNCT_2:sch 2(A2);
+take f;
+thus thesis by A3;
+end;
 
 theorem :: PCOMPS_1:21
     FX is locally_finite implies clf FX is locally_finite;
@@ -169,9 +202,23 @@ theorem :: PCOMPS_1:24
                GX is_finer_than FX & GX is locally_finite;
  end;
 
- definition
+
+ registration
   cluster paracompact (non empty TopSpace);
+  existence
+   proof
+    take PT = 1TopSp {1};
+    A1: PT is compact by Th9;
+    let FX be Subset-Family of PT;
+    assume that A2:FX is_a_cover_of PT and A3: FX is open;
+    consider GX being Subset-Family of PT
+      such that A4: GX c= FX and A5: GX is_a_cover_of PT and
+                A6: GX is finite by A1,A2,A3,COMPTS_1:def 3;
+     take GX;
+     thus thesis by A3,A4,A5,A6,Th13,SETFAM_1:17,TOPS_2:18;
+   end;
  end;
+
 
 theorem :: PCOMPS_1:25
      T is compact implies T is paracompact;
@@ -194,9 +241,19 @@ theorem :: PCOMPS_1:28
  reserve x,y,z for Element of PM;
  reserve V,W,Y for Subset of PM;
 
-scheme SubFamExM {A() -> MetrStruct, P[Subset of A()]}:
+scheme :: PCOMPS_1:sch 2
+ SubFamExM {A() -> MetrStruct, P[Subset of A()]}:
    ex F being Subset-Family of A() st
-   for B being Subset of A() holds B in F iff P[B];
+   for B being Subset of A() holds B in F iff P[B]
+proof
+   defpred Q[Subset of A()] means P[$1];
+   consider F being Subset-Family of A() such that
+A1: for B being Subset of A() holds B in F iff Q[B]
+     from SETFAM_1:sch 1;
+   reconsider F as Subset-Family of A();
+   take F;
+   thus thesis by A1;
+end;
 
   definition let PM;
    func Family_open_set(PM) -> Subset-Family of PM means
@@ -204,6 +261,7 @@ scheme SubFamExM {A() -> MetrStruct, P[Subset of A()]}:
    for V holds V in it iff for x st x in V holds
                          ex r st r>0 & Ball(x,r) c= V;
  end;
+
 
 theorem :: PCOMPS_1:29
  for x ex r st r>0 & Ball(x,r) c= the carrier of PM;
@@ -243,13 +301,30 @@ definition let PM;
     TopStruct (#the carrier of PM,Family_open_set(PM)#);
 end;
 
-definition let PM;
+
+registration let PM;
  cluster TopSpaceMetr PM -> strict TopSpace-like;
+ coherence
+  proof
+     TopSpaceMetr PM=TopStruct (#the carrier of PM,Family_open_set(PM)#) by
+Def6
+;
+   hence thesis by Th37;
+  end;
 end;
 
-definition let PM be non empty MetrStruct;
+
+registration let PM be non empty MetrStruct;
  cluster TopSpaceMetr PM -> non empty;
+ coherence
+  proof
+     TopSpaceMetr PM=TopStruct (#the carrier of PM,Family_open_set(PM)#) by
+Def6
+;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: PCOMPS_1:38
    for PM being non empty MetrSpace holds TopSpaceMetr PM is_T2;
@@ -265,6 +340,7 @@ definition let D be set,f be Function of [:D,D:],REAL;
               f.(a,c)<=f.(a,b)+f.(b,c);
 end;
 
+
 theorem :: PCOMPS_1:39
  for D being set,f being Function of [:D,D:],REAL
          holds f is_metric_of D iff
@@ -277,6 +353,7 @@ definition let D be non empty set, f be Function of [:D,D:],REAL;
     MetrStruct(#D,f#);
 end;
 
+
 ::       Metrizable topological spaces
 
  definition let IT be non empty TopStruct;
@@ -288,6 +365,20 @@ end;
                the topology of IT;
  end;
 
- definition
+
+ registration
    cluster strict metrizable (non empty TopSpace);
+   existence
+   proof
+    consider MS being strict non empty MetrSpace;
+    take TS = TopSpaceMetr MS;
+    A1: TS = TopStruct (#the carrier of MS,Family_open_set(MS)#) by Def6;
+    then reconsider f = the distance of MS as
+             Function of [:the carrier of TS,the carrier of TS:],REAL;
+    thus TS is strict;
+    take f;
+    thus f is_metric_of the carrier of TS by A1,Th39;
+    hence thesis by A1,Def8;
+   end;
  end;
+

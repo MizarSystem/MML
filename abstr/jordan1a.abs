@@ -75,6 +75,7 @@ definition let f be FinSequence;
   len f div 2 + 1;
 end;
 
+
 theorem :: JORDAN1A:9
    for f being FinSequence st len f is odd holds len f = 2 * Center f - 1;
 
@@ -83,12 +84,30 @@ theorem :: JORDAN1A:10
 
 begin  :: Some subsets of the plane
 
-definition
+registration
  cluster compact non vertical non horizontal
            being_simple_closed_curve non empty Subset of TOP-REAL 2;
+ existence
+  proof consider f being non constant standard special_circular_sequence;
+   take L~f;
+   thus thesis;
+  end;
  cluster compact non empty horizontal Subset of TOP-REAL 2;
+ existence
+  proof
+   take LSeg(|[ 0,0 ]|,|[ 1,0 ]|);
+      |[ 0,0 ]|`2 = 0 & |[ 1,0 ]|`2 = 0 by EUCLID:56;
+   hence thesis by SPPOL_1:36;
+  end;
  cluster compact non empty vertical Subset of TOP-REAL 2;
+ existence
+  proof
+   take LSeg(|[ 0,0 ]|,|[ 0,1 ]|);
+      |[ 0,0 ]|`1 = 0 & |[ 0,1 ]|`1 = 0 by EUCLID:56;
+   hence thesis by SPPOL_1:37;
+  end;
 end;
+
 
 theorem :: JORDAN1A:11
  p in N-most D implies p`2 = N-bound D;
@@ -132,11 +151,22 @@ theorem :: JORDAN1A:23
    p in Vertical_Line s & q in Vertical_Line s
   implies LSeg(p,q) c= Vertical_Line s;
 
-definition
+registration
  let S be non empty being_simple_closed_curve Subset of TOP-REAL 2;
  cluster Lower_Arc S -> non empty compact;
+ coherence
+  proof
+      Lower_Arc S is_an_arc_of E-max S, W-min S by JORDAN6:def 9;
+   hence thesis by JORDAN5A:1;
+  end;
  cluster Upper_Arc S -> non empty compact;
+ coherence
+  proof
+      Upper_Arc S is_an_arc_of W-min S, E-max S by JORDAN6:def 8;
+   hence thesis by JORDAN5A:1;
+  end;
 end;
+
 
 theorem :: JORDAN1A:24
    for A,B being Subset of TOP-REAL 2 st A meets B
@@ -159,15 +189,49 @@ theorem :: JORDAN1A:28
    for S being compact Subset of TOP-REAL 2
   holds proj2.:S is compact;
 
-scheme TRSubsetEx { n() -> Nat, P[set] } :
+scheme :: JORDAN1A:sch 1
+ TRSubsetEx { n() -> Nat, P[set] } :
  ex A being Subset of TOP-REAL n() st
-  for p being Point of TOP-REAL n() holds p in A iff P[p];
+  for p being Point of TOP-REAL n() holds p in A iff P[p]
+proof
+    defpred Q[set] means P[$1];
+    consider A being set such that
+A1:  for x being set holds x in A iff x in the carrier of TOP-REAL n() & Q[x]
+      from XBOOLE_0:sch 1;
+      A c= the carrier of TOP-REAL n()
+    proof
+      let x be set;
+      assume x in A;
+      hence thesis by A1;
+    end;
+    then reconsider A as Subset of TOP-REAL n();
+    take A;
+    thus thesis by A1;
+  end;
 
-scheme TRSubsetUniq { n() -> Nat, P[set] } :
+scheme :: JORDAN1A:sch 2
+ TRSubsetUniq { n() -> Nat, P[set] } :
  for A, B being Subset of TOP-REAL n() st
   (for p being Point of TOP-REAL n() holds p in A iff P[p]) &
   (for p being Point of TOP-REAL n() holds p in B iff P[p])
- holds A = B;
+ holds A = B
+proof
+    let A, B be Subset of TOP-REAL n() such that
+A1:   for p being Point of TOP-REAL n() holds p in A iff P[p] and
+A2:   for p being Point of TOP-REAL n() holds p in B iff P[p];
+    hereby
+      let x be set;
+      assume
+A3:     x in A;
+      then P[x] by A1;
+      hence x in B by A2,A3;
+    end;
+    let x be set;
+    assume
+A4:   x in B;
+    then P[x] by A2;
+    hence x in A by A1,A4;
+  end;
 
 definition let p be Point of TOP-REAL 2;
  func north_halfline p -> Subset of TOP-REAL 2 means
@@ -190,6 +254,7 @@ definition let p be Point of TOP-REAL 2;
   for x being Point of TOP-REAL 2 holds
    x in it iff x`1 <= p`1 & x`2 = p`2;
 end;
+
 
 theorem :: JORDAN1A:29
  north_halfline p =
@@ -223,12 +288,41 @@ theorem :: JORDAN1A:36
  west_halfline p =
    { |[ r,p`2 ]| where r is Element of REAL: r <= p`1 };
 
-definition let p be Point of TOP-REAL 2;
+registration let p be Point of TOP-REAL 2;
  cluster north_halfline p -> non empty convex;
+coherence
+  proof
+A1: north_halfline p =
+      { |[ p`1,r ]| where r is Element of REAL: r >= p`2 } by Th30;
+    then |[p`1,p`2]| in north_halfline p;
+    hence thesis by A1,Lm6;
+  end;
  cluster east_halfline p -> non empty convex;
+coherence
+  proof
+A2: east_halfline p =
+      { |[ r,p`2 ]| where r is Element of REAL: r >= p`1 } by Th32;
+    then |[p`1,p`2]| in east_halfline p;
+    hence thesis by A2,Lm5;
+  end;
  cluster south_halfline p -> non empty convex;
+coherence
+  proof
+A3: south_halfline p =
+      { |[ p`1,r ]| where r is Element of REAL: r <= p`2 } by Th34;
+    then |[p`1,p`2]| in south_halfline p;
+    hence thesis by A3,Lm4;
+  end;
  cluster west_halfline p -> non empty convex;
+coherence
+  proof
+A4: west_halfline p =
+      { |[ r,p`2 ]| where r is Element of REAL: r <= p`1 } by Th36;
+    then |[p`1,p`2]| in west_halfline p;
+    hence thesis by A4,Lm3;
+  end;
 end;
+
 
 begin  :: Goboards
 

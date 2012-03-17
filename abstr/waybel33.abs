@@ -41,6 +41,7 @@ definition
   "\/"({inf B where B is Subset of L: B in F},L);
 end;
 
+
 theorem :: WAYBEL33:1
    for L1, L2 being complete LATTICE st the RelStr of L1 = the RelStr of L2
  for X1 being non empty Subset of L1
@@ -57,17 +58,62 @@ definition
   the topology of L = xi L;
 end;
 
-definition
+
+registration
  cluster lim-inf -> TopSpace-like (non empty TopRelStr);
+ coherence
+proof
+   let L be non empty TopRelStr;
+   assume A1:L is lim-inf;
+   set T = ConvergenceSpace lim_inf-Convergence L;
+A2:the topology of L = xi L by A1,Def2 .= the topology of T by WAYBEL28:def 4;
+ the carrier of L = the carrier of T by YELLOW_6:def 27;
+then A3:the carrier of L in the topology of L by A2,PRE_TOPC:def 1;
+A4:(for a being Subset-Family of L st a c= the topology of L
+    holds (union a) in the topology of L)
+   proof
+    let a being Subset-Family of L;
+    assume A5:a c= the topology of L;
+    reconsider b = a as Subset-Family of T by YELLOW_6:def 27;
+      (union b) in the topology of T by A2,A5,PRE_TOPC:def 1;
+    hence (union a) in the topology of L by A2;
+   end;
+     (for a,b being Subset of L st
+    a in the topology of L & b in the topology of L
+    holds a /\ b in the topology of L) by A2,PRE_TOPC:def 1;
+   hence thesis by A3,A4,PRE_TOPC:def 1;
+ end;
 end;
 
-definition
+
+registration
  cluster trivial -> lim-inf TopLattice;
+ coherence
+  proof let L be TopLattice;
+   assume L is trivial;
+   then reconsider L' = L as trivial TopLattice;
+
+   consider x being Point of L';
+      the carrier of ConvergenceSpace lim_inf-Convergence L = the carrier of L'
+     by YELLOW_6:def 27;
+   then reconsider S = ConvergenceSpace lim_inf-Convergence L as
+      trivial non empty TopSpace by REALSET1:def 13;
+   reconsider y = x as Point of S by YELLOW_6:def 27;
+   thus the topology of L = {{},{y}} by YELLOW_9:9
+      .= the topology of S by YELLOW_9:9 .= xi L by WAYBEL28:def 4;
+  end;
 end;
 
-definition
+
+registration
  cluster lim-inf continuous complete TopLattice;
+ existence
+ proof
+   consider L being trivial non empty TopLattice;
+   take L; thus thesis;
+ end;
 end;
+
 
 theorem :: WAYBEL33:2
  for L1, L2 being non empty 1-sorted
@@ -132,20 +178,65 @@ theorem :: WAYBEL33:9
   st the RelStr of L1 = the RelStr of L2
   holds xi L1 = xi L2;
 
-definition
+registration
  let R be /\-complete (non empty reflexive RelStr);
  cluster -> /\-complete TopAugmentation of R;
+ coherence
+  proof let T be TopAugmentation of R;
+   let X be non empty Subset of T;
+A1: the RelStr of T = the RelStr of R by YELLOW_9:def 4;
+   then reconsider Y = X as non empty Subset of R;
+   consider x being Element of R such that
+A2: x is_<=_than Y and
+A3: for y being Element of R st y is_<=_than Y holds x >= y by WAYBEL_0:def 40;
+   reconsider y = x as Element of T by A1;
+   take y; thus y is_<=_than X by A1,A2,YELLOW_0:2;
+   let z be Element of T;
+   reconsider v = z as Element of R by A1;
+   assume z is_<=_than X;
+    then v is_<=_than Y by A1,YELLOW_0:2;
+    then x >= v by A3;
+   hence y >= z by A1,YELLOW_0:1;
+  end;
 end;
 
-definition
+
+registration
  let R be Semilattice;
  cluster -> with_infima TopAugmentation of R;
+ coherence
+  proof let T be TopAugmentation of R;
+   let x,y be Element of T;
+A1: the RelStr of T = the RelStr of R by YELLOW_9:def 4;
+   then reconsider x' = x, y' = y as Element of R;
+   consider z' being Element of R such that
+A2: z' <= x' & z' <= y' and
+A3: for v' being Element of R st v' <= x' & v' <= y' holds v' <= z'
+     by LATTICE3:def 11;
+   reconsider z = z' as Element of T by A1;
+   take z; thus z <= x & z <= y by A1,A2,YELLOW_0:1;
+   let v be Element of T;
+   reconsider v' = v as Element of R by A1;
+   assume v <= x & v <= y;
+    then v' <= x' & v' <= y' by A1,YELLOW_0:1;
+    then v' <= z' by A3;
+   hence v <= z by A1,YELLOW_0:1;
+  end;
 end;
 
-definition
+
+registration
  let L be /\-complete up-complete Semilattice;
  cluster strict lim-inf TopAugmentation of L;
+ existence
+  proof set T = TopRelStr(# the carrier of L, the InternalRel of L, xi L #);
+A1: the RelStr of T = the RelStr of L;
+   then reconsider T as TopAugmentation of L by YELLOW_9:def 4;
+   take T; thus T is strict;
+   thus the topology of T = xi T by A1,Th9;
+  end;
 end;
+
 
 theorem :: WAYBEL33:10
  for L being /\-complete up-complete Semilattice
@@ -160,10 +251,13 @@ definition
   it is lim-inf;
 end;
 
-definition
+
+registration
  let L be /\-complete up-complete Semilattice;
  cluster Xi L -> lim-inf;
+ coherence by Def3;
 end;
+
 
 theorem :: WAYBEL33:11
  for L being complete LATTICE, N being net of L holds

@@ -37,6 +37,7 @@ let n be Ordinal,
 redefine func {p} -> non empty finite Subset of Polynom-Ring(n,L);
 end;
 
+
 theorem :: GROEB_1:1
 for n being Ordinal,
     T being connected TermOrder of n,
@@ -153,6 +154,7 @@ func HT(P,T) -> Subset of Bags n equals
   { HT(p,T) where p is Polynomial of n,L : p in P & p <> 0_(n,L) };
 end;
 
+
 definition
 let n be Ordinal,
     S be Subset of Bags n;
@@ -161,6 +163,7 @@ func multiples(S) -> Subset of Bags n equals
   { b where b is Element of Bags n :
          ex b' being bag of n st b' in S & b' divides b };
 end;
+
 
 theorem :: GROEB_1:12
 ::: theorem 5.35 (i) ==> (ii), p. 206
@@ -281,6 +284,7 @@ pred G is_Groebner_basis_wrt T means
 :: GROEB_1:def 3
   PolyRedRel(G,T) is locally-confluent;
 end;
+
 
 definition
 ::: definition 5.37, p. 207
@@ -447,11 +451,191 @@ func DivOrder(n) -> Order of Bags n means
   for b1,b2 being bag of n holds [b1,b2] in it iff b1 divides b2;
 end;
 
-definition
+
+registration
 ::: theorem 5.2, p. 189
 let n be Nat;
 cluster RelStr(#Bags n, DivOrder n#) -> Dickson;
+coherence
+proof
+set P = product (n --> OrderedNAT), J = n --> OrderedNAT;
+set S = product Carrier (n --> OrderedNAT), SJ = Carrier (n --> OrderedNAT);
+A1: for x being set st x in S
+    for g being Function st x = g
+    holds dom g = n & for y being set st y in dom g holds g.y in NAT
+    proof
+    let x be set;
+    assume A2: x in S;
+    let g' be Function;
+    assume A3: x = g';
+    consider g being Function such that
+    A4: x = g & dom g = dom SJ &
+        for y being set st y in dom SJ holds g.y in SJ.y by A2,CARD_3:def 5;
+    thus dom g' = n by A3,A4,PBOOLE:def 3;
+    thus for y being set st y in dom g' holds g'.y in NAT
+      proof
+      let y be set;
+      assume A5: y in dom g';
+      then A6: y in n by A3,A4,PBOOLE:def 3;
+      then consider R being 1-sorted such that
+      A7: R = J.y & SJ.y = the carrier of R by PRALG_1:def 13;
+       g.y in the carrier of R by A3,A4,A5,A7;
+      hence thesis by A3,A4,A6,A7,DICKSON:def 15,FUNCOP_1:13;
+      end;
+    end;
+defpred Q[set,set] means
+     $1 in S & (ex b being bag of n st b = $2 & b = $1);
+A8: for x,y1,y2 being set st x in S & Q[x,y1] & Q[x,y2] holds y1 = y2;
+A9: for x being set st x in S ex y being set st Q[x,y]
+   proof
+   let x be set;
+   assume A10: x in S;
+   then consider g being Function such that
+   A11: x = g & dom g = dom SJ &
+        for y being set st y in dom SJ holds g.y in SJ.y
+        by CARD_3:def 5;
+   A12: x = g & dom g = n &
+       for y being set st y in dom g holds g.y in NAT by A1,A10,A11;
+   defpred QQ[set,set] means $2 = g.$1;
+   A13: for x,y1,y2 being set st x in n & QQ[x,y1] & QQ[x,y2]
+       holds y1 = y2;
+   A14: for x being set st x in n ex y being set st QQ[x,y];
+   consider b being Function such that
+   A15: dom b = n & for x being set st x in n holds QQ[x,b.x]
+     from FUNCT_1:sch 2(A13,A14);
+   reconsider b as ManySortedSet of n by A15,PBOOLE:def 3;
+    now let u be set;
+     assume u in rng b;
+     then consider x being set such that
+     A16: x in dom b & u = b.x by FUNCT_1:def 5;
+     A17: u = g.x by A15,A16;
+      x in dom g by A12,A16,PBOOLE:def 3;
+     hence u in NAT by A1,A10,A11,A17;
+     end;
+   then rng b c= NAT by TARSKI:def 3;
+   then reconsider b as bag of n by SEQM_3:def 8;
+   take b;
+   thus x in S by A10;
+   take b;
+   thus b = b;
+   thus b = x by A12,A15,FUNCT_1:9;
+   end;
+consider i being Function such that
+A18: dom i = S & for x being set st x in S holds Q[x,i.x]
+   from FUNCT_1:sch 2(A8,A9);
+set R = RelStr(#Bags n, DivOrder n#);
+A19: now let v be set;
+    assume v in rng i;
+    then consider u being set such that
+    A20: u in dom i & v = i.u by FUNCT_1:def 5;
+     u in S & (ex b being bag of n st b = i.u & b = u) by A18,A20;
+    hence v in Bags n by A20,POLYNOM1:def 14;
+    end;
+A21: for x being Element of R
+    holds ex u being Element of P st u in dom i & i.u = x
+    proof
+    let x be Element of R;
+    reconsider g = x as bag of n by POLYNOM1:def 14;
+    A22: dom g = n by PBOOLE:def 3 .= dom(Carrier J) by PBOOLE:def 3;
+    A23: now let x be set;
+        assume x in dom(Carrier J);
+        then A24: x in n by PBOOLE:def 3;
+        then consider L being 1-sorted such that
+        A25: L = J.x & (Carrier J).x = the carrier of L by PRALG_1:def 13;
+         the carrier of L = NAT by A24,A25,DICKSON:def 15,FUNCOP_1:13;
+        hence g.x in (Carrier J).x by A25;
+        end;
+    then A26: g in product Carrier J by A22,CARD_3:def 5;
+    then g in the carrier of P by YELLOW_1:def 4;
+    then reconsider g as Element of P;
+    take g;
+    thus g in dom i by A18,A22,A23,CARD_3:def 5;
+     Q[g,i.g] by A18,A26;
+    then consider g' being Function such that
+    A27: g' = g & g' in S &
+        ex b being bag of n st b = i.g & b = g;
+    thus i.g = x by A27;
+    end;
+ now let N be Subset of R;
+  set N' = i"N;
+  A28: N' c= S by A18,RELAT_1:167;
+  then N' c= the carrier of P by YELLOW_1:def 4;
+  then reconsider N' as Subset of P;
+  consider B' being set such that
+  A29: B' is_Dickson-basis_of N',P & B' is finite
+     by DICKSON:def 10;
+  A30: B' c= N' &
+      for a being Element of P st a in N'
+      ex b being Element of P st b in B' & b <= a by A29,DICKSON:def 9;
+  set B = i.:B';
+  A31: B is finite by A29,FINSET_1:17;
+   now let u be set;
+    assume u in B;
+    then consider v being set such that
+    A32: v in dom i & v in B' & u = i.v by FUNCT_1:def 12;
+    thus u in N by A30,A32,FUNCT_1:def 13;
+    end;
+  then A33: B c= N by TARSKI:def 3;
+  A34: for a,b being Element of P,
+         ta,tb being Element of Bags n st a = ta & b = tb & a in S
+         holds a <= b implies ta divides tb
+     proof
+     let a,b being Element of P,
+         ta,tb being Element of Bags n;
+     assume A35: a = ta & b = tb & a in S;
+     assume a <= b;
+     then consider f,g being Function such that
+     A36: f = a & g = b &
+         for i be set st i in n
+         ex R being RelStr, ai,bi being Element of R
+           st R = J.i & ai = f.i & bi = g.i & ai <= bi
+         by A35,YELLOW_1:def 4;
+      now let k be set;
+       assume A37: k in n;
+       then consider R being RelStr, ak,bk being Element of R such that
+       A38: R = J.k & ak = f.k & bk = g.k & ak <= bk by A36;
+        J.k = OrderedNAT by A37,FUNCOP_1:13;
+       then [ak,bk] in NATOrd by A38,DICKSON:def 15,ORDERS_1:def 9;
+       then consider a',b' being Nat such that
+       A39: [a',b'] = [ak,bk] & a' <= b' by DICKSON:def 14;
+       A40: a' = [ak,bk]`1 by A39,MCART_1:def 1 .= ak by MCART_1:def 1;
+        b' = [ak,bk]`2 by A39,MCART_1:def 2 .= bk by MCART_1:def 2;
+       hence ta.k <= tb.k by A35,A36,A38,A39,A40;
+       end;
+     hence thesis by POLYNOM1:50;
+     end;
+   for a being Element of R st a in N
+                 ex b being Element of R st b in B & b <= a
+    proof
+    let a be Element of R;
+    assume A41: a in N;
+    consider a' being Element of P such that
+    A42: a' in dom i & i.a' = a by A21;
+    A43: a' in S & (ex b being bag of n st b = i.a' & b = a') by A18,A42;
+     a' in N' by A41,A42,FUNCT_1:def 13;
+    then consider b' being Element of P such that
+    A44: b' in B' & b' <= a' by A29,DICKSON:def 9;
+    set b = i.b';
+    A45: B' c= S by A28,A30,XBOOLE_1:1;
+    then consider b1 being bag of n such that
+    A46: b1 = i.b' & b1 = b' by A18,A44;
+     b in rng i by A18,A44,A45,FUNCT_1:def 5;
+    then reconsider b as Element of Bags n by A19;
+    reconsider b as Element of R;
+    take b;
+    thus b in B by A18,A44,A45,FUNCT_1:def 12;
+    reconsider aa = a, bb = b as Element of Bags n;
+     bb divides aa by A34,A42,A43,A44,A45,A46;
+    then [b,a] in DivOrder(n) by Def5;
+    hence b <= a by ORDERS_1:def 9;
+    end;
+  then B is_Dickson-basis_of N,R by A33,DICKSON:def 9;
+  hence ex B being set st B is_Dickson-basis_of N,R & B is finite by A31;
+  end;
+hence thesis by DICKSON:def 10;
 end;
+end;
+
 
 theorem :: GROEB_1:34
 ::: theorem 5.2, p. 189
@@ -491,6 +675,7 @@ pred p is_monic_wrt T means
   HC(p,T) = 1_ L;
 end;
 
+
 definition
 ::: definition 5.29, p. 203
 let n be Ordinal,
@@ -503,8 +688,17 @@ pred P is_reduced_wrt T means
 :: GROEB_1:def 7
   for p being Polynomial of n,L st p in P
   holds p is_monic_wrt T & p is_irreducible_wrt P\{p},T;
-synonym P is_autoreduced_wrt T;
 end;
+notation
+::: definition 5.29, p. 203
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be right_zeroed add-associative right_complementable
+         commutative associative well-unital distributive
+         Field-like non trivial (non empty doubleLoopStr),
+    P be Subset of Polynom-Ring(n,L);
+synonym P is_autoreduced_wrt T for P is_reduced_wrt T ; end;
+
 
 theorem :: GROEB_1:37
 ::: lemma 5.42, p. 208

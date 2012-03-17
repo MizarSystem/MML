@@ -13,11 +13,6 @@ FINSET_1
 CARD_1
 FINSEQ_1
 #
-SeqEx
-SeqLambda
-IndSeq
-SepSeq
-#
 M4 K52 ;K56 ;;;
 ªM1 V2 ;V4 ;V19 ;;ª&R1 K75 B1 ;K73 F1 ;;;M4 K52 ;K56 ;;ª&R2 B2 K73 F1 ;;;ªP1 B2 K20 B1 B2 ;;;;M4 K52 ;K56 ;;M1 ;M1 ;ª&R2 B1 K73 F1 ;;;P1 B1 B2 ;P1 B1 B3 ;ªR1 B2 B3 ;;M4 K52 ;K56 ;;ª&R2 B1 K73 F1 ;;;M1 ;ªP1 B1 B2 ;;;
 #

@@ -84,6 +84,7 @@ A5: now let k be Nat;
         per cases by A7,REAL_1:def 5;
         suppose k + 1 = LifeSpan s;
          hence IC (Computation s).(k + 1) = IC (Computation s).LifeSpan s;
+        end;
         suppose A8: k + 1 > LifeSpan s;
       then LifeSpan s <= k by NAT_1:38;
       then A9: CurInstr (Computation s).k = halt SCMPDS by A1,Th2;
@@ -92,9 +93,10 @@ A5: now let k be Nat;
          .= IC Exec(halt SCMPDS,(Computation s).k) by A9,AMI_1:def 18
          .= IC (Computation s).LifeSpan s by A6,A8,AMI_1:def 8,NAT_1:38;
         end;
+        end;
       hence P[k + 1];
      end;
-     for k being Nat holds P[k] from Ind(A3,A5);
+     for k being Nat holds P[k] from NAT_1:sch 1(A3,A5);
    hence thesis by A2;
 end;
 
@@ -174,8 +176,10 @@ proof
       suppose A2: x in dom I;
          dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
        hence not x in D by A2,SCMPDS_2:10,XBOOLE_0:3;
+      end;
       suppose x = IC SCMPDS;
        hence not x in D by SCMPDS_3:6;
+     end;
      end;
    then dom (I +* Start-At l) misses D by XBOOLE_0:3;
    hence s | D = (s +* (I +* Start-At l)) | D by SCMFSA8A:2;
@@ -471,7 +475,8 @@ definition
   coherence;
 end;
 
-definition
+
+registration
    let n be Nat;
    cluster goto (n+1) -> No-StopCode;
    correctness by SCMPDS_5:25;
@@ -484,7 +489,8 @@ definition
    end;
 end;
 
-definition
+
+registration
    let n be Nat;
    cluster Goto (n+1) -> No-StopCode;
    correctness
@@ -500,6 +506,7 @@ definition
        hence thesis;
    end;
 end;
+
 
 theorem Th32:
     card Goto k1 = 1
@@ -536,6 +543,7 @@ definition
  pred I is_halting_on s means
 :Def3:    s +* Initialized stop I is halting;
 end;
+
 
 theorem Th34: ::S7B_Th24
  for I being Program-block holds
@@ -652,7 +660,7 @@ A23:  IC C1.(k + 1) in dom pI by A2,Def2;
      end;
      now let k be Nat;
    A24: IC C1.k in dom pI by A2,Def2;
-        for k being Nat holds P[k] from Ind(A11,A12);
+        for k being Nat holds P[k] from NAT_1:sch 1(A11,A12);
       hence IC C2.k in dom pI by A24;
      end;
    hence I is_closed_on s2 by Def2;
@@ -727,12 +735,12 @@ A24:   IC C1.(k + 1) in dom pI by A2,Def2;
       thus C1.(k + 1) | D = C2.(k + 1) | D by A15,A20,A21,A22,SCMPDS_4:24;
       end;
      end;
-       for k being Nat holds P[k] from Ind(A12,A13);
+       for k being Nat holds P[k] from NAT_1:sch 1(A12,A13);
      then CurInstr C2.m = halt SCMPDS by A3;
 then A25: s2 +* IsI is halting by AMI_1:def 20;
        now let k be Nat;
 A26:   IC C1.k in dom pI by A2,Def2;
-         for k being Nat holds P[k] from Ind(A12,A13);
+         for k being Nat holds P[k] from NAT_1:sch 1(A12,A13);
        hence IC C2.k in dom pI by A26;
      end;
      hence I is_closed_on s2 by Def2;
@@ -818,7 +826,7 @@ A20:   pIJ =I ';' J ';' SCMPDS-Stop by SCMPDS_4:def 7
      end;
 A22: s1+*IsJ=s +* (IsI +* IsJ) by FUNCT_4:15
      .=s+*IsJ by SCMPDS_5:17;
-A23: for m holds X[m] from Ind(A7,A8);
+A23: for m holds X[m] from NAT_1:sch 1(A7,A8);
      hereby
         let k be Nat;
         assume k <= LifeSpan s1;
@@ -1081,9 +1089,11 @@ A24:   k < LifeSpan s1;
        then CurInstr (Computation s1).k <> halt SCMPDS by A1,A2,Th42;
        hence
           CurInstr (Computation s2).k <> halt SCMPDS by A1,A2,A4,A24,Th41;
+      end;
       suppose LifeSpan s1 <= k;
 then k = LifeSpan s1 by A23,AXIOMS:21;
        hence CurInstr (Computation s2).k <> halt SCMPDS by A16,SCMPDS_2:85;
+     end;
      end;
 A25: now let k be Nat;
       assume CurInstr (Computation s2).k = halt SCMPDS;
@@ -1164,6 +1174,7 @@ then A18:    s2 is halting by AMI_1:def 20;
                C1k in dom pI by A1,Def2;
              then C1k in dom pJ by A8;
              hence C2k in dom pJ by A1,A2,A19,Th39;
+           end;
            suppose A20:k > m;
              set m2=LifeSpan s2;
 A21:          m2 <= m by A17,A18,SCM_1:def 2;
@@ -1173,8 +1184,10 @@ A21:          m2 <= m by A17,A18,SCM_1:def 2;
              then C2k in dom pI by A1,Def2;
              hence C2k in dom pJ by A8;
         end;
+        end;
         hence IJ is_closed_on s by A3,Def2;
 
+    end;
     suppose IC s3 =inspos card I;
 then A22:  IC s4=inspos card I by A1,A2,Th39;
 A23:  card (G ';' J) = card G + card J by SCMPDS_4:45
@@ -1232,6 +1245,7 @@ then A38:  s2 is halting by AMI_1:def 20;
              C1k in dom pI by A1,Def2;
            then C1k in dom pJ by A8;
            hence C2k in dom pJ by A1,A2,A39,Th39;
+         end;
          suppose k > m;
 then A40:          k >= m+1 by INT_1:20;
           set m2=LifeSpan s2;
@@ -1241,7 +1255,9 @@ A41:        m2 <= m+1 by A37,A38,SCM_1:def 2;
            .=inspos (card I + card J + 1) by A36,A38,A41,Th3;
            hence C2k in dom pJ by A33,SCMPDS_4:1;
       end;
+      end;
       hence IJ is_closed_on s by A3,Def2;
+end;
 end;
 
 theorem Th45:  :: SP4_88,Th27
@@ -1339,7 +1355,7 @@ A14: for k being Nat st P[k] holds P[k + 1]
       thus C1.(k + 1) | SCM-Data-Loc
        = C2.(k + 1) | SCM-Data-Loc by A15,A16,A17,A20,A21,SCMPDS_4:83;
      end;
-     for k being Nat holds P[k] from Ind(A10,A14);
+     for k being Nat holds P[k] from NAT_1:sch 1(A10,A14);
    hence thesis;
 end;
 
@@ -1437,6 +1453,7 @@ definition
  coherence;
 end;
 
+
 definition
  let a be Int_position,k be Integer;
  let I be Program-block;
@@ -1464,6 +1481,7 @@ definition
 :Def12:    (a,k)>=0_goto 2 ';' goto (card I+1) ';' I;
  coherence;
 end;
+
 
 Lm4:
      card (i ';' I ';' Goto n ';' J) = card I + card J +2
@@ -1630,8 +1648,10 @@ then A26:  m+1 < card pIF by A25,REAL_1:53;
        .= IC (Computation s2).k1 + 1 by A4,A7,A17,A18,A19,A21,Th45
        .= inspos (m + 1) by A24,SCMPDS_3:def 3;
       hence IC C3.k in dom pIF by A26,SCMPDS_4:1;
+     end;
      suppose k = 0;
        hence IC C3.k in dom pIF by A8,A10,AMI_1:def 19;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A22,Def3;
@@ -1723,9 +1743,11 @@ A26:      card pIF = card IF+1 by SCMPDS_5:7
            by A4,A6,A18,A20,A21,Th45
          .= inspos (m + (card I + 2)) by A24,SCMPDS_3:def 3;
          hence IC C3.k in dom pIF by A26,A27,SCMPDS_4:1;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pIF by A9,SCMPDS_4:75;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A22,Def3;
@@ -1799,6 +1821,7 @@ A22:   l < LifeSpan s2 + 1;
       suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th29;
+      end;
       suppose
        l <> 0;
          then consider n such that
@@ -1811,6 +1834,7 @@ A25:       CurInstr (Computation s3).l = halt SCMPDS;
            by A4,A6,A15,A16,A17,A19,Th45
         .= halt SCMPDS by A23,A25,AMI_1:51;
         hence contradiction by A5,A24,SCM_1:def 2;
+     end;
      end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
        LifeSpan s2 + 1 <= l;
@@ -1838,6 +1862,7 @@ A35:    not x in dom (s | A) by A11,A33,SCMPDS_2:53;
        .= (Result s2).x by A27,A33,SCMPDS_4:23
        .= IExec(I2,s).x by A29,A35,FUNCT_4:12
        .= (IExec(I2,s) +* SAl).x by A34,FUNCT_4:12;
+      end;
       suppose
 A36:    x = IC SCMPDS;
 then A37:    x in dom SAl by A32,TARSKI:def 1;
@@ -1862,8 +1887,10 @@ A39:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
            by XCMPLX_1:1
        .= (IExec(I2,s) +* SAl).x by A36,A37,FUNCT_4:14;
 
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I2,s) +* SAl).x by Th26;
+     end;
      end;
    hence IExec(IF,s) = IExec(I2,s) +* SAl by A28,FUNCT_1:9
    .= IExec(I,s) +* Start-At inspos (card I + card J + 1)
@@ -1947,6 +1974,7 @@ A25:    l < LifeSpan s1 + 1;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A10,Th29;
 
+       end;
        suppose l <> 0;
        then consider n such that
 A26:     l = n + 1 by NAT_1:22;
@@ -1957,6 +1985,7 @@ A28:       CurInstr (Computation s3).l = halt SCMPDS;
          = CurInstr (Computation s4).n by A4,A6,A19,A20,A22,Th45
         .= halt SCMPDS by A26,A28,AMI_1:51;
          hence contradiction by A5,A27,SCM_1:def 2;
+      end;
       end;
       then for l be Nat st
         CurInstr (Computation s3).l = halt SCMPDS holds
@@ -1985,6 +2014,7 @@ A38:    not x in dom (s | A) by A13,A36,SCMPDS_2:53;
        .= (Result s1).x by A30,A36,SCMPDS_4:23
        .= IExec(J,s).x by A32,A38,FUNCT_4:12
        .= (IExec(J,s) +* SAl).x by A37,FUNCT_4:12;
+      end;
       suppose
 A39:    x = IC SCMPDS;
 then A40:    x in dom SAl by A35,TARSKI:def 1;
@@ -2005,13 +2035,15 @@ A42:   IC Result s1 = (Result s1).IC SCMPDS by AMI_1:def 15
            by SCMPDS_3:def 3
        .= SAl.IC SCMPDS by XCMPLX_1:1
        .= (IExec(J,s) +* SAl).x by A39,A40,FUNCT_4:14;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(J,s) +* SAl).x by Th26;
+    end;
     end;
     hence IExec(IF,s) = IExec(J,s) +* SAl by A31,FUNCT_1:9;
 end;
 
-definition
+registration
    let I,J be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if=0(a,k1,I,J) -> shiftable parahalting;
@@ -2036,16 +2068,19 @@ A3:    J is_closed_on s & J is_halting_on s by Th34,Th35;
        suppose s.DataLoc(s.a,k1)= 0;
         then IF is_halting_on s by A2,Th52;
         hence s is halting by A1,Def3;
+       end;
        suppose s.DataLoc(s.a,k1) <> 0;
         then IF is_halting_on s by A3,Th53;
         hence s is halting by A1,Def3;
+   end;
    end;
    then IsIF is halting by AMI_1:def 26;
    hence IF is parahalting by SCMPDS_4:def 10;
   end;
 end;
 
-definition
+
+registration
    let I,J be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if=0(a,k1,I,J) -> No-StopCode;
@@ -2056,6 +2091,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem  ::E,S8B_21A
    for s being State of SCMPDS,I,J being No-StopCode shiftable parahalting
@@ -2072,10 +2108,12 @@ A2: J is_closed_on s & J is_halting_on s by Th34,Th35;
        then IExec(IF,s) =
            IExec(I,s) +* Start-At inspos (card I + card J + 2) by A1,Th54;
        hence IC IExec(IF,s) = inspos (card I + card J + 2) by AMI_5:79;
+      end;
       suppose s.DataLoc(s.a,k1) <> 0;
        then IExec(IF,s) =
            IExec(J,s) +* Start-At inspos (card I + card J + 2) by A2,Th55;
         hence IC IExec(IF,s) = inspos (card I + card J + 2) by AMI_5:79;
+     end;
      end;
 end;
 
@@ -2210,8 +2248,10 @@ then A24:  m+1 < card pIF by A23,REAL_1:53;
        .= IC (Computation s2).k1 + 1 by A4,A6,A16,A17,A19,Th45
        .= inspos (m + 1) by A22,SCMPDS_3:def 3;
       hence IC C3.k in dom pIF by A24,SCMPDS_4:1;
+     end;
      suppose k = 0;
        hence IC C3.k in dom pIF by A7,A9,AMI_1:def 19;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A20,Def3;
@@ -2262,9 +2302,11 @@ then A13: CurInstr s4 = halt SCMPDS by A12,AMI_1:def 17;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
          hence IC C3.k in dom pIF by A11,A12,A13,AMI_1:52;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pIF by A3,SCMPDS_4:75;
+     end;
      end;
      hence IF is_closed_on s by Def2;
        s3 is halting by A13,AMI_1:def 20;
@@ -2331,6 +2373,7 @@ A21:   l < LifeSpan s2 + 1;
       suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th29;
+      end;
       suppose
        l <> 0;
          then consider n such that
@@ -2343,6 +2386,7 @@ A24:       CurInstr (Computation s3).l = halt SCMPDS;
            by A4,A6,A15,A16,A18,Th45
         .= halt SCMPDS by A22,A24,AMI_1:51;
         hence contradiction by A5,A23,SCM_1:def 2;
+     end;
      end;
      then for l be Nat st
        CurInstr (Computation s3).l = halt SCMPDS
@@ -2372,6 +2416,7 @@ A34:    not x in dom (s | A) by A11,A32,SCMPDS_2:53;
        .= (Result s2).x by A26,A32,SCMPDS_4:23
        .= IExec(I,s).x by A28,A34,FUNCT_4:12
        .= (IExec(I,s) +* SAl).x by A33,FUNCT_4:12;
+      end;
       suppose
 A35:    x = IC SCMPDS;
 then A36:    x in dom SAl by A31,TARSKI:def 1;
@@ -2390,8 +2435,10 @@ A38:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= (Start-At (inspos (card I) + 1)).IC SCMPDS by A38,AMI_3:50
        .= SAl.IC SCMPDS by SCMPDS_3:def 3
        .= (IExec(I,s) +* SAl).x by A35,A36,FUNCT_4:14;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I,s) +* SAl).x by Th26;
+     end;
      end;
    hence IExec(IF,s) = IExec(I,s) +* SAl by A27,FUNCT_1:9;
 end;
@@ -2474,6 +2521,7 @@ then A22:    not x in dom SAl by A20,TARSKI:def 1;
        .= s3.x by A5,A21,SCMPDS_2:67
        .= s.x by A21,SCMPDS_5:19
        .= (s +* SAl).x by A22,FUNCT_4:12;
+      end;
       suppose
 A23:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A6,AMI_1:48,AMI_5:25
@@ -2482,13 +2530,15 @@ A23:    x = IC SCMPDS;
         = s4.x by A16,A18,FUNCT_4:12
        .= inspos(card I + 1) by A13,A23,AMI_1:def 15
        .= (s +* SAl).x by A23,Lm8;
+       end;
        suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (s +* SAl).x by Th27;
+    end;
     end;
     hence IExec(IF,s) = s +* SAl by A17,FUNCT_1:9;
 end;
 
-definition
+registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if=0(a,k1,I) -> shiftable parahalting;
@@ -2508,16 +2558,19 @@ A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
        suppose s.DataLoc(s.a,k1)= 0;
         then IF is_halting_on s by A2,Th62;
         hence s is halting by A1,Def3;
+       end;
        suppose s.DataLoc(s.a,k1) <> 0;
         then IF is_halting_on s by Th63;
         hence s is halting by A1,Def3;
+   end;
    end;
    then IsIF is halting by AMI_1:def 26;
    hence IF is parahalting by SCMPDS_4:def 10;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if=0(a,k1,I) -> No-StopCode;
@@ -2527,6 +2580,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem  ::E2,S8B_21A
    for s being State of SCMPDS,I being No-StopCode shiftable parahalting
@@ -2541,9 +2595,11 @@ A1: I is_closed_on s & I is_halting_on s by Th34,Th35;
     suppose s.DataLoc(s.a,k1) = 0;
       then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+1) by A1,Th64;
       hence thesis by AMI_5:79;
+    end;
     suppose s.DataLoc(s.a,k1) <> 0;
       then IExec(IF,s) =s +* Start-At inspos (card I+ 1) by Th65;
       hence thesis by AMI_5:79;
+end;
 end;
 
 theorem  ::E2,S8B_21B
@@ -2719,8 +2775,10 @@ then A24:   m+2 < card pIF by A23,REAL_1:53;
        .= IC (Computation s2).k1 + 2 by A4,A6,A16,A17,A19,Th45
        .= inspos (m + 2) by A22,SCMPDS_3:def 3;
       hence IC C3.k in dom pIF by A24,SCMPDS_4:1;
+     end;
      suppose k = 0;
        hence IC C3.k in dom pIF by A7,A10,AMI_1:def 19;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A20,Def3;
@@ -2788,11 +2846,14 @@ then A19: CurInstr s5 = halt SCMPDS by A18,AMI_1:def 17;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pIF by A3,SCMPDS_4:75;
+      end;
       suppose k = 1;
          hence IC C3.k in dom pIF by A10,A12,Th18;
+       end;
        suppose 1 < k;
          then 1+1 <= k by INT_1:20;
          hence IC C3.k in dom pIF by A17,A18,A19,AMI_1:52;
+     end;
      end;
      hence IF is_closed_on s by Def2;
        s3 is halting by A19,AMI_1:def 20;
@@ -2861,6 +2922,7 @@ A21:   l < LifeSpan s2 + 1;
       suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A10,Th29;
+      end;
       suppose
        l <> 0;
          then consider n such that
@@ -2873,6 +2935,7 @@ A24:       CurInstr (Computation s3).l = halt SCMPDS;
            by A4,A6,A15,A16,A18,Th45
         .= halt SCMPDS by A22,A24,AMI_1:51;
         hence contradiction by A5,A23,SCM_1:def 2;
+     end;
      end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
@@ -2901,6 +2964,7 @@ A34:    not x in dom (s | A) by A12,A32,SCMPDS_2:53;
        .= (Result s2).x by A26,A32,SCMPDS_4:23
        .= IExec(I,s).x by A28,A34,FUNCT_4:12
        .= (IExec(I,s) +* SAl).x by A33,FUNCT_4:12;
+      end;
       suppose
 A35:    x = IC SCMPDS;
 then A36:    x in dom SAl by A31,TARSKI:def 1;
@@ -2920,8 +2984,10 @@ A38:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= SAl.IC SCMPDS by SCMPDS_3:def 3
        .= (IExec(I,s) +* SAl).x by A35,A36,FUNCT_4:14;
 
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I,s) +* SAl).x by Th26;
+     end;
      end;
    hence IExec(IF,s) = IExec(I,s) +* SAl by A27,FUNCT_1:9;
 end;
@@ -2989,8 +3055,10 @@ then A20:  s3 is halting by AMI_1:def 20;
         suppose l=0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A4,Th29;
+        end;
         suppose l=1;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A13,SCMPDS_2:85;
+      end;
       end;
       then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
         holds 2 <= l;
@@ -3016,6 +3084,7 @@ then A29:    not x in dom SAl by A27,TARSKI:def 1;
        .= s3.x by A5,A28,SCMPDS_2:67
        .= s.x by A28,SCMPDS_5:19
        .= (s +* SAl).x by A29,FUNCT_4:12;
+      end;
       suppose
 A30:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A24,AMI_1:48,AMI_5:25
@@ -3024,13 +3093,15 @@ A30:    x = IC SCMPDS;
         = s5.x by A22,A25,FUNCT_4:12
        .= inspos(card I + 2) by A18,A30,AMI_1:def 15
        .= (s +* Start-At inspos (card I + 2)).x by A30,Lm8;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (s +* SAl).x by Th27;
+    end;
     end;
     hence IExec(IF,s) = s +* SAl by A23,FUNCT_1:9;
 end;
 
-definition
+registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if<>0(a,k1,I) -> shiftable parahalting;
@@ -3051,16 +3122,19 @@ A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
        suppose s.DataLoc(s.a,k1)<>0;
         then IF is_halting_on s by A2,Th72;
         hence s is halting by A1,Def3;
+       end;
        suppose s.DataLoc(s.a,k1) = 0;
         then IF is_halting_on s by Th73;
         hence s is halting by A1,Def3;
+   end;
    end;
    then IsIF is halting by AMI_1:def 26;
    hence IF is parahalting by SCMPDS_4:def 10;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if<>0(a,k1,I) -> No-StopCode;
@@ -3070,6 +3144,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem  ::E3,S8B_21A
    for s being State of SCMPDS,I being No-StopCode shiftable parahalting
@@ -3084,9 +3159,11 @@ A1: I is_closed_on s & I is_halting_on s by Th34,Th35;
     suppose s.DataLoc(s.a,k1) <> 0;
       then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+2) by A1,Th74;
       hence thesis by AMI_5:79;
+    end;
     suppose s.DataLoc(s.a,k1) = 0;
       then IExec(IF,s) =s +* Start-At inspos (card I+ 2) by Th75;
       hence thesis by AMI_5:79;
+end;
 end;
 
 theorem  ::E3,S8B_21B
@@ -3225,8 +3302,10 @@ then A25:  m+1 < card pIF by A24,REAL_1:53;
        .= IC (Computation s2).k1 + 1 by A4,A7,A16,A17,A18,A20,Th45
        .= inspos (m + 1) by A23,SCMPDS_3:def 3;
       hence IC C3.k in dom pIF by A25,SCMPDS_4:1;
+     end;
      suppose k = 0;
        hence IC C3.k in dom pIF by A8,A10,AMI_1:def 19;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A21,Def3;
@@ -3317,9 +3396,11 @@ A25:      card pIF = card IF+1 by SCMPDS_5:7
            by A4,A6,A17,A19,A20,Th45
          .= inspos (m + (card I + 2)) by A23,SCMPDS_3:def 3;
          hence IC C3.k in dom pIF by A25,A26,SCMPDS_4:1;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pIF by A9,SCMPDS_4:75;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A21,Def3;
@@ -3393,6 +3474,7 @@ A21:   l < LifeSpan s2 + 1;
       suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th30;
+      end;
       suppose
        l <> 0;
          then consider n such that
@@ -3405,6 +3487,7 @@ A24:       CurInstr (Computation s3).l = halt SCMPDS;
            by A4,A6,A14,A15,A16,A18,Th45
         .= halt SCMPDS by A22,A24,AMI_1:51;
         hence contradiction by A5,A23,SCM_1:def 2;
+     end;
      end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
@@ -3432,6 +3515,7 @@ A34:    not x in dom (s | A) by A11,A32,SCMPDS_2:53;
        .= (Result s2).x by A26,A32,SCMPDS_4:23
        .= IExec(I2,s).x by A28,A34,FUNCT_4:12
        .= (IExec(I2,s) +* SAl).x by A33,FUNCT_4:12;
+      end;
       suppose
 A35:    x = IC SCMPDS;
 then A36:    x in dom SAl by A31,TARSKI:def 1;
@@ -3456,8 +3540,10 @@ A38:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
            by XCMPLX_1:1
        .= (IExec(I2,s) +* SAl).x by A35,A36,FUNCT_4:14;
 
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I2,s) +* SAl).x by Th26;
+     end;
      end;
    hence IExec(IF,s) = IExec(I2,s) +* SAl by A27,FUNCT_1:9
    .= IExec(I,s) +* Start-At inspos (card I + card J + 1)
@@ -3540,6 +3626,7 @@ A25:    l < LifeSpan s1 + 1;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A10,Th30;
 
+       end;
        suppose l <> 0;
        then consider n such that
 A26:     l = n + 1 by NAT_1:22;
@@ -3550,6 +3637,7 @@ A28:       CurInstr (Computation s3).l = halt SCMPDS;
          = CurInstr (Computation s4).n by A4,A6,A19,A20,A22,Th45
         .= halt SCMPDS by A26,A28,AMI_1:51;
          hence contradiction by A5,A27,SCM_1:def 2;
+      end;
       end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s1 + 1 <= l;
@@ -3577,6 +3665,7 @@ A38:    not x in dom (s | A) by A13,A36,SCMPDS_2:53;
        .= (Result s1).x by A30,A36,SCMPDS_4:23
        .= IExec(J,s).x by A32,A38,FUNCT_4:12
        .= (IExec(J,s) +* SAl).x by A37,FUNCT_4:12;
+      end;
       suppose
 A39:    x = IC SCMPDS;
 then A40:    x in dom SAl by A35,TARSKI:def 1;
@@ -3597,13 +3686,15 @@ A42:   IC Result s1 = (Result s1).IC SCMPDS by AMI_1:def 15
            by SCMPDS_3:def 3
        .= SAl.IC SCMPDS by XCMPLX_1:1
        .= (IExec(J,s) +* SAl).x by A39,A40,FUNCT_4:14;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(J,s) +* SAl).x by Th26;
+    end;
     end;
     hence IExec(IF,s) = IExec(J,s) +* SAl by A31,FUNCT_1:9;
 end;
 
-definition
+registration
    let I,J be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if>0(a,k1,I,J) -> shiftable parahalting;
@@ -3628,16 +3719,19 @@ A3:    J is_closed_on s & J is_halting_on s by Th34,Th35;
        suppose s.DataLoc(s.a,k1) > 0;
         then IF is_halting_on s by A2,Th82;
         hence s is halting by A1,Def3;
+       end;
        suppose s.DataLoc(s.a,k1) <= 0;
         then IF is_halting_on s by A3,Th83;
         hence s is halting by A1,Def3;
+   end;
    end;
    then IsIF is halting by AMI_1:def 26;
    hence IF is parahalting by SCMPDS_4:def 10;
   end;
 end;
 
-definition
+
+registration
    let I,J be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if>0(a,k1,I,J) -> No-StopCode;
@@ -3648,6 +3742,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem  ::G,S8B_21A
    for s being State of SCMPDS,I,J being No-StopCode shiftable parahalting
@@ -3664,10 +3759,12 @@ A2: J is_closed_on s & J is_halting_on s by Th34,Th35;
        then IExec(IF,s) =
            IExec(I,s) +* Start-At inspos (card I + card J + 2) by A1,Th84;
        hence IC IExec(IF,s) = inspos (card I + card J + 2) by AMI_5:79;
+    end;
     suppose s.DataLoc(s.a,k1) <= 0;
       then IExec(IF,s) =
            IExec(J,s) +* Start-At inspos (card I + card J + 2) by A2,Th85;
       hence IC IExec(IF,s) = inspos (card I + card J + 2) by AMI_5:79;
+end;
 end;
 
 theorem  ::G,S8B_21B
@@ -3802,8 +3899,10 @@ then A23:  m+1 < card pIF by A22,REAL_1:53;
        .= IC (Computation s2).k1 + 1 by A4,A6,A15,A16,A18,Th45
        .= inspos (m + 1) by A21,SCMPDS_3:def 3;
       hence IC C3.k in dom pIF by A23,SCMPDS_4:1;
+     end;
      suppose k = 0;
        hence IC C3.k in dom pIF by A7,A9,AMI_1:def 19;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A19,Def3;
@@ -3853,9 +3952,11 @@ then A12: CurInstr s4 = halt SCMPDS by A11,AMI_1:def 17;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
          hence IC C3.k in dom pIF by A10,A11,A12,AMI_1:52;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pIF by A3,SCMPDS_4:75;
+     end;
      end;
      hence IF is_closed_on s by Def2;
        s3 is halting by A12,AMI_1:def 20;
@@ -3922,6 +4023,7 @@ A20:   l < LifeSpan s2 + 1;
       suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th30;
+      end;
       suppose
        l <> 0;
          then consider n such that
@@ -3934,6 +4036,7 @@ A23:       CurInstr (Computation s3).l = halt SCMPDS;
            by A4,A6,A14,A15,A17,Th45
         .= halt SCMPDS by A21,A23,AMI_1:51;
         hence contradiction by A5,A22,SCM_1:def 2;
+     end;
      end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
@@ -3962,6 +4065,7 @@ A33:    not x in dom (s | A) by A11,A31,SCMPDS_2:53;
        .= (Result s2).x by A25,A31,SCMPDS_4:23
        .= IExec(I,s).x by A27,A33,FUNCT_4:12
        .= (IExec(I,s) +* SAl).x by A32,FUNCT_4:12;
+      end;
       suppose
 A34:    x = IC SCMPDS;
 then A35:    x in dom SAl by A30,TARSKI:def 1;
@@ -3980,8 +4084,10 @@ A37:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= (Start-At (inspos (card I) + 1)).IC SCMPDS by A37,AMI_3:50
        .= SAl.IC SCMPDS by SCMPDS_3:def 3
        .= (IExec(I,s) +* SAl).x by A34,A35,FUNCT_4:14;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I,s) +* SAl).x by Th26;
+     end;
      end;
    hence IExec(IF,s) = IExec(I,s) +* SAl by A26,FUNCT_1:9;
 end;
@@ -4056,6 +4162,7 @@ then A21:    not x in dom SAl by A19,TARSKI:def 1;
        .= s3.x by A5,A20,SCMPDS_2:68
        .= s.x by A20,SCMPDS_5:19
        .= (s +* SAl).x by A21,FUNCT_4:12;
+      end;
       suppose
 A22:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A6,AMI_1:48,AMI_5:25
@@ -4064,13 +4171,15 @@ A22:    x = IC SCMPDS;
         = s4.x by A15,A17,FUNCT_4:12
        .= inspos(card I + 1) by A12,A22,AMI_1:def 15
        .= (s +* SAl).x by A22,Lm8;
+       end;
        suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (s +* SAl).x by Th27;
+    end;
     end;
     hence IExec(IF,s) = s +* SAl by A16,FUNCT_1:9;
 end;
 
-definition
+registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if>0(a,k1,I) -> shiftable parahalting;
@@ -4090,16 +4199,19 @@ A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
        suppose s.DataLoc(s.a,k1) > 0;
         then IF is_halting_on s by A2,Th92;
         hence s is halting by A1,Def3;
+       end;
        suppose s.DataLoc(s.a,k1) <= 0;
         then IF is_halting_on s by Th93;
         hence s is halting by A1,Def3;
+   end;
    end;
    then IsIF is halting by AMI_1:def 26;
    hence IF is parahalting by SCMPDS_4:def 10;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if>0(a,k1,I) -> No-StopCode;
@@ -4109,6 +4221,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem  ::G,S8B_21A
    for s being State of SCMPDS,I being No-StopCode shiftable parahalting
@@ -4123,9 +4236,11 @@ A1: I is_closed_on s & I is_halting_on s by Th34,Th35;
     suppose s.DataLoc(s.a,k1) > 0;
       then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+1) by A1,Th94;
       hence thesis by AMI_5:79;
+    end;
     suppose s.DataLoc(s.a,k1) <= 0;
       then IExec(IF,s) =s +* Start-At inspos (card I+ 1) by Th95;
       hence thesis by AMI_5:79;
+end;
 end;
 
 theorem  ::G,S8B_21B
@@ -4256,8 +4371,10 @@ then A23:   m+2 < card pIF by A22,REAL_1:53;
        .= IC (Computation s2).k1 + 2 by A4,A6,A15,A16,A18,Th45
        .= inspos (m + 2) by A21,SCMPDS_3:def 3;
       hence IC C3.k in dom pIF by A23,SCMPDS_4:1;
+     end;
      suppose k = 0;
        hence IC C3.k in dom pIF by A7,A10,AMI_1:def 19;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A19,Def3;
@@ -4325,11 +4442,14 @@ then A19: CurInstr s5 = halt SCMPDS by A18,AMI_1:def 17;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pIF by A3,SCMPDS_4:75;
+      end;
       suppose k = 1;
          hence IC C3.k in dom pIF by A10,A12,Th18;
+       end;
        suppose 1 < k;
          then 1+1 <= k by INT_1:20;
          hence IC C3.k in dom pIF by A17,A18,A19,AMI_1:52;
+     end;
      end;
      hence IF is_closed_on s by Def2;
        s3 is halting by A19,AMI_1:def 20;
@@ -4398,6 +4518,7 @@ A21:   l < LifeSpan s2 + 1;
       suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A10,Th30;
+      end;
       suppose
        l <> 0;
          then consider n such that
@@ -4410,6 +4531,7 @@ A24:       CurInstr (Computation s3).l = halt SCMPDS;
            by A4,A6,A15,A16,A18,Th45
         .= halt SCMPDS by A22,A24,AMI_1:51;
         hence contradiction by A5,A23,SCM_1:def 2;
+     end;
      end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
@@ -4437,6 +4559,7 @@ A34:    not x in dom (s | A) by A12,A32,SCMPDS_2:53;
        .= (Result s2).x by A26,A32,SCMPDS_4:23
        .= IExec(I,s).x by A28,A34,FUNCT_4:12
        .= (IExec(I,s) +* SAl).x by A33,FUNCT_4:12;
+      end;
       suppose
 A35:    x = IC SCMPDS;
 then A36:    x in dom SAl by A31,TARSKI:def 1;
@@ -4455,8 +4578,10 @@ A38:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= (Start-At (inspos (card I) + 2)).IC SCMPDS by A38,AMI_3:50
        .= SAl.IC SCMPDS by SCMPDS_3:def 3
        .= (IExec(I,s) +* SAl).x by A35,A36,FUNCT_4:14;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I,s) +* SAl).x by Th26;
+     end;
      end;
    hence IExec(IF,s) = IExec(I,s) +* SAl by A27,FUNCT_1:9;
 end;
@@ -4524,8 +4649,10 @@ then A20:  s3 is halting by AMI_1:def 20;
         suppose l=0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A4,Th30;
+        end;
         suppose l=1;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A13,SCMPDS_2:85;
+      end;
       end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
        2 <= l;
@@ -4551,6 +4678,7 @@ then A29:    not x in dom SAl by A27,TARSKI:def 1;
        .= s3.x by A5,A28,SCMPDS_2:68
        .= s.x by A28,SCMPDS_5:19
        .= (s +* SAl).x by A29,FUNCT_4:12;
+      end;
       suppose
 A30:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A24,AMI_1:48,AMI_5:25
@@ -4559,13 +4687,15 @@ A30:    x = IC SCMPDS;
         = s5.x by A22,A25,FUNCT_4:12
        .= inspos(card I + 2) by A18,A30,AMI_1:def 15
        .= (s +* Start-At inspos (card I + 2)).x by A30,Lm8;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (s +* SAl).x by Th27;
+    end;
     end;
     hence IExec(IF,s) = s +* SAl by A23,FUNCT_1:9;
 end;
 
-definition
+registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if<=0(a,k1,I) -> shiftable parahalting;
@@ -4586,16 +4716,19 @@ A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
        suppose s.DataLoc(s.a,k1) <= 0;
         then IF is_halting_on s by A2,Th102;
         hence s is halting by A1,Def3;
+       end;
        suppose s.DataLoc(s.a,k1) > 0;
         then IF is_halting_on s by Th103;
         hence s is halting by A1,Def3;
+   end;
    end;
    then IsIF is halting by AMI_1:def 26;
    hence IF is parahalting by SCMPDS_4:def 10;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if<=0(a,k1,I) -> No-StopCode;
@@ -4605,6 +4738,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem  ::G3,S8B_21A
    for s being State of SCMPDS,I being No-StopCode shiftable parahalting
@@ -4619,9 +4753,11 @@ A1: I is_closed_on s & I is_halting_on s by Th34,Th35;
     suppose s.DataLoc(s.a,k1) <= 0;
       then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+2) by A1,Th104;
       hence thesis by AMI_5:79;
+    end;
     suppose s.DataLoc(s.a,k1) > 0;
       then IExec(IF,s) =s +* Start-At inspos (card I+ 2) by Th105;
       hence thesis by AMI_5:79;
+end;
 end;
 
 theorem  ::G3,S8B_21B
@@ -4760,8 +4896,10 @@ then A25:  m+1 < card pIF by A24,REAL_1:53;
        .= IC (Computation s2).k1 + 1 by A4,A7,A16,A17,A18,A20,Th45
        .= inspos (m + 1) by A23,SCMPDS_3:def 3;
       hence IC C3.k in dom pIF by A25,SCMPDS_4:1;
+     end;
      suppose k = 0;
        hence IC C3.k in dom pIF by A8,A10,AMI_1:def 19;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A21,Def3;
@@ -4852,9 +4990,11 @@ A25:      card pIF = card IF+1 by SCMPDS_5:7
            by A4,A6,A17,A19,A20,Th45
          .= inspos (m + (card I + 2)) by A23,SCMPDS_3:def 3;
          hence IC C3.k in dom pIF by A25,A26,SCMPDS_4:1;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pIF by A9,SCMPDS_4:75;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A21,Def3;
@@ -4928,6 +5068,7 @@ A21:   l < LifeSpan s2 + 1;
       suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th31;
+      end;
       suppose l <> 0;
          then consider n such that
 A22:     l = n + 1 by NAT_1:22;
@@ -4939,6 +5080,7 @@ A24:       CurInstr (Computation s3).l = halt SCMPDS;
            by A4,A6,A14,A15,A16,A18,Th45
         .= halt SCMPDS by A22,A24,AMI_1:51;
         hence contradiction by A5,A23,SCM_1:def 2;
+     end;
      end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
        LifeSpan s2 + 1 <= l;
@@ -4966,6 +5108,7 @@ A34:    not x in dom (s | A) by A11,A32,SCMPDS_2:53;
        .= (Result s2).x by A26,A32,SCMPDS_4:23
        .= IExec(I2,s).x by A28,A34,FUNCT_4:12
        .= (IExec(I2,s) +* SAl).x by A33,FUNCT_4:12;
+      end;
       suppose
 A35:    x = IC SCMPDS;
 then A36:    x in dom SAl by A31,TARSKI:def 1;
@@ -4989,8 +5132,10 @@ A38:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= (Start-At inspos (card I + card J + (1 + 1))).IC SCMPDS
            by XCMPLX_1:1
        .= (IExec(I2,s) +* SAl).x by A35,A36,FUNCT_4:14;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I2,s) +* SAl).x by Th26;
+     end;
      end;
    hence IExec(IF,s) = IExec(I2,s) +* SAl by A27,FUNCT_1:9
    .= IExec(I,s) +* Start-At inspos (card I + card J + 1)
@@ -5073,6 +5218,7 @@ A25:    l < LifeSpan s1 + 1;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A10,Th31;
 
+       end;
        suppose l <> 0;
        then consider n such that
 A26:     l = n + 1 by NAT_1:22;
@@ -5083,6 +5229,7 @@ A28:       CurInstr (Computation s3).l = halt SCMPDS;
          = CurInstr (Computation s4).n by A4,A6,A19,A20,A22,Th45
         .= halt SCMPDS by A26,A28,AMI_1:51;
          hence contradiction by A5,A27,SCM_1:def 2;
+      end;
       end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
        LifeSpan s1 + 1 <= l;
@@ -5110,6 +5257,7 @@ A38:    not x in dom (s | A) by A13,A36,SCMPDS_2:53;
        .= (Result s1).x by A30,A36,SCMPDS_4:23
        .= IExec(J,s).x by A32,A38,FUNCT_4:12
        .= (IExec(J,s) +* SAl).x by A37,FUNCT_4:12;
+      end;
       suppose
 A39:    x = IC SCMPDS;
 then A40:    x in dom SAl by A35,TARSKI:def 1;
@@ -5130,13 +5278,15 @@ A42:   IC Result s1 = (Result s1).IC SCMPDS by AMI_1:def 15
            by SCMPDS_3:def 3
        .= SAl.IC SCMPDS by XCMPLX_1:1
        .= (IExec(J,s) +* SAl).x by A39,A40,FUNCT_4:14;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(J,s) +* SAl).x by Th26;
+    end;
     end;
     hence IExec(IF,s) = IExec(J,s) +* SAl by A31,FUNCT_1:9;
 end;
 
-definition
+registration
    let I,J be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if<0(a,k1,I,J) -> shiftable parahalting;
@@ -5161,16 +5311,19 @@ A3:    J is_closed_on s & J is_halting_on s by Th34,Th35;
        suppose s.DataLoc(s.a,k1) < 0;
         then IF is_halting_on s by A2,Th112;
         hence s is halting by A1,Def3;
+       end;
        suppose s.DataLoc(s.a,k1) >= 0;
         then IF is_halting_on s by A3,Th113;
         hence s is halting by A1,Def3;
+   end;
    end;
    then IsIF is halting by AMI_1:def 26;
    hence IF is parahalting by SCMPDS_4:def 10;
   end;
 end;
 
-definition
+
+registration
    let I,J be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if<0(a,k1,I,J) -> No-StopCode;
@@ -5181,6 +5334,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem  ::L,S8B_21A
    for s being State of SCMPDS,I,J being No-StopCode shiftable parahalting
@@ -5197,10 +5351,12 @@ A2: J is_closed_on s & J is_halting_on s by Th34,Th35;
        then IExec(IF,s) =
            IExec(I,s) +* Start-At inspos (card I + card J + 2) by A1,Th114;
        hence IC IExec(IF,s) = inspos (card I + card J + 2) by AMI_5:79;
+    end;
     suppose s.DataLoc(s.a,k1) >= 0;
       then IExec(IF,s) =
            IExec(J,s) +* Start-At inspos (card I + card J + 2) by A2,Th115;
       hence IC IExec(IF,s) = inspos (card I + card J + 2) by AMI_5:79;
+end;
 end;
 
 theorem  ::S8B_21B
@@ -5335,8 +5491,10 @@ then A23:  m+1 < card pIF by A22,REAL_1:53;
        .= IC (Computation s2).k1 + 1 by A4,A6,A15,A16,A18,Th45
        .= inspos (m + 1) by A21,SCMPDS_3:def 3;
       hence IC C3.k in dom pIF by A23,SCMPDS_4:1;
+     end;
      suppose k = 0;
        hence IC C3.k in dom pIF by A7,A9,AMI_1:def 19;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A19,Def3;
@@ -5386,9 +5544,11 @@ then A12: CurInstr s4 = halt SCMPDS by A11,AMI_1:def 17;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
          hence IC C3.k in dom pIF by A10,A11,A12,AMI_1:52;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pIF by A3,SCMPDS_4:75;
+     end;
      end;
      hence IF is_closed_on s by Def2;
        s3 is halting by A12,AMI_1:def 20;
@@ -5455,6 +5615,7 @@ A20:   l < LifeSpan s2 + 1;
       suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th31;
+      end;
       suppose
        l <> 0;
          then consider n such that
@@ -5467,6 +5628,7 @@ A23:       CurInstr (Computation s3).l = halt SCMPDS;
            by A4,A6,A14,A15,A17,Th45
         .= halt SCMPDS by A21,A23,AMI_1:51;
         hence contradiction by A5,A22,SCM_1:def 2;
+     end;
      end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
        LifeSpan s2 + 1 <= l;
@@ -5495,6 +5657,7 @@ A33:    not x in dom (s | A) by A11,A31,SCMPDS_2:53;
        .= (Result s2).x by A25,A31,SCMPDS_4:23
        .= IExec(I,s).x by A27,A33,FUNCT_4:12
        .= (IExec(I,s) +* SAl).x by A32,FUNCT_4:12;
+      end;
       suppose
 A34:    x = IC SCMPDS;
 then A35:    x in dom SAl by A30,TARSKI:def 1;
@@ -5513,8 +5676,10 @@ A37:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= (Start-At (inspos (card I) + 1)).IC SCMPDS by A37,AMI_3:50
        .= SAl.IC SCMPDS by SCMPDS_3:def 3
        .= (IExec(I,s) +* SAl).x by A34,A35,FUNCT_4:14;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I,s) +* SAl).x by Th26;
+     end;
      end;
    hence IExec(IF,s) = IExec(I,s) +* SAl by A26,FUNCT_1:9;
 end;
@@ -5589,6 +5754,7 @@ then A21:    not x in dom SAl by A19,TARSKI:def 1;
        .= s3.x by A5,A20,SCMPDS_2:69
        .= s.x by A20,SCMPDS_5:19
        .= (s +* SAl).x by A21,FUNCT_4:12;
+      end;
       suppose
 A22:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A6,AMI_1:48,AMI_5:25
@@ -5597,13 +5763,15 @@ A22:    x = IC SCMPDS;
         = s4.x by A15,A17,FUNCT_4:12
        .= inspos(card I + 1) by A12,A22,AMI_1:def 15
        .= (s +* SAl).x by A22,Lm8;
+       end;
        suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (s +* SAl).x by Th27;
+    end;
     end;
     hence IExec(IF,s) = s +* SAl by A16,FUNCT_1:9;
 end;
 
-definition
+registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if<0(a,k1,I) -> shiftable parahalting;
@@ -5623,16 +5791,19 @@ A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
        suppose s.DataLoc(s.a,k1) < 0;
         then IF is_halting_on s by A2,Th122;
         hence s is halting by A1,Def3;
+       end;
        suppose s.DataLoc(s.a,k1) >= 0;
         then IF is_halting_on s by Th123;
         hence s is halting by A1,Def3;
+   end;
    end;
    then IsIF is halting by AMI_1:def 26;
    hence IF is parahalting by SCMPDS_4:def 10;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if<0(a,k1,I) -> No-StopCode;
@@ -5642,6 +5813,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem  ::L2,S8B_21A
    for s being State of SCMPDS,I being No-StopCode shiftable parahalting
@@ -5656,9 +5828,11 @@ A1: I is_closed_on s & I is_halting_on s by Th34,Th35;
     suppose s.DataLoc(s.a,k1) < 0;
       then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+1) by A1,Th124;
       hence thesis by AMI_5:79;
+    end;
     suppose s.DataLoc(s.a,k1) >= 0;
       then IExec(IF,s) =s +* Start-At inspos (card I+ 1) by Th125;
       hence thesis by AMI_5:79;
+end;
 end;
 
 theorem  ::L,S8B_21B
@@ -5789,8 +5963,10 @@ then A23:   m+2 < card pIF by A22,REAL_1:53;
        .= IC (Computation s2).k1 + 2 by A4,A6,A15,A16,A18,Th45
        .= inspos (m + 2) by A21,SCMPDS_3:def 3;
       hence IC C3.k in dom pIF by A23,SCMPDS_4:1;
+     end;
      suppose k = 0;
        hence IC C3.k in dom pIF by A7,A10,AMI_1:def 19;
+     end;
      end;
      hence IF is_closed_on s by Def2;
      thus IF is_halting_on s by A19,Def3;
@@ -5858,11 +6034,14 @@ then A19: CurInstr s5 = halt SCMPDS by A18,AMI_1:def 17;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pIF by A3,SCMPDS_4:75;
+      end;
       suppose k = 1;
          hence IC C3.k in dom pIF by A10,A12,Th18;
+       end;
        suppose 1 < k;
          then 1+1 <= k by INT_1:20;
          hence IC C3.k in dom pIF by A17,A18,A19,AMI_1:52;
+     end;
      end;
      hence IF is_closed_on s by Def2;
        s3 is halting by A19,AMI_1:def 20;
@@ -5931,6 +6110,7 @@ A21:   l < LifeSpan s2 + 1;
       suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A10,Th31;
+      end;
       suppose
        l <> 0;
          then consider n such that
@@ -5943,6 +6123,7 @@ A24:       CurInstr (Computation s3).l = halt SCMPDS;
            by A4,A6,A15,A16,A18,Th45
         .= halt SCMPDS by A22,A24,AMI_1:51;
         hence contradiction by A5,A23,SCM_1:def 2;
+     end;
      end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
@@ -5971,6 +6152,7 @@ A34:    not x in dom (s | A) by A12,A32,SCMPDS_2:53;
        .= (Result s2).x by A26,A32,SCMPDS_4:23
        .= IExec(I,s).x by A28,A34,FUNCT_4:12
        .= (IExec(I,s) +* SAl).x by A33,FUNCT_4:12;
+      end;
       suppose
 A35:    x = IC SCMPDS;
 then A36:    x in dom SAl by A31,TARSKI:def 1;
@@ -5990,8 +6172,10 @@ A38:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= SAl.IC SCMPDS by SCMPDS_3:def 3
        .= (IExec(I,s) +* SAl).x by A35,A36,FUNCT_4:14;
 
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I,s) +* SAl).x by Th26;
+     end;
      end;
    hence IExec(IF,s) = IExec(I,s) +* SAl by A27,FUNCT_1:9;
 end;
@@ -6059,8 +6243,10 @@ then A20:  s3 is halting by AMI_1:def 20;
         suppose l=0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A4,Th31;
+        end;
         suppose l=1;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A13,SCMPDS_2:85;
+      end;
       end;
      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
        holds 2 <= l;
@@ -6086,6 +6272,7 @@ then A29:    not x in dom SAl by A27,TARSKI:def 1;
        .= s3.x by A5,A28,SCMPDS_2:69
        .= s.x by A28,SCMPDS_5:19
        .= (s +* SAl).x by A29,FUNCT_4:12;
+      end;
       suppose
 A30:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A24,AMI_1:48,AMI_5:25
@@ -6094,13 +6281,15 @@ A30:    x = IC SCMPDS;
         = s5.x by A22,A25,FUNCT_4:12
        .= inspos(card I + 2) by A18,A30,AMI_1:def 15
        .= (s +* Start-At inspos (card I + 2)).x by A30,Lm8;
+      end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (s +* SAl).x by Th27;
+    end;
     end;
     hence IExec(IF,s) = s +* SAl by A23,FUNCT_1:9;
 end;
 
-definition
+registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if>=0(a,k1,I) -> shiftable parahalting;
@@ -6121,16 +6310,19 @@ A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
        suppose s.DataLoc(s.a,k1) >= 0;
         then IF is_halting_on s by A2,Th132;
         hence s is halting by A1,Def3;
+       end;
        suppose s.DataLoc(s.a,k1) < 0;
         then IF is_halting_on s by Th133;
         hence s is halting by A1,Def3;
+   end;
    end;
    then IsIF is halting by AMI_1:def 26;
    hence IF is parahalting by SCMPDS_4:def 10;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if>=0(a,k1,I) -> No-StopCode;
@@ -6140,6 +6332,7 @@ definition
      hence thesis;
    end;
 end;
+
 
 theorem  ::L2,S8B_21A
    for s being State of SCMPDS,I being No-StopCode shiftable parahalting
@@ -6154,9 +6347,11 @@ A1: I is_closed_on s & I is_halting_on s by Th34,Th35;
     suppose s.DataLoc(s.a,k1) >= 0;
       then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+2) by A1,Th134;
       hence thesis by AMI_5:79;
+    end;
     suppose s.DataLoc(s.a,k1) < 0;
       then IExec(IF,s) =s +* Start-At inspos (card I+ 2) by Th135;
       hence thesis by AMI_5:79;
+end;
 end;
 
 theorem   ::L,S8B_21B

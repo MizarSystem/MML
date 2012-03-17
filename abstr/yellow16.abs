@@ -45,20 +45,52 @@ theorem :: YELLOW16:3
   st f' = f & g' = g & f' <= g'
   holds f <= g;
 
-definition
+registration
  let S be non empty RelStr;
  let T be non empty reflexive antisymmetric RelStr;
  cluster directed-sups-preserving monotone map of S,T;
+ existence
+  proof consider x being Element of T;
+   take f = S --> x;
+A1:  f = (the carrier of S) --> x by BORSUK_1:def 3;
+   thus f is directed-sups-preserving
+     proof let X be Subset of S; assume
+A2:    X is non empty directed;
+A3:    f.:X = {x}
+       proof thus f.:X c= {x} by A1,BORSUK_1:6;
+        consider a being Element of X;
+A4:       a in X by A2;
+         then f.a = x & dom f = the carrier of S by A1,FUNCOP_1:13,19;
+         then x in f.:X by A4,FUNCT_1:def 12;
+        hence thesis by ZFMISC_1:37;
+       end;
+     assume ex_sup_of X,S;
+     thus ex_sup_of f.:X, T by A3,YELLOW_0:38;
+     thus sup (f.:X) = x by A3,YELLOW_0:39 .= f.sup X by A1,FUNCOP_1:13;
+    end;
+   let a,b be Element of S;
+      f.a = x & f.b = x & x <= x by A1,FUNCOP_1:13;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: YELLOW16:4
    for f,g being Function st f is idempotent & rng g c= rng f & rng g c= dom f
   holds f*g = g;
 
-definition
+registration
  let S be 1-sorted;
  cluster idempotent map of S,S;
+ existence
+  proof take f = id S;
+A1:  the carrier of S = {} implies the carrier of S = {};
+      f = id the carrier of S by GRCAT_1:def 11;
+    then f*f = f by A1,FUNCT_2:23;
+   hence thesis by QUANTAL1:def 9;
+  end;
 end;
+
 
 theorem :: YELLOW16:5
  for L being up-complete (non empty Poset)
@@ -95,6 +127,7 @@ definition
   ex g being directed-sups-preserving map of S,T st f*g = id S;
 end;
 
+
 definition
  let S,T be non empty Poset;
  pred S is_a_retract_of T means
@@ -105,6 +138,7 @@ definition
 :: YELLOW16:def 4
   ex f being map of T,S st f is_an_UPS_retraction_of T,S;
 end;
+
 
 theorem :: YELLOW16:10
  for S,T being non empty Poset, f being Function
@@ -232,9 +266,17 @@ definition
   for x being set st x in rng R holds x is Poset;
 end;
 
-definition
+
+registration
  cluster Poset-yielding -> RelStr-yielding reflexive-yielding Relation;
+ coherence
+  proof let R be Relation; assume
+A1:  for x being set st x in rng R holds x is Poset;
+   hence for x being set st x in rng R holds x is RelStr;
+   thus for S being RelStr st S in rng R holds S is reflexive by A1;
+  end;
 end;
+
 
 definition
  let X be non empty set;
@@ -244,22 +286,48 @@ definition
  redefine func pi(Y,i) -> Subset of L;
 end;
 
-definition
+
+registration
  let X be set;
  let S be Poset;
  cluster X --> S -> Poset-yielding;
+ coherence
+  proof
+A1:  rng (X --> S) c= {S} by FUNCOP_1:19;
+   let x be set; assume x in rng (X --> S);
+   hence thesis by A1,TARSKI:def 1;
+  end;
 end;
 
-definition
+
+registration
  let I be set;
  cluster Poset-yielding non-Empty ManySortedSet of I;
+ existence
+  proof consider P being non empty Poset;
+   take I --> P; thus thesis;
+  end;
 end;
 
-definition
+
+registration
  let I be non empty set;
  let J be Poset-yielding non-Empty ManySortedSet of I;
  cluster product J -> transitive antisymmetric;
+ coherence
+  proof
+A1:  now let i be Element of I;
+        dom J = I by PBOOLE:def 3;
+      then J.i in rng J by FUNCT_1:def 5;
+     hence J.i is Poset by Def5;
+    end;
+    then for i being Element of I holds J.i is transitive;
+   hence product J is transitive by WAYBEL_3:29;
+      for i being Element of I holds J.i is antisymmetric by A1;
+   hence thesis by WAYBEL_3:30;
+  end;
 end;
+
 
 definition
  let I be non empty set;
@@ -353,6 +421,7 @@ definition
   ex_inf_of X,T implies "/\"(X, T) in the carrier of S;
 end;
 
+
 theorem :: YELLOW16:42
  for T being non empty transitive RelStr
  for S being full non empty SubRelStr of T
@@ -367,7 +436,8 @@ theorem :: YELLOW16:43
   holds S inherits_inf_of X,T iff
     (ex_inf_of X,T implies ex_inf_of X, S & inf X = "/\"(X, T));
 
-scheme ProductSupsInheriting
+scheme :: YELLOW16:sch 1
+ ProductSupsInheriting
  { I() -> non empty set,
    J,K() -> Poset-yielding non-Empty ManySortedSet of I(),
    P[set, set] }:
@@ -380,9 +450,31 @@ scheme ProductSupsInheriting
    for i being Element of I() holds K().i is full SubRelStr of J().i
  and
    for i being Element of I(), X being Subset of K().i st P[X, K().i]
-    holds K().i inherits_sup_of X, J().i;
+    holds K().i inherits_sup_of X, J().i
+proof   let X be Subset of product K() such that
+A4:  P[X, product K()] and
+A5:  ex_sup_of X, product J();
+   set f = "\/"(X, product J());
+      product K() is SubRelStr of product J() by A2,Th39;
+    then the carrier of product K() c= the carrier of product J()
+     by YELLOW_0:def 13;
+    then X c= the carrier of product J() by XBOOLE_1:1;
+   then reconsider Y = X as Subset of product J();
+A6:  dom f = I() by WAYBEL_3:27;
+      now let i be Element of I();
+        P[pi(X, i), K().i] by A1,A4;
+then A7:    K().i inherits_sup_of pi(X, i), J().i by A3;
+        ex_sup_of pi(Y,i), J().i by A5,Th33;
+      then sup pi(Y,i) in the carrier of K().i by A7,Def6;
+      then f.i in the carrier of K().i by A5,Th35;
+     hence f.i is Element of K().i;
+    end;
+    then "\/"(X, product J()) is Element of product K() by A6,WAYBEL_3:27;
+   hence thesis;
+  end;
 
-scheme PowerSupsInheriting
+scheme :: YELLOW16:sch 2
+ PowerSupsInheriting
  { I() -> non empty set,
    L() -> non empty Poset,
    S() -> non empty full SubRelStr of L(),
@@ -393,9 +485,35 @@ scheme PowerSupsInheriting
    for X being Subset of S()|^I() st P[X, S()|^I()]
     for i being Element of I() holds P[pi(X, i), S()]
  and
-   for X being Subset of S() st P[X, S()] holds S() inherits_sup_of X, L();
+   for X being Subset of S() st P[X, S()] holds S() inherits_sup_of X, L()
+proof
+   defpred p[set,set] means P[$1,$2];
+   reconsider K = I() --> S(), J = I() --> L() as
+     Poset-yielding non-Empty ManySortedSet of I();
+A3:  S()|^I() = product K & L()|^I() = product J by YELLOW_1:def 5;
+A4: now let X be Subset of product K such that
+A5:   p[X, product K];
+     let i be Element of I();
+        K.i = S() by FUNCOP_1:13;
+     hence p[pi(X, i), K.i] by A1,A3,A5;
+    end;
+A6: now let i be Element of I();
+        K.i = S() & J.i = L() by FUNCOP_1:13;
+     hence K.i is full SubRelStr of J.i;
+    end;
+A7: now let i be Element of I(), X be Subset of K.i such that
+A8:   p[X, K.i];
+        K.i = S() & J.i = L() by FUNCOP_1:13;
+     hence K.i inherits_sup_of X, J.i by A2,A8;
+    end;
+      for X being Subset of product K st p[X, product K]
+     holds product K inherits_sup_of X, product J
+      from ProductSupsInheriting(A4,A6,A7);
+   hence thesis by A3;
+  end;
 
-scheme ProductInfsInheriting
+scheme :: YELLOW16:sch 3
+ ProductInfsInheriting
  { I() -> non empty set,
    J,K() -> Poset-yielding non-Empty ManySortedSet of I(),
    P[set, set] }:
@@ -408,9 +526,31 @@ scheme ProductInfsInheriting
    for i being Element of I() holds K().i is full SubRelStr of J().i
  and
    for i being Element of I(), X being Subset of K().i st P[X, K().i]
-    holds K().i inherits_inf_of X, J().i;
+    holds K().i inherits_inf_of X, J().i
+proof   let X be Subset of product K() such that
+A4:  P[X, product K()] and
+A5:  ex_inf_of X, product J();
+   set f = "/\"(X, product J());
+      product K() is SubRelStr of product J() by A2,Th39;
+    then the carrier of product K() c= the carrier of product J()
+     by YELLOW_0:def 13;
+    then X c= the carrier of product J() by XBOOLE_1:1;
+   then reconsider Y = X as Subset of product J();
+A6:  dom f = I() by WAYBEL_3:27;
+      now let i be Element of I();
+        P[pi(X, i), K().i] by A1,A4;
+then A7:    K().i inherits_inf_of pi(X, i), J().i by A3;
+        ex_inf_of pi(Y,i), J().i by A5,Th34;
+      then inf pi(Y,i) in the carrier of K().i by A7,Def7;
+      then f.i in the carrier of K().i by A5,Th36;
+     hence f.i is Element of K().i;
+    end;
+    then "/\"(X, product J()) is Element of product K() by A6,WAYBEL_3:27;
+   hence thesis;
+  end;
 
-scheme PowerInfsInheriting
+scheme :: YELLOW16:sch 4
+ PowerInfsInheriting
  { I() -> non empty set,
    L() -> non empty Poset,
    S() -> non empty full SubRelStr of L(),
@@ -421,15 +561,51 @@ scheme PowerInfsInheriting
    for X being Subset of S()|^I() st P[X, S()|^I()]
     for i being Element of I() holds P[pi(X, i), S()]
  and
-   for X being Subset of S() st P[X, S()] holds S() inherits_inf_of X, L();
+   for X being Subset of S() st P[X, S()] holds S() inherits_inf_of X, L()
+proof
+   defpred p[set,set] means P[$1,$2];
+   reconsider K = I() --> S(), J = I() --> L() as
+     Poset-yielding non-Empty ManySortedSet of I();
+A3:  S()|^I() = product K & L()|^I() = product J by YELLOW_1:def 5;
+A4: now let X be Subset of product K such that
+A5:   p[X, product K];
+     let i be Element of I();
+        K.i = S() by FUNCOP_1:13;
+     hence p[pi(X, i), K.i] by A1,A3,A5;
+    end;
+A6: now let i be Element of I();
+        K.i = S() & J.i = L() by FUNCOP_1:13;
+     hence K.i is full SubRelStr of J.i;
+    end;
+A7: now let i be Element of I(), X be Subset of K.i such that
+A8:   p[X, K.i];
+        K.i = S() & J.i = L() by FUNCOP_1:13;
+     hence K.i inherits_inf_of X, J.i by A2,A8;
+    end;
+      for X being Subset of product K st p[X, product K]
+     holds product K inherits_inf_of X, product J
+      from ProductInfsInheriting(A4,A6,A7);
+   hence thesis by A3;
+  end;
 
-definition
+registration
  let I be set;
  let L be non empty RelStr;
  let X be non empty Subset of L|^I;
  let i be set;
  cluster pi(X,i) -> non empty;
+ coherence
+  proof L|^I = product (I --> L) by YELLOW_1:def 5;
+   then reconsider Y = X as non empty Subset of product (I --> L);
+   consider f being Element of Y;
+   f in the carrier of product (I --> L); then
+   f in product Carrier (I --> L) by YELLOW_1:def 4; then
+   reconsider f as Function by AMI_1:22;
+   f.i in pi(X,i) by CARD_3:def 6;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: YELLOW16:44
    for L being non empty Poset
@@ -437,31 +613,44 @@ theorem :: YELLOW16:44
  for X be non empty set
   holds S|^X is directed-sups-inheriting SubRelStr of L|^X;
 
-definition
+registration
  let I be non empty set;
  let J be RelStr-yielding non-Empty ManySortedSet of I;
  let X be non empty Subset of product J;
  let i be set;
  cluster pi(X,i) -> non empty;
+ coherence
+  proof consider f being Element of X;
+   f in the carrier of product J; then
+   f in product Carrier J by YELLOW_1:def 4; then
+   reconsider f as Function by AMI_1:22;
+   f.i in pi(X,i) by CARD_3:def 6;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: YELLOW16:45
  for X being non empty set
  for L being up-complete (non empty Poset)
   holds L|^X is up-complete;
 
-definition
+registration
  let L be up-complete (non empty Poset);
  let X be non empty set;
  cluster L|^X -> up-complete;
+ coherence by Th45;
 end;
+
 
 begin :: Topological retracts
 
-definition
+registration
  let T be TopSpace;
  cluster the topology of T -> non empty;
+ coherence by PRE_TOPC:def 1;
 end;
+
 
 theorem :: YELLOW16:46
  for T being non empty TopSpace, S being non empty SubSpace of T

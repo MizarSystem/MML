@@ -24,8 +24,6 @@ MIDSP_1
 MIDSP_2
 MIDSP_3
 #
-SeqLambdaD'
-#
 M3 K71 ;K75 ;;M1 W5 ;;M2 F2 ;;;
 ªM8 F2 ;;ª&R1 K82 B1 ;K106 F1 ;N1 ;;M15 F1 ;;R1 K11 B1 B2 ;F3 B2 ;;;;
 #

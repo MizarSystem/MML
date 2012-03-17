@@ -20,18 +20,50 @@ environ
 
 begin
 
-scheme LambdaSep1{D, R() -> non empty set, A() -> Element of D(),
+scheme :: RLVECT_2:sch 1
+ LambdaSep1{D, R() -> non empty set, A() -> Element of D(),
                   B() -> Element of R(), F(set) -> Element of R()}:
  ex f being Function of D(),R() st
-  f.A() = B() & for x being Element of D() st x <> A() holds f.x = F(x);
+  f.A() = B() & for x being Element of D() st x <> A() holds f.x = F(x)
+proof
+     defpred P[set,set] means
+     ($1 = A() implies $2 = B()) & ($1 <> A() implies $2 = F($1));
+     A1: for x being Element of D()
+          ex y being Element of R() st P[x,y]
+      proof let x be Element of D();
+          (x = A() implies thesis) & (x <> A() implies thesis);
+       hence thesis;
+      end;
+     consider f being Function of D(),R() such that A2:
+      for x being Element of D() holds P[x,f.x] from FUNCT_2:sch 3(A1);
+    take f;
+    thus thesis by A2;
+   end;
 
-scheme LambdaSep2{D, R() -> non empty set, A1, A2() -> Element of D(),
+scheme :: RLVECT_2:sch 2
+ LambdaSep2{D, R() -> non empty set, A1, A2() -> Element of D(),
                   B1, B2() -> Element of R(), F(set) -> Element of R()}:
  ex f being Function of D(),R() st
   f.A1() = B1() & f.A2() = B2() &
    for x being Element of D() st x <> A1() & x <> A2() holds f.x = F(x)
  provided
-   A1() <> A2();
+   A1() <> A2()
+proof
+      defpred P[set,set] means
+        ($1 = A1() implies $2 = B1()) & ($1 = A2() implies $2 = B2()) &
+        ($1 <> A1() & $1 <> A2() implies $2 = F($1));
+      A2: for x being Element of D()
+           ex y being Element of R() st P[x,y]
+       proof let x be Element of D();
+           (x = A1() implies thesis) & (x = A2() implies thesis) &
+         (x <> A1() & x <> A2() implies thesis) by A1;
+        hence thesis;
+       end;
+      consider f being Function of D(),R() such that A3:
+       for x being Element of D() holds P[x,f.x] from FUNCT_2:sch 3(A2);
+     take f;
+     thus thesis by A3;
+    end;
 
 reserve X,Y,x,y,y1,y2 for set,
         p for FinSequence,
@@ -50,6 +82,7 @@ definition let S be 1-sorted; let x;
 :: RLVECT_2:def 1
    x;
 end;
+
 
 canceled 2;
 
@@ -100,8 +133,13 @@ theorem :: RLVECT_2:9
  for f being Permutation of dom F st G = F * f holds
   Sum(F) = Sum(G);
 
-definition let V be 1-sorted;
+registration let V be 1-sorted;
  cluster empty finite Subset of V;
+ existence
+  proof {} is Subset of V by SUBSET_1:4;
+     then {} is Subset of V & {} is finite;
+   hence thesis;
+  end;
 end;
 
 
@@ -112,6 +150,7 @@ definition let V be 1-sorted; let S,T be finite Subset of V;
   func S \ T -> finite Subset of V;
   func S \+\ T -> finite Subset of V;
 end;
+
 
 definition let V be non empty LoopStr,
                T be finite Subset of V;
@@ -124,23 +163,33 @@ definition let V be non empty LoopStr,
     rng F = T & F is one-to-one & it = Sum(F);
 end;
 
-definition let V be non empty 1-sorted;
+
+registration let V be non empty 1-sorted;
  cluster non empty finite Subset of V;
+ existence
+  proof consider v being Element of V;
+      {v} is finite Subset of V;
+   hence thesis;
+  end;
 end;
+
 
 definition let V be non empty 1-sorted; let v be Element of V;
  redefine func {v} -> finite Subset of V;
 end;
+
 
 definition let V be non empty 1-sorted;
  let v1,v2 be Element of V;
  redefine func {v1,v2} -> finite Subset of V;
 end;
 
+
 definition let V be non empty 1-sorted;
  let v1,v2,v3 be Element of V;
  redefine func {v1,v2,v3} -> finite Subset of V;
 end;
+
 
 canceled 4;
 
@@ -213,6 +262,7 @@ definition let V be non empty ZeroStr;
   for v being Element of V st not v in T holds it.v = 0;
 end;
 
+
 reserve K,L,L1,L2,L3 for Linear_Combination of V;
 
 definition let V be non empty LoopStr, L be Linear_Combination of V;
@@ -220,6 +270,7 @@ definition let V be non empty LoopStr, L be Linear_Combination of V;
 :: RLVECT_2:def 6
    {v where v is Element of V : L.v <> 0};
 end;
+
 
 canceled 3;
 
@@ -234,6 +285,7 @@ definition let V be non empty LoopStr;
    Carrier (it) = {};
 end;
 
+
 canceled;
 
 theorem :: RLVECT_2:30
@@ -245,6 +297,7 @@ definition let V be non empty LoopStr; let A be Subset of V;
 :: RLVECT_2:def 8
    Carrier (it) c= A;
 end;
+
 
 reserve l,l1,l2 for Linear_Combination of A;
 
@@ -266,6 +319,7 @@ definition let V; let F; let f;
    len it = len F &
          for i st i in dom it holds it.i = f.(F/.i) * F/.i;
 end;
+
 
 canceled 4;
 
@@ -326,11 +380,13 @@ definition let V be non empty LoopStr; let L1,L2 be Linear_Combination of V;
       for v being Element of V holds L1.v = L2.v;
 end;
 
+
 definition let V be non empty LoopStr; let L1,L2 be Linear_Combination of V;
  func L1 + L2 -> Linear_Combination of V means
 :: RLVECT_2:def 12
    for v being Element of V holds it.v = L1.v + L2.v;
 end;
+
 
 canceled 3;
 
@@ -356,6 +412,7 @@ definition let V,a; let L;
 :: RLVECT_2:def 13
    for v holds it.v = a * L.v;
 end;
+
 
 canceled 2;
 
@@ -386,6 +443,7 @@ definition let V,L;
    (- 1) * L;
 end;
 
+
 canceled;
 
 theorem :: RLVECT_2:73
@@ -409,6 +467,7 @@ definition let V; let L1,L2;
    L1 + (- L2);
 end;
 
+
 canceled;
 
 theorem :: RLVECT_2:79
@@ -430,9 +489,17 @@ definition let V;
    x in it iff x is Linear_Combination of V;
 end;
 
-definition let V;
+
+registration let V;
  cluster LinComb(V) -> non empty;
+coherence
+ proof
+  consider x being Linear_Combination of V;
+    x in LinComb V by Def16;
+  hence thesis;
+ end;
 end;
+
 
 reserve e,e1,e2 for Element of LinComb(V);
 
@@ -442,11 +509,13 @@ definition let V; let e;
    e;
 end;
 
+
 definition let V; let L;
  func @L -> Element of LinComb(V) equals
 :: RLVECT_2:def 18
    L;
 end;
+
 
 definition let V;
  func LCAdd(V) -> BinOp of LinComb(V) means
@@ -454,11 +523,13 @@ definition let V;
    for e1,e2 holds it.(e1,e2) = @e1 + @e2;
 end;
 
+
 definition let V;
  func LCMult(V) -> Function of [:REAL,LinComb(V):], LinComb(V) means
 :: RLVECT_2:def 20
    for a,e holds it.[a,e] = a * @e;
 end;
+
 
 definition let V;
  func LC_RLSpace(V) -> RealLinearSpace equals
@@ -466,9 +537,17 @@ definition let V;
    RLSStruct (# LinComb(V), @ZeroLC(V), LCAdd(V), LCMult(V) #);
 end;
 
-definition let V;
+
+registration let V;
  cluster LC_RLSpace(V) -> strict non empty;
+coherence
+ proof
+    LC_RLSpace(V) = RLSStruct (# LinComb(V), @ZeroLC(V), LCAdd(V), LCMult(V) #)
+   by Def21;
+  hence LC_RLSpace(V) is strict & the carrier of LC_RLSpace(V) is non empty;
+ end;
 end;
+
 
 canceled 9;
 
@@ -501,6 +580,7 @@ definition let V; let A;
 :: RLVECT_2:def 22
      the carrier of it = {l : not contradiction};
 end;
+
 
 canceled 3;
 

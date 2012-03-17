@@ -22,12 +22,22 @@ begin :: Preliminaries
 
 reserve x,y,z for set;
 
-definition let x,y,z;
+registration let x,y,z;
  cluster <*x,y,z*> -> non trivial;
+  coherence
+ proof len <*x,y,z*> = 3 by FINSEQ_1:62;
+   hence <*x,y,z*> is non trivial by SPPOL_1:2;
+ end;
 end;
 
-definition let f be non empty FinSequence;
+
+registration let f be non empty FinSequence;
  cluster Rev f -> non empty;
+ coherence
+  proof
+      dom f <> {} by RELAT_1:64;
+    hence Rev f is non empty by FINSEQ_5:60,RELAT_1:60;
+  end;
 end;
 
 begin
@@ -76,9 +86,11 @@ theorem :: FINSEQ_6:13
 theorem :: FINSEQ_6:14
  p in rng f1 implies (f1^f2)-|p = f1-|p;
 
-definition let f1; let i be natural number;
+registration let f1; let i be natural number;
  cluster f1|Seg i -> FinSequence-like;
+ coherence by FINSEQ_1:19;
 end;
+
 
 theorem :: FINSEQ_6:15
  f1 c= f2 implies f3^f1 c= f3^f2;
@@ -335,6 +347,7 @@ definition let D be non empty set;
  IT/.1 = IT/.len IT;
 end;
 
+
 definition let D,f,p;
  func Rotate(f,p) -> FinSequence of D equals
 :: FINSEQ_6:def 2
@@ -342,21 +355,87 @@ definition let D,f,p;
    otherwise f;
 end;
 
-definition let D; let f be non empty FinSequence of D, p be Element of D;
+
+registration let D; let f be non empty FinSequence of D, p be Element of D;
  cluster Rotate(f,p) -> non empty;
+ coherence
+  proof
+   per cases;
+   suppose
+A1:   p in rng f;
+      (f:-p)^((f-:p)/^1) is non empty;
+   hence thesis by A1,Def2;
+   end;
+   suppose not p in rng f;
+   hence thesis by Def2;
+  end;
+  end;
 end;
 
-definition let D;
+
+registration let D;
  cluster circular non empty trivial FinSequence of D;
+ existence
+  proof consider d being Element of D;
+   take <*d*>;
+   thus <*d*> is circular
+    proof thus <*d*>/.1 = <*d*>/.len<*d*> by FINSEQ_1:56;
+    end;
+   thus thesis;
+  end;
  cluster circular non empty non trivial FinSequence of D;
+ existence
+  proof consider d being Element of D;
+   take <*d,d*>;
+   thus <*d,d*> is circular
+    proof len<*d,d*> = 2 by FINSEQ_1:61;
+     hence <*d,d*>/.len<*d,d*> = d by FINSEQ_4:26
+             .= <*d,d*>/.1 by FINSEQ_4:26;
+    end;
+   thus thesis;
+  end;
 end;
+
 
 theorem :: FINSEQ_6:95
  Rotate(f,f/.1) = f;
 
-definition let D,p; let f be circular non empty FinSequence of D;
+registration let D,p; let f be circular non empty FinSequence of D;
  cluster Rotate(f,p) -> circular;
+ coherence
+  proof
+   per cases;
+   suppose not p in rng f;
+    hence thesis by Def2;
+   end;
+   suppose that
+A1: p in rng f and
+A2: p <> f/.1;
+A3:  Rotate(f,p) = (f:-p)^((f-:p)/^1) by A1,Def2;
+      p..f <> 1 & p..f >= 1 by A1,A2,FINSEQ_4:31,FINSEQ_5:41;
+    then p..f > 1 by REAL_1:def 5;
+    then p..f >= 1+1 by NAT_1:38;
+    then A4:  len(f-:p) >= 1+1 by A1,FINSEQ_5:45;
+    then 1 <= len(f-:p) by AXIOMS:22;
+    then len((f-:p)/^1) = len(f-:p)-1 by RFINSEQ:def 2;
+then A5:  len((f-:p)/^1) + 1 = len(f-:p) by XCMPLX_1:27;
+    then len((f-:p)/^1) >= 1 by A4,REAL_1:53;
+then A6:  len((f-:p)/^1) in dom((f-:p)/^1) by FINSEQ_3:27;
+      1 in dom(f:-p) by FINSEQ_5:6;
+   hence (Rotate(f,p))/.1 = (f:-p)/.1 by A3,GROUP_5:95
+          .= p by FINSEQ_5:56
+          .= (f-:p)/.(p..f) by A1,FINSEQ_5:48
+          .= (f-:p)/.(len((f-:p)/^1)+1) by A1,A5,FINSEQ_5:45
+          .= ((f-:p)/^1)/.(len((f-:p)/^1)) by A6,FINSEQ_5:30
+          .= ((f:-p)^((f-:p)/^1))/.(len(f:-p)+len((f-:p)/^1)) by A6,GROUP_5:96
+          .= (Rotate(f,p))/.len Rotate(f,p) by A3,FINSEQ_1:35;
+   end;
+   suppose p in rng f & p = f/.1;
+   hence thesis by Th95;
+  end;
+  end;
 end;
+
 
 theorem :: FINSEQ_6:96
    f is circular & p in rng f implies rng Rotate(f,p) = rng f;

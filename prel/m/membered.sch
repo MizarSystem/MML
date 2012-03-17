@@ -15,12 +15,6 @@ ABSVALUE
 RAT_1
 MEMBERED
 #
-CM_Separation
-RM_Separation
-WM_Separation
-IM_Separation
-NM_Separation
-#
 ;
 ªM1 V22 ;;ªM1 V1 ;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;
 #

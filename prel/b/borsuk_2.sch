@@ -11,8 +11,6 @@ NUMBERS
 FINSET_1
 CARD_1
 #
-FrCard
-#
 M1 W1 ;;M1 ;M1 ;;
 R3 K57 ËM2 F1 ;;;F3 B1 ;&R2 B1 F2 ;;P1 B1 ;;;K57 F2 ;;;;
 #

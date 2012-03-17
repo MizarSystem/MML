@@ -15,9 +15,6 @@ CARD_1
 FINSEQ_1
 FINSEQ_4
 #
-LambdaIdx
-FuncIdx_correctness
-#
 M1 ;M1 W5 ;;M2 F2 ;;;
 ªM5 V3 ;V6 F1 ;F2 ;;F1 ;F2 ;;ªM1 ;ª&R2 B2 F1 ;;ªR1 K98 F1 ;F2 ;B1 B2 ;F3 B2 ;;;;
 #

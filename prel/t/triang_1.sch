@@ -13,11 +13,8 @@ NAT_1
 XREAL_0
 FINSET_1
 #
-Regr1
-SubFinite
-#
 M4 K52 ;K56 ;;;
-M4 K52 ;K56 ;;ª&R12 B1 F1 ;;ªP1 B1 ;;P1 F1 ;;M4 K52 ;K56 ;;ª&ªR12 F1 ;B1 ;P1 K64 B1 N1 ;;ªP1 B1 ;;;
+M4 K52 ;K56 ;;ª&R13 B1 F1 ;;ªP1 B1 ;;P1 F1 ;;M4 K52 ;K56 ;;ª&ªR13 F1 ;B1 ;P1 K64 B1 N1 ;;ªP1 B1 ;;;
 #
 M1 ;M3 K40 F1 ;;;;
 P1 F2 ;;V20 F2 ;;P1 K44 F1 ;;;M3 F1 ;;M3 K40 F1 ;;;ª&R2 B1 F2 ;;R3 B2 F2 ;;P1 B2 ;ªP1 K6 B2 K1 B1 ;;;;;

@@ -29,8 +29,9 @@ begin  :: The properties of some functions
 
  reserve A, B, X, Y for set;
 
-definition let X be empty set;
+registration let X be empty set;
  cluster union X -> empty;
+coherence by ZFMISC_1:2;
 end;
 
 theorem :: YELLOW12:1
@@ -55,9 +56,11 @@ theorem :: YELLOW12:6
 theorem :: YELLOW12:7
 <:pr2(X,Y),pr1(X,Y):> is one-to-one;
 
-definition let X, Y be set;
+registration let X, Y be set;
  cluster <:pr2(X,Y),pr1(X,Y):> -> one-to-one;
+coherence by Th7;
 end;
+
 
 theorem :: YELLOW12:8
 <:pr2(X,Y),pr1(X,Y):>" = <:pr2(Y,X),pr1(Y,X):>;
@@ -154,17 +157,37 @@ theorem :: YELLOW12:24
 for R being upper-bounded Semilattice, X being Subset of [:R,R:] st
  ex_inf_of (inf_op R).:X,R holds inf_op R preserves_inf_of X;
 
-definition let R be complete Semilattice;
+registration let R be complete Semilattice;
  cluster inf_op R -> infs-preserving;
+coherence
+  proof
+    let X be Subset of [:R,R:] such that
+A1:   ex_inf_of X,[:R,R:];
+    thus
+     ex_inf_of (inf_op R).:X,R by YELLOW_0:17;
+    then inf_op R preserves_inf_of X by Th24;
+    hence thesis by A1,WAYBEL_0:def 30;
+  end;
 end;
+
 
 theorem :: YELLOW12:25
 for R being lower-bounded sup-Semilattice, X being Subset of [:R,R:] st
  ex_sup_of (sup_op R).:X,R holds sup_op R preserves_sup_of X;
 
-definition let R be complete sup-Semilattice;
+registration let R be complete sup-Semilattice;
  cluster sup_op R -> sups-preserving;
+coherence
+  proof
+    let X be Subset of [:R,R:] such that
+A1:   ex_sup_of X,[:R,R:];
+    thus
+     ex_sup_of (sup_op R).:X,R by YELLOW_0:17;
+    then sup_op R preserves_sup_of X by Th25;
+    hence thesis by A1,WAYBEL_0:def 31;
+  end;
 end;
+
 
 theorem :: YELLOW12:26
   for N being Semilattice, A being Subset of N st
@@ -197,13 +220,25 @@ begin  :: On the Hausdorff Spaces
 
  reserve R, S, T for non empty TopSpace;
 
-definition let T be non empty TopStruct;
+registration let T be non empty TopStruct;
  cluster the TopStruct of T -> non empty;
+coherence by STRUCT_0:def 1;
 end;
 
-definition let T be TopSpace;
+
+registration let T be TopSpace;
  cluster the TopStruct of T -> TopSpace-like;
+coherence
+  proof
+    set IT = the TopStruct of T;
+    thus the carrier of IT in the topology of IT by PRE_TOPC:def 1;
+    thus for a being Subset-Family of IT
+      st a c= the topology of IT
+       holds union a in the topology of IT by PRE_TOPC:def 1;
+    thus thesis by PRE_TOPC:def 1;
+  end;
 end;
+
 
 theorem :: YELLOW12:32
 for S, T being TopStruct, B being Basis of S st
@@ -216,17 +251,21 @@ for S, T being TopStruct, B being prebasis of S st
 theorem :: YELLOW12:34
 for J being Basis of T holds J is non empty;
 
-definition let T be non empty TopSpace;
+registration let T be non empty TopSpace;
  cluster -> non empty Basis of T;
+coherence by Th34;
 end;
+
 
 theorem :: YELLOW12:35
 for x being Point of T, J being Basis of x holds J is non empty;
 
-definition let T be non empty TopSpace,
+registration let T be non empty TopSpace,
                x be Point of T;
  cluster -> non empty Basis of x;
+coherence by Th35;
 end;
+
 
 theorem :: YELLOW12:36
   for S1, T1, S2, T2 being non empty TopSpace,
@@ -280,14 +319,45 @@ theorem :: YELLOW12:46
  for A being Subset of [:T,T:] st A = id the carrier of T
   holds A is closed;
 
-definition let S, T be TopStruct;
+registration let S, T be TopStruct;
  cluster strict Refinement of S, T;
+existence
+  proof
+    consider R being Refinement of S, T;
+    set R1 = the TopStruct of R;
+      R1 is Refinement of S, T
+    proof
+      thus the carrier of R1 = (the carrier of S) \/ (the carrier of T)
+        by YELLOW_9:def 6;
+        (the topology of S) \/ (the topology of T) is prebasis of R
+        by YELLOW_9:def 6;
+      hence (the topology of S) \/ (the topology of T) is prebasis of R1
+        by Th33;
+    end;
+    then reconsider R1 as Refinement of S, T;
+    take R1;
+    thus thesis;
+  end;
 end;
 
-definition let S be non empty TopStruct, T be TopStruct;
+
+registration let S be non empty TopStruct, T be TopStruct;
  cluster strict non empty Refinement of S, T;
+existence
+  proof
+    consider R being strict Refinement of S, T;
+    take R;
+    thus thesis;
+  end;
  cluster strict non empty Refinement of T, S;
+existence
+  proof
+    consider R being strict Refinement of T, S;
+    take R;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: YELLOW12:47
   for R, S, T being TopStruct holds

@@ -52,9 +52,16 @@ theorem :: CARD_5:12
 theorem :: CARD_5:13
    (ex n st M = Card n) or (ex A st M = alef A);
 
- definition let phi;
+ registration let phi;
   cluster Union phi -> ordinal;
+   coherence
+    proof ex A st rng phi c= A by ORDINAL2:def 8;
+      then On rng phi = rng phi & union rng phi = Union phi
+       by ORDINAL3:8,PROB_1:def 3;
+     hence thesis by ORDINAL3:7;
+    end;
  end;
+
 
 theorem :: CARD_5:14
  X c= A implies ex phi st
@@ -90,15 +97,24 @@ theorem :: CARD_5:22
 theorem :: CARD_5:23
  M <` exp(2,M);
 
- definition
+ registration
   cluster infinite set;
+   existence
+    proof take X = alef 0; thus not X is finite by Th11;
+    end;
 
   cluster infinite Cardinal;
+   existence
+    proof take alef 0; thus not alef 0 is finite by Th11;
+    end;
  end;
 
- definition
+
+ registration
   cluster infinite -> non empty set;
+   coherence by CARD_1:51;
  end;
+
 
  definition
   mode Aleph is infinite Cardinal;
@@ -118,9 +134,12 @@ theorem :: CARD_5:23
     for K st K in M holds it.K = exp(K,N);
  end;
 
- definition let A;
+
+ registration let A;
   cluster alef A -> infinite;
+   coherence by Th11;
  end;
+
 
 begin :: Arithmetics of alephs
 
@@ -149,18 +168,44 @@ theorem :: CARD_5:31
 theorem :: CARD_5:32
  union a = a;
 
- definition let a,M;
+ registration let a,M;
   cluster a +` M -> infinite;
+   coherence
+    proof
+        a, M are_c=-comparable by ORDINAL1:25;
+      then a <=` M or M <=` a by XBOOLE_0:def 9;
+      then a +` M = M & M is Aleph or a +` M = a by Th26,Th27,CARD_4:34;
+     hence thesis;
+    end;
  end;
 
- definition let M,a;
+
+ registration let M,a;
   cluster M +` a -> infinite;
+   coherence
+    proof M +` a = a +` M;
+     hence thesis;
+    end;
  end;
 
- definition let a,b;
+
+ registration let a,b;
   cluster a *` b -> infinite;
+   coherence
+    proof a,b are_c=-comparable by ORDINAL1:25;
+     then a <=` b or b <=` a by XBOOLE_0:def 9;
+     hence thesis by Th27;
+    end;
   cluster exp(a,b) -> infinite;
+   coherence
+    proof 0 <> a & a <=` a & 1 <` b by Lm1,Th25;
+      then exp(a,1) = a & exp(a,1) <=` exp(a,b) & alef 0 <=` a
+       by Th25,CARD_2:40,CARD_4:70;
+      then alef 0 <=` exp(a,b) by XBOOLE_1:1;
+     hence thesis by CARD_4:11;
+    end;
  end;
+
 
 begin :: Regular alephs
 
@@ -168,14 +213,24 @@ begin :: Regular alephs
   attr IT is regular means
 :: CARD_5:def 4
      cf IT = IT;
-  antonym IT is irregular;
-end;
+  end;
+notation let IT be Aleph;
+  antonym IT is irregular for IT is regular ; end;
 
-definition
+
+registration
   let a;
   cluster nextcard a -> infinite;
+   coherence
+    proof not a is finite & a <` nextcard a by CARD_1:32;
+      then alef 0 <=` a & a <=` nextcard a by CARD_1:13,CARD_4:11;
+      then alef 0 <=` nextcard a by XBOOLE_1:1;
+     hence thesis by CARD_4:11;
+    end;
   cluster -> ordinal Element of a;
+   coherence;
  end;
+
 
 canceled;
 
@@ -198,9 +253,14 @@ theorem :: CARD_5:39
  dom phi = M & rng phi c= N & M <` cf N implies
    sup phi in N & Union phi in N;
 
- definition let a;
+ registration let a;
   cluster cf a -> infinite;
+   coherence
+    proof alef 0 <=` cf a by Th36;
+     hence thesis by Th26;
+    end;
  end;
+
 
 theorem :: CARD_5:40
  cf a <` a implies a is_limit_cardinal;

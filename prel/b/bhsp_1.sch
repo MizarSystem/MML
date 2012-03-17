@@ -20,8 +20,6 @@ SEQM_3
 NORMSP_1
 BHSP_1
 #
-Ex_Seq_in_RUS
-#
 G6 W26 ;;M3 U1 F1 ;;;;
 ªM13 F1 ;;ªM4 K52 ;K56 ;;R1 K125 F1 ;B1 B2 ;F2 B2 ;;;
 #

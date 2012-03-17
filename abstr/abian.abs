@@ -32,113 +32,291 @@ definition
  attr i is even means
 :: ABIAN:def 1
  ex j being Integer st i = 2*j;
- antonym i is odd;
-end;
+ end;
+notation
+ let i be number;
+ antonym i is odd for i is even ; end;
 
+
+notation
+ let n be Nat;
+ antonym n is odd for n is even ;
+end;
 definition
  let n be Nat;
  redefine attr n is even means
 :: ABIAN:def 2
    ex k st n = 2*k;
- antonym n is odd;
+ end;
+
+
+registration
+ cluster even Nat;
+ existence proof
+  take 0, 0;
+  thus 0 = 2*0;
+ end;
+ cluster odd Nat;
+ existence proof
+  take 1;
+  let k be Nat; assume 1 = 2*k;
+  hence contradiction by NAT_1:40;
+ end;
+ cluster even Integer;
+ existence proof
+  take 0, 0;
+  thus 0 = 2*0;
+ end;
+ cluster odd Integer;
+ existence proof
+  take 1;
+  assume 1 is even; then consider k being Integer such that
+A1: 1 = 2*k by Def1;
+  thus contradiction by A1,INT_1:22;
+ end;
 end;
 
-definition
- cluster even Nat;
- cluster odd Nat;
- cluster even Integer;
- cluster odd Integer;
-end;
 
 theorem :: ABIAN:1
  for i being Integer
    holds i is odd iff ex j being Integer st i = 2*j+1;
 
 
-definition
+registration
  let i be Integer;
  cluster 2*i -> even;
+ coherence by Def1;
 end;
 
-definition
+
+registration
  let i be even Integer;
  cluster i+1 -> odd;
+ coherence proof
+  consider j being Integer such that
+A1: i = 2*j by Def1;
+  thus thesis by A1,Th1;
+ end;
 end;
 
-definition
+
+registration
  let i be odd Integer;
  cluster i+1 -> even;
+ coherence proof
+  consider j being Integer such that
+A1: i = 2*j+1 by Th1;
+     i+1 = 2*j+(1+1) by A1,XCMPLX_1:1
+       .= 2*j+2*1 .= 2*(j+1) by XCMPLX_1:8;
+  hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let i be even Integer;
  cluster i-1 -> odd;
+ coherence proof
+  consider j being Integer such that
+A1: i = 2*j by Def1;
+     i-1 = 2*(j-1+1)-1 by A1,XCMPLX_1:27
+      .= 2*(j-1)+2*1-1 by XCMPLX_1:8
+      .= 2*(j-1)+(1+1-1) by XCMPLX_1:29
+      .= 2*(j-1)+1;
+  hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let i be odd Integer;
  cluster i-1 -> even;
+ coherence proof
+  consider j being Integer such that
+A1: i = 2*j+1 by Th1;
+  thus thesis by A1,XCMPLX_1:26;
+ end;
 end;
 
-definition
+
+registration
  let i be even Integer, j be Integer;
  cluster i*j -> even;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k by Def1;
+     i*j = 2*(k*j) by A1,XCMPLX_1:4;
+  hence thesis;
+ end;
  cluster j*i -> even;
+ coherence proof
+  consider k being Integer such that
+A2: i = 2*k by Def1;
+     i*j = 2*(k*j) by A2,XCMPLX_1:4;
+  hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let i, j be odd Integer;
  cluster i*j -> odd;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k+1 by Th1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    i*j = 2*k*(2*l)+2*k*1+2*l*1+1*1 by A1,A2,XCMPLX_1:10
+        .= 2*(k*(2*l))+2*k*1+2*l*1+1 by XCMPLX_1:4
+        .= 2*(k*(2*l)+(k*1))+2*(l*1)+1 by XCMPLX_1:8
+        .= 2*(k*(2*l)+(k*1)+(l*1))+1 by XCMPLX_1:8;
+  hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let i, j be even Integer;
  cluster i+j -> even;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k by Def1;
+  consider l being Integer such that
+A2: j = 2*l by Def1;
+    i+j = 2*(k+l) by A1,A2,XCMPLX_1:8;
+ hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let i be even Integer, j be odd Integer;
  cluster i+j -> odd;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k by Def1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    i+j = 2*k+2*l+1 by A1,A2,XCMPLX_1:1
+     .= 2*(k+l)+1 by XCMPLX_1:8;
+ hence thesis;
+ end;
  cluster j+i -> odd;
+ coherence proof
+  consider k being Integer such that
+A3: i = 2*k by Def1;
+  consider l being Integer such that
+A4: j = 2*l+1 by Th1;
+    j+i = 2*k+2*l+1 by A3,A4,XCMPLX_1:1
+     .= 2*(k+l)+1 by XCMPLX_1:8;
+ hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let i, j be odd Integer;
  cluster i+j -> even;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k+1 by Th1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    j+i = 2*k+1+2*l+1 by A1,A2,XCMPLX_1:1
+     .= 2*k+2*l+1+1 by XCMPLX_1:1
+     .= 2*k+2*l+(1+1) by XCMPLX_1:1
+     .= 2*(k+l)+2*1 by XCMPLX_1:8
+     .= 2*(k+l+1) by XCMPLX_1:8;
+ hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let i be even Integer, j be odd Integer;
  cluster i-j -> odd;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k by Def1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    i-j = 2*k-2*l-1 by A1,A2,XCMPLX_1:36
+     .= 2*(k-l)-1 by XCMPLX_1:40;
+ hence thesis;
+ end;
  cluster j-i -> odd;
+ coherence proof
+  consider k being Integer such that
+A3: i = 2*k by Def1;
+  consider l being Integer such that
+A4: j = 2*l+1 by Th1;
+    j-i = 2*l-2*k+1 by A3,A4,XCMPLX_1:29
+     .= 2*(l-k)+1 by XCMPLX_1:40;
+ hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let i, j be odd Integer;
  cluster i-j -> even;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k+1 by Th1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    i-j = 2*k+1-2*l-1 by A1,A2,XCMPLX_1:36
+     .= 2*k-2*l+1-1 by XCMPLX_1:29
+     .= 2*(k-l)+1-1 by XCMPLX_1:40
+     .= 2*(k-l) by XCMPLX_1:26;
+ hence thesis;
+ end;
 end;
+
 
 definition
  let E, f, n;
  redefine func iter(f, n) -> Function of E, E;
 end;
 
-definition
+
+registration
   let A be set, B be with_non-empty_element set;
  cluster non-empty Function of A, B;
+ existence proof
+  consider X being non empty set such that
+A1: X in B by TRIANG_1:def 1;
+  reconsider f = A --> X as Function of A, B by A1,FUNCOP_1:57;
+  take f;
+  let n be set; assume n in dom f;
+   then n in A by FUNCOP_1:19;
+  hence f.n is non empty by FUNCOP_1:13;
+ end;
 end;
 
-definition
+
+registration
 let A be non empty set, B be with_non-empty_element set,
     f be non-empty Function of A, B,
     a be Element of A;
  cluster f.a -> non empty;
+ coherence proof
+     dom f = A by FUNCT_2:def 1;
+   then f.a in rng f by FUNCT_1:def 5;
+ hence thesis by AMI_1:def 1;
+ end;
 end;
 
-definition
+
+registration
  let X be non empty set;
  cluster bool X -> with_non-empty_element;
+ coherence proof
+  take X;
+  thus X in bool X by ZFMISC_1:def 1;
+ end;
 end;
+
 
 theorem :: ABIAN:2
  for S being non empty Subset of NAT st 0 in S
@@ -156,8 +334,11 @@ definition
  pred f has_a_fixpoint means
 :: ABIAN:def 3
  ex x st x is_a_fixpoint_of f;
- antonym f has_no_fixpoint;
-end;
+ end;
+notation
+ let f be Function;
+ antonym f has_no_fixpoint for f has_a_fixpoint ; end;
+
 
 definition
  let X be set, x be Element of X;
@@ -166,13 +347,23 @@ definition
  union x = union union X;
 end;
 
+
 theorem :: ABIAN:4
  sE is covering iff union sE = E;
 
-definition
+registration
  let E;
  cluster non empty finite covering Subset-Family of E;
+ existence proof
+    {E} c= bool E by ZFMISC_1:80;
+  then reconsider sE = {E} as Subset-Family of E by SETFAM_1:def 7;
+  take sE;
+  thus sE is non empty finite;
+     union sE = E by ZFMISC_1:31;
+  hence sE is covering by Th4;
+ end;
 end;
+
 
 theorem :: ABIAN:5
    for E being set, f being Function of E, E,
@@ -188,6 +379,7 @@ definition
   for x, y st x in E & y in E
    holds [x,y] in it iff ex k, l st iter(f,k).x = iter(f,l).y;
 end;
+
 
 theorem :: ABIAN:6
  for E being non empty set, f being Function of E, E,

@@ -11,7 +11,7 @@ environ
       VECTSP_1, AFPROJ, PARTFUN1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, EQREL_1, RELSET_1, RELAT_1,
       RELAT_2, PARTFUN1, MCART_1, STRUCT_0, ANALOAF, DIRAF, AFF_1, AFF_4,
-      PAPDESAF, INCSP_1, INCPROJ;
+      AFF_2, PAPDESAF, INCSP_1, INCPROJ;
  constructors DOMAIN_1, AFF_2, TRANSLAC, EQREL_1, RELAT_2, AFF_1, AFF_4,
       INCPROJ, XBOOLE_0;
  clusters INCPROJ, RELSET_1, STRUCT_0, SUBSET_1, XBOOLE_0, ZFMISC_1, PARTFUN1;
@@ -60,9 +60,11 @@ definition let AS; func AfLines(AS) -> Subset-Family of AS equals
 :: AFPROJ:def 1
   {A: A is_line}; end;
 
+
 definition let AS; func AfPlanes(AS) -> Subset-Family of AS equals
 :: AFPROJ:def 2
   {A: A is_plane}; end;
+
 
 theorem :: AFPROJ:7
 for x holds (x in AfLines(AS) iff ex X st x=X & X is_line);
@@ -76,11 +78,13 @@ equals
 :: AFPROJ:def 3
 {[K,M]: K is_line & M is_line & K '||' M}; end;
 
+
 definition let AS;
  func PlanesParallelity(AS) -> Equivalence_Relation of AfPlanes(AS)
 equals
 :: AFPROJ:def 4
 {[X,Y]: X is_plane & Y is_plane & X '||' Y}; end;
+
 
 definition let AS,X such that X is_line; func LDir(X) -> Subset of AfLines(AS)
 equals
@@ -88,12 +92,14 @@ equals
 Class(LinesParallelity(AS),X);
  end;
 
+
 definition let AS,X such that
    X is_plane; func PDir(X) -> Subset of AfPlanes(AS)
 equals
 :: AFPROJ:def 6
 Class(PlanesParallelity(AS),X);
  end;
+
 
 theorem :: AFPROJ:9
 X is_line implies for x holds x in LDir(X) iff ex Y st x=Y
@@ -117,10 +123,12 @@ equals
 :: AFPROJ:def 7
 Class LinesParallelity(AS); end;
 
+
 definition let AS; func Dir_of_Planes(AS) -> non empty set
 equals
 :: AFPROJ:def 8
 Class PlanesParallelity(AS); end;
+
 
 theorem :: AFPROJ:14
 for x holds x in Dir_of_Lines(AS) iff ex X st x=LDir(X)
@@ -158,11 +166,13 @@ definition let AS;
     (the carrier of AS) \/ Dir_of_Lines(AS);
 end;
 
+
 definition let AS;
   func ProjectiveLines(AS) -> non empty set equals
 :: AFPROJ:def 10
  [:AfLines(AS),{1}:] \/ [:Dir_of_Planes(AS),{2}:];
 end;
+
 
 definition let AS;
   func Proj_Inc(AS) -> Relation of ProjectivePoints(AS),ProjectiveLines(AS)
@@ -173,11 +183,13 @@ for x,y holds [x,y] in it iff
                      x = LDir(K))) or
 (ex K,X st K is_line & X is_plane & x=LDir(K) & y=[PDir(X),2] & K '||' X); end;
 
+
 definition let AS; func
  Inc_of_Dir(AS) -> Relation of Dir_of_Lines(AS),Dir_of_Planes(AS) means
 :: AFPROJ:def 12
   for x,y holds [x,y] in it iff ex A,X st x=LDir(A) & y=PDir(X) &
     A is_line & X is_plane & A '||' X; end;
+
 
 definition let AS; func
  IncProjSp_of(AS) -> strict IncProjStr
@@ -186,6 +198,7 @@ equals
 IncProjStr (# ProjectivePoints(AS),
  ProjectiveLines(AS), Proj_Inc(AS) #);
  end;
+
 
 definition let AS; func ProjHorizon(AS) -> strict IncProjStr equals
 :: AFPROJ:def 14
@@ -311,17 +324,56 @@ theorem :: AFPROJ:44
  ex q being Element of
  the Points of ProjHorizon(AS) st q on P & q on Q;
 
-definition let AS;
+registration let AS;
   cluster IncProjSp_of(AS) -> partial linear up-2-dimensional
     up-3-rank Vebleian;
+  correctness
+  proof
+    set XX = IncProjSp_of(AS);
+    A1: for a,b being POINT of XX, A,K being LINE of XX st a on A & b on A &
+    a on K & b on K
+      holds a=b or A=K by Lm4;
+    A2: for a,b being POINT of XX ex A being LINE of XX st a on A & b on A by
+Lm6;
+    A3: ex a being POINT of XX, A being LINE of XX st not a on A by Lm8;
+    A4: for A being LINE of XX ex a,b,c being POINT of XX st
+      a<>b & b<>c & c <>a & a on A & b on A & c on A
+    proof
+      let A be LINE of XX;
+      consider a,b,c being POINT of XX such that
+    A5: a on A & b on A & c on A & a<>b & b<>c & c <>a by Lm5;
+      take a,b,c;
+      thus thesis by A5;
+    end;
+      for a,b,c,d,p,q being POINT of XX, M,N,P,Q being LINE of XX st
+      a on M & b on M & c on N & d on N & p on M & p on N & a on P & c on P &
+      b on Q & d on Q & not p on P & not p on Q & M<>N holds
+      ex q being POINT of XX st q on P & q on Q by Lm14;
+    hence thesis by A1,A2,A3,A4,INCPROJ:def 9,def 10,def 11,def 12,def 13;
+  end;
 end;
 
-definition
+
+registration
  cluster strict 2-dimensional IncProjSp;
+  existence
+ proof consider AS being AffinPlane;
+  set XX=IncProjSp_of(AS);
+    for A,K being LINE of XX
+   ex a being POINT of XX st a on A & a on K by Lm7;
+  then XX is 2-dimensional IncProjSp by INCPROJ:def 14;
+  hence thesis;
+ end;
 end;
 
-definition let AS be AffinPlane;
- cluster IncProjSp_of(AS) -> 2-dimensional; end;
+
+registration let AS be AffinPlane;
+ cluster IncProjSp_of(AS) -> 2-dimensional;
+correctness proof set XX=IncProjSp_of(AS);
+   for A,K being LINE of XX ex a being Element of the Points
+ of XX st a on A & a on K by Lm7;
+ hence thesis by INCPROJ:def 14; end; end;
+
 
 theorem :: AFPROJ:45
 IncProjSp_of(AS) is 2-dimensional implies AS is AffinPlane;

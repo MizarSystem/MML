@@ -55,11 +55,13 @@ for r st r>0 ex G st G is finite & the carrier of N = union G &
                      for C st C in G ex w st C = Ball(w,r);
 end;
 
+
 definition let N;
  redefine mode sequence of N -> Function means
 :: TBSP_1:def 2
   dom it = NAT & rng it c= the carrier of N;
 end;
+
 
  reserve S1 for sequence of M,
          S2 for sequence of N;
@@ -77,6 +79,7 @@ attr S2 is convergent means
       for r st r>0 ex n st for m st n<=m holds dist(S2.m,x)<r;
 end;
 
+
 definition let M,S1;
   assume S1 is convergent;
   func lim S1 -> Element of M means
@@ -84,11 +87,13 @@ definition let M,S1;
     for r st r>0 ex n st for m st m>=n holds dist(S1.m,it)<r;
 end;
 
+
 definition let N,S2;
   attr S2 is Cauchy means
 :: TBSP_1:def 5
   for r st r>0 ex p st for n,m st p<=n & p<=m holds dist(S2.n,S2.m)<r;
 end;
+
 
 definition let N;
   attr N is complete means
@@ -96,14 +101,17 @@ definition let N;
   for S2 st S2 is Cauchy holds S2 is convergent;
 end;
 
+
 canceled;
 
 theorem :: TBSP_1:7
  N is triangle symmetric & S2 is convergent implies S2 is Cauchy;
 
-definition let M be triangle symmetric (non empty MetrStruct);
+registration let M be triangle symmetric (non empty MetrStruct);
   cluster convergent -> Cauchy sequence of M;
+coherence by Th7;
 end;
+
 
 theorem :: TBSP_1:8
   N is symmetric implies
@@ -137,13 +145,30 @@ definition let N;
      x in C & y in C holds dist(x,y)<=r;
 end;
 
-definition let A be non empty set;
+
+registration let A be non empty set;
  cluster DiscreteSpace(A) -> bounded;
+coherence
+  proof
+    set N = DiscreteSpace(A);
+    take 2;
+    thus 0<2;
+A1: N = MetrStruct (#A,discrete_dist A#) by METRIC_1:def 12;
+    let x,y being Point of N;
+A2: x = y or x <> y;
+      dist(x,y) = (the distance of N).(x,y) by METRIC_1:def 1;
+    then dist(x,y) = 0 or dist(x,y) = 1 by A1,A2,METRIC_1:def 11;
+    hence dist(x,y)<=2;
+  end;
 end;
 
-definition
+
+registration
  cluster bounded (non empty MetrSpace);
+existence
+  proof take DiscreteSpace{0}; thus thesis; end;
 end;
+
 
 canceled;
 
@@ -185,13 +210,23 @@ theorem :: TBSP_1:22
 theorem :: TBSP_1:23
 for P being Subset of T holds P is finite implies P is bounded;
 
-definition let T;
+registration let T;
  cluster finite -> bounded Subset of T;
+coherence by Th23;
 end;
 
-definition let T;
+
+registration let T;
  cluster finite non empty Subset of T;
+existence
+  proof
+    consider X being finite non empty Subset of T;
+    reconsider X as Subset of T;
+    take X;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: TBSP_1:24
 Y is finite & (for P being Subset of T st P in Y holds P is bounded) implies
@@ -200,9 +235,11 @@ Y is finite & (for P being Subset of T st P in Y holds P is bounded) implies
 theorem :: TBSP_1:25
  N is bounded iff [#]N is bounded;
 
-definition let N be bounded (non empty MetrStruct);
+registration let N be bounded (non empty MetrStruct);
  cluster [#]N -> bounded;
+coherence by Th25;
 end;
+
 
 theorem :: TBSP_1:26
 T is totally_bounded implies T is bounded;
@@ -217,6 +254,7 @@ for s st (for x,y being Point of N st x in C & y in C holds dist(x,y)<=s) holds
  it<=s if C <> {}
   otherwise it = 0;
 end;
+
 
 canceled;
 
@@ -245,6 +283,7 @@ theorem :: TBSP_1:33
 definition let N,S2;
  redefine func rng S2 -> Subset of N;
 end;
+
 
 theorem :: TBSP_1:34
   for S1 being sequence of T holds S1 is Cauchy implies rng S1 is bounded;

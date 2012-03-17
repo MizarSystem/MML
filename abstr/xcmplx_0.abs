@@ -28,20 +28,43 @@ definition
  c in COMPLEX;
 end;
 
-definition
+
+registration
  cluster <i> -> complex;
+ coherence
+  proof set X = { x where x is Element of Funcs({0,one},REAL): x.1 = 0};
+A1:  now assume <i> in X;
+      then ex x being Element of Funcs({0,one},REAL) st <i> = x & x.1 = 0;
+     hence contradiction by Def1,FUNCT_4:66;
+    end;
+    reconsider z=0, j=1 as Element of REAL;
+      <i> = (0,1) --> (z,j) by Def1;
+    then <i> in Funcs({0,one},REAL) by Lm1,FUNCT_2:11;
+    then <i> in Funcs({0,one},REAL) \ X by A1,XBOOLE_0:def 4;
+   hence <i> in COMPLEX by Lm1,NUMBERS:def 2,XBOOLE_0:def 2;
+  end;
 end;
 
-definition
+
+registration
  cluster complex number;
+ existence
+  proof
+   take <i>;
+   thus thesis;
+  end;
 end;
 
+
+notation let x be complex number;
+  synonym x is zero for x is empty ;
+end;
 definition let x be complex number;
-  redefine attr x is empty means
+  redefine attr x is zero means
 :: XCMPLX_0:def 3
       x = 0;
-  synonym x is zero;
-end;
+  end;
+
 
 definition let x,y be complex number;
  func x+y means
@@ -57,10 +80,24 @@ definition let x,y be complex number;
  commutativity;
 end;
 
-definition let z,z' be complex number;
+registration let z,z' be complex number;
  cluster z+z' -> complex;
+ coherence
+  proof
+      ex x1,x2,y1,y2 being Element of REAL st
+     z = [*x1,x2*] & z' = [*y1,y2*] & z+z' = [*+(x1,y1),+(x2,y2)*] by Def4;
+   hence z+z' in COMPLEX;
+  end;
  cluster z*z' -> complex;
+ coherence
+  proof
+      ex x1,x2,y1,y2 being Element of REAL st
+     z = [*x1,x2*] & z' = [*y1,y2*] &
+    z*z' = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *] by Def5;
+   hence z*z' in COMPLEX;
+  end;
 end;
+
 
 definition let z be complex number;
  func -z -> complex number means
@@ -74,6 +111,7 @@ definition let z be complex number;
   involutiveness;
 end;
 
+
 definition let x,y be complex number;
   func x-y equals
 :: XCMPLX_0:def 8
@@ -83,31 +121,139 @@ definition let x,y be complex number;
     x * y";
 end;
 
-definition let x,y be complex number;
+
+registration let x,y be complex number;
   cluster x-y -> complex;
+ coherence proof x-y = x+-y by Def8; hence thesis; end;
   cluster x/y -> complex;
+ coherence proof x/y = x*y" by Def9; hence thesis; end;
 end;
 
-definition
+registration
  cluster non zero (complex number);
+ existence
+  proof
+A1:  REAL c= COMPLEX by NUMBERS:def 2,XBOOLE_1:7;
+     one in REAL by ARYTM_0:1,ARYTM_2:21;
+    then one is complex number by A1,Def2;
+   hence thesis;
+  end;
 end;
 
-definition let x be non zero (complex number);
+registration let x be non zero (complex number);
   cluster -x -> non zero;
+  coherence
+   proof
+    assume
+A1:   -x = 0;
+      x + -x = 0 by Def6;
+     then consider x1,x2,y1,y2 being Element of REAL such that
+A2:   x = [*x1,x2*] and
+A3:   -x = [*y1,y2*] and
+A4:   0 = [*+(x1,y1),+(x2,y2)*] by Def4;
+A5:   +(x2,y2) = 0 by A4,ARYTM_0:26;
+     then A6:    +(x1,y1) = 0 by A4,ARYTM_0:def 7;
+A7:   y2 = 0 by A1,A3,ARYTM_0:26;
+     then A8:     y1 = 0 by A1,A3,ARYTM_0:def 7;
+      x2 = 0 by A5,A7,ARYTM_0:13;
+     then x = x1 by A2,ARYTM_0:def 7 .= 0 by A6,A8,ARYTM_0:13;
+    hence contradiction;
+   end;
   cluster x" -> non zero;
+  coherence
+   proof
+    assume
+A9:   x" = 0;
+      x*x" = 1 by Def7;
+     then consider x1,x2,y1,y2 being Element of REAL such that
+       x = [*x1,x2*] and
+A10:   x" = [*y1,y2*] and
+A11:   1 = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *] by Def5;
+A12:   y2 = 0 by A9,A10,ARYTM_0:26;
+     then A13:   y1 = 0 by A9,A10,ARYTM_0:def 7;
+      +(*(x1,y2),*(x2,y1)) = 0 by A11,ARYTM_0:26;
+     then 1 = +(*(x1,y1),opp*(x2,y2)) by A11,ARYTM_0:def 7
+          .= +(*(x1,y1),*(opp x2,y2)) by ARYTM_0:17
+          .= +(0,*(opp x2,y2)) by A13,ARYTM_0:14
+          .= *(opp x2,y2) by ARYTM_0:13;
+    hence contradiction by A12,ARYTM_0:14;
+   end;
  let y be non zero (complex number);
   cluster x*y -> non zero;
+  coherence
+   proof
+A14:   1 = succ 0 .= one by ORDINAL2:def 4;
+      1 in REAL;
+     then reconsider j =1 as complex number by Def2,Lm5;
+     consider u1,u2,v1,v2 being Element of REAL such that
+A15:   j = [*u1,u2*] and
+A16:   y = [*v1,v2*] and
+A17:   j*y = [* +(*(u1,v1),opp*(u2,v2)), +(*(u1,v2),*(u2,v1)) *] by Def5;
+A18:   u2 = 0 by A15,ARYTM_0:26;
+     then *(u2,v1) = 0 by ARYTM_0:14;
+     then A19:    +(*(u1,v2),*(u2,v1)) = *(u1,v2) by ARYTM_0:13;
+A20:   u1 = 1 by A15,A18,ARYTM_0:def 7;
+      +(0,opp 0) = 0 by ARYTM_0:def 4;
+     then A21:   opp 0 = 0 by ARYTM_0:13;
+A22:   +(*(u1,v1),opp*(u2,v2)) = +(v1,opp*(u2,v2)) by A14,A20,ARYTM_0:21
+         .= +(v1,*(opp u2,v2)) by ARYTM_0:17
+         .= +(v1,*(0,v2)) by A15,A21,ARYTM_0:26
+         .= +(v1,0) by ARYTM_0:14
+         .= v1 by ARYTM_0:13;
+      0 in REAL;
+     then reconsider z =0 as complex number by Def2,Lm5;
+     consider u1,u2,v1,v2 being Element of REAL such that
+       x" = [*u1,u2*] and
+A23:   z = [*v1,v2*] and
+A24:   x"*z = [* +(*(u1,v1),opp*(u2,v2)), +(*(u1,v2),*(u2,v1)) *] by Def5;
+A25:    v2 = 0 by A23,ARYTM_0:26;
+      then A26:    v1 = 0 by A23,ARYTM_0:def 7;
+      then A27:    +(*(u1,v1),opp*(u2,v2)) = +(0,opp*(u2,v2)) by ARYTM_0:14
+         .= opp*(u2,v2) by ARYTM_0:13
+         .= 0 by A21,A25,ARYTM_0:14;
+A28:   +(*(u1,v2),*(u2,v1)) = +(0,*(u2,v1)) by A25,ARYTM_0:14
+         .= *(u2,v1) by ARYTM_0:13
+         .= 0 by A26,ARYTM_0:14;
+    assume
+A29:   x*y = 0;
+A30:   x"*x*y = x"*(x*y) by Lm4 .= 0 by A24,A27,A28,A29,ARYTM_0:def 7;
+      x"*x*y = j * y by Def7 .= y by A14,A16,A17,A19,A20,A22,ARYTM_0:21;
+    hence contradiction by A30;
+   end;
 end;
 
-definition let x,y be non zero (complex number);
+
+registration let x,y be non zero (complex number);
   cluster x/y -> non zero;
+  coherence
+   proof
+      x/y = x*y" by Def9;
+     hence thesis;
+   end;
 end;
 
-definition
+
+registration
   cluster -> complex Element of REAL;
+  coherence
+  proof
+    let n be Element of REAL;
+     n in REAL;
+    hence thesis by Def2,Lm5;
+  end;
 end;
 
-definition
+
+registration
   cluster natural -> complex number;
+  coherence
+  proof
+    let n be set;
+    assume n is natural;
+    then n in NAT by ORDINAL2:def 21;
+    then n in REAL;
+    hence thesis by Def2,Lm5;
+  end;
 end;
+
 

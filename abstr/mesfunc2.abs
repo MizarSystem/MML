@@ -40,6 +40,7 @@ pred f is_finite means
   for x st x in dom f holds |. f.x .| <' +infty;
 end;
 
+
 theorem :: MESFUNC2:1
   f = 1(#)f;
 
@@ -108,6 +109,7 @@ func max-(f) -> PartFunc of C,ExtREAL means
 dom it = dom f &
 for x be Element of C st x in dom it holds it.x = max(-(f.x),0.);
 end;
+
 
 theorem :: MESFUNC2:14
 for C being non empty set, f being PartFunc of C,ExtREAL,
@@ -185,6 +187,7 @@ definition let A,X be set;
 redefine func chi(A,X) -> PartFunc of X,ExtREAL;
 end;
 
+
 theorem :: MESFUNC2:31
   chi(A,X) is_finite;
 
@@ -193,17 +196,44 @@ theorem :: MESFUNC2:32
 
 begin  :: Definition and measurability of simple function
 
-definition
+registration
   let X be set;
   let S be sigma_Field_Subset of X;
   cluster disjoint_valued FinSequence of S;
+existence
+proof
+   reconsider A = {} as Element of S by MEASURE1:45;
+   deffunc F(Nat) = A;
+   consider p being FinSequence of S such that
+A1:len p = 1 and
+A2:for n being Nat st n in Seg 1 holds p.n = F(n) from FINSEQ_2:sch 1;
+A3:for n,m being set st n <> m holds p.n misses p.m
+   proof
+    let n,m being set;
+    assume that n <> m;
+A4:  dom p = Seg 1 by A1,FINSEQ_1:def 3;
+      p.n = {}
+    proof
+      per cases;
+      suppose n in dom p; hence thesis by A2,A4;
+      end;
+      suppose not n in dom p; hence thesis by FUNCT_1:def 4;
+    end;
+    end;
+    hence thesis by XBOOLE_1:65;
+   end;
+   take p;
+   thus thesis by A3,PROB_2:def 3;
 end;
+end;
+
 
 definition
   let X be set;
   let S be sigma_Field_Subset of X;
   mode Finite_Sep_Sequence of S is disjoint_valued FinSequence of S;
 end;
+
 
 theorem :: MESFUNC2:33
 F is Finite_Sep_Sequence of S implies
@@ -227,6 +257,7 @@ ex F being Finite_Sep_Sequence of S st (dom f = union rng F &
 for n being Nat,x,y being Element of X st
 n in dom F & x in F.n & y in F.n holds f.x = f.y);
 end;
+
 
 theorem :: MESFUNC2:35
   f is_finite implies rng f is Subset of REAL;

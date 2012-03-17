@@ -14,13 +14,10 @@ FINSET_1
 CARD_1
 FINSEQ_1
 #
-FinSeqFam
-FinSeqFam'
-#
 M1 W1 ;;M8 F1 ;;M1 ;;
 V19 ËM4 K52 ;K56 ;;;F3 F2 ;B1 ;&R2 B1 K75 F2 ;;;P1 B1 ;;;;
 #
 M1 W1 ;;M8 F1 ;;M1 ;;
-V19 ËM4 K52 ;K56 ;;;F3 F2 ;B1 ;&R11 N1 B1 ;R11 B1 K74 F2 ;;;P1 B1 ;;;;
+V19 ËM4 K52 ;K56 ;;;F3 F2 ;B1 ;&R12 N1 B1 ;R12 B1 K74 F2 ;;;P1 B1 ;;;;
 #
 !

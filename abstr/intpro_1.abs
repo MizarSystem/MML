@@ -24,12 +24,14 @@ definition let E be set;
       <*0*>in E;
 end;
 
+
 definition let E be set;
   attr E is with_int_implication means
 :: INTPRO_1:def 2
   for p, q being FinSequence st
          p in E & q in E holds <*1*>^p^q in E;
 end;
+
 
 definition let E be set;
   attr E is with_int_conjunction means
@@ -38,6 +40,7 @@ definition let E be set;
      p in E & q in E holds <*2*>^p^q in E;
 end;
 
+
 definition let E be set;
   attr E is with_int_disjunction means
 :: INTPRO_1:def 4
@@ -45,11 +48,13 @@ definition let E be set;
          p in E & q in E holds <*3*>^p^q in E;
 end;
 
+
 definition let E be set;
   attr E is with_int_propositional_variables means
 :: INTPRO_1:def 5
      for n being Nat holds <* 5+2*n *> in E;
 end;
+
 
 definition let E be set;
   attr E is with_modal_operator means
@@ -57,6 +62,7 @@ definition let E be set;
   for p being FinSequence st
          p in E holds <*6*>^p in E;
 end;
+
 
 :: We reserve <*4*> for verum for a possible formulation.
 :: So do we <* 5+2*n+1 *> for every n >= 1 for introduction of a number of
@@ -73,18 +79,21 @@ definition let E be set;
         with_modal_operator;
 end;
 
-definition
+registration
   cluster MC-closed ->
      with_FALSUM with_int_implication
      with_int_conjunction with_int_disjunction
      with_int_propositional_variables
      with_modal_operator non empty set;
+  coherence by Def7,Lm1;
   cluster
       with_FALSUM with_int_implication
       with_int_conjunction with_int_disjunction
       with_int_propositional_variables
       with_modal_operator -> MC-closed Subset of NAT*;
+  coherence by Def7;
 end;
+
 
 definition
   func MC-wff -> set means
@@ -93,25 +102,47 @@ definition
    for E being set st E is MC-closed holds it c= E;
 end;
 
-definition
+
+registration
   cluster MC-wff -> MC-closed;
+  coherence by Def8;
 end;
 
-definition
+
+registration
   cluster MC-closed non empty set;
+  existence
+  proof
+    take MC-wff;
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
   cluster -> Relation-like Function-like Element of MC-wff;
+coherence
+   proof let p be Element of MC-wff;
+       MC-wff c= NAT* & p in MC-wff by Def7;
+     hence thesis by FINSEQ_1:def 11;
+   end;
 end;
 
-definition
+
+registration
   cluster -> FinSequence-like Element of MC-wff;
+coherence
+   proof let p be Element of MC-wff;
+       MC-wff c= NAT* & p in MC-wff by Def7;
+     hence thesis by FINSEQ_1:def 11;
+   end;
 end;
+
 
 definition
   mode MC-formula is Element of MC-wff;
 end;
+
 
 definition
   func FALSUM -> MC-formula equals
@@ -132,12 +163,14 @@ definition
     <*3*>^p^q;
 end;
 
+
 definition
 let p be Element of MC-wff;
   func Nes p -> MC-formula equals
 :: INTPRO_1:def 13
     <*6*>^p;
 end;
+
 
  reserve T, X, Y for Subset of MC-wff;
  reserve p, q, r, s for Element of MC-wff;
@@ -158,17 +191,20 @@ definition let T be Subset of MC-wff;
     (p in T & p => q in T implies q in T);
 end;
 
+
 definition let X;
   func CnIPC X -> Subset of MC-wff means
 :: INTPRO_1:def 15
   r in it iff for T st T is IPC_theory & X c= T holds r in T;
 end;
 
+
 definition
   func IPC-Taut -> Subset of MC-wff equals
 :: INTPRO_1:def 16
     CnIPC({}(MC-wff));
 end;
+
 
 definition
   let p be Element of MC-wff;
@@ -177,11 +213,13 @@ definition
         (p => FALSUM);
 end;
 
+
 definition
   func IVERUM -> MC-formula equals
 :: INTPRO_1:def 18
   (FALSUM => FALSUM);
 end;
+
 
 theorem :: INTPRO_1:1
   p => (q => p) in CnIPC (X);
@@ -225,9 +263,11 @@ theorem :: INTPRO_1:13
 theorem :: INTPRO_1:14 :: Th14:
     CnIPC(CnIPC(X)) = CnIPC(X);
 
-definition let X be Subset of MC-wff;
+registration let X be Subset of MC-wff;
   cluster CnIPC(X) -> IPC_theory;
+  coherence by Lm3;
 end;
+
 
 theorem :: INTPRO_1:15
   T is IPC_theory iff CnIPC(T) = T;
@@ -235,9 +275,11 @@ theorem :: INTPRO_1:15
 theorem :: INTPRO_1:16 :: Th16:
     T is IPC_theory implies IPC-Taut c= T;
 
-definition
+registration
   cluster IPC-Taut -> IPC_theory;
+  coherence by Def16;
 end;
+
 
 begin  :: Formulas provable in IPC : implication
 
@@ -418,6 +460,7 @@ definition let T be Subset of MC-wff;
     (p in T & p => q in T implies q in T);
 end;
 
+
 theorem :: INTPRO_1:67
 T is CPC_theory implies T is IPC_theory;
 
@@ -427,11 +470,13 @@ definition let X;
   r in it iff for T st T is CPC_theory & X c= T holds r in T;
 end;
 
+
 definition
   func CPC-Taut -> Subset of MC-wff equals
 :: INTPRO_1:def 21
     CnCPC({}(MC-wff));
 end;
+
 
 theorem :: INTPRO_1:68
 CnIPC (X) c= CnCPC (X);
@@ -464,9 +509,11 @@ theorem :: INTPRO_1:73
 theorem :: INTPRO_1:74 :: Th6C:
     CnCPC(CnCPC(X)) = CnCPC(X);
 
-definition let X be Subset of MC-wff;
+registration let X be Subset of MC-wff;
   cluster CnCPC(X) -> CPC_theory;
+  coherence by Lm22;
 end;
+
 
 theorem :: INTPRO_1:75
   T is CPC_theory iff CnCPC(T) = T;
@@ -474,9 +521,11 @@ theorem :: INTPRO_1:75
 theorem :: INTPRO_1:76 :: Th8C:
     T is CPC_theory implies CPC-Taut c= T;
 
-definition
+registration
   cluster CPC-Taut -> CPC_theory;
+  coherence by Def21;
 end;
+
 
 theorem :: INTPRO_1:77 :: CPCincIPC:
   IPC-Taut c= CPC-Taut;
@@ -507,6 +556,7 @@ definition let T be Subset of MC-wff;
     (p in T implies Nes p in T);
 end;
 
+
 theorem :: INTPRO_1:78
 T is S4_theory implies T is CPC_theory;
 
@@ -519,11 +569,13 @@ definition let X;
   r in it iff for T st T is S4_theory & X c= T holds r in T;
 end;
 
+
 definition
   func S4-Taut -> Subset of MC-wff equals
 :: INTPRO_1:def 24
     CnS4({}(MC-wff));
 end;
+
 
 theorem :: INTPRO_1:80
 CnCPC (X) c= CnS4 (X);
@@ -570,9 +622,11 @@ theorem :: INTPRO_1:90
 theorem :: INTPRO_1:91 :: Th10M:
     CnS4(CnS4(X)) = CnS4(X);
 
-definition let X be Subset of MC-wff;
+registration let X be Subset of MC-wff;
   cluster CnS4(X) -> S4_theory;
+  coherence by Lm24;
 end;
+
 
 theorem :: INTPRO_1:92
   T is S4_theory iff CnS4(T) = T;
@@ -580,9 +634,11 @@ theorem :: INTPRO_1:92
 theorem :: INTPRO_1:93 :: Th12M:
     T is S4_theory implies S4-Taut c= T;
 
-definition
+registration
   cluster S4-Taut -> S4_theory;
+  coherence by Def24;
 end;
+
 
 theorem :: INTPRO_1:94 :: S4incCPC:
   CPC-Taut c= S4-Taut;

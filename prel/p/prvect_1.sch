@@ -13,8 +13,6 @@ CARD_1
 RELSET_1
 FINSEQ_1
 #
-NEFinSeqLambda
-#
 M1 V1 ;V3 ;W5 ;V19 ;;M1 ;;
 ™ùM1 V1 ;V3 ;W5 ;V19 ;;™&R1 K74 B1 ;K74 F1 ;;;ùM4 K56 ;K75 F1 ;;;R1 K11 B1 B2 ;F2 B2 ;;;;
 #

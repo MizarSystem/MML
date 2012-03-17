@@ -28,7 +28,7 @@ environ
 begin
 
 :: this should be in ordinal2
-definition
+registration
   cluster being_limit_ordinal Ordinal;
   existence
 proof
@@ -37,10 +37,12 @@ proof
 end;
 end;
 
+
 definition let X,Y be set;
   redefine func X \ Y -> Subset of X;
   coherence by XBOOLE_1:36;
 end;
+
 
 theorem Th1:
   for x being set for X being infinite set holds Card {x} <` Card X
@@ -50,10 +52,11 @@ proof
    hence Card { x } <` Card X by CARD_4:13;
 end;
 
-definition let X be infinite set;
+registration let X be infinite set;
   cluster Card X -> infinite;
   coherence by CARD_4:1;
 end;
+
 
 scheme ElemProp{D()-> non empty set,x()->set,P[set]}:
   P[x()]
@@ -119,6 +122,7 @@ proof take { X };
    thus thesis by Th2;
 end;
 end;
+
 
 theorem
    for F being set holds F is Filter of X iff
@@ -186,18 +190,19 @@ proof
    hence Y2 in I by A1;
 end;
 
-definition
+notation
   let X,S;
-  redefine func COMPLEMENT S;
-  synonym dual S;
-end;
+  synonym dual S for COMPLEMENT S;
+  end;
+
 
 reserve S for non empty Subset-Family of X;
 
-definition let X,S;
+registration let X,S;
   cluster COMPLEMENT S -> non empty;
   coherence by SETFAM_1:46;
 end;
+
 
 theorem
     dual S = {Y:Y` in S}
@@ -241,6 +246,7 @@ proof
 end;
 end;
 
+
 definition let X,F;
   redefine func dual F -> Ideal of X;
 coherence
@@ -252,6 +258,7 @@ proof
    hence thesis by Def2;
 end;
 end;
+
 
 reserve I for Ideal of X;
 
@@ -291,21 +298,23 @@ definition let X,N,S;
   (S1 c= S & Card S1 <` N) holds meet S1 in S;
 end;
 
+
 definition let X,N,S;
   pred S is_additive_with N means
 :Def4:  for S1 being non empty set st
   (S1 c= S & Card S1 <` N) holds union S1 in S;
 end;
 
-definition let X,N,F;
-  redefine pred F is_multiplicative_with N;
-  synonym F is_complete_with N;
-end;
 
-definition let X,N,I;
-  redefine pred I is_additive_with N;
-  synonym I is_complete_with N;
-end;
+notation let X,N,F;
+  synonym F is_complete_with N for F is_multiplicative_with N;
+  end;
+
+
+notation let X,N,I;
+  synonym I is_complete_with N for I is_additive_with N;
+  end;
+
 
 theorem Th12:
   S is_multiplicative_with N implies dual S is_additive_with N
@@ -317,7 +326,7 @@ proof assume A1: S is_multiplicative_with N;
    A4: S3 c= S by A2,YELLOW_8:9;
    A5: {Y`: Y in S2} = S3 by Th9;
    deffunc F(Subset of X) = $1`;
-   Card {F(Y): Y in S2} <=` Card S2 from FraenkelCard;
+   Card {F(Y): Y in S2} <=` Card S2 from TREES_2:sch 2;
    then Card S3 <` N by A3,A5,ORDINAL1:22;
    then A6: (meet S3)`` in S by A1,A4,Def3;
      (union S2)` = X \ union S2 by SUBSET_1:def 5 .= [#]X \ union S2
@@ -334,6 +343,7 @@ definition let X,F;
 :Def7:  for Y holds Y in F or (X \ Y) in F;
 end;
 
+
 definition let X,F,Z;
   func Extend_Filter(F,Z) -> non empty Subset-Family of X equals
 :Def8:  {Y: ex Y2 st (Y2 in {Y1 /\ Z : Y1 in F} & Y2 c= Y)};
@@ -341,7 +351,7 @@ definition let X,F,Z;
 proof
    defpred P[set] means ex Y2 st (Y2 in {Y1 /\ Z : Y1 in F} & Y2 c= $1);
    set IT = {Y: P[Y]};
-   A1: IT is Subset of bool X from SubsetD;
+   A1: IT is Subset of bool X from DOMAIN_1:sch 7;
      X in F by Th5;
    then X /\ Z in {Y1 /\ Z : Y1 in F};
    then Z in {Y1 /\ Z : Y1 in F} by XBOOLE_1:28;
@@ -349,6 +359,7 @@ proof
    hence IT is non empty Subset-Family of X by A1,SETFAM_1:def 7;
 end;
 end;
+
 
 theorem Th13:
   for Z1 holds ( Z1 in Extend_Filter(F,Z) iff ex Z2 st Z2 in F & Z2 /\ Z c= Z1)
@@ -455,10 +466,11 @@ proof
      { X } is Filter of X by Th4;
      then A1: { X } in {S: S is Filter of X};
      defpred P[set] means $1 is Filter of X;
-     {S: P[S]} is Subset of bool bool X from SubsetD;
+     {S: P[S]} is Subset of bool bool X from DOMAIN_1:sch 7;
    hence thesis by A1,SETFAM_1:def 7;
 end;
 end;
+
 
 theorem Th15:
   for S being set holds S in Filters(X) iff S is Filter of X
@@ -518,9 +530,11 @@ TARSKI:def 4;
          suppose S1 c= S2;
          then Y1 /\ Y2 in S2 by A10,A12,A14,Def1;
          hence Y1 /\ Y2 in union FS by A13,TARSKI:def 4;
+         end;
          suppose S2 c= S1;
          then Y1 /\ Y2 in S1 by A10,A12,A14,Def1;
          hence Y1 /\ Y2 in union FS by A11,TARSKI:def 4;
+      end;
       end;
       assume A16: Y1 in union FS & Y1 c= Y2;
       then consider S1 being set such that
@@ -557,6 +571,7 @@ A4:  X1 is c=-linear;
       suppose A5: X1 = {};
       take F;
       thus thesis by A5;
+      end;
       suppose X1 is non empty;
       then reconsider X2=X1 as non empty Subset of Filters(X) by A3,XBOOLE_1:1;
       A6: union X2 is Filter of X by A4,Th16;
@@ -573,6 +588,7 @@ A4:  X1 is c=-linear;
       then reconsider MF = union X2 as Element of Larger_F;
       take MF;
       thus thesis by ZFMISC_1:92;
+    end;
     end;
    then consider Uf1 be set such that
 A10: Uf1 in Larger_F &
@@ -591,6 +607,7 @@ A10: Uf1 in Larger_F &
       per cases;
       suppose Z in Uf;
       hence thesis;
+      end;
       suppose A13: not Z in Uf;
         X \ Z in Uf
       proof
@@ -611,6 +628,7 @@ A10: Uf1 in Larger_F &
        end;
        hence thesis;
    end;
+   end;
 end;
 
 reserve X for infinite set;
@@ -624,7 +642,7 @@ definition let X;
 proof
    defpred P[set] means Card (X \ $1) <` Card X;
    set IT = { Y : P[Y] };
-   A1: IT is Subset of bool X from SubsetD;
+   A1: IT is Subset of bool X from DOMAIN_1:sch 7;
      Card (X \ X) = Card ({} qua set) by XBOOLE_1:37 .= 0 by CARD_4:17;
    then A2: Card (X \ X) <` Card X by ORDINAL3:10;
      X c= X;
@@ -674,11 +692,13 @@ hence thesis;
 end;
 end;
 
+
 definition let X;
   func Frechet_Ideal(X) -> Ideal of X equals
 :Def11:  dual Frechet_Filter(X);
   coherence;
 end;
+
 
 theorem Th18:
   Y in Frechet_Filter(X) iff Card (X \ Y) <` Card X
@@ -737,7 +757,7 @@ proof
    end;
 end;
 
-definition let X;
+registration let X;
   cluster non principal being_ultrafilter Filter of X;
   existence
 proof
@@ -776,7 +796,8 @@ proof
 end;
 end;
 
-definition let X;
+
+registration let X;
   cluster uniform being_ultrafilter -> non principal Filter of X;
   coherence
 proof let F;
@@ -804,6 +825,7 @@ proof let F;
    hence contradiction by A2,Def1;
 end;
 end;
+
 
 theorem Th22:
   for F being being_ultrafilter Filter of X for Y holds
@@ -855,7 +877,7 @@ proof
    end;
    consider h being Function such that A11: dom h = X and
      rng h c= F and
-   A12: for x being set st x in X holds P[x,h.x] from NonUniqBoundFuncEx(A5);
+   A12: for x being set st x in X holds P[x,h.x] from COMPTS_1:sch 1(A5);
    A13: {h.x : x in Y} c= F
    proof let y be set such that A14: y in {h.x : x in Y};
       consider x such that A15: y = h.x and x in Y by A14;
@@ -912,16 +934,20 @@ definition
 :Def12:  for N being Aleph holds nextcard N = exp(2,N);
 end;
 
+
 definition let IT be Aleph;
   attr IT is inaccessible means
 :Def13:  IT is regular limit;
-  synonym IT is_inaccessible_cardinal;
-end;
+  end;
+notation let IT be Aleph;
+  synonym IT is_inaccessible_cardinal for IT is inaccessible ; end;
 
-definition
+
+registration
   cluster inaccessible -> regular limit Aleph;
   coherence by Def13;
 end;
+
 
 theorem
     alef 0 is inaccessible
@@ -933,8 +959,10 @@ end;
 definition let IT be Aleph;
   attr IT is strong_limit means
 :Def14:  for N st N <` IT holds exp(2,N) <` IT;
-  synonym IT is_strong_limit_cardinal;
-end;
+  end;
+notation let IT be Aleph;
+  synonym IT is_strong_limit_cardinal for IT is strong_limit ; end;
+
 
 theorem Th26:
   alef 0 is strong_limit
@@ -963,10 +991,11 @@ proof
    hence contradiction by A1,A3,Def14;
 end;
 
-definition
+registration
   cluster strong_limit -> limit Aleph;
   coherence by Th27;
 end;
+
 
 theorem Th28:
   GCH implies (M is limit implies M is strong_limit)
@@ -994,13 +1023,17 @@ end;
 definition let IT be Aleph;
   attr IT is strongly_inaccessible means
 :Def15:  IT is regular strong_limit;
-  synonym IT is_strongly_inaccessible_cardinal;
-end;
+  end;
+notation let IT be Aleph;
+  synonym IT is_strongly_inaccessible_cardinal for IT is strongly_inaccessible
+; end;
 
-definition
+
+registration
   cluster strongly_inaccessible -> regular strong_limit Aleph;
   coherence by Def15;
 end;
+
 
 theorem
     alef 0 is strongly_inaccessible by Def15,Th26,CARD_5:42;
@@ -1014,10 +1047,11 @@ proof
    hence thesis by Th27;
 end;
 
-definition
+registration
   cluster strongly_inaccessible -> inaccessible Aleph;
   coherence by Th30;
 end;
+
 
 theorem
     GCH implies ( M is inaccessible implies M is strongly_inaccessible)
@@ -1033,8 +1067,10 @@ definition let M;
   attr M is measurable means
 :Def16:  ex Uf being Filter of M st Uf is_complete_with M
   & Uf is non principal being_ultrafilter;
-  synonym M is_measurable_cardinal;
-end;
+  end;
+notation let M;
+  synonym M is_measurable_cardinal for M is measurable ; end;
+
 
 theorem Th32:
   for A being being_limit_ordinal Ordinal for X being set st
@@ -1094,7 +1130,7 @@ proof
    hence contradiction by A9,Def2;
 end;
 
-definition let M;
+registration let M;
   cluster nextcard M -> non limit;
   coherence
 proof take M;
@@ -1102,7 +1138,8 @@ proof take M;
 end;
 end;
 
-definition
+
+registration
   cluster non limit infinite Cardinal;
   existence
 proof
@@ -1112,7 +1149,8 @@ proof
 end;
 end;
 
-definition
+
+registration
   cluster non limit -> regular Aleph;
   coherence
 proof let M such that A1: M is non limit;
@@ -1123,6 +1161,7 @@ proof let M such that A1: M is non limit;
 end;
 end;
 
+
 definition
   let M be non limit Cardinal;
   func predecessor M -> Cardinal means
@@ -1131,7 +1170,8 @@ existence by CARD_1:def 7;
 uniqueness by CARD_4:21;
 end;
 
-definition
+
+registration
   let M be non limit Aleph;
   cluster predecessor M -> infinite;
   coherence
@@ -1141,11 +1181,13 @@ proof assume A1: predecessor M is finite;
 end;
 end;
 
+
 definition  :: infinite matrix
   let X be set;
   let N,N1 be Cardinal;
   mode Inf_Matrix of N,N1,X is Function of [:N,N1:],X;
 end;
+
 
 reserve X for set;
 reserve M for non limit Aleph;
@@ -1164,6 +1206,7 @@ definition   :: Ulam matrix on nextcard N;
   (for K1 holds Card (M \ union {T.(N1,K1): N1 in predecessor M}) <=`
   predecessor M );
 end;
+
 
 :: this is pretty long
 theorem Th34:
@@ -1197,7 +1240,7 @@ proof
    consider h1 being Function such that A6:  dom h1 = GT and
      rng h1 c= Funcs(N, nextcard N) and
    A7: for K1 being set st K1 in GT holds P[K1,h1.K1]
-    from NonUniqBoundFuncEx(A1);
+    from COMPTS_1:sch 1(A1);
      for K1 being set st K1 in dom h1 holds h1.K1 is Function
    proof let K1 be set such that A8: K1 in dom h1;
       consider f being Function such that A9: h1.K1 = f &
@@ -1220,12 +1263,12 @@ proof
    proof let N1,K1;
       defpred P[set] means g(N1,$1)=K1;
       A13: {K2 where K2 is Element of GT1 :  P[K2] } is Subset of GT1
-      from SubsetD;
+      from DOMAIN_1:sch 7;
       take {K2 where K2 is Element of GT1 :  g(N1,K2)=K1 };
       thus thesis by A13;
    end;
    consider T1 being Function of [:predecessor M,M:],bool GT1 such that
-   A14: for N1,K1 holds P[N1,K1,T1.[N1,K1]] from FuncEx2D(A12);
+   A14: for N1,K1 holds P[N1,K1,T1.[N1,K1]] from FUNCT_2:sch 7(A12);
    A15: for N1,K1 holds T1.(N1,K1) =
    {K2 where K2 is Element of GT1 :  g(N1,K2)=K1 }
    proof let N1,K1;
@@ -1375,12 +1418,13 @@ proof
            not (K1 is finite) by A39,A42,CARD_4:1;
          then Card (K1 \/ {K1}) = Card K1 by CARD_4:36;
          hence thesis by A39,A42,A48,CARD_1:27;
+         end;
          suppose A49: K1 in N;
            {K5 where K5 is Element of GT1: K1 in K5} = GT1
          proof
            defpred P[set] means K1 in $1;
            {K5 where K5 is Element of GT1: P[K5]} is Subset of GT1
-            from SubsetD;
+            from DOMAIN_1:sch 7;
             hence {K5 where K5 is Element of GT1: K1 in K5} c= GT1;
             let K6 be set such that A50: K6 in GT1;
             A51: K6 in nextcard N & not K6 in N by A50,XBOOLE_0:def 4;
@@ -1394,6 +1438,7 @@ proof
  M \ ( M \ N) by Def17 .= M /\ N by XBOOLE_1:48;
            M /\ N c= N by XBOOLE_1:17;
          hence thesis by A53,CARD_1:23;
+      end;
       end;
         M \ union {T.(N1,K1): N1 in N} c=
       M \ {K5 where K5 is Element of GT1: K1 in K5} by A33,XBOOLE_1:34;
@@ -1424,8 +1469,9 @@ proof
      defpred P[set,set] means $2=K1 & $1 in N;
      defpred R[set,set] means $1 in N;
      deffunc F(Element of predecessor M,Element of M) = T.($1,$2);
-      A6: {F(N1,K2): P[N1,K2]} is Subset of bool M from SubsetFD2;
-        {F(N1,K2): K2=K1 & R[N1,K2]} = {F(N2,K1): R[N2,K1] } from FrEqua2;
+      A6: {F(N1,K2): P[N1,K2]} is Subset of bool M from COMPLSP1:sch 4;
+        {F(N1,K2): K2=K1 & R[N1,K2]} = {F(N2,K1): R[N2,K1] } from
+FRAENKEL:sch 20;
       then reconsider C={T.(N1,K1): N1 in N} as Subset-Family of M
         by A6,SETFAM_1:def 7;
       A7: Card (M \ union {T.(N1,K1): N1 in N}) <=` N by A4,Def18;
@@ -1455,7 +1501,7 @@ proof
       A14: N <` M by A1,CARD_1:32;
       deffunc F(set) = T.$1;
       A15: Card {F(X) where X is Element of [:N,M:]: X in [:N,{K1}:] } <=`
-      Card [:N,{K1}:] from FraenkelCard;
+      Card [:N,{K1}:] from TREES_2:sch 2;
         {T.(N1,K1) : N1 in N } c=
       {T.X where X is Element of [:N,M:]: X in [:N,{K1}:] }
       proof let Y be set such that A16: Y in {T.(N1,K1) : N1 in N };
@@ -1477,7 +1523,7 @@ proof
       hence contradiction by A20,Th10;
    end;
    consider h being Function of M,N such that
-   A21: for K1 holds P[K1,h.K1] from FuncExD(A8);
+   A21: for K1 holds P[K1,h.K1] from FUNCT_2:sch 3(A8);
    A22: for K1 holds not T.(h.K1,K1) = {}
    proof let K1;
       assume T.(h.K1,K1) = {};
@@ -1495,7 +1541,7 @@ proof
          hence x in M by A26,CARD_5:38;
       end;
       deffunc F(set) = sup (h"{$1});
-      Card {F(N2): N2 in N} <=` Card N from FraenkelCard;
+      Card {F(N2): N2 in N} <=` Card N from TREES_2:sch 2;
       then Card {sup (h"{N2}): N2 in N} <=` N by CARD_1:def 5;
       then Card {sup (h"{N2}): N2 in N} <` M by A1,CARD_4:23;
       then A27: Card {sup (h"{N2}): N2 in N} <` cf M by CARD_5:def 4;
@@ -1736,10 +1782,12 @@ proof assume M is measurable;
          per cases;
          suppose g1 in Y_0;
          hence thesis;
+         end;
          suppose not g1 in Y_0;
          then not g1.A = {} by A16;
          then g1.A = one by TARSKI:def 2;
          hence thesis by A16;
+         end;
          end;
         Y \ Y_0 = Y_1
       proof thus Y \ Y_0 c= Y_1
@@ -1771,21 +1819,23 @@ by A12,RELAT_1:169;
       reconsider Z = {} as Element of { {},one} by TARSKI:def 2;
       take Z;
       thus thesis by A29;
+      end;
       suppose A30: M \ Inv_0 in F;
       reconsider O=one as Element of {{},one} by TARSKI:def 2;
       take O;
       thus thesis by A28,A30;
+   end;
    end;
    A31: Y is infinite by A10,CARD_1:68;
 
 :: now prove that the meet of {T(A):A in N} contains just one function
 :: contradicting uniformity
    consider g being Function of N1,{{},one} such that
-   A32: for A being Element of N1 holds P[A,g.A] from FuncExD(A14);
+   A32: for A being Element of N1 holds P[A,g.A] from FUNCT_2:sch 3(A14);
    deffunc T(Element of N1) =
    f"{h where h is Function of N1,{{},one}: h in Y & h.$1 = g.$1};
      Card {T(A) where A is Element of N1 : A in
- N1} <=` Card N1 from FraenkelCard;
+ N1} <=` Card N1 from TREES_2:sch 2;
    then Card {T(A) where A is Element of N1 : A in N1} <=` N1 by CARD_1:def 5;
    then A33: Card {T(A) where A is Element of N1: A in
  N1} <` M by A4,ORDINAL1:22;

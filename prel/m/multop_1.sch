@@ -12,15 +12,6 @@ MCART_1
 DOMAIN_1
 MULTOP_1
 #
-FuncEx3D
-TriOpEx
-Lambda3D
-TriOpLambda
-FuncEx4D
-QuaOpEx
-Lambda4D
-QuaOpLambda
-#
 M1 W5 ;;M1 W5 ;;M1 W5 ;;M1 W5 ;;;
 ªM5 V3 ;V6 K20 F1 ;F2 ;F3 ;;F4 ;;K20 F1 ;F2 ;F3 ;;F4 ;;ªM2 F1 ;;M2 F2 ;;M2 F3 ;;P1 B2 B3 B4 K48 K20 F1 ;F2 ;F3 ;;F4 ;B1 K76 F1 ;F2 ;F3 ;B2 B3 B4 ;;;M2 F1 ;;M2 F2 ;;M2 F3 ;;ªM2 F4 ;;ªP1 B1 B2 B3 B4 ;;
 #

@@ -46,7 +46,7 @@ assume A1: l>=1;
        k+l>=k+1 by A1,REAL_1:55;
      hence (k+1)*l>=k+1 by A5,AXIOMS:22;
     end;
-   thus for k holds _P[k] from Ind(A2,A3);
+   thus for k holds _P[k] from NAT_1:sch 1(A2,A3);
   end;
  hence thesis;
 end;
@@ -55,6 +55,7 @@ definition let n;
  redefine func n! -> Nat;
  coherence by NEWTON:22;
 end;
+
 
 theorem Th3:
  l >= 1 & n >= k*l implies n>=k
@@ -104,7 +105,7 @@ A2: _P[m] implies _P[m+1] proof
        (m+1) < ((m+1)+1) by REAL_1:69;
     hence thesis by A3,REAL_2:142;
    end;
-    for m holds _P[m] from Ind(A1,A2);
+    for m holds _P[m] from NAT_1:sch 1(A1,A2);
   hence thesis;
  end;
 
@@ -122,12 +123,14 @@ A4:    l!*(l+1)=(l+1)! by NEWTON:21;
       per cases by RLVECT_1:98;
        case l=0;
        hence thesis by NEWTON:19;
+       end;
        case A6: l>=1; (l+1)!>=(l+1)*l by A3,A4,A5,AXIOMS:25;
        hence (l+1)!>=(l+1) by A6,Th3;
      end;
+     end;
     hence (l+1)!>=(l+1);
    end;
-   thus   for l being Nat holds _P[l] from Ind(A1,A2);
+   thus   for l being Nat holds _P[l] from NAT_1:sch 1(A1,A2);
   end;
 
 canceled;
@@ -177,7 +180,7 @@ A2: for k st _P[k] holds _P[k+1]  proof let k;
      then j divides ((j+k)+1)! by NEWTON:21;
      hence thesis by XCMPLX_1:1;
     end;
-   thus  for k holds _P[k] from Ind(A1,A2);
+   thus  for k holds _P[k] from NAT_1:sch 1(A1,A2);
   end;
 
 theorem Th16:
@@ -524,14 +527,14 @@ definition
  existence proof
    deffunc O(Nat,Nat)= $1 hcf $2;
   thus ex o being BinOp of NAT st
-    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BinOpLambda;
+    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 2;
  end;
  uniqueness proof
     deffunc O(Nat,Nat)= $1 hcf $2;
   thus for o1,o2 being BinOp of NAT st
     (for a,b being Element of NAT holds o1.(a,b) = O(a,b)) &
     (for a,b being Element of NAT holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BinOpDefuniq;
+  holds o1 = o2 from COMPLSP1:sch 2;
  end;
 
  func lcmlat-> BinOp of NAT means
@@ -539,16 +542,17 @@ definition
  existence proof
    deffunc O(Nat,Nat)= $1 lcm $2;
   thus ex o being BinOp of NAT st
-    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BinOpLambda;
+    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 2;
  end;
  uniqueness proof
     deffunc O(Nat,Nat)= $1 lcm $2;
   thus for o1,o2 being BinOp of NAT st
     (for a,b being Element of NAT holds o1.(a,b) = O(a,b)) &
     (for a,b being Element of NAT holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BinOpDefuniq;
+  holds o1 = o2 from COMPLSP1:sch 2;
  end;
 end;
+
 
 reserve p,q,r for Element of LattStr (# NAT, lcmlat, hcflat #);
 
@@ -558,6 +562,7 @@ definition
  :Def5: m;
  coherence;
  end;
+
 
 theorem
 Th48: p"\/"q =@p lcm @q
@@ -668,6 +673,7 @@ definition
  coherence;
  end;
 
+
 canceled 2;
 
 theorem Th55:
@@ -701,10 +707,12 @@ definition
   end;
 end;
 
-definition
+
+registration
  cluster Nat_Lattice -> strict;
  coherence by Def8;
 end;
+
 
 reserve p,q,r for Element of Nat_Lattice;
 
@@ -822,7 +830,7 @@ existence
  proof
   defpred _P[Nat] means 0 < $1;
   consider X being Subset of NAT such that
-A1: for n being Nat holds n in X iff _P[n] from SubsetEx;
+A1: for n being Nat holds n in X iff _P[n] from SETWISEO:sch 1;
   take X;
   thus thesis by A1;
   end;
@@ -831,11 +839,12 @@ uniqueness proof
 thus for X1,X2 being Subset of NAT st
    (for y being Element of NAT holds y in X1 iff P[y]) &
    (for y being Element of NAT holds y in X2 iff P[y]) holds
-  X1 = X2 from Subset_Eq;
+  X1 = X2 from SUBSET_1:sch 2;
   end;
 end;
 
-definition
+
+registration
   cluster NATPLUS -> non empty;
   coherence
  proof
@@ -843,6 +852,7 @@ definition
    hence thesis by Def9;
   end;
   end;
+
 
 definition let D be non empty set, S be non empty Subset of D,
                N be non empty Subset of S;
@@ -853,19 +863,23 @@ redefine mode Element of N -> Element of S;
   end;
 end;
 
-definition let D be Subset of REAL;
+
+registration let D be Subset of REAL;
   cluster -> real Element of D;
 coherence;
 end;
 
-definition let D be Subset of NAT;
+
+registration let D be Subset of NAT;
   cluster -> real Element of D;
 coherence;
 end;
+
 
 definition
   mode NatPlus is Element of NATPLUS;
 end;
+
 
 :: LATTICE of NATURAL NUMBERS > 0
 
@@ -877,12 +891,14 @@ definition
  coherence by A1,Def9;
 end;
 
+
 definition
  let k be Element of NATPLUS;
  func @k -> NatPlus equals :Def11:
   k;
  coherence;
  end;
+
 
 reserve m,n for NatPlus;
 
@@ -894,7 +910,7 @@ definition
      deffunc O(Element of NATPLUS,Element of NATPLUS)= @(@$1 hcf @$2);
   consider f being BinOp of NATPLUS such that
   A1: for m,n being Element of NATPLUS holds
-  f.(m,n)=O(m,n) from BinOpLambda;
+  f.(m,n)=O(m,n) from BINOP_1:sch 2;
   take f;
   let m,n be Element of NATPLUS;
   A2: n>0 by Def9;
@@ -908,7 +924,7 @@ definition
   thus for o1,o2 being BinOp of NATPLUS st
     (for a,b being Element of NATPLUS holds o1.(a,b) = O(a,b)) &
     (for a,b being Element of NATPLUS holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BinOpDefuniq;
+  holds o1 = o2 from COMPLSP1:sch 2;
   end;
 
  func lcmlatplus-> BinOp of NATPLUS means
@@ -918,7 +934,7 @@ definition
      deffunc O(Element of NATPLUS,Element of NATPLUS)= @(@$1 lcm @$2);
   consider f being BinOp of NATPLUS such that
   A5: for m,n being Element of NATPLUS holds
-  f.(m,n)=O(m,n) from BinOpLambda;
+  f.(m,n)=O(m,n) from BINOP_1:sch 2;
   take f;
   let m,n be Element of NATPLUS;
   A6: m>0 by Def9;
@@ -933,9 +949,10 @@ definition
   thus for o1,o2 being BinOp of NATPLUS st
     (for a,b being Element of NATPLUS holds o1.(a,b) = O(a,b)) &
     (for a,b being Element of NATPLUS holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BinOpDefuniq;
+  holds o1 = o2 from COMPLSP1:sch 2;
   end;
 end;
+
 
 reserve p,q,r for Element of LattStr
                             (# NATPLUS, lcmlatplus, hcflatplus #);
@@ -947,6 +964,7 @@ definition
  :Def14: m;
  coherence;
  end;
+
 
 theorem
 Th69: p"\/"q =@p lcm @q
@@ -1062,10 +1080,12 @@ definition
   end;
 end;
 
-definition
+
+registration
  cluster NatPlus_Lattice -> strict;
  coherence by Def15;
 end;
+
 
 reserve x,y1,y2 for set;
 
@@ -1096,7 +1116,8 @@ definition let L be Lattice;
  existence proof take L; thus thesis by Lm13; end;
 end;
 
-definition let L be Lattice;
+
+registration let L be Lattice;
  cluster strict SubLattice of L;
   existence
    proof set S =
@@ -1160,6 +1181,7 @@ A9:    a'"/\"b' = a"/\"b by A1;
     hence thesis;
    end;
 end;
+
 
 canceled 4;
 
@@ -1236,7 +1258,7 @@ existence
  proof
   defpred _P[Nat] means $1 is prime;
   consider X being Subset of NAT such that
-A1: for n being Nat holds n in X iff _P[n] from SubsetEx;
+A1: for n being Nat holds n in X iff _P[n] from SETWISEO:sch 1;
   take X;
   let n be Nat;
   thus n in X implies n is prime by A1;
@@ -1248,18 +1270,21 @@ uniqueness proof
 thus for X1,X2 being Subset of NAT st
    (for y being Element of NAT holds y in X1 iff P[y]) &
    (for y being Element of NAT holds y in X2 iff P[y]) holds
-  X1 = X2 from Subset_Eq;
+  X1 = X2 from SUBSET_1:sch 2;
   end;
 end;
 
-definition
+
+registration
   cluster prime Nat;
 existence by INT_2:44;
 end;
 
+
 definition
   mode Prime is prime Nat;
 end;
+
 
 reserve p,f for Prime;
 reserve x for set;
@@ -1272,7 +1297,7 @@ definition let p;
 existence
  proof     defpred P[Nat] means ($1 < p & $1 is prime);
   consider X being Subset of NAT such that
-A1: for q being Nat holds q in X iff P[q] from SubsetEx;
+A1: for q being Nat holds q in X iff P[q] from SETWISEO:sch 1;
   take X;
   let q be Nat;
   thus q in X implies q < p & q is prime by A1;
@@ -1284,9 +1309,10 @@ uniqueness proof
 thus for X1,X2 being Subset of NAT st
    (for y being Element of NAT holds y in X1 iff P[y]) &
    (for y being Element of NAT holds y in X2 iff P[y]) holds
-  X1 = X2 from Subset_Eq;
+  X1 = X2 from SUBSET_1:sch 2;
   end;
 end;
+
 
 theorem Th77:
  SetPrimenumber p c= SetPrimes
@@ -1352,7 +1378,9 @@ theorem Th81:
    proof
     per cases by Lm14;
      case A1: l=0; take two; thus thesis by A1;
+     end;
      case A2: l=1; take two; thus thesis by A2;
+     end;
      case A3: 2<=l;
          l<=l! by Th10;
       then 2<=l! by A3,AXIOMS:22;
@@ -1364,6 +1392,7 @@ A7:      j<>0 by A4,INT_2:def 5;
       reconsider j'=j as Prime by A4;
       take j';
     thus thesis by A5,A6,A7,Th17;
+   end;
    end;
    hence thesis;
   end;
@@ -1445,9 +1474,11 @@ proof let f,g be Prime;
       then consider k such that A3: x = k & k<f & k is prime;
          k < g by A1,A3,AXIOMS:22;
       hence thesis by A3;
+     end;
      case x in {f};
        then x = f by TARSKI:def 1;
       hence thesis by A1;
+    end;
     end;
    hence thesis;
   end;
@@ -1478,7 +1509,8 @@ proof
       defpred _P[Nat] means $1 is prime & $1>m;
         ex p st p is prime & p>m by Th81;
      then A4: ex k st _P[k];
-     consider k such that A5: _P[k] & for l st _P[l] holds k <= l from Min(A4);
+     consider k such that A5: _P[k] & for l st _P[l] holds k <= l from
+NAT_1:sch 5(A4);
      take k;
      A6: {k2: k2<k & k2 is prime}={k1: k1<m & k1 is prime}\/{m}
       proof
@@ -1497,10 +1529,12 @@ A9:            s<=m by A5,A8;
             case s=m;
             then s in {m} by TARSKI:def 1;
             hence thesis by A8,XBOOLE_0:def 2;
+            end;
             case s<m;
             then A10: x in {k2: k2<m & k2 is prime} by A8;
      {k1: k1<m & k1 is prime}c={k3: k3<m & k3 is prime}\/{m} by XBOOLE_1:7;
             hence thesis by A10;
+           end;
            end;
           hence thesis;
          end;
@@ -1517,7 +1551,7 @@ A9:            s<=m by A5,A8;
     hence n + 1 = card C by A3,A6,CARD_2:54;
     thus k is Prime by A5;
     end;
-    for n holds _P1[n] from Ind(A1,A2);
+    for n holds _P1[n] from NAT_1:sch 1(A1,A2);
   then ex m st ex B being finite set st
    B = {k1:k1<m & k1 is prime} & n=card B & m is Prime;
  hence thesis;
@@ -1543,6 +1577,7 @@ A13: f<>g;
                                      by A14,A15,FINSET_1:13;
        card B1 <= card B2 by A14,CARD_1:80;
     hence thesis by A11,A12,A16,CARD_2:54;
+    end;
     case g<f;
     then A17: {k2: k2<g & k2 is prime}\/{g}c={k1: k1<f & k1 is prime} by Th91;
     A18: {k1: k1<f & k1 is prime} is finite by Th88;
@@ -1554,9 +1589,11 @@ A13: f<>g;
        card B3 <= card B4 by A17,CARD_1:80;
     hence thesis by A11,A12,A19,CARD_2:54;
    end;
+   end;
   hence contradiction by NAT_1:38;
  end;
 end;
+
 
 theorem Th93:
   SetPrimenumber p = {k:k<p & k is prime}
@@ -1624,13 +1661,13 @@ proof
    A3: ex i st _P[i] by A1,A2;
    consider p' such that
      A4: _P[p'] and
-     A5: for p1 st _P[p1] holds p' <= p1 from Min(A3);
+     A5: for p1 st _P[p1] holds p' <= p1 from NAT_1:sch 5(A3);
     defpred _Q[Nat] means
     ex n st p' divides $1 * n & (not p' divides $1) & (not p' divides n);
 A6: ex m st _Q[m] by A4;
    consider m' such that
      A7: _Q[m'] and
-     A8: for m1 st _Q[m1] holds m' <= m1 from Min(A6);
+     A8: for m1 st _Q[m1] holds m' <= m1 from NAT_1:sch 5(A6);
      m' <> 0 by A7;
    then A9: m' > 0 by NAT_1:19;
    consider n such that

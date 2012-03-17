@@ -31,9 +31,7 @@ INT_1
 ABSVALUE
 GROUP_1
 #
-LattInd
-#
 G3 V13 ;V14 ;V15 ;V46 ;V47 ;V98 ;;;
-M2 U1 F1 ;;;P1 B1 ;M2 U1 F1 ;;;ª&M2 U1 F1 ;;;ª&R12 F1 ;B2 B1 ;ªP1 B2 ;;ªP1 B1 ;;;
+M2 U1 F1 ;;;P1 B1 ;M2 U1 F1 ;;;ª&M2 U1 F1 ;;;ª&R13 F1 ;B2 B1 ;ªP1 B2 ;;ªP1 B1 ;;;
 #
 !

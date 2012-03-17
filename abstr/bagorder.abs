@@ -13,12 +13,12 @@ environ
       WAYBEL_4, WELLFND1, FUNCT_4, WELLORD2, TRIANG_1, SQUARE_1, ORDERS_2,
       FINSEQ_4, PROB_1, FUNCT_2, RFINSEQ, PARTFUN1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, RELAT_2,
-      RELSET_1, FINSET_1, FINSUB_1, CQC_LANG, ORDINAL1, MCART_1, WELLORD1,
-      ORDERS_1, ORDERS_2, WELLFND1, NUMBERS, XREAL_0, REAL_1, NAT_1, FUNCT_1,
-      SEQM_3, WAYBEL_0, CARD_1, NORMSP_1, PBOOLE, PRALG_1, CARD_3, DICKSON,
-      BINARITH, FINSEQ_1, WSIERP_1, POLYNOM1, RVSUM_1, PRE_CIRC, YELLOW_1,
-      WAYBEL_4, PARTFUN1, FUNCT_2, FUNCT_4, TRIANG_1, POLYNOM2, FINSEQ_4,
-      CQC_SIM1, DOMAIN_1, FINSEQOP, RFINSEQ;
+      RELSET_1, FINSET_1, FINSUB_1, CQC_LANG, ORDINAL1, ORDINAL2, MCART_1,
+      WELLORD1, ORDERS_1, ORDERS_2, WELLFND1, NUMBERS, XREAL_0, REAL_1, NAT_1,
+      FUNCT_1, SEQM_3, WAYBEL_0, CARD_1, NORMSP_1, PBOOLE, PRALG_1, CARD_3,
+      DICKSON, BINARITH, FINSEQ_1, WSIERP_1, POLYNOM1, RVSUM_1, PRE_CIRC,
+      YELLOW_1, WAYBEL_4, PARTFUN1, FUNCT_2, FUNCT_4, TRIANG_1, POLYNOM2,
+      FINSEQ_4, CQC_SIM1, DOMAIN_1, FINSEQOP, RFINSEQ;
  constructors WELLFND1, PRE_CIRC, REAL_1, FINSEQOP, DOMAIN_1, BINARITH,
       DICKSON, WSIERP_1, WAYBEL_4, TRIANG_1, POLYNOM2, ORDERS_2, CQC_SIM1;
  clusters DICKSON, YELLOW_1, ORDERS_1, CARD_1, POLYNOM1, BINARITH, STRUCT_0,
@@ -36,15 +36,34 @@ for x,y,z being set st z in x & z in y holds x \ {z} = y \ {z} iff x = y;
 theorem :: BAGORDER:2
   for n, k being Nat holds k in Seg n iff k-1 is Nat & k-1 < n;
 
-definition
+registration
   let f be natural-yielding Function, X be set;
   cluster f|X -> natural-yielding;
+  coherence proof
+  A1: rng f c= NAT by SEQM_3:def 8;
+       rng(f|X) c= rng f by RELAT_1:99;
+     then rng(f|X) c= NAT by A1,XBOOLE_1:1;
+   hence thesis by SEQM_3:def 8;
+  end;
 end;
 
-definition
+
+registration
   let f be finite-support Function, X be set;
   cluster f|X -> finite-support;
+  coherence proof
+       support (f|X) c= support f proof let x be set; assume
+     A1: x in support (f|X);
+     then A2: (f|X).x <> 0 by POLYNOM1:def 7;
+           support (f|X) c= dom (f|X) by POLYNOM1:41;
+         then f.x <> 0 by A1,A2,FUNCT_1:70;
+      hence x in support f by POLYNOM1:def 7;
+     end;
+     then support (f|X) is finite by FINSET_1:13;
+    hence thesis by POLYNOM1:def 8;
+  end;
 end;
+
 
 theorem :: BAGORDER:3
 for f being Function, x being set st x in dom f holds f*<*x*> = <*f.x*>;
@@ -65,15 +84,36 @@ definition
     for k being Nat st k in j-'i holds it.k = b.(i+k);
 end;
 
-definition
+
+registration
   let n,i,j be Nat, b be natural-yielding ManySortedSet of n;
   cluster (i,j)-cut b -> natural-yielding;
+coherence proof
+      now let y be set such that
+    A1: y in rng (i,j)-cut b;
+        consider x being set such that
+    A2: x in dom ((i,j)-cut b) and
+    A3: ((i,j)-cut b).x = y by A1,FUNCT_1:def 5;
+    A4: x in j-'i by A2,PBOOLE:def 3;
+          j-'i = {k where k is Nat : k < j-'i} by AXIOMS:30;
+        then consider k being Nat such that
+    A5: k = x & k < j-'i by A4;
+        reconsider x as Nat by A5;
+          y = b.(i+x) by A3,A4,Def1;
+        hence y in NAT;
+    end;
+    then rng (i,j)-cut b c= NAT by TARSKI:def 3;
+    hence (i,j)-cut b is natural-yielding by SEQM_3:def 8;
+end;
 end;
 
-definition
+
+registration
   let n,i,j be Nat, b be finite-support ManySortedSet of n;
   cluster (i,j)-cut b -> finite-support;
+coherence;
 end;
+
 
 theorem :: BAGORDER:6
   for n,i being Nat, a,b being ManySortedSet of n holds
@@ -88,10 +128,32 @@ definition
                                       Card y <=` n};
 end;
 
-definition
+
+registration
   let x be non empty set, n be non empty Nat;
   cluster Fin (x,n) -> non empty;
+coherence proof
+    consider y being Element of x;
+      0 < n by NAT_1:19;
+    then A1: 0+1 < n+1 by REAL_1:67;
+    A2: now per cases by ORDINAL1:26;
+        suppose 1 c= n;
+            hence Card {y} <=`n by CARD_1:79;
+        end;
+        suppose A3: n in 1;
+              1 = {k where k is Nat : k < 1} by AXIOMS:30;
+            then consider k being Nat such that
+        A4: k = n & k < 1 by A3;
+            thus Card {y} <=`n by A1,A4,NAT_1:38;
+    end;
+    end;
+      Fin (x,n) = {k where k is Element of bool x:
+                 k is finite & k is non empty & Card k <=` n} by Def2;
+    then {y} in Fin (x,n) by A2;
+    hence thesis;
 end;
+end;
+
 
 theorem :: BAGORDER:7
 for R being antisymmetric transitive non empty RelStr,
@@ -118,6 +180,7 @@ definition
   for i being Nat holds [s.(i+1),s.i] in the InternalRel of R;
 end;
 
+
 theorem :: BAGORDER:10
 for R being non empty transitive RelStr, f being sequence of R
  st f is non-increasing
@@ -142,6 +205,7 @@ func TotDegree b -> Nat means
 ex f being FinSequence of NAT
  st it = Sum f & f = b*SgmX(RelIncl n, support b);
 end;
+
 
 theorem :: BAGORDER:13
 for n being Ordinal, b being bag of n, s being finite Subset of n,
@@ -185,15 +249,15 @@ begin :: Some Special Orders (Section 4.4)
 definition
   let n be set;
   mode TermOrder of n is Order of Bags n;
-  canceled;
+  canceled 2;
 end;
 
-definition
+
+notation
   let n be Ordinal;
-  redefine func BagOrder n;
-  synonym LexOrder n;
-  canceled;
-end;
+  synonym LexOrder n for BagOrder n;
+  end;
+
 
 definition :: Definition 4.59 - admissible (specific for Bags)
   let n be Ordinal, T be TermOrder of n;
@@ -204,18 +268,23 @@ definition :: Definition 4.59 - admissible (specific for Bags)
   for a, b, c being bag of n st [a, b] in T holds [a+c, b+c] in T;
 end;
 
+
 theorem :: BAGORDER:23  :: 4.61 i) Lexicographical order is admissible
 for n being Ordinal holds LexOrder n is admissible;
 
-definition
+registration
   let n be Ordinal;
   cluster admissible TermOrder of n;
+  existence proof LexOrder n is admissible by Th23; hence thesis; end;
 end;
 
-definition
+
+registration
   let n be Ordinal;
   cluster LexOrder n -> admissible;
+  coherence by Th23;
 end;
+
 
 theorem :: BAGORDER:24
   for o being infinite Ordinal holds LexOrder o is non well-ordering;
@@ -230,13 +299,16 @@ definition
        for k being Ordinal st i in k & k in n holds p.k = q.k;
 end;
 
+
 theorem :: BAGORDER:25  :: Ex 4.61 ii
 for n being Ordinal holds InvLexOrder n is admissible;
 
-definition
+registration
   let n be Ordinal;
   cluster InvLexOrder n -> admissible;
+  coherence by Th25;
 end;
+
 
 theorem :: BAGORDER:26
 for o being Ordinal holds InvLexOrder o is well-ordering;
@@ -250,6 +322,7 @@ definition
         ((TotDegree a < TotDegree b) or
          (TotDegree a = TotDegree b & [a,b] in o));
 end;
+
 
 theorem :: BAGORDER:27  :: Exercise 4.61: iiia
 for n being Ordinal, o being TermOrder of n
@@ -267,14 +340,17 @@ definition
     Graded InvLexOrder n;
 end;
 
+
 theorem :: BAGORDER:28
                                            :: Ex 4.61: iiib
 for n being Ordinal holds GrLexOrder n is admissible;
 
-definition
+registration
   let n be Ordinal;
   cluster GrLexOrder n -> admissible;
+  coherence by Th28;
 end;
+
 
 theorem :: BAGORDER:29
   for o being infinite Ordinal holds GrLexOrder o is non well-ordering;
@@ -282,10 +358,12 @@ theorem :: BAGORDER:29
 theorem :: BAGORDER:30
 for n being Ordinal holds GrInvLexOrder n is admissible;
 
-definition
+registration
   let n be Ordinal;
   cluster GrInvLexOrder n -> admissible;
+  coherence by Th30;
 end;
+
 
 theorem :: BAGORDER:31
   for o being Ordinal holds GrInvLexOrder o is well-ordering;
@@ -298,6 +376,7 @@ definition
      ((0,i+1)-cut p <> (0,i+1)-cut q & [(0,i+1)-cut p,(0,i+1)-cut q] in o1) or
      ((0,i+1)-cut p = (0,i+1)-cut q & [(i+1,n)-cut p,(i+1,n)-cut q] in o2);
 end;
+
 
 theorem :: BAGORDER:32 ::E_4_61_iv:  :: Exercise 4.61: iv
   for i,n being Nat, o1 being TermOrder of (i+1),o2 being TermOrder of (n-'(i+1
@@ -313,6 +392,7 @@ definition
      the carrier of it = Bags n &
    for x,y being bag of n holds [x,y] in the InternalRel of it iff x divides y;
 end;
+
 
 theorem :: BAGORDER:33
 for n being Nat holds the carrier of product(n --> OrderedNAT) = Bags n;
@@ -339,6 +419,7 @@ definition
     it in X & it is_maximal_wrt X, the InternalRel of R;
 end;
 
+
 definition
   let R be connected (non empty Poset);
   func FinOrd-Approx R ->
@@ -354,6 +435,7 @@ definition
          x <> {} & y <> {} &
          PosetMax x = PosetMax y & [x \{PosetMax x}, y \{PosetMax y}] in it.n};
 end;
+
 
 theorem :: BAGORDER:36
 for R being connected (non empty Poset),
@@ -386,6 +468,7 @@ definition
        union rng FinOrd-Approx R;
 end;
 
+
 definition
   let R be connected (non empty Poset);
   func FinPoset R -> Poset equals
@@ -393,10 +476,16 @@ definition
      RelStr (# Fin the carrier of R, FinOrd R #);
 end;
 
-definition
+
+registration
   let R be connected (non empty Poset);
   cluster FinPoset R -> non empty;
+correctness proof
+      FinPoset R = RelStr(# Fin the carrier of R, FinOrd R #) by Def18;
+    hence FinPoset R is non empty;
 end;
+end;
+
 
 theorem :: BAGORDER:40
 for R being connected (non empty Poset),a,b being Element of FinPoset R
@@ -409,10 +498,91 @@ for R being connected (non empty Poset),a,b being Element of FinPoset R
             x<>{} & y<>{} & PosetMax x = PosetMax y &
              [x\{PosetMax x},y\{PosetMax y}] in FinOrd R);
 
-definition
+registration
   let R be connected (non empty Poset);
   cluster FinPoset R -> connected;
+correctness proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set FIR = FinOrd R, FCR = Fin CR;
+A1: FinPoset R = RelStr(#FCR, FIR#) by Def18;
+      now let x,y be Element of FinPoset R;
+        reconsider x'=x,y'=y as Element of Fin CR by A1;
+        defpred _P[Nat] means (for x,y being Element of Fin CR
+               st Card x = $1 holds ([x,y] in FIR or [y,x] in FIR));
+              now let a,b be Element of Fin CR such that
+            A2: Card a = 0;
+             a = {} by A2,CARD_2:59;
+                hence [a,b] in FIR or [a,b] in FIR by A1,Th40;
+            end;
+        then A4: _P[0];
+              now let n be Nat such that
+            A5: for x,y being Element of Fin CR
+                 st Card x = n
+                 holds ([x,y] in FIR or [y,x] in FIR);
+                let a,b be Element of Fin CR such that
+            A6: Card a = n+1;
+                per cases;
+                suppose a = {};
+                    hence [a,b] in FIR or [b,a] in FIR by A1,Th40;
+                end;
+                suppose A7: a <> {};
+                     now per cases;
+                       suppose b = {};
+                           hence [a,b] in FIR or [b,a] in FIR by A1,Th40;
+                       end;
+                       suppose A8: b <>{};
+                             now per cases;
+                               suppose A9: PosetMax a <> PosetMax b;
+                                 now per cases by WAYBEL_0:def 29;
+                                   suppose PosetMax a <= PosetMax b;
+                                       then [PosetMax a, PosetMax b] in IR
+                                        by ORDERS_1:def 9;
+              hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A9,Th40;
+                                   end;
+                                   suppose PosetMax b <= PosetMax a;
+                                       then [PosetMax b, PosetMax a] in IR
+                                        by ORDERS_1:def 9;
+                    hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A9,Th40;
+                               end;
+                               end;
+                               hence [a,b] in FIR or [b,a] in FIR;
+                               end;
+                               suppose A10: PosetMax a = PosetMax b;
+                               set ax = a\{PosetMax a}, bx = b\{PosetMax b};
+                               A11: Card ax = n by A6,Lm1;
+                                   reconsider ax,bx as Element of Fin CR
+                                    by Th38;
+                                     now per cases by A5,A11;
+                                   suppose [ax,bx] in FIR;
+                      hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A10,Th40;
+
+                                   end;
+                                   suppose [bx,ax] in FIR;
+               hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A10,Th40;
+                                  end;
+                                  end;
+                                  hence [a,b] in FIR or [b,a] in FIR;
+                           end;
+                           end;
+                           hence [a,b] in FIR or [b,a] in FIR;
+                  end;
+                  end;
+                  hence [a,b] in FIR or [b,a] in FIR;
+            end;
+            end;
+        then A12: for n being Nat st _P[n] holds _P[n+1];
+        A13: for n being Nat holds _P[n] from NAT_1:sch 1(A4,A12);
+              x' in Fin CR;
+            then consider n being Nat such that
+        A14: x,n are_equipotent by CARD_1:74;
+              Card x' = n by A14,CARD_1:def 5;
+            then [x',y'] in FIR or [y',x'] in FIR by A13;
+            hence x <= y or y <= x by A1,ORDERS_1:def 9;
+    end;
+    hence FinPoset R is connected by WAYBEL_0:def 29;
 end;
+end;
+
 
 definition
    let R be connected (non empty RelStr), C be non empty set such that
@@ -423,12 +593,14 @@ definition
    it in C & it is_minimal_wrt C, the InternalRel of R;
 end;
 
+
 definition
   let R  be non empty RelStr, s be sequence of R, j  be Nat;
   func SeqShift (s, j) -> sequence of R means
 :: BAGORDER:def 20
     for i being Nat holds it.i = s.(i+j);
 end;
+
 
 theorem :: BAGORDER:41
 for R being non empty RelStr, s being sequence of R, j being Nat

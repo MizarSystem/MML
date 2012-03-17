@@ -63,13 +63,50 @@ for F being Function,
 st product F <> {} & xi1 in F.i1 & i1 in dom F & i2 in dom F & Ai2<>F.i2
 holds proj(F,i1)"({xi1}) c= proj(F,i2)"Ai2 iff (i1 = i2 & xi1 in Ai2);
 
-scheme ElProductEx { I()->non empty set,
+scheme :: YELLOW17:sch 1
+ ElProductEx { I()->non empty set,
                       J()->TopSpace-yielding non-Empty ManySortedSet of I(),
                       P[set,set] }:
   ex f being Element of product J() st for i being Element of I() holds
     P[f.i,i]
   provided
-  for i being Element of I() ex x being Element of J().i st P[x,i];
+  for i being Element of I() ex x being Element of J().i st P[x,i]
+proof
+  defpred Q[set,set] means P[$2,$1] &
+      for i' being Element of I() st $1=i' holds $2 in the carrier of J().i';
+A2:
+  for i being set st i in I() ex x being set st Q[i, x]
+  proof
+    let i be set;
+    assume i in I();
+    then reconsider i1=i as Element of I();
+    consider x being Element of J().i1 such that
+A3:   P[x,i1] by A1;
+    take x;
+    thus P[x,i] by A3;
+    let i' be Element of I();
+    assume i=i';
+    hence x in the carrier of J().i';
+  end;
+  consider f being Function such that
+A4: dom f = I() and
+A5: for i being set st i in I() holds Q[i, f.i] from ZFREFLE1:sch 1(A2);
+A6: dom f = dom Carrier J() by A4,PBOOLE:def 3;
+    for x being set st x in dom Carrier J() holds f.x in (Carrier J()).x
+  proof
+    let x be set;
+    assume x in dom Carrier J();
+    then reconsider x'=x as Element of I() by PBOOLE:def 3;
+      f.x' in the carrier of J().x' by A5;
+    hence f.x in (Carrier J()).x by YELLOW_6:9;
+  end;
+  then f in product(Carrier J()) by A6,CARD_3:18;
+  then f in the carrier of product J() by WAYBEL18:def 3;
+  then reconsider f as Element of product J();
+  take f;
+  let i be Element of I();
+  thus P[f.i,i] by A5;
+end;
 
 theorem :: YELLOW17:8
 for I being non empty set,

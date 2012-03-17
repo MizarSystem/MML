@@ -13,11 +13,6 @@ ORDERS_1
 YELLOW_0
 WAYBEL_0
 #
-RelStrSubset
-LambdaMD
-KappaMD
-NonUniqExMD
-#
 G3 W11 ;;;
 êËM2 U1 F1 ;;;;B1 P1 B1 ;M2 K10 U1 F1 ;;;;;
 #

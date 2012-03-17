@@ -21,11 +21,6 @@ ENUMSET1
 FRAENKEL
 RLVECT_2
 #
-LambdaSep3
-LinCEx1
-LinCEx2
-LinCEx3
-#
 M1 W1 ;;M1 W1 ;;M3 F1 ;;M3 F1 ;;M3 F1 ;;M3 F2 ;;M3 F2 ;;M3 F2 ;;M3 F2 ;;;
 ªM6 V4 ;V16 F1 ;F2 ;;F1 ;F2 ;;ª&R1 K75 F1 ;F2 ;B1 F3 ;;F6 ;;R1 K75 F1 ;F2 ;B1 F4 ;;F7 ;;R1 K75 F1 ;F2 ;B1 F5 ;;F8 ;;M3 F1 ;;ª&ªR1 B2 F3 ;;ªR1 B2 F4 ;;ªR1 B2 F5 ;;ªR1 K75 F1 ;F2 ;B1 B2 ;F9 B2 ;;;;ªR1 F3 ;F4 ;;ªR1 F3 ;F5 ;;ªR1 F4 ;F5 ;;;
 #

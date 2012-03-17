@@ -49,7 +49,7 @@ proof
     A2: for k holds not X[k];
       deffunc V(Nat) = F($1);
       consider f being Function of NAT, NAT such that
-    A3: for k holds f.k = V(k) from LambdaD;
+    A3: for k holds f.k = V(k) from FUNCT_2:sch 4;
         f.0 in rng f by FUNCT_2:6;
       then reconsider rf = rng f as non empty Subset of NAT by RELSET_1:12;
       set m = min rf;
@@ -63,7 +63,7 @@ proof
      hence contradiction by A2,A4,A5,CQC_SIM1:def 8;
     end;
 then A6:  ex k st X[k];
-    thus ex k st X[k] & for n st X[n] holds k <= n from Min(A6);
+    thus ex k st X[k] & for n st X[n] holds k <= n from NAT_1:sch 5(A6);
 end;
 
 theorem Th1:
@@ -77,8 +77,10 @@ proof
      per cases by A3,INT_1:20;
      suppose 2*j+1 < 0;
       hence contradiction by A2,NAT_1:18;
+     end;
      suppose 2*j+1 = 0; then n = 2*0;
       hence contradiction by A1;
+     end;
      end;
    then reconsider j as Nat by INT_1:16;
    take j;
@@ -89,7 +91,7 @@ end;
 
 theorem Th2:
   for i being Integer st i <= r holds i <= [\ r /]
-proof 
+proof
   let i be Integer;
   assume
 A1: i <= r;
@@ -151,12 +153,14 @@ A4: m mod n < n by A1,NAT_1:46;
 A5: Mm < n by A1,GR_CY_2:3;
     Md = M div n;
  hence thesis by A2,A3,A4,A5,NAT_1:43;
+ end;
  suppose
 A6: n = 0;
   hence m qua Integer div n = 0 by INT_1:75
     .= m div n by A6,NAT_1:def 1;
   thus m qua Integer mod n = 0 by A6,INT_1:def 8
     .= m mod n by A6,NAT_1:def 2;
+end;
 end;
 
 begin :: SCM+FSA preliminaries
@@ -456,6 +460,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
     thus (UIL1*if0).x = UIL1.(if0.x) by A13,FUNCT_1:22
       .= UIL1.((if0+*ic4).x) by A15,FUNCT_4:12
       .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+   end;
    suppose A16: x = Lc4;
     thus (UIL1*if0).x
        = UIL1.(if0.x) by A13,FUNCT_1:22
@@ -467,6 +472,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
       .= UIL1.(ic4.x) by A16,CQC_LANG:6
       .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
       .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+  end;
   end;
  hence thesis by A2,A4,A5,FUNCT_1:9;
 end;
@@ -519,6 +525,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
     thus (UIL1*if0).x = UIL1.(if0.x) by A13,FUNCT_1:22
       .= UIL1.((if0+*ic4).x) by A15,FUNCT_4:12
       .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+   end;
    suppose A16: x = Lc4;
     thus (UIL1*if0).x
        = UIL1.(if0.x) by A13,FUNCT_1:22
@@ -530,6 +537,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
       .= UIL1.(ic4.x) by A16,CQC_LANG:6
       .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
       .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+  end;
   end;
  hence thesis by A2,A4,A5,FUNCT_1:9;
 end;
@@ -582,6 +590,7 @@ definition
        holds ( f.(StepWhile=0(a,I,s).(k+1)) < f.(StepWhile=0(a,I,s).k)
               or StepWhile=0(a,I,s).k.a <> 0 );
 end;
+
 
 theorem Th19: :: eParaProper:
  for I being parahalting Macro-Instruction holds ProperBodyWhile=0 a, I, s
@@ -644,12 +653,13 @@ then A16:       IC sk1 = insloc 0 by A14,A15,SCMFSA_9:22;
        end;
        hence P[k+1];
     end;
-A17: for k being Nat holds P[k] from Ind(A6,A8);
+A17: for k being Nat holds P[k] from NAT_1:sch 1(A6,A8);
       now per cases;
        suppose m = 0;
          then s.a <> 0 by A4,SCMFSA_9:def 4;
          hence while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s
          by SCMFSA_9:18;
+       end;
        suppose A18: m <> 0;
          then consider i being Nat such that
 A19:      m=i+1 by NAT_1:22;
@@ -689,6 +699,7 @@ then A31:           s.a = 0 by A5,A28;
               then I is_closed_on s & I is_halting_on s by A1,A30;
               hence IC (Computation s1).q in dom while=0(a,I) by A29,A31,
 SCMFSA_9:22;
+            end;
             suppose A32: q > p;
               defpred P2[Nat] means
                 $1<=m & $1<>0 & (ex k st StepWhile=0(a,I,s).$1=
@@ -703,7 +714,7 @@ A34:           now
 then 1 <= m by NAT_1:38;
 then A35:           ex k st P2[k] by A34;
                 ex k st P2[k] & for i st P2[i] holds i <=
- k from Max(A33,A35);
+ k from NAT_1:sch 6(A33,A35);
               then consider t being Nat such that
 A36:           P2[t] & for i st P2[i] holds i <= t;
                 now per cases;
@@ -717,6 +728,7 @@ AMI_1:51;
                      while=0(a,I) is_closed_on sm by A4,SCMFSA_9:18;
                    hence IC (Computation s1).q in dom while=0(a,I) by A39,
 SCMFSA7B:def 7;
+                 end;
                  suppose t<>m;
 then A40:                t < m by A36,REAL_1:def 5;
                    consider y being Nat such that
@@ -752,9 +764,12 @@ A53:              Dt.a = 0 by A5,A40;
                    hence IC (Computation s1).q in dom while=0(a,I)
                     by A51,A52,A53,SCMFSA_9:22;
               end;
+              end;
               hence IC (Computation s1).q in dom while=0(a,I);
          end;
+         end;
          hence while=0(a,I) is_closed_on s by SCMFSA7B:def 7;
+    end;
     end;
     hence thesis;
 end;
@@ -861,12 +876,16 @@ then A26:  s1 is halting by AMI_1:def 20;
       per cases by A28,CQC_THE1:4;
       suppose k = 0; then (Computation s).k = s by AMI_1:def 19;
        hence contradiction by A3,A8,A27,SCMFSA_2:48,124;
+      end;
       suppose k = 1;
        hence contradiction by A3,A13,A27,SCMFSA_2:47,124;
+      end;
       suppose k = 2;
        hence contradiction by A3,A17,A27,SCMFSA_2:47,124;
+      end;
       suppose k = 3;
        hence contradiction by A3,A21,A27,SCMFSA_2:47,124;
+     end;
      end;
  hence A29: LifeSpan s = 4 by A3,A25,A26,SCM_1:def 2;
 
@@ -897,15 +916,20 @@ then A37: k = 0 or k = 1 or k = 2 or k = 3 or 3+1 <= k by CQC_THE1:4,NAT_1:38;
  per cases by A37;
  suppose k = 0;
   hence thesis by AMI_1:def 19;
+ end;
  suppose k = 1;
   hence thesis by A3,A9,A33,SCMFSA6A:38;
+ end;
  suppose k = 2;
   hence thesis by A3,A14,A32,A34,SCMFSA6A:38;
+ end;
  suppose k = 3;
   hence thesis by A3,A18,A31,A35,SCMFSA6A:38;
+ end;
  suppose 4 <= k;
   then CurInstr (Computation s).k = halt SCM+FSA by A3,A26,A29,SCMFSA8A:4;
   hence thesis by A29,A36,Th6;
+end;
 end;
 
 theorem Th23: :: based on SCMFSA_9:22
@@ -984,7 +1008,7 @@ then k < LifeSpan sI by A17,AXIOMS:22;
     set s2 = (Computation s1).(1 + LifeSpan sI);
     set loc4 = insloc (card I + 4);
     set s3 = (Computation s1).(1+LifeSpan sI+1);
-       for k being Nat holds P[k] from Ind(A13,A15);
+       for k being Nat holds P[k] from NAT_1:sch 1(A13,A15);
 then A18: P[LifeSpan sI];
 then A19: CurInstr s2 = goto loc4 by A1,A2,SCMFSA_9:20;
 A20: s3 = Following s2 by AMI_1:def 19
@@ -1098,6 +1122,7 @@ A4:    for k being Nat st X[k] holds X[k+1]
      suppose SW.k.a <> 0;
        then SW.(k+1) | D = SW.k | D by Th24;
       hence SW.(k+1).intloc 0 = 1 by A5,SCMFSA6A:38;
+     end;
      suppose A6: SW.k.a = 0;
         ProperBodyWhile=0 a, I, s by A1,Th19;
      then A7: I is_closed_on SW.k & I is_halting_on SW.k by A6,Def1;
@@ -1128,7 +1153,8 @@ A15: IExec(I, SW.k) | D
         = ((Computation SWkIS).(LifeSpan SWkIS)).intloc 0 by A15,SCMFSA6A:38
        .= 1 by A5,A7,SCMFSA8C:97;
     end;
-thus for k being Nat holds X[k] from Ind(A3,A4);
+    end;
+thus for k being Nat holds X[k] from NAT_1:sch 1(A3,A4);
 end;
 
 theorem  :: eSW12:
@@ -1154,6 +1180,7 @@ A4: for k being Nat st X[k] holds X[k+1]
     suppose A7: ST1.k.a <> 0;
      hence ST1.(k+1) | D = ST1.k | D by Th24
         .= ST2.(k+1) | D by A5,A6,A7,Th24;
+    end;
     suppose A8: ST1.k.a = 0;
   then A9: I is_closed_on ST1.k & I is_halting_on ST1.k by A1,Def1;
   A10:  ST1.(k+1) | D = (Computation (ST1.k +* (WH +* SAt))).
@@ -1175,7 +1202,8 @@ A4: for k being Nat st X[k] holds X[k+1]
     hence ST1.(k+1) | D = ST2.(k+1) | D by A10,A12,A13,A14,A15,A17,SCMFSA8C:43
 ;
     end;
- thus for k holds X[k] from Ind(A3, A4);
+    end;
+ thus for k holds X[k] from NAT_1:sch 1(A3, A4);
 end;
 
 definition
@@ -1248,7 +1276,7 @@ then A19:       IC sk1 =insloc 0 by A17,A18,SCMFSA_9:22;
        end;
        hence P[k+1];
     end;
-A20: for k being Nat holds P[k] from Ind(A9,A11);
+A20: for k being Nat holds P[k] from NAT_1:sch 1(A9,A11);
   per cases;
   suppose A21: m = 0;
   A22: S | D = s | D by SCMFSA8A:11
@@ -1256,6 +1284,7 @@ A20: for k being Nat holds P[k] from Ind(A9,A11);
       then S.a = SW.m.a by SCMFSA6A:38;
    hence (Computation S).(LifeSpan S) | D
        = SW.m | D by A5,A7,A22,Th22;
+  end;
   suppose m <> 0;
          then consider i being Nat such that
 A23:      m=i+1 by NAT_1:22;
@@ -1291,6 +1320,7 @@ A33:  while=0(a,I)+* SAt c= sm by A30,FUNCT_4:26;
     .= (Computation sm).(LifeSpan sm) by A31,Th6;
   hence (Computation S).(LifeSpan S) | D = sm | D by A5,A33,Th22;
  end;
+ end;
  uniqueness proof let it1, it2 be Nat;
   given k1 being Nat such that
 A34: it1 = k1 and
@@ -1310,6 +1340,7 @@ A39: (for i being Nat st (StepWhile=0(a, I, s).i).a <> 0 holds k2 <= i) and
   hence it1 = it2 by A34,A37,AXIOMS:21;
  end;
 end;
+
 
 theorem  :: IE_while_ne0:
    s.intloc 0 = 1 & s.a <> 0 implies IExec(while=0(a, I), s) | D = s | D
@@ -1501,6 +1532,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
     thus (UIL1*if0).x = UIL1.(if0.x) by A13,FUNCT_1:22
       .= UIL1.((if0+*ic4).x) by A15,FUNCT_4:12
       .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+   end;
    suppose A16: x = Lc4;
     thus (UIL1*if0).x
        = UIL1.(if0.x) by A13,FUNCT_1:22
@@ -1512,6 +1544,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
       .= UIL1.(ic4.x) by A16,CQC_LANG:6
       .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
       .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+  end;
   end;
  hence thesis by A2,A4,A5,FUNCT_1:9;
 end;
@@ -1564,6 +1597,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
     thus (UIL1*if0).x = UIL1.(if0.x) by A13,FUNCT_1:22
       .= UIL1.((if0+*ic4).x) by A15,FUNCT_4:12
       .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+   end;
    suppose A16: x = Lc4;
     thus (UIL1*if0).x
        = UIL1.(if0.x) by A13,FUNCT_1:22
@@ -1575,6 +1609,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
       .= UIL1.(ic4.x) by A16,CQC_LANG:6
       .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
       .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+  end;
   end;
  hence thesis by A2,A4,A5,FUNCT_1:9;
 end;
@@ -1627,6 +1662,7 @@ definition
        holds ( f.(StepWhile>0(a,I,s).(k+1)) < f.(StepWhile>0(a,I,s).k)
               or StepWhile>0(a,I,s).k.a <= 0 );
 end;
+
 
 theorem Th32: :: ParaProper:
  for I being parahalting Macro-Instruction holds ProperBodyWhile>0 a, I, s
@@ -1685,12 +1721,13 @@ then A16:       IC sk1 =insloc 0 by A14,A15,SCMFSA_9:47;
        end;
        hence P[k+1];
     end;
-A17: for k being Nat holds P[k] from Ind(A6,A8);
+A17: for k being Nat holds P[k] from NAT_1:sch 1(A6,A8);
       now per cases;
        suppose m=0;
          then s.a <= 0 by A4,SCMFSA_9:def 5;
          hence while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s
          by SCMFSA_9:43;
+       end;
        suppose A18:m<>0;
          then consider i being Nat such that
 A19:      m=i+1 by NAT_1:22;
@@ -1730,6 +1767,7 @@ then A31:           s.a > 0 by A5,A28;
               then I is_closed_on s & I is_halting_on s by A1,A30;
               hence IC (Computation s1).q in dom while>0(a,I) by A29,A31,
 SCMFSA_9:47;
+            end;
             suppose A32: q > p;
               defpred P2[Nat] means
                 $1<=m & $1<>0 & (ex k st StepWhile>0(a,I,s).$1=
@@ -1744,7 +1782,7 @@ A34:           now
 then 1 <= m by NAT_1:38;
 then A35:           ex k st P2[k] by A34;
                 ex k st P2[k] & for i st P2[i] holds i <=
- k from Max(A33,A35);
+ k from NAT_1:sch 6(A33,A35);
               then consider t being Nat such that
 A36:           P2[t] & for i st P2[i] holds i <= t;
                 now per cases;
@@ -1758,6 +1796,7 @@ AMI_1:51;
                      while>0(a,I) is_closed_on sm by A4,SCMFSA_9:43;
                    hence IC (Computation s1).q in dom while>0(a,I) by A39,
 SCMFSA7B:def 7;
+                 end;
                  suppose t<>m;
 then A40:                t < m by A36,REAL_1:def 5;
                    consider y being Nat such that
@@ -1793,9 +1832,12 @@ A53:              Dt.a > 0 by A5,A40;
                    hence IC (Computation s1).q in dom while>0(a,I)
                     by A51,A52,A53,SCMFSA_9:47;
               end;
+              end;
               hence IC (Computation s1).q in dom while>0(a,I);
          end;
+         end;
          hence while>0(a,I) is_closed_on s by SCMFSA7B:def 7;
+    end;
     end;
     hence thesis;
 end;
@@ -1903,12 +1945,16 @@ then A26:  s1 is halting by AMI_1:def 20;
       per cases by A28,CQC_THE1:4;
       suppose k = 0; then (Computation s).k = s by AMI_1:def 19;
        hence contradiction by A3,A8,A27,SCMFSA_2:49,124;
+      end;
       suppose k = 1;
        hence contradiction by A3,A13,A27,SCMFSA_2:47,124;
+      end;
       suppose k = 2;
        hence contradiction by A3,A17,A27,SCMFSA_2:47,124;
+      end;
       suppose k = 3;
        hence contradiction by A3,A21,A27,SCMFSA_2:47,124;
+     end;
      end;
  hence A29: LifeSpan s = 4 by A3,A25,A26,SCM_1:def 2;
 
@@ -1939,15 +1985,20 @@ then A37: k = 0 or k = 1 or k = 2 or k = 3 or 3+1 <= k by CQC_THE1:4,NAT_1:38;
  per cases by A37;
  suppose k = 0;
   hence thesis by AMI_1:def 19;
+ end;
  suppose k = 1;
   hence thesis by A3,A9,A33,SCMFSA6A:38;
+ end;
  suppose k = 2;
   hence thesis by A3,A14,A32,A34,SCMFSA6A:38;
+ end;
  suppose k = 3;
   hence thesis by A3,A18,A31,A35,SCMFSA6A:38;
+ end;
  suppose 4 <= k;
   then CurInstr (Computation s).k = halt SCM+FSA by A3,A26,A29,SCMFSA8A:4;
   hence thesis by A29,A36,Th6;
+end;
 end;
 
 theorem Th36: :: based on SCMFSA_9:36
@@ -2026,7 +2077,7 @@ A15: now let k be Nat;
     set s2 = (Computation s1).(1 + LifeSpan sI);
     set loc4 = insloc (card I + 4);
     set s3 = (Computation s1).(1+LifeSpan sI+1);
-       for k being Nat holds P[k] from Ind(A13,A15);
+       for k being Nat holds P[k] from NAT_1:sch 1(A13,A15);
 then A18: P[LifeSpan sI];
 then A19: CurInstr s2 = goto loc4 by A1,A2,SCMFSA_9:45;
 A20: s3 = Following s2 by AMI_1:def 19
@@ -2140,6 +2191,7 @@ A4: for k being Nat st X[k] holds X[k+1]
      suppose SW.k.a <= 0;
        then SW.(k+1) | D = SW.k | D by Th37;
       hence SW.(k+1).intloc 0 = 1 by A5,SCMFSA6A:38;
+     end;
      suppose A6: SW.k.a > 0;
         ProperBodyWhile>0 a, I, s by A1,Th32;
      then A7: I is_closed_on SW.k & I is_halting_on SW.k by A6,Def4;
@@ -2168,7 +2220,8 @@ A15: IExec(I, SW.k) | D
         = ((Computation SWkIS).(LifeSpan SWkIS)).intloc 0 by A15,SCMFSA6A:38
        .= 1 by A5,A7,SCMFSA8C:97;
     end;
-thus for k being Nat holds X[k] from Ind(A3,A4);
+    end;
+thus for k being Nat holds X[k] from NAT_1:sch 1(A3,A4);
 end;
 
 theorem Th40: :: SW12:
@@ -2194,6 +2247,7 @@ A4: for k st X[k] holds X[k+1]
     suppose A7: ST1.k.a <= 0;
      hence ST1.(k+1) | D = ST1.k | D by Th37
         .= ST2.(k+1) | D by A5,A6,A7,Th37;
+    end;
     suppose A8: ST1.k.a > 0;
   then A9: I is_closed_on ST1.k & I is_halting_on ST1.k by A1,Def4;
   A10:  ST1.(k+1) | D = (Computation (ST1.k +* (WH +* SAt))).
@@ -2216,7 +2270,8 @@ A4: for k st X[k] holds X[k+1]
     hence ST1.(k+1) | D = ST2.(k+1) | D by A10,A12,A13,A14,A15,A17,SCMFSA8C:43
 ;
     end;
- thus for k holds X[k] from Ind(A3, A4);
+    end;
+ thus for k holds X[k] from NAT_1:sch 1(A3, A4);
 end;
 
 definition
@@ -2286,7 +2341,7 @@ then A19:       IC sk1 =insloc 0 by A17,A18,SCMFSA_9:47;
        end;
        hence P[k+1];
     end;
-A20: for k being Nat holds P[k] from Ind(A9,A11);
+A20: for k being Nat holds P[k] from NAT_1:sch 1(A9,A11);
   per cases;
   suppose A21: m = 0;
   A22: S | D = s | D by SCMFSA8A:11
@@ -2294,6 +2349,7 @@ A20: for k being Nat holds P[k] from Ind(A9,A11);
       then S.a = SW.m.a by SCMFSA6A:38;
    hence (Computation S).(LifeSpan S) | D
        = SW.m | D by A5,A7,A22,Th35;
+  end;
   suppose m <> 0;
          then consider i being Nat such that
 A23:      m=i+1 by NAT_1:22;
@@ -2329,6 +2385,7 @@ A33:  while>0(a,I)+* SAt c= sm by A30,FUNCT_4:26;
     .= (Computation sm).(LifeSpan sm) by A31,Th6;
   hence (Computation S).(LifeSpan S) | D = sm | D by A5,A33,Th35;
  end;
+ end;
  uniqueness proof let it1, it2 be Nat;
   given k1 being Nat such that
 A34: it1 = k1 and
@@ -2348,6 +2405,7 @@ A39: (for i being Nat st (StepWhile>0(a, I, s).i).a <= 0 holds k2 <= i) and
   hence it1 = it2 by A34,A37,AXIOMS:21;
  end;
 end;
+
 
 theorem  :: IE_while_le0:
    s.intloc 0 = 1 & s.a <= 0 implies IExec(while>0(a, I), s) | D = s | D
@@ -2439,11 +2497,13 @@ A4: now let n be Nat such that
       suppose A7: k <= n;
            then SW.n.a <= 0 by A1,A5,SCMFSA6A:38;
        hence SW.(n+1) | D = SW.k | D by A5,A7,Th37;
+      end;
       suppose k = n+1;
        hence SW.(n+1) | D = SW.k | D;
      end;
+     end;
     end;
- thus for n being Nat holds P[n] from Ind(A2, A4);
+ thus for n being Nat holds P[n] from NAT_1:sch 1(A2, A4);
 end;
 
 theorem
@@ -2516,6 +2576,7 @@ A8: for i, j being Nat st i < j & i <= K & j <= K holds SW.i <> SW.j
          suppose A17: i = k;
              not SW.i.a <= 0 by A6,A10;
           hence f.(SW.(k+1)) < f.(SW.i) by A7,A17;
+         end;
          suppose A18: i < k;
            A19: k < j by A15,NAT_1:38;
                  now assume SW.k.a <= 0; then K <= k by A6;
@@ -2524,7 +2585,8 @@ A8: for i, j being Nat st i < j & i <= K & j <= K holds SW.i <> SW.j
                then f.(SW.(k+1)) < f.(SW.k) by A7;
           hence f.(SW.(k+1)) < f.(SW.i) by A14,A15,A18,AXIOMS:22,NAT_1:38;
          end;
-           for k being Nat holds X[k] from Ind(A12, A13);
+         end;
+           for k being Nat holds X[k] from NAT_1:sch 1(A12, A13);
     hence contradiction by A9,A11;
    end;
 A20: for i, j being Nat st i < j & i <= K & j <= K
@@ -2536,6 +2598,7 @@ A20: for i, j being Nat st i < j & i <= K & j <= K
     assume SW.i | D = SW.j | D;
      then SW.i.a <= 0 by A5,A22,SCMFSA6A:38;
     hence contradiction by A6,A21,A22;
+   end;
    suppose A23: j < K;
      defpred X[Nat] means j+$1 <= K implies SW.(i+$1) | D = SW.(j+$1) | D;
     assume
@@ -2572,13 +2635,14 @@ SCMFSA8C:46
              .= SW.(j+k+1) | D by A30,A31,A33,A35,Th38
              .= SW.(j+(k+1)) | D by XCMPLX_1:1;
          end;
-     A42: for k being Nat holds X[k] from Ind(A24, A25);
+     A42: for k being Nat holds X[k] from NAT_1:sch 1(A24, A25);
          consider p being Nat such that
      A43: K = j+p and 1 <= p by A23,FSM_1:1;
      A44: SW.(i+p) | D = SW.K | D by A42,A43;
      A45: i+p < K by A21,A43,REAL_1:53;
            SW.(i+p).a <= 0 by A5,A44,SCMFSA6A:38;
     hence contradiction by A6,A45;
+   end;
    end;
  given i, j being Nat such that
 A46: i <> j and
@@ -2594,6 +2658,7 @@ definition
  attr f is on_data_only means
 :Def7: for s1, s2 st s1 | D = s2 | D holds f.s1 = f.s2;
 end;
+
 
 theorem Th46:
  s.intloc 0 = 1 & ProperBodyWhile>0 a, Ig, s & WithVariantWhile>0 a, Ig, s
@@ -2630,13 +2695,15 @@ A7: for x being State of SCM+FSA ex y being Nat st P[x,y] proof
        then consider k being Nat such that
      A8: k <= K & x | D = SW.k | D;
        take g.(SW.k); thus thesis by A8;
+     end;
      suppose A9: not ex k being Nat st k <= K & x | D = SW.k | D;
       take 0; thus thesis by A9;
+    end;
     end;
 
   consider f being Function of product the Object-Kind of SCM+FSA, NAT
    such that
-A10: for x being State of SCM+FSA holds P[x,f.x] from FuncExD(A7);
+A10: for x being State of SCM+FSA holds P[x,f.x] from FUNCT_2:sch 3(A7);
   take f;
   hereby let s1, s2 such that
   A11: s1 | D = s2 | D;
@@ -2653,9 +2720,11 @@ A10: for x being State of SCM+FSA holds P[x,f.x] from FuncExD(A7);
   A15:kk1 <= K & SW.(k+1) | D = SW.kk1 | D & f.(SW.(k+1))=g.(SW.kk1)by A10,A13;
         k = kk & k+1 = kk1 by A1,A2,A3,A5,A12,A13,A14,A15,Th45;
    hence f.(SW.(k+1)) < f.(SW.k) or SW.k.a <= 0 by A4,A14,A15;
+  end;
   suppose K <= k;
     then SW.K | D = SW.k | D by A6,Th43;
    hence f.(SW.(k+1)) < f.(SW.k) or SW.k.a <= 0 by A6,SCMFSA6A:38;
+end;
 end;
 
 theorem
@@ -2714,6 +2783,7 @@ definition
            );
  correctness;
 end;
+
 
 theorem
   for N, result being read-write Int-Location
@@ -2844,6 +2914,7 @@ A15: for u being State of SCM+FSA
            .= k by A26,AMI_5:3;
    hence Fusc n = ne1 * Fusc au1 + re * Fusc (au1+1) by A20,A26,PRE_FF:22;
    thus au1 = u.aux div 2;
+  end;
   suppose au is odd; then consider k being Nat such that
   A29: au = 2*k +1 by Th1;
 
@@ -2886,6 +2957,7 @@ A15: for u being State of SCM+FSA
            .= k by AMI_5:3;
    hence Fusc n = ne * Fusc au1 + re1 * Fusc (au1+1) by A20,A29,PRE_FF:21;
    thus au1 = u.aux div 2;
+end;
 end;
 
  set It = Initialize t;
@@ -2966,6 +3038,7 @@ A36: for k being Nat st X[k] holds X[k+1]
        thus SWt.(k+1).result = re1 by A43,A46,SCMFSA6A:38;
        thus SWt.(k+1).N = n by A43,A47,SCMFSA6A:38;
        thus Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) by A48;
+      end;
       suppose SWt.k.aux <= 0;
       then A49:  SWt.(k+1) | D = SWt.k | D by Th37;
        take au, ne, re;
@@ -2975,12 +3048,13 @@ A36: for k being Nat st X[k] holds X[k+1]
        thus SWt.(k+1).N = n by A40,A49,SCMFSA6A:38;
        thus Fusc n = ne * Fusc au + re * Fusc (au+1) by A41;
     end;
-A50: for k being Nat holds X[k] from Ind(A34, A36);
+    end;
+A50: for k being Nat holds X[k] from NAT_1:sch 1(A34, A36);
    deffunc U(Element of product the Object-Kind of SCM+FSA) =  abs($1.aux);
    consider f being Function of product the Object-Kind of SCM+FSA,NAT
      such that
 A51: for x being Element of product the Object-Kind of SCM+FSA
-      holds f.x = U(x) from LambdaD;
+      holds f.x = U(x) from FUNCT_2:sch 4;
 
   for k being Nat holds f.(SWt.(k+1)) < f.(SWt.k) or SWt.k.aux <= 0
  proof let k be Nat;

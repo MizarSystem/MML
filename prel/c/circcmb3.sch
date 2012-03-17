@@ -57,25 +57,6 @@ BINARITH
 ENUMSET1
 CIRCCMB3
 #
-OneGate1Ex
-OneGate2Ex
-OneGate3Ex
-OneGate4Ex
-OneGate5Ex
-1AryDef
-2AryDef
-3AryDef
-OneGate1Result
-OneGate2Result
-OneGate3Result
-OneGate4Result
-OneGate5Result
-Comb1CircResult
-Comb2CircResult
-Comb3CircResult
-Comb4CircResult
-Comb5CircResult
-#
 M1 ;M1 W1 ;V16 ;;M3 F2 ;;;
 ªG13 V148 ;;G15 V124 B1 ;V149 B1 ;B1 ;ª&R1 K373 B1 ;K1 F1 ;;;M3 K97 U14 B1 B2 ;;;R1 K20 K540 B1 B2 B3 ;K544 B1 ;;F3 K20 B3 F1 ;;;;;;
 #

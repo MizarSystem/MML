@@ -39,10 +39,12 @@ definition
  redefine func p+*(i,x) -> Element of n-tuples_on X;
 end;
 
+
 definition
  let n be Nat, t be Element of n-tuples_on NAT, i be Nat;
  redefine func t.i -> Element of NAT;
 end;
+
 
 canceled 2;
 
@@ -88,22 +90,67 @@ definition
  for f,g being Function st f in X & g in X holds f tolerates g;
 end;
 
-definition
+
+registration
  cluster non empty functional compatible set;
+ existence proof set A = {{}};
+A1: A is compatible proof let f, g be Function; assume f in A & g in A;
+    then f={} by TARSKI:def 1; then f c= g by XBOOLE_1:2;
+    hence f tolerates g by PARTFUN1:135;
+   end; take A; thus thesis by A1;
+ end;
 end;
 
-definition
+
+registration
  let X be functional compatible set;
  cluster union X -> Function-like Relation-like;
+ coherence proof thus union X is Function-like proof let x,y1,y2 be set;
+assume
+  A1: [x,y1] in union X & [x,y2] in union X; then consider f being set such
+that
+  A2: [x,y1] in f & f in X by TARSKI:def 4; consider g being set such that
+  A3: [x,y2] in g & g in X by A1,TARSKI:def 4;
+     reconsider f, g as Function by A2,A3,FRAENKEL:def 1;
+  A4: x in dom f & x in dom g by A2,A3,RELAT_1:def 4;
+  then A5: f.x = y1 & g.x = y2 by A2,A3,FUNCT_1:def 4;
+  A6: x in dom f /\ dom g by A4,XBOOLE_0:def 3
+; f tolerates g by A2,A3,Def1
+;
+   hence y1 = y2 by A5,A6,PARTFUN1:def 6;
+  end;
+  thus union X is Relation-like proof let x be set; assume
+       x in union X; then consider f being set such that
+  A7: x in f & f in X by TARSKI:def 4;
+    f is Function by A7,FRAENKEL:def 1; then consider y, z being set such
+that
+  A8: x = [y,z] by A7,RELAT_1:def 1; thus thesis by A8;
+  end;
+ end;
 end;
+
 
 theorem :: COMPUT_1:14
 X is functional compatible iff union X is Function;
 
-definition
+registration
  let X,Y be set;
  cluster non empty compatible PFUNC_DOMAIN of X,Y;
+ existence proof set A = {{}};
+     now let x be Element of A;
+   A1: x = {} by TARSKI:def 1; dom {} c= X & rng {} c= Y by XBOOLE_1:2;
+    hence x is PartFunc of X, Y by A1,RELSET_1:11;
+   end;
+then A2: A is PFUNC_DOMAIN of X,Y by RFUNCT_3:def 3;
+     A is compatible proof let f, g be Function;
+   assume f in A & g in A; then f = {} by TARSKI:def 1; then f c= g by XBOOLE_1
+:2;
+    hence f tolerates g by PARTFUN1:135;
+    end;
+  hence thesis by A2;
+ end;
 end;
+
 
 theorem :: COMPUT_1:15
 for X being non empty functional compatible set
@@ -117,20 +164,28 @@ theorem :: COMPUT_1:17
 for X being non empty functional compatible set
  holds rng union X = union {rng f where f is Element of X: not contradiction};
 
-definition let X,Y;
+registration let X,Y;
   cluster -> functional PFUNC_DOMAIN of X,Y;
+  coherence
+  proof
+    let P be PFUNC_DOMAIN of X,Y;
+    let x be set;
+    assume x in P;
+    hence thesis by RFUNCT_3:def 3;
+  end;
 end;
+
 
 theorem :: COMPUT_1:18
 for P being compatible PFUNC_DOMAIN of X,Y holds union P is PartFunc of X,Y;
 
 begin :: Homogeneous relations
 
-definition
+notation
  let f be Relation;
- redefine attr f is natural-yielding;
- synonym f is to-naturals;
-end;
+ synonym f is to-naturals for f is natural-yielding;
+ end;
+
 
 definition
  let f be Relation;
@@ -139,9 +194,13 @@ definition
  dom f c= NAT*;
 end;
 
-definition
+
+registration
  cluster from-natural-fseqs to-naturals Function;
+existence proof take f={}; thus dom f c= NAT* & rng f c= NAT by XBOOLE_1:2
+; end;
 end;
+
 
 definition
  let f be from-natural-fseqs Relation;
@@ -151,6 +210,7 @@ definition
   st len x = len y & x in dom f holds y in dom f;
 end;
 
+
 definition
  let f be Relation;
  attr f is homogeneous means
@@ -158,54 +218,140 @@ definition
  for x,y being FinSequence st x in dom f & y in dom f holds len x = len y;
 end;
 
+
 theorem :: COMPUT_1:19
 dom R c= n-tuples_on D implies R is homogeneous;
 
-definition
+registration
  cluster {} -> homogeneous;
+ coherence proof let x,y be FinSequence; assume x in dom {}; thus thesis; end
+;
 end;
 
-definition
+
+registration
  let p be FinSequence, x be set;
  cluster {p} --> x -> non empty homogeneous;
+ coherence proof set f = {p} --> x;
+ A1: dom f = {p} by FUNCOP_1:19;
+   thus f is non empty by FUNCOP_1:19,RELAT_1:60; let x,y be FinSequence;
+assume
+      x in dom f & y in dom f; then x = p & y = p by A1,TARSKI:def 1;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster non empty homogeneous Function;
+existence proof consider p being FinSequence;take {p}-->0; thus thesis; end;
 end;
 
-definition
+
+registration
  let f be homogeneous Function, g be Function;
  cluster g*f -> homogeneous;
+ coherence proof let x,y be FinSequence such that
+A1:  x in dom (g*f) & y in dom (g*f); dom (g*f) c= dom f by RELAT_1:44; hence
+ thesis by A1,Def4;
+  end;
 end;
 
-definition
+
+registration
  let X,Y be set;
  cluster homogeneous PartFunc of X*, Y;
+ existence proof set f = {}; dom f c= X* & rng f c= Y by XBOOLE_1:2;
+   then reconsider f as PartFunc of X*, Y by RELSET_1:11;
+   take f; let x,y be FinSequence; assume
+      x in dom f & y in dom f;
+   hence thesis by RELAT_1:60;
+  end;
 end;
 
-definition
+
+registration
  let X,Y be non empty set;
  cluster non empty homogeneous PartFunc of X*, Y;
+ existence proof consider n being Nat, y being Element of Y;
+   reconsider Z = n-tuples_on X as non empty Subset of X* by Th13;
+   reconsider f = Z --> y as PartFunc of X*, Y;
+   take f;
+A1:  dom f = Z by FUNCOP_1:19;
+   thus f is non empty by FUNCOP_1:19,RELAT_1:60;
+   let x,y be FinSequence; assume x in dom f & y in dom f;
+    then len x = n & len y = n by A1,FINSEQ_2:109;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let X be non empty set;
  cluster non empty homogeneous quasi_total PartFunc of X*, X;
+ existence proof consider n being Nat, y being Element of X;
+   reconsider Z = n-tuples_on X as non empty Subset of X* by Th13;
+   reconsider f = Z --> y as PartFunc of X*, X;
+   take f;
+A1:  dom f = Z by FUNCOP_1:19;
+   thus f is non empty by FUNCOP_1:19,RELAT_1:60;
+   thus f is homogeneous proof let x,y be FinSequence; assume
+        x in dom f & y in dom f; then len x = n & len y = n by A1,FINSEQ_2:109
+;
+     hence thesis;
+    end;
+   let p,q be FinSequence of X; assume len p = len q & p in dom f;
+    then len q = n by A1,FINSEQ_2:109; then q is Element of Z by FINSEQ_2:110
+;
+   hence thesis by A1;
+  end;
 end;
 
-definition
+
+registration
  cluster non empty homogeneous to-naturals len-total
          (from-natural-fseqs Function);
+ existence proof consider n, m being Nat;
+   reconsider Z = n-tuples_on NAT as non empty Subset of NAT* by Th13;
+   set f = Z --> m;
+A1: dom f = Z & rng f c= {m} by FUNCOP_1:19;
+    then reconsider f as from-natural-fseqs Function by Def2;
+   take f;
+A2: f is homogeneous proof let x,y be FinSequence; assume
+       x in dom f & y in dom f; then len x = n & len y = n by A1,FINSEQ_2:109;
+    hence thesis;
+   end; {m} is Subset of NAT by SUBSET_1:55;
+   then A3: rng f c= NAT by A1,XBOOLE_1:1;
+  f is len-total proof let x,y be FinSequence of NAT such that
+    A4: len x = len y and
+    A5: x in dom f;
+    A6: y is Element of (len y)-tuples_on NAT by FINSEQ_2:110;
+         len x = n by A1,A5,FINSEQ_2:109;
+     hence y in dom f by A1,A4,A6;
+    end;
+   hence thesis by A2,A3,FUNCOP_1:19,RELAT_1:60,SEQM_3:def 8;
+ end;
 end;
 
-definition
+
+registration
 cluster -> to-naturals from-natural-fseqs PartFunc of NAT*, NAT;
+coherence proof let f be PartFunc of NAT*,NAT; A1: rng f c=NAT by RELSET_1:12;
+ dom f c= NAT*;
+  hence thesis by A1,Def2,SEQM_3:def 8;
+ end;
 end;
 
-definition
+
+registration
 cluster quasi_total -> len-total PartFunc of NAT*,NAT;
+coherence proof let f be PartFunc of NAT*,NAT; assume
+  A1: f is quasi_total; let x,y be FinSequence of NAT such that
+  A2: len x = len y & x in dom f;
+  thus y in dom f by A1,A2,UNIALG_1:def 2;
+ end;
 end;
+
 
 theorem :: COMPUT_1:20
 for g being len-total to-naturals (from-natural-fseqs Function)
@@ -219,6 +365,7 @@ definition
    if ex x being FinSequence st x in dom f
    otherwise it = 0;
 end;
+
 
 theorem :: COMPUT_1:21
 arity {} = 0;
@@ -260,17 +407,26 @@ definition
       st dom f c= n-tuples_on X & dom g c= n-tuples_on X);
 end;
 
-definition
+
+registration
  cluster {} -> with_the_same_arity;
+ coherence proof let f, g be Function; thus thesis; end;
 end;
 
-definition
+
+registration
  cluster with_the_same_arity FinSequence;
+ existence proof take {}; thus thesis; end;
 
  let X be set;
  cluster with_the_same_arity FinSequence of X;
+ existence proof take <*>X; thus thesis; end;
  cluster with_the_same_arity Element of X*;
+ existence proof reconsider p = <*>X as Element of X* by FINSEQ_1:def 11;
+   take p; thus thesis;
+ end;
 end;
+
 
 definition
  let F be with_the_same_arity Relation;
@@ -280,6 +436,7 @@ definition
    if ex f being homogeneous Function st f in rng F
    otherwise it = 0;
 end;
+
 
 theorem :: COMPUT_1:29
   for F be with_the_same_arity FinSequence st len F = 0 holds arity F = 0;
@@ -291,23 +448,53 @@ definition
   {f where f is Element of PFuncs(X*, X): f is homogeneous};
 end;
 
+
 theorem :: COMPUT_1:30
 {} in HFuncs X;
 
-definition
+registration
  let X be non empty set;
  cluster non empty homogeneous quasi_total Element of HFuncs X;
+ existence proof consider x being Element of X; set p = <*>X;
+      p in X* by FINSEQ_1:def 11;
+   then reconsider Y = {p} as Subset of X* by ZFMISC_1:37;
+     {p} --> x is homogeneous & Y --> x in PFuncs(X*, X);
+   then {p} --> x in {f where f is Element of PFuncs(X*
+, X): f is homogeneous};
+   then reconsider f = {p} --> x as Element of HFuncs X by Def8;
+   take f;
+A1:  dom f = {p} by FUNCOP_1:19;
+   thus f is non empty homogeneous; let a,b be FinSequence of X such that
+A2:  len a = len b; assume a in dom f; then a = p by A1,TARSKI:def 1;
+    then len b = 0 by A2,FINSEQ_1:25; then b = {} by FINSEQ_1:25;
+   hence thesis by A1,TARSKI:def 1;
+  end;
 end;
 
-definition
+
+registration
  let X be set;
  cluster -> homogeneous Element of HFuncs X;
+ coherence proof let f be Element of HFuncs X;
+      HFuncs X = {g where g is Element of PFuncs(X*, X): g is homogeneous} &
+    f in HFuncs X by Def8;
+    then ex g being Element of PFuncs(X*, X) st f = g & g is homogeneous;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let X be non empty set, S be non empty Subset of HFuncs X;
  cluster -> homogeneous Element of S;
+ coherence proof let f be Element of S;
+      HFuncs X = {g where g is Element of PFuncs(X*, X): g is homogeneous} &
+    f in HFuncs X by Def8;
+    then ex g being Element of PFuncs(X*, X) st f = g & g is homogeneous;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: COMPUT_1:31
 for f being to-naturals homogeneous from-natural-fseqs Function
@@ -331,13 +518,26 @@ definition
  (n-tuples_on NAT) --> m;
 end;
 
+
 theorem :: COMPUT_1:34
 n const m in HFuncs NAT;
 
-definition
+registration
  let n,m be Nat;
  cluster n const m -> len-total non empty;
+ coherence proof set X = NAT;
+A1: dom (n const m) = dom ((n-tuples_on X)-->m) by Def9
+   .= n-tuples_on X by FUNCOP_1:19;
+     n const m is len-total proof let x, y be FinSequence of X; assume
+   A2: len x = len y & x in dom (n const m); then len x = n by A1,FINSEQ_2:109
+;
+       then y is Element of n-tuples_on X by A2,FINSEQ_2:110;
+     hence y in dom (n const m) by A1;
+   end;
+  hence thesis by A1,RELAT_1:60;
+ end;
 end;
+
 
 theorem :: COMPUT_1:35
 arity (n const m) = n;
@@ -353,13 +553,24 @@ definition
   for p being Element of n-tuples_on NAT holds it.p = (p/.i)+1;
 end;
 
+
 theorem :: COMPUT_1:37
 n succ i in HFuncs NAT;
 
-definition
+registration
  let n,i be Nat;
  cluster n succ i -> len-total non empty;
+ coherence proof
+ A1: dom (n succ i) = n-tuples_on NAT by Def10;
+      (n succ i) is len-total proof let x, y be FinSequence of NAT; assume
+    A2: len x = len y & x in dom (n succ i); then len x = n by A1,FINSEQ_2:109
+;
+        then y is Element of n-tuples_on NAT by A2,FINSEQ_2:110;
+     hence y in dom (n succ i) by A1;
+    end; hence thesis by A1,RELAT_1:60;
+ end;
 end;
+
 
 theorem :: COMPUT_1:38
 arity (n succ i) = n;
@@ -371,6 +582,7 @@ definition
   proj(n|->NAT, i);
 end;
 
+
 theorem :: COMPUT_1:39
 n proj i in HFuncs NAT;
 
@@ -378,10 +590,20 @@ theorem :: COMPUT_1:40
 dom (n proj i) = n-tuples_on NAT &
 (1 <= i & i <= n implies rng (n proj i) = NAT);
 
-definition
+registration
  let n,i be Nat;
  cluster n proj i -> len-total non empty;
+ coherence proof
+   A1: dom (n proj i) = n-tuples_on NAT by Th40;
+     n proj i is len-total proof let x, y be FinSequence of NAT; assume
+       A2: len x=len y & x in dom (n proj i); then len x=n by A1,FINSEQ_2:109;
+           then y is Element of n-tuples_on NAT by A2,FINSEQ_2:110;
+        hence y in dom (n proj i) by A1;
+       end;
+   hence thesis by A1,RELAT_1:60;
+ end;
 end;
+
 
 theorem :: COMPUT_1:41
 arity (n proj i) = n;
@@ -389,9 +611,11 @@ arity (n proj i) = n;
 theorem :: COMPUT_1:42
 for t being Element of n-tuples_on NAT holds (n proj i).t = t.i;
 
-definition let X be set;
+registration let X be set;
   cluster HFuncs X -> functional;
+  coherence;
 end;
+
 
 theorem :: COMPUT_1:43
 for F being Function of D, HFuncs E
@@ -407,11 +631,18 @@ theorem :: COMPUT_1:45
 for F being with_the_same_arity FinSequence of HFuncs D
  holds dom <:F:> c= (arity F)-tuples_on D;
 
-definition
+registration
  let X be non empty set;
  let F be with_the_same_arity FinSequence of HFuncs X;
  cluster <:F:> -> homogeneous;
+ coherence proof let x,y be FinSequence such that
+A1: x in dom <:F:> & y in dom <:F:>;
+  dom <:F:> c= (arity F)-tuples_on X by Th45;
+    then len x = arity F & len y = arity F by A1,FINSEQ_2:109;
+   hence len x = len y;
+  end;
 end;
+
 
 theorem :: COMPUT_1:46
 for f being Element of HFuncs D,
@@ -425,10 +656,19 @@ definition
  redefine mode Element of S -> Element of P;
 end;
 
-definition
+
+registration
  let f be homogeneous from-natural-fseqs Function;
  cluster <*f*> -> with_the_same_arity;
+ coherence proof let h,g be Function such that
+A1: h in rng <*f*> & g in rng <*f*>; rng <*f*> = {f} by FINSEQ_1:56;
+then A2: h = f & g = f by A1,TARSKI:def 1;
+   hence h is empty implies g is empty or dom g = {{}};
+   assume h is non empty & g is non empty; take i = arity f,NAT;
+   thus dom h c= i-tuples_on NAT & dom g c= i-tuples_on NAT by A2,Th24;
+  end;
 end;
+
 
 theorem :: COMPUT_1:47
   for f being homogeneous to-naturals from-natural-fseqs Function
@@ -508,6 +748,7 @@ definition
       not (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2 implies F.(m+1) = F.m);
 end;
 
+
 theorem :: COMPUT_1:53
 for p, q being FinSequence of NAT
  st q in dom primrec(e1,e2,i,p) ex k st q = p+*(i,k);
@@ -541,6 +782,7 @@ definition
    for p being Element of (arity f1+1)-tuples_on NAT
     holds G.p = primrec(f1,f2,i,p);
 end;
+
 
 theorem :: COMPUT_1:59
 e1 is empty implies primrec(e1,e2,i) is empty;
@@ -607,6 +849,7 @@ for g,f1,f2 being Element of HFuncs NAT, i being Nat
   holds g in X;
 end;
 
+
 definition
  let X be set;
  attr X is primitive-recursively_closed means
@@ -616,12 +859,18 @@ definition
   X is composition_closed & X is primitive-recursion_closed;
 end;
 
+
 theorem :: COMPUT_1:70
 HFuncs NAT is primitive-recursively_closed;
 
-definition
+registration
 cluster primitive-recursively_closed non empty Subset of HFuncs NAT;
+existence proof HFuncs NAT c= HFuncs NAT;
+   then reconsider X = HFuncs NAT as non empty Subset of HFuncs NAT;
+   take X; thus thesis by Th70;
+  end;
 end;
+
 
 reserve P for primitive-recursively_closed non empty Subset of HFuncs NAT;
 
@@ -659,18 +908,78 @@ definition
                 R is primitive-recursively_closed };
 end;
 
+
 theorem :: COMPUT_1:78
 for X being Subset of HFuncs(NAT) st X is primitive-recursively_closed
  holds PrimRec c= X;
 
-definition
+registration
  cluster PrimRec -> non empty primitive-recursively_closed;
+ coherence proof set S = { R where R is Element of bool HFuncs(NAT) :
+               R is primitive-recursively_closed };
+     HFuncs(NAT) in {HFuncs(NAT)} & {HFuncs(NAT)} c= bool HFuncs(NAT)
+     by TARSKI:def 1,ZFMISC_1:80;
+then A1: HFuncs(NAT) in S by Th70;
+     A2: now let Y be set; assume Y in S;
+       then consider R being Element of bool HFuncs(NAT) such that
+     A3: R = Y & R is primitive-recursively_closed;
+      thus 0 const 0 in Y by A3,Def17;
+     end;
+   hence PrimRec is non empty by A1,Def18,SETFAM_1:def 1;
+   thus PrimRec is primitive-recursively_closed proof
+    thus 0 const 0 in PrimRec by A1,A2,Def18,SETFAM_1:def 1;
+       now let Y be set; assume Y in S;
+       then consider R being Element of bool HFuncs(NAT) such that
+     A4: R = Y & R is primitive-recursively_closed;
+      thus 1 succ 1 in Y by A4,Def17;
+     end;
+    hence 1 succ 1 in PrimRec by A1,Def18,SETFAM_1:def 1;
+    hereby let n, i be Nat; assume
+    A5: 1 <= i & i <= n;
+        now let Y be set; assume Y in S;
+        then consider R being Element of bool HFuncs(NAT) such that
+      A6: R = Y & R is primitive-recursively_closed;
+       thus n proj i in Y by A5,A6,Def17;
+      end;
+     hence n proj i in PrimRec by A1,Def18,SETFAM_1:def 1;
+    end;
+    hereby     :: T is composition_closed;
+     let f be Element of HFuncs NAT,
+         F being with_the_same_arity FinSequence of HFuncs NAT such that
+    A7: f in PrimRec & arity f = len F & rng F c= PrimRec;
+        now let Y be set; assume
+      A8: Y in S; then consider R being Element of bool HFuncs(NAT) such that
+      A9: R = Y & R is primitive-recursively_closed;
+      A10: R is composition_closed by A9,Def17;
+            PrimRec c= R by A8,A9,Def18,SETFAM_1:4;
+          then f in R & rng F c= R by A7,XBOOLE_1:1;
+       hence f*<:F:> in Y by A7,A9,A10,Def15;
+      end;
+     hence f*<:F:> in PrimRec by A1,Def18,SETFAM_1:def 1;
+    end;
+    hereby ::  thus T is primitive-recursion_closed;
+     let g, f1, f2 be Element of HFuncs NAT, i being Nat such that
+    A11: g is_primitive-recursively_expressed_by f1,f2,i and
+    A12: f1 in PrimRec and
+    A13: f2 in PrimRec;
+        now let Y be set; assume
+      A14: Y in S; then consider R being Element of bool HFuncs(NAT) such that
+      A15: R = Y & R is primitive-recursively_closed;
+      A16: R is primitive-recursion_closed by A15,Def17;
+            f1 in R & f2 in R by A12,A13,A14,A15,Def18,SETFAM_1:def 1;
+       hence g in Y by A11,A15,A16,Def16;
+      end;
+     hence g in PrimRec by A1,Def18,SETFAM_1:def 1;
+    end;
+   end;
+ end;
 end;
 
-definition
- cluster -> homogeneous Element of PrimRec;
 
+registration
+ cluster -> homogeneous Element of PrimRec; coherence;
 end;
+
 
 definition
  let x be set;
@@ -679,23 +988,36 @@ definition
 x in PrimRec;
 end;
 
-definition
+
+registration
  cluster primitive-recursive -> Relation-like Function-like set;
+ coherence proof let x be set; assume x in PrimRec;
+   then x is Element of PrimRec; hence thesis; end;
 end;
 
-definition
+
+registration
  cluster primitive-recursive -> homogeneous to-naturals from-natural-fseqs
                                 Relation;
+ coherence proof let x be Relation; assume x in PrimRec;
+    then x is Element of PrimRec; hence thesis;
+ end;
 end;
 
-definition
+
+registration
  cluster -> primitive-recursive Element of PrimRec;
+ coherence by Def19;
 end;
 
-definition
+
+registration
  cluster primitive-recursive Function;
+existence proof consider x being Element of PrimRec; take x; thus thesis; end;
  cluster primitive-recursive Element of HFuncs NAT;
+existence proof consider x being Element of PrimRec; take x; thus thesis; end;
 end;
+
 
 definition
  func initial-funcs -> Subset of HFuncs NAT equals
@@ -721,6 +1043,7 @@ end;
    holds it.(m+1) = (PR-closure (it.m)) \/ (composition-closure (it.m));
 end;
 
+
 theorem :: COMPUT_1:79
 m <= n implies PrimRec-Approximation.m c= PrimRec-Approximation.n;
 
@@ -734,18 +1057,37 @@ theorem :: COMPUT_1:82
 for f being Element of HFuncs(NAT)
  st f in PrimRec-Approximation.m holds f is quasi_total;
 
-definition
+registration
  cluster -> quasi_total homogeneous Element of PrimRec;
+ coherence proof let f be Element of PrimRec; set prd = PrimRec-Approximation;
+     f in Union PrimRec-Approximation by Th81;
+   then f in union rng PrimRec-Approximation by PROB_1:def 3;
+   then consider X being set such that
+A1: f in X & X in rng prd by TARSKI:def 4; ex m being set st
+   m in dom prd & prd.m = X by A1,FUNCT_1:def 5;
+  hence f is quasi_total homogeneous by A1,Th82;
+ end;
 end;
 
-definition
+
+registration
  cluster primitive-recursive -> quasi_total Element of HFuncs NAT;
+ coherence proof let f be Element of HFuncs NAT; assume f in PrimRec;
+   then f is Element of PrimRec; hence thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster primitive-recursive -> len-total (from-natural-fseqs Function);
+ coherence proof let x be from-natural-fseqs Function; assume x in PrimRec;
+    then x is Element of PrimRec;
+   hence x is len-total;
+ end;
  cluster non empty Element of PrimRec;
+ existence proof 0 const 0 in PrimRec by Th73; hence thesis; end;
 end;
+
 
 begin :: Examples
 
@@ -765,65 +1107,134 @@ arity f = 2;
 arity f = 3;
 end;
 
-definition
+
+registration
  cluster unary -> non empty (homogeneous Function);
+ coherence proof let f be homogeneous Function; assume arity f = 1; then ex
+x being FinSequence st x in dom f by Def5;
+   hence thesis by RELAT_1:60;
+  end;
  cluster binary -> non empty (homogeneous Function);
+ coherence proof let f be homogeneous Function; assume arity f = 2; then ex x
+being FinSequence st x in dom f by Def5;
+   hence thesis by RELAT_1:60;
+  end;
  cluster 3-ary -> non empty (homogeneous Function);
+ coherence proof let f be homogeneous Function; assume arity f = 3; then ex x
+being FinSequence st x in dom f by Def5;
+   hence thesis by RELAT_1:60;
+  end;
 end;
 
-definition
+
+registration
  cluster 1 proj 1 -> primitive-recursive;
+ coherence proof 1 proj 1 in PrimRec by Def17; hence thesis by Def19; end;
  cluster 2 proj 1 -> primitive-recursive;
+ coherence proof 2 proj 1 in PrimRec by Def17; hence thesis by Def19; end;
  cluster 2 proj 2 -> primitive-recursive;
+ coherence proof 2 proj 2 in PrimRec by Def17; hence thesis by Def19; end;
  cluster 1 succ 1 -> primitive-recursive;
+ coherence proof 1 succ 1 in PrimRec by Th74; hence thesis by Def19; end;
  cluster 3 succ 3 -> primitive-recursive;
+ coherence proof 3 succ 3 in PrimRec by Th74; hence thesis by Def19; end;
 
  let i be Nat;
  cluster 0 const i -> nullary;
+ coherence proof thus arity (0 const i) = 0 by Th35; end;
  cluster 1 const i -> unary;
+ coherence proof thus arity (1 const i) = 1 by Th35; end;
  cluster 2 const i -> binary;
+ coherence proof thus arity (2 const i) = 2 by Th35; end;
  cluster 3 const i -> 3-ary;
+ coherence proof thus arity (3 const i) = 3 by Th35; end;
  cluster 1 proj i -> unary;
+ coherence proof thus arity (1 proj i) = 1 by Th41; end;
  cluster 2 proj i -> binary;
+ coherence proof thus arity (2 proj i) = 2 by Th41; end;
  cluster 3 proj i -> 3-ary;
+ coherence proof thus arity (3 proj i) = 3 by Th41; end;
  cluster 1 succ i -> unary;
+ coherence proof thus arity (1 succ i) = 1 by Th38; end;
  cluster 2 succ i -> binary;
+ coherence proof thus arity (2 succ i) = 2 by Th38; end;
  cluster 3 succ i -> 3-ary;
+ coherence proof thus arity (3 succ i) = 3 by Th38; end;
 
  let j be Nat;
  cluster i const j -> primitive-recursive;
+ coherence proof thus i const j in PrimRec by Th73; end;
 end;
 
-definition
+
+registration
  cluster nullary primitive-recursive non empty (homogeneous Function);
+ existence by Def17;
  cluster unary primitive-recursive (homogeneous Function);
+ existence by Def17;
  cluster binary primitive-recursive (homogeneous Function);
+existence proof take f=2 proj 1;thus f is binary;thus f in PrimRec by Def17
+;end;
  cluster 3-ary primitive-recursive (homogeneous Function);
+existence proof take f=3 proj 1;thus f is 3-ary; thus f in PrimRec by Def17
+;end;
 end;
 
-definition
+
+registration
   cluster non empty nullary len-total to-naturals
           (homogeneous from-natural-fseqs Function);
+  existence proof 0 const 0 is nullary; hence thesis; end;
   cluster non empty unary len-total to-naturals
           (homogeneous from-natural-fseqs Function);
+  existence proof 1 const 0 is unary; hence thesis; end;
   cluster non empty binary len-total to-naturals
           (homogeneous from-natural-fseqs Function);
+  existence proof 2 const 0 is binary; hence thesis; end;
   cluster non empty 3-ary len-total to-naturals
           (homogeneous from-natural-fseqs Function);
+  existence proof 3 const 0 is 3-ary; hence thesis; end;
 end;
 
-definition
+
+registration
  let f be nullary non empty (primitive-recursive Function);
  let g be binary (primitive-recursive Function);
  cluster primrec(f,g,1) -> primitive-recursive unary;
+ coherence proof
+A1:  0 <= 1 & 1 <= 0+1 & arity f = 0 & arity g = 0+2 &
+    f in PrimRec & g in PrimRec by Def19,Def24,Def26;
+   hence primrec(f,g,1) in PrimRec by Th77;
+A2:  dom <*0*> = {1} by FINSEQ_1:4,55; f is Element of PrimRec by Def19;
+    then dom f = 0-tuples_on NAT by A1,Th25 .= {<*>NAT} by FINSEQ_2:112;
+    then Del(<*0*>,1) = {} & {} in dom f & 1 in dom <*0*>
+     by A2,TARSKI:def 1,WSIERP_1:26; then <*0*>+*(1,0) in dom primrec(f,g,1)
+by A1,Lm6
+;
+     then <*0*> in dom primrec(f,g,1) & len <*0*> = 1 by FINSEQ_1:56,SCMFSA10:2
+;
+   hence arity primrec(f,g,1) = 1 by Def5;
+  end;
 end;
 
-definition
+
+registration
  let f be unary (primitive-recursive Function);
  let g be 3-ary (primitive-recursive Function);
  cluster primrec(f,g,1) -> primitive-recursive binary;
+ coherence proof A1:  1 <= 1 & 1 <= 1+1 & arity f = 1 & arity g = 1+2 &
+    f in PrimRec & g in PrimRec by Def19,Def25,Def27;
+   hence primrec(f,g,1) in PrimRec by Th77;
+   thus arity primrec(f,g,1) = 2 by A1,Th61;
+  end;
  cluster primrec(f,g,2) -> primitive-recursive binary;
+ coherence proof A2:  1 <= 2 & 2 <= 1+1 & arity f = 1 & arity g = 1+2 &
+    f in PrimRec & g in PrimRec by Def19,Def25,Def27;
+   hence primrec(f,g,2) in PrimRec by Th77;
+   thus arity primrec(f,g,2) = 2 by A2,Th61;
+  end;
 end;
+
 
 theorem :: COMPUT_1:83
 for f1 be unary len-total to-naturals
@@ -852,21 +1263,66 @@ definition
  g * <:<*3 proj 1, 3 proj 3*>:>;
 end;
 
-definition
+
+registration
  let g be to-naturals from-natural-fseqs Function;
  cluster (1,2)->(1,?,2) g -> to-naturals from-natural-fseqs;
+ coherence proof set G = (1,2)->(1,?,2) g;
+ A1: G = g*<:<*3 proj 1, 3 proj 3*>:> by Def28;
+  dom <:<*3 proj 1, 3 proj 3*>:> = dom (3 proj 1) /\
+ dom (3 proj 3) by FUNCT_6:62;
+then A2: dom <:<*3 proj 1, 3 proj 3*>:>
+ = (3-tuples_on NAT) /\ dom (3 proj 3) by Th40
+.= (3-tuples_on NAT)/\(3-tuples_on NAT) by Th40.= (3-tuples_on NAT);
+ A3: dom G c= dom <:<*3 proj 1, 3 proj 3*>:> by A1,RELAT_1:44;
+   (3-tuples_on NAT) c= NAT* by MSUALG_1:12;
+ then A4: dom G c= NAT* by A2,A3,XBOOLE_1:1;
+ A5: rng g c= NAT by SEQM_3:def 8; rng G c= rng g by A1,RELAT_1:45;
+    then rng G c= NAT by A5,XBOOLE_1:1;
+  hence thesis by A4,Def2,SEQM_3:def 8;
+ end;
 end;
 
-definition
+
+registration
  let g be homogeneous Function;
  cluster (1,2)->(1,?,2) g -> homogeneous;
+ coherence proof set G = (1,2)->(1,?,2) g;
+A1: G = g*<:<*3 proj 1, 3 proj 3*>:> by Def28;
+  let x,y be FinSequence such that
+A2: x in dom G and
+A3: y in dom G;
+  dom <:<*3 proj 1, 3 proj 3*>:> = dom (3 proj 1) /\
+ dom (3 proj 3) by FUNCT_6:62;
+then dom <:<*3 proj 1, 3 proj 3*>:>
+ = (3-tuples_on NAT) /\ dom (3 proj 3) by Th40
+.= (3-tuples_on NAT)/\(3-tuples_on NAT) by Th40 .=(3-tuples_on NAT);
+ then dom (g*<:<*3 proj 1, 3 proj 3*>:>) c= 3-tuples_on NAT by RELAT_1:44;
+    then 3 = len x & 3 = len y by A1,A2,A3,FINSEQ_2:109;
+  hence len x = len y;
+ end;
 end;
 
-definition
+
+registration
  let g be binary len-total to-naturals
           (homogeneous from-natural-fseqs Function);
  cluster (1,2)->(1,?,2) g -> non empty 3-ary len-total;
+ coherence proof
+ A1: arity g = 2 by Def26;
+      g is quasi_total homogeneous non empty PartFunc of NAT*, NAT by Th20;
+    then consider G being homogeneous PartFunc of NAT*, NAT such that
+ A2: G = g*<:<*3 proj 1, 3 proj 3*>:> and G is Element of HFuncs NAT and
+ A3: arity G = 3 and
+ A4: G is quasi_total non empty by A1,Lm8;
+    reconsider G' = G as quasi_total non empty
+                         homogeneous PartFunc of NAT*, NAT by A4;
+     G' is non empty 3-ary len-total to-naturals
+                        (homogeneous from-natural-fseqs Function) by A3,Def27;
+  hence thesis by A2,Def28;
+ end;
 end;
+
 
 theorem :: COMPUT_1:87
 for f being binary len-total to-naturals
@@ -877,16 +1333,21 @@ theorem :: COMPUT_1:88
 for g being binary (primitive-recursive Function)
  holds (1,2)->(1,?,2) g in PrimRec;
 
-definition
+registration
  let f be binary primitive-recursive (homogeneous Function);
  cluster (1,2)->(1,?,2) f -> primitive-recursive 3-ary;
+ coherence proof thus (1,2)->(1,?,2) f in PrimRec by Th88;
+   thus arity ((1,2)->(1,?,2) f) = 3 by Def27;
+  end;
 end;
+
 
 definition
  func [+] -> binary (primitive-recursive Function) equals
 :: COMPUT_1:def 29
   primrec(1 proj 1, 3 succ 3, 2);
 end;
+
 
 theorem :: COMPUT_1:89
 [+].<*i,j*> = i+j;
@@ -897,35 +1358,115 @@ definition
   primrec(1 const 0, (1,2)->(1,?,2) [+], 2);
 end;
 
+
 theorem :: COMPUT_1:90
 for i, j being Nat holds [*].<*i,j*> = i*j;
 
-definition
+registration
  let g,h be binary primitive-recursive (homogeneous Function);
  cluster <*g,h*> -> with_the_same_arity;
+ coherence proof
+   reconsider g, h as Element of PrimRec by Def19;
+      rng <*g,h*> c= PrimRec by FINSEQ_1:def 4;
+then A1:  rng <*g,h*> c= HFuncs NAT by XBOOLE_1:1;
+A2:  rng <*g,h*> = {g,h} by FINSEQ_2:147;
+      now let f1,f2 be homogeneous Function;
+     assume f1 in rng <*g,h*> & f2 in rng <*g,h*>;
+      then (f1 = g or f1 = h) & (f2 = g or f2 = h) by A2,TARSKI:def 2;
+      then arity f1 = 2 & arity f2 = 2 by Def26;
+     hence arity f1 = arity f2;
+    end; hence thesis by A1,Th33;
+  end;
 end;
 
-definition
+
+registration
  let f,g,h be binary (primitive-recursive Function);
  cluster f*<:<*g,h*>:> -> primitive-recursive;
+ coherence proof
+   reconsider g' = g, h' = h as Element of PrimRec by Def19;
+A1:  rng <*g',h'*> c= PrimRec by FINSEQ_1:def 4;
+    then rng <*g,h*> c= HFuncs NAT by XBOOLE_1:1;
+   then reconsider F = <*g,h*> as with_the_same_arity FinSequence of HFuncs NAT
+     by FINSEQ_1:def 4;
+A2:  f in PrimRec & PrimRec is composition_closed by Def17,Def19;
+    then f in HFuncs NAT & len F = 2 & arity f = 2 by Def26,FINSEQ_1:61;
+   hence f*<:<*g,h*>:> in PrimRec by A1,A2,Def15;
+  end;
 end;
 
-definition
+
+registration
  let f,g,h be binary (primitive-recursive Function);
  cluster f*<:<*g,h*>:> -> binary;
+ coherence proof
+  reconsider f' = f, fgh = f*<:<*g,h*>:>, g' = g, h' = h as Element of PrimRec
+by Def19;
+      rng <*g',h'*> c= PrimRec by FINSEQ_1:def 4;
+    then rng <*g,h*> c= HFuncs NAT by XBOOLE_1:1;
+   then reconsider F = <*g,h*> as with_the_same_arity FinSequence of HFuncs NAT
+     by FINSEQ_1:def 4;
+A1:  arity f = 2 & arity g = 2 & arity h = 2 by Def26;
+then A2:  dom f' = 2-tuples_on NAT & dom g' = 2-tuples_on NAT &
+    dom h' = 2-tuples_on NAT by Lm1;
+   consider x being Element of 2-tuples_on NAT;
+A3:  dom <:F:> = dom g /\ dom h by FUNCT_6:62;
+then x in dom <:F:> & g'.x in rng g' & h'.x in rng h' & rng g' c= NAT &
+    rng h' c= NAT by A2,FUNCT_1:def 5,RELSET_1:12;
+    then <:F:>.x = <*g'.x,h'.x*> & g'.x in NAT & h'.x in NAT by A3,FUNCT_6:62;
+    then <:F:>.x is Element of 2-tuples_on NAT by FINSEQ_2:121;
+then A4:fgh is non empty & f' = f by A2,A3,FUNCT_1:21,RELAT_1:60; rng F = {g,
+h
+} by FINSEQ_2:147;
+    then g in rng F by TARSKI:def 2; then arity F = 2 by A1,Def7;
+   hence arity (f*<:<*g,h*>:>) = 2 by A4,Th48;
+  end;
 end;
 
-definition
+
+registration
  let f be unary (primitive-recursive Function);
  let g be primitive-recursive Function;
  cluster f*<:<*g*>:> -> primitive-recursive;
+ coherence proof
+   reconsider g' = g as Element of PrimRec by Def19;
+A1:  rng <*g'*> c= PrimRec by FINSEQ_1:def 4;
+    then rng <*g*> c= HFuncs NAT by XBOOLE_1:1;
+   then reconsider F = <*g'*> as with_the_same_arity FinSequence of HFuncs NAT
+     by FINSEQ_1:def 4;
+A2:  f in PrimRec & PrimRec is composition_closed by Def17,Def19;
+    then f in HFuncs NAT & len F = 1 & arity f = 1 by Def25,FINSEQ_1:56;
+   hence f*<:<*g*>:> in PrimRec by A1,A2,Def15;
+  end;
 end;
 
-definition
+
+registration
  let f be unary (primitive-recursive Function);
  let g be binary (primitive-recursive Function);
  cluster f*<:<*g*>:> -> binary;
+coherence proof
+ reconsider f' = f, fg = f*<:<*g*>:>, g' = g as Element of PrimRec by Def19;
+      rng <*g'*> c= PrimRec by FINSEQ_1:def 4;
+    then rng <*g*> c= HFuncs NAT by XBOOLE_1:1;
+   then reconsider F = <*g'*> as with_the_same_arity FinSequence of HFuncs NAT
+     by FINSEQ_1:def 4;
+A1:  arity f = 1 & arity g = 2 by Def25,Def26;
+then A2:  dom f' = 1-tuples_on NAT & dom g' = 2-tuples_on NAT by Lm1;
+   consider x being Element of 2-tuples_on NAT;
+A3:  dom <:F:> = dom g by FUNCT_6:61;
+then x in dom <:F:> & g'.x in rng g' & rng g' c= NAT
+     by A2,FUNCT_1:def 5,RELSET_1:12;
+    then <:F:>.x = <*g'.x*> & g'.x in NAT by A3,FUNCT_6:61;
+    then <:F:>.x is Element of 1-tuples_on NAT by FINSEQ_2:118;
+then A4:  fg is non empty & f' = f by A2,A3,FUNCT_1:21,RELAT_1:60; rng F =
+{
+g} by FINSEQ_1:56;
+    then g in rng F by TARSKI:def 1; then arity F = 2 by A1,Def7;
+   hence arity (f*<:<*g*>:>) = 2 by A4,Th48;
+  end;
 end;
+
 
 definition
  func [!] -> unary (primitive-recursive Function) equals
@@ -933,7 +1474,9 @@ definition
  primrec(0 const 1, [*]*<:<*(1 succ 1)*<:<*2 proj 1*>:>, 2 proj 2*>:>, 1);
 end;
 
-scheme Primrec1{F() -> unary len-total to-naturals
+
+scheme :: COMPUT_1:sch 1
+ Primrec1{F() -> unary len-total to-naturals
                        (homogeneous from-natural-fseqs Function),
                 G() -> binary len-total to-naturals
                        (homogeneous from-natural-fseqs Function),
@@ -941,16 +1484,40 @@ scheme Primrec1{F() -> unary len-total to-naturals
 for i, j being Nat holds (F()*<:<*G()*>:>).<*i,j*> = f(g(i,j))
 provided
  for i being Nat holds F().<*i*> = f(i) and
- for i,j being Nat holds G().<*i,j*> = g(i,j);
+ for i,j being Nat holds G().<*i,j*> = g(i,j)
+proof let i, j be Nat;
+A3: dom <:<*G()*>:> = dom G() by FUNCT_6:61;
+     arity G() = 2 by Def26;
+then A4: dom G() = 2-tuples_on NAT by Th26;
+   A5: <*i,j*> is Element of 2-tuples_on NAT by FINSEQ_2:121;
+hence (F()*<:<*G()*>:>).<*i,j*>
+   = F().(<:<*G()*>:>.<*i,j*>) by A3,A4,FUNCT_1:23
+  .= F().<*G().<*i,j*>*> by A4,A5,FUNCT_6:61
+  .= F().<*g(i,j)*> by A2
+  .= f(g(i,j)) by A1;
+end;
 
-scheme Primrec2{F,G,H() -> binary len-total to-naturals
+scheme :: COMPUT_1:sch 2
+ Primrec2{F,G,H() -> binary len-total to-naturals
                            (homogeneous from-natural-fseqs Function),
                 f,g,h(set,set) -> Nat}:
 for i, j being Nat holds (F()*<:<*G(),H()*>:>).<*i,j*> = f(g(i,j),h(i,j))
 provided
  for i,j being Nat holds F().<*i,j*> = f(i,j) and
  for i,j being Nat holds G().<*i,j*> = g(i,j) and
- for i,j being Nat holds H().<*i,j*> = h(i,j);
+ for i,j being Nat holds H().<*i,j*> = h(i,j)
+proof let i, j being Nat;
+A4: dom <:<*G(),H()*>:> = dom G() /\ dom H() by FUNCT_6:62;
+     arity G() = 2 & arity H() = 2 by Def26;
+then A5: dom G() = 2-tuples_on NAT & dom H() = 2-tuples_on NAT by Th26;
+   A6: <*i,j*> is Element of 2-tuples_on NAT by FINSEQ_2:121;
+hence (F()*<:<*G(),H()*>:>).<*i,j*>
+   = F().(<:<*G(),H()*>:>.<*i,j*>) by A4,A5,FUNCT_1:23
+  .= F().<*G().<*i,j*>,H().<*i,j*>*> by A4,A5,A6,FUNCT_6:62
+  .= F().<*g(i,j),H().<*i,j*>*> by A2
+  .= F().<*g(i,j),h(i,j)*> by A3
+  .= f(g(i,j),h(i,j)) by A1;
+end;
 
 theorem :: COMPUT_1:91
   [!].<*i*> = i!;
@@ -961,6 +1528,7 @@ definition
   primrec(1 const 1, (1,2)->(1,?,2) [*], 2);
 end;
 
+
 theorem :: COMPUT_1:92
   [^].<*i,j*> = i |^ j;
 
@@ -970,6 +1538,7 @@ definition
    primrec(0 const 0, 2 proj 1, 1);
 end;
 
+
 theorem :: COMPUT_1:93
 [pred].<*0*> = 0 & [pred].<*i+1*> = i;
 
@@ -978,6 +1547,7 @@ definition
 :: COMPUT_1:def 34
 primrec(1 proj 1, (1,2)->(1,?,2) ([pred]*<:<*2 proj 2*>:>), 2);
 end;
+
 
 theorem :: COMPUT_1:94
   [-].<*i,j*> = i -' j;

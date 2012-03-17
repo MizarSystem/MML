@@ -17,10 +17,6 @@ FUNCOP_1
 FRAENKEL
 MARGREL1
 #
-rel_exist
-rel_D_exist
-rel_D_exist2
-#
 M1 ;;
 ªM1 V25 ;;ªM1 V2 ;V4 ;V19 ;;&ª&R2 B2 B1 ;ª&R2 B2 F1 ;;P1 B2 ;;;ª&R2 B2 F1 ;;P1 B2 ;ªR2 B2 B1 ;;;M1 V2 ;V4 ;V19 ;;M1 V2 ;V4 ;V19 ;;ª&P1 B1 ;P1 B2 ;ªR1 K74 B1 ;K74 B2 ;;;;
 #

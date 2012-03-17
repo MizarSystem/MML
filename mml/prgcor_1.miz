@@ -1,6 +1,6 @@
 :: Correctness of Non Overwriting Programs. {P}art {I}
 ::  by Yatsuka Nakamura
-:: 
+::
 :: Received December 5, 2003
 :: Copyright (c) 2003 Association of Mizar Users
 
@@ -124,9 +124,11 @@ proof let n,m,k be Nat;
   suppose B1: n-m>=0;then
     n-'m=n-m by BINARITH:def 3;
    hence (n+k)-'(m+k)=n-'m by B1,A1,BINARITH:def 3;
+  end;
   suppose B1: n-m<0;then
     n-'m=0 by BINARITH:def 3;
    hence (n+k)-'(m+k)=n-'m by B1,A1,BINARITH:def 3;
+end;
 end;
 
 reserve t for Nat;
@@ -195,7 +197,7 @@ proof let n,k be Nat;assume
  hence thesis by A2,NAT_1:def 1;
 end;
 
-definition let C be set, f be PartFunc of C, INT, x be set;
+registration let C be set, f be PartFunc of C, INT, x be set;
  cluster f.x -> integer;
  coherence
  proof
@@ -203,10 +205,13 @@ definition let C be set, f be PartFunc of C, INT, x be set;
    suppose x in dom f;then
      f.x in rng f by FUNCT_1:def 5;
     hence thesis by INT_1:12;
+   end;
    suppose not x in dom f;
     hence thesis by FUNCT_1:def 4;
  end;
+ end;
 end;
+
 
 theorem AA400: for m,n being Nat st m>0 holds ex i being Nat st
  (for k2 being Nat st k2<i holds m*(2|^k2)<=n)
@@ -224,8 +229,8 @@ proof let m,n be Nat;
   defpred P[Nat] means
       m*(2|^($1))> n;
   A9: ex k being Nat st P[k] by A8;
-  ex k being Nat st P[k] & for j being Nat st P[j] holds k<=j 
-                   from Min(A9);then
+  ex k being Nat st P[k] & for j being Nat st P[j] holds k<=j
+                   from NAT_1:sch 5(A9);then
   consider k being Nat such that
   A10: P[k] & for j being Nat st P[j] holds k<=j;
   for k2 being Nat st k2<k holds m*(2|^(k2))<=n by A10;
@@ -277,13 +282,13 @@ end;
 
 definition let n,m be Integer;
 assume A1: n>=0 & m>0;
-func idiv1_prg(n,m) -> Integer means   :AA190:  
+func idiv1_prg(n,m) -> Integer means   :AA190:
     ex sm,sn,pn being FinSequence of INT st
       len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (n<m implies it=0)& 
-    (not (n<m) implies 
+    (n<m implies it=0)&
+    (not (n<m) implies
     sm.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         &   sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -314,7 +319,7 @@ proof
    deffunc F1(Nat) = 1;
    ex ssm being FinSequence st len ssm=n2+1 &
                 for k2 being Nat st k2 in (Seg (n2+1)) holds
-   ssm.k2=F1(k2) from SeqLambda;then
+   ssm.k2=F1(k2) from FINSEQ_1:sch 2;then
    consider ssm being FinSequence such that
    B2b: len ssm=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
         ssm.k2=1;
@@ -331,10 +336,10 @@ proof
    reconsider ssm as FinSequence of INT by FINSEQ_1:def 4;
    set ssn=ssm,ppn=ssm;
    len ssm=n+1 & len ssn=n+1 & len ppn=n+1 &
-    (n<m implies n div m=0)& 
-    (not (n<m) implies 
+    (n<m implies n div m=0)&
+    (not (n<m) implies
     ssm.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n))
         &   ssm.(i+1)=ssm.(i)*2 & ssm.(i+1)>n
@@ -357,6 +362,7 @@ proof
      )
     ) by B2,B2b,B1;
    hence thesis;
+  end;
   suppose B0: n>=m;then n>0 by A1;then
    B91: n2>=0+1 by NAT_1:38;
    1< n2+1 by B91,NAT_1:38;then
@@ -364,7 +370,7 @@ proof
    deffunc F1(Nat) = m2*(2|^($1-'1));
    ex ssm being FinSequence st len ssm=n2+1 &
                 for k2 being Nat st k2 in (Seg (n2+1)) holds
-   ssm.k2=F1(k2) from SeqLambda;then
+   ssm.k2=F1(k2) from FINSEQ_1:sch 2;then
    consider ssm being FinSequence such that
    B2: len ssm=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
         ssm.k2=m*(2|^(k2-'1));
@@ -382,7 +388,7 @@ proof
    deffunc F(Nat) = n2 mod (m2*(2|^($1-'1)));
    ex ssn being FinSequence st len ssn=n2+1 &
    for k2 being Nat st k2 in (Seg (n2+1)) holds
-   ssn.k2=F(k2) from SeqLambda;then
+   ssn.k2=F(k2) from FINSEQ_1:sch 2;then
    consider ssn being FinSequence such that
    B3: len ssn=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
         ssn.k2=n2 mod (m2*(2|^(k2-'1)));
@@ -400,7 +406,7 @@ proof
    deffunc F3(Nat)= n2 div (m2*(2|^($1-'1)));
    ex ppn being FinSequence st len ppn=n2+1 &
      for k2 being Nat st k2 in (Seg (n2+1)) holds
-   ppn.k2= F3(k2) from SeqLambda;then
+   ppn.k2= F3(k2) from FINSEQ_1:sch 2;then
    consider ppn being FinSequence such that
    B4: len ppn=n+1 &
    for k2 being Nat st k2 in (Seg (n2+1)) holds
@@ -693,15 +699,16 @@ proof
       end;
   hence thesis by C716,B80d,B81,B2,B3,B4,B0,C79,C82x,C78,C82b,C61;
 end;
+end;
 uniqueness
 proof
   let t1,t2 be Integer;
   assume B1:  (ex sm,sn,pn being FinSequence of INT st
       len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (n<m implies t1=0)& 
-    (not (n<m) implies 
+    (n<m implies t1=0)&
+    (not (n<m) implies
     sm.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         &   sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -727,10 +734,10 @@ proof
   &
    (ex sm,sn,pn being FinSequence of INT st
       len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (n<m implies t2=0)& 
-    (not (n<m) implies 
+    (n<m implies t2=0)&
+    (not (n<m) implies
     sm.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         &   sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -754,10 +761,10 @@ proof
     ));then
     consider sm1,sn1,pn1 being FinSequence of INT such that
     B2:  len sm1=n+1 & len sn1=n+1 & len pn1=n+1 &
-    (n<m implies t1=0)& 
-    (not (n<m) implies 
+    (n<m implies t1=0)&
+    (not (n<m) implies
     sm1.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             sm1.(k+1)=sm1.(k)*2 & not(sm1.(k+1)>n))
         &   sm1.(i+1)=sm1.(i)*2 & sm1.(i+1)>n
@@ -781,10 +788,10 @@ proof
     );
     consider sm2,sn2,pn2 being FinSequence of INT such that
     B3:  len sm2=n+1 & len sn2=n+1 & len pn2=n+1 &
-    (n<m implies t2=0)& 
-    (not (n<m) implies 
+    (n<m implies t2=0)&
+    (not (n<m) implies
     sm2.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             sm2.(k+1)=sm2.(k)*2 & not(sm2.(k+1)>n))
         &   sm2.(i+1)=sm2.(i)*2 & sm2.(i+1)>n
@@ -809,6 +816,7 @@ proof
    now per cases;
    suppose n<m;
     hence t1=t2 by B2,B3;
+   end;
    suppose C0: n>=m;then
      consider i1 being Integer such that
      B5: 1<=i1 & i1<=n &
@@ -862,7 +870,7 @@ proof
        proof let k be Integer;
         assume D1: 1<=k & k<=i1+1;then
          0<=k by AXIOMS:22;then
-         reconsider kh=k as Nat by INT_1:16; 
+         reconsider kh=k as Nat by INT_1:16;
          k-1>=0 by D1,SQUARE_1:12;then
          D8: kh-' 1=k-1 by BINARITH:def 3;then
          D5: kh-' 1+1=k by XCMPLX_1:27;
@@ -892,16 +900,20 @@ proof
              now per cases;
              case e+1<i1;
               hence sm1.(e+1+1)=(sm1.(e+1))*2 by F2,B5;
+             end;
              case e+1>=i1;then e+1=i1 by F0b,AXIOMS:21;
               hence sm1.(e+1+1)=(sm1.(e+1))*2 by B5;
+             end;
              end;then
              sm1.(e+1+1)=(sm2.(e+1))*2 by E2,F3f
                      .=sm2.(e+1+1) by F3,F2,B6;
             hence P[e+1];
+           end;
            suppose e+1>=i1+1;
             hence P[e+1];
          end;
-         for e being Nat holds P[e] from Ind(D2,D3);
+         end;
+         for e being Nat holds P[e] from NAT_1:sch 1(D2,D3);
         hence sm1.k=sm2.k by D9b,D5;
        end;
        0<=ii1 by NAT_1:18;then
@@ -912,17 +924,19 @@ proof
        suppose 0<i1;then
          0+1<=ii1 by NAT_1:38;
         hence contradiction by G2,G3,C0b,B6;
+       end;
        suppose J0: 0>=i1;
         ii1>=0 by NAT_1:18;then
         i1=0 by J0;
         hence contradiction by B7,C0,G3;
+     end;
      end;
      now assume C0b: i2<i1;
        C1: for k being Integer st 1<=k & k<=i2+1 holds sm2.k=sm1.k
        proof let k be Integer;
         assume D1: 1<=k & k<=i2+1;then
          0<=k by AXIOMS:22;then
-         reconsider kh=k as Nat by INT_1:16; 
+         reconsider kh=k as Nat by INT_1:16;
          k-1>=0 by SQUARE_1:12,D1;then
          D8: kh-'1=k-1 by BINARITH:def 3;then
          D5: kh-'1+1=k by XCMPLX_1:27;
@@ -952,16 +966,20 @@ proof
              now per cases;
              case e+1<i2;
               hence sm2.(e+1+1)=(sm2.(e+1))*2 by F2,B6;
+             end;
              case e+1>=i2;then e+1=i2 by F0b,AXIOMS:21;
               hence sm2.(e+1+1)=(sm2.(e+1))*2 by B6;
+             end;
              end;then
              sm2.(e+1+1)=(sm1.(e+1))*2 by E2,F3f
                      .=sm1.(e+1+1) by F3,F2,B5;
             hence P[e+1];
+           end;
            suppose e+1>=i2+1;
             hence P[e+1];
          end;
-         for e being Nat holds P[e] from Ind(D2,D3);
+         end;
+         for e being Nat holds P[e] from NAT_1:sch 1(D2,D3);
         hence sm2.k=sm1.k by D9b,D5;
        end;
        0<=ii2 by NAT_1:18;then
@@ -972,10 +990,12 @@ proof
        suppose 0<i2;then
          0+1<=ii2 by NAT_1:38;
         hence contradiction by G2,G3,C0b,B5;
+       end;
        suppose J0: 0>=i2;
         ii2>=0 by NAT_1:18;then
         i2=0 by J0;
         hence contradiction by B7,C0,G3;
+     end;
      end;then
      T2: i1=i2 by T1,AXIOMS:21;
      T8: ii1<ii1+1 by NAT_1:38;
@@ -1001,18 +1021,23 @@ proof
                now per cases;
                case kk<i2;
                 hence sm2.(kk+1)=(sm2.(kk))*2 by F2,B6;
+               end;
                case kk>=i2;then kk=i2 by F0b,AXIOMS:21;
                 hence sm2.(kk+1)=(sm2.(kk))*2 by B6;
+               end;
                end;then
                sm2.(kk+1)=(sm1.(kk))*2 by E2b
                      .=sm1.(kk+1) by F3,F2,B5;
               hence sm1.(kk+1)=sm2.(kk+1);
+             end;
              case 0>=kk;then
                S3: kk=0 by NAT_1:18;
                sm1.1=sm2.1 by C0,B2,B3;
               hence sm1.(kk+1)=sm2.(kk+1) by S3;
              end;
+             end;
             hence sm1.(kk+1)=sm2.(kk+1);
+         end;
          suppose kk+1=i1+1;then kk+1-1=i1 by XCMPLX_1:26;then
              F1: kk=i1 by XCMPLX_1:26;then
              F2: kk<i1+1 by T8;
@@ -1023,16 +1048,19 @@ proof
                sm2.(kk+1)=(sm1.(kk))*2 by E2b,F1,B6,T2
                         .=sm1.(kk+1) by F1,B5;
               hence sm1.(kk+1)=sm2.(kk+1);
+             end;
              case kk<=0;then
                S3: kk=0 by NAT_1:18;
                sm1.1=sm2.1 by C0,B2,B3;
               hence sm1.(kk+1)=sm2.(kk+1) by S3;
              end;
+             end;
            hence sm1.(kk+1)=sm2.(kk+1);
+       end;
        end;
       hence P2[kk+1];
      end;
-     T10a: for jj being Nat holds P2[jj] from Ind(T3,T4);
+     T10a: for jj being Nat holds P2[jj] from NAT_1:sch 1(T3,T4);
      T10: for jj being Integer st 1<=jj & jj<=i1+1 holds sm1.jj=sm2.jj
       proof let jj be Integer;
        assume P1: 1<=jj & jj<=i1+1;then 0<jj by AXIOMS:22;then
@@ -1108,19 +1136,23 @@ proof
                    by S7,S8,S40,S41;
                  ii1+1+1-'(kk+1)=ii1+1-'kk by BB100;
                 hence sn1.(ii1+1+1-'(kk+1))=sn2.(ii1+1+1-'(kk+1)) by S42;
+               end;
                case kk>i2;
                 hence contradiction by F0b;
                end;
+               end;
               hence sn1.(ii1+1+1-'(kk+1))=sn2.(ii1+1+1-'(kk+1));
+             end;
              suppose 0>=kk;then
                S3: kk=0 by NAT_1:18;
                S4: sn1.(i1+1)=sn2.(i1+1) by B5,B6,T2;
                ii1+1+1-'(kk+1)=ii1+1-'kk by BB100 .=ii1+1 by S3,JORDAN3:2;
               hence sn1.(ii1+1+1-'(kk+1))=sn2.(ii1+1+1-'(kk+1)) by S4;
        end;
+       end;
       hence P3[kk+1];
      end;
-     T11a: for jj being Nat holds P3[jj] from Ind(T3,T4);
+     T11a: for jj being Nat holds P3[jj] from NAT_1:sch 1(T3,T4);
      defpred P4[Nat] means 1<=$1 & $1<=i1+1 implies
                pn1.(ii1+1+1-'$1)=pn2.(ii1+1+1-'$1);
      T3: P4[0];
@@ -1194,19 +1226,23 @@ proof
                    by S7,S8,S40,S41,S11;
                  ii1+1+1-'(kk+1)=ii1+1-'kk by BB100;
                 hence pn1.(ii1+1+1-'(kk+1))=pn2.(ii1+1+1-'(kk+1)) by S42;
+               end;
                case kk>i2;
                 hence contradiction by F0b;
                end;
+               end;
               hence pn1.(ii1+1+1-'(kk+1))=pn2.(ii1+1+1-'(kk+1));
+             end;
              suppose 0>=kk;then
                S3: kk=0 by NAT_1:18;
                S4: pn1.(i1+1)=pn2.(i1+1) by B6,T2,B5;
                ii1+1+1-'(kk+1)=ii1+1-'kk by BB100 .=i1+1 by S3,JORDAN3:2;
               hence pn1.(ii1+1+1-'(kk+1))=pn2.(ii1+1+1-'(kk+1)) by S4;
        end;
+       end;
       hence P4[kk+1];
      end;
-     T12a: for jj being Nat holds P4[jj] from Ind(T3,T4);
+     T12a: for jj being Nat holds P4[jj] from NAT_1:sch 1(T3,T4);
      T12: for jj being Integer st 1<=jj & jj<=i1+1 holds
                   pn1.(i1+1+1- jj)=pn2.(i1+1+1- jj)
       proof let jj be Integer;
@@ -1223,20 +1259,22 @@ proof
      i1+1+1- (i1+1)=1 by XCMPLX_1:26;
     hence t1=t2 by T13,B5,B6;
   end;
+  end;
   hence thesis;
 end;
 end;
 
+
 :: The following theorem is about array index area checking.
 :: Each index of an array appeared in the program is checked
 :: at the place just in front of the place the array is used,
-:: if it remains in the defined area of array. 
+:: if it remains in the defined area of array.
 theorem  for n,m being Integer st n>=0 & m>0 holds
    for sm,sn,pn being FinSequence of INT,i being Integer st
       len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (not (n<m) implies 
+    (not (n<m) implies
      sm.1=m &
-     ( 1<=i & i<=n & 
+     ( 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
         sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -1253,15 +1291,15 @@ theorem  for n,m being Integer st n>=0 & m>0 holds
              &
              pn.(i+1- j)=pn.(i+1- (j- 1))*2
         )
-       )& idiv1_prg(n,m)=pn.1 
+       )& idiv1_prg(n,m)=pn.1
      )
     )
     holds
       len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (n<m implies idiv1_prg(n,m)=0)& 
-    (not (n<m) implies 
+    (n<m implies idiv1_prg(n,m)=0)&
+    (not (n<m) implies
     1 in dom sm & sm.1=m &
-     ( 1<=i & i<=n & 
+     ( 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
         k+1 in dom sm & k in dom sm & sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         & i+1 in dom sm & i in dom sm & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -1282,7 +1320,7 @@ theorem  for n,m being Integer st n>=0 & m>0 holds
              & i+1-j in dom pn & i+1-(j-1) in dom pn &
              pn.(i+1- j)=pn.(i+1- (j- 1))*2
         )
-       ) & 1 in dom pn & 
+       ) & 1 in dom pn &
        idiv1_prg(n,m) =pn.1
      )
     )
@@ -1290,9 +1328,9 @@ proof let n,m be Integer;
  assume A1: n>=0 & m>0;
  let sm,sn,pn be FinSequence of INT,i be Integer;
   assume B1: len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (not (n<m) implies 
+    (not (n<m) implies
      sm.1=m &
-     ( 1<=i & i<=n & 
+     ( 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
         sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -1309,14 +1347,14 @@ proof let n,m be Integer;
              &
              pn.(i+1- j)=pn.(i+1- (j- 1))*2
         )
-       )& idiv1_prg(n,m)=pn.1 
+       )& idiv1_prg(n,m)=pn.1
      )
     );
     A9: n<m implies idiv1_prg(n,m)=0 by A1,B1,AA190;
     reconsider n2=n as Nat by A1,INT_1:16;
-    (not (n<m) implies 
+    (not (n<m) implies
     1 in dom sm & sm.1=m &
-     ( 1<=i & i<=n & 
+     ( 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
         k+1 in dom sm & k in dom sm & sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         & i+1 in dom sm & i in dom sm & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -1337,7 +1375,7 @@ proof let n,m be Integer;
              & i+1-j in dom pn & i+1-(j-1) in dom pn &
              pn.(i+1- j)=pn.(i+1- (j- 1))*2
         )
-       ) & 1 in dom pn & 
+       ) & 1 in dom pn &
        idiv1_prg(n,m) =pn.1
      )
     )
@@ -1436,7 +1474,7 @@ proof let n2,m2 be Nat;
    deffunc F1(Nat) = 1;
    ex ssm being FinSequence st len ssm=n2+1 &
                 for k2 being Nat st k2 in (Seg (n2+1)) holds
-   ssm.k2=F1(k2) from SeqLambda;then
+   ssm.k2=F1(k2) from FINSEQ_1:sch 2;then
    consider ssm being FinSequence such that
    B2b: len ssm=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
         ssm.k2=1;
@@ -1453,10 +1491,10 @@ proof let n2,m2 be Nat;
    reconsider ssm as FinSequence of INT by FINSEQ_1:def 4;
    set ssn=ssm,ppn=ssm;
    len ssm=n+1 & len ssn=n+1 & len ppn=n+1 &
-    (n<m implies n2 div m2=0)& 
-    (not (n<m) implies 
+    (n<m implies n2 div m2=0)&
+    (not (n<m) implies
     ssm.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n))
         &   ssm.(i+1)=ssm.(i)*2 & ssm.(i+1)>n
@@ -1481,10 +1519,10 @@ proof let n2,m2 be Nat;
    hence
     ex sm,sn,pn being FinSequence of INT st
       len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (n<m implies n2 div m2=0)& 
-    (not (n<m) implies 
+    (n<m implies n2 div m2=0)&
+    (not (n<m) implies
     sm.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         &   sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -1506,6 +1544,7 @@ proof let n2,m2 be Nat;
        n2 div m2=pn.1
      )
     );
+  end;
   suppose B0: n>=m;then n>0 by A1;then
    n2>=0+1 by NAT_1:38;then
    1< n2+1 by NAT_1:38;then
@@ -1513,7 +1552,7 @@ proof let n2,m2 be Nat;
    deffunc F1(Nat) = m2*(2|^($1-'1));
    ex ssm being FinSequence st len ssm=n2+1 &
                 for k2 being Nat st k2 in (Seg (n2+1)) holds
-   ssm.k2=F1(k2) from SeqLambda;then
+   ssm.k2=F1(k2) from FINSEQ_1:sch 2;then
    consider ssm being FinSequence such that
    B2: len ssm=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
         ssm.k2=m*(2|^(k2-'1));
@@ -1531,7 +1570,7 @@ proof let n2,m2 be Nat;
    deffunc F(Nat) = n2 mod (m2*(2|^($1-'1)));
    ex ssn being FinSequence st len ssn=n2+1 &
    for k2 being Nat st k2 in (Seg (n2+1)) holds
-   ssn.k2=F(k2) from SeqLambda;then
+   ssn.k2=F(k2) from FINSEQ_1:sch 2;then
    consider ssn being FinSequence such that
    B3: len ssn=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
         ssn.k2=n2 mod (m2*(2|^(k2-'1)));
@@ -1549,7 +1588,7 @@ proof let n2,m2 be Nat;
    deffunc F3(Nat)= n2 div (m2*(2|^($1-'1)));
    ex ppn being FinSequence st len ppn=n2+1 &
      for k2 being Nat st k2 in (Seg (n2+1)) holds
-   ppn.k2= F3(k2) from SeqLambda;then
+   ppn.k2= F3(k2) from FINSEQ_1:sch 2;then
    consider ppn being FinSequence such that
    B4: len ppn=n+1 &
    for k2 being Nat st k2 in (Seg (n2+1)) holds
@@ -1840,10 +1879,10 @@ proof let n2,m2 be Nat;
   hence
     ex sm,sn,pn being FinSequence of INT st
       len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (n<m implies n2 div m2=0)& 
-    (not (n<m) implies 
+    (n<m implies n2 div m2=0)&
+    (not (n<m) implies
     sm.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         &   sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -1865,13 +1904,14 @@ proof let n2,m2 be Nat;
        n2 div m2=pn.1
      )
     ) by C716,B80d,B81,B2,B3,B4,B0,C79,C82x,C78,C82b,C61;
+  end;
   end;then
    D11: ex sm,sn,pn being FinSequence of INT st
       len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (n<m implies n2 div m2=0)& 
-    (not (n<m) implies 
+    (n<m implies n2 div m2=0)&
+    (not (n<m) implies
     sm.1=m &
-     ( ex i being Integer st 1<=i & i<=n & 
+     ( ex i being Integer st 1<=i & i<=n &
        ((for k being Integer st 1<=k & k<i holds
             sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
         &   sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
@@ -1952,7 +1992,7 @@ proof let n,m be Integer,n2,m2 be Nat;
     (m2*(n2 div m2)=n2 implies n div m =-(n2 div m2))
     &(m2*(n2 div m2)<>n2 implies n div m =-(n2 div m2)-1))
   proof assume C0: n<0 & m>0 & n2= -n & m2=m;
-   thus 
+   thus
     (m2*(n2 div m2)=n2 implies n div m =-(n2 div m2))
     proof assume C1: m2*(n2 div m2)=n2;
       n2 = m2 * (n2 div m2) + (n2 mod m2) by C0,NAT_1:47;then
@@ -2056,6 +2096,7 @@ proof
  per cases;
  suppose m=0;
   hence thesis;
+ end;
  suppose C0: m<>0;
    now per cases;
    case D0: n>=0;
@@ -2063,6 +2104,7 @@ proof
      case m>0;then
        P[idiv1_prg(n,m)] by D0,BB310;
       hence ex i being Integer st P[i];
+     end;
      case E0: m<0;then
        E1: -m>0 by REAL_1:66;then
        reconsider n2=n,m2=-m as Nat by D0,INT_1:16;
@@ -2073,6 +2115,7 @@ proof
          n div m= -(n2 div m2) by E0,D0,BB320;then
          n div m= -idiv1_prg(n,-m) by F3,BB320,E1,D0;
         hence ex i being Integer st P[i] by E0,D0,F0;
+       end;
        case F0: (-m)* idiv1_prg(n,-m)<>n;
          F3: idiv1_prg(n,-m)=n div (-m) by E1,D0,BB310;then
          m2*(n2 div m2)<>n2 by BB320,D0,E1,F0;then
@@ -2080,9 +2123,12 @@ proof
          n div m= -(idiv1_prg(n,-m))-1 by F3,BB320,E1,D0;::then
         hence ex i being Integer st P[i] by E0,D0,F0;
        end;
+       end;
       hence ex i being Integer st P[i];
      end;
+     end;
     hence ex i being Integer st P[i];
+   end;
    case D0: n<0;then
      E1: -n >0 by REAL_1:66;
      now per cases by C0;
@@ -2093,6 +2139,7 @@ proof
        then
        P[idiv1_prg(-n,-m)] by E1,F0,BB310,G0,D0;
       hence ex i being Integer st P[i];
+     end;
      case E0: m>0;then
        reconsider n2= -n,m2=m as Nat by E1,INT_1:16;
        now per cases;
@@ -2102,6 +2149,7 @@ proof
          n div m= -(n2 div m2) by E0,BB320,D0;then
          n div m= -idiv1_prg(-n,m) by F3,BB320,E1,E0;::then
         hence ex i being Integer st P[i] by E0,D0,F0;
+       end;
        case F0: (m)* idiv1_prg(-n,m)<> -n;
          F3: idiv1_prg(-n,m)=(-n) div (m) by E1,E0,BB310;then
          m2*(n2 div m2)<>n2 by BB320,E0,E1,F0;then
@@ -2109,14 +2157,19 @@ proof
          n div m= -(idiv1_prg(-n,m))-1 by F3,BB320,E1,E0;
         hence ex i being Integer st P[i] by E0,D0,F0;
        end;
+       end;
       hence ex i being Integer st P[i];
+     end;
      end;
     hence ex i being Integer st P[i];
    end;
+   end;
   hence thesis;
+ end;
  end;
 uniqueness;
 end;
+
 
 theorem for n,m being Integer holds
  idiv_prg(n,m)=n div m
@@ -2125,6 +2178,7 @@ proof let n,m be Integer;
   suppose B0: m=0;then
     idiv_prg(n,m)=0 by AA210;
    hence idiv_prg(n,m)=n div m by B0,INT_1:75;
+  end;
   suppose B0: m<>0;
     now per cases;
     case C0: n>=0;
@@ -2132,6 +2186,7 @@ proof let n,m be Integer;
       case D0: m>0;
        hence idiv_prg(n,m)=idiv1_prg(n,m) by AA210,C0
         .=n div m by BB310,C0,D0;
+      end;
       case E0: m<0;
         now per cases;
         case G0: (-m)*(idiv1_prg(n,-m))=n;
@@ -2144,6 +2199,7 @@ proof let n,m be Integer;
           n div m= -(n2 div m2) by BB320,G0,E0,C0,F7
                  .= -(n div (-m)) by BB320,F0,C0;
          hence idiv_prg(n,m)=n div m by F8,F6;
+        end;
         case G0: (-m)*(idiv1_prg(n,-m))<>n;
           F0: -m>0 by REAL_1:66,E0;then
          reconsider m2= -m,n2= n as Nat by INT_1:16,C0;
@@ -2155,9 +2211,12 @@ proof let n,m be Integer;
                  .= -(n div (-m))-1 by BB320,F0,C0;
          hence idiv_prg(n,m)=n div m by F8,F6;
         end;
+        end;
        hence idiv_prg(n,m)=n div m;
       end;
+      end;
      hence idiv_prg(n,m)=n div m;
+    end;
     case C0: n<0;then
       F0: -n>0 by REAL_1:66;
       now per cases by B0;
@@ -2168,6 +2227,7 @@ proof let n,m be Integer;
         n div m = [\ n/m /] by INT_1:def 7
          .=[\ (-n)/(-m) /] by XCMPLX_1:192 .=(-n) div (-m) by INT_1:def 7;
        hence idiv_prg(n,m)=(n) div (m) by D1;
+      end;
       case E0: m>0;
         now per cases;
         case G0: (m)*(idiv1_prg(-n,m))= -n;
@@ -2179,6 +2239,7 @@ proof let n,m be Integer;
           n div m= -(n2 div m2) by BB320,G0,E0,C0,F7
                  .= -((-n) div (m)) by BB320,F0,E0;
          hence idiv_prg(n,m)=n div m by F8,F6;
+        end;
         case G0: (m)*(idiv1_prg(-n,m))<> -n;
          reconsider m2= m,n2= -n as Nat by INT_1:16,E0,F0;
          F6: idiv_prg(n,m)= - (idiv1_prg(-n,m))-1
@@ -2189,10 +2250,14 @@ proof let n,m be Integer;
                  .= -((-n) div (m))-1 by BB320,F0,E0;
          hence idiv_prg(n,m)=n div m by F8,F6;
         end;
+        end;
        hence idiv_prg(n,m)=n div m;
+      end;
       end;
      hence idiv_prg(n,m)=n div m;
     end;
+    end;
    hence idiv_prg(n,m)=n div m;
+end;
 end;
 

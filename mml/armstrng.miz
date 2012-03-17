@@ -13,10 +13,10 @@ environ
       ARYTM_1, FINSEQ_4, CONLAT_1, FINSUB_1, PARTFUN1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, FINSUB_1, RELAT_1,
       RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1,
-      FUNCT_4, FUNCT_1, ORDERS_1, TOLER_1, MCART_1, CARD_3, PBOOLE, STRUCT_0,
-      WAYBEL_4, CANTOR_1, YELLOW_8, CARD_1, FINSEQ_1, PRE_CIRC, MARGREL1,
-      FUNCT_2, FINSEQ_2, MATRLIN, BINARITH, BINARI_3, MIDSP_3, FINSEQ_4,
-      SERIES_1, EUCLID;
+      FUNCT_4, FUNCT_1, ORDERS_1, MCART_1, EQREL_1, CARD_3, PBOOLE, INT_1,
+      STRUCT_0, WAYBEL_4, CANTOR_1, YELLOW_8, CARD_1, FINSEQ_1, PRE_CIRC,
+      MARGREL1, FUNCT_2, FINSEQ_2, MATRLIN, BINARITH, BINARI_3, MIDSP_3,
+      FINSEQ_4, SERIES_1, EUCLID;
  constructors INT_1, WAYBEL_4, CANTOR_1, YELLOW_8, PRE_CIRC, MATRLIN, BINARITH,
       BINARI_3, MIDSP_3, REAL_1, SERIES_1, EUCLID, FINSEQOP, PRALG_1;
  clusters FINSET_1, SUBSET_1, ALTCAT_1, PBOOLE, FINSEQ_1, FINSEQ_2, GOBRD13,
@@ -72,11 +72,11 @@ A6: now let x be set, b be set such that
      hence Intersect sf in B by A1,A3,A7,A10,A11,FINSUB_1:def 2;
    end;
    end;
-     P[S] from Finite(A4,A5,A6);
+     P[S] from FINSET_1:sch 2(A4,A5,A6);
  hence Intersect S in B;
 end;
 
-definition
+registration
   cluster reflexive antisymmetric transitive non empty Relation;
   existence proof set R = {[{},{}]};
    reconsider R as Relation by RELAT_1:4;
@@ -99,6 +99,7 @@ definition
    thus R is non empty;
   end;
 end;
+
 
 theorem Th2:
 for R being antisymmetric transitive non empty Relation,
@@ -134,7 +135,7 @@ A7: y in X & y <> x & [x, y] in R;
   thus thesis by A6,A7,WAYBEL_4:def 24;
 end;
 
-SubsetS_Eq { X() -> set, P[set] }:
+scheme SubsetS_Eq { X() -> set, P[set] }:
  for X1,X2 being Subset of X() st
    (for y being set holds y in X1 iff P[y]) &
    (for y being set holds y in X2 iff P[y]) holds X1 = X2
@@ -162,7 +163,7 @@ definition
   for x being set holds x in it iff x is_maximal_wrt X, R;
  existence proof defpred _P[set] means $1 is_maximal_wrt X, R;
      consider I being set such that
- A1: for x being set holds x in I iff x in X & _P[x] from Separation;
+ A1: for x being set holds x in I iff x in X & _P[x] from XBOOLE_0:sch 1;
       for x being set st x in I holds x in X by A1;
     then reconsider I as Subset of X by TARSKI:def 3;
   take I; let x be set; thus x in I implies x is_maximal_wrt X, R by A1;
@@ -178,13 +179,17 @@ definition
  end;
 end;
 
+
 definition
   let x, X be set;
   pred x is_/\-irreducible_in X means :Def2:
    x in X &
    for z, y being set st z in X & y in X & x = z /\ y holds x = z or x = y;
-  antonym x is_/\-reducible_in X;
-end;
+  end;
+notation
+  let x, X be set;
+  antonym x is_/\-reducible_in X for x is_/\-irreducible_in X ; end;
+
 
 definition
   let X be non empty set;
@@ -213,6 +218,7 @@ definition
   end;
 end;
 
+
 scheme FinIntersect {X() -> non empty finite set, P[set]} :
   for x being set st x in X() holds P[x]
 provided
@@ -235,13 +241,14 @@ A5: ex k being Nat st R[k]
      take x; thus Card U(x) = k; thus not P[x] by A4;
    end; consider k being Nat such that
 A6: R[k] and
-A7: for n being Nat st R[n] holds k <= n from Min(A5);
+A7: for n being Nat st R[n] holds k <= n from NAT_1:sch 5(A5);
    consider s being Element of X() such that
 A8: Card U(s) = k and
 A9: not P[s] by A6;
    per cases;
    suppose s is_/\-irreducible_in X();
     hence contradiction by A1,A9;
+   end;
    suppose s is_/\-reducible_in X();
     then consider z, y being set such that
    A10: z in X() & y in X() and
@@ -286,6 +293,7 @@ A9: not P[s] by A6;
        then P[z] & P[y] by A7,A8;
     hence contradiction by A2,A9,A11;
 end;
+end;
 
 theorem Th3:
 for X being non empty finite set, x being Element of X
@@ -322,7 +330,9 @@ A3: now let x, y be set such that
        A10: s in S;
           per cases by A10,XBOOLE_0:def 2;
           suppose s in Sx; hence s is_/\-irreducible_in X by A7;
+          end;
           suppose s in Sy; hence s is_/\-irreducible_in X by A9;
+       end;
        end;
       hence P[x /\ y];
    end; for x being set st x in X holds P[x] from FinIntersect(A1,A3);
@@ -336,13 +346,14 @@ definition
   X in B;
 end;
 
-definition
-  let B be set;
-  redefine attr B is cap-closed;
-  synonym B is (B2);
-end;
 
-definition
+notation
+  let B be set;
+  synonym B is (B2) for B is cap-closed;
+  end;
+
+
+registration
   let X be set;
   cluster (B1) (B2) Subset-Family of X;
   existence proof set B = {X}; {X} c= bool X by ZFMISC_1:80;
@@ -356,6 +367,7 @@ definition
    end;
   end;
 end;
+
 
 theorem Th4:
 for X being set, B being non empty Subset-Family of X st B is cap-closed
@@ -380,6 +392,7 @@ A9: now let s, A be set such that
         per cases by A11;
         suppose ex a, b being Element of B st x <> a & x <> b & x = a /\ b;
          hence P[A\/{s}];
+        end;
         suppose ex f being Subset-Family of X
                  st A = {} or A = f & Intersect f <> x & Intersect f in B;
           then consider f being Subset-Family of X such that
@@ -392,6 +405,7 @@ A9: now let s, A be set such that
           per cases by A12;
           suppose A = {};
            hence P[A\/{s}] by A4,A6,A10,A14;
+          end;
           suppose A15: A <> {} & A = f & Intersect f <> x & Intersect f in B;
               then A\/sf c= bool X by XBOOLE_1:8;
               then reconsider As = A\/sf as non empty Subset-Family of X
@@ -405,17 +419,21 @@ A9: now let s, A be set such that
                 Intersect As in B by A1,A4,A10,A13,A14,A15,A16,A17,FINSUB_1:def
 2;
              hence thesis by A18;
+            end;
             suppose Intersect As = x;
              hence thesis by A4,A6,A10,A13,A14,A15,A16,A17;
            end;
+           end;
           end;
-    end; P[S] from Finite(A7,A8,A9);
+          end;
+    end;
+    end; P[S] from FINSET_1:sch 2(A7,A8,A9);
     then consider f being Subset-Family of X such that
 A19: S = {} or S = f & Intersect f <> x by A2,Def2;
   thus thesis by A3,A5,A19,CANTOR_1:def 3;
 end;
 
-definition
+registration
   let X, D be non empty set, n be Nat;
   cluster -> FinSequence-yielding Function of X, n-tuples_on D;
   coherence proof let f be Function of X, n-tuples_on D;
@@ -427,16 +445,20 @@ f
   end;
 end;
 
-definition
+
+registration
  let f be FinSequence-yielding Function, x be set;
  cluster f.x -> FinSequence-like;
  coherence proof
  per cases;
   suppose x in dom f; hence thesis by MATRLIN:def 1;
+  end;
   suppose not x in dom f;
    hence thesis by FUNCT_1:def 4;
  end;
+ end;
 end;
+
 
 definition
   :: cannot redefine from VALUAT for I need to use functions from
@@ -448,7 +470,7 @@ definition
   deffunc _F(set) = (p/.$1) '&' (q/.$1);
   consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j being Nat st j in Seg n holds z.j = _F(j) from SeqLambdaD;
+A2: for j being Nat st j in Seg n holds z.j = _F(j) from FINSEQ_2:sch 1;
 A3: n-tuples_on BOOLEAN =
       { s where s is Element of BOOLEAN*: len s = n } by FINSEQ_2:def 4;
      z in BOOLEAN* by FINSEQ_1:def 11; then z in n-tuples_on BOOLEAN by A1,A3;
@@ -469,6 +491,7 @@ A5: for i being set st i in Seg n holds it2.i = (p/.i) '&' (q/.i);
  end;
  commutativity;
 end;
+
 
 theorem Th5:
 for n being Nat, p being Tuple of n, BOOLEAN
@@ -528,9 +551,11 @@ per cases by NAT_1:19;
          i1-BinarySequence 1 = 'not' x by A2,A3,BINARI_3:32;
     hence Bi = <*TRUE*> by A1,A4,BINARI_3:15,POWER:29
            .= 0*i^<*1*> by A5,FINSEQ_1:47,MARGREL1:def 14;
+   end;
    suppose i > 0; then reconsider i' = i as non empty Nat;
         Bi = 0*(i')^<*1*> by BINARI_3:29,MARGREL1:def 14;
     hence thesis;
+  end;
   end;
 
 theorem Th8:
@@ -558,6 +583,7 @@ A3: now let n be Nat such that
     then A10: 1 in dom <*TRUE*> by FINSEQ_1:3;
      thus B(n+1).(i+1) = (0*n^<*TRUE*>).(i+1) by A7,A8,Th7,MARGREL1:def 14
         .= <*TRUE*>.1 by A7,A8,A9,A10,FINSEQ_1:def 7 .= TRUE by FINSEQ_1:57;
+    end;
     suppose A11: n > 0 & n = i;
           0*n = n |-> 0 by EUCLID:def 4; then dom 0*n = Seg n by FINSEQ_2:68;
     then A12: len 0*n = n by FINSEQ_1:def 3; dom <*TRUE*> = Seg 1 by FINSEQ_1:
@@ -565,6 +591,7 @@ A3: now let n be Nat such that
     then A13: 1 in dom <*TRUE*> by FINSEQ_1:3;
      thus B(n+1).(i+1) = (0*n^<*TRUE*>).(i+1) by A11,Th7,MARGREL1:def 14
         .= <*TRUE*>.1 by A11,A12,A13,FINSEQ_1:def 7 .= TRUE by FINSEQ_1:57;
+    end;
     suppose A14: n > 0 & n > i;
       then reconsider n' = n as non empty Nat;
     A15: 2 to_power i < 2 to_power n by A14,POWER:44; 0 <= i by NAT_1:18;
@@ -573,9 +600,10 @@ A3: now let n be Nat such that
     then A17: i+1 in dom B(n) by Lm1;
       thus B(n+1).(i+1) = (B(n')^<*FALSE*>).(i+1) by A15,BINARI_3:28
         .= TRUE by A4,A14,A17,FINSEQ_1:def 7;
+    end;
     end; hence _P[n+1];
     end;
-A18: for n being Nat holds _P[n] from Ind(A2,A3);
+A18: for n being Nat holds _P[n] from NAT_1:sch 1(A2,A3);
      defpred _P[Nat] means
   i < $1 implies for j being Nat st i+1 <=j & j <= $1 holds B($1).(j+1)= FALSE;
 A19: _P[0] by NAT_1:18;
@@ -593,10 +621,12 @@ A20: now let n be Nat such that
         then j = 1 by A23,A26,AXIOMS:21;
         then not j+1 in dom B(n+1) by A26,A27,FINSEQ_1:3;
      hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4,MARGREL1:def 13;
+    end;
     suppose A28: n > 0 & n = i;
     A29: dom B(n+1) = Seg (n+1) by Lm1; j+1 > n+1 by A23,A28,NAT_1:38;
        then not j+1 in dom B(n+1) by A29,FINSEQ_1:3;
      hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4,MARGREL1:def 13;
+    end;
     suppose A30: n > 0 & n > i;
       then reconsider n' = n as non empty Nat;
     A31: 2 to_power i < 2 to_power n by A30,POWER:44;
@@ -607,12 +637,14 @@ A20: now let n be Nat such that
       A34: dom B(n+1) = Seg (n+1) by Lm1; j+1 > n+1 by A33,NAT_1:38;
           then not j+1 in dom B(n+1) by A34,FINSEQ_1:3;
         hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4,MARGREL1:def 13;
+      end;
       suppose A35: j = n; dom B(n) = Seg n by Lm1;
       then A36: j = len B(n) by A35,FINSEQ_1:def 3;
             dom <*FALSE*> = Seg 1 by FINSEQ_1:55;
       then A37: 1 in dom <*FALSE*> by FINSEQ_1:3;
       thus B(n+1).(j+1) = (B(n')^<*FALSE*>).(j+1) by A31,BINARI_3:28
         .= <*FALSE*>.1 by A36,A37,FINSEQ_1:def 7 .= FALSE by FINSEQ_1:57;
+      end;
       suppose A38: j < n;
       A39: 1 <= j+1 by NAT_1:37; j+1 <= n by A38,NAT_1:38;
           then j+1 in Seg n by A39,FINSEQ_1:3;
@@ -620,9 +652,11 @@ A20: now let n be Nat such that
       thus B(n+1).(j+1) = (B(n')^<*FALSE*>).(j+1) by A31,BINARI_3:28
         .= B(n).(j+1) by A40,FINSEQ_1:def 7 .= FALSE by A21,A23,A30,A38;
       end;
+      end;
+    end;
     end; hence _P[n+1];
     end;
-A41: for n being Nat holds _P[n] from Ind(A19,A20);
+A41: for n being Nat holds _P[n] from NAT_1:sch 1(A19,A20);
      defpred _P[Nat] means
      i < $1 implies for j being Nat st 1 <=j & j < i+1 holds B($1).j = FALSE;
 A42: _P[0] by NAT_1:18;
@@ -637,6 +671,7 @@ A43: now let n be Nat such that
    suppose n = 0; then 0 <= i & i <= 0 by A45,NAT_1:18,38;
     then i = 0;
     hence B(n+1).j = FALSE by A46;
+   end;
    suppose A48: n > 0 & i < n;
       then reconsider n' = n as non empty Nat;
    A49: dom B(n) = Seg n by Lm1; j <= i & i <= n by A45,A46,NAT_1:38;
@@ -645,6 +680,7 @@ A43: now let n be Nat such that
         2 to_power i < 2 to_power n by A48,POWER:44;
     hence B(n+1).j = (B(n')^<*FALSE*>).j by BINARI_3:28
        .= B(n).j by A50,FINSEQ_1:def 7 .= FALSE by A44,A46,A48;
+   end;
    suppose A51: n > 0 & i = n;
        then j <= n by A46,NAT_1:38;
    then A52: j in Seg n by A46,FINSEQ_1:3;
@@ -653,9 +689,10 @@ A43: now let n be Nat such that
     thus B(n+1).j = (0*n^<*TRUE*>).j by A51,Th7,MARGREL1:def 14
       .= (0*n).j by A54,FINSEQ_1:def 7
       .= FALSE by A52,A53,FINSEQ_2:70,MARGREL1:def 13;
+     end;
      end; hence _P[n+1];
    end;
-A55: for n being Nat holds _P[n] from Ind(A42,A43);
+A55: for n being Nat holds _P[n] from NAT_1:sch 1(A42,A43);
  thus B.(i+1) = 1 by A1,A18,MARGREL1:def 14; let j be Nat such that
 A56: j in Seg n and
 A57: j<>i+1;
@@ -663,16 +700,19 @@ A58: 1 <= j & j <= n by A56,FINSEQ_1:3;
  per cases by A57,A58,REAL_1:def 5;
  suppose j < i+1;
   hence B.j = 0 by A1,A55,A58,MARGREL1:def 13;
+ end;
  suppose A59: j > i+1 & j < n;
    then j <> 0 by NAT_1:18; then consider k being Nat such that
  A60: j = k+1 by NAT_1:22;
  A61: i+1 <= k by A59,A60,NAT_1:38; k <= n by A59,A60,NAT_1:38;
   hence B.j = 0 by A1,A41,A60,A61,MARGREL1:def 13;
+ end;
  suppose A62: j > i+1 & j = n; i >= 0 by NAT_1:18; then i+1 > 0 by NAT_1:38;
   then consider m being Nat such that
  A63: n = m+1 by A62,NAT_1:22; i < m by A62,A63,AXIOMS:24;
      then 2 to_power i < 2 to_power m by POWER:44;
   hence B.j = 0 by A62,A63,BINARI_3:27,MARGREL1:def 13;
+end;
 end;
 
 begin :: 2. The relational model of data
@@ -685,6 +725,7 @@ definition
  #);
 end;
 
+
 begin :: 3. Dependency structures
 
 definition
@@ -694,7 +735,8 @@ definition
   canceled;
 end;
 
-definition
+
+registration
   let X be set;
   cluster non empty finite Dependency-set of X;
   existence proof {} c= X by XBOOLE_1:2;
@@ -702,6 +744,7 @@ definition
    take R; thus R is non empty; thus R is finite;
   end;
 end;
+
 
 definition
   let X be set;
@@ -711,21 +754,27 @@ definition
   coherence by RELSET_1:def 1;
 end;
 
+
 definition
+  let X be set;
+  mode Dependency of X is Element of Dependencies X;
+end;
+registration
   let X be set;
   cluster Dependencies X -> non empty;
   coherence proof Dependencies X = [: bool X, bool X :] by Def7; hence thesis
 ;
   end;
 
-  mode Dependency of X is Element of Dependencies X;
-end;
+  end;
+
 
 definition
   let X be set, F be non empty Dependency-set of X;
   redefine mode Element of F -> Dependency of X;
   correctness proof let x be Element of F; thus thesis by Def7; end;
 end;
+
 
 theorem Th9:
 for X, x being set
@@ -760,8 +809,11 @@ definition
   let R be DB-Rel, A, B be Subset of the Attributes of R;
   pred A >|> B, R means :Def8:
   for f, g being Element of the Relationship of R st f|A = g|A holds f|B = g|B;
-  synonym A, B holds_in R;
-end;
+  end;
+notation
+  let R be DB-Rel, A, B be Subset of the Attributes of R;
+  synonym A, B holds_in R for A >|> B, R ; end;
+
 
 definition
  let R be DB-Rel;
@@ -778,6 +830,7 @@ definition
   hence thesis by RELSET_1:def 1;
  end;
 end;
+
 
 theorem Th12:
 for R being DB-Rel, A, B being Subset of the Attributes of R
@@ -802,14 +855,20 @@ definition
 :
    P`1 c= Q`1 & Q`2 c= P`2;
   reflexivity;
-  synonym Q <= P; synonym P is_at_least_as_informative_as Q;
-end;
+  end;
+notation
+  let X be set, P, Q be Dependency of X;
+  synonym Q <= P for P >= Q ; synonym P is_at_least_as_informative_as Q for
+ P >= Q ; end;
+
 
 theorem Th13: :: antisymmetry
 for X being set, P, Q being Dependency of X st P <= Q & Q <= P holds P = Q
 proof let X be set, p, q be Dependency of X; assume p <= q & q <= p;
    then p`1 c= q`1 & q`2 c= p`2 & q`1 c= p`1 & p`2 c= q`2 by Def10;
 then A1: p`1 = q`1 & p`2 = q`2 by XBOOLE_0:def 10;
+     p in Dependencies X & q in Dependencies X &
+     Dependencies X c= [:bool X, bool X:]; then
      p = [p`1,p`2] & q = [q`1,q`2] by MCART_1:24;
  hence p = q by A1;
 end;
@@ -829,6 +888,7 @@ definition
    hence thesis by Def7;
   end;
 end;
+
 
 theorem Th15:
 for X being set, A, B, A', B' being Subset of X
@@ -855,6 +915,7 @@ definition
   end;
 end;
 
+
 theorem Th16:
 for X, x being set
  holds x in Dependencies-Order X
@@ -880,7 +941,7 @@ A1: Dependencies-Order X =
    A2: [x,y] in Dependencies-Order X by RELAT_1:def 4;
       consider E, F being Dependency of X such that
    A3: [x,y] = [E,F] & E <= F by A1,A2;
-        x = E by A3,ZFMISC_1:33;
+        x = E & E in Dependencies X by A3,ZFMISC_1:33;
     hence x in [: bool X, bool X :];
    end;
    assume x in [: bool X, bool X :];
@@ -902,7 +963,7 @@ A1: Dependencies-Order X =
    A2: [y,x] in Dependencies-Order X by RELAT_1:def 5;
       consider E, F being Dependency of X such that
    A3: [y,x] = [E,F] & E <= F by A1,A2;
-        x = F by A3,ZFMISC_1:33;
+     x = F & F in Dependencies X by A3,ZFMISC_1:33;
     hence x in [: bool X, bool X :];
    end;
    assume x in [: bool X, bool X :];
@@ -923,7 +984,7 @@ thus field Dependencies-Order X =
   .= [: bool X, bool X :];
 end;
 
-definition
+registration
   let X be set;
   cluster Dependencies-Order X -> non empty;
   coherence proof dom Dependencies-Order X = [:bool X, bool X:] by Th17;
@@ -978,15 +1039,22 @@ A3: field dox = dx \/ rng dox by RELAT_1:def 6
   end;
 end;
 
+notation
+  let X be set, F be Dependency-set of X;
+  synonym F is (F2) for F is transitive;
+  synonym F is (DC1) for F is transitive;
+  end;
+
 definition
   let X be set, F be Dependency-set of X;
   attr F is (F1) means :
 Def12:
    for A being Subset of X holds [A, A] in F;
-  synonym F is (DC2);
-  redefine attr F is transitive;
-  synonym F is (F2); synonym F is (DC1);
 end;
+
+notation
+  let X be set, F be Dependency-set of X;
+  synonym F is (DC2) for F is (F1) ; end;
 
 theorem Th20:
 for X being set, F being Dependency-set of X
@@ -1023,6 +1091,7 @@ Def14:
    st [A, B] in F & [A', B'] in F holds [A\/A', B\/B'] in F;
 end;
 
+
 theorem Th21:
 for X being set holds Dependencies X is (F1) (F2) (F3) (F4)
 proof let X be set;
@@ -1039,11 +1108,12 @@ A1: D = [: bool X, bool X :] by Def7;
    thus D is (F4) proof let A, B, A', B' being Subset of X; thus thesis; end;
 end;
 
-definition
+registration
   let X be set;
   cluster (F1) (F2) (F3) (F4) non empty Dependency-set of X;
   existence proof take Dependencies X; thus thesis by Th21; end;
 end;
+
 
 definition
   let X be set, F be Dependency-set of X;
@@ -1052,7 +1122,8 @@ Def15:
    F is (F1) (F2) (F3) (F4);
 end;
 
-definition
+
+registration
   let X be set;
   cluster full_family Dependency-set of X;
   existence proof
@@ -1061,10 +1132,12 @@ definition
   end;
 end;
 
+
 definition
   let X be set;
   mode Full-family of X is full_family Dependency-set of X;
 end;
+
 
 theorem Th22:
 for X being finite set, F being Dependency-set of X holds F is finite
@@ -1074,7 +1147,7 @@ proof let X be finite set, F be Dependency-set of X;
  hence F is finite by FINSET_1:13;
 end;
 
-definition
+registration
   let X be finite set;
   cluster finite Full-family of X;
   existence proof
@@ -1090,13 +1163,15 @@ definition
 end;
 
 
-definition
+
+registration
   let X be set;
   cluster full_family -> (F1) (F2) (F3) (F4) Dependency-set of X;
   coherence by Def15;
   cluster (F1) (F2) (F3) (F4) -> full_family Dependency-set of X;
   correctness by Def15;
 end;
+
 
 definition
   let X be set, F be Dependency-set of X;
@@ -1105,7 +1180,8 @@ definition
    for A, B being Subset of X st B c= A holds [A, B] in F;
 end;
 
-definition
+
+registration
  let X be set;
  cluster (F1) (F3) -> (DC3) Dependency-set of X;
  coherence proof let F be Dependency-set of X; assume
@@ -1130,7 +1206,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let X be set;
  cluster (DC3) (F2) (F4) non empty Dependency-set of X;
  existence proof
@@ -1138,6 +1215,7 @@ definition
   take D; thus thesis;
  end;
 end;
+
 
 theorem Th23: ::  F13_2_1_3:
 for X being set, F being Dependency-set of X
@@ -1154,11 +1232,12 @@ proof let X be set, F be Dependency-set of X; assume F is (F1) (F3);
  hence F is (DC3);
 end;
 
-definition
+registration
   let X be set;
   cluster (F1) -> non empty Dependency-set of X;
   coherence by Def12;
 end;
+
 
 theorem Th25: ::  WWA1:
 for R being DB-Rel holds Dependency-str R is full_family
@@ -1207,6 +1286,7 @@ proof let X be set, K be Subset of X;
 set F = { [A, B] where A, B is Subset of X : K c= A or B c= A };
     F c= [:bool X, bool X:] proof let x be set; assume x in F;
      then ex A, B being Subset of X st x = [A, B] & (K c= A or B c= A);
+     then x in Dependencies X & Dependencies X c= [:bool X, bool X:];
    hence x in [:bool X, bool X:];
   end;
   then reconsider F as Dependency-set of X by RELSET_1:def 1;
@@ -1251,6 +1331,7 @@ definition
   coherence by RELSET_1:4;
 end;
 
+
 theorem Th27:
 for X being set, F being Dependency-set of X holds Maximal_wrt F c= F
 proof let X be set, F be Dependency-set of X;
@@ -1264,6 +1345,7 @@ definition
   pred x ^|^ y, F means :Def18:
    [x, y] in Maximal_wrt F;
 end;
+
 
 theorem Th28:
 for X being finite set, P being Dependency of X, F being Dependency-set of X
@@ -1279,6 +1361,7 @@ then A2: [:bool X, bool X:] is finite by FINSET_1:19;
 A3: field DOX = [:bool X, bool X:] by Th19;
       S c= field DOX proof let a be set; assume a in S;
        then ex b be Element of FF st a = b & x <= b;
+     then a in Dependencies X & Dependencies X c= [:bool X, bool X:];
      hence a in field DOX by A3;
     end;
 then A4: S is finite Subset of field DOX by A2,A3,FINSET_1:13; x in S by A1;
@@ -1360,6 +1443,7 @@ Def21:
   st [A, B] in M & [A', B'] in M & A' c= B holds B' c= B;
 end;
 
+
 theorem Th30: ::  WWA2:
 for X being finite non empty set, F being Full-family of X
  holds Maximal_wrt F is (M1) (M2) (M3)
@@ -1369,7 +1453,7 @@ proof let X be finite non empty set, F be full_family Dependency-set of X;
  A1: field DOX = [:bool X, bool X:] by Th19;
      defpred _P[set] means ex y being Dependency of X st $1 = y & y >= [A,A];
      consider MA being set such that
- A2: for x being set holds x in MA iff x in F & _P[x] from Separation;
+ A2: for x being set holds x in MA iff x in F & _P[x] from XBOOLE_0:sch 1;
       [A, A] in F by Def16;
  then A3: MA <> {} by A2;
       MA c= F proof let x be set; assume x in MA; hence x in F by A2; end;
@@ -1533,7 +1617,7 @@ A38: M = Maximal_wrt G;
    A41: field DOX = [:bool X, bool X:] by Th19;
      defpred _P[set] means ex y being Dependency of X st $1 = y & y >= [a,b];
      consider MA being set such that
-   A42: for x being set holds x in MA iff x in G & _P[x] from Separation;
+   A42: for x being set holds x in MA iff x in G & _P[x] from XBOOLE_0:sch 1;
    A43: MA <> {} by A39,A40,A42;
         MA c= G proof let x be set; assume x in MA; hence x in G by A42
 ; end;
@@ -1567,7 +1651,7 @@ A38: M = Maximal_wrt G;
  hence G = F by TARSKI:2;
 end;
 
-definition
+registration
   let X be non empty finite set, F be Full-family of X;
   cluster Maximal_wrt F -> non empty;
   coherence proof set M = Maximal_wrt F; M is (M1) by Th30;
@@ -1577,6 +1661,7 @@ by Def19
    hence thesis;
   end;
 end;
+
 
 theorem Th32: ::  Ex2:
 for X being finite set, F being Dependency-set of X, K being Subset of X
@@ -1598,19 +1683,23 @@ A7: now let A, B be Subset of X; assume A8: [A,B] in M;
      per cases by A8,XBOOLE_0:def 2;
       suppose [A,B] in {[K, X]};
        hence [A,B] = [K,X] or not K c= A & A = B by TARSKI:def 1;
+      end;
       suppose [A,B] in {[a, a] where a is Subset of X : not K c= a};
         then consider a being Subset of X such that
       A9: [A,B] = [a,a] & not K c= a; A = a & B = a by A9,ZFMISC_1:33;
        hence [A,B] = [K,X] or not K c= A & A = B by A9;
     end;
+    end;
    M c= [:bool X, bool X:] proof let x be set; assume A10: x in M;
    per cases by A10,XBOOLE_0:def 2;
    suppose x in {[K, X]}; then x = [K,X] by TARSKI:def 1;
     hence thesis by A2,ZFMISC_1:def 2;
+   end;
    suppose x in {[A, A] where A is Subset of X : not K c= A};
-     then consider A being Subset of X such that
-   A11: x = [A,A] and not K c= A;
-    thus thesis by A11;
+     then ex A being Subset of X st x = [A,A] & not K c= A;
+     then x in Dependencies X & Dependencies X c= [:bool X, bool X:];
+    hence thesis;
+ end;
  end;
  then reconsider M as Dependency-set of X by RELSET_1:def 1;
 A12: M is (M1) proof let A be Subset of X;
@@ -1618,9 +1707,11 @@ A12: M is (M1) proof let A be Subset of X;
     suppose A13: K c= A;
      take A' = K, B' = [#]X; thus [A', B'] >= [A, A] by A2,A13,Th15;
      thus [A', B'] in M by A4,SUBSET_1:def 4;
+    end;
     suppose A14: not K c= A;
      take A' = A, B' = A; thus [A', B'] >= [A, A];
      thus [A', B'] in M by A5,A14;
+   end;
    end;
 A15: M is (M2) proof let A, B, A', B' be Subset of X such that
    A16: [A, B] in M and
@@ -1633,18 +1724,24 @@ A15: M is (M2) proof let A, B, A', B' be Subset of X such that
      per cases by A7,A17;
      suppose [A',B'] = [K,X];
       hence thesis by A20,ZFMISC_1:33;
+     end;
      suppose not K c= A' & A' = B';
       hence thesis by A19,A20,ZFMISC_1:33;
      end;
+     end;
+    end;
     suppose A21: not K c= A & A = B;
      thus A = A' & B = B' proof
      per cases by A7,A17;
      suppose [A',B'] = [K,X]; then A' = K & B' = X by ZFMISC_1:33;
          then B = X by A19,XBOOLE_0:def 10;
       hence thesis by A21;
+     end;
      suppose not K c= A' & A' = B';
       hence thesis by A19,A21,XBOOLE_0:def 10;
      end;
+     end;
+   end;
    end;
 A22: M is (M3) proof let A, B, A', B' be Subset of X such that
    A23: [A, B] in M and
@@ -1654,14 +1751,18 @@ A22: M is (M3) proof let A, B, A', B' be Subset of X such that
     suppose [A,B] = [K,X];
     then A = K & B = X by ZFMISC_1:33;
      hence B' c= B;
+    end;
     suppose A26: not K c= A & A = B;
      thus B' c= B proof
      per cases by A7,A24;
      suppose [A',B'] = [K,X];
       hence thesis by A25,A26,ZFMISC_1:33;
+     end;
      suppose not K c= A' & A' = B';
       hence thesis by A25;
      end;
+     end;
+   end;
    end;
  set FF = {[A, B] where A, B is Subset of X :
             ex A', B' being Subset of X st [A', B'] >= [A, B] & [A', B'] in M};
@@ -1669,7 +1770,8 @@ A22: M is (M3) proof let A, B, A', B' be Subset of X such that
      then consider A, B being Subset of X such that
  A27: x = [A,B] and
        ex A', B' being Subset of X st [A', B'] >= [A, B] & [A', B'] in M;
-  thus thesis by A27;
+      x in Dependencies X & Dependencies X c= [:bool X, bool X:] by A27;
+    hence thesis;
  end;
  then reconsider FF as Dependency-set of X by RELSET_1:def 1;
 A28: M = Maximal_wrt FF by A12,A15,A22,Th31;
@@ -1683,10 +1785,12 @@ A28: M = Maximal_wrt FF by A12,A15,A22,Th31;
     per cases;
     suppose K c= A; then [K,[#] X] >= [A,B] by A2,Th15;
      hence x in FF by A2,A29,A31,A32;
+    end;
     suppose A34: not K c= A;
     then A35: [A,A] in {[a, a] where a is Subset of X : not K c= a};
           [A,A] >= [A,B] by A30,A34,Th15;
      hence x in FF by A29,A33,A35;
+  end;
   end;
   assume x in FF; then consider A, B being Subset of X such that
   A36: x = [A,B] and
@@ -1697,12 +1801,14 @@ A28: M = Maximal_wrt FF by A12,A15,A22,Th31;
    suppose [A',B'] in {[K, X]}; then [A',B'] = [K,X] by TARSKI:def 1;
        then A' = K & B' = X by ZFMISC_1:33; then K c= A & B c= X by A38,Th15;
     hence x in F by A1,A36;
+   end;
    suppose [A',B'] in {[a, a] where a is Subset of X : not K c= a};
       then consider a being Subset of X such that
    A39: [A',B'] = [a,a] and not K c= a;
    A40: A' = a & B' = a by A39,ZFMISC_1:33;
      A' c= A & B c= B' by A38,Th15; then B c= A by A40,XBOOLE_1:1;
    hence x in F by A1,A36;
+  end;
   end;
  hence {[K, X]}\/{[A, A] where A is Subset of X : not K c= A}
      = Maximal_wrt F by A28,TARSKI:2;
@@ -1721,10 +1827,13 @@ Def22:
  A1: x = B & ex A being Subset of X st A ^|^ B, F;
   thus thesis by A1;
  end;
- synonym closed_attribute_subset F;
-end;
+ end;
+notation
+  let X be set, F be Dependency-set of X;
+  synonym closed_attribute_subset F for saturated-subsets F ; end;
 
-definition
+
+registration
   let X be set, F be finite Dependency-set of X;
   cluster saturated-subsets F -> finite;
   coherence proof
@@ -1742,7 +1851,7 @@ A3: for x being set st x in F ex y being set st P[x,y] proof
     end;
   consider f being Function such that
 A5: dom f = F and
-A6: for x being set st x in F holds P[x,f.x] from FuncEx(A2,A3);
+A6: for x being set st x in F holds P[x,f.x] from FUNCT_1:sch 2(A2,A3);
 A7: rng f is finite by A5,FINSET_1:26;
      ss c= rng f proof let x be set; assume x in ss;
       then consider B being Subset of X such that
@@ -1760,6 +1869,7 @@ A7: rng f is finite by A5,FINSET_1:26;
    hence saturated-subsets F is finite by A1,A7,FINSET_1:13;
  end;
 end;
+
 
 theorem Th33:
 for X, x being set, F being Dependency-set of X
@@ -1832,11 +1942,13 @@ definition
     F c= [:bool X, bool X:] proof let x be set; assume x in F;
     then ex a, b being Subset of X st x = [a,b] &
      for c being set st c in B & a c= c holds b c= c;
+      then x in Dependencies X & Dependencies X c= [:bool X, bool X:];
    hence x in [:bool X, bool X:];
   end;
  hence F is Dependency-set of X by RELSET_1:def 1;
  end;
 end;
+
 
 theorem Th35: ::  WWA3_0:
 for X being set, B being Subset-Family of X, F being Dependency-set of X
@@ -1859,6 +1971,7 @@ A1: F = {[a, b] where a,b is Subset of X :
      end; then F = Dependencies X by TARSKI:2;
      then F is (F1) (F2) (F3) (F4) by Th21;
     hence thesis by Def15;
+    end;
     suppose B is non empty; then reconsider B as non empty Subset-Family of X;
 A4: now let x,y be Subset of X, c be Element of B; assume that
     A5:  [x, y] in F and A6: x c= c;
@@ -1902,6 +2015,7 @@ A4: now let x,y be Subset of X, c be Element of B; assume that
       end;
    hence [a\/a', b\/b'] in F by A1;
   end;
+end;
 end;
 
 theorem Th36: ::  WWA3_00:
@@ -2053,6 +2167,7 @@ Def24:
   end;
 end;
 
+
 theorem Th38: ::  WWA3c:
 for X being finite non empty set, F being Dependency-set of X
   holds enclosure_of F is (B1) (B2)
@@ -2176,6 +2291,7 @@ A1: B = enclosure_of F by Def24;
  end;
 end;
 
+
 theorem Th40: ::  WWA3d:
 for X being finite non empty set, F being Dependency-set of X
  holds Dependency-closure F = X deps_encl_by enclosure_of F
@@ -2203,16 +2319,20 @@ A1: BB = {X}\/{B where B is Subset of X : not K c= B};
    suppose a in {X} & b in {X}; then a = X & b = X by TARSKI:def 1; then a/\
 b in {X} by TARSKI:def 1;
     hence a /\ b in BB by A1,XBOOLE_0:def 2;
+   end;
    suppose A3: a in {X} & b in BB1;
    then a = X by TARSKI:def 1; then a'/\b' = b by XBOOLE_1:28;
     hence a /\ b in BB by A1,A3,XBOOLE_0:def 2;
+   end;
    suppose A4: a in BB1 & b in {X}; then b = X by TARSKI:def 1;
      then a'/\b' = a by XBOOLE_1:28;
     hence a /\ b in BB by A1,A4,XBOOLE_0:def 2;
+   end;
    suppose a in BB1 & b in BB1;
      then ex B1 being Subset of X st b = B1 & not K c= B1;
      then not K c= a/\b by XBOOLE_1:18; then a'/\b' in BB1;
     hence a /\ b in BB by A1,XBOOLE_0:def 2;
+  end;
   end;
 end;
 
@@ -2232,9 +2352,11 @@ A1: F = { [A, B] where A, B is Subset of X : K c= A or B c= A };
     suppose
     A3: x in {X}; {X} c= bool X by ZFMISC_1:80;
      hence x in bool X by A3;
+    end;
     suppose x in {B where B is Subset of X : not K c= B};
       then ex B being Subset of X st x = B & not K c= B;
      hence x in bool X;
+   end;
    end;
    then reconsider BB' = BB as non empty Subset-Family of X by SETFAM_1:def 7;
 A4: BB' is (B1) by Th41;
@@ -2256,12 +2378,16 @@ A6: G = X deps_encl_by BB' by Def23;
         per cases by A9,XBOOLE_0:def 2;
          suppose c in {X}; then c = X by TARSKI:def 1;
           hence b c= c;
+         end;
          suppose c in {B where B is Subset of X : not K c= B};
             then ex B being Subset of X st c = B & not K c= B;
           hence b c= c by A10,A11,XBOOLE_1:1;
         end;
+        end;
+       end;
        suppose b c= a;
         hence b c= c by A10,XBOOLE_1:1;
+      end;
       end;
      hence x in G by A7;
     end;
@@ -2298,6 +2424,7 @@ A3: [#]X = X by SUBSET_1:def 4; set ss = saturated-subsets F;
      then A5: x = X by TARSKI:def 1; [K,X] in {[K,X]} by TARSKI:def 1;
        then [K,X] in M by XBOOLE_0:def 2; then K ^|^ X, F by A2,Def18;
       hence x in ss by A3,A5,Th33;
+      end;
       suppose x in {B where B is Subset of X : not K c= B};
         then consider B being Subset of X such that
       A6: x = B and
@@ -2305,6 +2432,7 @@ A3: [#]X = X by SUBSET_1:def 4; set ss = saturated-subsets F;
           [B,B] in {[A, A] where A is Subset of X : not K c= A} by A7;
         then [B,B] in M by XBOOLE_0:def 2; then B ^|^ B, F by A2,Def18;
        hence x in ss by A6,Th33;
+    end;
     end;
     assume x in ss; then consider b, a being Subset of X such that
     A8: x = b and
@@ -2314,6 +2442,7 @@ A3: [#]X = X by SUBSET_1:def 4; set ss = saturated-subsets F;
     suppose [a,b] in {[K,X]}; then [a,b] = [K,X] by TARSKI:def 1;
      then b = X by ZFMISC_1:33; then b in {X} by TARSKI:def 1;
      hence x in BB by A8,XBOOLE_0:def 2;
+    end;
     suppose [a,b] in {[A, A] where A is Subset of X : not K c= A};
      then consider c being Subset of X such that
     A11: [a,b] = [c,c] and
@@ -2321,6 +2450,7 @@ A3: [#]X = X by SUBSET_1:def 4; set ss = saturated-subsets F;
     A13: a = c & b = c by A11,ZFMISC_1:33;
           c in {B where B is Subset of X : not K c= B} by A12;
     hence x in BB by A8,A13,XBOOLE_0:def 2;
+  end;
   end;
   hence BB = ss by TARSKI:2;
 end;
@@ -2331,6 +2461,7 @@ definition
 :
   G c= B & B = { Intersect S where S is Subset-Family of X: S c= G };
 end;
+
 
 theorem  :: WWA4b:
   for X be finite non empty set, G being Subset-Family of X
@@ -2376,6 +2507,7 @@ A2: F = {[a, b] where a,b is Subset of X :
          per cases;
          suppose b = ic;
           hence thesis by A4,A9,A12;
+         end;
          suppose A13: b <> ic;
           reconsider ic as Subset of X;
                now let c be set; assume
@@ -2386,6 +2518,7 @@ A2: F = {[a, b] where a,b is Subset of X :
          then A14: [a,ic] in F by A2;
               [a,b] <= [a,ic] by A11,Th15;
           hence thesis by A5,A9,A13,A14,Th29;
+        end;
         end;
    end;
    assume x in H; then consider S being Subset-Family of X such that
@@ -2545,6 +2678,7 @@ then A8: X --> 0 is Element of product D by CARD_3:def 5;
     hence x in F by A3,A11;
    end;
    hence F = Dependency-str BD by TARSKI:2;
+  end;
   suppose A12: G is non empty;
    then reconsider n =len H as non empty Nat by A4,FINSEQ_1:25,RELAT_1:60;
 A13: dom H = Seg n by FINSEQ_1:def 3;
@@ -2562,13 +2696,15 @@ A14: now let x be Element of X;
         reconsider b = FALSE as Element of BOOLEAN;
         take b;
         thus  _P[i,b] by A16,MARGREL1:def 13;
+       end;
        suppose A17: not x in H.i;
         reconsider b = TRUE as Element of BOOLEAN;
         take b;
         thus _P[i,b] by A17,MARGREL1:def 14;
+       end;
        end; consider y being FinSequence of BOOLEAN such that
    A18: dom y = Seg n and
-   A19: for i being Nat st i in Seg n holds _P[i,y.i] from SeqDEx(A15);
+   A19: for i being Nat st i in Seg n holds _P[i,y.i] from MATRIX_2:sch 1(A15);
    A20: y in BOOLEAN* by FINSEQ_1:def 11;
          len y = n by A18,FINSEQ_1:def 3;
        then y in { s where s is Element of BOOLEAN*: len s = n } by A20;
@@ -2577,7 +2713,7 @@ A14: now let x be Element of X;
 ::       let i be Nat; assume i in Seg n;
        thus _R[x,y] by A19;
    end; consider M being Function of X, n-tuples_on BOOLEAN such that
-A21: for x being Element of X holds _R[x,M.x] from FuncExD(A14);
+A21: for x being Element of X holds _R[x,M.x] from FUNCT_2:sch 3(A14);
    set R = {f where f is Element of product D :
               ex i being Nat st for x being Element of X holds
                                f.x = Absval ((n-BinarySequence i) '&' (M.x)) };
@@ -2649,6 +2785,7 @@ then A23: X --> 0 in R by A8;
                .= 0 by A42,MARGREL1:49,def 13
                .= (nbg/.i) '&' (Mx/.i) by A42,MARGREL1:49,def 13
                .= ng.i by A38,A39,Def5;
+             end;
              suppose A43: not A c= H.i;
               thus nf.i = ng.i proof
               consider xx being set such that
@@ -2671,6 +2808,7 @@ then A23: X --> 0 in R by A8;
                thus nf.i = (nbf/.i) '&' (Mx/.i) by A38,A39,Def5
                         .= ng.i by A38,A39,A50,Def5;
               end;
+            end;
             end;
         then nf = ng by FUNCT_1:9;
             then g.a = Absval ((n-BinarySequence fi) '&' (M.x)) by A29,A32
@@ -2702,12 +2840,12 @@ then A23: X --> 0 in R by A8;
         deffunc _F(Element of X) = Absval ((n-BinarySequence 0) '&' (M.$1));
         consider f being Function of X, NAT such that
     A62: for x being Element of X
-          holds f.x = _F(x) from LambdaD;
+          holds f.x = _F(x) from FUNCT_2:sch 4;
         deffunc _F(Element of X) =
                         Absval ((n-BinarySequence 2 to_power k) '&' (M.$1));
         consider g being Function of X, NAT such that
     A63: for x being Element of X holds
-        g.x = _F(x) from LambdaD;
+        g.x = _F(x) from FUNCT_2:sch 4;
     A64: dom f = dom D by A5,FUNCT_2:def 1;
            now let x be set; assume x in dom D;
              then reconsider x' = x as Element of X by PBOOLE:def 3;
@@ -2753,12 +2891,14 @@ then A23: X --> 0 in R by A8;
                             .= FALSE by A60,A61,A73,A77,Th8,MARGREL1:def 13;
                     R.j = (bsi/.nj) '&' (Ma/.nj) by A73,Def5;
                 hence L.j = R.j by A76,A78,MARGREL1:49,def 13;
+              end;
               suppose A79: i = nj; dom Ma = Seg n by Lm1;
               then A80: Ma/.nj = Ma.i by A73,A79,FINSEQ_4:def 4
                         .= 0 by A21,A54,A58,A69,A73,A79;
                     R.j = (bsi/.nj) '&' (Ma/.nj) by A73,Def5
                      .= 0 by A80,MARGREL1:49,def 13;
                hence L.j = R.j by A76;
+             end;
              end;
            hence (f|A).x = g.x by A70,A71,FUNCT_1:9;
          end;
@@ -2787,6 +2927,7 @@ then A23: X --> 0 in R by A8;
    hence x in F by A3,A51;
   end;
   hence F = Dependency-str BD by TARSKI:2;
+end;
 end;
 
 begin :: 8. Structure of the family of candidate keys
@@ -2826,6 +2967,7 @@ definition
   end;
 end;
 
+
 theorem  :: Ex8:
   for X being finite set, F being Dependency-set of X, K being Subset of X
  st F = { [A, B] where A, B is Subset of X : K c= A or B c= A }
@@ -2845,11 +2987,13 @@ A3: candidate-keys F =
     suppose [a,X] in {[K, X]}; then [a,X] = [K,X] by TARSKI:def 1;
       then a = K by ZFMISC_1:33;
      hence x in {K} by A4,TARSKI:def 1;
+    end;
     suppose [a,X] in {[A, A] where A is Subset of X : not K c= A};
       then consider A being Subset of X such that
     A6: [a,X] = [A,A] and
     A7: not K c= A; a = A & X = A by A6,ZFMISC_1:33;
     hence x in {K} by A7;
+   end;
    end;
    assume x in {K};
    then A8: x = K by TARSKI:def 1; [K,X] in {[K,X]} by TARSKI:def 1;
@@ -2859,19 +3003,22 @@ A3: candidate-keys F =
  hence candidate-keys F = {K} by TARSKI:2;
 end;
 
-definition
+notation
   let X be set;
-  redefine attr X is empty;
-  antonym X is (C1);
-end;
+  antonym X is (C1) for X is empty;
+  end;
+
 
 definition
   let X be set;
   attr X is without_proper_subsets means :Def28
 :
    for x, y being set st x in X & y in X & x c= y holds x = y;
-  synonym X is (C2);
-end;
+  end;
+notation
+  let X be set;
+  synonym X is (C2) for X is without_proper_subsets ; end;
+
 
 theorem  :: WWA6:
   for R being DB-Rel holds candidate-keys Dependency-str R is (C1) (C2)
@@ -3096,10 +3243,12 @@ A4: (X --> 0) +* ({}X --> {}X) in R by A3;
         suppose A11: x in L;
           then g.x = (L --> L).x by A6,FUNCT_4:14 .= L by A11,FUNCOP_1:13;
          hence g.x in D.x by A10;
+        end;
         suppose not x in L;
           then g.x = (X --> 0).x by A6,FUNCT_4:12
              .= {}X by A8,A9,FUNCOP_1:13;
          hence g.x in D.x by A10;
+       end;
        end;
     hence x in product D by A5,A7,A8,CARD_3:def 5;
    end;
@@ -3148,11 +3297,14 @@ that
              suppose A32: a in Lg;
                then g.a = (Lg --> Lg).a by A20,A23,FUNCT_4:14;
               hence thesis by A32,FUNCOP_1:13;
+             end;
              suppose not a in Lg;
                then g.a = (X --> 0).a by A20,A23,FUNCT_4:12;
               hence thesis by A28,FUNCOP_1:13;
             end;
+            end;
          hence f|X = g|X by A17,A18,A20,A27,A30,A31;
+        end;
         suppose A33: Lf in M & Lg = 0; then consider L being Subset of X such
 that
         A34: Lf = L and
@@ -3170,6 +3322,7 @@ that
                    .= (Lf --> Lf).a by A18,A24,A38,FUNCT_4:14
                    .= Lf by A38,FUNCOP_1:13;
          hence f|X = g|X by A17,A36,A40;
+        end;
         suppose A41: Lf = 0 & Lg in M; then consider L being Subset of X such
 that
         A42: Lg = L and
@@ -3187,8 +3340,10 @@ that
                    .= (Lg --> Lg).a by A20,A23,A46,FUNCT_4:14
                    .= Lg by A46,FUNCOP_1:13;
          hence f|X = g|X by A17,A44,A48;
+        end;
         suppose Lf = 0 & Lg = 0;
          hence f|X = g|X by A18,A20;
+       end;
        end; then AA >|> XA, DB by Def8; then [A,X] in ds by A13;
        then consider a, b being Subset of X such that
    A49: [a,b] in Maximal_wrt ds and
@@ -3348,6 +3503,7 @@ definition
    for A, B, C being Subset of X st [A, B] in F holds [A\/C, B] in F;
 end;
 
+
 theorem  :: APP0:
   for X being set, F being Dependency-set of X
  holds F is (F1) (F2) (F3) (F4) iff F is (F2) (DC3) (F4) by Th23,Th24;
@@ -3443,6 +3599,7 @@ Def32:
        ex a, b being Subset of X st [a, b] in F & a c= A & not b c= A };
   correctness;
 end;
+
 
 theorem Th57:
 for X, A being set, F being Dependency-set of X st A in charact_set F
@@ -3606,6 +3763,7 @@ Def33:
     ex a being Subset of A st k c= a & a <> A & not a in charact_set F;
 end;
 
+
 theorem  :: WWACorB:
   for X being finite non empty set, F being Dependency-set of X,
     K being Subset of X
@@ -3668,6 +3826,7 @@ A3: X = [#]X by SUBSET_1:def 4;
          per cases;
           suppose k\/P = X;
            hence thesis by A19,SUBSET_1:def 4;
+          end;
           suppose k\/P <> X; then k\/P in charact_set F by A14,A20;
              then k\/P in charact_set dcF by Th61;
              then consider x, y being Subset of X such that
@@ -3682,6 +3841,7 @@ A3: X = [#]X by SUBSET_1:def 4;
           then A26: P = (y\/(k\/P)) by A16,A17,A25; not y c= P by A24,XBOOLE_1:
 10;
            hence thesis by A26,XBOOLE_1:7;
+        end;
         end; k c= K by A13,XBOOLE_0:def 8;
         then [K,[#]X] <= [k,[#]X] by Th15;
      hence contradiction by A3,A4,A6,A13,A21,Th29;
@@ -3707,6 +3867,7 @@ A34: [K, [#]X] in dcF proof
     per cases;
     suppose K\/P = X;
      hence thesis by A32,SUBSET_1:def 4;
+    end;
     suppose K\/P <> X; then K\/P in charact_set F by A27,A33,Def33;
         then K\/P in charact_set dcF by Th61;
         then consider x, y being Subset of X such that
@@ -3720,6 +3881,7 @@ A34: [K, [#]X] in dcF proof
           P c= K\/P by XBOOLE_1:7; then P c= y\/(K\/P) by XBOOLE_1:10;
     then A39: P = (y\/(K\/P)) by A29,A30,A38; not y c= P by A37,XBOOLE_1:10;
      hence thesis by A39,XBOOLE_1:7;
+   end;
    end;
      now let x', y' be Subset of X such that
    A40: [x', y'] in dcF and

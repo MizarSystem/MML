@@ -20,19 +20,33 @@ environ
 
 begin :: Category Yielding Functions
 
-definition let A be non empty set;
+registration let A be non empty set;
  cluster non empty-yielding ManySortedSet of A;
+  existence
+   proof consider f being non-empty ManySortedSet of A;
+    take f; consider a being Element of A;
+    take a; thus a in A & f.a is not empty;
+   end;
 end;
 
-definition let A be non empty set;
+
+registration let A be non empty set;
  cluster non-empty -> non empty-yielding ManySortedSet of A;
+  coherence
+   proof let f be ManySortedSet of A; assume
+     A1: f is non-empty;
+    consider a being Element of A;
+    take a; thus a in A & f.a is not empty by A1,PBOOLE:def 16;
+   end;
 end;
+
 
 definition
  let C be Categorial Category;
  let f be Morphism of C;
  redefine func f`2 -> Functor of f`11, f`12;
 end;
+
 
 theorem :: INDEX_1:1
    for C being Categorial Category, f,g being Morphism of C st
@@ -50,35 +64,69 @@ definition let IT be Function;
   for x being set st x in dom IT holds IT.x is Category;
 end;
 
-definition
+
+registration
  cluster Category-yielding Function;
+ existence
+  proof take f = {} --> 1Cat(0,1);
+   let x be set; assume x in dom f; hence thesis by FUNCOP_1:19;
+  end;
 end;
 
-definition let X be set;
+
+registration let X be set;
  cluster Category-yielding ManySortedSet of X;
+ existence
+  proof take f = X --> 1Cat(0,1);
+   let x be set; assume x in dom f;
+    then x in X by FUNCOP_1:19;
+   hence thesis by FUNCOP_1:13;
+  end;
 end;
+
 
 definition let A be set;
  mode ManySortedCategory of A is Category-yielding ManySortedSet of A;
 end;
+
 
 definition let C be Category;
  mode ManySortedSet of C is ManySortedSet of the Objects of C;
  mode ManySortedCategory of C is ManySortedCategory of the Objects of C;
 end;
 
-definition let X be set, x be Category;
+
+registration let X be set, x be Category;
  cluster X --> x -> Category-yielding;
+  coherence
+   proof let a be set; assume a in dom (X --> x);
+     then a in X by FUNCOP_1:19; hence thesis by FUNCOP_1:13;
+   end;
 end;
 
-definition let X be non empty set;
+
+registration let X be non empty set;
  cluster -> non empty ManySortedSet of X;
+  coherence
+   proof let f be ManySortedSet of X;
+    consider x be Element of X;
+       dom f = X by PBOOLE:def 3;
+     then [x,f.x] in f by FUNCT_1:def 4;
+    hence f is non empty;
+   end;
 end;
 
-definition
+
+registration
  let f be Category-yielding Function;
  cluster rng f -> categorial;
+  coherence
+   proof let x be set; assume x in rng f;
+     then ex y being set st y in dom f & x = f.y by FUNCT_1:def 5;
+    hence x is Category by Def1;
+   end;
 end;
+
 
 definition let X be non empty set;
  let f be ManySortedCategory of X;
@@ -86,11 +134,18 @@ definition let X be non empty set;
  redefine func f.x -> Category;
 end;
 
-definition
+
+registration
  let f be Function;
  let g be Category-yielding Function;
  cluster g*f -> Category-yielding;
+  coherence
+   proof let x be set; assume x in dom (g*f);
+     then (g*f).x = g.(f.x) & f.x in dom g by FUNCT_1:21,22;
+    hence (g*f).x is Category by Def1;
+   end;
 end;
+
 
 :: Objects and Morphisms
 
@@ -110,12 +165,14 @@ definition let F be Category-yielding Function;
    for C being Category st C = F.x holds it.x = the Morphisms of C;
 end;
 
+
 definition let A be non empty set;
  let F be ManySortedCategory of A;
  redefine
   func Objs F -> non-empty ManySortedSet of A;
   func Mphs F -> non-empty ManySortedSet of A;
 end;
+
 
 theorem :: INDEX_1:3
    for X being set, C being Category holds
@@ -131,11 +188,13 @@ definition let A,B be set;
   ex f being (ManySortedSet of A), g being ManySortedSet of B st it = [f,g];
 end;
 
+
 definition let A,B be set;
  let f be ManySortedSet of A;
  let g be ManySortedSet of B;
  redefine func [f,g] -> ManySortedSet of A,B;
 end;
+
 
 definition let A, B be set;
  let X be ManySortedSet of A,B;
@@ -143,6 +202,7 @@ definition let A, B be set;
   func X`1 -> ManySortedSet of A;
   func X`2 -> ManySortedSet of B;
 end;
+
 
 definition let A,B be set;
  let IT be ManySortedSet of A,B;
@@ -156,24 +216,41 @@ definition let A,B be set;
   IT`2 is Function-yielding;
 end;
 
-definition let A,B be set;
+
+registration let A,B be set;
  cluster Category-yielding_on_first Function-yielding_on_second
          ManySortedSet of A,B;
+  existence
+   proof consider f being ManySortedCategory of A;
+    consider g being ManySortedFunction of B;
+    reconsider X = [f,g] as ManySortedSet of A,B;
+    take X; thus X`1 is Category-yielding & X`2 is Function-yielding by MCART_1
+:7;
+   end;
 end;
+
 
 definition let A, B be set;
  let X be Category-yielding_on_first ManySortedSet of A,B;
  redefine func X`1 -> ManySortedCategory of A;
 end;
 
+
 definition let A, B be set;
  let X be Function-yielding_on_second ManySortedSet of A,B;
  redefine func X`2 -> ManySortedFunction of B;
 end;
 
-definition let f be Function-yielding Function;
+
+registration let f be Function-yielding Function;
  cluster rng f -> functional;
+  coherence
+   proof let x be set; assume x in rng f;
+     then ex y being set st y in dom f & x = f.y by FUNCT_1:def 5;
+    hence x is Function;
+   end;
 end;
+
 
 definition let A,B be set;
  let f be ManySortedCategory of A;
@@ -181,6 +258,7 @@ definition let A,B be set;
  redefine func [f,g] ->
   Category-yielding_on_first Function-yielding_on_second ManySortedSet of A,B;
 end;
+
 
 definition
  let A be non empty set;
@@ -191,13 +269,34 @@ definition
   for a being Element of A holds it.a is Functor of F.a, G.a;
 end;
 
-scheme LambdaMSFr
+
+scheme :: INDEX_1:sch 1
+ LambdaMSFr
  {A() -> non empty set, C1, C2() -> ManySortedCategory of A(),
   F(set) -> set}:
  ex F being ManySortedFunctor of C1(), C2() st
   for a being Element of A() holds F.a = F(a)
  provided
-  for a being Element of A() holds F(a) is Functor of C1().a, C2().a;
+  for a being Element of A() holds F(a) is Functor of C1().a, C2().a
+proof
+    deffunc G(set)=F($1);
+    consider f being ManySortedSet of A() such that
+A2:  for a being set st a in A() holds f.a = G(a) from MSUALG_1:sch 2;
+      f is Function-yielding
+     proof let a be set; assume a in dom f;
+      then reconsider a as Element of A() by PBOOLE:def 3;
+         f.a = F(a) by A2;
+      hence thesis by A1;
+     end;
+   then reconsider f as ManySortedFunction of A();
+      f is ManySortedFunctor of C1(), C2()
+     proof let a be Element of A();
+         f.a = F(a) by A2;
+      hence thesis by A1;
+     end;
+   then reconsider f as ManySortedFunctor of C1(), C2();
+   take f; thus thesis by A2;
+  end;
 
 definition
  let A be non empty set;
@@ -206,6 +305,7 @@ definition
  let a be Element of A;
  redefine func f.a -> Functor of F.a, G.a;
 end;
+
 
 begin :: Indexing
 
@@ -218,6 +318,7 @@ definition
 
    it`2 is ManySortedFunctor of it`1*F, it`1*G;
 end;
+
 
 theorem :: INDEX_1:4
  for A,B being non empty set, F,G being Function of B,A
@@ -247,11 +348,20 @@ definition
        [[I`1.(F.b),I`1.(G.b)],I`2.b] is Morphism of it);
 end;
 
-definition
+
+registration
  let A,B be non empty set;
  let F,G be Function of B,A;
  let I be Indexing of F,G;
  cluster full strict TargetCat of I;
+  existence
+   proof consider C being full (strict Categorial Category) such that
+A1:   (for a being Element of A holds I`1.a is Object of C) &
+      (for b being Element of B holds
+        [[I`1.(F.b),I`1.(G.b)],I`2.b] is Morphism of C) by Lm1;
+       C is TargetCat of I by A1,Def9;
+    hence thesis;
+   end;
 end;
 
 definition
@@ -263,7 +373,6 @@ definition
  let i be Function of A,B;
  given C being Category such that
  C = CatStr(#A, B, F, G, c, i#);
-
  mode Indexing of F, G, c, i -> Indexing of F,G means
 :: INDEX_1:def 10
 
@@ -272,12 +381,14 @@ definition
    it`2.(c.[m2,m1]) = (it`2.m2)*(it`2.m1);
 end;
 
+
 definition let C be Category;
  mode Indexing of C is
    Indexing of the Dom of C, the Cod of C, the Comp of C, the Id of C;
  mode coIndexing of C is
    Indexing of the Cod of C, the Dom of C, ~(the Comp of C), the Id of C;
 end;
+
 
 theorem :: INDEX_1:6
  for C being Category, I being Indexing of the Dom of C, the Cod of C holds
@@ -340,6 +451,7 @@ definition let C be Category;
   for T being TargetCat of I holds it = Image (I-functor(C,T));
 end;
 
+
 theorem :: INDEX_1:14
  for C being Category, I be Indexing of C
   for D being Categorial Category holds
@@ -353,6 +465,7 @@ definition
 :: INDEX_1:def 13
      I`2.m;
 end;
+
 
 definition
  let C be Category;
@@ -370,10 +483,17 @@ theorem :: INDEX_1:15
 
 begin :: Indexing vs Functor into Categorial Categories
 
-definition let C be Category, D be Categorial Category;
+registration let C be Category, D be Categorial Category;
  let F be Functor of C,D;
  cluster Obj F -> Category-yielding;
+ coherence
+  proof
+A1:  rng Obj F c= the Objects of D by RELSET_1:12;
+   let x be set; assume x in dom Obj F;
+    then (Obj F).x in rng Obj F by FUNCT_1:def 5; hence thesis by A1,CAT_5:12;
+  end;
 end;
+
 
 theorem :: INDEX_1:16
  for C being Category, D being Categorial Category, F being Functor of C,D
@@ -387,6 +507,7 @@ definition let C be Category;
 
    [Obj F, pr2 F];
 end;
+
 
 theorem :: INDEX_1:17
    for C being Category, D being Categorial Category, F being Functor of C,D
@@ -418,13 +539,14 @@ definition
  let C,D,E be Category;
  let F be Functor of C,D;
  let I be Indexing of E; assume
-     Image F is Subcategory of E;
+ Image F is Subcategory of E;
  func I*F -> Indexing of C means
 :: INDEX_1:def 16
 
  for F' being Functor of C,E st F' = F holds
   it = (I-functor(E,rng I)*F')-indexing_of C;
 end;
+
 
 theorem :: INDEX_1:22
  for C,D1,D2,E being Category, I being Indexing of E
@@ -466,6 +588,7 @@ definition
   it = (G*(I-functor(C,T)))-indexing_of C;
 end;
 
+
 theorem :: INDEX_1:27
  for C being Category, I being Indexing of C
  for T being TargetCat of I, D,E being Categorial Category
@@ -506,6 +629,7 @@ definition
 
    I2*(I1-functor(C,rng I1));
 end;
+
 
 theorem :: INDEX_1:32
  for C being Category, D being Categorial Category, I1 being Indexing of C

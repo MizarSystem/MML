@@ -33,21 +33,54 @@ definition let S be set; let X be set; let Y be Subset of S;
   redefine func X /\ Y -> Subset of S;
 end;
 
-definition
+
+registration
   cluster cardinal infinite -> being_limit_ordinal Ordinal;
+  coherence by CARD_4:32;
 end;
 
-definition
+
+registration
   cluster non empty being_limit_ordinal -> infinite Ordinal;
+  coherence
+  proof let A be Ordinal such that A1: A is non empty being_limit_ordinal;
+     assume A is finite;
+     then A2: A in omega by CARD_4:7;
+       not A c= {} by A1,XBOOLE_1:3;
+     then {} in A by ORDINAL1:26;
+     then omega c= A by A1,ORDINAL2:def 5;
+     then A in A by A2;
+     hence contradiction;
+  end;
 end;
 
-definition
+
+registration
   cluster non limit -> non countable Aleph;
+  coherence
+proof let M be Aleph such that A1: M is non limit;
+   assume M is countable;
+   then A2: Card M <=` alef 0 by CARD_4:def 1;
+     Card M = alef 0
+   proof assume Card M <> alef 0;
+      then Card M <` alef 0 by A2,CARD_1:13;
+      hence contradiction by CARD_4:2;
+   end;
+   then M = omega by CARD_1:83,def 5;
+   hence contradiction by A1,CARD_1:85,def 5;
+end;
 end;
 
-definition
+
+registration
   cluster regular non countable Aleph;
+  existence
+  proof consider M being non limit Aleph;
+     take M;
+     thus thesis;
+  end;
 end;
+
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                                   ::
@@ -69,12 +102,14 @@ definition
   X c= A & for B st B in A holds sup (X /\ B)=B implies B in X;
 end;
 
+
 definition
   let A,X;
   pred X is_club_in A means
 :: CARD_LAR:def 3
   X is_closed_in A & X is_unbounded_in A;
 end;
+
 
 reserve X for Subset of A;
 
@@ -83,11 +118,14 @@ definition
   attr X is unbounded means
 :: CARD_LAR:def 4
   sup X = A;
-  antonym X is bounded;
   attr X is closed means
 :: CARD_LAR:def 5
   for B st B in A holds sup (X /\ B)=B implies B in X;
 end;
+notation
+  let A,X;
+  antonym X is bounded for X is unbounded ; end;
+
 
 canceled;
 
@@ -128,6 +166,7 @@ definition let A,X,B1;
  inf { B2 where B2 is Element of A: B2 in X & B1 in B2};
 end;
 
+
 theorem :: CARD_LAR:10
   X is unbounded & B1 in A implies
   LBound(B1,X) in X & B1 in LBound(B1,X);
@@ -139,6 +178,7 @@ theorem :: CARD_LAR:11
 definition let A be set; let X be Subset of A; let Y be set;
   redefine func X \ Y -> Subset of A;
 end;
+
 
 theorem :: CARD_LAR:12
   B1 in A & X is closed unbounded implies
@@ -155,6 +195,7 @@ definition
   Y is closed unbounded implies X /\ Y is non empty;
 end;
 
+
 theorem :: CARD_LAR:14
   for X,Y being Subset of A holds (X is stationary & X c= Y implies
   Y is stationary);
@@ -168,6 +209,7 @@ definition
   Y is closed unbounded implies X /\ Y is non empty;
 end;
 
+
 theorem :: CARD_LAR:15
   for X,Y being set holds (X is_stationary_in A & X c= Y & Y c= A
   implies Y is_stationary_in A);
@@ -178,6 +220,7 @@ definition let X be set;
   redefine mode Element of S -> Subset of X;
 end;
 
+
 theorem :: CARD_LAR:16
     X is stationary implies X is unbounded;
 
@@ -187,6 +230,7 @@ definition let A,X;
   {B1 where B1 is Element of A:
   B1 is infinite being_limit_ordinal & sup (X /\ B1) = B1};
 end;
+
 
 theorem :: CARD_LAR:17
   X /\ B3 c= B1 implies B3 /\ limpoints X c= succ B1;
@@ -206,9 +250,20 @@ theorem :: CARD_LAR:20
 reserve M for non countable Aleph;
 reserve X for Subset of M;
 
-definition let M;
+registration let M;
   cluster cardinal infinite Element of M;
+  existence
+  proof take omega;
+       not M c= omega
+     proof
+        assume M c=omega;
+        hence contradiction by CARD_4:44,46;
+     end;
+     hence omega is Element of M by ORDINAL1:26;
+     thus thesis by CARD_1:83;
+  end;
 end;
+
 
 reserve N,N1 for cardinal infinite Element of M;
 
@@ -244,13 +299,15 @@ definition let M;
   attr M is Mahlo means
 :: CARD_LAR:def 10
  { N : N is regular } is_stationary_in M;
-  synonym M is_Mahlo;
   attr M is strongly_Mahlo means
 :: CARD_LAR:def 11
  { N :  N is strongly_inaccessible}
    is_stationary_in M;
-  synonym M is_strongly_Mahlo;
-end;
+  end;
+notation let M;
+  synonym M is_Mahlo for M is Mahlo ; synonym M is_strongly_Mahlo for
+ M is strongly_Mahlo ; end;
+
 
 theorem :: CARD_LAR:27
   M is strongly_Mahlo implies M is Mahlo;
@@ -307,9 +364,11 @@ theorem :: CARD_LAR:37
 theorem :: CARD_LAR:38
   for A being non empty Ordinal holds Rank A is non empty;
 
-definition let A be non empty Ordinal;
+registration let A be non empty Ordinal;
   cluster Rank A -> non empty;
+  coherence by Th38;
 end;
+
 
 theorem :: CARD_LAR:39
   M is strongly_inaccessible implies Rank M is Universe;

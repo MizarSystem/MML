@@ -30,10 +30,6 @@ RFUNCT_3
 ORDERS_1
 WELLFND1
 #
-PFSeparation
-WFMin
-WFInduction
-#
 M1 ;M1 ;;
 ªM3 K40 K190 F1 ;F2 ;;;;ªM6 V4 ;F1 ;F2 ;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;
 #

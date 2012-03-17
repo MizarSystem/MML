@@ -114,6 +114,7 @@ definition
      I ';' SCM+FSA-Stop;
 end;
 
+
 definition
  let a be Int-Location;
  let I,J be Macro-Instruction;
@@ -279,12 +280,15 @@ theorem :: SCMFSA8B:34  ::ThIFl0(@BBB8)
      (s.a >= 0 implies IExec(if<0(a,I,J),s) =
          IExec(J,s) +* Start-At insloc (card I + card J + card J + 7)));
 
-definition
+registration
  let I,J be parahalting Macro-Instruction;
  let a be read-write Int-Location;
  cluster if=0(a,I,J) -> parahalting;
+ correctness by Th20;
  cluster if>0(a,I,J) -> parahalting;
+ correctness by Th26;
 end;
+
 
 definition
  let a,b be Int-Location;
@@ -296,15 +300,30 @@ definition
  func if>0(a,b,I,J) -> Macro-Instruction equals
 :: SCMFSA8B:def 5
   SubFrom(a,b) ';' if>0(a,I,J);
- synonym if<0(b,a,I,J);
-end;
+ end;
+notation
+ let a,b be Int-Location;
+ let I,J be Macro-Instruction;
+ synonym if<0(b,a,I,J) for if>0(a,b,I,J) ; end;
 
-definition
+
+registration
  let I,J be parahalting Macro-Instruction;
  let a,b be read-write Int-Location;
  cluster if=0(a,b,I,J) -> parahalting;
+ correctness
+  proof
+     if=0(a,b,I,J) = SubFrom(a,b) ';' if=0(a,I,J) by Def4;
+   hence thesis;
+  end;
  cluster if>0(a,b,I,J) -> parahalting;
+ correctness
+  proof
+     if>0(a,b,I,J) = SubFrom(a,b) ';' if>0(a,I,J) by Def5;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: SCMFSA8B:35  ::PRE8'90'(@AAAA)
  for s being State of SCM+FSA, I being Macro-Instruction holds

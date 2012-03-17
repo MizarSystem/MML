@@ -30,15 +30,15 @@ begin :: Square roots of primes are irrational
  reserve seq, seq1, seq2 for Real_Sequence;
  reserve sq for FinSequence of REAL;
 
-definition let x;
- redefine attr x is rational;
- antonym x is irrational;
-end;
+notation let x;
+ antonym x is irrational for x is rational;
+ end;
 
-definition let x, y;
- redefine func x to_power y;
- synonym x.^.y;
-end;
+
+notation let x, y;
+ synonym x.^.y for x to_power y;
+ end;
+
 
 theorem :: IRRAT_1:1
  p is prime implies sqrt p is irrational;
@@ -48,16 +48,30 @@ theorem :: IRRAT_1:2
 
 begin :: A proof that e = e
 
-scheme LambdaRealSeq{F(set)->real number}:
+scheme :: IRRAT_1:sch 1
+ LambdaRealSeq{F(set)->real number}:
  (ex seq st for n holds seq.n=F(n)) &
  (for seq1, seq2 st
-  (for n holds seq1.n=F(n)) & (for n holds seq2.n=F(n)) holds seq1=seq2);
+  (for n holds seq1.n=F(n)) & (for n holds seq2.n=F(n)) holds seq1=seq2)
+proof
+  deffunc F1(set)=F($1);
+ thus ex seq st for n holds seq.n=F1(n) from SEQ_1:sch 1;
+ let seq1, seq2;
+ assume A1: for n holds seq1.n=F(n);
+ assume A2: for n holds seq2.n=F(n);
+   now let n;
+  thus seq1.n = F(n) by A1
+   .= seq2.n by A2;
+ end;
+ hence seq1 = seq2 by FUNCT_2:113;
+end;
 
 definition let k;
  func aseq(k) -> Real_Sequence means
 :: IRRAT_1:def 1
    for n holds it.n=(n-k)/n;
 end;
+
 
 definition
  let k;
@@ -66,12 +80,14 @@ definition
    for n holds it.n=(n choose k)*(n.^.(-k));
 end;
 
+
 definition
  let n;
  func cseq(n) -> Real_Sequence means
 :: IRRAT_1:def 3
    for k holds it.k=(n choose k)*(n.^.(-k));
 end;
+
 
 theorem :: IRRAT_1:3
  cseq(n).k=bseq(k).n;
@@ -82,11 +98,13 @@ definition
    for n holds it.n=(1+(1/n)).^.n;
 end;
 
+
 definition
  func eseq -> Real_Sequence means
 :: IRRAT_1:def 5
    for k holds it.k=1/(k!);
 end;
+
 
 :: lim(\n:(n choose k)*(n.^.(-k))) = 1/(k!)
 
@@ -213,11 +231,13 @@ definition
    Sum(eseq);
 end;
 
+
 definition
  redefine func number_e equals
 :: IRRAT_1:def 7
     exp(1);
 end;
+
 
 begin :: number_e is irrational
 

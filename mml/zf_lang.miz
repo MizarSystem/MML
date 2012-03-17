@@ -47,7 +47,8 @@ begin
     end;
  end;
 
- definition
+
+ registration
   cluster VAR -> non empty;
   coherence
   proof
@@ -56,8 +57,10 @@ begin
   end;
  end;
 
+
  definition mode Variable is Element of VAR;
  end;
+
 
  definition let n;
   func x.n -> Variable equals
@@ -69,6 +72,7 @@ begin
      hence thesis by Def1;
     end;
  end;
+
 
  reserve x,y,z,t for Variable;
 
@@ -86,6 +90,7 @@ begin
     end;
  end;
 
+
  definition let x,y;
   func x '=' y -> FinSequence of NAT equals
 :Def3:   <*0*>^<*x*>^<*y*>;
@@ -94,6 +99,7 @@ begin
 :Def4:   <*1*>^<*x*>^<*y*>;
    coherence;
  end;
+
 
 canceled 5;
 
@@ -131,6 +137,7 @@ A3:    <*1*>^<*x*>^<*y*> = <*1*>^(<*x*>^<*y*>) &
    coherence;
  end;
 
+
 canceled 2;
 
 theorem
@@ -146,6 +153,7 @@ A1:  'not' p = 'not' q;
 :Def7:   <*4*>^<*x*>^p;
    coherence;
  end;
+
 
 canceled;
 
@@ -188,7 +196,7 @@ A5:    (<*x*>^p).1 = x & (<*y*>^q).1 = y by FINSEQ_1:58;
           (for x,p st p in $1 holds All(x,p) in $1 );
      defpred Y[set] means for D st P[D] holds $1 in D;
      consider Y such that
-A1:    a in Y iff a in NAT* & Y[a] from Separation;
+A1:    a in Y iff a in NAT* & Y[a] from XBOOLE_0:sch 1;
         now set a = x.0 '=' x.0;
 A2:      a in NAT* by FINSEQ_1:def 11;
 A3:      for D st P[D] holds a in D;
@@ -283,12 +291,14 @@ A16:    (for a st a in D2 holds a is FinSequence of NAT ) &
     end;
  end;
 
+
  definition let IT be FinSequence of NAT;
   attr IT is ZF-formula-like means
 :Def9:  IT is Element of WFF;
  end;
 
- definition
+
+ registration
   cluster ZF-formula-like FinSequence of NAT;
    existence
     proof
@@ -299,9 +309,11 @@ A16:    (for a st a in D2 holds a is FinSequence of NAT ) &
     end;
  end;
 
+
 definition
   mode ZF-formula is ZF-formula-like FinSequence of NAT;
 end;
+
 
 canceled;
 
@@ -320,7 +332,7 @@ theorem
 
  reserve F,F1,G,G1,H,H1 for ZF-formula;
 
- definition let x,y;
+ registration let x,y;
   cluster x '=' y -> ZF-formula-like;
    coherence
     proof
@@ -337,7 +349,8 @@ theorem
     end;
  end;
 
- definition let H;
+
+ registration let H;
   cluster 'not' H -> ZF-formula-like;
    coherence
     proof
@@ -359,7 +372,8 @@ theorem
     end;
  end;
 
- definition let x,H;
+
+ registration let x,H;
   cluster All(x,H) -> ZF-formula-like;
    coherence
     proof
@@ -371,6 +385,7 @@ theorem
     end;
  end;
 
+
 ::
 ::                   The Properties of ZF-formulae
 ::
@@ -378,10 +393,8 @@ theorem
  definition let H;
   attr H is being_equality means
 :Def10:  ex x,y st H = x '=' y;
-  synonym H is_equality;
   attr H is being_membership means
 :Def11:  ex x,y st H = x 'in' y;
-  synonym H is_membership;
   attr H is negative means
 :Def12:  ex H1 st H = 'not' H1;
   attr H is conjunctive means
@@ -389,6 +402,10 @@ theorem
   attr H is universal means
 :Def14:  ex x,H1 st H = All(x,H1);
  end;
+notation let H;
+  synonym H is_equality for H is being_equality ; synonym H is_membership for
+ H is being_membership ; end;
+
 
 canceled;
 
@@ -405,6 +422,7 @@ theorem
 :Def15:  H is_equality or H is_membership;
  end;
 
+
  definition let F,G;
   func F 'or' G -> ZF-formula equals
 :Def16:   'not'('not' F '&' 'not' G); coherence;
@@ -412,15 +430,18 @@ theorem
 :Def17:   'not' (F '&' 'not' G); coherence;
  end;
 
+
  definition let F,G;
   func F <=> G -> ZF-formula equals
 :Def18:   (F => G) '&' (G => F); coherence;
  end;
 
+
  definition let x,H;
   func Ex(x,H) -> ZF-formula equals
 :Def19:   'not' All(x,'not' H); coherence;
  end;
+
 
  definition let H;
   attr H is disjunctive means
@@ -432,6 +453,7 @@ theorem
   attr H is existential means
 :Def23:  ex x,H1 st H = Ex(x,H1);
  end;
+
 
 canceled 5;
 
@@ -449,6 +471,7 @@ theorem
 :Def25:   Ex(x,Ex(y,H)); coherence;
  end;
 
+
 theorem
    All(x,y,H) = All(x,All(y,H)) & Ex(x,y,H) = Ex(x,Ex(y,H)) by Def24,Def25;
 
@@ -458,6 +481,7 @@ theorem
   func Ex(x,y,z,H) -> ZF-formula equals
 :Def27:   Ex(x,Ex(y,z,H)); coherence;
  end;
+
 
 theorem
    All(x,y,z,H) = All(x,All(y,z,H)) & Ex(x,y,z,H) = Ex(x,Ex(y,z,H)) by Def26,
@@ -735,10 +759,15 @@ theorem
   proof
    per cases by Th25;
     case H is_equality; hence H.1 = 0 by Th35;
+    end;
     case H is_membership; hence H.1 = 1 by Th36;
+    end;
     case H is negative; hence H.1 = 2 by Th37;
+    end;
     case H is conjunctive; hence H.1 = 3 by Th38;
+    end;
     case H is universal; hence H.1 = 4 by Th39;
+  end;
   end;
 
 theorem
@@ -880,7 +909,7 @@ then A31:      G = H1^sq by A25,A26,A27,FINSEQ_1:46;
      defpred P[Nat] means
       for H,F,sq st len H = $1 & H = F^sq holds H = F;
 A32:  for k st for n st n < k holds P[n] holds P[k] by A1;
-A33:  for n holds P[n] from Comp_Ind(A32);
+A33:  for n holds P[n] from NAT_1:sch 4(A32);
       len H = len H;
    hence thesis by A33;
   end;
@@ -995,6 +1024,7 @@ A11:    H = <*k*>^<*x*>^<*y*> by A7,A8,Def10,Def11;
     end;
  end;
 
+
 theorem
     H is atomic implies Var1 H = H.2 & Var2 H = H.3 by Def28,Def29;
 
@@ -1035,6 +1065,7 @@ A1: H is negative;
    uniqueness by Th10;
  end;
 
+
  definition let H;
   assume
 A1: H is conjunctive or H is disjunctive;
@@ -1069,6 +1100,7 @@ A3:       G 'or' F = H by A1,Def20;
    uniqueness by Th47,Th48;
    consistency;
  end;
+
 
 canceled;
 
@@ -1144,6 +1176,7 @@ A3:       Ex(x,G) = H by A1,Def23;
    consistency;
  end;
 
+
 theorem
     H is universal implies
    (x = bound_in H iff ex H1 st All(x,H1) = H) &
@@ -1198,6 +1231,7 @@ A2:    H = F => G by A1,Def21;
    uniqueness by Th49;
  end;
 
+
 theorem
     H is conditional implies
    (F = the_antecedent_of H iff ex G st H = F => G) &
@@ -1231,6 +1265,7 @@ A2:    H = F <=> G by A1,Def22;
    uniqueness by Th50;
  end;
 
+
 theorem
     H is biconditional implies
    (F = the_left_side_of H iff ex G st H = F <=> G) &
@@ -1254,6 +1289,7 @@ A1:  H is biconditional;
 :Def39:  F = 'not' H or ( ex H1 st F = H '&' H1 or F = H1 '&' H ) or
       ex x st F = All(x,H);
  end;
+
 
 canceled;
 
@@ -1405,6 +1441,7 @@ theorem
           H1 is_immediate_constituent_of F1;
  end;
 
+
 canceled;
 
 theorem
@@ -1421,6 +1458,7 @@ theorem
   pred H is_proper_subformula_of F means
 :Def41:  H is_subformula_of F & H <> F;
  end;
+
 
 canceled;
 
@@ -1521,7 +1559,7 @@ A11:      k = m + 1;
        end;
       hence len H < len H1 by A10,NAT_1:22;
      end;
-A13:  for k holds P[k] from Ind(A4,A5);
+A13:  for k holds P[k] from NAT_1:sch 1(A4,A5);
    consider k such that
 A14:  n = 2 + k by A3,NAT_1:28;
 A15:  1 + 1 + k = (1 + k) + 1 by XCMPLX_1:1;
@@ -1933,7 +1971,7 @@ A1:     H is_subformula_of x 'in' y;
     proof
      defpred X[set] means ex F st F = $1 & F is_subformula_of H;
      consider X such that
-A1:    a in X iff a in NAT* & X[a] from Separation;
+A1:    a in X iff a in NAT* & X[a] from XBOOLE_0:sch 1;
      take X;
      let a;
      thus a in X implies ex F st F = a & F is_subformula_of H by A1;
@@ -1959,6 +1997,7 @@ A4:    a in Y iff ex F st F = a & F is_subformula_of H;
      hence thesis by TARSKI:2;
     end;
  end;
+
 
 canceled;
 
@@ -2238,7 +2277,7 @@ A2: for H st H is negative & P[the_argument_of H] holds P[H] and
 A3: for H st H is conjunctive &
     P[the_left_argument_of H] & P[the_right_argument_of H] holds P[H] and
 A4: for H st H is universal & P[the_scope_of H] holds P[H]
-  proof
+proof
      defpred Q[Nat] means for H st len H = $1 holds P[H];
 A5:  for n st for k st k < n holds Q[k] holds Q[n]
      proof let n such that
@@ -2279,7 +2318,7 @@ A13:       H is universal;
      end;
    let H;
 A14:  len H = len H;
-      for n holds Q[n] from Comp_Ind(A5);
+      for n holds Q[n] from NAT_1:sch 4(A5);
    hence thesis by A14;
   end;
 
@@ -2287,7 +2326,7 @@ scheme ZF_CompInd { P[ZF-formula] } :
   for H holds P[H]
     provided
 A1: for H st for F st F is_proper_subformula_of H holds P[F] holds P[H]
-  proof
+proof
      defpred Q[Nat] means for H st len H = $1 holds P[H];
 A2:  for n st for k st k < n holds Q[k] holds Q[n]
      proof let n such that
@@ -2301,7 +2340,7 @@ A4:     len H = n;
        end;
       hence P[H] by A1;
      end;
-A5:  for n holds Q[n] from Comp_Ind (A2);
+A5:  for n holds Q[n] from NAT_1:sch 4 (A2);
    let H;
       len H = len H;
    hence thesis by A5;

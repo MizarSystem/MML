@@ -11,6 +11,7 @@ environ
       PCOMPS_1, FINSET_1, PCOMPS_2, GROUP_1, FINSEQ_4;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, REAL_1, TOPS_2, FUNCT_1, FUNCT_2, NAT_1, SETFAM_1, STRUCT_0,
+      NEWTON,
       METRIC_1, COMPTS_1, PRE_TOPC, PCOMPS_1, PREPOWER, WELLORD1, RELAT_1,
       FINSEQ_1, FINSET_1, RELAT_2, FINSEQ_2, FINSEQ_4;
  constructors TOPS_2, NAT_1, COMPTS_1, PCOMPS_1, REAL_1, PREPOWER, WELLORD1,
@@ -63,7 +64,7 @@ canceled 2;
             (2 |^ k) + 1 >= k + 1 by A11,REAL_1:55;
           hence thesis by A12,A13,AXIOMS:22;
         end;
-        for k be Nat holds P[k] from Ind(A9,A10);
+        for k be Nat holds P[k] from NAT_1:sch 1(A9,A10);
       then A14: n <= (2 |^ n);
         0 < n by A6,A7,AXIOMS:22;
       then A15: u/n >= u/(2 |^ n) by A2,A14,REAL_2:201;
@@ -139,9 +140,11 @@ A25:      R is_connected_in A by A1,WELLORD1:def 5;
             case A26:[x,y] in R;
               [x,y] in [:A,A:] by A24,ZFMISC_1:106;
             hence [x,y] in R |_2 A by A26,WELLORD1:16;
+            end;
             case A27:[y,x] in R;
               [y,x] in [:A,A:] by A24,ZFMISC_1:106;
             hence [y,x] in R |_2 A by A27,WELLORD1:16;
+          end;
           end;
           hence [x,y] in R |_2 A or [y,x] in R |_2 A;
         end;
@@ -165,10 +168,10 @@ scheme MinSet{A()->set,R()->Relation,P[set]}:
   provided
    A1: R() well_orders A() and
    A2: ex X be set st X in A() & P[X]
-   proof
+proof
      defpred Q[set] means P[$1];
      consider Y be set such that
-       A3: for x be set holds x in Y iff x in A() & Q[x] from Separation;
+       A3: for x be set holds x in Y iff x in A() & Q[x] from XBOOLE_0:sch 1;
 A4:     ex x be set st x in Y
        proof
          consider x be set such that A5: x in A() & P[x] by A2;
@@ -198,6 +201,7 @@ definition let FX be set, R be Relation,
   coherence;
 end;
 
+
 definition let FX be set, R be Relation;
   func DisjointFam(FX,R) means
     A in it iff ex B be Element of FX st B in FX & A = B\PartUnion(B,R);
@@ -207,7 +211,7 @@ definition let FX be set, R be Relation;
        ex B be Element of FX st B in FX & $1 = B\PartUnion(B,R);
       consider X being set such that
        A1: for x being set holds x in X iff x in bool union FX & P[x]
-        from Separation;
+        from XBOOLE_0:sch 1;
       reconsider X as set;
       take X;
       let A;
@@ -226,15 +230,17 @@ definition let FX be set, R be Relation;
     ex B be Element of FX st B in FX & $1 = B\PartUnion(B,R);
    thus for X1,X2 being set st
     (for x be set holds x in X1 iff P[x]) &
-    (for x be set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+    (for x be set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
   end;
 end;
+
 
 definition let X be set, n be Nat, f be Function of NAT,bool X;
   func PartUnionNat(n,f) equals
       union (f.:(Seg(n)\{n}));
   coherence;
   end;
+
 
 begin :: 3. Paracompactness of metrizable spaces
 
@@ -256,7 +262,7 @@ proof
    V1 is open & ex W st W in FX & Cl V1 c= W;
   consider HX such that
 A4: for V being Subset of PT holds V in HX iff P[V]
- from SubFamExS;
+ from PRE_TOPC:sch 1;
   take HX;
     for V being Subset of PT st V in HX holds V is open
   proof
@@ -295,6 +301,7 @@ A5: V1 = V & V1 is open & ex W st W in FX & Cl V1 c= W by A4;
           then Cl X c= V by A10,XBOOLE_1:1;
           then X in HX by A4,A6,A9;
           hence x in union HX by A9,TARSKI:def 4;
+          end;
           suppose A12: V` = {};
           consider X being Subset of PT such that A13: X=[#](PT);
           A14: V = ({}(PT))` by A12
@@ -304,6 +311,7 @@ A5: V1 = V & V1 is open & ex W st W in FX & Cl V1 c= W by A4;
             Cl X = V by A13,A14,TOPS_1:27;
           then X in HX by A4,A6,A15;
           hence x in union HX by A16,TARSKI:def 4;
+          end;
           end;
           hence thesis;
         end;
@@ -410,7 +418,8 @@ definition let PM be non empty set;
       end;
      end;
 
-XXX1 { PM() -> non empty set, UB() -> Element of bool bool PM(),
+
+scheme XXX1 { PM() -> non empty set, UB() -> Element of bool bool PM(),
             F(set,set) -> Subset of PM(),
             P[set],
             Q[set,set,set,set]} :
@@ -422,7 +431,7 @@ ex f being Function of NAT, bool bool PM() st
               st q <= n & fq = f.q holds Q[c,V,n,fq]
               }
       where V is Element of bool PM() : P[V]}
-  proof
+proof
     defpred T[Nat,FinSequence of bool bool PM(),set] means
      $3 = $2^<*{union { F(c,$1) where c is Element of PM():
       for fq be Element of bool bool PM(),q st q <= $1 & fq = $2/.(q+1) holds
@@ -476,10 +485,11 @@ ex f being Function of NAT, bool bool PM() st
         by FINSEQ_1:def 11;
     consider g be Function of NAT,(bool bool PM())* such that
       A7: g.0=A and
-      A8: for n be Element of NAT holds T[n,g.n,g.(n+1)] from RecExD(A1);
+      A8: for n be Element of NAT holds T[n,g.n,g.(n+1)] from RECDEF_1:sch 2
+(A1);
       deffunc G(Nat) = (g.$1)/.len(g.$1);
       consider f be Function of NAT,bool bool PM() such that
-       A9: for n holds f.n=G(n) from LambdaD;
+       A9: for n holds f.n=G(n) from FUNCT_2:sch 4;
       take f;
         len <*UB()*> = 1 by FINSEQ_1:56;
       hence f.0 = <*UB()*>/.1 by A7,A9 .= UB() by FINSEQ_4:25;
@@ -497,7 +507,7 @@ ex f being Function of NAT, bool bool PM() st
           .= len(g.k)+1 by FINSEQ_2:19;
           hence thesis by A12;
         end;
-      A13: for n holds R[n] from Ind(A10,A11);
+      A13: for n holds R[n] from NAT_1:sch 1(A10,A11);
       defpred T[Nat] means for q st q <= $1 holds f.q = (g.$1)/.(q+1);
       A14: T[0]
         proof
@@ -516,6 +526,7 @@ ex f being Function of NAT, bool bool PM() st
               now per cases by A18,REAL_1:def 5;
             suppose A19: q = k+1;
             thus f.q=(g.q)/.len(g.q) by A9 .= (g.(k+1))/.(q+1) by A13,A19;
+            end;
             suppose A20: q < k+1; then A21: q+1 <= k+1 by NAT_1:38;
             A22: q <= k by A20,NAT_1:38; q+1>=1 by NAT_1:29;
             then A23: q+1 in Seg(k+1) by A21,FINSEQ_1:3;
@@ -533,9 +544,10 @@ then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
             : P[V]}*>).(q+1) by A8 .= (g.k).(q+1) by A25,FINSEQ_1:def 7
             .= (g.k)/.(q+1) by A25,FINSEQ_4:def 4 .= f.q by A17,A22;
             end;
+            end;
             hence thesis;
           end;
-      A26: for n holds T[n] from Ind(A14,A16);
+      A26: for n holds T[n] from NAT_1:sch 1(A14,A16);
       let n;
       defpred P2[set] means P[$1];
       deffunc F2(set) = union { F(c,n) where c is Element of PM():
@@ -576,11 +588,12 @@ then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
                   hence Q[c,V,n,fq] by A31,A32;
                   end;
             { F1(c) where c is Element of PM(): P1[c] } =
-            { F1(c) where c is Element of PM(): P2[c] } from Fraenkel6'(A28);
+            { F1(c) where c is Element of PM(): P2[c] } from FRAENKEL:sch 3
+(A28);
             hence thesis;
           end;
       A33: NF = { G2(V) where V is Element of bool PM() : P2[V] }
-       from FraenkelF'R(A27);
+       from FRAENKEL:sch 6(A27);
       then A34: len(g.(n+1))=len((g.n)^<*NF*>) by A8
       .= len(g.n)+1 by FINSEQ_2:19;
       A35: len(g.n)+1 in dom (g.(n+1))
@@ -596,7 +609,7 @@ then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
       .= NF by FINSEQ_1:59;
   end;
 
-XXX { PM() -> non empty set, UB() -> Element of bool bool PM(),
+scheme XXX { PM() -> non empty set, UB() -> Element of bool bool PM(),
             F(set,set) -> Subset of PM(),
             P[set],
             Q[set,set,set]} :
@@ -609,7 +622,7 @@ ex f being Function of NAT, bool bool PM() st
               }
       where V is Element of bool PM()
       : P[V]}
-  proof
+proof
     defpred P1[set] means P[$1];
     defpred Q1[set,set,set,set] means Q[$1,$2,$3] & not $1 in union $4;
     deffunc F1(set,set) = F($1,$2);
@@ -681,10 +694,10 @@ ex f being Function of NAT, bool bool PM() st
                 end;
             end;
         { F1(c) where c is Element of PM(): P1[c] }
-         = { F1(c) where c is Element of PM(): Q1[c] } from Fraenkel6'(A4);
+         = { F1(c) where c is Element of PM(): Q1[c] } from FRAENKEL:sch 3(A4);
         hence F2(V) = G2(V);
       end;
-      fxxx1 = fxxx from FraenkelF'R(A3);
+      fxxx1 = fxxx from FRAENKEL:sch 6(A3);
     hence thesis by A2;
   end;
 
@@ -760,7 +773,7 @@ theorem  :: Stone Theorem - general case
         defpred P2[set] means ex n st $1 in f.n;
         consider GX being Subset-Family of PM
           such that A15: for X being Subset of PM
-            holds X in GX iff P2[X] from SubFamEx;
+            holds X in GX iff P2[X] from SETFAM_1:sch 1;
           GX is Subset-Family of PT by A1,A3,Th8;
         then reconsider GX as Subset-Family of PT;
         take GX;
@@ -807,6 +820,7 @@ theorem  :: Stone Theorem - general case
                       end;
                       hence thesis by A2,A3,A20,PCOMPS_1:36;
                     end;
+                  end;
                   suppose n>0;
                   then consider k such that A23: n = k + 1 by NAT_1:22;
                   thus X in the topology of PT
@@ -862,6 +876,7 @@ PM
                       hence thesis by A2,A3,A24,PCOMPS_1:36;
                     end;
                 end;
+                end;
                 hence thesis by PRE_TOPC:def 5;
               end;
             hence thesis by TOPS_2:def 1;
@@ -892,7 +907,7 @@ PM
                   defpred P2[Nat] means 3/(2 |^ $1) <= r;
                   A37: ex k be Nat st P2[k] by A35,Th3;
                   consider k such that A38: P2[k] and
-                   for l st P2[l] holds k <= l from Min(A37);
+                   for l st P2[l] holds k <= l from NAT_1:sch 5(A37);
                   A39: 2 |^ k > 0 by PREPOWER:13;
                      2 |^ (k+1) = 2 |^ k * 2 by NEWTON:11;
                   then 2 |^ (k+1) >= 2 |^ k by A39,REAL_2:146;
@@ -1046,6 +1061,7 @@ by A31;
                     thus Y in FX by A64;
                     thus X c= Y by A63,A66,ZFMISC_1:94;
                   end;
+                end;
                 suppose n>0;
                 then consider k such that A69: n = k + 1 by NAT_1:22;
                 thus ex Y be set st Y in FX & X c= Y
@@ -1110,6 +1126,7 @@ by A31;
                     thus X c= Y by A70,A73,ZFMISC_1:94;
                   end;
               end;
+              end;
               hence thesis;
             end;
             hence thesis by SETFAM_1:def 2;
@@ -1127,7 +1144,7 @@ by A31;
                 defpred P3[set] means X in f.$1;
                 A78: ex n st P3[n] by A15,A77;
                 consider k such that A79: P3[k] and
-                 for l st P3[l] holds k <= l from Min(A78);
+                 for l st P3[l] holds k <= l from NAT_1:sch 5(A78);
                   X is open by A16,A77,TOPS_2:def 1;
                 then A80: X in Family_open_set(PM) by A2,A3,PRE_TOPC:def 5;
                 reconsider x'=x as Element of PM
@@ -1162,7 +1179,7 @@ by A31;
                       A92: dom g = NZ and
                       A93: for y be set st y in NZ ex n st g.y=n & P4[y,n] &
                        for t be Nat st P4[y,t] holds n <=t
-                        from FuncExOfMinNat(A88);
+                        from TREES_2:sch 4(A88);
                     A94: rng g c= {i: i < (m+1+k+1)}
                       proof
                         let t be set;
@@ -1183,6 +1200,7 @@ by A31;
                           suppose A104: t=0;
                             m+1+k+1 >= 1 by NAT_1:29;
                           hence contradiction by A102,A104,AXIOMS:22;
+                          end;
                           suppose t>0;
                           then consider l be Nat such that
                               A105: t=l+1 by NAT_1:22;
@@ -1270,6 +1288,7 @@ by NAT_1:29;
       then dist(y,x') >= 1/(2 |^ m) - 1/(2 |^ (m+1+k+1)) by REAL_1:84;
       then dist(y,x') >= 1/(2 |^ (m+1+k+1)) by A115,AXIOMS:22;
       hence contradiction by A85,A103,METRIC_1:12;
+    end;
     end;
     hence contradiction;
   end;
@@ -1432,13 +1451,16 @@ by NAT_1:29;
           then c2 in union(Mn-Seg(M2)) by A147,A168,TARSKI:def 4;
           then c2 in PartUnion(M2,Mn) by Def1;
           hence contradiction by A153,XBOOLE_0:def 4;
+          end;
           suppose [M2,M1] in Mn;
           then M2 in Mn-Seg(M1) by A171,WELLORD1:def 1;
           then c1 in union(Mn-Seg(M1)) by A154,A169,TARSKI:def 4;
           then c1 in PartUnion(M1,Mn) by Def1;
           hence contradiction by A146,XBOOLE_0:def 4;
         end;
+        end;
         hence contradiction;
+        end;
         suppose n1>0;
         then consider l be Nat such that
             A172: n1 = l+1 by NAT_1:22;
@@ -1620,13 +1642,16 @@ by NAT_1:29;
           then c2 in union(Mn-Seg(M2)) by A179,A203,TARSKI:def 4;
           then c2 in PartUnion(M2,Mn) by Def1;
           hence contradiction by A185,XBOOLE_0:def 4;
+          end;
           suppose [M2,M1] in Mn;
           then M2 in Mn-Seg(M1) by A206,WELLORD1:def 1;
           then c1 in union(Mn-Seg(M1)) by A186,A204,TARSKI:def 4;
           then c1 in PartUnion(M1,Mn) by Def1;
           hence contradiction by A178,XBOOLE_0:def 4;
         end;
+        end;
         hence contradiction;
+      end;
       end;
       hence contradiction;
     end;
@@ -1645,11 +1670,13 @@ then A207: NZ,rng g are_equipotent by A92,WELLORD2:def 4;
         now per cases by NAT_1:19;
         suppose x1 = 0;
         hence x1 in {0} or x1 in Seg(m+1+k+1) by TARSKI:def 1;
+        end;
         suppose x1 > 0;
         then consider l be Nat such that
           A210: x1 = l +1 by NAT_1:22;
            x1 >= 1 by A210,NAT_1:29;
         hence x1 in {0} or x1 in Seg(m+1+k+1) by A208,A209,FINSEQ_1:3;
+      end;
       end;
       hence x in {0} \/ Seg(m+1+k+1) by XBOOLE_0:def 2;
     end;

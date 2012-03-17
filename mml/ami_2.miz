@@ -34,6 +34,7 @@ definition
  correctness by GR_CY_1:12;
 end;
 
+
 definition
  func SCM-Data-Loc -> Subset of NAT equals
 :Def2:  { 2*k + 1: not contradiction };
@@ -61,7 +62,8 @@ definition
    end;
 end;
 
-definition
+
+registration
  cluster SCM-Data-Loc -> non empty;
   coherence
    proof
@@ -75,6 +77,7 @@ definition
     hence thesis by Def3;
    end;
 end;
+
 
 reserve I,J,K for Element of Segm 9,
         a,a1,a2 for Element of SCM-Instr-Loc,
@@ -131,6 +134,7 @@ A7:       x = [K,<*a1,b1*>] & K in { 7,8 };
   end;
 end;
 
+
 canceled;
 
 theorem Th2:
@@ -144,10 +148,11 @@ proof
  hence [0,{}] in SCM-Instr by Def4,XBOOLE_0:def 2;
 end;
 
-definition
+registration
  cluster SCM-Instr -> non empty;
  coherence by Th2;
 end;
+
 
 theorem
    [6,<*a2*>] in SCM-Instr
@@ -246,7 +251,7 @@ then A2:   INT in {INT} \/ { SCM-Instr, SCM-Instr-Loc } &
     end;
     consider h being Function of NAT, {INT} \/ { SCM-Instr, SCM-Instr-Loc }
     such that
-A3:   for a being Element of NAT holds P[a,h.a] from FuncExD(A1);
+A3:   for a being Element of NAT holds P[a,h.a] from FUNCT_2:sch 3(A1);
    take h;
       P[0,h.0] by A3;
    hence h.0 = SCM-Instr-Loc;
@@ -266,17 +271,21 @@ A5: g.0 = SCM-Instr-Loc &
        suppose
         k = 0;
         hence f.k = g.k by A4,A5;
+       end;
        suppose A6:ex i st k = 2*i+1;
         hence f.k = INT by A4 .= g.k by A5,A6;
+       end;
        suppose A7:ex i st k = 2*i+2;
 
         hence f.k = SCM-Instr by A4 .= g.k by A5,A7;
+      end;
       end;
      hence f.k = g.k;
     end;
    hence thesis by FUNCT_2:113;
   end;
 end;
+
 
 theorem Th6:
    SCM-Instr-Loc <> INT & SCM-Instr <> INT & SCM-Instr-Loc <> SCM-Instr
@@ -346,6 +355,7 @@ definition
  mode SCM-State is Element of product SCM-OK;
 end;
 
+
 theorem Th10:
  for a being Element of SCM-Data-Loc holds
   SCM-OK.a = INT
@@ -405,6 +415,7 @@ definition let s be SCM-State;
  coherence by Th13,CARD_3:def 6;
 end;
 
+
 definition let s be SCM-State, u be Element of SCM-Instr-Loc;
  func SCM-Chg(s,u) -> SCM-State equals
 :Def7:  s +* (0 .--> u);
@@ -427,6 +438,7 @@ A4:     x = 0;
           .= u by CQC_LANG:6;
         then (s +* (0 .--> u)).0 in SCM-Instr-Loc;
        hence (s +* (0 .--> u)).x in SCM-OK.x by A4,Th7;
+      end;
       suppose
 A5:     x <> 0;
           {0} = dom(0 .--> u) by CQC_LANG:5;
@@ -434,11 +446,13 @@ A5:     x <> 0;
         then (s +* (0 .--> u)).x = s.x by FUNCT_4:12;
        hence (s +* (0 .--> u)).x in SCM-OK.x by A3,CARD_3:18;
      end;
+     end;
      hence (s +* (0 .--> u)).x in SCM-OK.x;
     end;
    hence thesis by A2,CARD_3:18;
   end;
 end;
+
 
 theorem
    for s being SCM-State, u being Element of SCM-Instr-Loc
@@ -496,6 +510,7 @@ A4:     x = t;
           .= u by CQC_LANG:6;
         then (s +* (t .--> u)).t in INT by INT_1:12;
        hence (s +* (t .--> u)).x in SCM-OK.x by A4,Th10;
+      end;
       suppose
 A5:     x <> t;
           {t} = dom(t .--> u) by CQC_LANG:5;
@@ -503,11 +518,13 @@ A5:     x <> t;
         then (s +* (t .--> u)).x = s.x by FUNCT_4:12;
        hence (s +* (t .--> u)).x in SCM-OK.x by A3,CARD_3:18;
      end;
+     end;
      hence (s +* (t .--> u)).x in SCM-OK.x;
     end;
    hence thesis by A2,CARD_3:18;
   end;
 end;
+
 
 theorem
    for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer
@@ -578,6 +595,7 @@ A1: x = [ I, <*mk, ml*>];
   correctness;
 end;
 
+
 theorem
    for x being Element of SCM-Instr, mk, ml being Element of SCM-Data-Loc, I
   st x = [ I, <*mk, ml*>]
@@ -607,6 +625,7 @@ A1: x = [ I, <*mk*>];
    end;
   correctness;
 end;
+
 
 theorem
    for x being Element of SCM-Instr, mk being Element of SCM-Instr-Loc, I
@@ -647,6 +666,7 @@ A1: x = [ I, <*mk,ml*>];
   correctness;
 end;
 
+
 theorem
    for x being Element of SCM-Instr,
      mk being Element of SCM-Instr-Loc,
@@ -670,7 +690,7 @@ A3:  <*mk',ml'*> = x`2 & x cond_address = <*mk',ml'*>/.2 by A1,Def13;
   hence x cond_address = ml by A3,FINSEQ_4:26;
  end;
 
-definition let s be SCM-State, a be Element of SCM-Data-Loc;
+registration let s be SCM-State, a be Element of SCM-Data-Loc;
  cluster s.a -> integer;
  coherence
   proof
@@ -680,6 +700,7 @@ definition let s be SCM-State, a be Element of SCM-Data-Loc;
   end;
 end;
 
+
 definition let D be non empty set; let x,y be real number,
   a,b be Element of D;
  func IFGT(x,y,a,b) -> Element of D equals
@@ -687,6 +708,7 @@ definition let D be non empty set; let x,y be real number,
    otherwise b;
  correctness;
 end;
+
 
 definition let d be Element of SCM-Instr-Loc;
  func Next d -> Element of SCM-Instr-Loc equals
@@ -701,6 +723,7 @@ A1:   d = 2*k and k > 0;
    hence thesis by Def3;
   end;
 end;
+
 
 definition let x be Element of SCM-Instr, s be SCM-State;
  func SCM-Exec-Res(x,s) -> SCM-State equals
@@ -732,6 +755,7 @@ definition let x be Element of SCM-Instr, s be SCM-State;
  coherence;
 end;
 
+
 definition
  func SCM-Exec ->
   Function of SCM-Instr, Funcs(product SCM-OK, product SCM-OK) means
@@ -743,7 +767,7 @@ definition
    consider f being
     Function of [:SCM-Instr,product SCM-OK:], product SCM-OK such that
 A1:   for x being Element of SCM-Instr, y being SCM-State holds
-    f.[x,y] = F(x,y) from Lambda2D;
+    f.[x,y] = F(x,y) from FUNCT_2:sch 8;
    take curry f;
    let x be Element of SCM-Instr, y be SCM-State;
    thus (curry f).x.y = f.[x,y] by CAT_2:3 .= SCM-Exec-Res(x,y) by A1;
@@ -767,4 +791,5 @@ A3:   for x being Element of SCM-Instr, y being SCM-State holds
    hence f = g by FUNCT_2:113;
   end;
 end;
+
 

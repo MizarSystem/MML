@@ -24,8 +24,25 @@ reserve p, q for FinSequence,
         D for non empty set,
         i, j, k, l, m, k1, k2, n, r for Nat;
 
-scheme FinSegRng{m, n() -> Nat, F(set)->set, P[Nat]}:
-  {F(i): m()<=i & i<=n() & P[i]} is finite;
+scheme :: GRAPH_2:sch 1
+ FinSegRng{m, n() -> Nat, F(set)->set, P[Nat]}:
+  {F(i): m()<=i & i<=n() & P[i]} is finite
+proof
+  set F = {F(i): m()<=i & i<=n() & P[i]};
+  deffunc G(Nat) = F($1-1);
+  consider f being FinSequence such that
+A1: len f = n()+1 and
+A2: for k st k in Seg (n()+1) holds f.k = G(k) from FINSEQ_1:sch 2;
+    F c= rng f proof let x be set;assume x in F; then consider j such that
+A3: x=F(j) & m()<=j & j<=n() and P[j];
+     1<=j+1 & j+1<=n()+1 by A3,AXIOMS:24,NAT_1:29;
+then A4: j+1 in Seg (n()+1) by FINSEQ_1:3;
+then A5: j+1 in dom f by A1,FINSEQ_1:def 3;
+     f.(j+1) = F(j+1-1) by A2,A4 .= F(j) by XCMPLX_1:26;
+  hence x in rng f by A3,A5,FUNCT_1:def 5;
+  end;
+  hence thesis by FINSET_1:13;
+end;
 
 theorem :: GRAPH_2:1
 m+1<=k & k<=n iff ex i being Nat st m<=i & i<n & k=i+1;
@@ -57,6 +74,7 @@ definition let p be FinSequence, m, n be Nat;
   otherwise it ={};
 end;
 
+
 theorem :: GRAPH_2:6
   1<=m & m<=len p implies (m,m)-cut p = <*p.m*>;
 
@@ -81,6 +99,7 @@ definition let D be set, p be FinSequence of D, m, n be Nat;
  redefine func (m, n)-cut p -> FinSequence of D;
 end;
 
+
 theorem :: GRAPH_2:12
 1<=m & m<=n & n<=len p implies
       ((m,n)-cut p).1 = p.m & ((m,n)-cut p).len ((m,n)-cut p)=p.n;
@@ -92,6 +111,7 @@ definition let p, q be FinSequence;
 :: GRAPH_2:def 2
   p^(2, len q)-cut q;
 end;
+
 
 theorem :: GRAPH_2:13
 q<>{} implies len (p^'q) +1 = len p + len q;
@@ -111,6 +131,7 @@ rng (p^'q) c= rng p \/ rng q;
 definition let D be set, p, q be FinSequence of D;
  redefine func p^'q -> FinSequence of D;
 end;
+
 
 theorem :: GRAPH_2:18
       p<>{} & q<>{} & p.len p = q.1 implies rng (p^'q) = rng p \/ rng q;
@@ -133,9 +154,11 @@ definition let f be FinSequence;
   for i being Nat st 1<=i & (i+1)<=len f holds f.i <> f.(i+1);
 end;
 
-definition
+registration
  cluster TwoValued Alternating FinSequence;
+ existence by Lm3,Lm5;
 end;
+
 
 reserve a, a1, a2 for TwoValued Alternating FinSequence;
 
@@ -160,6 +183,7 @@ definition let X; let fs be FinSequence of X;
 :: GRAPH_2:def 5
  it c= fs;
 end;
+
 
 reserve ss for FinSubsequence;
 
@@ -194,9 +218,11 @@ begin   :: Vertex sequences induced by chains
 
 reserve G for Graph;
 
-definition let G;
+registration let G;
  cluster the Vertices of G -> non empty;
+ coherence by GRAPH_1:def 1;
 end;
+
 
 reserve v, v1, v2, v3, v4 for Element of the Vertices of G,
         e for set;
@@ -210,9 +236,11 @@ e joins v1,v2 & e joins v3,v4 implies v1=v3 & v2=v4 or v1=v4 & v2=v3;
 reserve vs, vs1, vs2 for FinSequence of the Vertices of G,
         c, c1, c2 for Chain of G;
 
-definition let G;
+registration let G;
  cluster empty Chain of G;
+ existence proof {} is Chain of G by GRAPH_1:14; hence thesis; end;
 end;
+
 
 definition let G, X;
  func G-VSet X -> set equals
@@ -221,6 +249,7 @@ definition let G, X;
                 (v = (the Source of G).e or v = (the Target of G).e) };
 end;
 
+
 definition let G, vs; let c be FinSequence;
  pred vs is_vertex_seq_of c means
 :: GRAPH_2:def 7
@@ -228,6 +257,7 @@ definition let G, vs; let c be FinSequence;
       len vs = len c + 1 &
       for n st 1<=n & n<=len c holds c.n joins vs/.n, vs/.(n+1);
 end;
+
 
 canceled;
 
@@ -251,6 +281,7 @@ definition let G; let c be FinSequence;
  len c>=1 & Card (G-VSet rng c) = 2 &
   for n st n in dom c holds (the Source of G).(c.n) <> (the Target of G).(c.n);
 end;
+
 
 theorem :: GRAPH_2:38
 c alternates_vertices_in G & vs is_vertex_seq_of c
@@ -280,6 +311,7 @@ definition let G, c; assume
 :: GRAPH_2:def 9
    it is_vertex_seq_of c;
 end;
+
 
 theorem :: GRAPH_2:43
 vs is_vertex_seq_of c & c1 = c|Seg n & vs1= vs|Seg (n+1)
@@ -312,9 +344,20 @@ definition let G;
      (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs);
 end;
 
-definition let G;
+
+registration let G;
    cluster simple Chain of G;
+existence proof consider q being empty Chain of G;
+     take q; consider x being Element of the Vertices of G;
+     reconsider p =<*x*> as FinSequence of the Vertices of G;
+     take p;
+  thus p is_vertex_seq_of q by Lm7;
+   let n,m; assume 1<=n & n<m & m<=len p & p.n = p.m;
+       then 1<m & m<=1 by AXIOMS:22,FINSEQ_1:56;
+   hence n =1 & m = len p;
+ end;
 end;
+
 
 reserve sc for simple Chain of G;
 
@@ -354,16 +397,29 @@ vs is_vertex_seq_of c implies
   st Seq fc = sc & Seq fvs = vs1 & vs1 is_vertex_seq_of sc &
      vs.1 = vs1.1 & vs.len vs = vs1.len vs1;
 
-definition let G;
+registration let G;
  cluster empty -> one-to-one Chain of G;
+ correctness;
 end;
+
 
 theorem :: GRAPH_2:54
 p is Path of G implies p|Seg(n) is Path of G;
 
-definition let G;
+registration let G;
  cluster simple Path of G;
+existence proof consider q being empty Chain of G;
+     reconsider q as one-to-one Chain of G;
+     take q; consider x being Element of the Vertices of G;
+     reconsider p = <*x*> as FinSequence of the Vertices of G;
+     take p;
+   thus p is_vertex_seq_of q by Lm7;
+   let n,m; assume 1<=n & n<m & m<=len p & p.n = p.m;
+       then 1<m & m<=1 by AXIOMS:22,FINSEQ_1:56;
+   hence n =1 & m = len p;
+ end;
 end;
+
 
 theorem :: GRAPH_2:55
     2<len sc implies sc is Path of G;
@@ -371,9 +427,19 @@ theorem :: GRAPH_2:55
 theorem :: GRAPH_2:56
 sc is Path of G iff len sc = 0 or len sc = 1 or sc.1<>sc.2;
 
-definition let G;
+registration let G;
  cluster empty -> oriented Chain of G;
+ correctness proof let p be Chain of G; assume A1: p is empty;
+      for n st 1<=n & n < len p holds
+       (the Source of G).(p.(n+1)) = (the Target of G).(p.n) proof
+    let n; assume 1<=n & n<=len p;
+     then 1<=len p by AXIOMS:22; then 1<=0 by A1,FINSEQ_1:25;
+    hence thesis;
+   end;
+   hence thesis by GRAPH_1:def 12;
+  end;
 end;
+
 
 definition let G; let oc be oriented Chain of G; assume
  oc <> {};
@@ -381,3 +447,4 @@ definition let G; let oc be oriented Chain of G; assume
 :: GRAPH_2:def 11
    it is_vertex_seq_of oc & it.1 = (the Source of G).(oc.1);
 end;
+

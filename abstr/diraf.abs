@@ -28,15 +28,24 @@ definition let X;
    holds [[a,b],[c,d]] in it iff ([[a,b],[c,d]] in R or [[a,b],[d,c]] in R);
 end;
 
+
 definition let S be non empty AffinStruct;
  func Lambda(S) -> strict AffinStruct equals
 :: DIRAF:def 2
    AffinStruct (# the carrier of S, lambda(the CONGR of S) #);
  end;
 
-definition let S be non empty AffinStruct;
+
+registration let S be non empty AffinStruct;
  cluster Lambda S -> non empty;
+ coherence
+  proof
+      Lambda S = AffinStruct (# the carrier of S, lambda(the CONGR of S) #)
+                      by Def2;
+   hence the carrier of Lambda S is non empty;
+  end;
 end;
+
 
 reserve S for OAffinSpace;
 reserve a,b,c,d,p,q,r,x,y,z,t,u,w for Element of S;
@@ -67,6 +76,7 @@ definition let S be non empty AffinStruct;
 :: DIRAF:def 3
    a,b // b,c;
 end;
+
 
 canceled;
 
@@ -110,6 +120,7 @@ definition let S be non empty AffinStruct;
    a,b // c,d or a,b // d,c;
 end;
 
+
 canceled;
 
 theorem :: DIRAF:23
@@ -150,8 +161,11 @@ definition let S be non empty AffinStruct;
  pred LIN a,b,c means
 :: DIRAF:def 5
   a,b '||' a,c;
- synonym a,b,c is_collinear;
-end;
+ end;
+notation let S be non empty AffinStruct;
+           let a,b,c be Element of S;
+ synonym a,b,c is_collinear for LIN a,b,c ; end;
+
 
 canceled;
 
@@ -231,13 +245,37 @@ definition let IT be non empty AffinStruct;
     ex u being Element of IT st y,x // x,u & y,z // t,u);
 end;
 
-definition
+
+registration
  cluster strict non trivial AffinSpace-like (non empty AffinStruct);
+  existence
+   proof
+    consider S;
+      (ex x,y being Element of Lambda(S) st x<>y) &
+    (for x,y,z,t,u,w being Element of Lambda(S)
+     holds x,y // y,x & x,y // z,z &
+       (x<>y & x,y // z,t & x,y // u,w implies z,t // u,w) &
+       (x,y // x,z implies y,x // y,z)) &
+    (ex x,y,z being Element of Lambda(S) st not x,y // x,z) &
+    (for x,y,z being Element of Lambda(S)
+      ex t being Element of Lambda(S) st x,z // y,t & y<>t) &
+    (for x,y,z being Element of Lambda(S)
+     ex t being Element of Lambda(S) st
+       x,y // z,t & x,z // y,t) &
+    (for x,y,z,t being Element of Lambda(S)
+      st z,x // x,t & x<>z
+      ex u being Element of Lambda(S) st y,x // x,u &
+      y,z // t,u) by Th46;
+     then Lambda(S) is non trivial AffinSpace-like by Def7,REALSET1:def 20;
+    hence thesis;
+   end;
 end;
+
 
 definition
  mode AffinSpace is non trivial AffinSpace-like (non empty AffinStruct);
 end;
+
 
 theorem :: DIRAF:47
 for AS being AffinSpace holds
@@ -292,13 +330,25 @@ definition let IT be non empty AffinStruct;
     ex u being Element of IT st x,y // x,u & z,t // z,u;
 end;
 
-definition
+
+registration
  cluster strict 2-dimensional AffinSpace;
+  existence
+   proof consider S;
+     reconsider AS = Lambda(S) as AffinSpace by Th48;
+       for x,y,z,t  being Element of AS st not x,y // z,t
+     ex u being Element of AS st x,y // x,u & z,t // z,u
+     by Th51;
+     then AS is 2-dimensional by Def8;
+    hence thesis;
+   end;
 end;
+
 
 definition
  mode AffinPlane is 2-dimensional AffinSpace;
 end;
+
 
 canceled;
 

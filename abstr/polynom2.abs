@@ -30,15 +30,68 @@ environ
 
 begin :: Preliminaries ------------------------------------------------------------
 
-scheme SeqExD{D() -> non empty set,
+scheme :: POLYNOM2:sch 1
+ SeqExD{D() -> non empty set,
               N() -> Nat, P[set,set]}:
   ex p being FinSequence of D()
   st dom p = Seg N() &
      for k being Nat st k in Seg N() holds P[k,p/.k]
  provided
-  for k being Nat st k in Seg N() ex x being Element of D() st P[k,x];
+  for k being Nat st k in Seg N() ex x being Element of D() st P[k,x]
+proof
+  per cases;
+  suppose A2: N() = 0;
+   take <*>(D());
+   thus thesis by A2,FINSEQ_1:4,26;
+  end;
+  suppose A3: N() <> 0;
+     now assume A4: Seg N() = {};
+       now per cases;
+     case N() = 0;
+       hence contradiction by A3;
+     end;
+     case N() <> 0;
+       then 1 <= N() by RLVECT_1:99;
+       then A5: Seg 1 c= Seg N() by FINSEQ_1:7;
+         1 in (Seg 1) by FINSEQ_1:4,TARSKI:def 1;
+       hence contradiction by A4,A5;
+     end;
+     end;
+     hence contradiction;
+     end;
+   then reconsider M = Seg N() as non empty set;
+   defpred Q[set,set] means P[$1,$2];
+   A6: for x being Element of M
+       ex y being Element of D() st Q[x,y]
+       proof
+       let x be Element of M;
+         x in Seg N();
+       hence thesis by A1;
+       end;
+   consider f being Function of M,D() such that
+   A7: for x being Element of M holds Q[x,f.x] from FUNCT_2:sch 3(A6);
+     dom f = Seg N() by FUNCT_2:def 1;
+   then reconsider q = f as FinSequence by FINSEQ_1:def 2;
+     now let u be set;
+     assume A8: u in rng q;
+       rng q c= D() by RELSET_1:12;
+     hence u in D() by A8;
+     end;
+   then rng q c= D() by TARSKI:def 3;
+   then reconsider q as FinSequence of D() by FINSEQ_1:def 4;
+   take q;
+     now let k be Nat;
+     assume A9: k in Seg N();
+     then k in dom q by FUNCT_2:def 1;
+     then q.k = q/.k by FINSEQ_4:def 4;
+     hence P[k,q/.k] by A7,A9;
+     end;
+   hence thesis by FUNCT_2:def 1;
+ end;
+ end;
 
-scheme FinRecExD2{D() -> non empty set,A() -> (Element of D()),
+scheme :: POLYNOM2:sch 2
+ FinRecExD2{D() -> non empty set,A() -> (Element of D()),
                   N() -> Nat, P[set,set,set]}:
 ex p being FinSequence of D()
 st len p = N() &
@@ -48,9 +101,118 @@ provided
  for n being Nat
      st 1 <= n & n <= N()-1
      holds for x being Element of D()
-           ex y being Element of D() st P[n,x,y];
+           ex y being Element of D() st P[n,x,y]
+proof
+ consider 00 being Element of D();
+ defpred Q[Nat,set,set] means (0 <= $1 & $1 <= N()-2 implies P[$1+1,$2,$3]) &
+  (not (0 <= $1 & $1 <= N()-2) implies $3=00);
+ A2: for n be Nat for x be Element of D() ex y be Element of D() st Q[n,x,y]
+     proof
+     let n be Nat,x be Element of D();
+       0 <= n & n <= N()-2 implies thesis
+         proof
+         assume A3: 0 <= n & n <= N()-2;
+         then 0+1 <= n+1 & n+1 <= N()-2+1 by AXIOMS:24;
+         then 1 <= n+1 & n+1 <= N()-(1+1-1) by XCMPLX_1:37;
+         then consider y being Element of D() such that A4: P[n+1,x,y] by A1;
+         take y;
+         thus 0 <= n & n <= N()-2 implies P[n+1,x,y] by A4;
+         thus thesis by A3;
+         end;
+     hence thesis;
+     end;
+ consider f being Function of NAT,D() such that
+ A5: f.0 = A() &
+     for n being Element of NAT holds Q[n,f.n,f.(n+1)] from RECDEF_1:sch 2(A2);
+ defpred Q[set,set] means for r being Real st r = $1 holds $2 = f.(r-1);
+ A6: for x being set st x in REAL ex y being set st Q[x,y]
+     proof
+     let x be set;
+     assume x in REAL;
+     then reconsider r=x as Real;
+     take f.(r-1);
+     thus thesis;
+     end;
+ A7: for x,y1,y2 being set st x in REAL & Q[x,y1] & Q[x,y2] holds y1 = y2
+      proof
+      let x,y1,y2 be set;
+      assume A8: x in REAL &
+         (for r being Real st r=x holds y1=f.(r-1)) &
+         (for r being Real st r=x holds y2=f.(r-1));
+      then reconsider r = x as Real;
+      thus y1 = f.(r-1) by A8 .= y2 by A8;
+      end;
+ consider g being Function such that
+ A9: dom g = REAL &
+      for x being set st x in REAL holds Q[x,g.x] from FUNCT_1:sch 2(A7,A6);
+   Seg N() c= REAL by XBOOLE_1:1;
+ then A10: dom (g|Seg N()) = Seg N() by A9,RELAT_1:91;
+ then reconsider p = g|Seg N() as FinSequence by FINSEQ_1:def 2;
+   now let x be set;
+   assume x in rng p;
+   then consider y being set such that A11: y in dom p & x = p.y by FUNCT_1:def
+5;
+   reconsider y as Nat by A11;
+   A12: f.(y-1) in D()
+        proof
+          y <> 0 by A10,A11,FINSEQ_1:3;
+        then consider k being Nat such that A13: y = k+1 by NAT_1:22;
+          f.k in D();
+        hence f.(y-1) in D() by A13,XCMPLX_1:26;
+        end;
+     p.y = g.y by A11,FUNCT_1:70;
+   hence x in D() by A9,A11,A12;
+   end;
+ then rng p c= D() by TARSKI:def 3;
+ then reconsider p as FinSequence of D() by FINSEQ_1:def 4;
+ take p;
+ thus len p = N() by A10,FINSEQ_1:def 3;
+ A14: for n being Nat st n <= N()-1 holds p/.(n+1) = f.n
+      proof
+      let n be Nat such that A15: n <= N() - 1;
+      A16: 1 <= n+1 by NAT_1:29;
+        n+1 <= N()-1+1 by A15,AXIOMS:24;
+      then n+1 <= N()-(1-1) by XCMPLX_1:37;
+      then A17: n+1 in Seg N() by A16,FINSEQ_1:3;
+      A18: g.(n+1) = f.(n+1-1) by A9
+                  .= f.(n+(1-1)) by XCMPLX_1:29
+                  .= f.n;
+        p/.(n+1) = p.(n+1) by A10,A17,FINSEQ_4:def 4;
+      hence thesis by A17,A18,FUNCT_1:72;
+      end;
+ thus p/.1 = A() or N() = 0
+    proof
+      N() <> 0 implies thesis
+       proof
+       assume N() <> 0;
+       then consider k being Nat such that A19: N() = k+1 by NAT_1:22;
+         0 <= k by NAT_1:18;
+       then 0 + 1 <= k +1 by REAL_1:55;
+       then A20: 1 in Seg N() by A19,FINSEQ_1:3;
+       then p/.1 = p.1 by A10,FINSEQ_4:def 4
+                .= g.1 by A20,FUNCT_1:72
+                .= f.(1-1) by A9
+                .= A() by A5;
+       hence thesis;
+       end;
+    hence thesis;
+    end;
+ let n be Nat;
+ assume A21: 1 <= n & n <= N()-1;
+ then 0 <> n;
+ then consider k being Nat such that A22: n = k+1 by NAT_1:22;
+   0+1 <= k+1 by A21,A22;
+ then 0 <= k & k <= N()-1-1 by A21,A22,REAL_1:53,84;
+ then 0 <= k & k <= N() - (1+1) by XCMPLX_1:36;
+ then P[k+1,f.k,f.(k+1)] by A5;
+ then A23: P[k+1,f.k,p/.(k+1+1)] by A14,A21,A22;
+   k <= k+1 by NAT_1:29;
+ then k <= N()-1 by A21,A22,AXIOMS:22;
+ hence P[n,p/.n,p/.(n+1)] by A14,A22,A23;
+end;
 
-scheme FinRecUnD2{D() -> set, A() -> Element of D(),
+scheme :: POLYNOM2:sch 3
+ FinRecUnD2{D() -> set, A() -> Element of D(),
                   N() -> Nat,
                   F,G() -> FinSequence of D(),
                   P[set,set,set]}:
@@ -62,29 +224,157 @@ provided
  len F() = N() & (F()/.1 = A() or N() = 0) &
      for n being Nat st 1 <= n & n <= N()-1 holds P[n,F()/.n,F()/.(n+1)] and
  len G() = N() & (G()/.1 = A() or N() = 0) &
-     for n being Nat st 1 <= n & n <= N()-1 holds P[n,G()/.n,G()/.(n+1)];
+     for n being Nat st 1 <= n & n <= N()-1 holds P[n,G()/.n,G()/.(n+1)]
+proof
+  A4: dom F() = dom G() by A2,A3,FINSEQ_3:31;
+  assume F() <> G();
+  then consider x being set such that
+  A5: x in dom F() & F().x <> G().x by A4,FUNCT_1:9;
+    dom F() = Seg N() by A2,FINSEQ_1:def 3 .= dom G() by A3,FINSEQ_1:def 3;
+  then A6: F()/.x = F().x & G()/.x = G().x by A5,FINSEQ_4:def 4;
+  A7: x in Seg len F() by A5,FINSEQ_1:def 3;
+  reconsider x as Nat by A5;
+  defpred Q[Nat] means 1 <= $1 & $1 <= N() & F()/.$1 <> G()/.$1;
+  1 <= x & x <= N() by A2,A7,FINSEQ_1:3;
+  then A8: ex n being Nat st Q[n] by A5,A6;
+  consider n being Nat such that
+  A9: Q[n] & for k being Nat st Q[k] holds n <= k from NAT_1:sch 5(A8);
+    n <> 1 by A2,A3,A9;
+  then A10: 1 < n by A9,REAL_1:def 5;
+    0 <> n by A9;
+  then consider k being Nat such that A11: n = k+1 by NAT_1:22;
+  A12: 1 <= k by A10,A11,NAT_1:38;
+    k <= n by A11,NAT_1:29;
+  then A13: k <= N() by A9,AXIOMS:22;
+         n > k by A11,NAT_1:38;
+  then A14: F()/.k = G()/.k by A9,A12,A13;
+  A15: k <= N() - 1 by A9,A11,REAL_1:84;
+  reconsider Fk = F()/.k, Fk1 = F()/.(k+1),
+             Gk1 = G()/.(k+1) as Element of D();
+    P[k,Fk,Fk1] & P[k,Fk,Gk1] by A2,A3,A12,A14,A15;
+  hence contradiction by A1,A9,A11,A12,A15;
+end;
 
-scheme FinInd{M, N() -> Nat, P[Nat]} :
+scheme :: POLYNOM2:sch 4
+ FinInd{M, N() -> Nat, P[Nat]} :
 for i being Nat st M() <= i & i <= N() holds P[i]
 provided
   P[M()] and
-  for j being Nat st M() <= j & j < N() holds P[j] implies P[j+1];
+  for j being Nat st M() <= j & j < N() holds P[j] implies P[j+1]
+proof
+ defpred Q[Nat] means M() <= $1 & $1 <= N() & not(P[$1]);
+ assume not(for i being Nat st M() <= i & i <= N() holds P[i]);
+ then A3: ex i being Nat st Q[i];
+ consider k being Nat such that
+ A4: Q[k] & for k' being Nat st Q[k'] holds k <= k' from NAT_1:sch 5(A3);
+ per cases;
+ suppose k = M();
+   hence thesis by A1,A4;
+ end;
+ suppose k <> M();
+  then M() < k by A4,REAL_1:def 5;
+  then M() + 1 <= k by NAT_1:38;
+  then (M() + 1) - 1 <= k - 1 by REAL_1:49;
+  then (M() + 1) + -1 <= k - 1 by XCMPLX_0:def 8;
+  then A5: M() + (1 + -1) <= k - 1 by XCMPLX_1:1;
+    0 <= M() by NAT_1:18;
+  then reconsider k' = k - 1 as Nat by A5,INT_1:16;
+  A6: (k - 1) + 1 = (k + (-1)) + 1 by XCMPLX_0:def 8
+                  .= k + ((-1) + 1) by XCMPLX_1:1
+                  .= k + 0;
+  A7: k' <= k' + 1 by NAT_1:29;
+    k' <> k' + 1
+       proof
+       assume A8: k' = k' + 1;
+         (k' + 1) - k' = (k' + 1) + (-k') by XCMPLX_0:def 8
+                    .= 1 + (k' + (-k')) by XCMPLX_1:1
+                    .= 1 + 0 by XCMPLX_0:def 6;
+       hence thesis by A8,XCMPLX_1:14;
+       end;
+  then A9: k' < k by A6,A7,REAL_1:def 5;
+  then A10: not(Q[k']) by A4;
+    k' < N() by A4,A9,AXIOMS:22;
+  hence thesis by A2,A4,A5,A6,A10;
+end;
+end;
 
-scheme FinInd2{M,N() -> Nat, P[Nat]} :
+scheme :: POLYNOM2:sch 5
+ FinInd2{M,N() -> Nat, P[Nat]} :
 for i being Nat st M() <= i & i <= N() holds P[i]
 provided
   P[M()] and
   for j being Nat st M() <= j & j < N() holds
-     (for j' being Nat st M() <= j' & j' <= j holds P[j']) implies P[j+1];
+     (for j' being Nat st M() <= j' & j' <= j holds P[j']) implies P[j+1]
+proof
+ defpred Q[Nat] means
+   for j being Nat st M() <= j & j <= ($1) holds P[j];
+ A3: Q[M()] by A1,AXIOMS:21;
+ A4: for j being Nat st M() <= j & j < N() holds Q[j] implies Q[j+1]
+     proof
+     let j be Nat;
+     assume A5: M() <= j & j < N();
+     assume A6: Q[j];
+     thus Q[j+1]
+       proof
+       let i be Nat;
+       assume A7: M() <= i & i <= j + 1;
+       per cases;
+       suppose i = j + 1;
+         hence thesis by A2,A5,A6;
+       end;
+       suppose i <> j + 1;
+         then i < j + 1 by A7,REAL_1:def 5;
+         then i <= j by NAT_1:38;
+         hence thesis by A6,A7;
+       end;
+       end;
+     end;
+   for i being Nat st M() <= i & i <= N() holds Q[i] from FinInd(A3,A4);
+ hence thesis;
+end;
 
-scheme IndFinSeq {D() -> set,
+scheme :: POLYNOM2:sch 6
+ IndFinSeq {D() -> set,
                   F() -> FinSequence of D(),
                   P[set]} :
 for i being Nat st 1 <= i & i <= len F() holds P[F().i]
 provided
   P[F().1] and
   for i being Nat st 1 <= i & i < len F()
-      holds P[F().i] implies P[F().(i+1)];
+      holds P[F().i] implies P[F().(i+1)]
+proof
+defpred Q[Nat] means 1 <= $1 & $1 <= len F() & not(P[F().($1)]);
+assume not(for i being Nat st 1 <= i & i <= len F() holds P[F().i]);
+then A3: ex k being Nat st Q[k];
+consider k being Nat such that
+A4: Q[k] & for k' being Nat st Q[k'] holds k <= k' from NAT_1:sch 5(A3);
+ per cases;
+ suppose k = 1;
+  hence thesis by A1,A4;
+ end;
+ suppose A5: k <> 1;
+    1 - 1 <= k - 1 by A4,REAL_1:49;
+  then reconsider k' = k - 1 as Nat by INT_1:16;
+  A6: (k - 1) + 1 = (k + (-1)) + 1 by XCMPLX_0:def 8
+                  .= k + ((-1) + 1) by XCMPLX_1:1
+                  .= k + 0;
+  A7: k' <= k' + 1 by NAT_1:29;
+    k' <> k' + 1
+    proof
+    assume A8: k' = k' + 1;
+      (k' + 1) - k' = (k' + 1) + (-k') by XCMPLX_0:def 8
+                 .= 1 + (k' + (-k')) by XCMPLX_1:1
+                 .= 1 + 0 by XCMPLX_0:def 6;
+    hence thesis by A8,XCMPLX_1:14;
+    end;
+  then A9: k' < k by A6,A7,REAL_1:def 5;
+  then A10: not(Q[k']) by A4;
+    1 < k by A4,A5,REAL_1:def 5;
+  then A11: 1 <= k' by A6,NAT_1:38;
+    k' < len F() by A4,A9,AXIOMS:22;
+  hence thesis by A2,A4,A6,A10,A11;
+end;
+end;
 
 canceled;
 
@@ -97,11 +387,13 @@ theorem :: POLYNOM2:3
  for L being well-unital (non empty doubleLoopStr)
   holds 1_(L) = 1.L;
 
-definition
+registration
  cluster Abelian right_zeroed add-associative right_complementable
          unital well-unital distributive commutative associative
          non trivial (non empty doubleLoopStr);
+ existence proof take F_Real; thus thesis; end;
 end;
+
 
 begin :: About Finite Sequences and the Functor SgmX ------------------------------
 
@@ -201,16 +493,33 @@ attr b is empty means
 b = EmptyBag X;
 end;
 
-definition
+
+registration
 let X be non empty set;
 cluster non empty bag of X;
+existence
+proof
+consider x being Element of X;
+set b = EmptyBag X +* (x,1);
+take b;
+  dom (x.-->1) = {x} by CQC_LANG:5;
+then A1: x in dom (x.-->1) by TARSKI:def 1;
+  dom (EmptyBag X) = X by PBOOLE:def 3;
+then b.x = ((EmptyBag X)+*(x.-->1)).x by FUNCT_7:def 3;
+then b.x = (x.-->1).x by A1,FUNCT_4:14
+   .= 1 by CQC_LANG:6;
+then b.x <> (EmptyBag X).x by POLYNOM1:56;
+hence thesis by Def1;
 end;
+end;
+
 
 definition
 let X be set,
     b be bag of X;
 redefine func support b -> finite Subset of X;
 end;
+
 
 theorem :: POLYNOM2:15
 for n being Ordinal,
@@ -223,6 +532,7 @@ let x be FinSequence of X,
     b be bag of X;
 redefine func b * x -> PartFunc of NAT,NAT;
 end;
+
 
 definition
 let n be Ordinal,
@@ -264,13 +574,19 @@ holds eval(b1+b2,x) = eval(b1,x) * eval(b2,x);
 
 begin :: Evaluation of Polynomials ------------------------------------------------
 
-definition
+registration
 let n be Ordinal,
     L be add-associative right_zeroed right_complementable
          (non empty LoopStr),
     p,q be Polynomial of n, L;
 cluster p - q -> finite-Support;
+coherence
+proof
+  p - q = p + (-q) by POLYNOM1:def 23;
+hence thesis;
 end;
+end;
+
 
 theorem :: POLYNOM2:19
 for L being right_zeroed add-associative right_complementable
@@ -280,14 +596,16 @@ for L being right_zeroed add-associative right_complementable
     p being Polynomial of n,L st Support p = {}
 holds p = 0_(n,L);
 
-definition
+registration
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
          unital distributive
          non trivial (non empty doubleLoopStr),
     p be Polynomial of n,L;
 cluster Support p -> finite;
+coherence by POLYNOM1:def 10;
 end;
+
 
 theorem :: POLYNOM2:20
 for n being Ordinal,
@@ -305,6 +623,7 @@ func b@ -> bag of n equals
 b;
 end;
 
+
 definition
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
@@ -321,6 +640,7 @@ st len y = len SgmX(BagOrder n, Support p) &
         y/.i = (p * SgmX(BagOrder n, Support p))/.i *
                eval(((SgmX(BagOrder n, Support p))/.i)@,x);
 end;
+
 
 theorem :: POLYNOM2:21
 for n being Ordinal,
@@ -396,46 +716,107 @@ func Polynom-Evaluation(n,L,x) -> map of Polynom-Ring(n,L),L means
 for p being Polynomial of n,L holds it.p = eval(p,x);
 end;
 
-definition
+
+registration
  let n be Ordinal,
      L be right_zeroed Abelian add-associative right_complementable
           well-unital distributive associative
           non trivial (non empty doubleLoopStr);
  cluster Polynom-Ring (n, L) -> well-unital;
+ coherence
+  proof set R = Polynom-Ring (n, L);
+   let x be Element of R;
+A1:   1_ R = 1_(n,L) by POLYNOM1:def 27;
+    reconsider p = x as Polynomial of n,L by POLYNOM1:def 27;
+   thus x*(1_ R) = p*'1_(n,L) by A1,POLYNOM1:def 27
+          .= x by POLYNOM1:88;
+   thus (1_ R)*x = 1_(n,L)*'p by A1,POLYNOM1:def 27
+          .= x by POLYNOM1:89;
+  end;
 end;
 
-definition
+
+registration
 let n be Ordinal,
     L be Abelian right_zeroed add-associative right_complementable
          well-unital distributive associative
          non trivial (non empty doubleLoopStr),
     x be Function of n, L;
 cluster Polynom-Evaluation(n,L,x) -> unity-preserving;
+coherence
+ proof set f = Polynom-Evaluation(n,L,x);
+  thus f.(1_(Polynom-Ring(n,L))) = f.(1_(n,L)) by POLYNOM1:def 27
+                .= eval(1_(n,L),x) by Def5
+                .= 1.L by Th23
+                .= 1_ L by Th3;
+ end;
 end;
 
-definition
+
+registration
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
          Abelian unital distributive
          non trivial (non empty doubleLoopStr),
     x be Function of n, L;
 cluster Polynom-Evaluation(n,L,x) -> additive;
+coherence
+ proof
+ set f = Polynom-Evaluation(n,L,x);
+   for p,q being Element of Polynom-Ring(n,L)
+ holds f.(p+q) = f.p + f.q
+  proof
+  let p,q be Element of Polynom-Ring(n,L);
+  reconsider p' = p, q' = q as Polynomial of n,L by POLYNOM1:def 27;
+  reconsider p,q as Element of Polynom-Ring(n,L);
+  A1: f.(p + q) = f.(p'+q') by POLYNOM1:def 27
+              .= eval(p'+q',x) by Def5
+              .= eval(p',x) + eval(q',x) by Th25;
+    f.p = eval(p',x) & f.q = eval(q',x) by Def5;
+  hence thesis by A1;
+  end;
+ hence thesis by GRCAT_1:def 13;
+ end;
 end;
 
-definition
+
+registration
  let n be Ordinal,
      L be right_zeroed add-associative right_complementable
             Abelian unital distributive
             non trivial commutative associative (non empty doubleLoopStr),
     x be Function of n, L;
  cluster Polynom-Evaluation(n,L,x) -> multiplicative;
+ coherence
+proof
+set f = Polynom-Evaluation(n,L,x);
+   for p,q being Element of Polynom-Ring(n,L)
+ holds f.(p * q) = f.p * f.q
+  proof
+  let p,q be Element of Polynom-Ring(n,L);
+  reconsider p' = p, q' = q as Polynomial of n,L by POLYNOM1:def 27;
+  reconsider p,q as Element of Polynom-Ring(n,L);
+  A1: f.(p * q) = f.(p'*'q') by POLYNOM1:def 27
+              .= eval(p'*'q',x) by Def5
+              .= eval(p',x) * eval(q',x) by Th27;
+    f.p = eval(p',x) & f.q = eval(q',x) by Def5;
+  hence thesis by A1;
+  end;
+hence thesis by ENDALG:def 7;
+end;
 end;
 
-definition
+
+registration
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
             Abelian well-unital distributive
             non trivial commutative associative (non empty doubleLoopStr),
     x be Function of n, L;
  cluster Polynom-Evaluation(n,L,x) -> RingHomomorphism;
+ coherence
+ proof
+  thus Polynom-Evaluation(n,L,x) is additive multiplicative unity-preserving;
+ end;
 end;
+

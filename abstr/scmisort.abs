@@ -28,15 +28,27 @@ environ
 
 begin :: Preliminaries
 
-definition
+registration
  let i be good Instruction of SCM+FSA;
  cluster Macro i -> good;
+ coherence
+ proof
+       i does_not_destroy intloc 0 by SCM_HALT:def 6;
+     hence thesis by SCMFSA8C:99;
+ end;
 end;
 
-definition
+
+registration
  let a be read-write Int-Location,b be Int-Location;
  cluster AddTo(a,b) -> good;
+ coherence
+ proof
+      AddTo(a,b) does_not_destroy intloc 0 by SCMFSA7B:13;
+    hence thesis by SCM_HALT:def 6;
+ end;
 end;
+
 
 theorem :: SCMISORT:1   ::PR016
  for f be Function,d,r be set st d in dom f holds dom f=dom (f+*(d.-->r));
@@ -209,6 +221,7 @@ qua non empty set & for i being Nat
       (LifeSpan (it.i +* Initialized I) + 3);
 end;
 
+
 canceled 2;
 
 theorem :: SCMISORT:25   ::Th039
@@ -260,6 +273,7 @@ definition let D be set,
  f be Function of D,INT, d be Element of D;
  redefine func f.d -> Integer;
 end;
+
 
 theorem :: SCMISORT:31    :: W_halt3
    for I be good InitHalting Macro-Instruction,a be read-write Int-Location
@@ -341,12 +355,14 @@ definition
        );
 end;
 
+
 definition
  func Insert-Sort-Algorithm -> Macro-Instruction means
 :: SCMISORT:def 3
   ::def2
   it = insert-sort fsloc 0;
 end;
+
 
 theorem :: SCMISORT:38    ::IS002
  for f being FinSeq-Location holds

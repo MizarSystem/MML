@@ -31,10 +31,14 @@ definition let G be Group, A be Subgroup of G;
  redefine mode Subgroup of A -> Subgroup of G;
 end;
 
-definition let G be Group;
+
+registration let G be Group;
  cluster (1).G -> normal;
+ coherence by GROUP_3:137;
  cluster (Omega).G -> normal;
+ coherence by GROUP_3:137;
 end;
+
 
 reserve n for Nat;
 reserve i for Integer;
@@ -86,6 +90,7 @@ definition let G,B; let M be normal Subgroup of G;
     the HGrStr of M;
 end;
 
+
 theorem :: GROUP_6:10
  B /\ N is normal Subgroup of B & N /\ B is normal Subgroup of B;
 
@@ -93,9 +98,11 @@ definition let G,B; let N be normal Subgroup of G;
  redefine func B /\ N -> strict normal Subgroup of B;
 end;
 
+
 definition let G; let N be normal Subgroup of G; let B;
  redefine func N /\ B -> strict normal Subgroup of B;
 end;
+
 
 definition let G be non empty 1-sorted;
   redefine attr G is trivial means
@@ -103,9 +110,17 @@ definition let G be non empty 1-sorted;
   ex x st the carrier of G = {x};
 end;
 
-definition
+
+registration
  cluster trivial Group;
+ existence
+  proof consider G;
+   take (1).G;
+      the carrier of (1).G = {1.G} by GROUP_2:def 7;
+   hence thesis by Def2;
+  end;
 end;
+
 
 theorem :: GROUP_6:11
  (1).G is trivial;
@@ -123,9 +138,16 @@ definition let G,N;
     Left_Cosets N;
 end;
 
-definition let G,N;
+
+registration let G,N;
  cluster Cosets N -> non empty;
+ coherence
+  proof
+      Cosets N = Left_Cosets N by Def3;
+   hence thesis by GROUP_2:165;
+  end;
 end;
+
 
 theorem :: GROUP_6:14
  for N being normal Subgroup of G holds
@@ -154,15 +176,23 @@ definition let G; let N be normal Subgroup of G;
        for A1,A2 st W1 = A1 & W2 = A2 holds it.(W1,W2) = A1 * A2;
 end;
 
+
 definition let G; let N be normal Subgroup of G;
  func G./.N -> HGrStr equals
 :: GROUP_6:def 5
     HGrStr (# Cosets N, CosOp N #);
 end;
 
-definition let G; let N be normal Subgroup of G;
+
+registration let G; let N be normal Subgroup of G;
  cluster G./.N -> strict non empty;
+ coherence
+  proof
+      G./.N = HGrStr (# Cosets N, CosOp N #) by Def5;
+   hence G./.N is strict & the carrier of G./.N is non empty;
+  end;
 end;
+
 
 canceled 3;
 
@@ -184,6 +214,7 @@ definition
 S;
 end;
 
+
 theorem :: GROUP_6:24
  for N being normal Subgroup of G, T1,T2 being Element of G./.N
  holds @T1 * @T2 = T1 * T2;
@@ -191,9 +222,67 @@ theorem :: GROUP_6:24
 theorem :: GROUP_6:25
  @(T1 * T2) = @T1 * @T2;
 
-definition let G; let N be normal Subgroup of G;
+registration let G; let N be normal Subgroup of G;
  cluster G./.N -> associative Group-like;
+ coherence
+  proof A1: the carrier of G./.N = Cosets N by Th22;
+     G./.N is associative Group-like
+   proof
+   thus for f,g,h being Element of G./.N
+      holds f * (g * h) = f * g * h
+    proof let f,g,h be Element of G./.N;
+      consider a such that A2: f = a * N & f = N * a by A1,Th15;
+      consider c being Element of G such that
+       A3: h = c * N & h = N * c by A1,Th15;
+       A4: @f = f & @g = g & @h = h by Def6;
+     thus f * (g * h) = @f * @(g * h) by Th24
+                     .= (a * N) * (@g * @h) by A2,A4,Th25
+                     .= @f * @g * (c * N) by A2,A3,A4,GROUP_2:14
+                     .= @(f * g) * @h by A3,A4,Th25
+                     .= f * g * h by Th24;
+    end;
+     A5: carr N in Left_Cosets N & Cosets N = Left_Cosets N
+                                                by Th14,GROUP_2:165;
+    then reconsider e = carr N as Element of G./.N by Th22;
+   take e;
+   let h be Element of G./.N;
+    consider a such that A6: h = a * N & h = N * a by A1,Th15;
+     A7: @h = h & @e = e by Def6;
+   thus h * e = @h * @e by Th24
+             .= (a * N) * N by A6,A7,GROUP_2:def 11
+             .= a * (N * N) by GROUP_4:60
+             .= a * carr N by GROUP_4:58
+             .= h by A6,GROUP_2:def 13;
+   thus e * h = @e * @h by Th24
+             .= N * (N * a) by A6,A7,GROUP_2:def 12
+             .= N * N * a by GROUP_4:61
+             .= carr N * a by GROUP_4:58
+             .= h by A6,GROUP_2:def 14;
+    reconsider g = a" * N as Element of G./.N by A1,A5,GROUP_2:
+def 15;
+     A8: @g = g by Def6;
+   take g;
+   thus h * g = N * a * (a" * N) by A6,A7,A8,Th24
+             .= N * a * a" * N by GROUP_3:10
+             .= N * (a * a") * N by GROUP_2:129
+             .= N * 1.G * N by GROUP_1:def 5
+             .= carr N * N by GROUP_2:132
+             .= carr N * carr N by GROUP_2:def 11
+             .= e by GROUP_2:91;
+   thus g * h = @g * @h by Th24
+             .= a" * N * a * N by A6,A7,A8,GROUP_3:10
+             .= a" * (N * a) * N by GROUP_2:128
+             .= a" * (a * N) * N by GROUP_3:140
+             .= a" * a * N * N by GROUP_2:127
+             .= 1.G * N * N by GROUP_1:def 5
+             .= 1.G * (N * N) by GROUP_4:60
+             .= 1.G * carr N by GROUP_4:58
+             .= e by GROUP_2:43;
+   end;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: GROUP_6:26
  for N being normal Subgroup of G, S being Element of G./.N
@@ -247,6 +336,7 @@ definition let G,H;
   it.(a * b) = it.a * it.b;
 end;
 
+
 reserve g,h for Homomorphism of G,H;
 reserve g1 for Homomorphism of H,G;
 reserve h1 for Homomorphism of H,I;
@@ -284,15 +374,18 @@ definition let G,H,I,h,h1;
  redefine func h1 * h -> Homomorphism of G,I;
 end;
 
+
 definition let G,H,g;
  redefine func rng g -> Subset of H;
 end;
+
 
 definition let G,H;
  func 1:(G,H) -> Homomorphism of G,H means
 :: GROUP_6:def 8
    for a holds it.a = 1.H;
 end;
+
 
 theorem :: GROUP_6:49
    h1 * 1:(G,H) = 1:(G,I) & 1:(H,I) * h = 1:(G,I);
@@ -303,15 +396,58 @@ definition let G; let N be normal Subgroup of G;
    for a holds it.a = a * N;
 end;
 
+
 definition let G,H,g;
  func Ker g -> strict Subgroup of G means
 :: GROUP_6:def 10
    the carrier of it = {a : g.a = 1.H};
 end;
 
-definition let G,H,g;
+
+registration let G,H,g;
  cluster Ker g -> normal;
+ coherence
+  proof
+    defpred P[set] means g.$1 = 1.H;
+    reconsider A = {a : P[a]} as Subset of G from DOMAIN_1:sch 7;
+       g.(1.G) = 1.H by Th40;
+     then A1: 1.G in A;
+     A2: now let a,b;
+       assume that A3: a in A and A4: b in A;
+A5:        ex a1 st a1 = a & g.a1 = 1.H by A3;
+A6:        ex b1 st b1 = b & g.b1 = 1.H by A4;
+           g.(a * b) = g.a * g.b by Def7
+                  .= 1.H by A5,A6,GROUP_1:def 4;
+      hence a * b in A;
+     end;
+       now let a;
+       assume a in A;
+        then ex a1 st a1 = a & g.a1 = 1.H;
+         then g.(a") = (1.H)" by Th41
+               .= 1.H by GROUP_1:16;
+      hence a" in A;
+     end;
+    then consider B being strict Subgroup of G such that
+    A7: the carrier of B = A by A1,A2,GROUP_2:61;
+       now let a;
+         now let b;
+         assume b in B |^ a;
+          then consider c being Element of G such that
+           A8: b = c |^ a and A9: c in B by GROUP_3:70;
+             c in A by A7,A9,RLVECT_1:def 1;
+          then ex a1 st c = a1 & g.a1 = 1.H;
+           then g.b = (1.H) |^ (g.a) by A8,Th42
+              .= 1.H by GROUP_3:22;
+           then b in A;
+        hence b in B by A7,RLVECT_1:def 1;
+       end;
+      hence B |^ a is Subgroup of B by GROUP_2:67;
+     end;
+    then B is normal Subgroup of G by GROUP_3:145;
+   hence thesis by A7,Def10;
+  end;
 end;
+
 
 theorem :: GROUP_6:50
  a in Ker h iff h.a = 1.H;
@@ -329,6 +465,7 @@ definition let G,H,g;
 :: GROUP_6:def 11
    the carrier of it = g .: (the carrier of G);
 end;
+
 
 theorem :: GROUP_6:53
  rng g = the carrier of Image g;
@@ -366,12 +503,15 @@ definition
  attr h is being_monomorphism means
 :: GROUP_6:def 12
 h is one-to-one;
-  synonym h is_monomorphism;
- attr h is being_epimorphism means
+  attr h is being_epimorphism means
 :: GROUP_6:def 13
 rng h = the carrier of H;
-  synonym h is_epimorphism;
-end;
+  end;
+notation
+ let G,H,h;
+ synonym h is_monomorphism for h is being_monomorphism ; synonym
+ h is_epimorphism for h is being_epimorphism ; end;
+
 
 theorem :: GROUP_6:63
    h is_monomorphism & c in Image h implies h.(h".c) = c;
@@ -404,8 +544,12 @@ definition
  means
 :: GROUP_6:def 14
 h is_epimorphism & h is_monomorphism;
-  synonym h is_isomorphism;
-end;
+  end;
+notation
+ let G,H,h;
+ synonym h is_isomorphism for h is being_isomorphism
+ ; end;
+
 
 theorem :: GROUP_6:70
  h is_isomorphism iff rng h = the carrier of H & h is one-to-one;
@@ -435,6 +579,7 @@ definition
 ex h st h is_isomorphism;
  reflexivity;
 end;
+
 
 canceled;
 

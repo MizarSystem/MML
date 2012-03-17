@@ -42,6 +42,7 @@ for O being OSSubset of U0 st O = OSCl it holds
 the Sorts of GenOSAlg(O) = the Sorts of U0;
 end;
 
+
 theorem :: OSAFREE:1
   for S be OrderSortedSign,
     U0 be strict non-empty OSAlgebra of S,
@@ -63,6 +64,7 @@ attr IT is osfree means
    st h is_homomorphism U0,U1 & h is order-sorted & h || IT = f;
 end;
 
+
 definition
  let S be OrderSortedSign;
  let IT be monotone OSAlgebra of S;
@@ -70,6 +72,7 @@ attr IT is osfree means
 :: OSAFREE:def 3
    ex G being OSGeneratorSet of IT st G is osfree;
 end;
+
 
 begin
 ::
@@ -103,6 +106,7 @@ for a be Element of
     b.x in coprod(i,X));
 end;
 
+
 reserve S for OrderSortedSign,
         X for ManySortedSet of S,
         o for OperSymbol of S,
@@ -131,11 +135,19 @@ func DTConOSA(X) -> DTConstrStr equals
                    \/ Union (coprod X), OSREL(X) #);
 end;
 
-definition
+
+registration
  let S be OrderSortedSign,
      X be ManySortedSet of S;
  cluster DTConOSA(X) -> strict non empty;
+ coherence
+  proof
+      DTConOSA(X) = DTConstrStr (# [:the OperSymbols of S,{the carrier of S}:]
+                   \/ Union (coprod X), OSREL(X) #) by Def5;
+   hence DTConOSA X is strict & the carrier of DTConOSA(X) is non empty;
+  end;
 end;
+
 
 theorem :: OSAFREE:3
   for S be OrderSortedSign,
@@ -145,12 +157,131 @@ theorem :: OSAFREE:3
 
 reserve x for set;
 
-definition
+registration
  let S be OrderSortedSign,
      X be non-empty ManySortedSet of S;
 cluster DTConOSA(X) -> with_terminals with_nonterminals
    with_useful_nonterminals;
+ coherence
+  proof
+   set D = DTConOSA(X),
+       A = [:the OperSymbols of S,{the carrier of S}:] \/
+            Union (coprod (X qua ManySortedSet of S));
+   A1: Union (coprod X) misses [:the OperSymbols of S,{the carrier of S}:]
+        by MSAFREE:4;
+   A2: Terminals D = Union (coprod X) &
+       NonTerminals D = [:the OperSymbols of S,{the carrier of S}:] by Th3;
+   A3: D = DTConstrStr (# A , OSREL(X) #) by Def5;
+    for nt being Symbol of D st nt in NonTerminals D
+   ex p being FinSequence of TS(D) st nt ==> roots p
+   proof
+    let nt be Symbol of D;
+    assume nt in NonTerminals D;
+     then consider o being Element of the OperSymbols of S,
+     x2 being Element of {the carrier of S}
+     such that
+A4:   nt = [o,x2] by A2,DOMAIN_1:9;
+A5:   the carrier of S = x2 by TARSKI:def 1;
+    set O = the_arity_of o;
+    defpred P[set,set] means
+    ex i being Element of S st
+     i <= O/.$1 & $2 in coprod(i,X);
+    A6: for a be set st a in Seg len O ex b be set st P[a,b]
+     proof
+      let a be set; assume
+        a in Seg len O;
+      then A7: a in dom O by FINSEQ_1:def 3;
+      then A8: O.a in
+ rng O & rng O c= the carrier of S by FINSEQ_1:def 4,FUNCT_1:def 5;
+      then X.(O.a) is non empty by PBOOLE:def 16;
+      then consider x be set such that
+      A9: x in X.(O.a) by XBOOLE_0:def 1;
+      take y = [x,O.a];
+      A10: y in coprod(O.a,X) by A8,A9,MSAFREE:def 2;
+      take O/.a;
+      thus thesis by A7,A10,FINSEQ_4:def 4;
+     end;
+    consider b be Function such that
+    A11: dom b = Seg len O &
+    for a be set st a in Seg len O holds P[a,b.a] from ZFREFLE1:sch 1(A6);
+    reconsider b as FinSequence by A11,FINSEQ_1:def 2;
+    A12: rng b c= A
+     proof let a be set; assume a in rng b;
+      then consider c be set such that
+      A13: c in dom b & b.c = a by FUNCT_1:def 5;
+      consider i being Element of S such that
+      A14: i <= O/.c & a in coprod(i,X) by A11,A13;
+        dom coprod(X) = the carrier of S by PBOOLE:def 3;
+      then (coprod(X)).i in rng coprod(X) by FUNCT_1:def 5;
+      then coprod(i,X) in rng coprod(X) by MSAFREE:def 3;
+      then a in union rng coprod(X) by A14,TARSKI:def 4;
+      then a in Union coprod(X) by PROB_1:def 3;
+      hence thesis by XBOOLE_0:def 2;
+     end;
+    then reconsider b as FinSequence of A by FINSEQ_1:def 4;
+    reconsider b as Element of A* by FINSEQ_1:def 11;
+    A15: len b = len O by A11,FINSEQ_1:def 3;
+       now let c be set;
+      assume c in dom b;
+      then consider i being Element of S such that
+      A16: i <= O/.c & b.c in coprod(i,X) by A11;
+        dom coprod(X) = the carrier of S by PBOOLE:def 3;
+      then (coprod(X)).i in rng coprod(X) by FUNCT_1:def 5;
+      then coprod(i,X) in rng coprod(X) by MSAFREE:def 3;
+      then b.c in union rng coprod(X) by A16,TARSKI:def 4;
+       then b.c in Union coprod(X) by PROB_1:def 3;
+      hence b.c in [:the OperSymbols of S,{the carrier of S}:] implies
+      for o1 be OperSymbol of S st [o1,the carrier of S] = b.c holds
+      the_result_sort_of o1 <= O/.c by A1,XBOOLE_0:3;
+      assume b.c in Union (coprod X);
+      thus ex i being Element of S st
+       i <= O/.c &
+       b.c in coprod(i,X) by A16;
+     end;
+     then [nt,b] in OSREL(X) by A4,A5,A15,Th2;
+    then A17: nt ==> b by A3,LANG1:def 1;
+    deffunc F(set) = root-tree (b.$1);
+    consider f be Function such that
+    A18: dom f = dom b & for x st x in dom b holds f.x = F(x)
+                                                        from FUNCT_1:sch 3;
+    reconsider f as FinSequence by A11,A18,FINSEQ_1:def 2;
+      rng f c= TS(D)
+     proof
+      let x;
+      assume x in rng f;
+      then consider y be set such that
+      A19: y in dom f & f.y = x by FUNCT_1:def 5;
+      A20: x = root-tree(b.y) by A18,A19;
+        b.y in rng b by A18,A19,FUNCT_1:def 5;
+      then reconsider a = b.y as Symbol of D by A3,A12;
+      consider i being Element of S such that
+      A21: i <= O/.y & b.y in coprod(i,X) by A11,A18,A19;
+        dom coprod(X) = the carrier of S by PBOOLE:def 3;
+      then (coprod(X)).(i) in rng coprod(X) by FUNCT_1:def 5;
+      then coprod(i,X) in rng coprod(X) by MSAFREE:def 3;
+      then b.y in union rng coprod(X) by A21,TARSKI:def 4;
+      then a in Terminals D by A2,PROB_1:def 3;
+      hence thesis by A20,DTCONSTR:def 4;
+     end;
+    then reconsider f as FinSequence of TS(D) by FINSEQ_1:def 4;
+    take f;
+    A22: dom (roots f) = dom f by DTCONSTR:def 1;
+      for x st x in dom b holds (roots f).x = b.x
+     proof
+      let x;
+      assume A23: x in dom b;
+      then A24: f.x = root-tree (b.x) by A18;
+      reconsider i = x as Nat by A23;
+      consider T be DecoratedTree such that
+      A25: T = f.i & (roots f).i = T.{} by A18,A23,DTCONSTR:def 1;
+      thus thesis by A24,A25,TREES_4:3;
+     end;
+    hence thesis by A17,A18,A22,FUNCT_1:9;
+   end;
+   hence thesis by A2,DTCONSTR:def 6,def 7,def 8;
+  end;
 end;
+
 
 theorem :: OSAFREE:4
 for S be OrderSortedSign,
@@ -170,6 +301,7 @@ func OSSym(o,X) ->Symbol of DTConOSA(X) equals
  [o,the carrier of S];
 end;
 
+
 :: originally FreeSort, but it is not a good name in order-sorted context
 definition
  let S be OrderSortedSign,
@@ -184,12 +316,36 @@ func ParsedTerms(X,s) -> Subset of TS(DTConOSA(X)) equals
            & the_result_sort_of o <= s};
 end;
 
-definition
+
+registration
  let S be OrderSortedSign,
      X be non-empty ManySortedSet of S,
      s be Element of S;
 cluster ParsedTerms(X,s) -> non empty;
+ coherence
+  proof
+   set A = {a where a is Element of TS(DTConOSA(X)):
+            (ex s1 being Element of S, x be set st
+            s1 <= s & x in X.s1 & a = root-tree [x,s1]) or
+             ex o be OperSymbol of S st [o,the carrier of S] = a.{}
+                  & the_result_sort_of o <= s};
+   consider x be set such that A1: x in X.s by XBOOLE_0:def 1;
+   set a = [x,s];
+   A2: a in coprod(s,X) by A1,MSAFREE:def 2;
+   A3: (Terminals (DTConOSA(X))) = Union (coprod X) by Th3;
+     dom coprod(X) = the carrier of S by PBOOLE:def 3;
+   then (coprod(X)).s in rng coprod(X) by FUNCT_1:def 5;
+   then coprod(s,X) in rng coprod(X) by MSAFREE:def 3;
+   then a in union rng coprod(X) by A2,TARSKI:def 4;
+   then A4: a in Terminals (DTConOSA X) by A3,PROB_1:def 3;
+   then reconsider a as Symbol of DTConOSA(X);
+   reconsider b = root-tree a as Element of TS(DTConOSA X)
+                                                  by A4,DTCONSTR:def 4;
+     b in A by A1;
+   hence thesis by Def7;
+  end;
 end;
+
 
 definition
  let S be OrderSortedSign,
@@ -199,11 +355,21 @@ func ParsedTerms(X) -> OrderSortedSet of S means
 for s be Element of S holds it.s = ParsedTerms(X,s);
 end;
 
-definition
+
+registration
  let S be OrderSortedSign,
      X be non-empty ManySortedSet of S;
 cluster ParsedTerms(X) -> non-empty;
+coherence
+  proof
+   let i be set;
+   assume i in the carrier of S;
+   then reconsider s = i as Element of S;
+     (ParsedTerms(X)).s = ParsedTerms(X,s) by Def8;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: OSAFREE:5
 for S be OrderSortedSign,
@@ -246,6 +412,7 @@ for p be FinSequence of TS(DTConOSA(X)) st OSSym(o,X) ==> roots p holds
   it.p = (OSSym(o,X))-tree p;
 end;
 
+
 definition
  let S be OrderSortedSign,
      X be non-empty ManySortedSet of S;
@@ -256,6 +423,7 @@ func PTOper(X) ->
 for o be OperSymbol of S holds it.o = PTDenOp(o,X);
 end;
 
+
 definition
  let S be OrderSortedSign,
      X be non-empty ManySortedSet of S;
@@ -264,11 +432,18 @@ func ParsedTermsOSA(X) -> OSAlgebra of S equals
  MSAlgebra (# ParsedTerms(X), PTOper(X) #);
 end;
 
-definition
+
+registration
  let S be OrderSortedSign,
      X be non-empty ManySortedSet of S;
 cluster ParsedTermsOSA(X) -> strict non-empty;
+ coherence
+  proof
+   MSAlgebra (# ParsedTerms(X), PTOper(X) #) = ParsedTermsOSA X by Def11;
+    hence thesis by MSUALG_1:def 8;
+  end;
 end;
+
 
 definition
   let S be OrderSortedSign;
@@ -276,6 +451,7 @@ definition
   let o be OperSymbol of S;
  redefine func OSSym(o, X) -> NonTerminal of DTConOSA X;
 end;
+
 
 theorem :: OSAFREE:9
   for S being OrderSortedSign,
@@ -363,6 +539,7 @@ func LeastSort t -> SortSymbol of S means
        it <= s1;
 end;
 
+
 :: REVISE: the clusters needed to make the def from MSAFREE3 work
 :: are too demanding, make it more easily accessible (or include
 :: the clusters if it is too hard)
@@ -372,6 +549,7 @@ definition
  mode Element of A is Element of Union the Sorts of A;
  canceled;
 end;
+
 
 theorem :: OSAFREE:15
   for S being OrderSortedSign,
@@ -404,12 +582,14 @@ theorem :: OSAFREE:18
       holds LeastSort t = the_result_sort_of o;
 
 :: WHY is this necessary??? bug?
-definition
+registration
   let S be OrderSortedSign,
       X be non-empty ManySortedSet of S;
   let o2 be OperSymbol of S;
 cluster Args(o2,ParsedTermsOSA(X)) -> non empty;
+coherence;
 end;
+
 
 :: REVISE: was probably needed for casting, but try if
 :: LeastSort * x does the work and if so, remove this
@@ -425,6 +605,7 @@ func LeastSorts x -> Element of (the carrier of S)* means
        it.y = LeastSort t;
 end;
 
+
 :: all these should be generalized to any leastsorted osa
 theorem :: OSAFREE:19
   for S be locally_directed OrderSortedSign,
@@ -433,9 +614,15 @@ theorem :: OSAFREE:19
       x be FinSequence of TS DTConOSA(X) holds
   LeastSorts x <= the_arity_of o iff x in Args(o,ParsedTermsOSA(X));
 
-definition
+registration
   cluster locally_directed regular (monotone OrderSortedSign);
+existence
+proof consider S1 being discrete op-discrete OrderSortedSign;
+  take S1;
+  thus thesis;
 end;
+end;
+
 
 :: just casting funcs necessary for the usage of schemes,
 definition
@@ -449,6 +636,7 @@ func pi(o,x) -> Element of TS DTConOSA(X) equals
  OSSym(LBound(o,LeastSorts x),X)-tree x;
 end;
 
+
 definition
  let S be locally_directed OrderSortedSign,
      X be non-empty ManySortedSet of S,
@@ -458,6 +646,7 @@ func @(X,t) -> OperSymbol of S means
 :: OSAFREE:def 16
   [it,the carrier of S] = t;
 end;
+
 
 definition
   let S be OrderSortedSign,
@@ -469,6 +658,7 @@ definition
  root-tree t;
 end;
 
+
 :: the least monotone OSCongruence
 definition
   let S be locally_directed OrderSortedSign,
@@ -479,6 +669,7 @@ func LCongruence X -> monotone OSCongruence of ParsedTermsOSA(X) means
     it c= R;
 end;
 
+
 definition
   let S be locally_directed OrderSortedSign,
       X be non-empty ManySortedSet of S;
@@ -486,6 +677,7 @@ func FreeOSA(X) -> strict non-empty monotone OSAlgebra of S equals
 :: OSAFREE:def 19
   QuotOSAlg(ParsedTermsOSA(X),LCongruence(X));
 end;
+
 
 :: now we need an explicit description of a sufficiently small
 :: monotone OSCongruence on PTA; the PTCongruence turns out to
@@ -504,6 +696,7 @@ definition
   ex s be Element of S, x be set st
   x in X.s & t = [x,s] & s <= s1};
 end;
+
 
 definition
   let S be OrderSortedSign,
@@ -527,6 +720,7 @@ o1 ~= o2 & len the_arity_of o1 = len the_arity_of o2 &
         };
 end;
 
+
 :: a bit technical, to create the PTCongruence
 definition
   let S be locally_directed OrderSortedSign,
@@ -541,6 +735,7 @@ func PTClasses X -> Function of TS(DTConOSA(X)),
        ts being FinSequence of TS(DTConOSA(X)) st nt ==> roots ts
          holds it.(nt-tree ts) = @(nt,it * ts) );
 end;
+
 
 theorem :: OSAFREE:20
   for S be locally_directed OrderSortedSign,
@@ -590,6 +785,7 @@ func PTCongruence(X) -> MSEquivalence-like OrderSortedRelation of
   it.i = {[x,y] where x,y is Element of TS(DTConOSA(X)):
                       [x,i] in (PTClasses X).y};
 end;
+
 
 theorem :: OSAFREE:24
   for S be locally_directed OrderSortedSign,
@@ -651,11 +847,13 @@ theorem :: OSAFREE:28
     PTCongruence(X) is monotone;
 
 :: MSCongruence-like is ensured by the OSALG_4 cluster
-definition
+registration
   let S be locally_directed OrderSortedSign,
       X be non-empty ManySortedSet of S;
 cluster PTCongruence(X) -> monotone;
+coherence by Th28;
 end;
+
 
 definition
  let S be locally_directed OrderSortedSign,
@@ -668,12 +866,21 @@ for x be set holds x in it iff
   x = root-tree [a,s];
 end;
 
-definition
+
+registration
  let S be locally_directed OrderSortedSign,
      X be non-empty ManySortedSet of S,
      s be Element of S;
 cluster PTVars(s,X) -> non empty;
+  coherence
+  proof
+   consider x such that
+   A1: x in X.s by XBOOLE_0:def 1;
+     ex a be set st a in X.s & root-tree [x,s] = root-tree [a,s] by A1;
+   hence thesis by Def24;
+  end;
 end;
+
 
 theorem :: OSAFREE:29
 for S be locally_directed OrderSortedSign,
@@ -689,6 +896,7 @@ func PTVars(X) -> MSSubset of ParsedTermsOSA(X) means
 :: OSAFREE:def 25
 for s be Element of S holds it.s = PTVars(s,X);
 end;
+
 
 theorem :: OSAFREE:30
   for S be locally_directed OrderSortedSign,
@@ -706,12 +914,24 @@ for x be set holds x in it iff
   x = (OSNat_Hom(ParsedTermsOSA(X),LCongruence(X)).s).(root-tree [a,s]);
 end;
 
-definition
+
+registration
  let S be locally_directed OrderSortedSign,
      X be non-empty ManySortedSet of S,
      s be Element of S;
 cluster OSFreeGen(s,X) -> non empty;
+  coherence
+  proof
+   set NH = OSNat_Hom(ParsedTermsOSA(X),LCongruence(X));
+   defpred P[set] means ex a be set st a in X.s &
+   $1 = (NH.s).(root-tree [a,s]);
+   consider x such that
+   A1: x in X.s by XBOOLE_0:def 1;
+     P[(NH.s).root-tree [x,s]] by A1;
+   hence thesis by Def26;
+  end;
 end;
+
 
 theorem :: OSAFREE:31
 for S be locally_directed OrderSortedSign,
@@ -729,16 +949,19 @@ func OSFreeGen(X) -> OSGeneratorSet of FreeOSA(X) means
 for s be Element of S holds it.s = OSFreeGen(s,X);
 end;
 
+
 theorem :: OSAFREE:32
 for S be locally_directed OrderSortedSign,
     X be non-empty ManySortedSet of S
 holds OSFreeGen(X) is non-empty;
 
-definition
+registration
   let S be locally_directed OrderSortedSign,
       X be non-empty ManySortedSet of S;
 cluster OSFreeGen(X) -> non-empty;
+coherence by Th32;
 end;
+
 
 definition
   let S be locally_directed OrderSortedSign,
@@ -751,6 +974,7 @@ func OSClass(R,t) -> Element of OSClass(R,LeastSort t) means
        x being Element of (the Sorts of ParsedTermsOSA(X)).s st
        t = x holds it = OSClass(R,x);
 end;
+
 
 theorem :: OSAFREE:33
   for S be locally_directed OrderSortedSign,
@@ -803,6 +1027,7 @@ func pi(F,A,t) -> Element of Union A means
  it = f.(root-tree t);
 end;
 
+
 theorem :: OSAFREE:38
   for S be locally_directed OrderSortedSign,
       X be non-empty ManySortedSet of S,
@@ -827,6 +1052,7 @@ func NHReverse(s,X) -> Function of OSFreeGen(s,X),PTVars(s,X) means
     = root-tree t;
 end;
 
+
 definition
  let S be locally_directed OrderSortedSign,
      X be non-empty ManySortedSet of S;
@@ -834,6 +1060,7 @@ func NHReverse(X) -> ManySortedFunction of OSFreeGen(X),PTVars(X) means
 :: OSAFREE:def 31
   for s be Element of S holds it.s = NHReverse(s,X);
 end;
+
 
 theorem :: OSAFREE:39
 for S be locally_directed OrderSortedSign,
@@ -844,10 +1071,18 @@ for S be locally_directed OrderSortedSign,
     X be non-empty ManySortedSet of S holds
 FreeOSA(X) is osfree;
 
-definition
+registration
  let S be locally_directed OrderSortedSign;
 cluster osfree strict (non-empty monotone OSAlgebra of S);
+ existence
+  proof
+   consider U1 be non-empty OSAlgebra of S;
+   reconsider X = the Sorts of U1 as non-empty ManySortedSet of S;
+   take FreeOSA(X);
+   thus thesis by Th40;
+  end;
 end;
+
 
 begin
 :: PTMin ... minimality of PTCongruence on regular signatures
@@ -864,6 +1099,7 @@ func PTMin X -> Function of TS(DTConOSA(X)), TS(DTConOSA(X)) means
        ts being FinSequence of TS(DTConOSA(X)) st nt ==> roots ts
          holds it.(nt-tree ts) = pi(@(X,nt),it * ts) );
 end;
+
 
 theorem :: OSAFREE:41
   for S be locally_directed regular (monotone OrderSortedSign),
@@ -933,6 +1169,7 @@ mode MinTerm of S,X -> Element of TS DTConOSA(X) means
   (PTMin X).it = it;
 end;
 
+
 definition
   let S be locally_directed regular (monotone OrderSortedSign),
       X be non-empty ManySortedSet of S;
@@ -940,6 +1177,7 @@ func MinTerms X -> Subset of TS DTConOSA(X) equals
 :: OSAFREE:def 34
   rng (PTMin X);
 end;
+
 
 theorem :: OSAFREE:48
     for S be locally_directed regular (monotone OrderSortedSign),

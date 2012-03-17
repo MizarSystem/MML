@@ -104,6 +104,7 @@ A5: now let k be Nat;
         per cases by A7,REAL_1:def 5;
         suppose k + 1 = LifeSpan s;
          hence IC (Computation s).(k + 1) = IC (Computation s).LifeSpan s;
+        end;
         suppose A8: k + 1 > LifeSpan s;
       then LifeSpan s <= k by NAT_1:38;
       then A9: CurInstr (Computation s).k = halt SCM+FSA by A1,Th4;
@@ -112,9 +113,10 @@ A5: now let k be Nat;
          .= IC Exec(halt SCM+FSA,(Computation s).k) by A9,AMI_1:def 18
          .= IC (Computation s).LifeSpan s by A6,A8,AMI_1:def 8,NAT_1:38;
         end;
+        end;
       hence P[k + 1];
      end;
-     for k being Nat holds P[k] from Ind(A3,A5);
+     for k being Nat holds P[k] from NAT_1:sch 1(A3,A5);
    hence thesis by A2;
  end;
 
@@ -251,8 +253,10 @@ theorem  ::T52'
          D misses the Instruction-Locations of SCM+FSA by SCMFSA_2:13,14,
 XBOOLE_1:70;
        hence not x in D by A2,A3,XBOOLE_0:3;
+      end;
       suppose x = IC SCM+FSA;
        hence not x in D by SCMFSA6A:37;
+     end;
      end;
    then dom (I +* Start-At l) misses D by XBOOLE_0:3;
    hence s | D = (s +* (I +* Start-At l)) | D by Th2;
@@ -294,6 +298,7 @@ A1: dom (s +* Initialized I) = the carrier of SCM+FSA by AMI_3:36
        .= 1 by A4,SCMFSA6A:46
        .= (Initialize s).x by A4,SCMFSA6C:3
        .= (Initialize s +* (I +* Start-At insloc 0)).x by A5,FUNCT_4:12;
+      end;
       suppose A6: x = IC SCM+FSA;
     then A7: x in dom (I +* Start-At insloc 0) by SF_MASTR:65;
          x in dom (Initialized I) by A6,SCMFSA6A:24;
@@ -301,6 +306,7 @@ A1: dom (s +* Initialized I) = the carrier of SCM+FSA by AMI_3:36
        .= insloc 0 by A6,SCMFSA6A:46
        .= (I +* Start-At insloc 0).x by A6,SF_MASTR:66
        .= (Initialize s +* (I +* Start-At insloc 0)).x by A7,FUNCT_4:14;
+      end;
       suppose A8: x in dom I;
        then x in dom I \/ (dom Start-At insloc 0) by XBOOLE_0:def 2;
     then A9: x in dom (I +* Start-At insloc 0) by FUNCT_4:def 1;
@@ -308,6 +314,7 @@ A1: dom (s +* Initialized I) = the carrier of SCM+FSA by AMI_3:36
        .= I.x by A8,SCMFSA6A:50
        .= (I +* Start-At insloc 0).x by A8,SCMFSA6B:7
        .= (Initialize s +* (I +* Start-At insloc 0)).x by A9,FUNCT_4:14;
+      end;
       suppose A10: x is Instruction-Location of SCM+FSA & not x in dom I;
        then not x in dom I & not x = IC SCM+FSA by AMI_1:48;
        then not x in dom I & not x in {IC SCM+FSA} by TARSKI:def 1;
@@ -319,6 +326,7 @@ A1: dom (s +* Initialized I) = the carrier of SCM+FSA by AMI_3:36
        hence (s +* Initialized I).x = s.x by FUNCT_4:12
        .= (Initialize s).x by A10,SCMFSA6C:3
        .= (Initialize s +* (I +* Start-At insloc 0)).x by A11,FUNCT_4:12;
+      end;
       suppose A12: x is FinSeq-Location;
   then A13: not x in dom Initialized I & not x = IC SCM+FSA
            by SCMFSA6A:49,SCMFSA_2:82;
@@ -329,6 +337,7 @@ A1: dom (s +* Initialized I) = the carrier of SCM+FSA by AMI_3:36
        thus (s +* Initialized I).x = s.x by A13,FUNCT_4:12
        .= (Initialize s).x by A12,SCMFSA6C:3
        .= (Initialize s +* (I +* Start-At insloc 0)).x by A14,FUNCT_4:12;
+      end;
       suppose A15: x is Int-Location & x <> intloc 0;
   then A16: not x in dom Initialized I & not x = IC SCM+FSA
            by SCMFSA6A:48,SCMFSA_2:81;
@@ -340,6 +349,7 @@ A1: dom (s +* Initialized I) = the carrier of SCM+FSA by AMI_3:36
        thus (s +* Initialized I).x = s.x by A16,FUNCT_4:12
        .= (Initialize s).x by A18,SCMFSA6C:3
        .= (Initialize s +* (I +* Start-At insloc 0)).x by A17,FUNCT_4:12;
+     end;
      end;
    hence s +* Initialized I = Initialize s +* (I +* Start-At insloc 0)
        by A1,FUNCT_1:9;
@@ -433,6 +443,7 @@ then A5: dom PP c= dom the Object-Kind of SCM+FSA by A1,AMI_1:25;
   end;
 end;
 
+
 theorem Th18: ::T38
  for I being programmed FinPartState of SCM+FSA holds
      Directed I = Directed(I,insloc card I)
@@ -444,7 +455,7 @@ theorem Th18: ::T38
    .= Directed(I,insloc card I) by Def1;
  end;
 
-definition
+registration
  let P be programmed FinPartState of SCM+FSA;
  let l be Instruction-Location of SCM+FSA;
  cluster Directed(P,l) -> halt-free;
@@ -461,7 +472,8 @@ definition
   end;
 end;
 
-definition
+
+registration
  let P be programmed FinPartState of SCM+FSA;
  cluster Directed P -> halt-free;
  correctness
@@ -470,6 +482,7 @@ definition
    hence thesis;
   end;
 end;
+
 
 theorem Th19: ::T21
  for P being programmed FinPartState of SCM+FSA,
@@ -548,59 +561,72 @@ A5: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
   then i = halt SCM+FSA by SCMFSA_2:122;
     then IncAddr(i,n) = halt SCM+FSA by SCMFSA_4:8;
     hence thesis by SCMFSA7B:11;
+   end;
    suppose InsCode i = 1;
     then consider da, db being Int-Location such that
  A6: i = da := db by SCMFSA_2:54;
     thus thesis by A1,A6,SCMFSA_4:9;
+   end;
    suppose InsCode i = 2;
     then consider da, db being Int-Location such that
 A7:  i = AddTo(da,db) by SCMFSA_2:55;
     thus thesis by A1,A7,SCMFSA_4:10;
+   end;
    suppose InsCode i = 3;
     then consider da, db being Int-Location such that
 A8:  i = SubFrom(da, db) by SCMFSA_2:56;
     thus thesis by A1,A8,SCMFSA_4:11;
+   end;
    suppose InsCode i = 4;
     then consider da, db being Int-Location such that
 A9:  i = MultBy(da,db) by SCMFSA_2:57;
     thus thesis by A1,A9,SCMFSA_4:12;
+   end;
    suppose InsCode i = 5;
     then consider da, db being Int-Location such that
 A10:  i = Divide(da, db) by SCMFSA_2:58;
     thus thesis by A1,A10,SCMFSA_4:13;
+   end;
    suppose InsCode i = 6;
     then consider loc being Instruction-Location of SCM+FSA such that
 A11:  i = goto loc by SCMFSA_2:59;
       IncAddr(i,n) = goto (loc + n) by A11,SCMFSA_4:14;
     hence thesis by SCMFSA7B:17;
+   end;
    suppose InsCode i = 7;
     then consider loc being Instruction-Location of SCM+FSA,
              da being Int-Location such that
 A12:  i = da =0_goto loc by SCMFSA_2:60;
       IncAddr(i,n) = da =0_goto (loc + n) by A12,SCMFSA_4:15;
     hence thesis by SCMFSA7B:18;
+   end;
    suppose InsCode i = 8;
      then consider loc being Instruction-Location of SCM+FSA,
               da being Int-Location such that
 A13:  i = da >0_goto loc by SCMFSA_2:61;
       IncAddr(i,n) = da >0_goto (loc + n) by A13,SCMFSA_4:16;
     hence thesis by SCMFSA7B:19;
+   end;
    suppose InsCode i = 9;
     then consider db, da being Int-Location, g being FinSeq-Location such that
 A14:  i = da := (g,db) by SCMFSA_2:62;
     thus thesis by A1,A14,SCMFSA_4:17;
+   end;
    suppose InsCode i = 10;
     then consider db, da being Int-Location, g being FinSeq-Location such that
 A15:  i = (g,db):=da by SCMFSA_2:63;
     thus thesis by A1,A15,SCMFSA_4:18;
+   end;
    suppose InsCode i = 11;
     then consider da being Int-Location, g being FinSeq-Location such that
 A16:  i = da :=len g by SCMFSA_2:64;
     thus thesis by A1,A16,SCMFSA_4:19;
+   end;
    suppose InsCode i = 12;
     then consider da being Int-Location, g being FinSeq-Location such that
 A17:  i = g:=<0,...,0>da by SCMFSA_2:65;
     thus thesis by A1,A17,SCMFSA_4:20;
+ end;
  end;
 
 theorem Th23: ::TQ59'
@@ -665,8 +691,10 @@ theorem Th25: ::TQ58'
       per cases by A3,A4,XBOOLE_0:def 2;
       suppose i in rng I;
        hence i does_not_destroy a by A1,SCMFSA7B:def 4;
+      end;
       suppose i in rng J;
        hence i does_not_destroy a by A2,SCMFSA7B:def 4;
+     end;
      end;
    hence I +* J does_not_destroy a by SCMFSA7B:def 4;
  end;
@@ -701,14 +729,16 @@ theorem Th27: ::TG8
        then i = I.x by A2,A3,Th21;
        then i in rng I by A2,A3,FUNCT_1:def 5;
        hence i does_not_destroy a by A1,SCMFSA7B:def 4;
+      end;
       suppose I.x = halt SCM+FSA;
        then i = goto l by A2,A3,Th21;
        hence i does_not_destroy a by SCMFSA7B:17;
      end;
+     end;
    hence Directed(I,l) does_not_destroy a by SCMFSA7B:def 4;
  end;
 
-definition
+registration
  let I be good programmed FinPartState of SCM+FSA;
  let l be Instruction-Location of SCM+FSA;
  cluster Directed(I,l) -> good;
@@ -720,7 +750,8 @@ definition
   end;
 end;
 
-definition
+
+registration
  let I be good Macro-Instruction;
  cluster Directed I -> good;
  correctness
@@ -730,7 +761,8 @@ definition
   end;
 end;
 
-definition
+
+registration
  let I be Macro-Instruction, l be Instruction-Location of SCM+FSA;
  cluster Directed(I,l) -> initial;
  correctness
@@ -746,7 +778,8 @@ definition
   end;
 end;
 
-definition
+
+registration
  let I,J be good Macro-Instruction;
  cluster I ';' J -> good;
  coherence
@@ -756,6 +789,7 @@ A1: I ';' J = Directed I +* ProgramPart Relocated(J,card I) by SCMFSA6A:def 4;
    hence I ';' J is good by A1,Th26;
   end;
 end;
+
 
 Lm1:
  for l being Instruction-Location of SCM+FSA holds
@@ -802,6 +836,7 @@ definition
   end;
 end;
 
+
 definition
  let s be State of SCM+FSA;
  let P be initial FinPartState of SCM+FSA;
@@ -814,13 +849,15 @@ definition
          IC (Computation (s +* (P +* Start-At insloc 0))).n in dom P;
 end;
 
+
 definition let P be initial FinPartState of SCM+FSA;
  attr P is pseudo-paraclosed means
 :Def4: ::D2
  for s being State of SCM+FSA holds P is_pseudo-closed_on s;
 end;
 
-definition
+
+registration
  cluster pseudo-paraclosed Macro-Instruction;
  existence
   proof
@@ -844,6 +881,7 @@ A1: now let s be State of SCM+FSA;
    thus thesis by A1,Def4;
   end;
 end;
+
 
 definition
  let s be State of SCM+FSA,
@@ -892,6 +930,7 @@ A8: now assume k1 < k2;
    hence k1 = k2 by A8,AXIOMS:21;
   end;
 end;
+
 
 theorem Th28: ::TQ51
  for I,J being Macro-Instruction, x being set holds
@@ -1014,7 +1053,7 @@ A3: now let k be Nat;
        by A4,A5,A6,A14,A15,AXIOMS:22,SCMFSA6A:32;
      end;
     end;
-   thus for k being Nat holds P[k] from Ind(A2,A3);
+   thus for k being Nat holds P[k] from NAT_1:sch 1(A2,A3);
  end;
 
 theorem Th33: ::TT4
@@ -1111,7 +1150,7 @@ A9: now let k be Nat;
       (C1.$1,C2.$1 equal_outside A & CurInstr C2.$1 <> halt SCM+FSA);
 A22: P[0] by A8;
 A23: for k being Nat st P[k] holds P[k + 1] by A9;
-   thus for k being Nat holds P[k] from Ind(A22,A23);
+   thus for k being Nat holds P[k] from NAT_1:sch 1(A22,A23);
  end;
 
 theorem Th36: ::TQ4''(Lemma0)''
@@ -1519,7 +1558,7 @@ A11: now let k be Nat;
       (C1.$1,C2.$1 equal_outside A & CurInstr C2.$1 <> halt SCM+FSA);
 A24: P[0] by A10;
 A25: for k being Nat st P[k] holds P[k + 1] by A11;
-   thus for k being Nat holds P[k] from Ind(A24,A25);
+   thus for k being Nat holds P[k] from NAT_1:sch 1(A24,A25);
  end;
 
 theorem Th45: ::TQ4'(Lemma0)'
@@ -1690,8 +1729,10 @@ A20: now let k be Nat;
       suppose k < LifeSpan s1;
        then k + 1 <= LifeSpan s1 by NAT_1:38;
        hence P[k + 1] by A14;
+      end;
       suppose k = LifeSpan s1;
        hence P[k + 1] by A1,A2,A8,A18,Th36;
+      end;
       suppose A22: k > LifeSpan s1;
    A23: now assume k + 1 > LifeSpan s1;
       A24: CurInstr (Computation s2).k
@@ -1705,7 +1746,8 @@ A20: now let k be Nat;
          k + 1 > k + 0 by REAL_1:53;
        hence P[k + 1] by A17,A22,A23,AXIOMS:22,SCMFSA6A:15;
      end;
-     for k being Nat holds P[k] from Ind(A19,A20);
+     end;
+     for k being Nat holds P[k] from NAT_1:sch 1(A19,A20);
    hence I ';' SCM+FSA-Stop is_closed_on s by SCMFSA7B:def 7;
    thus I ';' SCM+FSA-Stop is_halting_on s by A12,SCMFSA7B:def 8;
  end;
@@ -1808,6 +1850,7 @@ then A5: dom Directed(ProgramPart Relocated(I,k),insloc (card I + k))
        .= goto insloc (card I + k) by A13,CQC_LANG:6
        .= goto ((insloc card I) + k) by SCMFSA_4:def 1
        .= IncAddr(i,k) by A12,SCMFSA_4:14;
+      end;
       suppose A15: i0 <> halt SCM+FSA;
        then InsCode i0 <> 0 by SCMFSA_2:122;
    then A16: IncAddr(i0,k) <> halt SCM+FSA by SCMFSA_2:124,SCMFSA_4:22;
@@ -1824,6 +1867,7 @@ then A5: dom Directed(ProgramPart Relocated(I,k),insloc (card I + k))
             (card I + k))*ProgramPart Relocated(I,k))).x by Th20
        .= (ProgramPart Relocated(I,k)).x by A18,FUNCT_4:12
        .= IncAddr(i,k) by A8,A15,A17,Th30;
+      end;
       end;
      hence (ProgramPart Relocated(Directed I,k)).x =
          (Directed(ProgramPart Relocated(I,k),insloc (card I + k))).x by A10;
@@ -2190,6 +2234,7 @@ D
 <>
            halt SCM+FSA by A1,A2,Th35;
        hence CurInstr (Computation s2).k <> halt SCM+FSA by A1,A2,A3,A33,Th42;
+      end;
       suppose LifeSpan s1 < k;
     then A34: LifeSpan s1 + 1 <= k by NAT_1:38;
          k < LifeSpan s1 + (1 + 1) by A32;
@@ -2198,6 +2243,7 @@ D
          InsCode goto insloc (card I + card J + 1) = 6 by SCMFSA_2:47;
        hence CurInstr (Computation s2).k <> halt SCM+FSA by A17,A34,A35,AXIOMS:
 21,SCMFSA_2:124;
+     end;
      end;
 then A36: for k be Nat st CurInstr (Computation s2).k = halt SCM+FSA holds
       LifeSpan s1 + 2 <= k;
@@ -2265,9 +2311,11 @@ A4: LifeSpan s2 = LifeSpan s1 + 2 by A1,A2,Lm5;
          n < card I by A8,A9,SCMFSA6A:15;
        then n < card IJ2 by A7,AXIOMS:22;
        hence IC (Computation s2).k in dom IJ2 by A9,SCMFSA6A:15;
+      end;
       suppose k = LifeSpan s1 + 1;
        then IC (Computation s2).k = insloc card I by A1,A2,Lm5;
        hence IC (Computation s2).k in dom IJ2 by A7,SCMFSA6A:15;
+      end;
       suppose k >= LifeSpan s1 + 2;
        then k >= LifeSpan s2 by A1,A2,Lm5;
    then A10: IC (Computation s2).k = IC (Computation s2).LifeSpan s2 by A3,Th5
@@ -2276,6 +2324,7 @@ A4: LifeSpan s2 = LifeSpan s1 + 2 by A1,A2,Lm5;
        .= card I + card J + 1 + 1 by XCMPLX_1:1;
        then card I + card J + 1 + 0 < card IJ2 by REAL_1:53;
        hence IC (Computation s2).k in dom IJ2 by A10,SCMFSA6A:15;
+     end;
      end;
    hence IJ2 is_closed_on s by SCMFSA7B:def 7;
    thus IJ2 is_halting_on s by A3,SCMFSA7B:def 8;
@@ -2469,6 +2518,7 @@ D
 SCM+FSA
            by A1,A2,Th44;
        hence CurInstr (Computation s2).k <> halt SCM+FSA by A1,A2,A3,A33,Th43;
+      end;
       suppose LifeSpan s1 < k;
     then A34: LifeSpan s1 + 1 <= k by NAT_1:38;
          k < LifeSpan s1 + (1 + 1) by A32;
@@ -2477,6 +2527,7 @@ SCM+FSA
          InsCode goto insloc (card I + card J + 1) = 6 by SCMFSA_2:47;
        hence CurInstr (Computation s2).k <> halt SCM+FSA by A17,A34,A35,AXIOMS:
 21,SCMFSA_2:124;
+     end;
      end;
 then A36: for k be Nat st CurInstr (Computation s2).k = halt SCM+FSA holds
        LifeSpan s1 + 2 <= k;

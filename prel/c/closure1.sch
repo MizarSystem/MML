@@ -21,9 +21,7 @@ FINSEQ_2
 MATRIX_1
 PBOOLE
 #
-MSSUBSET
-#
 M1 ;M16 V2 ;F1 ;;M16 F1 ;;;
-ª&M16 F1 ;;&ª&R14 F1 ;B1 F2 ;;ª&R14 F1 ;B1 F3 ;;P1 B1 ;;;ª&R14 F1 ;B1 F3 ;;P1 B1 ;ªR14 F1 ;B1 F2 ;;;;ªR15 F1 ;F2 ;F3 ;;;;
+ª&M16 F1 ;;&ª&R15 F1 ;B1 F2 ;;ª&R15 F1 ;B1 F3 ;;P1 B1 ;;;ª&R15 F1 ;B1 F3 ;;P1 B1 ;ªR15 F1 ;B1 F2 ;;;;ªR16 F1 ;F2 ;F3 ;;;;
 #
 !

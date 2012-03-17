@@ -36,9 +36,16 @@ definition
  let i be number;
  attr i is even means
 :Def1: ex j being Integer st i = 2*j;
- antonym i is odd;
-end;
+ end;
+notation
+ let i be number;
+ antonym i is odd for i is even ; end;
 
+
+notation
+ let n be Nat;
+ antonym n is odd for n is even ;
+end;
 definition
  let n be Nat;
  redefine attr n is even means
@@ -54,10 +61,10 @@ A1: n = 2*k by Def1;
  assume ex k st n = 2*k;
  hence n is even by Def1;
  end;
- antonym n is odd;
-end;
+ end;
 
-definition
+
+registration
  cluster even Nat;
  existence proof
   take 0, 0;
@@ -83,6 +90,7 @@ A1: 1 = 2*k by Def1;
  end;
 end;
 
+
 theorem Th1:
  for i being Integer
    holds i is odd iff ex j being Integer st i = 2*j+1 proof
@@ -97,10 +105,13 @@ A4: k = 2*m or k = 2*m+1 by SCHEME1:1;
  per cases by A3,A4;
  suppose i = k & k = 2*m;
   hence contradiction by A1,Def1;
+ end;
  suppose i = -k & k = 2*m; then i = 2*(-m) by XCMPLX_1:175;
   hence contradiction by A1,Def1;
+ end;
  suppose i = k & k = 2*m+1;
   hence contradiction by A2;
+ end;
  suppose i = -k & k = 2*m+1;
   then i = -(2*(m+1-1) + 1) by XCMPLX_1:26
    .= -(2*(m+1)-2*1+1) by XCMPLX_1:40
@@ -109,6 +120,7 @@ A4: k = 2*m or k = 2*m+1 by SCHEME1:1;
    .= -2*(m+1)+1 by XCMPLX_0:def 8
    .= 2*-(m+1)+1 by XCMPLX_1:175;
   hence contradiction by A2;
+ end;
  end;
  given j being Integer such that
 A5: i = 2*j+1;
@@ -120,13 +132,14 @@ A6: i = 2*k;
 end;
 
 
-definition
+registration
  let i be Integer;
  cluster 2*i -> even;
  coherence by Def1;
 end;
 
-definition
+
+registration
  let i be even Integer;
  cluster i+1 -> odd;
  coherence proof
@@ -136,7 +149,8 @@ A1: i = 2*j by Def1;
  end;
 end;
 
-definition
+
+registration
  let i be odd Integer;
  cluster i+1 -> even;
  coherence proof
@@ -148,7 +162,8 @@ A1: i = 2*j+1 by Th1;
  end;
 end;
 
-definition
+
+registration
  let i be even Integer;
  cluster i-1 -> odd;
  coherence proof
@@ -162,7 +177,8 @@ A1: i = 2*j by Def1;
  end;
 end;
 
-definition
+
+registration
  let i be odd Integer;
  cluster i-1 -> even;
  coherence proof
@@ -172,7 +188,8 @@ A1: i = 2*j+1 by Th1;
  end;
 end;
 
-definition
+
+registration
  let i be even Integer, j be Integer;
  cluster i*j -> even;
  coherence proof
@@ -190,7 +207,8 @@ A2: i = 2*k by Def1;
  end;
 end;
 
-definition
+
+registration
  let i, j be odd Integer;
  cluster i*j -> odd;
  coherence proof
@@ -206,7 +224,8 @@ A2: j = 2*l+1 by Th1;
  end;
 end;
 
-definition
+
+registration
  let i, j be even Integer;
  cluster i+j -> even;
  coherence proof
@@ -219,7 +238,8 @@ A2: j = 2*l by Def1;
  end;
 end;
 
-definition
+
+registration
  let i be even Integer, j be odd Integer;
  cluster i+j -> odd;
  coherence proof
@@ -243,7 +263,8 @@ A4: j = 2*l+1 by Th1;
  end;
 end;
 
-definition
+
+registration
  let i, j be odd Integer;
  cluster i+j -> even;
  coherence proof
@@ -260,7 +281,8 @@ A2: j = 2*l+1 by Th1;
  end;
 end;
 
-definition
+
+registration
  let i be even Integer, j be odd Integer;
  cluster i-j -> odd;
  coherence proof
@@ -284,7 +306,8 @@ A4: j = 2*l+1 by Th1;
  end;
 end;
 
-definition
+
+registration
  let i, j be odd Integer;
  cluster i-j -> even;
  coherence proof
@@ -300,13 +323,15 @@ A2: j = 2*l+1 by Th1;
  end;
 end;
 
+
 definition
  let E, f, n;
  redefine func iter(f, n) -> Function of E, E;
  coherence by FUNCT_7:85;
 end;
 
-definition
+
+registration
   let A be set, B be with_non-empty_element set;
  cluster non-empty Function of A, B;
  existence proof
@@ -320,7 +345,8 @@ A1: X in B by TRIANG_1:def 1;
  end;
 end;
 
-definition
+
+registration
 let A be non empty set, B be with_non-empty_element set,
     f be non-empty Function of A, B,
     a be Element of A;
@@ -332,7 +358,8 @@ let A be non empty set, B be with_non-empty_element set,
  end;
 end;
 
-definition
+
+registration
  let X be non empty set;
  cluster bool X -> with_non-empty_element;
  coherence proof
@@ -340,6 +367,7 @@ definition
   thus X in bool X by ZFMISC_1:def 1;
  end;
 end;
+
 
 theorem Th2:
  for S being non empty Subset of NAT st 0 in S
@@ -368,14 +396,18 @@ definition
  let f be Function;
  pred f has_a_fixpoint means
 :Def3: ex x st x is_a_fixpoint_of f;
- antonym f has_no_fixpoint;
-end;
+ end;
+notation
+ let f be Function;
+ antonym f has_no_fixpoint for f has_a_fixpoint ; end;
+
 
 definition
  let X be set, x be Element of X;
  attr x is covering means
 :Def4: union x = union union X;
 end;
+
 
 theorem Th4:
  sE is covering iff union sE = E
@@ -384,7 +416,7 @@ proof
  hence sE is covering iff union sE = E by Def4;
 end;
 
-definition
+registration
  let E;
  cluster non empty finite covering Subset-Family of E;
  existence proof
@@ -396,6 +428,7 @@ definition
   hence sE is covering by Th4;
  end;
 end;
+
 
 theorem
    for E being set, f being Function of E, E,
@@ -452,7 +485,7 @@ A4: now let x,y,z; assume
     end;
    consider EqR being Equivalence_Relation of E such that
 A12: for x,y holds [x,y] in EqR iff x in E & y in E & P[x,y]
-                  from Ex_Eq_Rel(A1, A3, A4);
+                  from EQREL_1:sch 1(A1, A3, A4);
   take EqR;
   let x, y; assume x in E & y in E;
   hence [x,y] in EqR iff ex k, l st iter(f,k).x = iter(f,l).y by A12;
@@ -476,6 +509,7 @@ A14: for x, y st x in E & y in E
   hence [a, b] in IT1 by A13,A18;
  end;
 end;
+
 
 theorem Th6:
  for E being non empty set, f being Function of E, E,
@@ -535,12 +569,12 @@ A3:  x0 in E & c = Class(=_f, x0) by EQREL_1:def 5;
       defpred _P[set] means
        ex k, l st i(k).$1 = i(l).x0 & k is even & l is even;
      set c1 = {_F(x) where x is Element of c : _P[x] };
-     c1 is Subset of c from SubsetFD;
+     c1 is Subset of c from COMPLSP1:sch 3;
    then reconsider c1 as Subset of E by XBOOLE_1:1;
      defpred _P[set] means
       ex k, l st i(k).$1 = i(l).x0 & k is odd & l is even;
      set c2 = {_F(x) where x is Element of c : _P[x] };
-      c2 is Subset of c from SubsetFD;
+      c2 is Subset of c from COMPLSP1:sch 3;
     then reconsider c2 as Subset of E by XBOOLE_1:1;
     reconsider c3 = {} as Subset of E by XBOOLE_1:2;
   per cases;
@@ -554,11 +588,14 @@ A5: b`1 = c1 & b`2 = c2 & b`3 = c3 by MCART_1:47;
      suppose x in c1; then consider xx being Element of c such that
       A7: x = xx & ex k, l st i(k).xx = i(l).x0 & k is even & l is even;
      thus x in c by A7;
+     end;
      suppose x in c2; then consider xx being Element of c such that
       A8: x = xx & ex k, l st i(k).xx = i(l).x0 & k is odd & l is even;
      thus x in c by A8;
+     end;
      suppose x in c3;
      hence x in c;
+    end;
     end;
     let x; assume x in c; then reconsider xc = x as Element of c;
         [xc,x0] in =_f by A3,EQREL_1:27;
@@ -572,6 +609,7 @@ A5: b`1 = c1 & b`2 = c2 & b`3 = c3 by MCART_1:47;
      suppose l is even;
       then xc in c1 by A9,A11;
      hence thesis by A5,XBOOLE_0:def 2;
+     end;
      suppose l is odd; then reconsider l as odd Nat;
          i(k+1).xc = (f*i(k)).xc by FUNCT_7:73
                 .= f.(i(l).x0) by A9,A10,FUNCT_1:23
@@ -580,12 +618,15 @@ A5: b`1 = c1 & b`2 = c2 & b`3 = c3 by MCART_1:47;
       then xc in c2;
      hence thesis by A5,XBOOLE_0:def 2;
     end;
+    end;
+    end;
     suppose A12: k is odd; then reconsider k as odd Nat;
     thus x in b`1 \/ b`2 \/ b`3 proof
      per cases;
      suppose l is even;
       then xc in c2 by A9,A12;
      hence thesis by A5,XBOOLE_0:def 2;
+     end;
      suppose l is odd; then reconsider l as odd Nat;
          i(k+1).xc = (f*i(k)).xc by FUNCT_7:73
                 .= f.(i(l).x0) by A9,A10,FUNCT_1:23
@@ -594,6 +635,8 @@ A5: b`1 = c1 & b`2 = c2 & b`3 = c3 by MCART_1:47;
       then xc in c1;
      hence thesis by A5,XBOOLE_0:def 2;
     end;
+    end;
+   end;
    end;
    thus f.:b`1 misses b`1 proof
       f.:c1 c= c2 proof let y be set; assume y in f.:c1;
@@ -659,6 +702,7 @@ E
     hence thesis by A4,A5,XBOOLE_1:63;
    end;
    thus f.:b`3 misses b`3 by A5,XBOOLE_1:65;
+  end;
   suppose c1 meets c2;
     then consider x1 being set such that
 A23: x1 in c1 & x1 in c2 by XBOOLE_0:3;
@@ -696,6 +740,7 @@ A30:    i(l2+k1).x1 = (i(l2)*i(k1)).x1 by FUNCT_7:79
      .= i(k1+l2).x1 by A29,A30,XCMPLX_1:27;
    hence i(k).r = r;
    thus r in c by Th7;
+   end;
    suppose A33: k1+l2 > k2+l1;
     take r = i(k2+l1).x1;
      reconsider k = k1+l2-(k2+l1) as Nat by A33,INT_1:18;
@@ -707,6 +752,7 @@ A30:    i(l2+k1).x1 = (i(l2)*i(k1)).x1 by FUNCT_7:79
    hence i(k).r = r;
    thus r in c by Th7;
    end;
+   end;
    then consider r being Element of E, k being odd Nat such that
 A34: i(k).r = r & r in c;
    reconsider r as Element of c by A34;
@@ -715,11 +761,11 @@ A35: for x being Element of c holds _F(x) in bool NAT proof
      let x be Element of c;
          deffunc _F1(Nat) = $1;
          defpred _P1[Nat] means i($1).x = r;
-         {_F1(l) where l is Nat : _P1[l]} is Subset of NAT from SubsetFD;
+         {_F1(l) where l is Nat : _P1[l]} is Subset of NAT from COMPLSP1:sch 3;
        hence thesis;
     end;
    consider Odl being Function of c, bool NAT such that
-A36: for x being Element of c holds Odl.x = _F(x) from FunctR_ealEx(A35);
+A36: for x being Element of c holds Odl.x = _F(x) from SUPINF_2:sch 1(A35);
      now let n be set; assume
      n in dom Odl;
        then reconsider nc = n as Element of c by FUNCT_2:def 1;
@@ -739,7 +785,7 @@ A36: for x being Element of c holds Odl.x = _F(x) from FunctR_ealEx(A35);
           .= r by A34,A42,A43,FUNCT_1:23;
         hence _P[i+1];
        end;
-   A44: for i being Nat holds _P[i] from Ind(A40, A41);
+   A44: for i being Nat holds _P[i] from NAT_1:sch 1(A40, A41);
          2*0 <> k;
    then A45: 0 < k by NAT_1:19;
       set dk = ln div k;
@@ -762,18 +808,18 @@ A36: for x being Element of c holds Odl.x = _F(x) from FunctR_ealEx(A35);
    then reconsider Odl as non-empty Function of c, bool NAT by UNIALG_1:def 6;
    deffunc _F(Element of c) = min (Odl.$1);
    consider odl being Function of c, NAT such that
-A49: for x being Element of c holds odl.x = _F(x) from LambdaD;
+A49: for x being Element of c holds odl.x = _F(x) from FUNCT_2:sch 4;
      deffunc _F1(Element of c) = $1;
      defpred _P1[set] means odl.$1 is even;
      defpred _P2[set] means odl.$1 is odd;
    set c1 = {_F1(x) where x is Element of c : _P1[x]};
    set d2 = {_F1(x) where x is Element of c : _P2[x]};
    set d1 = c1 \ {r};
-   A50: c1 is Subset of c from SubsetFD;
+   A50: c1 is Subset of c from COMPLSP1:sch 3;
       c1 \ {r} c= c1 by XBOOLE_1:36;
     then d1 c= c by A50,XBOOLE_1:1;
    then reconsider d1 as Subset of E by XBOOLE_1:1;
-      d2 is Subset of c from SubsetFD;
+      d2 is Subset of c from COMPLSP1:sch 3;
    then reconsider d2 as Subset of E by XBOOLE_1:1;
    reconsider d3 = {r} as Subset of E by ZFMISC_1:37;
    take b = [d1,d2,d3];
@@ -792,9 +838,11 @@ A54: d1 \/ d3 = c1 \/ d3 by XBOOLE_1:39 .= c1 by A53,ZFMISC_1:46;
        suppose x in c1; then consider xc being Element of c such that
        A56: xc = x & odl.xc is even;
         thus x in c by A56;
+       end;
        suppose x in d2; then consider xc being Element of c such that
        A57: xc = x & odl.xc is odd;
         thus x in c by A57;
+     end;
      end;
       let x be set; assume x in c; then reconsider xc = x as Element of c;
          odl.xc is even or odl.xc is odd;
@@ -889,8 +937,9 @@ A61: for x being Element of c st x <> r holds odl.(f.x) = (odl.x qua Nat)-1
      hence contradiction by A1,Def3;
     end;
   end;
+  end;
    consider F being Function of Class =_f, [:bool E, bool E, bool E:] such that
-A77:  for a being Element of Class =_f holds P[a,F.a] from FuncExD(A2);
+A77:  for a being Element of Class =_f holds P[a,F.a] from FUNCT_2:sch 3(A2);
   set E1c = {(F.c)`1 where c is Element of Class =_f: not contradiction};
   set E1 = union E1c;
   set E2c = {(F.c)`2 where c is Element of Class =_f: not contradiction};
@@ -907,16 +956,19 @@ A77:  for a being Element of Class =_f holds P[a,F.a] from FuncExD(A2);
       consider c being Element of Class =_f such that
    A80: Y = (F.c)`1 by A79;
     thus x in E by A79,A80;
+   end;
    suppose x in E2; then consider Y being set such that
    A81: x in Y & Y in E2c by TARSKI:def 4;
       consider c being Element of Class =_f such that
    A82: Y = (F.c)`2 by A81;
     thus x in E by A81,A82;
+   end;
    suppose x in E3; then consider Y being set such that
    A83: x in Y & Y in E3c by TARSKI:def 4;
       consider c being Element of Class =_f such that
    A84: Y = (F.c)`3 by A83;
     thus x in E by A83,A84;
+  end;
   end;
   let x; assume
   A85: x in E;
@@ -930,13 +982,16 @@ A77:  for a being Element of Class =_f holds P[a,F.a] from FuncExD(A2);
      then x in E1 by A88,TARSKI:def 4;
      then x in E1 \/ E2 by XBOOLE_0:def 2;
     hence x in E1 \/ E2 \/ E3 by XBOOLE_0:def 2;
+   end;
    suppose A89: x in (F.c)`2; (F.c)`2 in E2c;
      then x in E2 by A89,TARSKI:def 4;
      then x in E1 \/ E2 by XBOOLE_0:def 2;
     hence x in E1 \/ E2 \/ E3 by XBOOLE_0:def 2;
+   end;
    suppose A90: x in (F.c)`3; (F.c)`3 in E3c;
      then x in E3 by A90,TARSKI:def 4;
     hence x in E1 \/ E2 \/ E3 by XBOOLE_0:def 2;
+ end;
  end;
  thus f.:E1 misses E1 proof assume not thesis; then consider x such that
  A91: x in f.:E1 & x in E1 by XBOOLE_0:3;

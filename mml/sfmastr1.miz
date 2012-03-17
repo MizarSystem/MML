@@ -39,7 +39,8 @@ definition
  Macro i is good;
 end;
 
-definition
+
+registration
  let a be read-write Int-Location, b be Int-Location;
  cluster a := b -> good;
  coherence proof
@@ -63,7 +64,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  cluster good parahalting Instruction of SCM+FSA;
  existence proof
   consider a, b being read-write Int-Location;
@@ -72,7 +74,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let a, b be read-write Int-Location;
  cluster Divide(a, b) -> good;
  coherence proof
@@ -81,7 +84,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let l be Instruction-Location of SCM+FSA;
  cluster goto l -> good;
  coherence proof
@@ -90,7 +94,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let a be Int-Location, l be Instruction-Location of SCM+FSA;
  cluster a =0_goto l -> good;
  coherence proof
@@ -104,7 +109,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let a be Int-Location, f be FinSeq-Location, b be read-write Int-Location;
  cluster b := (f,a) -> good;
  coherence proof
@@ -113,7 +119,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let f be FinSeq-Location, b be read-write Int-Location;
  cluster b :=len f -> good;
  coherence proof
@@ -122,7 +129,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let f be FinSeq-Location, a be Int-Location;
  cluster f :=<0,...,0> a -> good;
  coherence proof
@@ -137,7 +145,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  cluster good Instruction of SCM+FSA;
  existence proof
   take h = halt SCM+FSA;
@@ -147,13 +156,15 @@ definition
  end;
 end;
 
-definition
+
+registration
  let i be good Instruction of SCM+FSA;
  cluster Macro i -> good;
  coherence by Def1;
 end;
 
-definition
+
+registration
  let i, j be good Instruction of SCM+FSA;
  cluster i ';' j -> good;
  coherence proof
@@ -162,7 +173,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let i be good Instruction of SCM+FSA,
      I be good Macro-Instruction;
  cluster i ';' I -> good;
@@ -177,7 +189,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let a, b be read-write Int-Location;
  cluster swap(a, b) -> good;
  coherence proof
@@ -187,7 +200,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let I be good Macro-Instruction, a be read-write Int-Location;
  cluster Times(a, I) -> good;
  coherence proof
@@ -197,6 +211,7 @@ definition
   hence thesis by SCMFSA8C:def 5;
  end;
 end;
+
 
 theorem Th1:
  for a being Int-Location, I being Macro-Instruction
@@ -215,59 +230,72 @@ A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
   per cases by A3,A4,A5,A6,CQC_THE1:9,NAT_1:26;
   suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
    hence i does_not_destroy aa by SCMFSA7B:11;
+  end;
   suppose InsCode i = 1; then consider a, b be Int-Location such that
   A7: i = a:=b by SCMFSA_2:54; UsedIntLoc i = {a, b} by A7,SF_MASTR:18;
      then a in UsedIntLoc i by TARSKI:def 2;
    hence i does_not_destroy aa by A2,A7,SCMFSA7B:12;
+  end;
   suppose InsCode i = 2; then consider a, b  be Int-Location such that
   A8: i = AddTo(a,b) by SCMFSA_2:55; UsedIntLoc i = {a, b} by A8,SF_MASTR:18;
      then a in UsedIntLoc i by TARSKI:def 2;
    hence i does_not_destroy aa by A2,A8,SCMFSA7B:13;
+  end;
   suppose InsCode i = 3; then consider a, b  be Int-Location such that
   A9: i = SubFrom(a, b) by SCMFSA_2:56; UsedIntLoc i = {a, b} by A9,SF_MASTR:18
 ;
      then a in UsedIntLoc i by TARSKI:def 2;
    hence i does_not_destroy aa by A2,A9,SCMFSA7B:14;
+  end;
   suppose InsCode i = 4; then consider a, b be Int-Location such that
   A10: i = MultBy(a, b) by SCMFSA_2:57; UsedIntLoc i = {a, b} by A10,SF_MASTR:
 18;
      then a in UsedIntLoc i by TARSKI:def 2;
    hence i does_not_destroy aa by A2,A10,SCMFSA7B:15;
+  end;
   suppose InsCode i = 5; then consider a, b be Int-Location such that
   A11: i = Divide(a, b) by SCMFSA_2:58; UsedIntLoc i = {a, b} by A11,SF_MASTR:
 18;
      then a in UsedIntLoc i & b in UsedIntLoc i by TARSKI:def 2;
    hence i does_not_destroy aa by A2,A11,SCMFSA7B:16;
+  end;
   suppose InsCode i = 6;
      then consider l be Instruction-Location of SCM+FSA such that
   A12: i = goto l by SCMFSA_2:59;
    thus i does_not_destroy aa by A12,SCMFSA7B:17;
+  end;
   suppose InsCode i = 7; then consider l be Instruction-Location of SCM+FSA,
      a being Int-Location such that
   A13: i = a=0_goto l by SCMFSA_2:60;
    thus i does_not_destroy aa by A13,SCMFSA7B:18;
+  end;
   suppose InsCode i = 8; then consider l be Instruction-Location of SCM+FSA,
      a being Int-Location such that
   A14: i = a>0_goto l by SCMFSA_2:61;
    thus i does_not_destroy aa by A14,SCMFSA7B:19;
+  end;
   suppose InsCode i = 9; then consider a, b  be Int-Location,
      f be FinSeq-Location such that
   A15: i = b:=(f,a) by SCMFSA_2:62; UsedIntLoc i = {a, b} by A15,SF_MASTR:21;
      then b in UsedIntLoc i by TARSKI:def 2;
    hence i does_not_destroy aa by A2,A15,SCMFSA7B:20;
+  end;
   suppose InsCode i = 10; then consider a, b  be Int-Location,
      f be FinSeq-Location such that
   A16: i = (f,a):=b by SCMFSA_2:63;
    thus i does_not_destroy aa by A16,SCMFSA7B:21;
+  end;
   suppose InsCode i = 11; then consider a be Int-Location,
      f be FinSeq-Location such that
   A17: i = a:=len f by SCMFSA_2:64; UsedIntLoc i = {a} by A17,SF_MASTR:22;
      then a in UsedIntLoc i by TARSKI:def 1;
    hence i does_not_destroy aa by A2,A17,SCMFSA7B:22;
+  end;
   suppose InsCode i = 12; then consider a be Int-Location,
      f be FinSeq-Location such that
   A18: i = f:=<0,...,0>a by SCMFSA_2:65;
    thus i does_not_destroy aa by A18,SCMFSA7B:23;
+end;
 end;
 
 begin :: Composition of non parahalting macro instructions
@@ -305,8 +333,10 @@ proof
          suppose A4: x in dom I;
             dom I c= Ins by AMI_3:def 13;
           hence contradiction by A2,A4,SCMFSA6A:37;
+         end;
          suppose x = IC SCM+FSA;
           hence contradiction by A1,SCMFSA6A:37,XBOOLE_0:def 3;
+      end;
       end;
       then dom ((IAt) | D) = {} by XBOOLE_0:def 1;
      hence IAt | D = {} by RELAT_1:64;
@@ -391,6 +421,7 @@ then A22: PPR c= I ';' J by FUNCT_4:26;
  A25: IC (Computation s1).k in dom I by A8,SCMFSA7B:def 7;
        dom I c= dom IJ by SCMFSA6A:56;
   hence IC (Computation s).k in dom IJ by A24,A25;
+ end;
  suppose m1+1 <= k;
    then consider i being Nat such that
  A26: k = m1+1+i by NAT_1:28;
@@ -408,6 +439,7 @@ then A22: PPR c= I ';' J by FUNCT_4:26;
  then A32: insloc (jloc+card I) in dom PPR by A28,A29,A31;
        dom PPR c= dom IJ by A22,RELAT_1:25;
   hence IC (Computation s).k in dom IJ by A26,A27,A30,A32;
+end;
 end;
 
 theorem Th4:
@@ -545,7 +577,7 @@ A16:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m) by AMI_1:def 17
      equal_outside the Instruction-Locations of SCM+FSA by A6,A7,A9,A10,NAT_1:
 38,SCMFSA6A:32;
    end;
- thus for n being Nat holds X[n] from Ind(A4,A5);
+ thus for n being Nat holds X[n] from NAT_1:sch 1(A4,A5);
 end;
 
 Lm1:
@@ -686,10 +718,12 @@ then A35: CurInstr((Computation s).m)
       suppose k <= m1;
        hence CurInstr (Computation s).k <> halt SCM+FSA
               by A2,A4,A9,A18,SCMFSA8A:35;
+      end;
       suppose m1 < k;
        then m1 + 1 <= k by NAT_1:38;
        then consider kk being Nat such that A37: m1 + 1 + kk = k by NAT_1:28;
        thus CurInstr (Computation s).k <> halt SCM+FSA by A32,A36,A37;
+     end;
      end;
 then A38: for k being Nat st CurInstr (Computation s).k = halt SCM+FSA
      holds m <= k;
@@ -965,18 +999,21 @@ A45:   dom Start-At l = {IC SCM+FSA} by AMI_3:34;
        then not x in dom Start-At l by A45,TARSKI:def 1;
        hence IExec(I ';' J,s).x
            = (IEJIs +* Start-At (IC IEJIs + card I)).x by A48,FUNCT_4:12;
+      end;
       suppose A49: x is FinSeq-Location;
   then A50:  IExec(I ';' J,s).x = IEJIs.x by A40,SCMFSA6A:38;
          x <> IC SCM+FSA by A49,SCMFSA_2:82;
        then not x in dom Start-At l by A45,TARSKI:def 1;
        hence IExec(I ';' J,s).x
            = (IEJIs +* Start-At (IC IEJIs + card I)).x by A50,FUNCT_4:12;
+      end;
       suppose A51: x = IC SCM+FSA;
        then x in {IC SCM+FSA} by TARSKI:def 1;
     then A52: x in dom Start-At l by AMI_3:34;
        thus IExec(I ';' J,s).x = l by A43,A51,AMI_1:def 15
        .= (Start-At l).IC SCM+FSA by AMI_3:50
        .= (IEJIs +* Start-At (IC IEJIs + card I)).x by A51,A52,FUNCT_4:14;
+      end;
       suppose A53: x is Instruction-Location of SCM+FSA;
          IExec(I ';' J,s) | Ins = ps by A30,SCMFSA6A:40
        .= IEJIs | Ins by A31,SCMFSA6A:40;
@@ -985,6 +1022,7 @@ A45:   dom Start-At l = {IC SCM+FSA} by AMI_3:34;
        then not x in dom Start-At l by A45,TARSKI:def 1;
        hence IExec(I ';' J,s).x
            = (IEJIs +* Start-At (IC IEJIs + card I)).x by A54,FUNCT_4:12;
+      end;
       end;
  hence thesis by A44,FUNCT_1:9;
 end;
@@ -1090,16 +1128,20 @@ XBOOLE_1:4;
      suppose A7: x' is read-write;
       thus ((Initialize IE)|D).x = (Initialize IE).x by A5,A6,FUNCT_1:72
           .= IE.x by A7,SCMFSA6C:3;
+     end;
      suppose x' is read-only;
              then A8: x' = intloc 0 by SF_MASTR:def 5;
       thus ((Initialize IE)|D).x = (Initialize IE).x' by A5,A6,FUNCT_1:72
          .= 1 by A8,SCMFSA6C:3
          .= IE.x by A2,A8,SCMFSA8C:96;
     end;
+    end;
+    end;
     suppose x in FinSeq-Locations;
       then reconsider x' = x as FinSeq-Location by SCMFSA_2:12;
     thus ((Initialize IE)|D).x = (Initialize IE).x' by A5,A6,FUNCT_1:72
        .= IE.x by SCMFSA6C:3;
+  end;
   end;
  hence (Initialize IE) | D = IE | D by FUNCT_1:68;
 end;
@@ -1245,6 +1287,7 @@ definition
  end;
 end;
 
+
 Lm3: for X being set st X is infinite holds X is non empty
 proof
   let X be set; assume A1: X is infinite;
@@ -1265,7 +1308,7 @@ definition
  existence proof
    defpred X[Nat] means not intloc $1 in L & $1 <> 0;
   set sn = {k where k is Nat : X[k] };
- A1: sn is Subset of NAT from SubsetD;
+ A1: sn is Subset of NAT from DOMAIN_1:sch 7;
     set M = L \/ {intloc 0};
       not Int-Locations c= M by SCMFSA_2:22,XBOOLE_0:def 10;
     then consider x being set such that
@@ -1286,6 +1329,7 @@ A5: now let n be Nat;
      per cases;
      suppose x is empty; then P[n, x, {} NAT];
       hence ex y being Element of bool NAT st P[n,x,y];
+     end;
      suppose x is non empty;
        then reconsider x' = x as non empty Subset of NAT;
          now
@@ -1298,11 +1342,12 @@ A5: now let n be Nat;
        end;
       hence ex y being Element of bool NAT st P[n,x,y];
     end;
+    end;
 
   consider f being Function of NAT, bool NAT such that
 A6: f.0 = sn and
 A7: for n being (Element of NAT) holds P[n, f.n, f.(n+1)]
-      from RecExD(A5);
+      from RECDEF_1:sch 2(A5);
 
   take f;
   thus f.0 = {v where v is Nat : not intloc v in L & v <> 0} by A6;
@@ -1315,16 +1360,18 @@ A8: X[0]
     then A9: sn is finite by A6;
      deffunc U(Nat) = intloc $1;
         set Isn = { U(v) where v is Nat : v in sn };
-          Isn is finite from FraenkelFin(A9);
+          Isn is finite from FRAENKEL:sch 21(A9);
         then reconsider Isn as finite set;
           now let x be set;
          hereby assume A10: x in M \/ Isn;
           per cases by A10,XBOOLE_0:def 2;
           suppose x in M;
            hence x in Int-Locations;
+          end;
           suppose x in Isn; then consider k being Nat such that
           A11: intloc k = x & k in sn;
            thus x in Int-Locations by A11,SCMFSA_2:9;
+         end;
          end;
         assume x in Int-Locations;
           then reconsider x' = x as Int-Location by SCMFSA_2:11;
@@ -1353,7 +1400,7 @@ A13:  for n st X[n] holds X[n+1]
       hence contradiction by A14,A15,A16,XBOOLE_1:45;
     end;
 
-  thus for n being Nat holds X[n] from Ind(A8, A13);
+  thus for n being Nat holds X[n] from NAT_1:sch 1(A8, A13);
  end;
  uniqueness proof let IT1, IT2 be Function of NAT, bool NAT such that
 A17: IT1.0 = {k where k is Nat : not intloc k in L & k <> 0} and
@@ -1377,18 +1424,20 @@ A23:  for n st X[n] holds X[n+1]
      thus IT1.(n+1) = IT1n \ {min IT1n} by A18
                    .= IT2.(n+1) by A20,A24;
     end;
-      for n being Nat holds X[n] from Ind(A22, A23);
+      for n being Nat holds X[n] from NAT_1:sch 1(A22, A23);
     hence for x being set st x in NAT holds IT1.x = IT2.x;
    end;
   hence IT1 = IT2 by FUNCT_1:9;
  end;
 end;
 
-definition
+
+registration
  let L be finite Subset of Int-Locations, n be Nat;
  cluster (RWNotIn-seq L).n -> non empty;
  coherence by Def2;
 end;
+
 
 theorem Th18:
  not 0 in (RWNotIn-seq L).n &
@@ -1418,7 +1467,7 @@ A5:  for n st X[n] holds X[n+1]
      let m; assume m in RL.(n+1); then m in RL.n by A8,XBOOLE_0:def 4;
      hence not intloc m in L by A7;
     end;
-        for n being Nat holds X[n]  from Ind(A1, A5);
+        for n being Nat holds X[n]  from NAT_1:sch 1(A1, A5);
  hence thesis;
 end;
 
@@ -1454,11 +1503,13 @@ A2:  for m st X[m] holds X[m+1]
      per cases by A4,REAL_1:def 5;
      suppose n = m;
       hence min (RL.n) < min (RL.(m+1)) by Th19;
+     end;
      suppose n < m;
        then min (RL.n) < min (RL.m) & min (RL.m) < min (RL.(m+1)) by A3,Th19;
       hence min (RL.n) < min (RL.(m+1)) by AXIOMS:22;
     end;
-  thus for n being Nat holds X[n] from Ind(A1, A2);
+    end;
+  thus for n being Nat holds X[n] from NAT_1:sch 1(A1, A2);
   end;
  hence thesis;
 end;
@@ -1469,12 +1520,14 @@ definition
 :Def3:
   intloc min ((RWNotIn-seq L).n);
  correctness;
- synonym n-stRWNotIn L;
- synonym n-ndRWNotIn L;
- synonym n-rdRWNotIn L;
-end;
+ end;
+notation
+ let n be Nat, L be finite Subset of Int-Locations;
+ synonym n-stRWNotIn L for n-thRWNotIn L ; synonym n-ndRWNotIn L for
+ n-thRWNotIn L ; synonym n-rdRWNotIn L for n-thRWNotIn L ; end;
 
-definition
+
+registration
  let n be Nat, L be finite Subset of Int-Locations;
  cluster n-thRWNotIn L -> read-write;
  coherence proof
@@ -1487,6 +1540,7 @@ A1: FNI = intloc min sn by Def3;
   hence thesis by SF_MASTR:def 5;
  end;
 end;
+
 
 theorem Th21:
  not n-thRWNotIn L in L
@@ -1512,12 +1566,14 @@ definition
  func n-thNotUsed p -> Int-Location equals
 :Def4:             n-thRWNotIn UsedIntLoc p;
  correctness;
- synonym n-stNotUsed p;
- synonym n-ndNotUsed p;
- synonym n-rdNotUsed p;
-end;
+ end;
+notation
+ let n be Nat, p be programmed FinPartState of SCM+FSA;
+ synonym n-stNotUsed p for n-thNotUsed p ; synonym n-ndNotUsed p for
+ n-thNotUsed p ; synonym n-rdNotUsed p for n-thNotUsed p ; end;
 
-definition
+
+registration
  let n be Nat, p be programmed FinPartState of SCM+FSA;
  cluster n-thNotUsed p -> read-write;
  coherence proof
@@ -1525,6 +1581,7 @@ definition
   hence thesis;
  end;
 end;
+
 
 begin :: A macro for the Fibonacci sequence
 
@@ -1575,6 +1632,7 @@ definition
    (N := N_save);
  correctness;
 end;
+
 
 theorem
   for N, result being read-write Int-Location
@@ -1688,7 +1746,7 @@ A17: now let n be Nat such that
        .= Fib (m+1+(n+1)) by XCMPLX_1:1;
      end;
     end;
-A27: for n being Nat holds P[n] from Ind(A14, A17);
+A27: for n being Nat holds P[n] from NAT_1:sch 1(A14, A17);
 A28: s1.intloc 0
    = Exec(i2, IExec(i00 ';' i0 ';' i1, s)).intloc 0 by SCMFSA6C:7
   .= IExec(i00 ';' i0 ';' i1, s).intloc 0 by SCMFSA_2:89

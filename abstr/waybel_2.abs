@@ -24,19 +24,66 @@ environ
 
 begin :: Preliminaries
 
-definition let X, Y be non empty set,
+registration let X, Y be non empty set,
                f be Function of X, Y,
                Z be non empty Subset of X;
  cluster f.:Z -> non empty;
+coherence
+  proof
+    consider x being Element of Z;
+A1: dom f = X by FUNCT_2:def 1;
+    then f.x in rng f by FUNCT_1:def 5;
+    hence thesis by A1,FUNCT_1:def 12;
+  end;
 end;
 
-definition
+
+registration
  cluster reflexive connected -> with_infima with_suprema (non empty RelStr);
+coherence
+  proof
+    let L be non empty RelStr such that
+A1:   L is reflexive connected;
+    thus L is with_infima
+    proof
+      let x, y be Element of L;
+      per cases by A1,WAYBEL_0:def 29;
+      suppose
+A2:        x <= y;
+        take z = x;
+        thus z <= x & z <= y by A1,A2,YELLOW_0:def 1;
+        thus thesis;
+      end;
+      suppose
+A3:        y <= x;
+        take z = y;
+        thus z <= x & z <= y by A1,A3,YELLOW_0:def 1;
+        thus thesis;
+    end;
+    end;
+    let x, y be Element of L;
+    per cases by A1,WAYBEL_0:def 29;
+    suppose
+A4:     x <= y;
+      take z = y;
+      thus z >= x & z >= y by A1,A4,YELLOW_0:def 1;
+      thus thesis;
+    end;
+    suppose
+A5:     y <= x;
+      take z = x;
+      thus z >= x & z >= y by A1,A5,YELLOW_0:def 1;
+      thus thesis;
+  end;
+  end;
 end;
 
-definition let C be Chain;
+
+registration let C be Chain;
  cluster [#]C -> directed;
+coherence;
 end;
+
 
 theorem :: WAYBEL_2:1
 for L being up-complete Semilattice
@@ -99,9 +146,36 @@ for L being up-complete Semilattice
     = "\/" (union {X where X is non empty directed Subset of L:
      ex x being Element of L st X = {x} "/\" proj2 D & x in proj1 D},L);
 
-definition let S, T be up-complete (non empty reflexive RelStr);
+registration let S, T be up-complete (non empty reflexive RelStr);
  cluster [:S,T:] -> up-complete;
+coherence
+  proof
+    let X be non empty directed Subset of [:S,T:];
+    reconsider X1 = proj1 X as non empty directed Subset of S
+      by YELLOW_3:21,22;
+    reconsider X2 = proj2 X as non empty directed Subset of T
+      by YELLOW_3:21,22;
+    consider x being Element of S such that
+A1:   x is_>=_than X1 and
+A2:   for z being Element of S st z is_>=_than X1 holds x <= z
+        by WAYBEL_0:def 39;
+    consider y being Element of T such that
+A3:   y is_>=_than X2 and
+A4:   for z being Element of T st z is_>=_than X2 holds y <= z
+        by WAYBEL_0:def 39;
+    take [x,y];
+    thus [x,y] is_>=_than X by A1,A3,YELLOW_3:31;
+    let z be Element of [:S,T:] such that
+A5:   z is_>=_than X;
+      the carrier of [:S,T:] = [:the carrier of S, the carrier of T:]
+      by YELLOW_3:def 2;
+then A6: z = [z`1,z`2] by MCART_1:23;
+    then z`1 is_>=_than X1 & z`2 is_>=_than X2 by A5,YELLOW_3:31;
+    then x <= z`1 & y <= z`2 by A2,A4;
+    hence [x,y] <= z by A6,YELLOW_3:11;
+  end;
 end;
+
 
 theorem :: WAYBEL_2:11
   for S, T being non empty reflexive antisymmetric RelStr
@@ -122,13 +196,36 @@ for S1, S2 being RelStr, D being Subset of S1
  for f being map of S1,S2 st f is monotone holds
   f.:(uparrow D) c= uparrow (f.:D);
 
-definition
+registration
  cluster trivial -> distributive complemented (non empty reflexive RelStr);
+coherence
+  proof
+    let L be non empty reflexive RelStr such that
+A1:   L is trivial;
+    thus L is distributive
+    proof
+      let x,y,z be Element of L;
+      thus x "/\" (y "\/" z) = (x "/\" y) "\/" (x "/\"
+ z) by A1,REALSET1:def 20;
+    end;
+    let x be Element of L;
+    take y = x;
+    thus x "\/" y = Top L by A1,REALSET1:def 20;
+    thus x "/\" y = Bottom L by A1,REALSET1:def 20;
+  end;
 end;
 
-definition
+
+registration
  cluster strict non empty trivial LATTICE;
+existence
+  proof
+    consider B being strict trivial (non empty reflexive RelStr);
+    take B;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL_2:15
 for H being distributive complete LATTICE
@@ -147,12 +244,34 @@ for H being complete distributive LATTICE, a being Element of H
 
 begin :: The Properties of Nets
 
-scheme ExNet { L() -> non empty RelStr,
+scheme :: WAYBEL_2:sch 1
+ ExNet { L() -> non empty RelStr,
                N() -> prenet of L(),
                F(set) -> Element of L()} :
  ex M being prenet of L() st the RelStr of M = the RelStr of N() &
   for i being Element of M holds
-   (the mapping of M).i = F((the mapping of N()).i);
+   (the mapping of M).i = F((the mapping of N()).i)
+proof
+    deffunc G(Element of N()) = F((the mapping of N()).$1);
+A1: for i being Element of N() holds
+     G(i) in the carrier of L();
+    consider f being Function of the carrier of N(), the carrier of L()
+       such that
+A2:  for i being Element of N() holds f.i = G(i)
+     from SUPINF_2:sch 1(A1);
+    set M = NetStr (# the carrier of N(), the InternalRel of N(), f #);
+      M is directed
+    proof
+A3:   the RelStr of M = the RelStr of N();
+A4:   [#]N() is directed by WAYBEL_0:def 6;
+        [#]N() = the carrier of N() by PRE_TOPC:12
+          .= [#]M by PRE_TOPC:12;
+      hence [#]M is directed by A3,A4,WAYBEL_0:3;
+    end;
+    then reconsider M as prenet of L();
+    take M;
+    thus thesis by A2;
+  end;
 
 theorem :: WAYBEL_2:18
 for L being non empty RelStr
@@ -177,6 +296,7 @@ definition let L be non empty RelStr,
    Sup the mapping of N;
 end;
 
+
 definition let L be non empty RelStr,
                J be set,
                f be Function of J,the carrier of L;
@@ -187,16 +307,43 @@ definition let L be non empty RelStr,
     it = NetStr (# Fin J, RelIncl Fin J, g #);
 end;
 
+
 theorem :: WAYBEL_2:21
   for L being non empty RelStr, J, x being set
  for f being Function of J,the carrier of L holds
   x is Element of FinSups f iff x is Element of Fin J;
 
-definition let L be complete antisymmetric (non empty reflexive RelStr),
+registration let L be complete antisymmetric (non empty reflexive RelStr),
                J be set,
                f be Function of J,the carrier of L;
  cluster FinSups f -> monotone;
+coherence
+  proof
+    let x, y be Element of FinSups f such that
+A1:   x <= y;
+    consider g being Function of Fin J, the carrier of L
+     such that
+A2:   for x being Element of Fin J holds g.x = sup (f.:x) &
+      FinSups f = NetStr (# Fin J, RelIncl Fin J, g #) by Def2;
+A3: ex_sup_of f.:x,L by YELLOW_0:17;
+A4: ex_sup_of f.:y,L by YELLOW_0:17;
+      g.x = sup (f.:x) & g.y = sup (f.:y) by A2;
+    then reconsider fx = g.x as Element of L;
+A5: InclPoset Fin J = RelStr(#Fin J, RelIncl Fin J#) by YELLOW_1:def 1;
+    then reconsider x1 = x, y1 = y
+      as Element of InclPoset Fin J by A2;
+    let a, b be Element of L such that
+A6:   a = netmap(FinSups f,L).x & b = netmap(FinSups f,L).y;
+A7: g = netmap(FinSups f,L) by A2,WAYBEL_0:def 7;
+      x1 <= y1 by A1,A2,A5,YELLOW_0:1;
+    then x c= y by YELLOW_1:3;
+    then f.:x c= f.:y by RELAT_1:156;
+    then sup (f.:x) <= sup (f.:y) by A3,A4,YELLOW_0:34;
+    then fx <= sup (f.:y) by A2;
+    hence a <= b by A2,A6,A7;
+  end;
 end;
+
 
 definition let L be non empty RelStr,
                x be Element of L,
@@ -208,22 +355,38 @@ definition let L be non empty RelStr,
    y = (the mapping of N).i & (the mapping of it).i = x "/\" y;
 end;
 
+
 theorem :: WAYBEL_2:22
 for L being non empty RelStr, N being non empty NetStr over L
  for x being Element of L, y being set holds
   y is Element of N iff y is Element of x "/\" N;
 
-definition let L be non empty RelStr,
+registration let L be non empty RelStr,
                x be Element of L,
                N be non empty NetStr over L;
  cluster x "/\" N -> non empty;
+coherence
+  proof
+      the RelStr of x "/\" N = the RelStr of N by Def3;
+    hence thesis by STRUCT_0:def 1;
+  end;
 end;
 
-definition let L be non empty RelStr,
+
+registration let L be non empty RelStr,
                x be Element of L,
                N be prenet of L;
  cluster x "/\" N -> directed;
+coherence
+  proof
+A1: the RelStr of x "/\" N = the RelStr of N by Def3;
+A2: [#]N is directed by WAYBEL_0:def 6;
+      [#]N = the carrier of N by PRE_TOPC:12
+      .= [#](x "/\" N) by A1,PRE_TOPC:12;
+    hence [#](x "/\" N) is directed by A1,A2,WAYBEL_0:3;
+  end;
 end;
+
 
 theorem :: WAYBEL_2:23
 for L being non empty RelStr, x being Element of L
@@ -283,13 +446,26 @@ definition let L be non empty RelStr;
   for x, y being Element of L holds it.[x,y] = x "/\" y;
 end;
 
+
 theorem :: WAYBEL_2:31
 for L being non empty RelStr, x being Element of [:L,L:] holds
  (inf_op L).x = x`1 "/\" x`2;
 
-definition let L be with_infima transitive antisymmetric RelStr;
+registration let L be with_infima transitive antisymmetric RelStr;
  cluster inf_op L -> monotone;
+coherence
+  proof
+    set f = inf_op L;
+    let x, y be Element of [:L,L:];
+    assume x <= y;
+then A1: x`1 <= y`1 & x`2 <= y`2 by YELLOW_3:12;
+    let a, b be Element of L such that
+A2:   a = f.x & b = f.y;
+      f.x = x`1 "/\" x`2 & f.y = y`1 "/\" y`2 by Th31;
+    hence a <= b by A1,A2,YELLOW_3:2;
+  end;
 end;
+
 
 theorem :: WAYBEL_2:32
 for S being non empty RelStr, D1, D2 being Subset of S holds
@@ -306,13 +482,26 @@ definition let L be non empty RelStr;
   for x, y being Element of L holds it.[x,y] = x "\/" y;
 end;
 
+
 theorem :: WAYBEL_2:34
 for L being non empty RelStr, x being Element of [:L,L:] holds
  (sup_op L).x = x`1 "\/" x`2;
 
-definition let L be with_suprema transitive antisymmetric RelStr;
+registration let L be with_suprema transitive antisymmetric RelStr;
  cluster sup_op L -> monotone;
+coherence
+  proof
+    set f = sup_op L;
+    let x, y be Element of [:L,L:];
+    assume x <= y;
+then A1: x`1 <= y`1 & x`2 <= y`2 by YELLOW_3:12;
+    let a, b be Element of L such that
+A2:   a = f.x & b = f.y;
+      f.x = x`1 "\/" x`2 & f.y = y`1 "\/" y`2 by Th34;
+    hence a <= b by A1,A2,YELLOW_3:3;
+  end;
 end;
+
 
 theorem :: WAYBEL_2:35
 for S being non empty RelStr, D1, D2 being Subset of S holds
@@ -334,26 +523,50 @@ definition let R be non empty reflexive RelStr;
     x "/\" sup D = sup ({x} "/\" D);
 end;
 
+
 definition let R be non empty reflexive RelStr;
  attr R is meet-continuous means
 :: WAYBEL_2:def 7
   R is up-complete satisfying_MC;
 end;
 
-definition
+
+registration
  cluster trivial -> satisfying_MC (non empty reflexive RelStr);
+coherence
+  proof
+    let IT be non empty reflexive RelStr;
+    assume IT is trivial;
+    then reconsider I = IT as trivial (non empty reflexive RelStr);
+    let x be Element of IT,
+        D be non empty directed Subset of IT;
+    consider a being Element of I such that
+A1:   the carrier of I = {a} by TEX_1:def 1;
+    thus x "/\" sup D = sup ({x} "/\" D) by A1,REALSET1:def 20;
+  end;
 end;
 
-definition
+
+registration
  cluster meet-continuous ->
               up-complete satisfying_MC (non empty reflexive RelStr);
+coherence by Def7;
  cluster up-complete satisfying_MC ->
               meet-continuous (non empty reflexive RelStr);
+coherence by Def7;
 end;
 
-definition
+
+registration
  cluster strict non empty trivial LATTICE;
+existence
+  proof
+    consider B being strict trivial non empty reflexive RelStr;
+    take B;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL_2:37
 for S being non empty reflexive RelStr st
@@ -366,9 +579,30 @@ theorem :: WAYBEL_2:38
 for L being up-complete Semilattice st SupMap L is meet-preserving holds
  for I1, I2 being Ideal of L holds (sup I1) "/\" (sup I2) = sup (I1 "/\" I2);
 
-definition let L be up-complete sup-Semilattice;
+registration let L be up-complete sup-Semilattice;
  cluster SupMap L -> join-preserving;
+coherence
+  proof
+    set f = SupMap L;
+A1: dom f = the carrier of InclPoset(Ids L) by FUNCT_2:def 1;
+    let x, y be Element of InclPoset(Ids L);
+    assume ex_sup_of {x,y},InclPoset(Ids L);
+      f.:{x,y} = {f.x,f.y} by A1,FUNCT_1:118;
+    hence ex_sup_of f.:{x,y},L by YELLOW_0:20;
+    reconsider x1 = x, y1 = y as Ideal of L by YELLOW_2:43;
+A2: ex_sup_of x1 "\/" y1,L by WAYBEL_0:75;
+    thus sup (f.:{x,y}) = sup {f.x,f.y} by A1,FUNCT_1:118
+                      .= f.x "\/" f.y by YELLOW_0:41
+                      .= f.x "\/" sup y1 by YELLOW_2:def 3
+                      .= sup x1 "\/" sup y1 by YELLOW_2:def 3
+                      .= sup (x1 "\/" y1) by Th4
+                      .= sup downarrow (x1 "\/" y1) by A2,WAYBEL_0:33
+                      .= f.(downarrow (x1 "\/" y1)) by YELLOW_2:def 3
+                      .= f.(x "\/" y) by YELLOW_4:30
+                      .= f.sup {x,y} by YELLOW_0:41;
+  end;
 end;
+
 
 :: Th 4.2, s.30, 2 => 1
 theorem :: WAYBEL_2:39
@@ -449,9 +683,11 @@ for L being up-complete LATTICE
  holds L is meet-continuous iff
   SupMap L is meet-preserving join-preserving;
 
-definition let L be meet-continuous LATTICE;
+registration let L be meet-continuous LATTICE;
  cluster SupMap L -> meet-preserving join-preserving;
+coherence by Th49;
 end;
+
 
 :: Th 4.2, s.30, 4 <=> 2
 theorem :: WAYBEL_2:50
@@ -478,9 +714,11 @@ theorem :: WAYBEL_2:53
 for L being up-complete Semilattice holds
  L is meet-continuous iff inf_op L is directed-sups-preserving;
 
-definition let L be meet-continuous Semilattice;
+registration let L be meet-continuous Semilattice;
  cluster inf_op L -> directed-sups-preserving;
+coherence by Th53;
 end;
+
 
 :: Th 4.2, s.30, 4 <=> 7
 theorem :: WAYBEL_2:54
@@ -498,18 +736,23 @@ theorem :: WAYBEL_2:55
    for f being Function of J,the carrier of L
   holds x "/\" Sup f = sup(x "/\" FinSups f);
 
-definition let L be meet-continuous Semilattice,
+registration let L be meet-continuous Semilattice,
                x be Element of L;
  cluster x "/\" -> directed-sups-preserving;
+coherence by Lm1;
 end;
+
 
 :: Remark 4.3 s.31
 theorem :: WAYBEL_2:56
 for H being complete (non empty Poset) holds
   H is Heyting iff H is meet-continuous distributive;
 
-definition
+registration
  cluster complete Heyting -> meet-continuous distributive (non empty Poset);
+coherence by Th56;
  cluster complete meet-continuous distributive -> Heyting (non empty Poset);
+coherence by Th56;
 end;
+
 

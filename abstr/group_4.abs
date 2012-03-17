@@ -28,13 +28,70 @@ definition let D be non empty set; let F be FinSequence of D; let X be set;
  redefine func F - X -> FinSequence of D;
 end;
 
-scheme MeetSbgEx{G() -> Group, P[set]}:
+
+scheme :: GROUP_4:sch 1
+ MeetSbgEx{G() -> Group, P[set]}:
  ex H being strict Subgroup of G() st
   the carrier of H =
     meet{A where A is Subset of G() :
           ex K being strict Subgroup of G() st A = the carrier of K & P[K]}
  provided
-   ex H being strict Subgroup of G() st P[H];
+   ex H being strict Subgroup of G() st P[H]
+proof  set X = {A where A is Subset of G():
+                 ex K being strict Subgroup of G()
+                   st A = the carrier of K & P[K]};
+   consider T being strict Subgroup of G() such that A2: P[T] by A1;
+      carr T = the carrier of T by GROUP_2:def 9;
+    then A3: carr T in X by A2;
+   then reconsider Y = meet X as Subset of G() by SETFAM_1:8;
+      now let Z be set;
+      assume Z in X;
+       then consider A being Subset of G() such that
+       A4: Z = A and
+        A5: ex K being strict Subgroup of G() st A = the carrier of K & P[K];
+       consider H being Subgroup of G() such that
+        A6: A = the carrier of H & P[H] by A5;
+          1.G() in H by GROUP_2:55;
+     hence 1.G() in Z by A4,A6,RLVECT_1:def 1;
+    end;
+    then A7: Y <> {} by A3,SETFAM_1:def 1;
+    A8: now let a,b be Element of G();
+      assume A9: a in Y & b in Y;
+         now let Z be set;
+         assume A10: Z in X;
+          then consider A being Subset of G() such that
+          A11: A = Z and
+           A12: ex H being strict Subgroup of G()
+               st A = the carrier of H & P[H];
+          consider H being Subgroup of G() such that
+           A13: A = the carrier of H & P[H] by A12;
+             a in the carrier of H & b in the carrier of H
+                                             by A9,A10,A11,A13,SETFAM_1:def 1;
+           then a in H & b in H by RLVECT_1:def 1;
+           then a * b in H by GROUP_2:59;
+        hence a * b in Z by A11,A13,RLVECT_1:def 1;
+       end;
+     hence a * b in Y by A3,SETFAM_1:def 1;
+    end;
+      now let a be Element of G();
+      assume A14: a in Y;
+         now let Z be set;
+         assume A15: Z in X;
+          then consider A being Subset of G() such that
+          A16: A = Z and
+           A17: ex H being strict Subgroup of G()
+               st A = the carrier of H & P[H];
+          consider H being Subgroup of G() such that
+           A18: A = the carrier of H & P[H] by A17;
+             a in the carrier of H by A14,A15,A16,A18,SETFAM_1:def 1;
+           then a in H by RLVECT_1:def 1;
+           then a" in H by GROUP_2:60;
+        hence a" in Z by A16,A18,RLVECT_1:def 1;
+       end;
+     hence a" in Y by A3,SETFAM_1:def 1;
+    end;
+  hence thesis by A7,A8,GROUP_2:61;
+ end;
 
 reserve x,y,y1,y2,X,Y for set,
         k,l,m,n for Nat,
@@ -47,9 +104,30 @@ reserve x,y,y1,y2,X,Y for set,
         F,F1,F2 for FinSequence of the carrier of G,
         I,I1,I2 for FinSequence of INT;
 
-scheme SubgrSep{G() -> Group,P[set]}:
+scheme :: GROUP_4:sch 2
+ SubgrSep{G() -> Group,P[set]}:
  ex X st X c= Subgroups G() &
-  for H being strict Subgroup of G() holds H in X iff P[H];
+  for H being strict Subgroup of G() holds H in X iff P[H]
+proof
+   defpred R[set] means ex H being Subgroup of G() st $1 = H & P[H];
+   consider X such that A1: x in X iff x in Subgroups G() &
+   R[x] from XBOOLE_0:sch 1;
+  take X;
+  thus X c= Subgroups G()
+   proof let x;
+     assume x in X;
+    hence x in Subgroups G() by A1;
+   end;
+  let H be strict Subgroup of G();
+  thus H in X implies P[H]
+   proof assume H in X;
+     then ex H1 being Subgroup of G() st H = H1 & P[H1] by A1;
+    hence thesis;
+   end;
+   assume A2: P[H];
+      H in Subgroups G() by GROUP_3:def 1;
+  hence thesis by A1,A2;
+ end;
 
 definition let i;
  canceled;
@@ -58,6 +136,7 @@ definition let i;
 :: GROUP_4:def 2
     i;
 end;
+
 
 canceled 2;
 
@@ -79,6 +158,7 @@ definition let G be non empty HGrStr;
 :: GROUP_4:def 3
     (the mult of G) "**" F;
 end;
+
 
 canceled;
 
@@ -150,6 +230,7 @@ definition let G,I,F;
         for k st k in dom F holds it.k = (F/.k) |^ @(I/.k);
 end;
 
+
 canceled 3;
 
 theorem :: GROUP_4:25
@@ -188,6 +269,7 @@ definition let G,A;
          st A c= the carrier of H holds it is Subgroup of H);
 end;
 
+
 canceled 3;
 
 theorem :: GROUP_4:37
@@ -223,6 +305,7 @@ definition let G,a;
    not for A st gr A = the HGrStr of G holds gr(A \ {a}) = the HGrStr of G;
 end;
 
+
 canceled;
 
 theorem :: GROUP_4:46
@@ -236,6 +319,7 @@ definition let G, H;
     the HGrStr of H <> K & H is Subgroup of K
      holds K = the HGrStr of G;
 end;
+
 
 canceled;
 
@@ -258,6 +342,7 @@ definition let G be Group;
                ex H being strict Subgroup of G st H is maximal otherwise
              it = the HGrStr of G;
 end;
+
 
 canceled 3;
 
@@ -289,6 +374,7 @@ definition let G,H1,H2;
 :: GROUP_4:def 9
     carr H1 * carr H2;
 end;
+
 
 theorem :: GROUP_4:57
  H1 * H2 = carr H1 * carr H2 & H1 * H2 = H1 * carr H2 &
@@ -324,6 +410,7 @@ definition let G,H1,H2;
 :: GROUP_4:def 10
     gr(carr H1 \/ carr H2);
 end;
+
 
 canceled;
 
@@ -405,6 +492,7 @@ definition let G;
    for S1,S2,H1,H2 st S1 = H1 & S2 = H2 holds it.(S1,S2) = H1 "\/" H2;
 end;
 
+
 definition let G;
  func SubMeet G -> BinOp of Subgroups G means
 :: GROUP_4:def 12
@@ -416,6 +504,7 @@ definition let G be Group;
 :: GROUP_4:def 13
     LattStr (# Subgroups G, SubJoin G, SubMeet G #);
 end;
+
 
 canceled 5;
 
@@ -431,9 +520,16 @@ theorem :: GROUP_4:94
  for G being Group holds
  the L_meet of lattice G = SubMeet G;
 
-definition let G be Group;
+registration let G be Group;
   cluster lattice G -> lower-bounded upper-bounded;
+  coherence
+  proof
+A1: lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #) by Def13;
+   hence lattice G is lower-bounded by Lm14;
+   thus lattice G is upper-bounded by A1,Lm14;
+  end;
 end;
+
 
 canceled 3;
 

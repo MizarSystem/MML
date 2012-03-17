@@ -19,12 +19,6 @@ SEQM_3
 FUNCT_6
 KURATO_2
 #
-LambdaSSeq
-ExTopStrSeq
-TSubsetEx
-TSubsetUniq
-SubSeqChoice
-#
 G1 W18 ;;M3 K40 U1 F1 ;;;;;
 ªM9 V4 ;V19 K56 ;K40 U1 F1 ;;;;K56 ;K40 U1 F1 ;;;;ªM4 K52 ;K56 ;;R1 K100 U1 F1 ;;B1 B2 ;F2 B2 ;;;
 #
@@ -38,6 +32,6 @@ G3 ;;
 M3 K40 U1 F1 ;;;;M3 K40 U1 F1 ;;;;ª&M3 U1 F1 ;;;&ª&R2 B3 B1 ;ªP1 B3 ;;ª&P1 B3 ;ªR2 B3 B1 ;;;M3 U1 F1 ;;;&ª&R2 B3 B2 ;ªP1 B3 ;;ª&P1 B3 ;ªR2 B3 B2 ;;;ªR1 B1 B2 ;;;
 #
 G3 W18 ;V23 ;;M9 V4 ;V19 K56 ;K40 U1 F1 ;;;;K56 ;K40 U1 F1 ;;;;;
-ªM15 F1 ;F2 ;;ªM4 K52 ;K56 ;;P1 K134 F1 ;B1 B2 ;;M4 K52 ;K56 ;;ªM4 K52 ;K56 ;;ª&R14 B1 B2 ;P1 K134 F1 ;F2 ;B2 ;;;;
+ªM15 F1 ;F2 ;;ªM4 K52 ;K56 ;;P1 K134 F1 ;B1 B2 ;;M4 K52 ;K56 ;;ªM4 K52 ;K56 ;;ª&R15 B1 B2 ;P1 K134 F1 ;F2 ;B2 ;;;;
 #
 !

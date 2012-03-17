@@ -35,12 +35,13 @@ definition let X be set;
    end;
 end;
 
+
 scheme DenestFraenkel
  {A()->non empty set, B()->non empty set, F(set)->set,
   G(set)->Element of B(), P[set]}:
   {F(a) where a is Element of B(): a in {G(b) where b is Element of A(): P[b]}}
     = {F(G(a)) where a is Element of A(): P[a]}
-  proof
+proof
    thus {F(a) where a is Element of B(): a in {G(b) where b is Element of A():
       P[b]}} c= {F(G(a)) where a is Element of A(): P[a]}
      proof let x be set; assume x in {F(a) where a is Element of B():
@@ -62,7 +63,7 @@ scheme EmptyFraenkel {A() -> non empty set, f(set) -> set, P[set]}:
  {f(a) where a is Element of A(): P[a]} = {}
   provided
 A1: not ex a being Element of A() st P[a]
- proof assume not thesis;
+proof  assume not thesis;
   then reconsider X = {f(a) where a is Element of A(): P[a]} as non empty set;
   consider x being Element of X; x in X;
    then ex a being Element of A() st x = f(a) & P[a];
@@ -142,11 +143,13 @@ definition let L be 1-sorted;
  mode UnOp of L is map of L,L;
 end;
 
+
 definition let L be non empty LattStr, X be Subset of L;
  attr X is directed means
     for Y being finite Subset of X ex x being Element of L st
    "\/"(Y, L) [= x & x in X;
 end;
+
 
 theorem
    for L being non empty LattStr, X being Subset of L st X is directed holds
@@ -165,7 +168,8 @@ definition
      L_join, L_meet, mult -> BinOp of the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty QuantaleStr;
  existence
   proof consider A being non empty set, b1,b2,b3 being BinOp of A;
@@ -174,6 +178,7 @@ definition
   end;
 end;
 
+
 definition
   struct (QuantaleStr, multLoopStr) QuasiNetStr
    (# carrier -> set,
@@ -181,7 +186,8 @@ definition
      unity -> Element of the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty QuasiNetStr;
  existence
   proof consider A being non empty set, b1,b2,b3 being (BinOp of A),
@@ -190,6 +196,7 @@ definition
     thus the carrier of QuasiNetStr(#A,b1,b2,b3,e#) is non empty;
   end;
 end;
+
 
 definition let IT be non empty HGrStr;
  attr IT is with_left-zero means
@@ -200,20 +207,23 @@ definition let IT be non empty HGrStr;
    for a being Element of IT holds a*b = b;
 end;
 
+
 definition let IT be non empty HGrStr;
  attr IT is with_zero means:
 Def4:
   IT is with_left-zero with_right-zero;
 end;
 
-definition
+
+registration
  cluster with_zero -> with_left-zero with_right-zero (non empty HGrStr);
   coherence by Def4;
  cluster with_left-zero with_right-zero -> with_zero (non empty HGrStr);
   coherence by Def4;
 end;
 
-definition
+
+registration
  cluster with_zero (non empty HGrStr);
   existence
    proof consider x being set, f being BinOp of {x};
@@ -225,6 +235,7 @@ definition
     take x; thus thesis by TARSKI:def 1;
    end;
 end;
+
 
 definition let IT be non empty QuantaleStr;
  attr IT is right-distributive means:
@@ -246,6 +257,7 @@ Def6:
       a is Element of IT, b is Element of IT:
      a in X1 & b in X2},IT);
 end;
+
 
 reserve x,y,z for set;
 
@@ -318,12 +330,13 @@ q = q) &
    hence Q is Lattice-like by LATTICES:def 10;
   end;
 
-definition let A be non empty set, b1,b2,b3 be BinOp of A;
+registration let A be non empty set, b1,b2,b3 be BinOp of A;
  cluster QuantaleStr(#A,b1,b2,b3#) -> non empty;
  coherence by STRUCT_0:def 1;
 end;
 
-definition
+
+registration
  cluster associative commutative unital with_zero
   left-distributive right-distributive complete Lattice-like
      (non empty QuantaleStr);
@@ -335,6 +348,7 @@ definition
    end;
 end;
 
+
 scheme LUBFraenkelDistr
     {Q() -> complete Lattice-like (non empty QuantaleStr),
      f(set, set) -> Element of Q(),
@@ -344,7 +358,7 @@ scheme LUBFraenkelDistr
   "\/"({f(a,b) where a is Element of Q(),
                    b is Element of Q(): a in X() & b in
  Y()}, Q())
-  proof set Q = Q(), X = X(), Y = Y();
+proof   set Q = Q(), X = X(), Y = Y();
    set Z = {{f(a,b) where b is Element of Q: b in Y}
                     where a is Element of Q: a in X};
    set W = {"\/"V where V is Subset of Q: V in Z};
@@ -430,7 +444,7 @@ b: a in X & b in Y}, Q)
  defpred P[set] means $1 in X;
  deffunc H(Element of Q,Element of Q) = $1[*]$2;
 A1:  for a holds F(a) = G(a) by Def5;
-      {F(c): P[c]} = {G(a): P[a]} from FraenkelF'(A1);
+      {F(c): P[c]} = {G(a): P[a]} from FRAENKEL:sch 5(A1);
    hence
     "\/"(X,Q) [*] "\/"(Y,Q) =
     "\/"({"\/"({H(a,b) where b is Element of Q: b in Y}, Q)
@@ -465,13 +479,14 @@ A3:    x = c [*] d & d in {a,b};
    hence thesis by A1,LATTICE3:44;
   end;
 
-definition let A be non empty set, b1,b2,b3 be (BinOp of A),
+registration let A be non empty set, b1,b2,b3 be (BinOp of A),
   e be Element of A;
  cluster QuasiNetStr(#A,b1,b2,b3,e#) -> non empty;
  coherence by STRUCT_0:def 1;
 end;
 
-definition
+
+registration
  cluster complete Lattice-like (non empty QuasiNetStr);
   existence
    proof set B = BooleLatt {};
@@ -481,7 +496,8 @@ definition
    end;
 end;
 
-definition
+
+registration
  cluster left-distributive right-distributive -> times-continuous
   times-additive (complete Lattice-like (non empty QuasiNetStr));
  coherence
@@ -497,7 +513,8 @@ definition
   end;
 end;
 
-definition
+
+registration
  cluster associative commutative well-unital with_zero with_left-zero
   left-distributive right-distributive complete Lattice-like
    (non empty QuasiNetStr);
@@ -520,6 +537,7 @@ A1:   now let x, y be Element of Q;
    end;
 end;
 
+
 definition
  mode Quantale is associative left-distributive right-distributive
       complete Lattice-like (non empty QuantaleStr);
@@ -528,9 +546,11 @@ definition
    times-additive complete Lattice-like (non empty QuasiNetStr);
 end;
 
+
 definition
  mode BlikleNet is with_zero (non empty QuasiNet);
 end;
+
 
 theorem
    for Q being well-unital (non empty QuasiNetStr) st Q is Quantale
@@ -589,6 +609,7 @@ definition let f be Function;
     f * f = f;
 end;
 
+
 Lm1:
   for A being non empty set, f being UnOp of A st f is idempotent
     for a being Element of A holds f.(f.a) = f.a
@@ -614,7 +635,8 @@ Def12:
    IT."\/"X [= "\/"({IT.a where a is Element of L: a in X}, L);
 end;
 
-definition
+
+registration
  let L be Lattice;
  cluster inflationary deflationary monotone UnOp of L;
  existence
@@ -635,6 +657,7 @@ definition
    hence thesis;
   end;
 end;
+
 
 theorem Th10:
  for L being complete Lattice, j being UnOp of L st j is monotone holds
@@ -682,6 +705,7 @@ definition let Q be non empty QuantaleStr;
  b);
 end;
 
+
 definition let Q be non empty QuantaleStr, a,b be Element of Q;
   func a -r> b -> Element of Q equals:
 Def15:
@@ -693,6 +717,7 @@ Def16:
     "\/"({ c where c is Element of Q: a [*] c [= b }, Q);
    correctness;
 end;
+
 
 theorem Th11:
  a [*] b [= c iff b [= a -l> c
@@ -720,7 +745,7 @@ defpred P2[Element of Q] means a [*] $1 [= c;
      hence a [*] d [= c;
     end;
 then A3:  P1[d] iff P2[d];
-A4:  {F(d1): P1[d1]} = {F(d2): P2[d2]} from Fraenkel6'(A3);
+A4:  {F(d1): P1[d1]} = {F(d2): P2[d2]} from FRAENKEL:sch 3(A3);
       {a [*] d: d in X} is_less_than c
      proof let d1; assume d1 in {a [*] d: d in X};
       then consider d2 such that
@@ -757,7 +782,7 @@ defpred P2[Element of Q] means $1 [*] b [= c;
      hence d [*] b [= c;
     end;
 then A3:  P1[d] iff P2[d];
-A4:  {F(d1): P1[d1]} = {F(d2): P2[d2]} from Fraenkel6'(A3);
+A4:  {F(d1): P1[d1]} = {F(d2): P2[d2]} from FRAENKEL:sch 3(A3);
       {d [*] b: d in X} is_less_than c
      proof let d1; assume d1 in {d [*] b: d in X};
       then consider d2 such that
@@ -833,6 +858,7 @@ Def17:
 Def18:
    for a being Element of Q holds a -r> IT = a -l> IT;
 end;
+
 
 theorem Th15:
  c is cyclic iff for a,b st a [*] b [= c holds b [*] a [= c
@@ -976,7 +1002,7 @@ A3:   P1[b] iff P2[b]
        proof b [*] (a [*] I) = b [*] a [*] I & I-r>D=D by A1,VECTSP_1:def 16;
         hence thesis by Th12;
        end;
-A4:    {F(b): P1[b]} = {F(c): P2[c]} from Fraenkel6'(A3);
+A4:    {F(b): P1[b]} = {F(c): P2[c]} from FRAENKEL:sch 3(A3);
      thus a [*] I = ((a [*] I)-r>D)-l>D by A1
          .= "\/"({c: c [*] a [= D},Q)-l>D by A4,Def15
          .= (a-r>D)-l>D by Def15
@@ -987,7 +1013,7 @@ A5:   P3[b] iff P4[b]
        proof J [*] (a [*] b) = J [*] a [*] b & J-l>D=D by A1,VECTSP_1:def 16;
         hence thesis by Th11;
        end;
-A6:    {F(b): P3[b]} = {F(c): P4[c]} from Fraenkel6'(A5);
+A6:    {F(b): P3[b]} = {F(c): P4[c]} from FRAENKEL:sch 3(A5);
      thus J [*] a = ((J [*] a)-l>D)-r>D by A1
          .= "\/"({c: a [*] c [= D},Q)-r>D by A6,Def16
          .= (a-l>D)-r>D by Def16
@@ -1022,7 +1048,7 @@ A2:  P1[d] iff P2[d]
      proof d [*] (b [*] (c -l> a)) = d [*] b [*] (c -l> a) by VECTSP_1:def 16;
       hence thesis by A1,Th12;
      end;
-A3:  {F(d1): P1[d1]} = {F(d2): P2[d2]} from Fraenkel6'(A2);
+A3:  {F(d1): P1[d1]} = {F(d2): P2[d2]} from FRAENKEL:sch 3(A2);
    thus b -r> c = "\/"({d: d [*] b [= c}, Q) by Def15
                .= (b [*] (c -l> a)) -r> a by A3,Def15;
 defpred P3[Element of Q] means b [*] $1 [= c;
@@ -1031,7 +1057,7 @@ A4:  P3[d] iff P4[d]
      proof (c -r> a) [*] b [*] d = (c -r> a) [*] (b [*] d) by VECTSP_1:def 16;
       hence thesis by A1,Th11;
      end;
-A5:  {F(d1): P3[d1]} = {F(d2): P4[d2]} from Fraenkel6'(A4);
+A5:  {F(d1): P3[d1]} = {F(d2): P4[d2]} from FRAENKEL:sch 3(A4);
    thus b -l> c = "\/"({d: b [*] d [= c}, Q) by Def16
                .= ((c -r> a) [*] b) -l> a by A5,Def16;
   end;
@@ -1043,7 +1069,8 @@ definition
     unity, absurd -> Element of the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty Girard-QuantaleStr;
  existence
   proof
@@ -1054,12 +1081,14 @@ definition
   end;
 end;
 
+
 definition let IT be non empty Girard-QuantaleStr;
  attr IT is cyclic means:
 Def19:   the absurd of IT is cyclic;
  attr IT is dualized means:
 Def20:   the absurd of IT is dualizing;
 end;
+
 
 theorem Th21:
  for Q being non empty Girard-QuantaleStr st the LattStr of Q = BooleLatt {}
@@ -1078,13 +1107,14 @@ A2:    carr(Q) = {{}} by A1,LATTICE3:def 1,ZFMISC_1:1;
      hence thesis;
     end;
 
-definition let A be non empty set, b1,b2,b3 be (BinOp of A),
+registration let A be non empty set, b1,b2,b3 be (BinOp of A),
                e1,e2 be Element of A;
  cluster Girard-QuantaleStr(#A,b1,b2,b3,e1,e2#) -> non empty;
  coherence by STRUCT_0:def 1;
 end;
 
-definition
+
+registration
   cluster associative commutative well-unital
    left-distributive right-distributive complete Lattice-like
    cyclic dualized strict (non empty Girard-QuantaleStr);
@@ -1099,17 +1129,20 @@ definition
     end;
 end;
 
+
 definition
   mode Girard-Quantale is associative well-unital
    left-distributive right-distributive
    complete Lattice-like cyclic dualized (non empty Girard-QuantaleStr);
 end;
 
+
 definition let G be Girard-QuantaleStr;
   func Bottom G -> Element of G equals:
 Def21:  the absurd of G;
    correctness;
 end;
+
 
 definition let G be non empty Girard-QuantaleStr;
   func Top G -> Element of G equals:
@@ -1121,6 +1154,7 @@ Def23:   a -r> Bottom G;
    correctness;
 end;
 
+
 definition let G be non empty Girard-QuantaleStr;
  func Negation G -> UnOp of G means
      for a being Element of G holds it.a = Bottom a;
@@ -1128,7 +1162,7 @@ definition let G be non empty Girard-QuantaleStr;
    proof
     deffunc F(Element of G) = Bottom $1;
     consider f being Function of the carrier of G, the carrier of G such that
-A1:   for a being Element of G holds f.a = F(a) from LambdaD;
+A1:   for a being Element of G holds f.a = F(a) from FUNCT_2:sch 4;
     reconsider f as UnOp of G;
     take f; thus thesis by A1;
    end;
@@ -1143,17 +1177,20 @@ A3:  for a being Element of G holds f2.a = Bottom a;
    end;
 end;
 
+
 definition let G be non empty Girard-QuantaleStr, u be UnOp of G;
   func Bottom u -> UnOp of G equals
      Negation(G)*u;
    correctness;
 end;
 
+
 definition let G be non empty Girard-QuantaleStr, o be BinOp of G;
   func Bottom o -> BinOp of G equals
       Negation(G)*o;
    correctness;
 end;
+
 
 reserve Q for Girard-Quantale,
         a,a1,a2,b,b1,b2,c,d for Element of Q,
@@ -1266,6 +1303,7 @@ Def27:   Bottom (Bottom a [*] Bottom b);
   correctness;
 end;
 
+
 theorem
    a [*] "\/"(X,Q) = "\/"({a [*] b: b in X}, Q) & a delta "/\"(X,Q) =
    "/\"({a delta c: c in X}, Q)
@@ -1280,7 +1318,7 @@ A2:  {G(c): c in {H(d): P[d]}} = {G(H(b)): P[b]} from DenestFraenkel;
 deffunc F1(Element of Q) = Bottom (Bottom a [*] Bottom $1);
 deffunc F2(Element of Q) = a delta $1;
 A3: F1(b) = F2(b) by Def27;
-A4: {F1(b): P[b]} = {F2(c): P[c]} from FraenkelF'(A3);
+A4: {F1(b): P[b]} = {F2(c): P[c]} from FRAENKEL:sch 5(A3);
    thus a delta "/\"(X,Q) = Bottom (Bottom a [*] Bottom "/\"(X,Q)) by Def27
        .= Bottom (Bottom a [*] "\/"({Bottom b: b in X}, Q)) by Th25
        .= Bottom "\/"({Bottom a [*] Bottom b: b in X}, Q) by A1,Def5
@@ -1301,7 +1339,7 @@ A2:  {G(c): c in {H(d): P[d]}} = {G(H(b)): P[b]} from DenestFraenkel;
 deffunc F1(Element of Q) = Bottom (Bottom $1 [*] Bottom a);
 deffunc F2(Element of Q) = $1 delta a;
 A3: F1(b) = F2(b) by Def27;
-A4: {F1(b): P[b]} = {F2(c): P[c]} from FraenkelF'(A3);
+A4: {F1(b): P[b]} = {F2(c): P[c]} from FRAENKEL:sch 5(A3);
    thus "/\"(X,Q) delta a = Bottom (Bottom "/\"(X,Q) [*] Bottom a) by Def27
        .= Bottom ("\/"({Bottom b: b in X}, Q) [*] Bottom a) by Th25
        .= Bottom "\/"({Bottom b [*] Bottom a: b in X}, Q) by A1,Def6
@@ -1390,7 +1428,7 @@ RELSET_1:12;
    reconsider j' = j as Function of carr(Q), D by A2,FUNCT_2:def 1,RELSET_1:11;
    deffunc F(Subset of D) = j'."\/"($1,Q);
    consider f being Function of bool D, D such that
-A3:  for X being Subset of D holds f.X = F(X) from LambdaD;
+A3:  for X being Subset of D holds f.X = F(X) from FUNCT_2:sch 4;
 A4: dom f = bool D by FUNCT_2:def 1;
 A5:  for a being Element of D holds f.{a} = a
      proof let a be Element of D;

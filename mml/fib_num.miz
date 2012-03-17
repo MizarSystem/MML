@@ -10,7 +10,8 @@ environ
       FUNCT_3, RELAT_1, ORDINAL2, FIB_NUM, ABSVALUE, POWER, SEQ_1, SEQ_2,
       SEQM_3, LATTICES, GROUP_1;
  notation ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, SEQ_1, NAT_1, INT_2,
-      PRE_FF, SEQ_2, SEQM_3, LIMFUNC1, QUIN_1, ABSVALUE, PREPOWER, POWER;
+      PRE_FF, SEQ_2, SEQM_3, LIMFUNC1, QUIN_1, ABSVALUE, NEWTON, PREPOWER,
+      POWER;
  constructors REAL_1, NAT_1, PREPOWER, INT_2, SEQ_2, SEQM_3, PRE_FF, LIMFUNC1,
       QUIN_1, POWER, PARTFUN1, MEMBERED;
  clusters XREAL_0, SQUARE_1, QUIN_1, NEWTON, SEQ_1, RELSET_1, MEMBERED,
@@ -63,11 +64,13 @@ let k; assume
        then 1 = m by A3,NAT_LAT:36;
        hence thesis;
 
+      end;
       suppose A4:k = 1;
       let m, n; assume k hcf m = 1;
         k hcf m * n = 1 by A4,NAT_LAT:35;
       hence thesis by A4,NAT_LAT:35;
 
+      end;
       suppose A5:k > 1;
       let m, n; assume
       A6: k hcf m = 1; set b = k hcf m * n;
@@ -80,6 +83,7 @@ let k; assume
           then k = 0 by INT_2:3;
           hence thesis by A5;
 
+          end;
           suppose A7:b = 1; set c = k hcf n;
           A8: c divides k by NAT_1:def 5;
           A9:c divides n by NAT_1:def 5;
@@ -88,6 +92,7 @@ let k; assume
           then c divides 1 by A7,A8,NAT_1:def 5;
           hence thesis by A7,WSIERP_1:20;
 
+          end;
           suppose b > 1; then b >= 1 + 1 by NAT_1:38;
           then consider p such that
              A10: p is prime and
@@ -145,8 +150,10 @@ by A13,A18,XCMPLX_1:4
       k hcf n = p * (s hcf r) by A13,A18,PYTHTRIP:8;
     hence thesis by A2,A14,A19,A22;
     end;
+    end;
   end;
-  for k holds P[k] from Comp_Ind(A1);
+  end;
+  for k holds P[k] from NAT_1:sch 4(A1);
 hence thesis;
 end;
 
@@ -173,7 +180,7 @@ for k being Nat holds P[k]
 A1: P[0] and
 A2: P[1] and
 A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
-    proof
+proof
     defpred Q[Nat] means P[$1] & P[$1 + 1];
     A4:Q[0] by A1,A2;
     A5:for k st Q[k] holds Q[k+1]
@@ -184,7 +191,7 @@ A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
         .= (k + 1) + 1 by XCMPLX_1:1;
         hence thesis by A3,A6;
         end;
-    A7:for k holds Q[k] from Ind(A4,A5);
+    A7:for k holds Q[k] from NAT_1:sch 1(A4,A5);
     let k;
     thus thesis by A7;
     end;
@@ -197,7 +204,7 @@ for m, n  being Nat holds P[m, n]
         (for m, n  being Nat st (m < k & n < k) holds P[m,n])
         holds
         (for m  being Nat st m <= k holds P[k,m])
-    proof
+proof
     defpred Q[Nat] means
     for m, n st (m <= $1 & n <= $1) holds P[m,n];
     A3: for k st (for r st r < k holds Q[r]) holds Q[k]
@@ -212,6 +219,7 @@ for m, n  being Nat holds P[m, n]
         suppose s < k;
         then (m <= s & n <= s) implies P[m,n] by A4;
         hence thesis by SQUARE_1:46;
+        end;
         suppose A7:s = k;
 
         A8:for m, n holds (m < k & n < k) implies P[m,n]
@@ -229,12 +237,15 @@ for m, n  being Nat holds P[m, n]
             per cases by A7,SQUARE_1:49;
             suppose k = m;
             hence thesis by A2,A5,A8;
+            end;
             suppose k = n;
             then P[n,m] by A2,A5,A8;
             hence thesis by A1;
             end;
+            end;
         end;
-    A12:for k holds Q[k] from Comp_Ind(A3);
+        end;
+    A12:for k holds Q[k] from NAT_1:sch 4(A3);
     let m, n;
     set k = max(m,n);
       (m <= k & n <= k) implies P[m,n] by A12;
@@ -261,6 +272,7 @@ assume that A4: P[k]
        per cases;
        suppose k = 0;
        hence thesis by Lm1,Lm2,PRE_FF:1;
+       end;
        suppose k <> 0;
        then A6: 1 <= k by RLVECT_1:99;
         ((k + 1) + 1) + 1 =
@@ -276,6 +288,7 @@ assume that A4: P[k]
          1 + (k+1) = k + (1 + 1) by XCMPLX_1:1
        .= k + 2;
        hence thesis by A9,A10,AXIOMS:22;
+end;
 end;
 thus for k being Nat holds P[k] from Fib_Ind(A1, A2, A3);
 end;
@@ -293,7 +306,7 @@ proof
       then Fib((k+1) + 1) >= Fib(k+1) + 0 by A3,AXIOMS:24;
       hence thesis;
    end;
-   thus for k being Nat holds P[k] from Ind(A1,A2);
+   thus for k being Nat holds P[k] from NAT_1:sch 1(A1,A2);
 end;
 
 Lm5: for m, n being Nat st m >= n holds Fib(m) >= Fib(n)
@@ -316,7 +329,7 @@ for n being Nat holds Fib(n+$1) >= Fib(n);
         Fib(n+k) >= Fib(n) by A4;
       hence thesis by A5,AXIOMS:22;
    end;
-   A6: for k holds P[k] from Ind(A2, A3);
+   A6: for k holds P[k] from NAT_1:sch 1(A2, A3);
    let k;
    let n;
    thus thesis by A6;
@@ -330,9 +343,11 @@ let m;
 per cases;
 suppose m = 0;
 hence thesis by PRE_FF:1;
+end;
 suppose m <> 0;
 then m > 0 by NAT_1:19;
 hence thesis by Lm3;
+end;
 end;
 
 theorem
@@ -395,7 +410,7 @@ A2:now let k; assume
       .= 1 by A3,Th1;
      end;
     end;
-thus for m being Nat holds P[m] from Ind(A1,A2);
+thus for m being Nat holds P[m] from NAT_1:sch 1(A1,A2);
 end;
 
 theorem
@@ -415,6 +430,7 @@ proof
        suppose m = k;
        hence thesis;
 
+       end;
        suppose A5:m < k;
        A6: not m < 0 by NAT_1:18;
        thus thesis
@@ -426,6 +442,7 @@ proof
        by NAT_LAT:36,PRE_FF:1;
        hence thesis by A7,NAT_LAT:36;
 
+       end;
        suppose A8:m > 0;
        thus thesis
        proof
@@ -453,6 +470,8 @@ proof
           hence thesis by A3,A5,A12,A14;
       end;
    end;
+   end;
+end;
 end;
 thus for m, n holds P[m,n] from Bin_Ind(A1,A2);
 end;
@@ -492,9 +511,11 @@ Th6: for x, a, b, c being real number st
           then x - r1 = 0 by XCMPLX_1:14;
           hence thesis by A3;
 
+          end;
           suppose x = r2;
           then x - r2 = 0 by XCMPLX_1:14;
           hence thesis by A3;
+       end;
        end;
        hence thesis by A1,A2,QUIN_1:15;
     end;
@@ -509,6 +530,7 @@ definition
   correctness;
 end;
 
+
 :: The value of tau_bar is approximately -.618
 
 definition
@@ -516,6 +538,7 @@ definition
   :Def2: (1 - sqrt 5)/2;
   correctness;
 end;
+
 
 Lm8: (tau ^2 = tau + 1) & (tau_bar ^2 = tau_bar + 1)
 proof
@@ -702,7 +725,7 @@ proof
              0 <= abs(x |^ k) by ABSVALUE:5;
       hence thesis by A1,A4,A5,A6,REAL_2:140;
    end;
-   thus thesis from Ind(A2, A3);
+   thus thesis from NAT_1:sch 1(A2, A3);
 end;
 hence thesis;
 end;
@@ -829,7 +852,7 @@ proof
    let F;
    assume A1: for n being Nat holds F.n = Fib(n+1)/Fib(n);
    deffunc ff(Nat) = Fib($1);
-     ex f st for n holds f. n = ff(n) from ExRealSeq;
+     ex f st for n holds f. n = ff(n) from SEQ_1:sch 1;
    then consider f such that
    A2:for n holds f.n = ff(n);
 
@@ -856,12 +879,12 @@ proof
    end;
 
    deffunc ff(Nat) = (tau to_power $1)/(sqrt 5);
-     ex g st for n holds g . n = ff(n) from ExRealSeq;
+     ex g st for n holds g . n = ff(n) from SEQ_1:sch 1;
    then consider g such that
    A5: for n holds g.n = ff(n);
 
    deffunc ff(Nat) = (tau_bar to_power $1)/(sqrt 5);
-     ex h st for n holds h . n = ff(n) from ExRealSeq;
+     ex h st for n holds h . n = ff(n) from SEQ_1:sch 1;
    then consider h such that
    A6: for n holds h.n = ff(n);
 

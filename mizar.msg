@@ -353,6 +353,8 @@ Unexpected "end"
 ";" missing
 # 219
 Unexpected "proof"
+# 228
+Unexpected "reconsider"
 # 229
 "redefine" repeated
 # 230

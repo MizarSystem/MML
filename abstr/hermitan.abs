@@ -103,51 +103,101 @@ attr f is cmplxhomogeneous means
    for v be Vector of V, a be Scalar of V holds f.(a*v) = (a*')*f.v;
 end;
 
-definition
+
+registration
   let V be non empty VectSpStr over F_Complex;
 cluster 0Functional(V) -> cmplxhomogeneous;
+ coherence
+  proof let x be Vector of V, r be Scalar of V;
+   A1: (0Functional(V)).x = 0.F_Complex by HAHNBAN1:22;
+   thus (0Functional(V)).(r*x) = 0.F_Complex by HAHNBAN1:22
+    .= (r*')*(0Functional(V)).x by A1,VECTSP_1:39;
+  end;
 end;
 
-definition
+
+registration
  let V be add-associative right_zeroed right_complementable VectSp-like
            (non empty VectSpStr over F_Complex);
 cluster cmplxhomogeneous -> 0-preserving Functional of V;
+ coherence
+  proof let F be Functional of V;
+   assume A1:F is cmplxhomogeneous;
+  A2: 0.F_Complex = the Zero of F_Complex by RLVECT_1:def 2;
+   thus F.(0.V) = F.((0.F_Complex) * 0.V) by VECTSP10:2
+   .= (0.F_Complex)*' * F.(0.V) by A1,Def1
+   .= 0.F_Complex by A2,COMPLFLD:83,VECTSP_1:39;
+  end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
 cluster additive cmplxhomogeneous 0-preserving Functional of V;
+  existence proof take 0Functional(V); thus thesis; end;
 end;
+
 
 definition
  let V be non empty VectSpStr over F_Complex;
 mode antilinear-Functional of V is additive cmplxhomogeneous Functional of V;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
  let f,g be cmplxhomogeneous Functional of V;
 cluster f+g -> cmplxhomogeneous;
+ coherence
+  proof
+   let v be Vector of V, a be Scalar of V;
+   thus (f+g).(a*v) = f.(a*v) + g.(a*v) by HAHNBAN1:def 6
+   .= a*'*f.v + g.(a*v) by Def1
+   .= a*'*f.v + a*'*g.v by Def1
+   .= a*'*(f.v + g.v) by VECTSP_1:def 11
+   .= a*'*(f + g).v by HAHNBAN1:def 6;
+  end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
  let f be cmplxhomogeneous Functional of V;
 cluster -f -> cmplxhomogeneous;
+ coherence
+  proof
+   let v be Vector of V, a be Scalar of V;
+   thus (-f).(a*v) = - f.(a*v) by HAHNBAN1:def 7
+    .= -(a*'*f.v) by Def1
+    .= a*'*(-f.v) by VECTSP_1:41
+    .= a*'*(-f).v by HAHNBAN1:def 7;
+   end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
  let a be Scalar of V;
  let f be cmplxhomogeneous Functional of V;
 cluster a*f -> cmplxhomogeneous;
+ coherence
+  proof
+   let v be Vector of V, b be Scalar of V;
+   thus (a*f).(b*v) = a* f.(b*v) by HAHNBAN1:def 9
+    .= a*(b*'*f.v) by Def1
+    .= b*'*(a*f.v) by VECTSP_1:def 16
+    .= b*'*(a*f).v by HAHNBAN1:def 9;
+   end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
  let f,g be cmplxhomogeneous Functional of V;
 cluster f-g -> cmplxhomogeneous;
+ coherence proof f-g = f+ -g by HAHNBAN1:def 8; hence thesis; end;
 end;
+
 
 definition
  let V be non empty VectSpStr over F_Complex;
@@ -157,34 +207,86 @@ func f*' -> Functional of V means
  for v be Vector of V holds it.v = (f.v)*';
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
  let f be additive Functional of V;
 cluster f*' -> additive;
+coherence
+ proof
+  let v,w be Vector of V;
+  thus f*'.(v+w) = (f.(v+w))*' by Def2
+  .= (f.v + f.w)*' by HAHNBAN1:def 11
+  .= (f.v)*' + (f.w)*' by COMPLFLD:87
+  .= (f*').v + (f.w)*' by Def2
+  .= (f*').v + (f*').w by Def2;
+ end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
  let f be homogeneous Functional of V;
 cluster f*' -> cmplxhomogeneous;
+coherence
+proof
+  let v be Vector of V,r be Scalar of V;
+  thus f*'.(r*v) = (f.(r*v))*' by Def2
+  .= (r*f.v)*' by HAHNBAN1:def 12
+  .= r*'*(f.v)*' by COMPLFLD:90
+  .= r*'*(f*').v by Def2;
+ end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
  let f be cmplxhomogeneous Functional of V;
 cluster f*' -> homogeneous;
+coherence
+proof
+  let v be Vector of V,r be Scalar of V;
+  thus f*'.(r*v) = (f.(r*v))*' by Def2
+  .= (r*'*f.v)*' by Def1
+  .= (r*')*'*(f.v)*' by COMPLFLD:90
+  .= r*(f.v)*' by COMPLFLD:86
+  .= r*(f*').v by Def2;
+ end;
 end;
 
-definition
+
+registration
  let V be non trivial VectSp of F_Complex;
  let f be non constant Functional of V;
 cluster f*' -> non constant;
+coherence
+ proof
+  consider x,y be set such that
+ A1: x in dom f & y in dom f & f.x <> f.y by SEQM_3:def 5;
+ A2: dom (f*') = the carrier of V by FUNCT_2:def 1;
+  reconsider v=x,w=y as Vector of V by A1;
+  take x,y;
+     now assume (f.v)*' = (f.w)*';
+    then f.v = (f.w)*'*' by COMPLFLD:86;
+    hence contradiction by A1,COMPLFLD:86;
+   end;
+  then (f*').x <> (f.w)*' by Def2;
+  hence thesis by A1,A2,Def2;
+ end;
 end;
 
-definition
+
+registration
  let V be non trivial VectSp of F_Complex;
 cluster additive cmplxhomogeneous non constant non trivial Functional of V;
+ existence
+  proof
+   consider f be additive homogeneous non constant non trivial Functional of V;
+   take f*';
+   thus thesis;
+  end;
 end;
+
 
 theorem :: HERMITAN:19
   for V be non empty VectSpStr over F_Complex, f be Functional of V holds
@@ -236,22 +338,77 @@ func QcFunctional(f) -> antilinear-Functional of VectQuot(V,Ker(f*')) equals
   QFunctional(f,Ker(f*'));
 end;
 
+
 theorem :: HERMITAN:29
 for V be VectSp of F_Complex, f be antilinear-Functional of V
 for A be Vector of VectQuot(V,Ker (f*')), v be Vector of V
  st A = v+Ker (f*') holds (QcFunctional(f)).A = f.v;
 
-definition
+registration
  let V be non trivial VectSp of F_Complex;
  let f be non constant antilinear-Functional of V;
 cluster QcFunctional(f) -> non constant;
+ coherence
+ proof
+   set W = Ker (f*'), qf = QcFunctional(f), qv = VectQuot(V,W);
+   assume qf is constant;
+  then A1: qf = 0Functional(qv) by VECTSP10:def 7;
+   consider v be Vector of V such that
+  A2: v <> 0.V & f.v <> 0.F_Complex by VECTSP10:29;
+   reconsider cv = v+W as Vector of qv by VECTSP10:24;
+     0.F_Complex = qf.cv by A1,HAHNBAN1:22
+   .= f.v by Th29;
+   hence contradiction by A2;
+  end;
 end;
 
-definition
+
+registration
  let V be VectSp of F_Complex;
  let f be antilinear-Functional of V;
 cluster QcFunctional(f) -> non degenerated;
+ coherence
+ proof
+  set qf = QcFunctional(f), W = Ker (f*'), qV = VectQuot(V,W),
+      K = F_Complex;
+  A1: ker qf = {w where w is Vector of qV: qf.w=0.K} by VECTSP10:def 9;
+  A2: the carrier of qV = CosetSet(V,W) by VECTSP10:def 6;
+  A3: CosetSet(V,W) = {A where A is Coset of W: not contradiction} by VECTSP10:
+def 2;
+  A4: qf = QFunctional(f,W) by Def3;
+  A5: the carrier of W = ker f*' by VECTSP10:def 11
+   .= ker f by Th26;
+  A6: ker f = {w where w is Vector of V: f.w=0.K} by VECTSP10:def 9;
+  thus ker qf c= {0.qV}
+   proof
+    let x be set; assume
+      x in ker qf;
+    then consider w be Vector of qV such that
+   A7: x= w & qf.w=0.K by A1;
+      w in CosetSet(V,W) by A2;
+    then consider A be Coset of W such that
+   A8: w = A by A3;
+    consider v be Vector of V such that
+   A9: A = v + W by VECTSP_4:def 6;
+      f.v = 0.K by A4,A5,A7,A8,A9,VECTSP10:def 12;
+    then v in ker f by A6;
+    then v in W by A5,RLVECT_1:def 1;
+    then v+W = the carrier of W by VECTSP_4:64;
+    then w = zeroCoset(V,W) by A8,A9,VECTSP10:def 4
+    .= 0.qV by VECTSP10:22;
+    hence thesis by A7,TARSKI:def 1;
+   end;
+  thus {0.qV} c= ker qf
+   proof
+    let x be set; assume
+      x in {0.qV};
+    then A10: x = 0.qV by TARSKI:def 1;
+      qf.(0.qV) = 0.K by HAHNBAN1:def 13;
+    hence thesis by A1,A10;
+   end;
+  end;
 end;
+
 
 begin
 ::Sesquilinear Forms in Complex Vector Spaces
@@ -263,6 +420,7 @@ attr f is cmplxhomogeneousFAF means
 :: HERMITAN:def 4
    for v be Vector of V holds FunctionalFAF(f,v) is cmplxhomogeneous;
 end;
+
 
 theorem :: HERMITAN:30
 for V,W be non empty VectSpStr over F_Complex
@@ -284,32 +442,62 @@ attr f is diagReR+0valued means
     for v be Vector of V holds 0 <= Re (f.[v,v]);
 end;
 
-definition
+registration
  let V,W be non empty VectSpStr over F_Complex;
 cluster NulForm(V,W) -> cmplxhomogeneousFAF;
+ coherence
+  proof let v be Vector of V;
+      FunctionalFAF(NulForm(V,W),v) = 0Functional(W) by BILINEAR:11;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
 cluster NulForm(V,V) -> hermitan;
+ coherence
+   proof
+      NulForm(V,V) = FormFunctional(0Functional(V),0Functional(V))
+      by BILINEAR:23;
+    hence thesis by Lm3;
+   end;
 cluster NulForm(V,V) -> diagReR+0valued;
+ coherence
+  proof let v be Vector of V;
+     Re (0.F_Complex) = 0 by COMPTRIG:10,HAHNBAN1:15;
+   hence thesis by BILINEAR:1;
+  end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
 cluster hermitan -> diagRvalued Form of V,V;
+ coherence
+  proof let f be Form of V,V; assume
+  A1:f is hermitan;
+   let v be Vector of V;
+     f.[v,v] =(f.[v,v])*' by A1,Def5;
+   hence thesis by Th5;
+  end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
 cluster diagReR+0valued hermitan diagRvalued additiveSAF homogeneousSAF
           additiveFAF cmplxhomogeneousFAF Form of V,V;
+ existence proof take NulForm(V,V); thus thesis; end;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
 cluster additiveSAF homogeneousSAF additiveFAF cmplxhomogeneousFAF Form of V,W;
+ existence proof take NulForm(V,W); thus thesis; end;
 end;
+
 
 definition
  let V,W be non empty VectSpStr over F_Complex;
@@ -317,74 +505,232 @@ mode sesquilinear-Form of V,W is
  additiveSAF homogeneousSAF additiveFAF cmplxhomogeneousFAF Form of V,W;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
 cluster hermitan additiveFAF -> additiveSAF Form of V,V;
+ coherence
+  proof let f be Form of V,V; assume
+   A1: f is hermitan additiveFAF;
+    let w be Vector of V;
+    set F = FunctionalSAF(f,w), F1 = FunctionalFAF(f,w);
+   A2: F1 is additive by A1,BILINEAR:def 12;
+       now let x,y be Vector of V;
+      thus F.(x+y) = f.[x+y,w] by BILINEAR:10
+       .= (f.[w,x+y])*' by A1,Def5
+       .= (F1.(x+y))*' by BILINEAR:9
+       .= (F1.x+ F1.y)*' by A2,HAHNBAN1:def 11
+       .= (f.[w,x]+ F1.y)*' by BILINEAR:9
+       .= (f.[w,x]+ f.[w,y])*' by BILINEAR:9
+       .= (f.[w,x])*' + (f.[w,y])*' by COMPLFLD:87
+       .= f.[x,w]+ (f.[w,y])*' by A1,Def5
+       .= f.[x,w]+ f.[y,w] by A1,Def5
+       .= F.x+f.[y,w] by BILINEAR:10
+       .= F.x+F.y by BILINEAR:10;
+     end;
+    hence thesis by HAHNBAN1:def 11;
+   end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
 cluster hermitan additiveSAF -> additiveFAF Form of V,V;
+ coherence
+  proof let f be Form of V,V; assume
+   A1: f is hermitan additiveSAF;
+    let v1 be Vector of V;
+    set F = FunctionalFAF(f,v1), F2 = FunctionalSAF(f,v1);
+   A2: F2 is additive by A1,BILINEAR:def 13;
+       now let x,y be Vector of V;
+      thus F.(x+y) = f.[v1,x+y] by BILINEAR:9
+      .= (f.[x+y,v1])*' by A1,Def5
+      .= (F2.(x+y))*' by BILINEAR:10
+      .= (F2.x+ F2.y)*' by A2,HAHNBAN1:def 11
+      .= (f.[x,v1]+ F2.y)*' by BILINEAR:10
+      .= (f.[x,v1]+ f.[y,v1])*' by BILINEAR:10
+      .= (f.[x,v1])*' + (f.[y,v1])*' by COMPLFLD:87
+      .= f.[v1,x]+ (f.[y,v1])*' by A1,Def5
+      .= f.[v1,x]+ f.[v1,y] by A1,Def5
+      .= F.x+f.[v1,y] by BILINEAR:9
+      .= F.x+F.y by BILINEAR:9;
+     end;
+    hence thesis by HAHNBAN1:def 11;
+   end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
 cluster hermitan homogeneousSAF -> cmplxhomogeneousFAF Form of V,V;
+ coherence
+  proof let f be Form of V,V; assume
+   A1: f is hermitan homogeneousSAF;
+    let v1 be Vector of V;
+    set F = FunctionalFAF(f,v1), F2 = FunctionalSAF(f,v1);
+   A2: F2 is homogeneous by A1,BILINEAR:def 15;
+       now let x be Vector of V, r be Scalar of V;
+      thus F.(r*x) = f.[v1,r*x] by BILINEAR:9
+      .= (f.[r*x,v1])*' by A1,Def5
+      .= (F2.(r*x))*' by BILINEAR:10
+      .= (r*F2.x)*' by A2,HAHNBAN1:def 12
+      .= r*' *(F2.x)*' by COMPLFLD:90
+      .= r*' *(f.[x,v1])*' by BILINEAR:10
+      .= r*' * f.[v1,x] by A1,Def5
+      .= r*' * F.x by BILINEAR:9;
+     end;
+    hence thesis by Def1;
+   end;
 end;
 
-definition
+
+registration
  let V be non empty VectSpStr over F_Complex;
 cluster hermitan cmplxhomogeneousFAF -> homogeneousSAF Form of V,V;
+ coherence
+  proof let f be Form of V,V; assume
+   A1: f is hermitan cmplxhomogeneousFAF;
+    let w be Vector of V;
+    set F = FunctionalSAF(f,w), F2 = FunctionalFAF(f,w);
+   A2: F2 is cmplxhomogeneous by A1,Def4;
+       now let x be Vector of V, r be Scalar of V;
+      thus F.(r*x) = f.[r*x,w] by BILINEAR:10
+      .= (f.[w,r*x])*' by A1,Def5
+      .= (F2.(r*x))*' by BILINEAR:9
+      .= (r*' * F2.x)*' by A2,Def1
+      .= (r*')*' *(F2.x)*' by COMPLFLD:90
+      .= r*(F2.x)*' by COMPLFLD:86
+      .= r *(f.[w,x])*' by BILINEAR:9
+      .= r * f.[x,w] by A1,Def5
+      .= r * F.x by BILINEAR:10;
+     end;
+    hence thesis by HAHNBAN1:def 12;
+   end;
 end;
+
 
 definition
  let V be non empty VectSpStr over F_Complex;
 mode hermitan-Form of V is hermitan additiveSAF homogeneousSAF Form of V,V;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f be Functional of V, g be cmplxhomogeneous Functional of W;
 cluster FormFunctional(f,g) -> cmplxhomogeneousFAF;
+ coherence
+  proof
+   let v be Vector of V;
+   set fg= FormFunctional(f,g), F = FunctionalFAF(fg,v);
+  A1: F= f.v * g by BILINEAR:25;
+   let y be Vector of W,r be Scalar of W;
+   thus F.(r* y) = f.v * g.(r*y) by A1,HAHNBAN1:def 9
+    .= f.v *(r*'*g.y) by Def1
+    .= r*'*(f.v * g.y) by VECTSP_1:def 16
+    .= r*' *F.y by A1,HAHNBAN1:def 9;
+  end;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f be cmplxhomogeneousFAF Form of V,W;
  let v be Vector of V;
 cluster FunctionalFAF(f,v) -> cmplxhomogeneous;
+ coherence
+  proof
+   set F = FunctionalFAF(f,v);
+   let y be Vector of W,r be Scalar of W;
+   thus F.(r* y) = f.[v,r*y] by BILINEAR:9
+    .= r*'*f.[v,y] by Th30
+    .= r*' *F.y by BILINEAR:9;
+  end;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f,g be cmplxhomogeneousFAF Form of V,W;
 cluster f+g -> cmplxhomogeneousFAF;
+correctness
+  proof
+   let w be Vector of V;
+   set Ffg = FunctionalFAF(f+g,w), Ff = FunctionalFAF(f,w);
+   set Fg = FunctionalFAF(g,w);
+   let v be Vector of W, a be Scalar of V;
+   thus Ffg.(a*v) = (Ff+Fg).(a*v) by BILINEAR:14
+    .= Ff.(a*v) + Fg.(a*v) by HAHNBAN1:def 6
+    .= a*'*Ff.v + Fg.(a*v) by Def1
+    .= a*'*Ff.v + a*'*Fg.v by Def1
+    .= a*'*(Ff.v + Fg.v) by VECTSP_1:def 11
+    .= a*'*(Ff + Fg).v by HAHNBAN1:def 6
+    .= a*'* Ffg.v by BILINEAR:14;
+  end;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f be cmplxhomogeneousFAF Form of V,W;
  let a be Scalar of V;
 cluster a*f -> cmplxhomogeneousFAF;
+ coherence
+  proof
+  let w be Vector of V;
+  set Ffg = FunctionalFAF(a*f,w), Ff = FunctionalFAF(f,w);
+  let v be Vector of W, b be Scalar of V;
+   thus Ffg.(b*v) = (a*Ff).(b*v) by BILINEAR:16
+    .= a*Ff.(b*v) by HAHNBAN1:def 9
+    .= a*(b*'*Ff.v) by Def1
+    .= b*'*(a*Ff.v) by VECTSP_1:def 16
+    .= b*'*(a*Ff).v by HAHNBAN1:def 9
+    .= b*'* Ffg.v by BILINEAR:16;
+  end;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f be cmplxhomogeneousFAF Form of V,W;
 cluster -f -> cmplxhomogeneousFAF;
+ coherence
+  proof
+   let w be Vector of V;
+   set Ffg = FunctionalFAF(-f,w), Ff = FunctionalFAF(f,w);
+   let v be Vector of W, a be Scalar of W;
+   thus Ffg.(a*v) = (-Ff).(a*v) by BILINEAR:18
+   .= -Ff.(a*v) by HAHNBAN1:def 7
+   .= -(a*'*Ff.v) by Def1
+   .= a*'*(-Ff.v) by VECTSP_1:41
+   .= a*'*(-Ff).v by HAHNBAN1:def 7
+   .= a*'*Ffg.v by BILINEAR:18;
+  end;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f,g be cmplxhomogeneousFAF Form of V,W;
 cluster f-g -> cmplxhomogeneousFAF;
+ coherence proof f-g = f+-g by BILINEAR:def 7; hence thesis; end;
 end;
 
-definition
+
+registration
  let V,W be non trivial VectSp of F_Complex;
 cluster additiveSAF homogeneousSAF additiveFAF cmplxhomogeneousFAF
           non constant non trivial Form of V,W;
+existence
+ proof
+  consider f be additive homogeneous non constant non trivial Functional of V;
+  consider g be additive cmplxhomogeneous non constant
+    non trivial Functional of W;
+  take FormFunctional(f,g);
+  thus thesis;
+ end;
 end;
+
 
 definition
  let V,W be non empty VectSpStr over F_Complex;
@@ -394,52 +740,164 @@ func f*' -> Form of V,W means
  for v be Vector of V, w be Vector of W holds it.[v,w] = (f.[v,w])*';
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f be additiveFAF Form of V,W;
 cluster f*' -> additiveFAF;
+ coherence
+  proof
+   let v be Vector of V;
+   let w,t be Vector of W;
+   set fg = FunctionalFAF(f*',v);
+   thus fg.(w+t) = (f*').[v,w+t] by BILINEAR:9
+    .= (f.[v,w+t])*' by Def8
+    .= (f.[v,w]+ f.[v,t])*' by BILINEAR:28
+    .= (f.[v,w])*'+ (f.[v,t])*' by COMPLFLD:87
+    .= (f*').[v,w]+ (f.[v,t])*' by Def8
+    .= (f*').[v,w]+ (f*').[v,t] by Def8
+    .= fg.w+ (f*').[v,t] by BILINEAR:9
+    .= fg.w+ fg.t by BILINEAR:9;
+  end;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f be additiveSAF Form of V,W;
 cluster f*' -> additiveSAF;
+ coherence
+  proof
+   let w be Vector of W;
+   let v,t be Vector of V;
+   set fg = FunctionalSAF(f*',w);
+   thus fg.(v+t) = (f*').[v+t,w] by BILINEAR:10
+    .= (f.[v+t,w])*' by Def8
+    .= (f.[v,w]+ f.[t,w])*' by BILINEAR:27
+    .= (f.[v,w])*'+ (f.[t,w])*' by COMPLFLD:87
+    .= (f*').[v,w]+ (f.[t,w])*' by Def8
+    .= (f*').[v,w]+ (f*').[t,w] by Def8
+    .= fg.v+ (f*').[t,w] by BILINEAR:10
+    .= fg.v+ fg.t by BILINEAR:10;
+  end;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f be homogeneousFAF Form of V,W;
 cluster f*' -> cmplxhomogeneousFAF;
+ coherence
+  proof
+   let v be Vector of V;
+   let w be Vector of W, r be Scalar of W;
+   set fg = FunctionalFAF(f*',v);
+   thus fg.(r*w) = (f*').[v,r*w] by BILINEAR:9
+    .= (f.[v,r*w])*' by Def8
+    .= (r*f.[v,w])*' by BILINEAR:33
+    .= r*'*(f.[v,w])*' by COMPLFLD:90
+    .= r*'*(f*').[v,w] by Def8
+    .= r*'*fg.w by BILINEAR:9;
+  end;
 end;
 
-definition
+
+registration
  let V,W be non empty VectSpStr over F_Complex;
  let f be cmplxhomogeneousFAF Form of V,W;
 cluster f*' -> homogeneousFAF;
+ coherence
+  proof
+   let v be Vector of V;
+   let w be Vector of W, r be Scalar of W;
+   set fg = FunctionalFAF(f*',v);
+   thus fg.(r*w) = (f*').[v,r*w] by BILINEAR:9
+    .= (f.[v,r*w])*' by Def8
+    .= (r*'*f.[v,w])*' by Th30
+    .= r*'*'* (f.[v,w])*' by COMPLFLD:90
+    .= r* (f.[v,w])*' by COMPLFLD:86
+    .= r*(f*').[v,w] by Def8
+    .= r* fg.w by BILINEAR:9;
+  end;
 end;
 
-definition
+
+registration
  let V,W be non trivial VectSp of F_Complex;
  let f be non constant Form of V,W;
 cluster f*' -> non constant;
+ coherence
+  proof
+   consider x,y be set such that
+  A1: x in dom f & y in dom f & f.x <> f.y by SEQM_3:def 5;
+  take x,y;
+  A2: dom f = [:the carrier of V, the carrier of W:] by FUNCT_2:def 1;
+   consider vx be Vector of V ,wx be Vector of W such that
+  A3: x = [vx,wx] by A1,DOMAIN_1:9;
+   consider vy be Vector of V ,wy be Vector of W such that
+  A4: y = [vy,wy] by A1,DOMAIN_1:9;
+      now assume (f*').[vx,wx] = f*'.[vy,wy];
+     then (f.[vx,wx])*'*' = (f*'.[vy,wy])*' by Def8;
+     then f.[vx,wx] = (f*'.[vy,wy])*' by COMPLFLD:86;
+     then f.[vx,wx] = (f.[vy,wy])*'*' by Def8;
+     hence contradiction by A1,A3,A4,COMPLFLD:86;
+    end;
+   hence thesis by A1,A2,A3,A4,FUNCT_2:def 1;
+  end;
 end;
+
 
 theorem :: HERMITAN:31
 for V be non empty VectSpStr over F_Complex, f be Functional of V,
 v be Vector of V
 holds (FormFunctional(f,f*')).[v,v] = [**|. f.v .|^2, 0 **];
 
-definition
+registration
  let V be non empty VectSpStr over F_Complex;
  let f be Functional of V;
 cluster FormFunctional(f,f*') -> diagReR+0valued hermitan diagRvalued;
+ coherence
+  proof
+   set g = FormFunctional(f,f*');
+   thus g is diagReR+0valued
+    proof
+     let v be Vector of V;
+     A1: g.[v,v] = [** |. f.v .|^2, 0 **] by Th31;
+       g.[v,v] = [**Re (g.[v,v]), Im (g.[v,v]) **] by COMPTRIG:9;
+     then Re (g.[v,v]) = |. f.v .|^2 by A1,COMPTRIG:8;
+     hence thesis by SQUARE_1:72;
+    end;
+   thus g is hermitan
+    proof
+     let v,w be Vector of V;
+     thus g.[v,w] = (g.[v,w])*'*' by COMPLFLD:86
+     .= (f.v * (f*').w)*'*' by BILINEAR:def 11
+     .= (f.v * (f.w)*')*'*' by Def2
+     .= ((f.v)*' * (f.w)*'*')*' by COMPLFLD:90
+     .= ((f.v)*' * f.w)*' by COMPLFLD:86
+     .= (f.w * (f*').v)*' by Def2
+     .= (g.[w,v])*' by BILINEAR:def 11;
+    end;
+   let v be Vector of V;
+   A2: g.[v,v] = [** |. f.v .|^2, 0 **] by Th31;
+     g.[v,v] = [**Re (g.[v,v]), Im (g.[v,v]) **] by COMPTRIG:9;
+   hence thesis by A2,COMPTRIG:8;
+  end;
 end;
 
-definition
+
+registration
  let V be non trivial VectSp of F_Complex;
 cluster diagReR+0valued hermitan diagRvalued additiveSAF homogeneousSAF
           additiveFAF cmplxhomogeneousFAF non constant non trivial Form of V,V;
+existence
+ proof
+  consider f be additive homogeneous non constant non trivial Functional of V;
+  take FormFunctional(f,f*');
+  thus thesis;
+ end;
 end;
+
 
 theorem :: HERMITAN:32
   for V,W be non empty VectSpStr over F_Complex, f be Form of V,W
@@ -511,6 +969,7 @@ func signnorm(f,v) -> real number equals
 :: HERMITAN:def 9
 Re (f.[v,v]);
 end;
+
 
 theorem :: HERMITAN:44
 for V be add-associative right_zeroed right_complementable
@@ -596,21 +1055,32 @@ func quasinorm(f) -> RFunctional of V means
    for v be Element of V holds it.v = sqrt (signnorm(f,v));
 end;
 
+
 definition
   let V be VectSp of F_Complex;
   let f be diagReR+0valued hermitan-Form of V;
 redefine func quasinorm(f) -> Semi-Norm of V;
 end;
 
+
 begin
 :: Kernel of Hermitan Forms and Hermitan Forms in Quotinet Vector Spaces
 
-definition
+registration
  let V be add-associative right_zeroed right_complementable
            VectSp-like (non empty VectSpStr over F_Complex);
  let f be cmplxhomogeneousFAF Form of V,V;
 cluster diagker f -> non empty;
+ coherence
+  proof
+   set F = F_Complex;
+     f.[0.V,0.V] = 0.F & diagker f = {v where v is Vector of V : f.[v,v] = 0.F}
+        by Th42,BILINEAR:def 18;
+   then 0.V in diagker f;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: HERMITAN:54
   for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V
@@ -655,18 +1125,78 @@ Form of V,VectQuot(W,RKer (f*')) equals
  (RQForm(f*'))*';
 end;
 
+
 theorem :: HERMITAN:62
 for V be non empty VectSpStr over F_Complex, W  be VectSp of F_Complex
 for f be additiveFAF cmplxhomogeneousFAF Form of V,W
 for v be Vector of V, w be Vector of W holds
 (RQ*Form(f)).[v,w+RKer (f*')] = f.[v,w];
 
-definition
+registration
  let V,W be VectSp of F_Complex;
  let f be sesquilinear-Form of V,W;
 cluster LQForm(f) -> additiveFAF cmplxhomogeneousFAF;
+ coherence
+  proof
+   set lf = LQForm(f);
+   thus LQForm(f) is additiveFAF
+    proof
+     let A be Vector of VectQuot(V,LKer(f));
+     set flf = FunctionalFAF(lf,A);
+     consider v be Vector of V such that
+    A1: A = v + LKer(f) by VECTSP10:23;
+     let w,t be Vector of W;
+     thus flf.(w+t) = lf.[A,w+t] by BILINEAR:9
+     .= f.[v,w+t] by A1,BILINEAR:def 21
+     .= f.[v,w]+f.[v,t] by BILINEAR:28
+     .= lf.[A,w]+ f.[v,t] by A1,BILINEAR:def 21
+     .= lf.[A,w]+ lf.[A,t] by A1,BILINEAR:def 21
+     .= flf.w+ lf.[A,t] by BILINEAR:9
+     .= flf.w + flf.t by BILINEAR:9;
+    end;
+   let A be Vector of VectQuot(V,LKer(f));
+   set flf = FunctionalFAF(lf,A);
+   consider v be Vector of V such that
+  A2: A = v + LKer(f) by VECTSP10:23;
+   let w be Vector of W, r be Scalar of W;
+   thus flf.(r*w) = lf.[A,r*w] by BILINEAR:9
+    .= f.[v,r*w] by A2,BILINEAR:def 21
+    .= r*'*f.[v,w] by Th30
+    .= r*'*lf.[A,w] by A2,BILINEAR:def 21
+    .= r*'*flf.w by BILINEAR:9;
+  end;
 cluster RQ*Form(f) -> additiveSAF homogeneousSAF;
+ coherence
+  proof
+   set lf = RQ*Form(f);
+   thus RQ*Form(f) is additiveSAF
+    proof
+     let A be Vector of VectQuot(W,RKer(f*'));
+     set flf = FunctionalSAF(lf,A);
+     consider w be Vector of W such that
+    A3: A = w + RKer(f*') by VECTSP10:23;
+     let v,t be Vector of V;
+     thus flf.(v+t) = lf.[v+t,A] by BILINEAR:10
+     .= f.[v+t,w] by A3,Th62
+     .= f.[v,w]+f.[t,w] by BILINEAR:27
+     .= lf.[v,A]+ f.[t,w] by A3,Th62
+     .= lf.[v,A]+ lf.[t,A] by A3,Th62
+     .= flf.v+ lf.[t,A] by BILINEAR:10
+     .= flf.v + flf.t by BILINEAR:10;
+    end;
+   let A be Vector of VectQuot(W,RKer(f*'));
+   set flf = FunctionalSAF(lf,A);
+   consider w be Vector of W such that
+  A4: A = w + RKer(f*') by VECTSP10:23;
+   let v be Vector of V, r be Scalar of V;
+   thus flf.(r*v) = lf.[r*v,A] by BILINEAR:10
+    .= f.[r*v,w] by A4,Th62
+    .= r*f.[v,w] by BILINEAR:32
+    .= r*lf.[v,A] by A4,Th62
+    .= r*flf.v by BILINEAR:10;
+  end;
 end;
+
 
 definition
  let V,W be VectSp of F_Complex;
@@ -679,18 +1209,64 @@ for A be Vector of VectQuot(V,LKer f), B be Vector of VectQuot(W, RKer(f*'))
  st A = v + LKer f & B = w + RKer (f*') holds it.[A,B]= f.[v,w];
 end;
 
-definition
+
+registration
  let V,W be non trivial VectSp of F_Complex;
  let f be non constant sesquilinear-Form of V,W;
  cluster Q*Form(f) -> non constant;
+coherence
+ proof
+  set K = F_Complex;
+  consider v be Vector of V, w be Vector of W such that
+ A1: f.[v,w] <> 0.K by BILINEAR:41;
+  reconsider A = v +LKer f as Vector of VectQuot(V,LKer(f)) by VECTSP10:24;
+  reconsider B=w + RKer(f*') as Vector of VectQuot(W,RKer(f*')) by VECTSP10:24;
+    (Q*Form(f)).[A,B] = f.[v,w] by Def12;
+  hence thesis by A1,BILINEAR:41;
+ end;
 end;
 
-definition
+
+registration
  let V be right_zeroed (non empty VectSpStr over F_Complex),
      W be VectSp of F_Complex;
  let f be additiveFAF cmplxhomogeneousFAF Form of V,W;
 cluster RQ*Form(f) -> non degenerated-on-right;
+ coherence
+  proof
+   set K= F_Complex, qf = RQ*Form(f), R = RKer(f*'), qW = VectQuot(W,R);
+  A1: rightker qf =
+   {w where w is Vector of qW : for v be Vector of V holds qf.[v,w] = 0.K}
+        by BILINEAR:def 17;
+  A2: rightker f =
+   {w where w is Vector of W : for v be Vector of V holds f.[v,w] = 0.K}
+        by BILINEAR:def 17;
+  A3: rightker f = rightker f*' by Th58;
+   thus rightker qf c= {0.qW}
+    proof let x be set; assume x in rightker qf;
+     then consider ww be Vector of qW such that
+    A4: x= ww & for v be Vector of V holds qf.[v,ww]=0.K by A1;
+     consider w be Vector of W such that
+    A5: ww = w + R by VECTSP10:23;
+        now let v be Vector of V;
+       thus f.[v,w] = qf.[v,ww] by A5,Th62
+        .= 0.K by A4;
+      end;
+     then w in rightker f by A2;
+     then w in the carrier of R by A3,BILINEAR:def 20;
+     then w in R by RLVECT_1:def 1;
+     then w+R = the carrier of R by VECTSP_4:64
+     .= zeroCoset(W,R) by VECTSP10:def 4
+     .= 0.qW by VECTSP10:22;
+     hence thesis by A4,A5,TARSKI:def 1;
+    end;
+   let x be set; assume x in {0.qW};
+  then A6: x = 0.qW by TARSKI:def 1;
+     for v be Vector of V holds qf.[v,0.qW] = 0.K by BILINEAR:30;
+   hence thesis by A1,A6;
+ end;
 end;
+
 
 theorem :: HERMITAN:63
 for V be non empty VectSpStr over F_Complex, W be VectSp of F_Complex
@@ -716,18 +1292,42 @@ for V,W be VectSp of F_Complex, f be sesquilinear-Form of V,W holds
  leftker Q*Form(f) = leftker (LQForm(RQ*Form(f))) &
  rightker Q*Form(f) = rightker (LQForm(RQ*Form(f)));
 
-definition
+registration
  let V,W be VectSp of F_Complex;
  let f be sesquilinear-Form of V,W;
 cluster RQ*Form(LQForm(f)) -> non degenerated-on-left non degenerated-on-right;
+ coherence
+  proof
+     leftker LQForm(f) = {0.(VectQuot(V,LKer f))} by BILINEAR:def 24;
+   then leftker RQ*Form(LQForm(f)) = {0.(VectQuot(V,LKer f))} by Th63;
+   hence thesis by BILINEAR:def 24;
+  end;
 cluster LQForm(RQ*Form(f)) -> non degenerated-on-left non degenerated-on-right;
+ coherence
+ proof
+     rightker RQ*Form(f) = {0.(VectQuot(W,RKer f*'))} by BILINEAR:def 25;
+   then rightker LQForm(RQ*Form(f)) = {0.(VectQuot(W,RKer f*'))} by BILINEAR:45
+;
+   hence thesis by BILINEAR:def 25;
+  end;
 end;
 
-definition
+
+registration
  let V,W be VectSp of F_Complex;
  let f be sesquilinear-Form of V,W;
  cluster Q*Form(f) -> non degenerated-on-left non degenerated-on-right;
+  coherence
+   proof
+   A1: leftker RQ*Form(LQForm(f)) = leftker Q*Form(f) &
+       rightker LQForm(RQ*Form(f)) = rightker Q*Form(f) by Th67;
+   A2: leftker RQ*Form(LQForm(f))= {0.(VectQuot(V,LKer f))} by BILINEAR:def 24;
+      rightker LQForm(RQ*Form(f)) = {0.(VectQuot(W,RKer f*'))}
+    by BILINEAR:def 25;
+    hence thesis by A1,A2,BILINEAR:def 24,def 25;
+  end;
 end;
+
 
 begin
 :: Scalar Product in Quotient Vector Space Generated by Nonnegative Hermitan Form
@@ -740,15 +1340,48 @@ attr f is positivediagvalued means
 for v be Vector of V st v <> 0.V holds 0 < Re (f.[v,v]);
 end;
 
-definition
+
+registration
  let V be right_zeroed (non empty VectSpStr over F_Complex);
  cluster positivediagvalued additiveSAF -> diagReR+0valued Form of V,V;
+ coherence
+  proof
+   let f be Form of V,V;
+   assume that A1: f is positivediagvalued additiveSAF;
+   let v be Vector of V;
+   per cases;
+    suppose v = 0.V;
+     then A2: f.[v,v] = 0.F_Complex by A1,BILINEAR:31;
+       [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPTRIG:9,10;
+     hence thesis by A2,COMPTRIG:8;
+    end;
+    suppose v <> 0.V;
+     hence thesis by A1,Def13;
+  end;
+  end;
 end;
 
-definition
+
+registration
  let V be right_zeroed (non empty VectSpStr over F_Complex);
  cluster positivediagvalued additiveFAF -> diagReR+0valued Form of V,V;
+ coherence
+  proof
+   let f be Form of V,V;
+   assume that A1: f is positivediagvalued additiveFAF;
+   let v be Vector of V;
+   per cases;
+    suppose v = 0.V;
+     then A2: f.[v,v] = 0.F_Complex by A1,BILINEAR:30;
+       [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPTRIG:9,10;
+     hence thesis by A2,COMPTRIG:8;
+    end;
+    suppose v <> 0.V;
+     hence thesis by A1,Def13;
+  end;
+  end;
 end;
+
 
 definition
  let V be VectSp of F_Complex;
@@ -758,6 +1391,7 @@ equals
 :: HERMITAN:def 14
 Q*Form(f);
 end;
+
 
 theorem :: HERMITAN:68
 for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V
@@ -776,15 +1410,42 @@ holds rightker ScalarForm(f) = rightker Q*Form(f);
 :: The From in Quotient Space Generated by Non negative Hermitan Form is the Scalar Product
 ::
 
-definition
+registration
  let V be VectSp of F_Complex;
  let f be diagReR+0valued hermitan-Form of V;
 cluster ScalarForm(f) -> non degenerated-on-left non degenerated-on-right
             positivediagvalued;
+ coherence
+  proof
+  set vq = VectQuot(V,LKer(f)), vr = VectQuot(V,RKer(f*')), qh = ScalarForm(f);
+ A1: leftker qh = leftker Q*Form(f) by Th69
+  .= {0.vq} by BILINEAR:def 24;
+    rightker qh = rightker Q*Form(f) by Th70
+  .= {0.vr} by BILINEAR:def 25
+  .= {0.vq} by Th59;
+  hence A2: qh is non degenerated-on-left &
+   qh is non degenerated-on-right by A1,BILINEAR:def 24,def 25;
+  let A be Vector of vq;
+  assume A <> 0.vq;
+   then Re (qh.[A,A]) <> 0 by A2,Th61;
+  hence 0 < Re (qh.[A,A]) by Def7;
+ end;
 end;
 
-definition
+
+registration
  let V be non trivial VectSp of F_Complex;
  let f be diagReR+0valued non constant hermitan-Form of V;
 cluster ScalarForm(f) -> non constant;
+ coherence
+  proof
+  set K = F_Complex;
+  consider v, w be Vector of V such that
+ A1: f.[v,w] <> 0.K by BILINEAR:41;
+  reconsider A = v +LKer f, B = w + LKer f as Vector of VectQuot(V,LKer(f))
+     by VECTSP10:24;
+    (ScalarForm(f)).[A,B] = f.[v,w] by Th68;
+  hence thesis by A1,BILINEAR:41;
+ end;
 end;
+

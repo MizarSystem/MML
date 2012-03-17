@@ -11,8 +11,6 @@ SETFAM_1
 STRUCT_0
 ORDERS_1
 #
-NonUniqExD1
-#
 G3 W11 ;;M2 K6 U1 F1 ;;;;M2 W1 ;K6 U1 F1 ;;;;;
 ªM5 V4 ;V6 F2 ;F3 ;;F2 ;F3 ;;ªM2 U1 F1 ;;;ª&R2 B2 F2 ;;M2 U1 F1 ;;;ª&R2 B3 F3 ;;R1 B3 K32 B1 B2 ;;P1 B2 B3 ;;;M2 U1 F1 ;;;ª&R2 B1 F2 ;;M2 U1 F1 ;;;ª&R2 B2 F3 ;;P1 B1 B2 ;;;;
 #

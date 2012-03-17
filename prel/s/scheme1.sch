@@ -17,31 +17,8 @@ SEQ_1
 SEQM_3
 PARTFUN1
 #
-ExRealSubseq
-ExRealSeq2
-ExRealSeq3
-ExRealSeq4
-ExRealSeq5
-PartFuncExD2
-PartFuncExD2'
-PartFuncExD2''
-PartFuncExD3
-PartFuncExD3'
-PartFuncExD4
-PartFuncExS2
-PartFuncExS3
-PartFuncExS4
-PartFuncExC_D2
-PartFuncExC_D3
-PartFuncExC_S2
-PartFuncExC_S3
-ExFuncD3
-ExFuncD4
-FuncExC_D2
-FuncExC_D3
-#
 M6 V4 ;V20 K56 ;K52 ;;K56 ;K52 ;;;
-ªM6 V4 ;V20 K56 ;K52 ;;K56 ;K52 ;;ª&R13 B1 F1 ;;M4 K52 ;K56 ;;P1 K90 K56 ;B1 B2 ;;M4 K52 ;K56 ;;ª&M3 K52 ;;ª&R1 B3 K90 K56 ;F1 ;B2 ;;ªP1 B3 ;;M4 K52 ;K56 ;;ªR1 K90 K56 ;F1 ;B2 ;K90 K56 ;B1 B3 ;;;;M4 K52 ;K56 ;;ªM4 K52 ;K56 ;;ª&R12 B1 B2 ;P1 K90 K56 ;F1 ;B2 ;;;;
+ªM6 V4 ;V20 K56 ;K52 ;;K56 ;K52 ;;ª&R14 B1 F1 ;;M4 K52 ;K56 ;;P1 K90 K56 ;B1 B2 ;;M4 K52 ;K56 ;;ª&M3 K52 ;;ª&R1 B3 K90 K56 ;F1 ;B2 ;;ªP1 B3 ;;M4 K52 ;K56 ;;ªR1 K90 K56 ;F1 ;B2 ;K90 K56 ;B1 B3 ;;;;M4 K52 ;K56 ;;ªM4 K52 ;K56 ;;ª&R13 B1 B2 ;P1 K90 K56 ;F1 ;B2 ;;;;
 #
 M3 K52 ;;M3 K52 ;;;
 ªM6 V4 ;V20 K56 ;K52 ;;K56 ;K52 ;;ªM4 K52 ;K56 ;;&R1 K90 K56 ;B1 K65 N2 B2 ;;F1 B2 ;;R1 K90 K56 ;B1 K64 K65 N2 B2 ;N1 ;;F2 B2 ;;;;

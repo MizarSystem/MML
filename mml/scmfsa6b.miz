@@ -184,7 +184,7 @@ A1: s = Following s;
   defpred X[set] means (Computation s).$1 = s;
 A2: X[0] by AMI_1:def 19;
 A3: for n st X[n] holds X[n+1] by A1,AMI_1:def 19;
- thus for n holds X[n] from Ind(A2, A3);
+ thus for n holds X[n] from NAT_1:sch 1(A2, A3);
 end;
 
 theorem Th16:
@@ -225,13 +225,16 @@ A4:    x = l;
            = ObjectKind l by A4,AMI_1:def 6
           .= the Instructions of S by AMI_1:def 14;
      hence (s+*(l,i)).x in (the Object-Kind of S).x by A5;
+     end;
      suppose x <> l;
       then (s+*(l,i)).x = s.x by FUNCT_7:34;
      hence (s+*(l,i)).x in (the Object-Kind of S).x by A3,CARD_3:18;
     end;
+    end;
    hence s+*(l,i) is State of S by A1,A2,CARD_3:18;
   end;
 end;
+
 
 definition
  let s be State of SCM+FSA, li be Int-Location, k be Integer;
@@ -250,13 +253,16 @@ A4:    x = li;
            = ObjectKind li by A4,AMI_1:def 6
           .= INT by SCMFSA_2:26;
      hence (s+*(li,k)).x in (the Object-Kind of SCM+FSA).x by A5,INT_1:12;
+     end;
      suppose x <> li;
       then (s+*(li,k)).x = s.x by FUNCT_7:34;
      hence (s+*(li,k)).x in (the Object-Kind of SCM+FSA).x by A3,CARD_3:18;
     end;
+    end;
    hence s+*(li,k) is State of SCM+FSA by A1,A2,CARD_3:18;
  end;
 end;
+
 
 theorem Th17:
  for S being steady-programmed IC-Ins-separated definite
@@ -282,7 +288,7 @@ A2: now let n;
    .= ((Computation s).(n+1))|the Instruction-Locations of S by AMI_1:def 19;
   hence X[n+1];
  end;
- thus for n holds X[n] from Ind(A1,A2);
+ thus for n holds X[n] from NAT_1:sch 1(A1,A2);
 end;
 
 begin
@@ -293,6 +299,7 @@ definition let I be Macro-Instruction, s be State of SCM+FSA;
   Result(s+*Initialized I) +* s|the Instruction-Locations of SCM+FSA;
  coherence by AMI_5:82;
 end;
+
 
 definition let I be Macro-Instruction;
  attr I is paraclosed means
@@ -308,6 +315,7 @@ definition let I be Macro-Instruction;
  for s being State of SCM+FSA st I +* Start-At insloc 0 c= s
   for k being Nat holds ((Computation s).k).intloc 0 = s.intloc 0;
 end;
+
 
 Lm1:
   Macro halt SCM+FSA is parahalting
@@ -348,10 +356,11 @@ A12: IC m1 = m1.IC SCM+FSA by A4,AMI_3:def 16
      .= halt SCM+FSA by A6,A9,A10,GRFUNC_1:8;
  end;
 
-definition
+registration
  cluster parahalting Macro-Instruction;
  existence by Lm1;
 end;
+
 
 theorem Th18:
  for I being parahalting Macro-Instruction
@@ -381,13 +390,14 @@ A4: I +* Start-At insloc 0 is halting by Def3;
   hence s is halting by A4,AMI_1:def 26;
 end;
 
-definition let I be parahalting Macro-Instruction;
+registration let I be parahalting Macro-Instruction;
  cluster Initialized I -> halting;
  coherence proof
   let s be State of SCM+FSA; assume Initialized I c= s;
   hence s is halting by Th19;
  end;
 end;
+
 
 theorem Th20:
  s2 +*(IC s2, goto IC s2) is not halting
@@ -413,7 +423,7 @@ A7:   CurInstr((Computation s1).n)
            .= IC s1 by A4,SCMFSA_2:95;
     hence X[n+1];
    end;
-A8: for n holds X[n] from Ind(A3,A5);
+A8: for n holds X[n] from NAT_1:sch 1(A3,A5);
  let n;
      CurInstr((Computation s1).n)
           = ((Computation s1).n).IC((Computation s1).n) by AMI_1:def 17
@@ -467,10 +477,10 @@ SCMFSA6A:29;
      the Instruction-Locations of SCM+FSA by A7,A8,A9,A10,NAT_1:38,SCMFSA6A:32;
     hence thesis;
    end;
- thus for m holds X[m] from Ind(A5,A6);
+ thus for m holds X[m] from NAT_1:sch 1(A5,A6);
 end;
 
-definition
+registration
  cluster parahalting -> paraclosed Macro-Instruction;
  coherence proof
   let I be Macro-Instruction; assume
@@ -483,7 +493,7 @@ A2: I +* Start-At insloc 0 c= s;
 then A3: ex n st X[n];
   consider n such that
 A4: X[n] and
-A5: for m st X[m] holds n <= m from Min(A3);
+A5: for m st X[m] holds n <= m from NAT_1:sch 5(A3);
    set s2 = (Computation s).n,
        s0 = s +*(IC s2, goto IC s2), s1 = s2 +*(IC s2, goto IC s2);
    set IAt = I +* Start-At insloc 0;
@@ -530,7 +540,7 @@ A19: dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
 then A20: ex n st X[n];
   consider n such that
 A21: X[n] and
-A22: for m st X[m] holds n <= m from Min(A20);
+A22: for m st X[m] holds n <= m from NAT_1:sch 5(A20);
    set FI = FirstNotUsed(I);
    set s2 = (Computation s).n;
    reconsider s00 = s +*(IC s2, intloc 0 := FI) as State of SCM+FSA;
@@ -594,6 +604,7 @@ A41: (s.intloc 0) < (s.intloc 0)+1 by REAL_1:69;
  hence contradiction by A17;
 end;
 end;
+
 
 theorem
    for I being parahalting Macro-Instruction,
@@ -667,13 +678,13 @@ A9: for i being Instruction-Location of SCM+FSA holds Exec(goto l,S).i = S.i
        .= Exec(goto l,S) by A3,AMI_1:def 18
        .= S by A6,A7,A8,A9,SCMFSA_2:86;
   end;
-A10: for m holds X[m] from Ind(A4,A5);
+A10: for m holds X[m] from NAT_1:sch 1(A4,A5);
  let m;
   CurInstr((Computation S).m) = goto l by A3,A10;
  hence CurInstr((Computation S).m) <> halt SCM+FSA by SCMFSA_2:47,124;
 end;
 
-definition
+registration
  cluster parahalting -> non empty Macro-Instruction;
  coherence
   proof let I be Macro-Instruction such that
@@ -686,7 +697,8 @@ A2: I is empty;
    consider S be State of SCM+FSA such that
 A3: IC S = insloc 0 and
 A4:  for i being Nat holds
-     S.insloc i = U(i) & S.intloc i = V(i) & S.fsloc i = W(i) from SCMFSAEx;
+     S.insloc i = U(i) & S.intloc i = V(i) & S.fsloc i = W(i) from
+SCMFSA6A:sch 1;
 A5:  I c= S by A2,XBOOLE_1:2;
 A6:  intloc 0 in dom S by SCMFSA_2:66;
       S.intloc 0 = 1 by A4;
@@ -705,6 +717,7 @@ then A9:  Start-At(insloc 0) c= S by AMI_3:def 12;
   end;
 end;
 
+
 theorem Th25: ::T9'
  for I being parahalting Macro-Instruction holds dom I <> {}
  proof
@@ -714,7 +727,7 @@ theorem Th25: ::T9'
 A2: for x be set st x in NAT holds
       ex y being set st y in the Instructions of SCM+FSA & P[x,y];
    consider f be Function of NAT,the Instructions of SCM+FSA such that
-A3: for x being set st x in NAT holds P[x,f.x] from FuncEx1(A2);
+A3: for x being set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
    deffunc U(Nat) = f.$1;
    deffunc V(set) = 1;
    deffunc W(set) = <*>INT;
@@ -722,7 +735,7 @@ A3: for x being set st x in NAT holds P[x,f.x] from FuncEx1(A2);
 A4: IC s = insloc 0 and
 A5: for i being Nat holds
        s.insloc i = U(i) &
-       s.intloc i = V(i) & s.fsloc i = W(i) from SCMFSAEx;
+       s.intloc i = V(i) & s.fsloc i = W(i) from SCMFSA6A:sch 1;
 A6: dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
        the Instruction-Locations of SCM+FSA by AMI_3:36,SCMFSA_2:8;
 then A7: dom s
@@ -751,9 +764,11 @@ then A13: dom Initialized I c= dom s by A10,A11,XBOOLE_1:8;
       suppose A16: x = intloc 0;
        hence (Initialized I).x = 1 by SCMFSA6A:46
        .= s.x by A5,A16;
+      end;
       suppose A17: x = IC SCM+FSA;
        hence (Initialized I).x = IC s by A4,SCMFSA6A:46
        .= s.x by A17,AMI_1:def 15;
+     end;
      end;
    then Initialized I c= s by A13,GRFUNC_1:8;
    hence contradiction by A9,AMI_1:def 26;
@@ -770,8 +785,10 @@ theorem Th26: ::T9
    per cases by NAT_1:19;
    suppose n = 0;
     hence insloc 0 in dom I by A1,A2;
+   end;
    suppose 0 < n;
     hence insloc 0 in dom I by A1,A2,SCMFSA_4:def 4;
+ end;
  end;
 
 theorem Th27: ::T0
@@ -881,7 +898,7 @@ then A20: dom J c= dom JAt by GRFUNC_1:8;
        = C2.(k + 1) | (Int-Locations \/ FinSeq-Locations) by A15,A16,A17,
 SCMFSA6A:41;
      end;
-     for k being Nat holds P[k] from Ind(A6,A14);
+     for k being Nat holds P[k] from NAT_1:sch 1(A6,A14);
    hence thesis;
  end;
 
@@ -1048,10 +1065,11 @@ A4: s = (Computation s).0 by AMI_1:def 19;
   thus Mi is parahalting by Lm1;
  end;
 
-definition
+registration
  cluster keeping_0 parahalting Macro-Instruction;
  existence by Lm2;
 end;
+
 
 theorem
    for I being keeping_0 parahalting Macro-Instruction
@@ -1135,7 +1153,7 @@ A15:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m) by AMI_1:def 17
      equal_outside the Instruction-Locations of SCM+FSA by A5,A6,A8,A9,NAT_1:38
 ,SCMFSA6A:32;
    end;
- thus for m holds X[m] from Ind(A3,A4);
+ thus for m holds X[m] from NAT_1:sch 1(A3,A4);
 end;
 
 theorem Th37: ::Lemma01
@@ -1220,7 +1238,7 @@ A5,Th36;
              equal_outside A by A16,A17,A18,A20,A22,A23,A24,AXIOMS:22,SCMFSA6A:
 32;
         end;
-        for n being Nat holds X[n] from Ind(A12,A13);
+        for n being Nat holds X[n] from NAT_1:sch 1(A12,A13);
       then (Computation s1).k, (Computation s2).k equal_outside A;
       hence (Computation sISA0).k, (Computation s2).k equal_outside A
           by A9,FUNCT_7:29;
@@ -1346,7 +1364,7 @@ A5,Th36;
              equal_outside A by A16,A17,A18,A20,A22,A23,A24,AXIOMS:22,SCMFSA6A:
 32;
         end;
-        for n being Nat holds X[n] from Ind(A12,A13);
+        for n being Nat holds X[n] from NAT_1:sch 1(A12,A13);
       then (Computation s1).k, (Computation s2).k equal_outside A;
       hence (Computation sISA0).k, (Computation s2).k equal_outside A
           by A9,FUNCT_7:29;
@@ -1459,7 +1477,7 @@ A4: now let k be Nat;
              equal_outside A by A13,A14,A15,A17,A19,A20,A21,AXIOMS:22,SCMFSA6A:
 32;
         end;
-        for n being Nat holds X[n] from Ind(A9,A10);
+        for n being Nat holds X[n] from NAT_1:sch 1(A9,A10);
       then (Computation s1).k, (Computation s2).k equal_outside A;
       hence (Computation s).k, (Computation s2).k equal_outside A
           by A6,FUNCT_7:29;
@@ -1508,9 +1526,11 @@ A30: CurInstr (Computation s2).m
        .= (Directed I).lk by A33,A35,FUNCT_4:14;
          (Directed I).lk in rng Directed I by A33,A35,FUNCT_1:def 5;
        hence contradiction by A36,A37,SCMFSA6A:18;
+      end;
       suppose A38: k = LifeSpan s;
        assume CurInstr (Computation (s +* Directed I)).k = halt SCM+FSA;
        hence contradiction by A30,A38,SCMFSA_2:47,124;
+     end;
      end;
  end;
 
@@ -1582,7 +1602,7 @@ A20:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m) by AMI_1:def 17
       equal_outside the Instruction-Locations of SCM+FSA by A10,A11,A13,A14,
 NAT_1:38,SCMFSA6A:32;
    end;
- thus for k being Nat holds X[k] from Ind(A8, A9);
+ thus for k being Nat holds X[k] from NAT_1:sch 1(A8, A9);
 end;
 
 
@@ -1635,6 +1655,7 @@ A10:  intloc 0 in dom Initialized I by SCMFSA6A:45;
             dom J c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
           hence ((Initialized J) | D).x = ((Computation s1).m1 | D).x by A13,
 A14,SCMFSA6A:37;
+         end;
          suppose A15: x = intloc 0;
           thus ((Initialized J) | D).x = (Initialized J).x by A13,FUNCT_1:72
           .= 1 by A15,SCMFSA6A:46
@@ -1642,9 +1663,11 @@ A14,SCMFSA6A:37;
           .= s1.x by A2,A10,A15,GRFUNC_1:8
           .= ((Computation s1).m1).x by A3,A15,Def4
           .= ((Computation s1).m1 | D).x by A13,FUNCT_1:72;
+         end;
          suppose x = IC SCM+FSA;
           hence ((Initialized J) | D).x = ((Computation s1).m1 | D).x by A12,
 SCMFSA6A:37,XBOOLE_0:def 3;
+        end;
         end;
         Initialized J c= s3 by FUNCT_4:26;
       then dom Initialized J c= dom s3 by GRFUNC_1:8;
@@ -1724,10 +1747,12 @@ then A35: CurInstr((Computation s).m)
       per cases;
       suppose k <= m1;
        hence CurInstr (Computation s).k <> halt SCM+FSA by A2,A23,Th39;
+      end;
       suppose m1 < k;
        then m1 + 1 <= k by NAT_1:38;
        then consider kk being Nat such that A37: m1 + 1 + kk = k by NAT_1:28;
        thus CurInstr (Computation s).k <> halt SCM+FSA by A32,A36,A37;
+     end;
      end;
 then A38: for k being Nat st CurInstr (Computation s).k = halt SCM+FSA
      holds m <= k;
@@ -1757,7 +1782,7 @@ then A42: J +* Start-At insloc 0 c= s3 by Th8;
      end;
  end;
 
-definition
+registration
  let I, J be parahalting Macro-Instruction;
  cluster I ';' J -> parahalting;
  coherence
@@ -1796,9 +1821,11 @@ A8:  s3 | D = ((Computation s1).m1 | D) +* kk by AMI_5:6;
          suppose A13: x in dom J;
             dom J c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
           hence kk.x = ((Computation s1).m1 | D).x by A11,A13,SCMFSA6A:37;
+         end;
          suppose x = IC SCM+FSA;
           hence kk.x = ((Computation s1).m1 | D).x by A10,SCMFSA6A:37,XBOOLE_0:
 def 3;
+        end;
         end;
         JAt c= s3 by FUNCT_4:26;
       then dom JAt c= dom s3 by GRFUNC_1:8;
@@ -1854,6 +1881,7 @@ A24:  (Computation s).(m1 + 1) | D = s3 | D
        .= halt SCM+FSA by SCMFSA_4:8;
   end;
 end;
+
 
 theorem Th41:
  for I being keeping_0 Macro-Instruction
@@ -1917,7 +1945,7 @@ A18:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m) by AMI_1:def 17
       equal_outside the Instruction-Locations of SCM+FSA by A10,A11,A12,
 SCMFSA6A:32;
    end;
- thus for k being Nat holds X[k] from Ind(A8, A9);
+ thus for k being Nat holds X[k] from NAT_1:sch 1(A8, A9);
 end;
 
 theorem Th42:
@@ -2087,7 +2115,7 @@ set CIJk1 = (Computation sIJSA0).(LifeSpan sISA0+1+k1);
       (Computation sIJSA0).(LifeSpan sISA0+1+k1)
     equal_outside the Instruction-Locations of SCM+FSA by A31,A32,SCMFSA6A:28;
    end;
-   for k being Nat holds X[k] from Ind(A17, A18);
+   for k being Nat holds X[k] from NAT_1:sch 1(A17, A18);
  hence for k being Nat
      holds (Computation (Result(s +*I)
                                +* (J +* Start-At insloc 0))).k
@@ -2098,7 +2126,7 @@ set CIJk1 = (Computation sIJSA0).(LifeSpan sISA0+1+k1);
             equal_outside the Instruction-Locations of SCM+FSA by A10,A11;
 end;
 
-definition
+registration
  let I, J be keeping_0 Macro-Instruction;
  cluster I ';' J -> keeping_0;
  coherence
@@ -2138,6 +2166,7 @@ A10:  (Computation (s +* (I +* SA0))).k.intloc 0
         equal_outside the Instruction-Locations of SCM+FSA by A7,A9,Th40
 ;
     hence ((Computation s).k).intloc 0 = s.intloc 0 by A2,A10,SCMFSA6A:30;
+   end;
    suppose A11: k > LifeSpan(s +* (I +* SA0));
     set LS = LifeSpan(s +* (I +* SA0));
      consider p being Nat such that
@@ -2174,6 +2203,8 @@ set Sr = Start-At (IC ((Computation (Result(s +*(I+*SA0))
     hence ((Computation s).k).intloc 0 = s.intloc 0 by A2,A14,A16,A17,SCMFSA6A:
 30;
   end;
+  end;
+  end;
   suppose A18: not s +* (I +* SA0) is halting;
    let k be Nat;
       I +* SA0 c= s +* (I +* SA0) by FUNCT_4:26;
@@ -2185,7 +2216,9 @@ then A19:  (Computation (s +* (I +* SA0))).k.intloc 0
            equal_outside the Instruction-Locations of SCM+FSA by A18,Th41;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by A2,A19,SCMFSA6A:30;
  end;
+ end;
 end;
+
 
 theorem Th43: ::T22
  for I being keeping_0 parahalting Macro-Instruction,
@@ -2380,6 +2413,7 @@ A34:   dom Start-At l = {IC SCM+FSA} by AMI_3:34;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I)).x
            by A37,FUNCT_4:12;
+      end;
       suppose A38: x is FinSeq-Location;
   then A39:  IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A26,SCMFSA6A:38;
          x <> IC SCM+FSA by A38,SCMFSA_2:82;
@@ -2387,6 +2421,7 @@ A34:   dom Start-At l = {IC SCM+FSA} by AMI_3:34;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I)).x
            by A39,FUNCT_4:12;
+      end;
       suppose A40: x = IC SCM+FSA;
        then x in {IC SCM+FSA} by TARSKI:def 1;
     then A41: x in dom Start-At l by AMI_3:34;
@@ -2395,6 +2430,7 @@ A34:   dom Start-At l = {IC SCM+FSA} by AMI_3:34;
        .= (Start-At l).IC SCM+FSA by AMI_3:50
        .= (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I)).x
            by A40,A41,FUNCT_4:14;
+      end;
       suppose A42: x is Instruction-Location of SCM+FSA;
          IExec(I ';' J,s) | A = ps by A16,SCMFSA6A:40
        .= IExec(J,IExec(I,s)) | A by A17,SCMFSA6A:40;
@@ -2404,6 +2440,7 @@ A34:   dom Start-At l = {IC SCM+FSA} by AMI_3:34;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I)).x
            by A43,FUNCT_4:12;
+      end;
       end;
       hence thesis by A33,FUNCT_1:9;
      end;

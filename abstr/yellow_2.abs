@@ -23,8 +23,19 @@ begin :: Basic Facts
 
 reserve x, X, Y for set;
 
-scheme RelStrSubset{L() -> non empty RelStr, P[set]}:
-  {x where x is Element of L(): P[x]} is Subset of L();
+scheme :: YELLOW_2:sch 1
+ RelStrSubset{L() -> non empty RelStr, P[set]}:
+  {x where x is Element of L(): P[x]} is Subset of L()
+proof
+    {x where x is Element of L(): P[x]} c= the carrier of L()
+  proof
+    let x be set;
+    assume x in {l where l is Element of L(): P[l]};
+    then ex l being Element of L() st x = l & P[l];
+    hence thesis;
+  end;
+  hence thesis;
+end;
 
 theorem :: YELLOW_2:1
     for L being non empty RelStr
@@ -87,24 +98,66 @@ theorem :: YELLOW_2:8
 
 begin :: Maps
 
-scheme LambdaMD{X, Y() -> non empty RelStr, F(set) -> Element of Y()}:
-  ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x);
+scheme :: YELLOW_2:sch 2
+ LambdaMD{X, Y() -> non empty RelStr, F(set) -> Element of Y()}:
+  ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x)
+proof  deffunc f(set) = F($1);
+  consider f being Function of the carrier of X(),the carrier of Y() such that
+A1:  for s being Element of X() holds f.s = f(s)
+   from FUNCT_2:sch 4;
+  reconsider f as map of X(),Y();
+  take f;
+  thus thesis by A1;
+ end;
 
-scheme KappaMD{X, Y() -> non empty RelStr, F(set) -> set}:
+scheme :: YELLOW_2:sch 3
+ KappaMD{X, Y() -> non empty RelStr, F(set) -> set}:
   ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x)
 provided
-  for x being Element of X() holds F(x) is Element of Y();
+  for x being Element of X() holds F(x) is Element of Y()
+proof
+  reconsider X = the carrier of X(),Y = the carrier of Y() as non empty set;
+  deffunc f(set) = F($1);
+A2: now let x be Element of X;
+     F(x) is Element of Y() by A1;
+     hence f(x) in Y;
+    end;
+  consider f being Function of X, Y such that
+A3: for x being Element of X holds f.x = f(x) from SUPINF_2:sch 1(A2);
+  reconsider f as map of X(),Y();
+  take f;
+  thus thesis by A3;
+ end;
 
-scheme NonUniqExMD{X, Y() -> non empty RelStr, P[set,set]}:
+scheme :: YELLOW_2:sch 4
+ NonUniqExMD{X, Y() -> non empty RelStr, P[set,set]}:
   ex f being map of X(), Y() st for x being Element of X() holds P[x, f.x]
 provided
-  for x being Element of X() ex y being Element of Y() st P[x, y];
+  for x being Element of X() ex y being Element of Y() st P[x, y]
+proof
+  defpred p[set,set] means P[$1,$2];
+A2: for x being set st x in the carrier of X()
+     ex y being set st y in the carrier of Y() & p[x,y]
+   proof let x be set;
+    assume x in the carrier of X();
+    then reconsider x as Element of X();
+      ex y being Element of Y() st p[x,y] by A1;
+    hence thesis;
+   end;
+  consider f being Function of the carrier of X(),the carrier of Y() such that
+A3:  for x being set st x in the carrier of X() holds p[x,f.x]
+   from FUNCT_2:sch 1(A2);
+  reconsider f as map of X(),Y();
+  take f;
+  thus thesis by A3;
+ end;
 
 definition
   let S, T be 1-sorted;
   let f be map of S, T;
   redefine func rng f -> Subset of T;
 end;
+
 
 theorem :: YELLOW_2:9
   for S, T being non empty 1-sorted
@@ -120,8 +173,12 @@ definition
 
   for j being set st j in J
     ex a, b being Element of L st a = f.j & b = g.j & a <= b;
-  synonym g >= f;
-end;
+  end;
+notation
+  let J be set, L be RelStr;
+  let f, g be Function of J, the carrier of L;
+  synonym g >= f for f <= g ; end;
+
 
 theorem :: YELLOW_2:10
     for L, M being non empty RelStr, f,g being map of L, M holds
@@ -139,6 +196,7 @@ definition
    subrelstr rng f;
 end;
 
+
 theorem :: YELLOW_2:11
   for L, M being non empty RelStr
   for f being map of L, M
@@ -151,17 +209,29 @@ theorem :: YELLOW_2:12
   for y being Element of Image f
     ex x being Element of L st f.x = y;
 
-definition
+registration
   let L be non empty RelStr;
   let X be non empty Subset of L;
   cluster subrelstr X -> non empty;
+  coherence
+ proof the carrier of subrelstr X = X by YELLOW_0:def 15;
+  hence thesis by STRUCT_0:def 1;
+ end;
 end;
 
-definition
+
+registration
   let L, M be non empty RelStr;
   let f be map of L, M;
   cluster Image f -> non empty;
+  coherence
+ proof
+    dom f = the carrier of L by FUNCT_2:def 1;
+  then rng f is non empty & rng f = the carrier of Image f by Th11,RELAT_1:65;
+  hence Image f is non empty by STRUCT_0:def 1;
+ end;
 end;
+
 
 
 begin :: Monotone Maps
@@ -273,9 +343,11 @@ theorem :: YELLOW_2:30   ::Proposition 2.2 (i)  (variant 3)
     holds
    (for A being Subset of L holds ex_inf_of A,L) implies L is complete;
 
-definition
+registration
   cluster up-complete /\-complete upper-bounded -> complete (non empty Poset);
+  correctness by Lm1;
 end;
+
 
 theorem :: YELLOW_2:31   :: Theorem 2.3 (The Fixed-Point Theorem)
   for f being map of L, L st f is monotone
@@ -349,10 +421,17 @@ theorem :: YELLOW_2:42
     holds
    I /\ J is Ideal of L;
 
-definition
+registration
   let L be non empty reflexive transitive RelStr;
   cluster Ids L -> non empty;
+  correctness
+  proof
+    consider x being Element of L;
+      downarrow x in {Y where Y is Ideal of L: not contradiction};
+    hence Ids L is non empty by WAYBEL_0:def 23;
+  end;
 end;
+
 
 theorem :: YELLOW_2:43
   for L being non empty reflexive transitive RelStr
@@ -371,10 +450,32 @@ theorem :: YELLOW_2:45
     holds
    x "/\" y = x /\ y;
 
-definition
+registration
   let L be with_infima Poset;
   cluster InclPoset(Ids L) -> with_infima;
+  correctness
+  proof
+      for x, y be set st (x in Ids L & y in Ids L) holds x /\ y in Ids L
+    proof
+      let x, y be set;
+      assume
+    A1: x in Ids L & y in Ids L;
+      then x in
+ {X where X is Ideal of L: not contradiction} by WAYBEL_0:def 23;
+      then consider I being Ideal of L such that
+    A2: I = x;
+        y in {X where X is Ideal of L: not contradiction} by A1,WAYBEL_0:def 23
+;
+      then consider J being Ideal of L such that
+    A3: J = y;
+        I /\ J is Ideal of L by Th42;
+      then I /\ J in {X where X is Ideal of L: not contradiction};
+      hence x /\ y in Ids L by A2,A3,WAYBEL_0:def 23;
+    end;
+    hence InclPoset(Ids L) is with_infima by YELLOW_1:12;
+  end;
 end;
+
 
 theorem :: YELLOW_2:46
   for L being with_suprema Poset
@@ -385,10 +486,30 @@ theorem :: YELLOW_2:46
      ex a, b being Element of L st a in x & b in y & z = a "\/" b} &
        ex_sup_of {x, y},InclPoset(Ids L) & x "\/" y = downarrow Z;
 
-definition
+registration
   let L be with_suprema Poset;
   cluster InclPoset(Ids L) -> with_suprema;
+  correctness
+  proof
+    set P = InclPoset(Ids L);
+      for x, y being Element of P
+      ex z being Element of P st x <= z & y <= z &
+        for z' being Element of P st x <= z' & y <= z' holds z <= z'
+    proof
+      let x, y be Element of P;
+      consider Z being Subset of L such that
+          Z = {z where z is Element of L: z in x or z in y or
+        ex a, b being Element of L st a in x & b in y & z = a "\/" b} and
+    A1: ex_sup_of {x, y},InclPoset(Ids L) and
+          x "\/" y = downarrow Z by Th46;
+
+      take x "\/" y;
+      thus thesis by A1,YELLOW_0:18;
+    end;
+    hence thesis by LATTICE3:def 10;
+  end;
 end;
+
 
 theorem :: YELLOW_2:47
   for L being lower-bounded sup-Semilattice
@@ -412,10 +533,12 @@ theorem :: YELLOW_2:50
     holds
    InclPoset(Ids L) is complete;
 
-definition
+registration
   let L be lower-bounded sup-Semilattice;
   cluster InclPoset(Ids L) -> complete;
+  correctness by Th50;
 end;
+
 
 
 begin :: Special Maps
@@ -427,6 +550,7 @@ definition
 
   for I being Ideal of L holds it.I = sup I;
 end;
+
 
 theorem :: YELLOW_2:51
   for L being non empty Poset
@@ -441,10 +565,12 @@ theorem :: YELLOW_2:52
 theorem :: YELLOW_2:53
   for L being up-complete (non empty Poset) holds SupMap L is monotone;
 
-definition
+registration
   let L be up-complete (non empty Poset);
   cluster SupMap L -> monotone;
+  correctness by Th53;
 end;
+
 
 definition
   let L be non empty Poset;
@@ -454,13 +580,16 @@ definition
   for x being Element of L holds it.x = downarrow x;
 end;
 
+
 theorem :: YELLOW_2:54
   for L being non empty Poset holds IdsMap L is monotone;
 
-definition
+registration
   let L be non empty Poset;
   cluster IdsMap L -> monotone;
+  correctness by Th54;
 end;
+
 
 
 begin :: A Family of Elements in a Lattice
@@ -479,15 +608,14 @@ definition
    "/\"(rng F, L);
 end;
 
-definition
+
+notation
   let J be set, L be non empty RelStr;
   let F be Function of J, the carrier of L;
-  redefine func \\/(F, L);
-  synonym Sup F;
+  synonym Sup F for \\/(F, L);
+  synonym Inf F for //\(F, L);
+  end;
 
-  redefine func //\(F, L);
-  synonym Inf F;
-end;
 
 definition
   let J be non empty set, S be non empty 1-sorted;
@@ -496,11 +624,13 @@ definition
   redefine func F.j -> Element of S;
 end;
 
+
 definition
   let J be set, S be non empty 1-sorted;
   let F be Function of J, the carrier of S;
   redefine func rng F -> Subset of S;
 end;
+
 
 reserve J for non empty set,
         j for Element of J;

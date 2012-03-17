@@ -32,26 +32,41 @@ theorem :: DTCONSTR:2
    st y in dom p holds p.y in x;
 :: This definition really belongs elsewhere
 
-definition
+registration
  let X be set;
  cluster -> Relation-like Function-like Element of X*;
+ coherence;
   :: for x being Element of X* holds x is Function-like
 end;
 
-definition
+
+registration
  let X be set;
  cluster -> FinSequence-like Element of X*;
+ coherence;
 end;
 
-definition
+
+registration
  let D be non empty set, t be Element of FinTrees D;
  cluster dom t -> finite;
+ coherence by TREES_3:def 8;
 end;
 
-definition
+
+registration
  let D be non empty set, T be DTree-set of D;
  cluster -> DTree-yielding FinSequence of T;
+ coherence proof let ts be FinSequence of T;
+     now let x be set; assume
+      x in dom ts;
+    then ts.x in T by Th2;
+    hence ts.x is DecoratedTree by TREES_3:def 5;
+   end;
+  hence thesis by TREES_3:26;
+ end;
 end;
+
 
 definition
  let D be non empty set;
@@ -59,6 +74,7 @@ definition
  let Tset be non empty Subset of F;
  redefine mode Element of Tset -> Element of F;
 end;
+
 
 definition
  let p be FinSequence such that
@@ -68,6 +84,7 @@ definition
   dom it = dom p & for i being Nat st i in dom p
    ex T being DecoratedTree st T = p.i & it.i = T.{};
 end;
+
 
 definition
  let D be non empty set, T be DTree-set of D;
@@ -99,34 +116,74 @@ definition
   dom it = dom f & for x being set st x in dom f holds it.x = (f.x)`2;
 end;
 
+
 definition
  let X, Y be set, f be FinSequence of [:X, Y:];
  redefine func pr1 f -> FinSequence of X;
           func pr2 f -> FinSequence of Y;
 end;
 
+
 theorem :: DTCONSTR:7
 pr1 {} = {} & pr2 {} = {};
 
-scheme MonoSetSeq { f() -> Function, A() -> set, H(set, set) -> set}:
+scheme :: DTCONSTR:sch 1
+ MonoSetSeq { f() -> Function, A() -> set, H(set, set) -> set}:
  for k, s being Nat holds f().k c= f().(k+s)
 provided
- for n being Nat holds f().(n+1) = f().n \/ H(n, f().n);
+ for n being Nat holds f().(n+1) = f().n \/ H(n, f().n)
+proof let k be Nat;
+set f = f();
+  defpred P[Nat] means f.k c= f.(k+$1);
+A2: P[0];
+A3: now let s be Nat; assume
+A4:    P[s];
+       f.(k+(s+1)) = f.((k+s)+1) by XCMPLX_1:1
+                  .= f.(k+s) \/ H(k+s, f.(k+s)) by A1;
+       then f.(k+s) c= f.(k+(s+1)) by XBOOLE_1:7;
+      hence P[s+1] by A4,XBOOLE_1:1;
+     end;
+ thus for s being Nat holds P[s] from NAT_1:sch 1(A2,A3);
+end;
 
 begin
 
-definition
+registration
   let A be non empty set, R be Relation of A,A*;
  cluster DTConstrStr(#A,R#) -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
 
-scheme DTConstrStrEx { S() -> non empty set,
+
+scheme :: DTCONSTR:sch 2
+ DTConstrStrEx { S() -> non empty set,
                        P[set, set] }:
  ex G be strict non empty DTConstrStr st the carrier of G = S() &
   for x being Symbol of G, p being FinSequence of the carrier of G
-   holds x ==> p iff P[x, p];
+   holds x ==> p iff P[x, p]
+proof
+  defpred R[set,set] means P[$1,$2];
+  consider PR being Relation of S(), S()* such that
+A1: for x, y being set
+    holds [x,y] in PR iff x in S() & y in S()* & R[x, y] from RELSET_1:sch 1;
+   take DT = DTConstrStr (# S(), PR #);
+   thus the carrier of DT = S();
+   let x be Symbol of DT,
+       p be FinSequence of the carrier of DT;
+   hereby assume
+     x ==> p;
+     then [x, p] in the Rules of DT by LANG1:def 1;
+    hence P[x, p] by A1;
+   end;
+   assume
+A2:   P[x, p];
+       p in (the carrier of DT)* by FINSEQ_1:def 11;
+     then [x, p] in PR by A1,A2;
+   hence x ==> p by LANG1:def 1;
+end;
 
-scheme DTConstrStrUniq { S() -> non empty set,
+scheme :: DTCONSTR:sch 3
+ DTConstrStrUniq { S() -> non empty set,
                          P[set, set] }:
  for G1, G2 being strict non empty DTConstrStr
   st (the carrier of G1 = S() &
@@ -135,13 +192,48 @@ scheme DTConstrStrUniq { S() -> non empty set,
       (the carrier of G2 = S() &
        for x being Symbol of G2, p being FinSequence of the carrier of G2
          holds x ==> p iff P[x, p])
-   holds G1 = G2;
+   holds G1 = G2
+proof    let G1, G2 be strict non empty DTConstrStr such that
+A1: (the carrier of G1 = S() &
+     for x being Symbol of G1, p being FinSequence of the carrier of G1
+         holds x ==> p iff P[x, p]) and
+A2: (the carrier of G2 = S() &
+     for x being Symbol of G2, p being FinSequence of the carrier of G2
+         holds x ==> p iff P[x, p]);
+     now let x, y be set;
+    hereby assume
+A3:   [x, y] in the Rules of G1;
+then A4: x in the carrier of G1 & y in (the carrier of G1)* by ZFMISC_1:106;
+      reconsider x1 = x as Symbol of G1 by A3,ZFMISC_1:106;
+    reconsider y1 = y as FinSequence of the carrier of G1 by A4,FINSEQ_2:def 3;
+A5:    x1 ==> y1 iff P[x1, y1] by A1;
+    reconsider x2 = x as Symbol of G2 by A1,A2,A3,ZFMISC_1:106;
+    reconsider y2 = y as FinSequence of the carrier of G2 by A1,A2,A4,FINSEQ_2:
+def 3;
+        x2 ==> y2 by A2,A3,A5,LANG1:def 1;
+     hence [x, y] in the Rules of G2 by LANG1:def 1;
+    end;
+    assume
+A6:   [x, y] in the Rules of G2;
+then A7:  x in the carrier of G2 & y in (the carrier of G2)* by ZFMISC_1:106;
+      reconsider x2 = x as Symbol of G2 by A6,ZFMISC_1:106;
+    reconsider y2 = y as FinSequence of the carrier of G2 by A7,FINSEQ_2:def 3;
+A8:    x2 ==> y2 iff P[x2, y2] by A2;
+    reconsider x1 = x as Symbol of G1 by A1,A2,A6,ZFMISC_1:106;
+    reconsider y1 = y as FinSequence of the carrier of G1 by A1,A2,A7,FINSEQ_2:
+def 3;
+        x1 ==> y1 by A1,A6,A8,LANG1:def 1;
+    hence [x, y] in the Rules of G1 by LANG1:def 1;
+   end;
+ hence G1 = G2 by A1,A2,RELAT_1:def 2;
+ end;
 
 theorem :: DTCONSTR:8
   for G being non empty DTConstrStr holds
       Terminals G misses NonTerminals G;
 
-scheme DTCMin { f() -> Function,
+scheme :: DTCONSTR:sch 4
+ DTCMin { f() -> Function,
                 G() -> non empty DTConstrStr, D() -> non empty set,
                 TermVal(set) -> Element of D(),
                 NTermVal(set, set, set) -> Element of D()}:
@@ -169,9 +261,198 @@ provided
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
-                               p = q & o ==> pr1 roots q };
+                               p = q & o ==> pr1 roots q }
+proof
+set f = f();
+set G = G();
+set D = D();
+deffunc
+ NTV(Symbol of G, FinSequence) = NTermVal($1, pr1 roots $2, pr2 roots $2);
+   Union f c= FinTrees [:the carrier of G, D:] proof
+   let u be set; assume u in Union f;
+    then consider k being set such that
+A4: k in NAT & u in f.k by A1,CARD_5:10;
+  defpred P[Nat] means for u being set st u in f.$1 holds
+   u in FinTrees [:the carrier of G, D:];
+A5: P[0] proof let u be set; assume
+        u in f.0;
+     then ex t being Symbol of G, d being Element of D st u = root-tree [t,d] &
+              (t in Terminals G() & d = TermVal(t) or
+               t ==> {} & d = NTermVal(t, {}, {})) by A2;
+     hence u in FinTrees [:the carrier of G, D:];
+    end;
+A6: now let n be Nat such that
+A7:   P[n];
+     thus P[n+1]
+     proof
+     let u be set; assume
+        u in f.(n+1);
+      then u in f.n \/
+            { [o, NTV(o, p)]-tree p
+              where o is Symbol of G, p is Element of (f.n)*:
+              ex q being FinSequence of FinTrees[:the carrier of G, D:] st
+                           p = q & o ==> pr1 roots q } by A3;
+then A8:    u in f.n or
+      u in { [o, NTV(o, p)]-tree p
+               where o is Symbol of G, p is Element of (f.n)*:
+               ex q being FinSequence of FinTrees[:the carrier of G, D:] st
+                           p = q & o ==> pr1 roots q } by XBOOLE_0:def 2;
+      assume
+A9:     not u in FinTrees [:the carrier of G, D:];
+        then consider o being Symbol of G, p being Element of (f.n)* such that
+A10:     u = [o, NTV(o, p)]-tree p &
+           ex q being FinSequence of FinTrees [:the carrier of G, D:] st
+                           p = q & o ==> pr1 roots q by A7,A8;
+       reconsider p as FinSequence of FinTrees [:the carrier of G, D:] by A10;
+         u = [o, NTV(o, p)]-tree p by A10;
+     hence contradiction by A9;
+     end;
+    end;
+    for n being Nat holds P[n] from NAT_1:sch 1(A5,A6);
+    hence thesis by A4;
+  end;
+ then reconsider X = Union f as Subset of FinTrees [:the carrier of G, D:];
+ take X;
+ thus X = Union f;
+  hereby let d be Symbol of G;
+   assume d in Terminals G;
+    then root-tree [d, TermVal(d)] in f.0 by A2;
+   hence root-tree [d, TermVal(d)] in X by A1,CARD_5:10;
+  end;
 
-scheme DTCSymbols { f() -> Function,
+  hereby let o be Symbol of G, p be FinSequence of X such that
+A11: o ==> pr1 roots p;
+   set s = pr1 roots p, v = pr2 roots p;
+A13: dom p = Seg len p by FINSEQ_1:def 3;
+     defpred P[set,set] means p.$1 in f.($2);
+A14: for x being Nat st x in Seg len p ex n being Nat st P[x,n] proof
+     let x be Nat; assume
+       x in Seg len p;
+     then p.x in rng p & rng p c= X by A13,FINSEQ_1:def 4,FUNCT_1:def 5;
+     then ex n being set st n in NAT & p.x in f.n by A1,CARD_5:10;
+     hence thesis;
+   end;
+  consider pn being FinSequence of NAT such that
+A15: dom pn = Seg len p &
+     for k being Nat st k in Seg len p holds P[k,pn.k] from MATRIX_2:sch 1
+ (A14);
+A16: now
+defpred P[Nat,Nat] means $1 >= $2;
+  assume rng pn <> {};
+then A17: rng pn is finite & rng pn <> {} & rng pn c= NAT by FINSEQ_1:def 4;
+A18: for x, y being Nat holds P[x,y] or P[y,x];
+A19: for x, y, z being Nat st P[x,y] & P[y,z] holds P[x,z] by AXIOMS:22;
+   consider n being Nat such that
+A20:  n in rng pn & for y being Nat st y in rng pn holds P[n,y]
+                                from CQC_SIM1:sch 4 ( A17, A18, A19 );
+   take n;
+   thus rng p c= f.n proof
+    let t be set; assume
+       t in rng p;
+     then consider k being set such that
+A21:  k in dom p & t = p.k by FUNCT_1:def 5;
+     reconsider k as Nat by A21,FINSEQ_3:25;
+A22:  pn.k in rng pn by A13,A15,A21,FUNCT_1:def 5;
+    then reconsider pnk = pn.k as Nat by A17;
+      n >= pnk by A20,A22;
+    then consider s being Nat such that
+A23:   n = pnk + s by NAT_1:28;
+    deffunc H(set,set) =
+    { [o1, NTermVal(o1, pr1 roots p1, pr2 roots p1)]-tree p1
+           where o1 is Symbol of G(), p1 is Element of (f.$1)* :
+            ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
+                               p1 = q & o1 ==> pr1 roots q };
+A24: for n being Nat holds f.(n+1) = f.n \/ H(n, f.n) by A3
+;
+   for k, s being Nat holds f.k c= f.(k+s) from MonoSetSeq (A24);
+then A25:  f.pnk c= f.n by A23;
+      t in f.(pn.k) by A13,A15,A21;
+    hence thesis by A25;
+   end;
+  end;
+    now assume rng pn = {};
+   then pn = {} by FINSEQ_1:27;
+   then dom pn = {} by FINSEQ_1:26;
+   then p = {} by A13,A15,FINSEQ_1:26;
+then A26:   rng p = {} by FINSEQ_1:27;
+   consider n being Nat;
+   take n;
+   thus rng p c= f.n by A26,XBOOLE_1:2;
+  end;
+then consider n being Nat such that
+A27: rng p c= f.n by A16;
+     X = union rng f & f.n in rng f by A1,FUNCT_1:def 5,PROB_1:def 3;
+   then f.n c= X by ZFMISC_1:92;
+   then reconsider fn = f.n as Subset of FinTrees [:the carrier of G, D:] by
+XBOOLE_1:1;
+   reconsider q = p as FinSequence of fn by A27,FINSEQ_1:def 4;
+   reconsider q' = q as Element of (fn)* by FINSEQ_1:def 11;
+     [o, NTermVal(o, s, v)]-tree q' in
+      { [oo, NTV(oo, pp)]-tree pp
+                where oo is Symbol of G, pp is Element of (fn)* :
+          ex q being FinSequence of FinTrees [:the carrier of G, D:] st
+                           pp = q & oo ==> pr1 roots q } by A11;
+    then [o, NTermVal(o, s, v)]-tree q' in f.n \/
+      { [oo, NTV(oo, pp)]-tree pp
+                where oo is Symbol of G, pp is Element of (fn)* :
+          ex q being FinSequence of FinTrees [:the carrier of G, D:] st
+                         pp = q & oo ==> pr1 roots q } by XBOOLE_0:def 2;
+   then [o, NTermVal(o, s, v)]-tree q' in f.(n+1) by A3;
+  hence [o, NTermVal(o, s, v)]-tree p in X by A1,CARD_5:10;
+ end;
+
+ let F be Subset of FinTrees [:the carrier of G, D:] such that
+A28: (for d being Symbol of G st d in Terminals G
+                              holds root-tree [d, TermVal(d)] in F) &
+   (for o being Symbol of G, p being FinSequence of F st o ==> pr1 roots p
+         holds [o, NTV(o, p)]-tree p in F);
+         defpred P[Nat] means f.$1 c= F;
+   A29:P[0] proof let x be set;
+       reconsider p = {} as FinSequence of F by FINSEQ_1:29;
+       assume x in f.0;
+       then consider t being Symbol of G, d being Element of D such that
+    A30: x = root-tree [t, d] & (t in Terminals G() & d = TermVal(t) or
+           t ==> pr1 roots p & d = NTV(t, p))
+                                by A2,Th3,Th7;
+           [t, d]-tree p = root-tree [t, d] by TREES_4:20;
+        hence x in F by A28,A30;
+       end;
+   A31: now let n be Nat such that
+    A32:  P[n];
+       thus P[n+1] proof let x be set; assume
+    A33:   x in f.(n+1) & not x in F;
+         then x in f.n \/ {[oo, NTV(oo, pp)]-tree pp
+                where oo is Symbol of G, pp is Element of (f.n)* :
+          ex q being FinSequence of FinTrees [:the carrier of G, D:] st
+                           pp = q & oo ==> pr1 roots q } by A3;
+         then x in f.n or
+               x in {[oo, NTV(oo, pp)]-tree pp
+                where oo is Symbol of G, pp is Element of (f.n)* :
+          ex q being FinSequence of FinTrees [:the carrier of G, D:] st
+                           pp = q & oo ==> pr1 roots q } by XBOOLE_0:def 2;
+         then consider o being Symbol of G, p being Element of (f.n)* such that
+     A34:  x = [o, NTV(o, p)]-tree p &
+         ex q being FinSequence of FinTrees [:the carrier of G, D:] st
+                               p = q & o ==> pr1 roots q by A32,A33;
+           rng p c= f.n by FINSEQ_1:def 4;
+         then rng p c= F by A32,XBOOLE_1:1;
+         then reconsider p as FinSequence of F by FINSEQ_1:def 4;
+           o ==> pr1 roots p by A34;
+         hence contradiction by A28,A33,A34;
+        end;
+       end;
+    A35: for n being Nat holds P[n] from NAT_1:sch 1 (A29, A31);
+  thus X c= F proof
+       let x be set; assume x in X;
+           then consider n being set such that
+       A36: n in NAT & x in f.n by A1,CARD_5:10;
+            f.n c= F by A35,A36;
+       hence x in F by A36;
+   end;
+ end;
+
+scheme :: DTCONSTR:sch 5
+ DTCSymbols { f() -> Function,
                     G() -> non empty DTConstrStr, D() -> non empty set,
                     TermVal(set) -> Element of D(),
                     NTermVal(set, set, set) -> Element of D()}:
@@ -196,9 +477,222 @@ provided
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
-                               p = q & o ==> pr1 roots q };
+                               p = q & o ==> pr1 roots q }
+proof
+set f = f();
+set G = G();
+set D = D();
+set S = the carrier of G;
+set SxD = [:S, D:];
+deffunc
+ NTV(Symbol of G, FinSequence) =NTermVal($1, pr1 roots $2, pr2 roots $2);
+ deffunc F(set) = TermVal($1);
+ deffunc G(set,set,set) = NTermVal($1,$2,$3);
+A4:  f().0 = { root-tree [t, d] where t is Symbol of G(),
+                                  d is Element of D() :
+           t in Terminals G() & d = F(t) or
+           t ==> {} & d = G(t, {}, {}) } by A2;
+A5:  for n being Nat
+    holds f().(n+1) =
+     f().n \/ { [o, G(o, pr1 roots p, pr2 roots p)]-tree p
+           where o is Symbol of G(), p is Element of (f().n)* :
+            ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
+                               p = q & o ==> pr1 roots q } by A3;
+ consider X being Subset of FinTrees [:the carrier of G, D:] such that
+A6: X = Union f &
+    (for d being Symbol of G st d in Terminals G
+                               holds root-tree [d, F(d)] in X) &
+    (for o being Symbol of G,
+         p being FinSequence of X st o ==> pr1 roots p
+            holds [o, G(o, pr1 roots p, pr2 roots p)]-tree p in X ) &
+    (for F being Subset of FinTrees [:the carrier of G, D:] st
+        (for d being Symbol of G st d in Terminals G
+                               holds root-tree [d, F(d)] in F ) &
+        (for o being Symbol of G,
+             p being FinSequence of F st o ==> pr1 roots p
+            holds [o, G(o, pr1 roots p, pr2 roots p)]-tree p in F)
+       holds X c= F ) from DTCMin (A1, A4, A5);
+ set X' = { t`1 where t is Element of FinTrees [:the carrier of G,D:]:
+           t in Union f };
+   X' c= FinTrees(the carrier of G) proof let x be set; assume
+     x in X';
+   then consider tt being Element of FinTrees [:the carrier of G,D:] such that
+A7: x = tt`1 & tt in Union f;
+      tt`1 = pr1(the carrier of G, D) * tt &
+           rng tt c= [:the carrier of G, D:] &
+            dom pr1(the carrier of G, D) = [:the carrier of G, D:]
+                        by FUNCT_2:def 1,TREES_2:def 9,TREES_3:def 12;
+          then dom tt`1 = dom tt & dom tt is finite by RELAT_1:46;
+    hence x in FinTrees the carrier of G by A7,TREES_3:def 8;
+ end;
+ then reconsider X' as Subset of FinTrees(the carrier of G());
+ take X1= X';
+ thus X1 = { t`1 where t is Element of FinTrees [:the carrier of G,D:]:
+                                                     t in Union f };
+ hereby let t be Symbol of G(); assume
+A8: t in Terminals G();
+A9: (root-tree [t, TermVal(t)])`1 = root-tree t by TREES_4:25;
+       root-tree [t, TermVal(t)] in Union f by A6,A8;
+  hence root-tree t in X1 by A9;
+ end;
+ hereby
+  let nt be Symbol of G(),
+      ts be FinSequence of X1; assume
+A10: nt ==> roots ts;
+A11: dom ts = Seg len ts by FINSEQ_1:def 3;
+    defpred P[set,set] means
+     ex dt being DecoratedTree of [:the carrier of G(), D():] st
+           dt = $2 & dt`1 = ts.$1 & dt in Union f;
+A12: for k being Nat st k in Seg len ts
+     ex x being Element of FinTrees [:the carrier of G, D:] st P[k,x]
+      proof
+    let k be Nat; assume
+       k in Seg len ts;
+     then ts.k in rng ts & rng ts c= X1 by A11,FINSEQ_1:def 4,FUNCT_1:def 5;
+     then ts.k in X1;
+     then ex x being Element of FinTrees [:the carrier of G, D:] st
+          ts.k = x`1 & x in Union f;
+     hence thesis;
+    end;
+ consider dts being FinSequence of FinTrees [:the carrier of G, D:]
+   such that
+A13: dom dts = Seg len ts and
+A14: for k being Nat st k in Seg len ts holds P[k,dts.k] from MATRIX_2:sch 1
+ (A12);
+      rng dts c= Union f proof
+     let x be set; assume
+       x in rng dts;
+      then consider k being set such that
+A15:  k in dom ts & x = dts.k by A11,A13,FUNCT_1:def 5;
+      reconsider k as Nat by A15,FINSEQ_3:25;
+       ex dt being DecoratedTree of [:the carrier of G(), D():]
+       st dt = x & dt`1 = ts.k & dt in Union f by A11,A14,A15;
+     hence thesis;
+    end;
+     then reconsider dts as FinSequence of X by A6,FINSEQ_1:def 4;
+A16: dom roots ts = dom ts by Def1;
+A17: dom pr1 roots dts = dom roots dts & dom pr2 roots dts = dom roots dts
+                    by Def2,Def3;
+then A18: dom pr1 roots dts = dom ts & dom pr2 roots dts = dom ts
+                    by A11,A13,Def1;
+       now let k be Nat; assume
+A19:    k in dom ts;
+        then consider dt being DecoratedTree of [:the carrier of G(), D():]
+           such that
+A20:   dt = dts.k & dt`1 = ts.k & dt in Union f by A11,A14;
+       reconsider r = {} as Node of dt by TREES_1:47;
+         ex T being DecoratedTree st T = ts.k & (roots ts).k = T.{}
+                            by A19,Def1;
+then A21:   (roots ts).k = (dt.r)`1 by A20,TREES_3:41;
+         ex T being DecoratedTree st T = dts.k & (roots dts).k = T.{}
+                            by A11,A13,A19,Def1;
+      hence (roots ts).k = (pr1 roots dts).k by A17,A18,A19,A20,A21,Def2;
+     end;
+    then roots ts = pr1 roots dts by A16,A18,FINSEQ_1:17;
+then A22: [nt, NTV(nt, dts)]-tree dts in X
+                          by A6,A10;
+A23: rng dts c= FinTrees [:the carrier of G(), D():] by FINSEQ_1:def 4;
+      FinTrees [:the carrier of G(),D():] c= Trees [:the carrier of G(), D():]
+                                          by TREES_3:22;
+    then rng dts c= Trees [:the carrier of G(), D():] by A23,XBOOLE_1:1;
+    then reconsider dts' = dts as FinSequence of Trees [:the carrier of G(),D()
+:]
+                                   by FINSEQ_1:def 4;
+A24: rng ts c= FinTrees the carrier of G() by FINSEQ_1:def 4;
+      FinTrees the carrier of G() c= Trees the carrier of G()
+                                        by TREES_3:22;
+    then rng ts c= Trees the carrier of G() by A24,XBOOLE_1:1;
+    then reconsider ts' = ts as FinSequence of Trees the carrier of G()
+                                   by FINSEQ_1:def 4;
+     now let i be Nat; assume i in dom dts;
+    then consider dt being DecoratedTree of [:the carrier of G, D:] such that
+A25: dt = dts.i & dt`1 = ts.i & dt in Union f by A13,A14;
+    let T be DecoratedTree of [:the carrier of G(), D():]; assume
+      T = dts.i;
+    hence ts.i = T`1 by A25;
+   end;
+   then ([nt, NTV(nt, dts)]-tree dts')`1
+                = nt-tree ts' by A11,A13,TREES_4:27;
+   hence nt-tree ts in X1 by A6,A22;
+ end;
+ let F be Subset of FinTrees the carrier of G; assume that
+A26: for d being Symbol of G st d in Terminals G holds root-tree d in F and
+A27: for o being Symbol of G, p being FinSequence of F st o ==> roots p
+           holds o-tree p in F;
+ thus X1 c= F proof let x be set; assume x in X1;
+  then consider tt being Element of FinTrees [:the carrier of G, D:] such that
+A28: x = tt`1 & tt in Union f;
+  set FF = { dt where dt is Element of FinTrees SxD : dt`1 in F };
+    FF c= FinTrees SxD proof let x be set; assume
+     x in FF;
+   then ex dt being Element of FinTrees SxD st x = dt & dt`1 in F;
+   hence thesis;
+  end;
+  then reconsider FF as Subset of FinTrees SxD;
 
-scheme DTCHeight { f() -> Function,
+A29: now let d be Symbol of G; assume d in Terminals G;
+then A30:   root-tree d in F by A26;
+        (root-tree [d, TermVal(d)])`1 = root-tree d by TREES_4:25;
+   hence root-tree [d, TermVal(d)] in FF by A30;
+  end;
+  now let o be Symbol of G,
+            p be FinSequence of FF; assume
+A31: o ==> pr1 roots p;
+     consider p1 being FinSequence of FinTrees S such that
+A32:  dom p1 = dom p and
+A33:  for i being Nat st i in dom p
+      ex T being Element of FinTrees SxD st T = p.i & p1.i = T`1 and
+A34:  ([o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p)`1 = o-tree p1
+                                                  by TREES_4:31;
+       rng p1 c= F proof let x be set; assume
+         x in rng p1; then consider k being set such that
+ A35:  k in dom p1 & x = p1.k by FUNCT_1:def 5;
+       reconsider k as Nat by A35,FINSEQ_3:25;
+ A36:  p.k in rng p by A32,A35,FUNCT_1:def 5;
+       consider dt being Element of FinTrees SxD such that
+ A37:  dt = p.k & x = dt`1 by A32,A33,A35;
+         rng p c= FF by FINSEQ_1:def 4;
+       then p.k in FF by A36;
+       then ex dt being Element of FinTrees SxD st p.k = dt & dt`1 in F;
+      hence thesis by A37;
+     end;
+     then reconsider p1 as FinSequence of F by FINSEQ_1:def 4;
+
+     A38: dom roots p1 = dom p1 by Def1;
+     A39: dom pr1 roots p = dom roots p by Def2;
+     then A40: dom pr1 roots p = dom p1 by A32,Def1;
+       now let k be Nat; assume
+     A41:  k in dom p1;
+     then A42:  p.k in rng p by A32,FUNCT_1:def 5;
+          consider dt being Element of FinTrees SxD such that
+     A43:  dt = p.k & p1.k = dt`1 by A32,A33,A41;
+            rng p c= FF by FINSEQ_1:def 4;
+          then p.k in FF by A42;
+          then consider dt being Element of FinTrees SxD such that
+     A44: p.k = dt & dt`1 in F;
+          reconsider r = {} as Node of dt by TREES_1:47;
+            ex T being DecoratedTree st T = p1.k & (roots p1).k = T.{}
+                            by A41,Def1;
+     then A45: (roots p1).k = (dt.r)`1 by A43,A44,TREES_3:41;
+            ex T being DecoratedTree st T = p.k & (roots p).k = T.{}
+                            by A32,A41,Def1;
+      hence (roots p1).k = (pr1 roots p).k by A39,A40,A41,A44,A45,Def2;
+     end;
+     then pr1 roots p = roots p1 by A38,A40,FINSEQ_1:17;
+     then ([o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p)`1 in F
+       by A27,A31,A34;
+   hence [o, NTV(o, p)]-tree p in FF;
+  end;
+
+  then X c= FF by A6,A29;
+  then tt in FF by A6,A28;
+  then ex dt being Element of FinTrees SxD st tt = dt & dt`1 in F;
+  hence x in F by A28;
+ end;
+end;
+
+scheme :: DTCONSTR:sch 6
+ DTCHeight { f() -> Function,
                    G() -> non empty DTConstrStr, D() -> non empty set,
                    TermVal(set) -> Element of D(),
                    NTermVal(set, set, set) -> Element of D()}:
@@ -214,9 +708,182 @@ provided
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
+                               p = q & o ==> pr1 roots q }
+proof
+set f = f();
+set G = G();
+set D = D();
+set SxD = [:the carrier of G, D:];
+deffunc
+ NTV(Symbol of G, FinSequence) =NTermVal($1, pr1 roots $2, pr2 roots $2);
+ defpred R[Nat] means
+for dt being Element of FinTrees SxD st dt in Union f
+              holds dt in f.$1 iff height dom dt <= $1;
+ A4: R[0]
+     proof
+     let dt be Element of FinTrees SxD; assume
+  A5: dt in Union f;
+     hereby assume
+         dt in f.0;
+     then ex t being Symbol of G, d being Element of D st dt= root-tree [t,d] &
+              (t in Terminals G() & d = TermVal(t) or
+               t ==> {} & d = NTermVal(t, {}, {})) by A2;
+      hence height dom dt <= 0 by TREES_1:79,TREES_4:3;
+     end;
+     assume height dom dt <= 0;
+       then height dom dt = 0 by NAT_1:18;
+  then A6:  dom dt = elementary_tree 0 by TREES_1:80;
+  defpred P[Nat] means not dt in f.$1;
+     assume
+  A7:  P[0];
+  A8: now let n be Nat; assume
+   A9: P[n];
+        thus P[n+1]
+        proof
+        assume dt in f.(n+1);
+         then dt in f.n \/ { [o, NTV(o, p)]-tree p
+           where o is Symbol of G, p is Element of (f.n)* :
+           ex q being FinSequence of FinTrees SxD st p=q & o ==> pr1 roots q}
+                      by A3;
+         then dt in f.n or dt in {[o,NTV(o, p)]-tree p
+           where o is Symbol of G, p is Element of (f.n)* :
+           ex q being FinSequence of FinTrees SxD st p=q & o ==> pr1 roots q}
+                      by XBOOLE_0:def 2;
+         then consider o being Symbol of G, p being Element of (f.n)* such that
+   A10:  dt = [o, NTV(o, p)]-tree p &
+         ex q being FinSequence of FinTrees SxD st p = q & o ==> pr1 roots q
+                      by A9;
+   A11:  dt = root-tree (dt.{}) by A6,TREES_4:5;
+then A12:         p = {} by A10,TREES_4:17;
+         then dt = root-tree [o, NTermVal(o,{},{})]
+                            by A10,A11,Th3,Th7,TREES_4:def 4;
+        hence contradiction by A2,A7,A10,A12,Th3,Th7;
+        end;
+       end;
+  A13:  for n being Nat holds P[n] from NAT_1:sch 1 (A7, A8);
+         ex n being set st n in NAT & dt in f.n by A1,A5,CARD_5:10;
+     hence contradiction by A13;
+    end;
+A14: now let n be Nat; assume
+  A15: R[n];
+    thus R[n+1]
+    proof
+     let dt be Element of FinTrees SxD; assume
+  A16: dt in Union f;
+     hereby assume
+        dt in f.(n+1);
+      then dt in f.n \/ {[o, NTV(o, p)]-tree p
+           where o is Symbol of G, p is Element of (f.n)* :
+            ex q being FinSequence of FinTrees SxD st
+                           p = q & o ==> pr1 roots q } by A3;
+  then A17: dt in f.n or dt in {[o, NTV(o, p)]-tree p
+           where o is Symbol of G, p is Element of (f.n)* :
+            ex q being FinSequence of FinTrees SxD st
+                           p = q & o ==> pr1 roots q } by XBOOLE_0:def 2;
+      per cases;
+      suppose dt in f.n;
+        then height dom dt <= n & n <= n+1 by A15,A16,NAT_1:29;
+       hence height dom dt <= n+1 by AXIOMS:22;
+      end;
+      suppose not dt in f.n;
+        then consider o being Symbol of G, p being Element of (f.n)* such that
+   A18:  dt = [o, NTV(o, p)]-tree p &
+         ex q being FinSequence of FinTrees SxD st p = q & o ==> pr1 roots q
+                                          by A17;
+        reconsider p as FinSequence of FinTrees SxD by A18;
+   A19:  dom dt = tree(doms p) by A18,TREES_4:10;
+          now let t be finite Tree; assume
+            t in rng doms p;
+          then consider k being set such that
+   A20:    k in dom doms p & t = (doms p).k by FUNCT_1:def 5;
+   A21:    k in dom p by A20,TREES_3:39;
+   then A22:    p.k in rng p & rng p c=FinTrees SxD by FINSEQ_1:def 4,FUNCT_1:
+def 5;
+          then reconsider pk = p.k as Element of FinTrees SxD;
+          A23: rng p c= f.n by FINSEQ_1:def 4;
+   then A24:    t = dom pk & pk in f.n by A20,A21,A22,FUNCT_6:31;
+            pk in Union f by A1,A22,A23,CARD_5:10;
+          hence height t <= n by A15,A24;
+        end;
+       hence height dom dt <= n+1 by A19,TREES_3:80;
+     end;
+     end;
+     assume
+   A25: height dom dt <= n+1;
+   defpred P[Nat] means dt in f.$1;
+         ex k being set st k in NAT & dt in f.k by A1,A16,CARD_5:10;
+   then A26: ex k being Nat st P[k];
+       consider mk being Nat such that
+   A27: P[mk] & for kk being Nat st P[kk] holds mk <= kk from NAT_1:sch 5
+ (A26);
+   deffunc F(set,set) = { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
+           where o is Symbol of G(), p is Element of (f.$1)* :
+            ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p = q & o ==> pr1 roots q };
+A28: for n being Nat holds f.(n+1) = f.n \/ F(n, f.n) by A3
+;
+   A29: for k, s being Nat holds f.k c= f.(k+s) from MonoSetSeq (A28);
+     per cases by NAT_1:22;
+     suppose mk = 0;
+      then f.mk c= f.(0+(n+1)) & 0+(n+1) = n+1 by A29;
+      hence dt in f.(n+1) by A27;
+     end;
+     suppose ex k being Nat st mk = k+1;
+      then consider k being Nat such that
+   A30: mk = k+1;
+A31:       k < k+1 by NAT_1:38;
+         f.mk = f.k \/ {[o, NTV(o, p)]-tree p
+           where o is Symbol of G, p is Element of (f.k)* :
+            ex q being FinSequence of FinTrees SxD st
+                           p = q & o ==> pr1 roots q } by A3,A30;
+       then dt in f.k or dt in {[o, NTV(o, p)]-tree p
+           where o is Symbol of G, p is Element of (f.k)* :
+            ex q being FinSequence of FinTrees SxD st
+                           p = q & o ==>
+ pr1 roots q } by A27,XBOOLE_0:def 2;
+       then consider o being Symbol of G, p being Element of (f.k)* such that
+   A32:  dt = [o, NTV(o, p)]-tree p &
+         ex q being FinSequence of FinTrees SxD st p = q & o ==> pr1 roots q
+          by A27,A30,A31;
+        reconsider p as FinSequence of FinTrees SxD by A32;
+   A33:  dom dt = tree(doms p) by A32,TREES_4:10;
+          rng p c= f.n proof let x be set; assume x in rng p;
+         then consider k' being set such that
+     A34:  k' in dom p & x = p.k' by FUNCT_1:def 5;
+            x in rng p & rng p c= FinTrees SxD
+            by A34,FINSEQ_1:def 4,FUNCT_1:def 5;
+          then reconsider t = x as Element of FinTrees SxD;
+            t = x;
+          then k' in dom doms p & dom t = (doms p).k' by A34,FUNCT_6:31;
+          then dom t in rng doms p by FUNCT_1:def 5;
+          then height dom t < height dom dt by A33,TREES_3:81;
+          then height dom t < n+1 by A25,AXIOMS:22;
+     then A35:  height dom t <= n by NAT_1:38;
+            rng p c= f.k & t in rng p by A34,FINSEQ_1:def 4,FUNCT_1:def 5;
+          then t in Union f by A1,CARD_5:10;
+         hence thesis by A15,A35;
+        end;
+        then p is FinSequence of f.n by FINSEQ_1:def 4;
+        then reconsider p as Element of (f.n)* by FINSEQ_1:def 11;
+          [o, NTV(o, p)]-tree p in
+         {[oo, NTV(oo, pp)]-tree pp
+           where oo is Symbol of G, pp is Element of (f.n)* :
+            ex q being FinSequence of FinTrees SxD st
+                           pp = q & oo ==> pr1 roots q } by A32;
+        then dt in f.n \/
+          {[oo, NTV(oo, pp)]-tree pp
+           where oo is Symbol of G, pp is Element of (f.n)* :
+            ex q being FinSequence of FinTrees SxD st
+                           pp = q & oo ==> pr1 roots q } by A32,XBOOLE_0:def 2;
+     hence dt in f.(n+1) by A3;
+     end;
+     end;
+    end;
+thus for n being Nat holds R[n] from NAT_1:sch 1 (A4, A14);
+end;
 
-scheme DTCUniq { f() -> Function,
+scheme :: DTCONSTR:sch 7
+ DTCUniq { f() -> Function,
                    G() -> non empty DTConstrStr, D() -> non empty set,
                    TermVal(set) -> Element of D(),
                    NTermVal(set, set, set) -> Element of D()}:
@@ -232,7 +899,161 @@ provided
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
+                               p = q & o ==> pr1 roots q }
+proof
+set f = f();
+set G = G();
+set D = D();
+set S = the carrier of G;
+set SxD = [:S, D:];
+deffunc
+ NTV(Symbol of G, FinSequence) =NTermVal($1, pr1 roots $2, pr2 roots $2);
+ deffunc F(set) = TermVal($1);
+ deffunc G(set,set,set) = NTermVal($1,$2,$3);
+A4:  f().0 = { root-tree [t, d] where t is Symbol of G(),
+                                  d is Element of D() :
+           t in Terminals G() & d = F(t) or
+           t ==> {} & d = G(t, {}, {}) } by A2;
+A5:  for n being Nat
+    holds f().(n+1) =
+     f().n \/ { [o, G(o, pr1 roots p, pr2 roots p)]-tree p
+           where o is Symbol of G(), p is Element of (f().n)* :
+            ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
+                               p = q & o ==> pr1 roots q } by A3;
+ defpred R[Nat] means
+for dt1, dt2 being DecoratedTree of SxD
+      st dt1 in f.$1 & dt2 in f.$1 & dt1`1 = dt2`1 holds dt1 = dt2;
+A6: R[0] proof let dt1,dt2 be DecoratedTree of SxD; assume
+ A7: dt1 in f.0 & dt2 in f.0 & dt1`1 = dt2`1;
+       then consider t1 being Symbol of G, d1 being Element of D such that
+ A8:   dt1= root-tree [t1, d1] & (t1 in Terminals G & d1 = TermVal(t1) or
+           t1 ==> {} & d1 = NTermVal(t1, {}, {})) by A2;
+       consider t2 being Symbol of G, d2 being Element of D such that
+ A9:   dt2= root-tree [t2, d2] & (t2 in Terminals G & d2 = TermVal(t2) or
+           t2 ==> {} & d2 = NTermVal(t2, {}, {})) by A2,A7;
+         root-tree t1 = dt1`1 & root-tree t2 = dt2`1 by A8,A9,TREES_4:25;
+       then A10:  t1 = t2 by A7,TREES_4:4;
+         now let t be Symbol of G; assume
+           t ==> {};
+         then not ex t' being Symbol of G st t=t' &
+                    not ex tnt being FinSequence st t' ==> tnt;
+         then not t in
+              {t' where t' is Symbol of G:
+                         not ex tnt being FinSequence st t' ==> tnt };
+         hence not t in Terminals G by LANG1:def 2;
+       end;
+     hence dt1 = dt2 by A8,A9,A10;
+    end;
+A11: now let n be Nat such that
+A12: R[n];
+    thus R[n+1]
+    proof
+     let dt1, dt2 be DecoratedTree of SxD; assume
+A13:  dt1 in f.(n+1) & dt2 in f.(n+1) & dt1`1 = dt2`1;
+then A14: dom dt1 = dom dt1`1 & dom dt2 = dom dt1`1 by TREES_4:24;
+A15: dt1 in Union f & dt2 in Union f by A1,A13,CARD_5:10;
+  ex X being Subset of FinTrees [:the carrier of G(), D():]
+ st X = Union f() &
+    (for d being Symbol of G() st d in Terminals G()
+                               holds root-tree [d, F(d)] in X) &
+    (for o being Symbol of G(),
+         p being FinSequence of X st o ==> pr1 roots p
+            holds [o, G(o, pr1 roots p, pr2 roots p)]-tree p in X ) &
+    (for F being Subset of FinTrees [:the carrier of G(), D():] st
+        (for d being Symbol of G() st d in Terminals G()
+                               holds root-tree [d, F(d)] in F ) &
+        (for o being Symbol of G(),
+             p being FinSequence of F st o ==> pr1 roots p
+            holds [o, G(o, pr1 roots p, pr2 roots p)]-tree p in F)
+       holds X c= F ) from DTCMin(A1, A4, A5);
+     then reconsider dt1' = dt1, dt2' = dt2 as Element of FinTrees SxD
+             by A15;
+A16: for n being Nat,
+           dt being Element of FinTrees [:the carrier of G(), D():]
+         st dt in Union f() holds dt in f().n iff height dom dt <= n
+                   from DTCHeight (A1, A4, A5);
+     per cases;
+     suppose
+ A17: dt1 in f.n;
+      then height dom dt1' <= n by A15,A16;
+      then dt2' in f.n by A14,A15,A16;
+      hence dt1 = dt2 by A12,A13,A17;
+     end;
+     suppose
+ A18: not dt1 in f.n;
+ A19: f.(n+1) = f.n \/ {[o1, NTV(o1, p1)]-tree p1
+           where o1 is Symbol of G, p1 is Element of (f.n)* :
+            ex q being FinSequence of FinTrees SxD st
+                           p1 = q & o1 ==> pr1 roots q } by A3;
+      then dt1 in f.n or
+         dt1 in {[o1, NTV(o1, p1)]-tree p1
+           where o1 is Symbol of G, p1 is Element of (f.n)* :
+            ex q being FinSequence of FinTrees SxD st
+                        p1 = q & o1 ==>
+ pr1 roots q } by A13,XBOOLE_0:def 2;
+      then consider o1 being Symbol of G, p1 being Element of (f.n)* such that
+ A20:  dt1 = [o1, NTV(o1, p1)]-tree p1 &
+         ex q being FinSequence of FinTrees SxD st p1 = q & o1 ==> pr1 roots q
+                                          by A18;
+        height dom dt1' > n by A15,A16,A18;
+ then A21:  not dt2' in f.n by A14,A15,A16;
+        dt2 in f.n or
+         dt2 in {[o2, NTV(o2, p2)]-tree p2
+           where o2 is Symbol of G, p2 is Element of (f.n)* :
+            ex q being FinSequence of FinTrees SxD st
+                    p2 = q & o2 ==> pr1 roots q } by A13,A19,XBOOLE_0:def 2;
+      then consider o2 being Symbol of G, p2 being Element of (f.n)* such that
+ A22:  dt2 = [o2, NTV(o2, p2)]-tree p2 &
+         ex q being FinSequence of FinTrees SxD st p2 = q & o2 ==> pr1 roots q
+                                          by A21;
+      reconsider p1 as FinSequence of FinTrees SxD by A20;
+      consider p11 being FinSequence of FinTrees S such that
+ A23: dom p11 = dom p1 &
+      (for i being Nat st i in dom p1 holds
+           ex T being Element of FinTrees SxD st T = p1.i & p11.i = T`1) &
+      ([o1, NTV(o1,p1)]-tree p1)`1 = o1-tree p11 by TREES_4:31;
+      reconsider p2 as FinSequence of FinTrees SxD by A22;
+      consider p21 being FinSequence of FinTrees S such that
+ A24: dom p21 = dom p2 &
+      (for i being Nat st i in dom p2 holds
+           ex T being Element of FinTrees SxD st T = p2.i & p21.i = T`1) &
+      ([o2, NTV(o2,p2)]-tree p2)`1 = o2-tree p21 by TREES_4:31;
+      A25: o1 = o2 & p11 = p21 by A13,A20,A22,A23,A24,TREES_4:15;
+        now let k be Nat; assume
+ A26:  k in dom p11;
+       then consider p1k being Element of FinTrees SxD such that
+ A27:  p1k = p1.k & p11.k = p1k`1 by A23;
+       consider p2k being Element of FinTrees SxD such that
+ A28:  p2k = p2.k & p21.k = p2k`1 by A24,A25,A26;
+         p1k in f.n & p2k in f.n by A23,A24,A25,A26,A27,A28,Th2;
+       hence p1.k = p2.k by A12,A25,A27,A28;
+      end;
+      then p1 = p2 by A23,A24,A25,FINSEQ_1:17;
+      hence dt1 = dt2 by A20,A22,A25;
+      end;
+      end;
+    end;
+A29: for n be Nat holds R[n] from NAT_1:sch 1 (A6, A11);
+  let dt1, dt2 be DecoratedTree of SxD; assume
+A30: dt1 in Union f & dt2 in Union f & dt1`1 = dt2`1;
+    then consider n1 being set such that
+A31:  n1 in NAT & dt1 in f.n1 by A1,CARD_5:10;
+    consider n2 being set such that
+A32:  n2 in NAT & dt2 in f.n2 by A1,A30,CARD_5:10;
+    reconsider n1, n2 as Nat by A31,A32;
+    deffunc F(set,set) = { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
+           where o is Symbol of G(), p is Element of (f.$1)* :
+            ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p = q & o ==> pr1 roots q };
+A33: for n being Nat holds f.(n+1) = f.n \/ F(n, f.n) by A3
+;
+   A34: for k, s being Nat holds f.k c= f.(k+s) from MonoSetSeq (A33);
+      n1 <= n2 or n1 >= n2;
+    then (ex s being Nat st n2 = n1 + s) or (ex s being Nat st n1 = n2 + s)
+                                  by NAT_1:28;
+    then f.n1 c= f.n2 or f.n2 c= f.n1 by A34; hence dt1 = dt2 by A29,A30,A31,
+A32;
+end;
 
 definition
  let G be non empty DTConstrStr;
@@ -249,7 +1070,9 @@ definition
    holds it c= F;
 end;
 
-scheme DTConstrInd{ G()->non empty DTConstrStr, P[set] }:
+
+scheme :: DTCONSTR:sch 8
+ DTConstrInd{ G()->non empty DTConstrStr, P[set] }:
  for t being DecoratedTree of the carrier of G()
        st t in TS(G()) holds P[t]
  provided
@@ -259,9 +1082,178 @@ scheme DTConstrInd{ G()->non empty DTConstrStr, P[set] }:
        ts being FinSequence of TS(G()) st nt ==> roots ts &
             for t being DecoratedTree of the carrier of G() st t in rng ts
                       holds P[t]
-    holds P[nt-tree ts];
+    holds P[nt-tree ts]
+proof    deffunc F(set,set) =
+     $2 \/ { [o, 0]-tree p where o is Symbol of G(), p is Element of $2* :
+            ex q being FinSequence of FinTrees [:the carrier of G(), NAT:] st
+                               p = q & o ==> pr1 roots q };
+consider f being Function such that
+          :: 0 and NAT used for D() from FThn
+A3: dom f = NAT and
+A4: f.0 = { root-tree [t, d] where t is Symbol of G(), d is Nat :
+           t in Terminals G() & d = T(t) or
+           t ==> {} & d = A(t,{},{}) } and
+A5: for n being Nat holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 3;
+A6:  for n being Nat
+    holds f.(n+1) =
+     f.n \/ { [o, A(o, pr1 roots p, pr2 roots p)]-tree p
+           where o is Symbol of G(), p is Element of (f.n)* :
+            ex q being FinSequence of FinTrees [:the carrier of G(), NAT:] st
+                               p = q & o ==> pr1 roots q } by A5;
+A7: ex X being Subset of FinTrees [:the carrier of G(), NAT:]
+ st X = Union f &
+    (for d being Symbol of G() st d in Terminals G()
+                               holds root-tree [d, T(d)] in X) &
+    (for o being Symbol of G(),
+         p being FinSequence of X st o ==> pr1 roots p
+            holds [o, A(o, pr1 roots p, pr2 roots p)]-tree p in X ) &
+    (for F being Subset of FinTrees [:the carrier of G(), NAT:] st
+        (for d being Symbol of G() st d in Terminals G()
+                               holds root-tree [d, T(d)] in F ) &
+        (for o being Symbol of G(),
+             p being FinSequence of F st o ==> pr1 roots p
+            holds [o, A(o, pr1 roots p, pr2 roots p)]-tree p in F)
+       holds X c= F ) from DTCMin (A3,A4,A6);
+consider TSG being Subset of FinTrees(the carrier of G()) such that
+A8: TSG = { t`1 where t is Element of FinTrees [:(the carrier of G()), NAT:]
+                       : t in Union f } and
+A9: for d being Symbol of G() st d in Terminals G()
+          holds root-tree d in TSG and
+A10: for o being Symbol of G(), p being FinSequence of TSG st o ==> roots p
+         holds o-tree p in TSG and
+A11: for F being Subset of FinTrees the carrier of G() st
+     (for d being Symbol of G() st d in Terminals G() holds root-tree d in F)
+    & (for o being Symbol of G(), p being FinSequence of F st o ==> roots p
+           holds o-tree p in F)
+     holds TSG c= F from DTCSymbols (A3, A4, A6);
+A12: TSG = TS(G()) by A9,A10,A11,Def4;
+defpred R[Nat] means for t being DecoratedTree of [:the carrier of G(), NAT:]
+       st t in f.$1 holds P[t`1];
+ A13: R[0] proof let tt be DecoratedTree of [:the carrier of G(),NAT:];
+         reconsider p = {} as FinSequence of TS(G()) by FINSEQ_1:29;
+        assume tt in f.0;
+         then consider t being Symbol of G(), d being Nat such that
+    A14: tt = root-tree [t, d] & (t in Terminals G() & d = 0 or
+           t ==> roots p & d = 0) by A4,Th3;
+    A15:  tt`1 = root-tree t & t-tree p = root-tree t by A14,TREES_4:20,25;
+           for T being DecoratedTree of the carrier of G() st
+           T in rng p holds P[T] by FINSEQ_1:27;
+        hence P[tt`1] by A1,A2,A14,A15;
+       end;
+   A16: now let n be Nat; assume
+   A17:   R[n];
+       thus R[n+1]
+       proof
+        let x be DecoratedTree of [:the carrier of G(), NAT:]; assume
+   A18:   x in f.(n+1) & not P[x`1];
+         then x in f.n \/ {[o, 0]-tree p where o is Symbol of G(),
+                                      p is Element of (f.n)* :
+           ex q being FinSequence of FinTrees [:the carrier of G(), NAT:] st
+                               p = q & o ==> pr1 roots q } by A5;
+         then x in f.n or x in {[o, 0]-tree p where o is Symbol of G(),
+                                      p is Element of (f.n)* :
+           ex q being FinSequence of FinTrees [:the carrier of G(), NAT:] st
+                               p = q & o ==>
+ pr1 roots q } by XBOOLE_0:def 2;
+         then consider o being Symbol of G(), p being Element of (f.n)* such
+that
+     A19:  x = [o, 0]-tree p &
+         ex q being FinSequence of FinTrees [:the carrier of G(), NAT:] st
+                               p = q & o ==> pr1 roots q by A17,A18;
+           Union f=union rng f & f.n in rng f by A3,FUNCT_1:def 5,PROB_1:def 3;
+        then A20:  rng p c= f.n & f.n c= Union f by FINSEQ_1:def 4,ZFMISC_1:92;
+     A21: dom p = Seg len p by FINSEQ_1:def 3;
+     defpred P[set,set] means
+      ex dt being Element of FinTrees [:the carrier of G(), NAT:] st
+              dt = p.$1 & dt`1 = $2 & dt in Union f;
+     A22: for k being Nat st k in Seg len p
+          ex x being Element of FinTrees the carrier of G() st P[k,x]
+          proof
+          let k be Nat; assume
+            k in Seg len p;
+          then A23: p.k in rng p & rng p c= Union f
+            by A20,A21,FUNCT_1:def 5,XBOOLE_1:1;
+       then p.k in Union f;
+          then reconsider dt = p.k as
+           Element of FinTrees [:(the carrier of G()), NAT:] by A7;
+            dt`1 = pr1(the carrier of G(), NAT) * dt &
+           rng dt c= [:the carrier of G(), NAT:] &
+            dom pr1(the carrier of G(), NAT) = [:the carrier of G(), NAT:]
+                        by FUNCT_2:def 1,TREES_2:def 9,TREES_3:def 12;
+          then dom dt`1 = dom dt & dom dt is finite by RELAT_1:46;
+          then reconsider x = dt`1 as Element of FinTrees the carrier of G()
+                                 by TREES_3:def 8;
+          take x, dt;
+          thus thesis by A23;
+         end;
+         consider p1 being FinSequence of FinTrees the carrier of G()
+               such that
+     A24:  dom p1 = Seg len p and
+     A25:  for k being Nat st k in Seg len p holds P[k,p1.k] from
+MATRIX_2:sch 1 (A22);
+         reconsider p as FinSequence of Trees [:the carrier of G(), NAT:]
+               by A19,Th1;
+     A26: dom roots p1 = dom p1 by Def1;
+     A27: dom pr1 roots p = dom roots p by Def2;
+     then A28: dom pr1 roots p = dom p1 by A21,A24,Def1;
+       now let k be Nat; assume
+     A29:    k in dom p1;
+        then consider dt being Element of FinTrees [:the carrier of G(), NAT:]
+           such that
+     A30:   dt = p.k & dt`1 = p1.k & dt in Union f by A24,A25;
+       reconsider r = {} as Node of dt by TREES_1:47;
+         ex T being DecoratedTree st T = p1.k & (roots p1).k = T.{}
+                            by A29,Def1;
+     then A31:   (roots p1).k = (dt.r)`1 by A30,TREES_3:41;
+         ex T being DecoratedTree st T = p.k & (roots p).k = T.{}
+                            by A21,A24,A29,Def1;
+      hence (roots p1).k = (pr1 roots p).k by A27,A28,A29,A30,A31,Def2;
+     end;
+     then A32: roots p1 = pr1 roots p by A26,A28,FINSEQ_1:17;
+           rng p1 c= TS(G()) proof
+          let x be set; assume
+             x in rng p1; then consider k being set such that
+         A33: k in dom p1 & x = p1.k by FUNCT_1:def 5;
+           reconsider k as Nat by A33,FINSEQ_3:25;
+             ex dt being Element of FinTrees [:the carrier of G(), NAT:] st
+              dt = p.k & dt`1 = p1.k & dt in Union f by A24,A25,A33;
+          hence thesis by A8,A12,A33;
+         end;
+         then reconsider p1 as FinSequence of TS(G()) by FINSEQ_1:def 4;
+           now let t be DecoratedTree of the carrier of G(); assume
+             t in rng p1; then consider k being set such that
+      A34:  k in dom p1 & t = p1.k by FUNCT_1:def 5;
+           reconsider k as Nat by A34,FINSEQ_3:25;
+           consider dt being Element of FinTrees [:the carrier of G(), NAT:]
+             such that
+      A35:  dt = p.k & dt`1 = p1.k & dt in Union f by A24,A25,A34;
+             p.k in rng p by A21,A24,A34,FUNCT_1:def 5;
+          hence P[t] by A17,A20,A34,A35;
+         end;
+     then A36: P[o-tree p1] by A2,A19,A32;
+         reconsider p1 as FinSequence of Trees the carrier of G()
+               by Th1;
+           now let k be Nat; assume k in dom p;
+           then ex dt being Element of FinTrees [:the carrier of G(), NAT:] st
+              dt = p.k & dt`1 = p1.k & dt in Union f by A21,A25;
+           hence for T being DecoratedTree of [:the carrier of G(), NAT:] st
+             T = p.k holds p1.k = T`1;
+         end;
+         hence contradiction by A18,A19,A21,A24,A36,TREES_4:27;
+         end;
+       end;
+A37: for n being Nat holds R[n] from NAT_1:sch 1 (A13, A16);
+ let t be DecoratedTree of the carrier of G(); assume
+    t in TS(G());
+  then consider tt being Element of FinTrees[:the carrier of G(), NAT:] such
+that
+A38: t = tt`1 & tt in Union f by A8,A12;
+    ex n being set st n in NAT & tt in f.n by A3,A38,CARD_5:10;
+ hence P[t] by A37,A38;
+end;
 
-scheme DTConstrIndDef{G()->non empty DTConstrStr, D()->non empty set,
+scheme :: DTCONSTR:sch 9
+ DTConstrIndDef{G()->non empty DTConstrStr, D()->non empty set,
                    TermVal(set) -> Element of D(),
                    NTermVal(set, set, set) -> Element of D()
                    }:
@@ -270,9 +1262,202 @@ scheme DTConstrIndDef{G()->non empty DTConstrStr, D()->non empty set,
          holds f.(root-tree t) = TermVal(t)) &
   (for nt being Symbol of G(),
        ts being FinSequence of TS(G()) st nt ==> roots ts
-         holds f.(nt-tree ts) = NTermVal(nt, roots ts, f * ts));
+         holds f.(nt-tree ts) = NTermVal(nt, roots ts, f * ts))
+proof set G = G();
+deffunc TT(set) = TermVal($1);
+deffunc NN(set,set,set) = NTermVal($1,$2,$3);
+deffunc  NTV(Symbol of G, FinSequence) = NN($1, pr1 roots $2, pr2 roots $2);
+deffunc F(set,set) = $2 \/ { [o, NN(o, pr1 roots p, pr2 roots p)]-tree p
+           where o is Symbol of G, p is Element of $2* :
+            ex q being FinSequence of FinTrees [:the carrier of G, D():] st
+                               p = q & o ==> pr1 roots q };
+consider f being Function such that
+A1: dom f = NAT and
+A2: f.0 = { root-tree [t, d] where t is Symbol of G,
+                                  d is Element of D() :
+           t in Terminals G & d = TT(t) or
+           t ==> {} & d = NN(t, {}, {}) } and
+A3: for n being Nat holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 3;
+A4:  for n being Nat
+    holds f.(n+1) =
+     f.n \/ { [o, NN(o, pr1 roots p, pr2 roots p)]-tree p
+           where o is Symbol of G, p is Element of (f.n)* :
+            ex q being FinSequence of FinTrees [:the carrier of G, D():] st
+                               p = q & o ==> pr1 roots q } by A3;
+   (ex X1 being Subset of FinTrees(the carrier of G) st
+   X1 = { t`1 where t is Element of FinTrees [:(the carrier of G), D():] :
+                    t in Union f }
+  & (for d being Symbol of G st d in Terminals G holds root-tree d in X1)
+  & (for o being Symbol of G, p being FinSequence of X1 st o ==> roots p
+         holds o-tree p in X1)
+  & for F being Subset of FinTrees the carrier of G st
+     (for d being Symbol of G st d in Terminals G holds root-tree d in F)
+    & (for o being Symbol of G, p being FinSequence of F st o ==> roots p
+           holds o-tree p in F)
+   holds X1 c= F) from DTCSymbols (A1, A2, A4);
 
-scheme DTConstrUniqDef{G()->non empty DTConstrStr, D()->non empty set,
+then A5: TS(G) = { t`1 where
+               t is Element of FinTrees [:(the carrier of G), D():] :
+               t in Union f } by Def4;
+defpred P[set,set] means
+     for dt being DecoratedTree of [:(the carrier of G), D():]
+      st dt in Union f & $1 = dt`1 holds $2 = (dt`2).{};
+
+A6: for e being set st e in TS(G) ex u being set st u in D() & P[e,u]
+    proof
+ let e be set; assume e in TS(G);
+ then consider DT being Element of FinTrees [:(the carrier of G), D():]
+  such that
+A7: e = DT`1 & DT in Union f by A5;
+  reconsider r = {} as Node of DT`2 by TREES_1:47;
+  take u = (DT`2).r;
+  thus u in D();
+A8: for dt1, dt2 being DecoratedTree of [:(the carrier of G), D():]
+  st dt1 in Union f & dt2 in Union f & dt1`1 = dt2`1 holds dt1 = dt2
+                                             from DTCUniq (A1, A2, A4);
+  let dt be DecoratedTree of [:(the carrier of G), D():]; assume
+     dt in Union f & e = dt`1;
+  hence u = (dt`2).{} by A7,A8;
+end;
+
+ consider ff being Function such that
+A9: dom ff = TS(G) & rng ff c= D() and
+A10: for e being set st e in TS(G) holds P[e,ff.e]
+                             from COMPTS_1:sch 1 (A6);
+ reconsider ff as Function of TS(G), D() by A9,FUNCT_2:def 1,RELSET_1:11;
+ take ff;
+ consider X be Subset of FinTrees [:the carrier of G, D():] such that
+A11: X = Union f and
+A12: for d being Symbol of G st d in Terminals G
+                               holds root-tree [d, TT(d)] in X and
+A13: for o being Symbol of G,
+        p being FinSequence of X st o ==> pr1 roots p
+            holds [o, NN(o, pr1 roots p, pr2 roots p)]-tree p in X and
+      for F being Subset of FinTrees [:the carrier of G, D():] st
+        (for d being Symbol of G st d in Terminals G
+                               holds root-tree [d, TT(d)] in F ) &
+        (for o being Symbol of G,
+             p being FinSequence of F st o ==> pr1 roots p
+            holds [o, NN(o, pr1 roots p, pr2 roots p)]-tree p in F)
+       holds X c= F from DTCMin (A1, A2, A4);
+ hereby let t be Symbol of G; assume
+A14: t in Terminals G;
+A15: (root-tree [t, TermVal(t)])`1 = root-tree t &
+    (root-tree [t, TermVal(t)])`2 = root-tree TermVal(t) by TREES_4:25;
+A16: root-tree [t, TermVal(t)] in Union f by A11,A12,A14;
+    then root-tree t in TS(G) by A5,A15;
+  hence ff.(root-tree t) = (root-tree TermVal(t)).{} by A10,A15,A16
+                        .= TermVal(t) by TREES_4:3;
+ end;
+
+ let nt be Symbol of G,
+     ts be FinSequence of TS(G);
+  set rts = roots ts;
+    assume
+A17: nt ==> rts;
+  set x = ff * ts;
+A19: dom ts = Seg len ts by FINSEQ_1:def 3;
+defpred P[set,set] means
+ ex dt being DecoratedTree of [:the carrier of G, D():] st
+           dt = $2 & dt`1 = ts.$1 & dt in Union f;
+A20: for k being Nat st k in Seg len ts
+     ex x being Element of FinTrees [:(the carrier of G), D():] st P[k,x]
+      proof
+    let k be Nat; assume
+       k in Seg len ts;
+     then ts.k in rng ts & rng ts c= TS(G) by A19,FINSEQ_1:def 4,FUNCT_1:def 5;
+     then ts.k in TS(G);
+     then ex x being Element of FinTrees [:(the carrier of G), D():] st
+          ts.k = x`1 & x in Union f by A5;
+     hence thesis;
+    end;
+ consider dts being FinSequence of FinTrees [:(the carrier of G), D():]
+   such that
+A21: dom dts = Seg len ts and
+A22: for k being Nat st k in Seg len ts holds P[k,dts.k] from MATRIX_2:sch 1
+ (A20);
+      rng dts c= X proof
+     let x be set; assume
+       x in rng dts;
+      then consider k being set such that
+A23:  k in dom ts & x = dts.k by A19,A21,FUNCT_1:def 5;
+      reconsider k as Nat by A23,FINSEQ_3:25;
+       ex dt being DecoratedTree of [:the carrier of G, D():]
+       st dt = x & dt`1 = ts.k & dt in Union f by A19,A22,A23;
+     hence thesis by A11;
+    end;
+     then reconsider dts as FinSequence of X by FINSEQ_1:def 4;
+A24: dom roots ts = dom ts by Def1;
+A25: dom pr1 roots dts = dom roots dts & dom pr2 roots dts = dom roots dts
+                    by Def2,Def3;
+then A26: dom pr1 roots dts = dom ts & dom pr2 roots dts = dom ts
+                    by A19,A21,Def1;
+       now let k be Nat; assume
+A27:    k in dom ts;
+        then consider dt being DecoratedTree of [:the carrier of G, D():]
+           such that
+A28:   dt = dts.k & dt`1 = ts.k & dt in Union f by A19,A22;
+       reconsider r = {} as Node of dt by TREES_1:47;
+         ex T being DecoratedTree st T = ts.k & (roots ts).k = T.{}
+                            by A27,Def1;
+then A29:   (roots ts).k = (dt.r)`1 by A28,TREES_3:41;
+         ex T being DecoratedTree st T = dts.k & (roots dts).k = T.{}
+                            by A19,A21,A27,Def1;
+      hence (roots ts).k = (pr1 roots dts).k by A25,A26,A27,A28,A29,Def2;
+     end;
+then A30: roots ts = pr1 roots dts by A24,A26,FINSEQ_1:17;
+then A31: [nt, NTV(nt, dts)]-tree dts in X
+                          by A13,A17;
+A32: rng dts c= FinTrees [:the carrier of G, D():] by FINSEQ_1:def 4;
+      FinTrees [:the carrier of G,D():] c= Trees [:the carrier of G, D():]
+                                          by TREES_3:22;
+    then rng dts c= Trees [:the carrier of G, D():] by A32,XBOOLE_1:1;
+    then reconsider dts' = dts as FinSequence of Trees [:the carrier of G,D():]
+                                   by FINSEQ_1:def 4;
+A33: rng ts c= FinTrees the carrier of G by FINSEQ_1:def 4;
+      FinTrees the carrier of G c= Trees the carrier of G
+                                        by TREES_3:22;
+    then rng ts c= Trees the carrier of G by A33,XBOOLE_1:1;
+    then reconsider ts' = ts as FinSequence of Trees the carrier of G
+                                   by FINSEQ_1:def 4;
+     now let i be Nat; assume i in dom dts;
+    then consider dt being DecoratedTree of [:the carrier of G, D():] such that
+A34: dt = dts.i & dt`1 = ts.i & dt in Union f by A21,A22;
+    let T be DecoratedTree of [:the carrier of G, D():]; assume
+      T = dts.i;
+    hence ts.i = T`1 by A34;
+   end;
+then A35:  ([nt, NTV(nt, dts)]-tree dts')`1
+                = nt-tree ts' by A19,A21,TREES_4:27;
+A36: rng ts c= dom ff by A9,FINSEQ_1:def 4;
+then A37: dom (ff * ts) = dom ts by RELAT_1:46;
+    now let k be Nat; assume
+A38: k in dom ts;
+     then consider dt being DecoratedTree of [:the carrier of G, D():] such
+that
+A39: dt = dts.k & dt`1 = ts.k & dt in Union f by A19,A22;
+     reconsider r = {} as Node of dt by TREES_1:47;
+     A40: ts.k in rng ts by A38,FUNCT_1:def 5;
+A41: x.k = ff.(dt`1) by A37,A38,A39,FUNCT_1:22
+        .= dt`2.{} by A9,A10,A36,A39,A40
+        .= (dt.r)`2 by TREES_3:41;
+       ex T being DecoratedTree st T = dts.k & (roots dts).k = T.r
+      by A19,A21,A38,Def1;
+   hence x.k = (pr2 roots dts).k by A25,A26,A38,A39,A41,Def3;
+  end;
+then A42: x = pr2 roots dts by A26,A37,FINSEQ_1:17;
+  reconsider r = {} as Node of [nt, NTermVal(nt, rts, x)]-tree dts
+                              by TREES_1:47;
+    nt-tree ts in TS(G) by A5,A11,A31,A35;
+ then ff.(nt-tree ts) = (([nt, NTermVal(nt, rts, x)]-tree dts)`2).r
+                          by A10,A11,A30,A31,A35,A42
+                .= (([nt, NTermVal(nt, rts, x)]-tree dts).r)`2 by TREES_3:41
+                .= [nt, NTermVal(nt, rts, x)]`2 by TREES_4:def 4;
+ hence ff.(nt-tree ts) = NTermVal(nt, rts, ff * ts) by MCART_1:7;
+end;
+
+scheme :: DTCONSTR:sch 10
+ DTConstrUniqDef{G()->non empty DTConstrStr, D()->non empty set,
                    TermVal(set) -> Element of D(),
                    NTermVal(set, set, set) -> Element of D(),
                    f1, f2() -> Function of TS(G()), D()
@@ -289,7 +1474,53 @@ and
             holds f2().(root-tree t) = TermVal(t)) &
      (for nt being Symbol of G(),
           ts being FinSequence of TS(G()) st nt ==> roots ts
-              holds f2().(nt-tree ts) = NTermVal(nt, roots ts, f2() * ts));
+              holds f2().(nt-tree ts) = NTermVal(nt, roots ts, f2() * ts))
+proof
+set G = G();
+defpred P[set] means f1().$1 = f2().$1;
+A3: now let s be Symbol of G; assume
+ A4: s in Terminals G;
+     then f1().(root-tree s) = TermVal(s) by A1
+                       .= f2().(root-tree s) by A2,A4;
+     hence P[root-tree s];
+    end;
+A5: now
+     let nt be Symbol of G,
+            ts be FinSequence of TS(G); assume
+ A6: nt ==> roots ts &
+     for t being DecoratedTree of the carrier of G st t in rng ts holds P[t];
+ A7: rng ts c= TS(G) by FINSEQ_1:def 4;
+     then rng ts c= dom f1() by FUNCT_2:def 1;
+ then A8: dom (f1() * ts) = dom ts & dom ts = Seg len ts
+          by FINSEQ_1:def 3,RELAT_1:46;
+     reconsider ntv1 = f1() * ts as FinSequence;
+     reconsider ntv1 as FinSequence of D();
+       rng ts c= dom f2() by A7,FUNCT_2:def 1;
+ then A9: dom (f2() * ts) = dom ts by RELAT_1:46;
+       now let x be set; assume
+ A10:  x in dom ts;
+      then reconsider t =ts.x as Element of FinTrees the carrier of G by Th2;
+        t in rng ts by A10,FUNCT_1:def 5;
+ then A11:  f1().t = f2().t by A6;
+      thus (f1() * ts).x = f1().t by A8,A10,FUNCT_1:22
+                           .= (f2() * ts).x by A9,A10,A11,FUNCT_1:22;
+     end;
+ then A12: f1() * ts = f2() * ts by A8,A9,FUNCT_1:9;
+     f1().(nt-tree ts) = NTermVal (nt, roots ts, ntv1)
+                                 by A1,A6
+                           .= f2().(nt-tree ts) by A2,A6,A12;
+     hence P[nt-tree ts];
+    end;
+A13: for t being DecoratedTree of the carrier of G st t in TS(G)
+          holds P[t] from DTConstrInd (A3,A5);
+     now let x be set; assume
+A14: x in TS(G);
+    then reconsider x' = x as Element of FinTrees the carrier of G;
+      x' = x;
+    hence f1().x = f2().x by A13,A14;
+   end;
+ hence thesis by FUNCT_2:18;
+end;
 
 begin
 
@@ -318,36 +1549,69 @@ definition let G be non empty DTConstrStr;
    ex p being FinSequence of TS(G) st nt ==> roots p;
 end;
 
-definition
+registration
  cluster with_terminals with_nonterminals with_useful_nonterminals strict
          (non empty DTConstrStr);
+ existence by Lm15;
 end;
+
 
 definition
  let G be with_terminals (non empty DTConstrStr);
  redefine func Terminals G -> non empty Subset of G;
-  cluster TS G -> non empty;
+  end;
+registration
+ let G be with_terminals (non empty DTConstrStr);
+ cluster TS G -> non empty;
+ coherence proof
+   consider t being set such that
+A1: t in Terminals G by XBOOLE_0:def 1;
+  thus thesis by A1,Def4;
+end;
 end;
 
-definition
+
+registration
  let G be with_useful_nonterminals (non empty DTConstrStr);
  cluster TS G -> non empty;
+ coherence proof
+  consider s being Symbol of G;
+  per cases;
+  suppose not ex tnt being FinSequence st s ==> tnt;
+    then s in {t where t is Symbol of G:
+                            not ex tnt being FinSequence st t ==> tnt };
+    then s in Terminals G by LANG1:def 2;
+   hence thesis by Def4;
+  end;
+  suppose ex tnt being FinSequence st s ==> tnt;
+    then s in {t where t is Symbol of G:
+                ex tnt being FinSequence st t ==> tnt };
+    then s in NonTerminals G by LANG1:def 3;
+      then consider p being FinSequence of TS G such that
+A1:  s ==> roots p by Def8;
+   thus thesis by A1,Def4;
 end;
+end;
+end;
+
 
 definition
  let G be with_nonterminals (non empty DTConstrStr);
  redefine func NonTerminals G -> non empty Subset of G;
 end;
 
+
 definition
  let G be with_terminals (non empty DTConstrStr);
  mode Terminal of G is Element of Terminals G;
 end;
 
+
 definition
  let G be with_nonterminals (non empty DTConstrStr);
  mode NonTerminal of G is Element of NonTerminals G;
 end;
+
 
 definition
  let G be with_nonterminals with_useful_nonterminals (non empty DTConstrStr);
@@ -358,11 +1622,13 @@ definition
   nt ==> roots it;
 end;
 
+
 definition
  let G be with_terminals (non empty DTConstrStr);
  let t be Terminal of G;
  redefine func root-tree t -> Element of TS(G);
 end;
+
 
 definition
  let G be with_nonterminals with_useful_nonterminals (non empty DTConstrStr);
@@ -370,6 +1636,7 @@ definition
  let p be SubtreeSeq of nt;
  redefine func nt-tree p -> Element of TS(G);
 end;
+
 
 theorem :: DTCONSTR:9
 for G being with_terminals (non empty DTConstrStr),
@@ -389,9 +1656,10 @@ begin
 
 :: Peano naturals continued ::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition
+registration
  cluster PeanoNat ->
      with_terminals with_nonterminals with_useful_nonterminals;
+ coherence by Lm15;
 end;
 
 definition
@@ -399,6 +1667,7 @@ definition
       t be Element of TS PeanoNat;
  redefine func nt-tree t -> Element of TS PeanoNat;
 end;
+
 
 definition
  let x be FinSequence of NAT such that
@@ -418,6 +1687,7 @@ definition
          holds it.(nt-tree ts) = plus-one(it * ts));
 end;
 
+
 definition
  let x be Element of TS(PeanoNat);
  func PNsucc x -> Element of TS(PeanoNat) equals
@@ -431,6 +1701,7 @@ definition
    it.0 = root-tree 0 &
   for n being Nat holds it.(n+1) = PNsucc it.n;
 end;
+
 
 theorem :: DTCONSTR:11
   for pn being Element of TS(PeanoNat) holds pn = NAT-to-PN.(PN-to-NAT.pn);
@@ -450,6 +1721,7 @@ definition
    (for p, q being Element of D* holds g.(p,q) = p^q) &
      it = g "**" F;
 end;
+
 
 theorem :: DTCONSTR:13
  for D being set, d be Element of D* holds FlattenSeq <*d*> = d;
@@ -491,6 +1763,7 @@ definition
              holds f.(nt-tree ts) = FlattenSeq(x)^<*nt*>);
 end;
 
+
 definition
  let G be with_nonterminals non empty (non empty DTConstrStr),
        nt be Symbol of G;
@@ -510,6 +1783,7 @@ definition
                   where tsg is Element of FinTrees the carrier of G :
                   tsg in TS G & tsg.{} = nt };
 end;
+
 
 theorem :: DTCONSTR:14
 for t being DecoratedTree of the carrier of PeanoNat

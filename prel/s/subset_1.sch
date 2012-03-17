@@ -3,9 +3,6 @@ XBOOLE_0
 ZFMISC_1
 SUBSET_1
 #
-Subset_Ex
-Subset_Eq
-#
 M1 ;;
 ªM2 K6 F1 ;;;ªM1 ;&ª&R2 B2 B1 ;ª&R2 B2 F1 ;;P1 B2 ;;;ª&R2 B2 F1 ;;P1 B2 ;ªR2 B2 B1 ;;;;
 #

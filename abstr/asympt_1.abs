@@ -23,9 +23,11 @@ environ
 
 begin :: Examples from the text
 
-definition
+registration
   cluster -> non negative Element of NAT;
+  coherence by NAT_1:18;
 end;
+
 
 reserve c, c1, c2, d, d1, d2, e for Real,
         i, k, n, m, N, n1, n2, N0, N1, N2, N3, M for Nat,
@@ -53,8 +55,16 @@ definition let a,b,c be Real;
   it.n = a to_power (b*n+c);
 end;
 
-definition let a be positive Real, b,c be Real;
+
+registration let a be positive Real, b,c be Real;
  cluster seq_a^(a,b,c) -> eventually-positive;
+  coherence proof
+   set f = seq_a^(a,b,c);
+   take 0;
+    let n; assume n >= 0;
+     f.n = a to_power (b*n+c) by Def1;
+    hence f.n > 0 by POWER:39;
+  end;
 end;
 
 theorem :: ASYMPT_1:3
@@ -69,18 +79,37 @@ definition
   it.0 = 0 & (for n st n > 0 holds it.n = log(2,n));
 end;
 
+
 definition let a be Real;
  func seq_n^(a) -> Real_Sequence means
 :: ASYMPT_1:def 3
   it.0 = 0 & (for n st n > 0 holds it.n = n to_power a);
 end;
 
-definition
+
+registration
  cluster seq_logn -> eventually-positive;
+  coherence proof
+   set f = seq_logn;
+   take 2;
+   let n; assume
+   A1: n >= 2;
+   then A2: f.n = log(2,n) by Def2;
+        log(2,n) >= log(2,2) by A1,PRE_FF:12;
+    hence f.n > 0 by A2,POWER:60;
+  end;
 end;
 
-definition let a be Real;
+
+registration let a be Real;
  cluster seq_n^(a) -> eventually-positive;
+  coherence proof
+   set f = seq_n^(a);
+   take 1;
+    let n; assume A1: n >= 1;
+       then f.n = n to_power a by Def3;
+     hence f.n > 0 by A1,POWER:39;
+  end;
 end;
 
 theorem :: ASYMPT_1:4
@@ -119,8 +148,14 @@ definition
    NAT --> b;
 end;
 
-definition
+
+registration
  cluster seq_const(1) -> eventually-nonnegative;
+ coherence proof
+  take 0; let n; assume n >= 0;
+     (seq_const(1)).n = (NAT --> 1).n by Def4 .= 1 by FUNCOP_1:13;
+  hence (seq_const(1)).n >= 0;
+ end;
 end;
 
 theorem :: ASYMPT_1:9
@@ -161,9 +196,18 @@ definition let a be Nat;
   it.n = (n+a)!;
 end;
 
-definition let a be Nat;
+
+registration let a be Nat;
  cluster seq_n!(a) -> eventually-positive;
+  coherence proof
+   set f = seq_n!(a);
+   take 0;
+    let n; assume n >= 0;
+         f.n = (n+a)! by Def5;
+     hence f.n > 0 by NEWTON:23;
+  end;
 end;
+
 
 theorem :: ASYMPT_1:14 :: Part 4
    not seq_n!(0) in Big_Theta(seq_n!(1));
@@ -357,6 +401,7 @@ definition let n be Nat, a,b be positive Real;
        prob28.(n+1) = prob28.n^<*4*((prob28.n)/.n1) + b*((n+1)+1)*>;
 end;
 
+
 definition let a,b be positive Real;
  func seq_prob28(a,b) -> Real_Sequence means
 :: ASYMPT_1:def 7
@@ -429,9 +474,25 @@ theorem :: ASYMPT_1:40
 
 begin :: Problem 3.34
 
-definition
+registration
  cluster (seq_n^(1) - seq_const(1)) -> eventually-positive;
+  coherence proof
+   set f = seq_n^(1);
+   set g = seq_const(1);
+   take 2;
+    let n; assume
+    A1: n >= 2;
+    then A2: n > 1+0 by AXIOMS:22;
+    A3: f.n = n to_power 1 by A1,Def3 .= n by POWER:30;
+    A4: g.n = (NAT --> 1).n by Def4 .= 1 by FUNCOP_1:13;
+         (f-g).n = (f +- g).n by SEQ_1:15
+              .= f.n + (-g).n by SEQ_1:11
+              .= n + -1 by A3,A4,SEQ_1:14
+              .= n-1 by XCMPLX_0:def 8;
+     hence (f-g).n > 0 by A2,REAL_1:86;
+  end;
 end;
+
 
 :: This is to show that Big_Theta(n-1) + Big_Theta(n) = Big_Theta(n).
 :: Note that it is not true that Big_Theta(n) = Big_Theta(n) - Big_Theta(n-1).

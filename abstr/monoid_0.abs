@@ -29,6 +29,7 @@ definition let G be 1-sorted;
  mode BinOp of G is BinOp of the carrier of G;
 end;
 
+
 definition let IT be 1-sorted;
  attr IT is constituted-Functions means
 :: MONOID_0:def 1
@@ -40,42 +41,76 @@ definition let IT be 1-sorted;
    for a being Element of IT holds a is FinSequence;
 end;
 
-definition
+
+registration
  cluster constituted-Functions 1-sorted;
+  existence
+   proof consider f being Function; take X = 1-sorted(#{f}#);
+    let a be Element of X;
+    thus thesis by TARSKI:def 1;
+   end;
  cluster constituted-FinSeqs 1-sorted;
+  existence
+   proof consider f being FinSequence; take X = 1-sorted(#{f}#);
+    let a be Element of X;
+    thus thesis by TARSKI:def 1;
+   end;
 end;
 
-definition let X be constituted-Functions 1-sorted;
+
+registration let X be constituted-Functions 1-sorted;
  cluster -> Function-like Relation-like Element of X;
+  coherence by Def1;
 end;
 
-definition
+
+registration
  cluster constituted-FinSeqs -> constituted-Functions 1-sorted;
+  coherence
+   proof let X be 1-sorted such that
+A1: X is constituted-FinSeqs;
+    let a be Element of carr(X);
+    thus thesis by A1,Def2;
+   end;
 end;
 
-definition
+
+registration
  cluster constituted-FinSeqs -> constituted-Functions HGrStr;
+  coherence
+   proof
+       now let G be HGrStr; assume G is constituted-FinSeqs;
+       then G is constituted-FinSeqs 1-sorted;
+      hence G is constituted-Functions;
+     end;
+    hence thesis;
+   end;
 end;
 
-definition let X be constituted-FinSeqs 1-sorted;
+
+registration let X be constituted-FinSeqs 1-sorted;
  cluster -> FinSequence-like Element of X;
+  coherence by Def2;
  end;
+
 
 definition let D be set, p,q be FinSequence of D;
  redefine func p^q -> Element of D*;
 end;
 
-definition let g,f be Function;
- redefine func f*g; synonym f(*)g;
-end;
+notation let g,f be Function;
+ synonym f(*)g for f*g; end;
+
 
 definition let X be set, g,f be Function of X,X;
  redefine func f*g -> Function of X,X;
 end;
 
+
 definition let X be set, g,f be Permutation of X;
  redefine func f*g -> Permutation of X;
 end;
+
 
 definition let D be non empty set;
   let IT be BinOp of D;
@@ -109,6 +144,7 @@ definition let D be non empty set;
     IT.(a,b) = the_unity_wrt IT holds a = b & b = the_unity_wrt IT;
 end;
 
+
 theorem :: MONOID_0:1
  for D be non empty set, f being BinOp of D holds
   f is invertible iff f is left-invertible right-invertible;
@@ -135,6 +171,7 @@ definition let IT be non empty HGrStr;
    the mult of IT has_a_unity;
 end;
 
+
 definition let G;
  redefine attr G is commutative means
 :: MONOID_0:def 11
@@ -144,6 +181,7 @@ definition let G;
 
    the mult of G is associative;
 end;
+
 
 definition let IT be non empty HGrStr;
  attr IT is idempotent means
@@ -172,11 +210,24 @@ definition let IT be non empty HGrStr;
    the mult of IT is uniquely-decomposable;
 end;
 
-definition
+
+registration
  cluster unital commutative associative cancelable idempotent invertible
          uniquely-decomposable constituted-Functions constituted-FinSeqs
          strict (non empty HGrStr);
+  existence
+   proof consider p being FinSequence, o being BinOp of {p};
+    take G = HGrStr(#{p},o#);
+    thus op(G) has_a_unity & op(G) is commutative & op(G) is associative &
+      op(G) is cancelable & op(G) is idempotent &
+      op(G) is invertible uniquely-decomposable by Th3;
+    thus (for x being Element of G holds x is Function) &
+      (for x being Element of G holds x is FinSequence)
+      by TARSKI:def 1;
+    thus thesis;
+   end;
 end;
+
 
 theorem :: MONOID_0:4
  G is unital implies
@@ -223,18 +274,41 @@ theorem :: MONOID_0:17
  G is associative implies
   (G is invertible iff G is unital & the mult of G has_an_inverseOp);
 
-definition
+registration
  cluster associative Group-like -> invertible (non empty HGrStr);
+  coherence
+   proof let G be non empty HGrStr; assume
+   G is associative Group-like;
+    then reconsider G as associative Group-like (non empty HGrStr);
+       G is unital associative & op(G) has_an_inverseOp
+      by GROUP_1:36;
+    hence thesis by Th17;
+   end;
  cluster associative invertible -> Group-like (non empty HGrStr);
+  coherence by Lm6;
 end;
 
-definition
+
+registration
  cluster invertible -> left-invertible right-invertible (non empty HGrStr);
+  coherence by Lm4;
  cluster left-invertible right-invertible -> invertible (non empty HGrStr);
+  coherence by Lm4;
  cluster cancelable -> left-cancelable right-cancelable (non empty HGrStr);
+  coherence by Lm5;
  cluster left-cancelable right-cancelable -> cancelable (non empty HGrStr);
+  coherence by Lm5;
  cluster associative invertible -> unital cancelable (non empty HGrStr);
+  coherence
+   proof let G be non empty HGrStr;
+    assume G is associative invertible;
+     then reconsider G as associative invertible (non empty HGrStr);
+       for a,b,c being Element of G st
+      a*b = a*c or b*a = c*a holds b = c by GROUP_1:14;
+    hence thesis by Th15;
+   end;
 end;
+
 
 begin
 
@@ -246,32 +320,58 @@ definition let IT be non empty multLoopStr;
   the unity of IT is_a_unity_wrt the mult of IT;
 end;
 
+
 theorem :: MONOID_0:18
  M is well-unital iff for a being Element of M holds
    (the unity of M)*a = a & a*(the unity of M) = a;
 
-definition
+registration
  cluster well-unital -> unital (non empty multLoopStr);
+  coherence by Lm7;
 end;
+
 
 theorem :: MONOID_0:19
  for M being non empty multLoopStr st M is well-unital holds
   the unity of M = the_unity_wrt the mult of M;
 
-definition let A be non empty set, m be BinOp of A,
+registration let A be non empty set, m be BinOp of A,
   u be Element of A;
  cluster multLoopStr(#A,m,u#) -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
 
-definition
+
+registration
  cluster well-unital commutative associative cancelable idempotent invertible
          uniquely-decomposable unital constituted-Functions
          constituted-FinSeqs strict (non empty multLoopStr);
+  existence
+   proof consider p being FinSequence,
+      o being BinOp of {p}, e being Element of {p};
+    take G = multLoopStr(#{p},o,e#);
+    reconsider e as Element of G;
+    reconsider o as BinOp of G;
+       now let b be Element of G;
+         o.(e,b) = p & o.(b,e) = p & b = p by TARSKI:def 1;
+      hence o.(e,b) = b & o.(b,e) = b;
+     end;
+    hence un(G) is_a_unity_wrt op(G) by BINOP_1:11;
+    hence op(G) is commutative & op(G) is associative & op(G) is cancelable &
+      op(G) is idempotent & op(G) is invertible uniquely-decomposable &
+      ex e being Element of G st e is_a_unity_wrt op(G) by Th3;
+    thus (for x being Element of G holds x is Function) &
+      (for x being Element of G holds x is FinSequence)
+      by TARSKI:def 1;
+    thus thesis;
+   end;
 end;
+
 
 definition
  mode Monoid is well-unital associative (non empty multLoopStr);
 end;
+
 
 definition let G be HGrStr;
  mode MonoidalExtension of G -> multLoopStr means
@@ -279,9 +379,16 @@ definition let G be HGrStr;
   the HGrStr of it = the HGrStr of G;
 end;
 
-definition let G be non empty HGrStr;
+
+registration let G be non empty HGrStr;
  cluster -> non empty MonoidalExtension of G;
+ coherence
+  proof let M be MonoidalExtension of G;
+      the HGrStr of M = the HGrStr of G by Def22;
+   hence the carrier of M is non empty;
+  end;
 end;
+
 
 theorem :: MONOID_0:20
  for M being MonoidalExtension of G holds
@@ -291,9 +398,17 @@ theorem :: MONOID_0:20
        a',b' being Element of G st a = a' & b = b'
     holds a*b = a'*b';
 
-definition let G be HGrStr;
+registration let G be HGrStr;
  cluster strict MonoidalExtension of G;
+  existence
+   proof consider g being Element of G;
+    set M = multLoopStr(#carr(G), op(G), g#);
+       the HGrStr of M = the HGrStr of G;
+     then M is MonoidalExtension of G by Def22;
+    hence thesis;
+   end;
 end;
+
 
 theorem :: MONOID_0:21
  for G being non empty HGrStr, M being MonoidalExtension of G holds
@@ -304,41 +419,79 @@ theorem :: MONOID_0:21
       (G is uniquely-decomposable implies M is uniquely-decomposable) &
        (G is cancelable implies M is cancelable);
 
-definition let G be constituted-Functions HGrStr;
+registration let G be constituted-Functions HGrStr;
  cluster -> constituted-Functions MonoidalExtension of G;
+  coherence
+   proof let M be MonoidalExtension of G; let a be Element of M;
+       the HGrStr of M = the HGrStr of G by Def22;
+     then a is Element of G;
+    hence thesis;
+   end;
 end;
 
-definition let G be constituted-FinSeqs HGrStr;
+
+registration let G be constituted-FinSeqs HGrStr;
  cluster -> constituted-FinSeqs MonoidalExtension of G;
+  coherence
+   proof let M be MonoidalExtension of G; let a be Element of M;
+       the HGrStr of M = the HGrStr of G by Def22;
+     then a is Element of G;
+    hence thesis;
+   end;
 end;
 
-definition let G be unital (non empty HGrStr);
+
+registration let G be unital (non empty HGrStr);
  cluster -> unital MonoidalExtension of G;
+  coherence by Th21;
 end;
 
-definition let G be associative (non empty HGrStr);
+
+registration let G be associative (non empty HGrStr);
  cluster -> associative MonoidalExtension of G;
+  coherence by Th21;
 end;
 
-definition let G be commutative (non empty HGrStr);
+
+registration let G be commutative (non empty HGrStr);
  cluster -> commutative MonoidalExtension of G;
+  coherence by Th21;
 end;
 
-definition let G be invertible (non empty HGrStr);
+
+registration let G be invertible (non empty HGrStr);
  cluster -> invertible MonoidalExtension of G;
+  coherence by Th21;
 end;
 
-definition let G be cancelable (non empty HGrStr);
+
+registration let G be cancelable (non empty HGrStr);
  cluster -> cancelable MonoidalExtension of G;
+  coherence by Th21;
 end;
 
-definition let G be uniquely-decomposable (non empty HGrStr);
+
+registration let G be uniquely-decomposable (non empty HGrStr);
  cluster -> uniquely-decomposable MonoidalExtension of G;
+  coherence by Th21;
 end;
 
-definition let G be unital (non empty HGrStr);
+
+registration let G be unital (non empty HGrStr);
  cluster well-unital strict MonoidalExtension of G;
+  existence
+   proof set M = multLoopStr(#carr(G), op(G), the_unity_wrt op(G)#);
+       M is MonoidalExtension of G
+      proof
+       thus the HGrStr of M = the HGrStr of G;
+      end;
+    then reconsider M as MonoidalExtension of G;
+    take M;
+    thus un(M) is_a_unity_wrt op(M) by Th4;
+    thus thesis;
+   end;
 end;
+
 
 theorem :: MONOID_0:22
  for G being unital (non empty HGrStr)
@@ -352,18 +505,48 @@ definition let G be HGrStr;
    the mult of it <= the mult of G;
 end;
 
-definition let G be HGrStr;
+
+registration let G be HGrStr;
  cluster strict SubStr of G;
+  existence
+   proof
+       the HGrStr of G is SubStr of G by Def23;
+    hence thesis;
+   end;
 end;
 
-definition let G be non empty HGrStr;
+
+registration let G be non empty HGrStr;
  cluster strict non empty SubStr of G;
+  existence
+   proof
+       the HGrStr of G is SubStr of G by Def23;
+    hence thesis;
+   end;
 end;
 
-definition let G be unital (non empty HGrStr);
+
+registration let G be unital (non empty HGrStr);
  cluster unital associative commutative cancelable idempotent invertible
          uniquely-decomposable strict (non empty SubStr of G);
+  existence
+   proof consider a being Element of G such that
+A1:   for b being Element of G holds a*b = b & b*a = b by Th6;
+    consider f being BinOp of {a};
+    set H = HGrStr(#{a},f#);
+       f = {[a,a]} --> a & a = a*a & a*a = op(G).(a,a) &
+     op(G).(a,a) = op(G).[a,a] & dom op(G) = [:carr(G),carr(G):]
+      by A1,Th3,BINOP_1:def 1,FUNCT_2:def 1,VECTSP_1:def 10;
+     then op(H) <= op(G) by FUNCT_4:8;
+    then reconsider H as non empty SubStr of G by Def23;
+    take H;
+    thus op(H) has_a_unity & op(H) is associative & op(H) is commutative &
+      op(H) is cancelable & op(H) is idempotent &
+      op(H) is invertible uniquely-decomposable by Th3;
+    thus thesis;
+   end;
 end;
+
 
 definition let G be HGrStr;
  mode MonoidalSubStr of G -> multLoopStr means
@@ -372,13 +555,49 @@ definition let G be HGrStr;
    for M being multLoopStr st G = M holds the unity of it = the unity of M;
 end;
 
-definition let G be HGrStr;
+
+registration let G be HGrStr;
  cluster strict MonoidalSubStr of G;
+  existence
+   proof consider N being MonoidalSubStr of G;
+       op(the multLoopStr of N) <= op(G) &
+     for M being multLoopStr st G = M
+      holds un(the multLoopStr of N) = un(M) by Def24;
+    then reconsider N' = the multLoopStr of N as MonoidalSubStr of G by Def24;
+    take N'; thus thesis;
+   end;
 end;
 
-definition let G be non empty HGrStr;
+
+registration let G be non empty HGrStr;
  cluster strict non empty MonoidalSubStr of G;
+  existence
+   proof
+    per cases;
+    suppose G is multLoopStr;
+      then reconsider L = G as multLoopStr;
+        for N being multLoopStr st G = N
+        holds the unity of the multLoopStr of L = the unity of N;
+      then reconsider M = the multLoopStr of L as MonoidalSubStr of G
+                       by Def24;
+     take M;
+     thus M is strict;
+        the carrier of M = the carrier of G;
+     hence the carrier of M is non empty;
+    end;
+    suppose
+A1:   G is not multLoopStr;
+    consider M being strict MonoidalExtension of G;
+A2: the HGrStr of M = the HGrStr of G by Def22;
+      for N being multLoopStr st G = N holds the unity of M = the unity of N
+       by A1;
+    then reconsider M as MonoidalSubStr of G by A2,Def24;
+   take M;
+   thus thesis;
+   end;
+   end;
 end;
+
 
 definition let M be multLoopStr;
  redefine mode MonoidalSubStr of M means
@@ -387,10 +606,32 @@ definition let M be multLoopStr;
    the unity of it = the unity of M;
 end;
 
-definition let G be well-unital (non empty multLoopStr);
+
+registration let G be well-unital (non empty multLoopStr);
  cluster well-unital associative commutative cancelable idempotent invertible
          uniquely-decomposable strict (non empty MonoidalSubStr of G);
+  existence
+   proof set a = un(G);
+    reconsider e = a as Element of {a} by TARSKI:def 1;
+    consider f being BinOp of {a};
+    set H = multLoopStr(#{a},f,e#);
+       f = {[a,a]} --> a & a = a*a & a*a = op(G).(a,a) &
+     op(G).(a,a) = op(G).[a,a] & dom op(G) = [:carr(G),carr(G):]
+      by Th3,Th18,BINOP_1:def 1,FUNCT_2:def 1,VECTSP_1:def 10;
+     then op(H) <= op(G) by FUNCT_4:8;
+    then reconsider H as non empty MonoidalSubStr of G by Def25;
+    take H;
+       now let b be Element of H; b = a by TARSKI:def 1;
+      hence op(H).(un(H),b) = b & op(H).(b,un(H)) = b by TARSKI:def 1;
+     end;
+    hence un(H) is_a_unity_wrt op(H) by BINOP_1:11;
+    thus op(H) is associative & op(H) is commutative &
+      op(H) is cancelable & op(H) is idempotent &
+      op(H) is invertible uniquely-decomposable by Th3;
+    thus thesis;
+   end;
 end;
+
 
 theorem :: MONOID_0:23
  for G being HGrStr, M being MonoidalSubStr of G holds M is SubStr of G;
@@ -399,17 +640,21 @@ definition let G be HGrStr, M be MonoidalExtension of G;
  redefine mode SubStr of M -> SubStr of G;
 end;
 
+
 definition let G1 be HGrStr, G2 be SubStr of G1;
  redefine mode SubStr of G2 -> SubStr of G1;
 end;
+
 
 definition let G1 be HGrStr, G2 be MonoidalSubStr of G1;
  redefine mode SubStr of G2 -> SubStr of G1;
 end;
 
+
 definition let G be HGrStr, M be MonoidalSubStr of G;
  redefine mode MonoidalSubStr of M -> MonoidalSubStr of G;
 end;
+
 
 theorem :: MONOID_0:24
    G is SubStr of G & M is MonoidalSubStr of M;
@@ -476,81 +721,217 @@ theorem :: MONOID_0:39
  for M being well-unital uniquely-decomposable (non empty multLoopStr)
    for N being non empty MonoidalSubStr of M holds N is uniquely-decomposable;
 
-definition let G be constituted-Functions non empty HGrStr;
+registration let G be constituted-Functions non empty HGrStr;
  cluster -> constituted-Functions (non empty SubStr of G);
+  coherence
+   proof let H be non empty SubStr of G; let a be Element of H;
+       carr(H) c= carr(G) by Th25;
+     then a is Element of G by TARSKI:def 3;
+    hence thesis;
+   end;
  cluster -> constituted-Functions (non empty MonoidalSubStr of G);
+  coherence
+   proof let H be non empty MonoidalSubStr of G;
+    let a be Element of H;
+       carr(H) c= carr(G) by Th25;
+     then a is Element of G by TARSKI:def 3;
+    hence thesis;
+   end;
 end;
 
-definition let G be constituted-FinSeqs non empty HGrStr;
+
+registration let G be constituted-FinSeqs non empty HGrStr;
  cluster -> constituted-FinSeqs (non empty SubStr of G);
+  coherence
+   proof let H be non empty SubStr of G; let a be Element of H;
+       carr(H) c= carr(G) by Th25;
+     then a is Element of G by TARSKI:def 3;
+    hence thesis;
+   end;
  cluster -> constituted-FinSeqs (non empty MonoidalSubStr of G);
+  coherence
+   proof let H be non empty MonoidalSubStr of G;
+    let a be Element of H;
+       carr(H) c= carr(G) by Th25;
+     then a is Element of G by TARSKI:def 3;
+    hence thesis;
+   end;
 end;
 
-definition let M be well-unital (non empty multLoopStr);
+
+registration let M be well-unital (non empty multLoopStr);
  cluster -> well-unital (non empty MonoidalSubStr of M);
+  coherence by Th33;
 end;
 
-definition let G be commutative (non empty HGrStr);
+
+registration let G be commutative (non empty HGrStr);
  cluster -> commutative (non empty SubStr of G);
+  coherence by Th34;
  cluster -> commutative (non empty MonoidalSubStr of G);
+  coherence
+   proof let N be non empty MonoidalSubStr of G; N is SubStr of G by Th23;
+    hence thesis by Th34;
+   end;
 end;
 
-definition let G be associative (non empty HGrStr);
+
+registration let G be associative (non empty HGrStr);
  cluster -> associative (non empty SubStr of G);
+  coherence by Th35;
  cluster -> associative (non empty MonoidalSubStr of G);
+  coherence
+   proof let N be non empty MonoidalSubStr of G; N is SubStr of G by Th23;
+    hence thesis by Th35;
+   end;
 end;
 
-definition let G be idempotent (non empty HGrStr);
+
+registration let G be idempotent (non empty HGrStr);
  cluster -> idempotent (non empty SubStr of G);
+  coherence by Th36;
  cluster -> idempotent (non empty MonoidalSubStr of G);
+  coherence
+   proof let N be non empty MonoidalSubStr of G; N is SubStr of G by Th23;
+    hence thesis by Th36;
+   end;
 end;
 
-definition let G be cancelable (non empty HGrStr);
+
+registration let G be cancelable (non empty HGrStr);
  cluster -> cancelable (non empty SubStr of G);
+  coherence by Th37;
  cluster -> cancelable (non empty MonoidalSubStr of G);
+  coherence
+   proof let N be non empty MonoidalSubStr of G; N is SubStr of G by Th23;
+    hence thesis by Th37;
+   end;
 end;
 
-definition let M be well-unital uniquely-decomposable (non empty multLoopStr);
+
+registration
+let M be well-unital uniquely-decomposable (non empty multLoopStr);
  cluster -> uniquely-decomposable (non empty MonoidalSubStr of M);
+  coherence by Th39;
 end;
 
-scheme SubStrEx1 {G() -> non empty HGrStr,
+
+scheme :: MONOID_0:sch 1
+ SubStrEx1 {G() -> non empty HGrStr,
                   D() -> non empty Subset of G()}:
  ex H being strict non empty SubStr of G() st the carrier of H = D()
  provided
- for x,y being Element of D() holds x*y in D();
+ for x,y being Element of D() holds x*y in D()
+proof   set op = the mult of G(), carr = the carrier of G();
+A2:    [:D(),D():] c= [:carr,carr:] & dom op = [:carr,carr:]
+     by FUNCT_2:def 1;
+then A3:  dom (op|([:D(),D():] qua set)) = [:D(),D():] by RELAT_1:91;
+      rng (op|([:D(),D():] qua set)) c= D()
+     proof let x; assume x in rng (op|([:D(),D():] qua set));
+      then consider y such that
+A4:     y in dom (op|([:D(),D():] qua set)) &
+       x = (op|([:D(),D():] qua set)).y by FUNCT_1:def 5;
+      reconsider y as Element of [:D(),D():]
+       by A2,A4,RELAT_1:91;
+      reconsider y1 = y`1, y2 = y`2 as Element of D();
+         y = [y1,y2] by MCART_1:23;
+       then op.(y1,y2) = op.y by BINOP_1:def 1 .= x by A4,FUNCT_1:70;
+       then x = y1*y2 by VECTSP_1:def 10;
+      hence thesis by A1;
+     end;
+   then reconsider f = op|([:D(),D():] qua set) as BinOp of D() by A3,FUNCT_2:
+def 1,RELSET_1:11;
+      f <= op by RELAT_1:88;
+   then reconsider H = HGrStr(#D(),f#) as strict non empty SubStr of G() by
+Def23;
+   take H; thus thesis;
+  end;
 
-scheme SubStrEx2 {G() -> non empty HGrStr, P[set]}:
+scheme :: MONOID_0:sch 2
+ SubStrEx2 {G() -> non empty HGrStr, P[set]}:
  ex H being strict non empty SubStr of G() st
   for x being Element of G() holds x in
  the carrier of H iff P[x]
  provided
   for x,y being Element of G()
      holds P[x] & P[y] implies P[x*y] and
-  ex x being Element of G() st P[x];
+  ex x being Element of G() st P[x]
+proof
+   defpred Q[set] means P[$1];
+   consider X such that
+A3:  x in X iff x in carr(G()) & Q[x] from XBOOLE_0:sch 1;
+   consider x being Element of G() such that
+A4:  P[x] by A2;
+   reconsider X as non empty set by A3,A4;
+      X c= carr(G()) proof let x; thus thesis by A3; end;
+   then reconsider X as non empty Subset of G();
+A5:  now let x,y be Element of X;
+        P[x] & P[y] by A3;
+      then P[x*y] by A1;
+     hence x*y in X by A3;
+    end;
+   consider H being strict non empty SubStr of G() such that
+A6:    the carrier of H = X from SubStrEx1(A5);
+   take H; thus thesis by A3,A6;
+  end;
 
-scheme MonoidalSubStrEx1 {G() -> non empty multLoopStr,
+scheme :: MONOID_0:sch 3
+ MonoidalSubStrEx1 {G() -> non empty multLoopStr,
                           D() -> non empty Subset of G()}:
  ex H being strict non empty MonoidalSubStr of G() st
   the carrier of H = D()
  provided
  for x,y being Element of D() holds x*y in D() and
- the unity of G() in D();
+ the unity of G() in D()
+proof   reconsider G = G() as non empty HGrStr;
+   reconsider D = D() as non empty Subset of G;
+A3: for x,y being Element of D holds x*y in D by A1;
+   consider H being strict non empty SubStr of G such that
+A4:  the carrier of H = D from SubStrEx1(A3);
+   reconsider e = the unity of G() as Element of H by A2,A4;
+   set N = multLoopStr(#the carrier of H, the mult of H, e#);
+      N is MonoidalSubStr of G()
+     proof
+      thus op(N) <= op(G()) by Def23;
+      thus thesis;
+     end;
+   then reconsider N as strict non empty MonoidalSubStr of G();
+   take N; thus thesis by A4;
+  end;
 
-scheme MonoidalSubStrEx2 {G() -> non empty multLoopStr, P[set]}:
+scheme :: MONOID_0:sch 4
+ MonoidalSubStrEx2 {G() -> non empty multLoopStr, P[set]}:
  ex M being strict non empty MonoidalSubStr of G() st
   for x being Element of G() holds x in
  the carrier of M iff P[x]
  provided
   for x,y being Element of G()
      holds P[x] & P[y] implies P[x*y] and
-  P[the unity of G()];
+  P[the unity of G()]
+proof
+   reconsider G = G() as non empty HGrStr;
+   defpred Q[set] means P[$1];
+A3: for x,y being Element of G
+     holds Q[x] & Q[y] implies Q[x*y] by A1;
+A4: ex x being Element of G st Q[x] by A2;
+   consider H being strict non empty SubStr of G such that
+A5:  for x being Element of G holds x in the carrier of H
+      iff Q[x] from SubStrEx2(A3,A4);
+   reconsider e = the unity of G() as Element of H by A2,A5;
+      the mult of H <= the mult of G() by Def23;
+   then reconsider M = multLoopStr(#carr(H), op(H), e#) as
+     strict non empty MonoidalSubStr of G() by Def25;
+   take M; thus thesis by A5;
+  end;
 
-definition let G,a,b;
- redefine func a*b -> Element of G;
-
- synonym a [*] b;
+notation let G,a,b;
+ synonym a [*] b for a*b ;
 end;
+definition let G,a,b;
+ redefine func a [*] b -> Element of G;
+
+ end;
+
 
 begin :: Monoids on natural numbers
 
@@ -560,6 +941,7 @@ definition
 :: MONOID_0:def 26
    HGrStr(#REAL, addreal#);
 end;
+
 
 theorem :: MONOID_0:40
  the carrier of <REAL,+> = REAL &
@@ -582,15 +964,23 @@ theorem :: MONOID_0:44
  for N being unital (non empty SubStr of <REAL,+>) holds
   the_unity_wrt the mult of N = 0;
 
-definition let G be unital (non empty HGrStr);
+registration let G be unital (non empty HGrStr);
  cluster associative invertible -> unital cancelable Group-like
   (non empty SubStr of G);
+  coherence
+   proof let H be non empty SubStr of G; assume
+   H is associative invertible;
+     then H is associative invertible (non empty HGrStr);
+    hence thesis;
+   end;
 end;
+
 
 definition
  redefine func INT.Group -> unital invertible strict
   (non empty SubStr of <REAL,+>);
 end;
+
 :: corollary
 :: INT.Group is unital commutative associative cancelable invertible;
 
@@ -610,6 +1000,7 @@ definition
 
   the carrier of it = NAT;
 end;
+
 :: corollary
 :: <NAT,+> is unital commutative associative cancelable uniquely-decomposable;
 
@@ -619,6 +1010,7 @@ definition
 :: MONOID_0:def 28
     not contradiction;
 end;
+
 :: corollary
 :: <NAT,+,0> is
 ::   well-unital commutative associative cancelable uniquely-decomposable;
@@ -628,6 +1020,7 @@ definition
 :: MONOID_0:def 29
    the mult of <NAT,+>;
 end;
+
 
 canceled;
 
@@ -662,6 +1055,7 @@ definition
    HGrStr(#REAL,multreal#);
 end;
 
+
 theorem :: MONOID_0:55
  the carrier of <REAL,*> = REAL &
  the mult of <REAL,*> = multreal &
@@ -692,6 +1086,7 @@ definition
 :: MONOID_0:def 31
    the carrier of it = NAT;
 end;
+
 :: corollary
 :: <NAT,*> is unital commutative associative uniquely-decomposable;
 
@@ -701,6 +1096,7 @@ definition
 :: MONOID_0:def 32
 not contradiction;
 end;
+
 :: corollary
 :: <NAT,*,1> is well-unital commutative associative uniquely-decomposable;
 
@@ -709,6 +1105,7 @@ definition
 :: MONOID_0:def 33
    the mult of <NAT,*>;
 end;
+
 
 theorem :: MONOID_0:61
  <NAT,*> = HGrStr(#NAT,multnat#);
@@ -748,6 +1145,7 @@ definition
    for p,q being Element of it holds p [*] q = p^q;
 end;
 
+
 definition let D;
  func D*+^+<0> -> well-unital strict (non empty MonoidalExtension of D*+^)
   means
@@ -758,6 +1156,7 @@ definition let D;
 :: MONOID_0:def 36
    the mult of D*+^;
 end;
+
 
 theorem :: MONOID_0:68
  D*+^ = HGrStr(#D*, D-concatenation#);
@@ -804,6 +1203,7 @@ definition let X be set;
    for f,g being Element of it holds f [*] g = f(*)g;
 end;
 
+
 definition let X be set;
  func MPFuncs X -> well-unital strict
   (non empty MonoidalExtension of GPFuncs X) means
@@ -814,6 +1214,7 @@ definition let X be set;
 :: MONOID_0:def 39
    the mult of GPFuncs X;
 end;
+
 :: corollary
 :: MPFuncs X is constituted-Functions strict Monoid;
 
@@ -840,6 +1241,7 @@ definition let X be set;
 :: MONOID_0:def 40
    the carrier of it = Funcs(X,X);
 end;
+
 :: corollary
 :: GFuncs X is unital associative constituted-Functions;
 
@@ -848,6 +1250,7 @@ definition let X be set;
 :: MONOID_0:def 41
     not contradiction;
 end;
+
 :: corollary
 :: GFuncs X is constituted-Functions Monoid;
 
@@ -872,6 +1275,7 @@ definition let X be set;
   for f being Element of GFuncs X holds
    f in the carrier of it iff f is Permutation of X;
 end;
+
 :: corollary
 :: GPerms X is constituted-Functions Group;
 

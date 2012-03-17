@@ -13,9 +13,6 @@ SETFAM_1
 CLASSES2
 ORDINAL4
 #
-CriticalNumber
-UOS_Lambda
-#
 M1 V7 ;;;
 ªM1 V7 ;;ªR1 F1 B1 ;B1 ;M1 V7 ;;M1 V7 ;;ª&R2 B1 B2 ;ªR2 F1 B1 ;F1 B2 ;;;M1 V1 ;V3 ;V9 ;V12 ;;M1 V7 ;;ª&ªR1 B2 K19 ;;V8 B2 ;ªM1 V1 ;V3 ;V9 ;V12 ;;ª&R1 K1 B1 ;B2 ;M1 V7 ;;ª&R2 B4 B2 ;ªR1 K11 B3 B4 ;F1 B4 ;;;ªR9 F1 B2 ;B3 ;;;;
 #

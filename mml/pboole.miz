@@ -44,7 +44,8 @@ A2:   for i st i in dom f holds f.i is empty;
   end;
 end;
 
-definition
+
+registration
  cluster empty-yielding Function;
  existence
   proof
@@ -54,6 +55,7 @@ definition
    thus thesis by RELAT_1:60;
   end;
 end;
+
 
 theorem
    for f being Function st f is non-empty
@@ -92,11 +94,13 @@ A5:  f = {} or rng f = { {} };
   per cases by A5;
   suppose f = {};
   hence for i st i in dom f holds f.i is empty by RELAT_1:60;
+  end;
   suppose
 A6: rng f = { {} };
   let i; assume i in dom f;
    then f.i in rng f by FUNCT_1:def 5;
   hence f.i is empty by A6,TARSKI:def 1;
+ end;
  end;
 
 reserve I for set; :: of indices
@@ -113,6 +117,7 @@ definition let I;
     end;
 end;
 
+
 reserve x,X,Y,Z,V for ManySortedSet of I;
 
 scheme Kuratowski_Function{A()-> set, F(set) -> set}:
@@ -120,7 +125,7 @@ scheme Kuratowski_Function{A()-> set, F(set) -> set}:
   for e st e in A() holds f.e in F(e)
  provided
 A1: for e st e in A() holds F(e) <> {}
-  proof
+proof
      defpred P[set,set] means $2 in F($1);
 A2:  now let e;
      consider fe being Element of F(e);
@@ -132,7 +137,7 @@ then A3:     F(e) <> {} by A1;
     end;
     consider f being Function such that
 A4:  dom f = A() and
-A5:  for e st e in A() holds P[e,f.e] from NonUniqFuncEx(A2);
+A5:  for e st e in A() holds P[e,f.e] from ZFREFLE1:sch 1(A2);
     reconsider f as ManySortedSet of A() by A4,Def3;
    take f; thus thesis by A5;
   end;
@@ -144,6 +149,7 @@ definition let I,X,Y;
 :Def5: for i st i in I holds X.i c= Y.i;
  reflexivity;
 end;
+
 
 definition let I be non empty set,X,Y be ManySortedSet of I;
  redefine pred X in Y;
@@ -162,20 +168,21 @@ definition let I be non empty set,X,Y be ManySortedSet of I;
  end;
 end;
 
+
 scheme PSeparation { I()-> set, A() -> ManySortedSet of I(), P[set,set] } :
   ex X being ManySortedSet of I() st
    for i being set st i in I()
     for e holds e in X.i iff e in A().i & P[i,e]
- proof
+proof
     defpred R[set,set] means for e holds e in $2 iff e in A().$1 & P[ $1,e];
 A1: now let i such that i in I();
     defpred Q[set] means P[i,$1];
-    ex u st for e holds e in u iff e in A().i & Q[e] from Separation;
+    ex u st for e holds e in u iff e in A().i & Q[e] from XBOOLE_0:sch 1;
     hence ex u st R[i,u];
    end;
    consider f being Function such that
 A2: dom f = I() and
-A3: for i st i in I() holds R[i,f.i] from NonUniqFuncEx(A1);
+A3: for i st i in I() holds R[i,f.i] from ZFREFLE1:sch 1(A1);
      f is ManySortedSet of I() by A2,Def3;
   hence thesis by A3;
  end;
@@ -204,7 +211,7 @@ definition
      deffunc F(set) = X.$1 \/ Y.$1;
      consider f being Function such that
 A1:   dom f = I and
-A2:   for i st i in I holds f.i = F(i) from Lambda;
+A2:   for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
        f is ManySortedSet of I by A1,Def3;
     hence thesis by A2;
    end;
@@ -229,7 +236,7 @@ A5:     i in I;
      deffunc F(set) = X.$1 /\ Y.$1;
      consider f being Function such that
 A6:   dom f = I and
-A7:    for i st i in I holds f.i = F(i) from Lambda;
+A7:    for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
        f is ManySortedSet of I by A6,Def3;
     hence thesis by A7;
    end;
@@ -254,7 +261,7 @@ A10:    i in I;
      deffunc F(set) = X.$1 \ Y.$1;
      consider f being Function such that
 A11:   dom f = I and
-A12:    for i st i in I holds f.i = F(i) from Lambda;
+A12:    for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
        f is ManySortedSet of I by A11,Def3;
     hence thesis by A12;
    end;
@@ -272,12 +279,16 @@ A15:     i in I;
   pred X overlaps Y means
 :Def10: for i st i in I holds X.i meets Y.i;
   symmetry;
-  antonym X does_not_overlap Y;
   pred X misses Y means
 :Def11: for i st i in I holds X.i misses Y.i;
   symmetry;
-  antonym X meets Y;
-end;
+  end;
+notation
+ let I;
+  let X,Y;
+  antonym X does_not_overlap Y for X overlaps Y ; antonym X meets Y for
+ X misses Y ; end;
+
 
 definition let I,X,Y;
  func X \+\ Y -> ManySortedSet of I equals
@@ -285,6 +296,7 @@ definition let I,X,Y;
  correctness;
  commutativity;
 end;
+
 
 theorem Th4:
  for i st i in I holds (X \+\ Y).i = X.i \+\ Y.i
@@ -439,6 +451,7 @@ A1:   X c= Y & Y c= X;
     hence thesis by Th3;
    end;
 end;
+
 
 canceled;
 
@@ -1383,10 +1396,12 @@ proof assume A1: X overlaps Y or X overlaps Z;
   then consider x such that A2:x in X & x in Y by Th11;
     x in X & x in Y \/ Z by A2,Th7;
   hence thesis by Th10;
+ end;
  suppose X overlaps Z;
   then consider x such that A3:x in X & x in Z by Th11;
     x in X & x in Y \/ Z by A3,Th7;
  hence thesis by Th10;
+end;
 end;
 
 canceled;
@@ -1596,6 +1611,7 @@ definition let I,X,Y;
  reflexivity;
 end;
 
+
 theorem
    X c= Y implies X [= Y
   proof assume
@@ -1711,7 +1727,8 @@ definition let I be set;
   end;
 end;
 
-definition let I be set;
+
+registration let I be set;
  cluster empty-yielding ManySortedSet of I;
  existence
   proof take [0]I; let i; assume
@@ -1729,7 +1746,8 @@ definition let I be set;
   end;
 end;
 
-definition let I be non empty set;
+
+registration let I be non empty set;
  cluster non-empty -> non empty-yielding ManySortedSet of I;
   coherence
    proof let M be ManySortedSet of I;
@@ -1749,6 +1767,7 @@ A2:   M is empty-yielding;
     thus M.i is empty by A2,Def15;
    end;
 end;
+
 
 theorem
    X is empty-yielding iff X = [0]I
@@ -1803,7 +1822,7 @@ A5:  i in I;
     deffunc G(set) = IFEQ(i,$1,e,f.$1);
     consider g being Function such that
 A6:  dom g = I and
-A7:  for u st u in I holds g.u = G(u) from Lambda;
+A7:  for u st u in I holds g.u = G(u) from FUNCT_1:sch 3;
     reconsider g as ManySortedSet of I by A6,Def3;
 A8:   g.i = IFEQ(i,i,e,f.i) by A5,A7 .= e by CQC_LANG:def 1;
    assume
@@ -1814,10 +1833,12 @@ A10:         u in I;
       per cases;
       suppose u = i;
        hence g.u in X.u by A8,A9;
+      end;
       suppose
 A11:         u <> i;
          g.u = IFEQ(i,u,e,f.u) by A7,A10 .= f.u by A11,CQC_LANG:def 1;
       hence g.u in X.u by A4,A10;
+     end;
      end;
     then g in Y by A2,Def14;
    hence e in Y.i by A5,A8,Def4;
@@ -1858,7 +1879,7 @@ A4:   i in I;
        deffunc G(set) = IFEQ(i,$1,e,f.$1);
        consider g being Function such that
 A5:     dom g = I and
-A6:     for u st u in I holds g.u = G(u) from Lambda;
+A6:     for u st u in I holds g.u = G(u) from FUNCT_1:sch 3;
        reconsider g as ManySortedSet of I by A5,Def3;
 A7:     g.i = IFEQ(i,i,e,f.i) by A4,A6 .= e by CQC_LANG:def 1;
       hereby assume
@@ -1869,10 +1890,12 @@ A9:         u in I;
           per cases;
           suppose u = i;
            hence g.u in X.u by A7,A8;
+          end;
           suppose
 A10:         u <> i;
              g.u = IFEQ(i,u,e,f.u) by A6,A9 .= f.u by A10,CQC_LANG:def 1;
           hence g.u in X.u by A3,A9;
+         end;
          end;
         then g in Y by A1;
        hence e in Y.i by A4,A7,Def4;
@@ -1885,12 +1908,14 @@ A12:         u in I;
          per cases;
          suppose u = i;
           hence g.u in Y.u by A7,A11;
+         end;
          suppose
 A13:         u <> i;
             f in X by A3,Def4;
           then A14:         f in Y by A1;
             g.u = IFEQ(i,u,e,f.u) by A6,A12 .= f.u by A13,CQC_LANG:def 1;
          hence g.u in Y.u by A12,A14,Def4;
+        end;
         end;
        then g in X by A1;
       hence e in X.i by A4,A7,Def4;

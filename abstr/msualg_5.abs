@@ -41,6 +41,7 @@ begin
       it c= EqR2;
   end;
 
+
   theorem :: MSUALG_5:2
    EqR1 "\/" EqR2 = EqCl (EqR1 \/ EqR2);
 
@@ -66,21 +67,60 @@ begin
      (the L_join of it).(x,y) = x "\/" y;
   end;
 
+
 begin
      :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
      ::              MANY  SORTED  EQUIVALENCE  RELATIONS             ::
      :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  definition
+  registration
    let I,M;
    cluster MSEquivalence_Relation-like ManySortedRelation of M;
+   existence
+   proof
+    deffunc F(set)=id (M.$1);
+    consider f be ManySortedSet of I such that A1:
+     for d st d in I holds
+      f.d = F(d) from MSUALG_1:sch 2;
+    A2: dom f = I by PBOOLE:def 3;
+      for x be set st x in dom f holds f.x is Relation
+    proof
+     let x be set;
+     assume x in dom f;
+     then f.x = id (M.x) by A1,A2;
+     hence thesis;
+    end;
+    then reconsider f as ManySortedRelation of I by MSUALG_4:def 1;
+      for i be set st i in I holds f.i is Relation of M.i,M.i
+    proof
+     let i be set;
+     assume i in I;
+     then f.i = id (M.i) by A1;
+     hence thesis;
+    end;
+    then reconsider f as ManySortedRelation of M,M by MSUALG_4:def 2;
+    reconsider f as ManySortedRelation of M;
+    A3: for i be set, R be Relation of M.i st
+     i in I & f.i = R holds
+      R is Equivalence_Relation of M.i
+    proof
+     let i be set,R be Relation of M.i;
+     assume i in I & f.i = R;
+     then R = id (M.i) by A1;
+     hence thesis;
+    end;
+    take f;
+    thus thesis by A3,MSUALG_4:def 3;
+   end;
   end;
+
 
   definition
    let I,M;
    mode Equivalence_Relation of M is
        MSEquivalence_Relation-like ManySortedRelation of M;
   end;
+
 
   reserve I for non empty set;
   reserve M for ManySortedSet of I;
@@ -93,6 +133,7 @@ begin
 :: MSUALG_5:def 3
      for i being Element of I holds it.i = EqCl(R.i);
   end;
+
 
   theorem :: MSUALG_5:5
      EqCl EqR = EqR;
@@ -112,6 +153,7 @@ begin
       it = EqCl EqR3;
    commutativity;
   end;
+
 
   theorem :: MSUALG_5:6
    EqR1 \/ EqR2 c= EqR1 "\/" EqR2;
@@ -154,17 +196,20 @@ begin
      (the L_join of it).(x,y) = x "\/" y;
   end;
 
+
 begin
      :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
      ::    LATTICE  OF  CONGRUENCES  IN  A  MANY  SORTED  ALGEBRA     ::
      :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  definition
+  registration
    let S be non empty ManySortedSign;
    let A be MSAlgebra over S;
    cluster MSEquivalence-like ->
           MSEquivalence_Relation-like ManySortedRelation of A;
+   coherence by MSUALG_4:def 5;
   end;
+
 
   reserve S for non void non empty ManySortedSign;
   reserve A for non-empty MSAlgebra over S;
@@ -219,16 +264,94 @@ begin
       x is MSCongruence of A;
   end;
 
+
   theorem :: MSUALG_5:19
    id (the Sorts of A) is MSCongruence of A;
 
   theorem :: MSUALG_5:20
    [|the Sorts of A,the Sorts of A|] is MSCongruence of A;
 
-  definition
+  registration
    let S, A;
    cluster CongrLatt A -> bounded;
+   coherence
+   proof
+      ex c being Element of CongrLatt A st
+     for a being Element of CongrLatt A holds
+       c"/\"a = c & a"/\"c = c
+    proof
+     reconsider c' = id (the Sorts of A) as MSCongruence of A by Th19;
+     reconsider c = c' as Element of CongrLatt A by Def6;
+     take c;
+     let a be Element of CongrLatt A;
+     reconsider a' = a as MSCongruence of A by Def6;
+     A1: the L_meet of CongrLatt A = (the L_meet of EqRelLatt the Sorts of A) |
+                    [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                          by NAT_LAT:def 16;
+     A2: [c,a] in [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                             by ZFMISC_1:106;
+     A3: now let i be set; assume A4: i in the carrier of S;
+      then reconsider i' = i as Element of S;
+      reconsider a2 = a'.i' as Equivalence_Relation of (the Sorts of A).i;
+      thus (c' /\ a').i = c'.i /\ a'.i by A4,PBOOLE:def 8
+         .= id ((the Sorts of A).i) /\ a2 by MSUALG_3:def 1
+         .= id ((the Sorts of A).i) by EQREL_1:17
+         .= c'.i by A4,MSUALG_3:def 1;
+     end;
+     thus c"/\"a = (the L_meet of CongrLatt A).(c,a) by LATTICES:def 2
+       .= (the L_meet of CongrLatt A).[c,a] by BINOP_1:def 1
+       .= (the L_meet of EqRelLatt the Sorts of A).[c,a] by A1,A2,FUNCT_1:72
+       .= (the L_meet of EqRelLatt the Sorts of A).(c,a) by BINOP_1:def 1
+       .= c' /\ a' by Def5
+       .= c by A3,PBOOLE:3;
+     hence a "/\" c = c;
+    end;
+    then A5: CongrLatt A is lower-bounded by LATTICES:def 13;
+      ex c being Element of CongrLatt A st
+     for a being Element of CongrLatt A holds
+      c"\/"a = c & a"\/"c = c
+    proof
+     reconsider c' = [|the Sorts of A,the Sorts of A|] as MSCongruence of A
+       by Th20;
+     reconsider c = c' as Element of CongrLatt A by Def6;
+     take c;
+     let a be Element of CongrLatt A;
+     reconsider a' = a as MSCongruence of A by Def6;
+     A6: the L_join of CongrLatt A = (the L_join of EqRelLatt the Sorts of A) |
+                   [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                          by NAT_LAT:def 16;
+     A7: [c,a] in [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                             by ZFMISC_1:106;
+     A8: now let i be set; assume A9: i in the carrier of S;
+      then reconsider i' = i as Element of S;
+      consider K1 be ManySortedRelation of the Sorts of A such that
+       A10: K1 = c' \/ a' & c' "\/" a' = EqCl K1 by Def4;
+      reconsider K2 = c'.i' , a2 = a'.i' as
+                                  Equivalence_Relation of (the Sorts of A).i;
+        (c' \/ a').i = c'.i \/ a'.i by A9,PBOOLE:def 7
+           .= [:(the Sorts of A).i,(the Sorts of A).i:] \/ a'.i
+                                                         by A9,PRALG_2:def 9
+           .= nabla (the Sorts of A).i \/ a2 by EQREL_1:def 1
+           .= nabla (the Sorts of A).i by Th4
+           .= [:(the Sorts of A).i,(the Sorts of A).i:] by EQREL_1:def 1
+           .= c'.i by A9,PRALG_2:def 9;
+      hence (c' "\/" a').i = EqCl K2 by A10,Def3
+         .= c'.i by Th3;
+     end;
+     thus c"\/"a = (the L_join of CongrLatt A).(c,a) by LATTICES:def 1
+           .= (the L_join of CongrLatt A).[c,a] by BINOP_1:def 1
+           .= (the L_join of EqRelLatt the Sorts of A).[c,a]
+                                                        by A6,A7,FUNCT_1:72
+           .= (the L_join of EqRelLatt the Sorts of A).(c,a) by BINOP_1:def 1
+           .= c' "\/" a' by Def5
+           .= c by A8,PBOOLE:3;
+      hence a"\/"c = c;
+    end;
+    then CongrLatt A is upper-bounded by LATTICES:def 14;
+    hence CongrLatt A is bounded by A5,LATTICES:def 15;
+   end;
   end;
+
 
   theorem :: MSUALG_5:21
      Bottom CongrLatt A = id (the Sorts of A);

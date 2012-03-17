@@ -3,8 +3,6 @@ XBOOLE_0
 ZFMISC_1
 SUBSET_1
 #
-Irrel
-#
 M1 W1 ;;M1 W1 ;;M1 ;M1 ;;
 R1 ËM2 F1 ;;;F3 B1 ;P1 B1 ;ËM2 F2 ;;M2 F1 ;;;F4 B1 B2 ;P1 B2 ;;ùM2 F2 ;;ùM2 F1 ;;R1 F3 B2 ;F4 B1 B2 ;;;
 #

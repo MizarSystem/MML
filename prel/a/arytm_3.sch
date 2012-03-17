@@ -9,9 +9,6 @@ ZFMISC_1
 SUBSET_1
 ARYTM_3
 #
-Omega_Ind
-DisNat
-#
 ;
 M1 V8 ;V15 ;;P1 B1 ;P1 K5 ;;M1 V8 ;V15 ;;ª&P1 B1 ;ªP1 K22 B1 ;;;;
 #

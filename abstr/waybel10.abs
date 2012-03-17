@@ -24,34 +24,120 @@ environ
 
 begin :: Preliminaries
 
-scheme SubrelstrEx {L() -> non empty RelStr, P[set], a() -> set}:
+scheme :: WAYBEL10:sch 1
+ SubrelstrEx {L() -> non empty RelStr, P[set], a() -> set}:
  ex S being non empty full strict SubRelStr of L() st
   for x being Element of L() holds x is Element of S iff P[x]
  provided
     P[a()] and
-    a() in the carrier of L();
+    a() in the carrier of L()
+proof   defpred p[set] means P[$1];
+    consider A being set such that
+A3:  for x being set holds x in A iff x in the carrier of L() & p[x]
+     from XBOOLE_0:sch 1;
+      A c= the carrier of L() proof let x be set; thus thesis by A3; end;
+   then reconsider A as non empty Subset of L() by A1,A2,A3;
+   set S = subrelstr A;
+A4:  the carrier of S = A by YELLOW_0:def 15;
+   take S; let x be Element of L();
+   thus x is Element of S implies P[x] by A3,A4;
+   assume P[x]; then x in A by A3;
+   hence thesis by A4;
+  end;
 
-scheme RelstrEq {L1, L2() -> non empty RelStr, P[set], Q[set,set]}:
+scheme :: WAYBEL10:sch 2
+ RelstrEq {L1, L2() -> non empty RelStr, P[set], Q[set,set]}:
  the RelStr of L1() = the RelStr of L2()
   provided
   for x being set holds x is Element of L1() iff P[x] and
   for x being set holds x is Element of L2() iff P[x] and
   for a,b being Element of L1() holds a <= b iff Q[a,b] and
-  for a,b being Element of L2() holds a <= b iff Q[a,b];
+  for a,b being Element of L2() holds a <= b iff Q[a,b]
+proof   set S1 = L1(), S2 = L2();
+A5:  the carrier of L1() = the carrier of L2()
+     proof
+      hereby let x be set; assume x in the carrier of S1;
+       then reconsider y = x as Element of S1;
+          P[y] by A1;
+        then x is Element of S2 by A2;
+       hence x in the carrier of S2;
+      end;
+      let x be set; assume x in the carrier of S2;
+      then reconsider y = x as Element of S2;
+         P[y] by A2;
+       then x is Element of S1 by A1;
+      hence thesis;
+     end;
+      the InternalRel of L1() = the InternalRel of L2()
+     proof let x,y be set;
+      hereby assume
+A6:      [x,y] in the InternalRel of S1;
+        then x in the carrier of S1 & y in the carrier of S1 by ZFMISC_1:106;
+       then reconsider x1 = x, y1 = y as Element of S1;
+       reconsider x2 = x1, y2 = y1 as Element of S2 by A5;
+          x1 <= y1 by A6,ORDERS_1:def 9;
+        then Q[x1,y1] by A3;
+        then x2 <= y2 by A4;
+       hence [x,y] in the InternalRel of S2 by ORDERS_1:def 9;
+      end;
+      assume
+A7:     [x,y] in the InternalRel of S2;
+       then x in the carrier of S2 & y in the carrier of S2 by ZFMISC_1:106;
+      then reconsider x2 = x, y2 = y as Element of S2;
+      reconsider x1 = x2, y1 = y2 as Element of S1 by A5;
+         x2 <= y2 by A7,ORDERS_1:def 9;
+       then Q[x2,y2] by A4;
+       then x1 <= y1 by A3;
+      hence [x,y] in the InternalRel of S1 by ORDERS_1:def 9;
+     end;
+   hence thesis by A5;
+  end;
 
-scheme SubrelstrEq1 {L() -> non empty RelStr,
+scheme :: WAYBEL10:sch 3
+ SubrelstrEq1 {L() -> non empty RelStr,
                     S1, S2() -> non empty full SubRelStr of L(), P[set]}:
  the RelStr of S1() = the RelStr of S2()
   provided
   for x being set holds x is Element of S1() iff P[x] and
-  for x being set holds x is Element of S2() iff P[x];
+  for x being set holds x is Element of S2() iff P[x]
+proof   defpred p[set] means P[$1];
+A3:  for x being set holds x is Element of S1() iff p[x] by A1;
+A4:  for x being set holds x is Element of S2() iff p[x] by A2;
+    defpred Q[set,set] means [$1,$2] in the InternalRel of L();
+A5:  now let a,b be Element of S1();
+     reconsider x = a, y = b as Element of L() by YELLOW_0:59;
+        a in the carrier of S1() & b in the carrier of S1() &
+      (x <= y iff [x,y] in the InternalRel of L()) by ORDERS_1:def 9;
+     hence a <= b iff Q[a,b] by YELLOW_0:60,61;
+    end;
+A6:  now let a,b be Element of S2();
+     reconsider x = a, y = b as Element of L() by YELLOW_0:59;
+        a in the carrier of S2() & b in the carrier of S2() &
+      (x <= y iff [x,y] in the InternalRel of L()) by ORDERS_1:def 9;
+     hence a <= b iff Q[a,b] by YELLOW_0:60,61;
+    end;
+   thus thesis from RelstrEq(A3,A4,A5,A6);
+  end;
 
-scheme SubrelstrEq2 {L() -> non empty RelStr,
+scheme :: WAYBEL10:sch 4
+ SubrelstrEq2 {L() -> non empty RelStr,
                     S1, S2() -> non empty full SubRelStr of L(), P[set]}:
  the RelStr of S1() = the RelStr of S2()
   provided
   for x being Element of L() holds x is Element of S1() iff P[x] and
-  for x being Element of L() holds x is Element of S2() iff P[x];
+  for x being Element of L() holds x is Element of S2() iff P[x]
+proof
+    defpred p[set] means P[$1] & $1 is Element of L();
+A3:  now let x be set;
+        x is Element of S1() implies x is Element of L() by YELLOW_0:59;
+     hence x is Element of S1() iff p[x] by A1;
+    end;
+A4:  now let x be set;
+        x is Element of S2() implies x is Element of L() by YELLOW_0:59;
+     hence x is Element of S2() iff p[x] by A2;
+    end;
+   thus thesis from SubrelstrEq1(A3,A4);
+  end;
 
 theorem :: WAYBEL10:1
  for R,Q being Relation holds
@@ -74,46 +160,96 @@ definition
  redefine func S opp -> strict full SubRelStr of L opp;
 end;
 
-definition
+
+registration
  let X be set, L be non empty RelStr;
  cluster X --> L -> non-Empty;
+ coherence
+  proof let R be 1-sorted; assume
+A1:  R in rng (X --> L);
+      rng (X --> L) c= {L} by FUNCOP_1:19;
+   hence thesis by A1,TARSKI:def 1;
+  end;
 end;
 
-definition
+
+registration
  let S be RelStr, T be non empty reflexive RelStr;
  cluster monotone map of S,T;
+ existence
+  proof consider c being Element of T;
+   take f = S --> c;
+   let x,y be Element of S; assume [x,y] in the InternalRel of S;
+then A1:  x in the carrier of S & y in the carrier of S by ZFMISC_1:106;
+A2:  f = (the carrier of S) --> c by BORSUK_1:def 3;
+   let a,b be Element of T; assume a = f.x & b = f.y;
+    then a = c & b = c by A1,A2,FUNCOP_1:13;
+   hence a <= b;
+  end;
 end;
 
-definition
+
+registration
  let L be non empty RelStr;
  cluster projection -> monotone idempotent map of L,L;
+ coherence by WAYBEL_1:def 13;
 end;
 
-definition
+
+registration
  let S,T be non empty reflexive RelStr;
  let f be monotone map of S,T;
  cluster corestr f -> monotone;
+ coherence
+  proof let x,y be Element of S; assume x <= y;
+    then the carrier of Image f <> {} & f.x <= f.y &
+    f.x = (corestr f).x & f.y = (corestr f).y by WAYBEL_1:32,def 2;
+   hence thesis by YELLOW_0:61;
+  end;
 end;
 
-definition
+
+registration
  let L be 1-sorted;
  cluster id L -> one-to-one;
+ coherence
+  proof id L = id the carrier of L by GRCAT_1:def 11;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let L be non empty reflexive RelStr;
  cluster id L -> sups-preserving infs-preserving;
+ coherence
+  proof
+A1:  id L = id the carrier of L by GRCAT_1:def 11;
+   thus id L is sups-preserving
+    proof let X be Subset of L; assume
+A2:    ex_sup_of X,L;
+        (id L).sup X = sup X & (id L).:X = X by A1,BORSUK_1:3,TMAP_1:91;
+     hence ex_sup_of (id L).:X,L & sup ((id L).:X) = (id L).sup X by A2;
+    end;
+   let X be Subset of L; assume
+A3:  ex_inf_of X,L;
+      (id L).inf X = inf X & (id L).:X = X by A1,BORSUK_1:3,TMAP_1:91;
+   hence thesis by A3;
+  end;
 end;
+
 
 theorem :: WAYBEL10:5
    for L being RelStr, S being Subset of L
   holds id S is map of subrelstr S, L &
    for f being map of subrelstr S, L st f = id S holds f is monotone;
 
-definition
+registration
  let L be non empty reflexive RelStr;
  cluster sups-preserving infs-preserving closure kernel one-to-one map of L,L;
+ existence proof take id L; thus thesis; end;
 end;
+
 
 theorem :: WAYBEL10:6
  for L being non empty reflexive RelStr, c being closure map of L,L
@@ -130,6 +266,7 @@ definition
    f|the carrier of R;
 end;
 
+
 theorem :: WAYBEL10:7
  for S,T being RelStr, R being SubRelStr of S
  for f being Function of the carrier of S, the carrier of T
@@ -140,12 +277,22 @@ theorem :: WAYBEL10:8
  for S,T being RelStr, f being map of S,T st f is one-to-one
  for R being SubRelStr of S holds f|R is one-to-one;
 
-definition
+registration
  let S,T be non empty reflexive RelStr;
  let f be monotone map of S,T;
  let R be SubRelStr of S;
  cluster f|R -> monotone;
+ coherence
+  proof let x,y be Element of R; assume
+A1:  x <= y; then [x,y] in the InternalRel of R by ORDERS_1:def 9;
+then A2:  x in the carrier of R & y in the carrier of R by ZFMISC_1:106;
+      the carrier of R c= the carrier of S by YELLOW_0:def 13;
+   then reconsider a = x, b = y as Element of S by A2;
+      a <= b & f.a = (f|R).x & f.b = (f|R).y by A1,A2,Th7,YELLOW_0:60;
+   hence thesis by WAYBEL_1:def 2;
+  end;
 end;
+
 
 theorem :: WAYBEL10:9
  for S,T being non empty RelStr, R being non empty SubRelStr of S
@@ -154,10 +301,17 @@ theorem :: WAYBEL10:9
 
 begin :: The lattice of closure operators
 
-definition
+registration
  let S be RelStr, T be non empty reflexive RelStr;
  cluster MonMaps(S,T) -> non empty;
+ coherence
+  proof consider f being monotone map of S,T;
+      f in Funcs (the carrier of S, the carrier of T) by FUNCT_2:11;
+    then f in the carrier of MonMaps(S,T) by YELLOW_1:def 6;
+   hence thesis by STRUCT_0:def 1;
+  end;
 end;
+
 
 theorem :: WAYBEL10:10
  for S being RelStr, T being non empty reflexive RelStr, x being set holds
@@ -170,6 +324,7 @@ definition
 
   for f being map of L,L holds f is Element of it iff f is closure;
 end;
+
 
 theorem :: WAYBEL10:11
  for L being non empty reflexive RelStr, x being set holds
@@ -208,43 +363,196 @@ definition
    ex R being RelStr st b = R & a is SubRelStr of R;
 end;
 
+
 theorem :: WAYBEL10:16
  for L,R being RelStr
  for x,y being Element of Sub L st y = R holds
    x <= y iff x is SubRelStr of R;
 
-definition
+registration
  let L be RelStr;
  cluster Sub L -> reflexive antisymmetric transitive;
+ coherence
+  proof set R = Sub L;
+   thus R is reflexive
+    proof let x be Element of R;
+     reconsider A = x as strict SubRelStr of L by Def3;
+        A is SubRelStr of A by YELLOW_0:def 13;
+     hence x <= x by Th16;
+    end;
+   thus R is antisymmetric
+    proof let x,y be Element of R;
+     reconsider A = x, B = y as strict SubRelStr of L by Def3;
+     assume x <= y & y <= x;
+      then A is SubRelStr of B & B is SubRelStr of A by Th16;
+      then the carrier of A c= the carrier of B &
+      the carrier of B c= the carrier of A &
+      the InternalRel of A c= the InternalRel of B &
+      the InternalRel of B c= the InternalRel of A by YELLOW_0:def 13;
+      then the carrier of A = the carrier of B &
+      the InternalRel of A = the InternalRel of B by XBOOLE_0:def 10;
+     hence thesis;
+    end;
+   thus R is transitive
+    proof let x,y,z be Element of R;
+     reconsider A = x, B = y, C = z as strict SubRelStr of L by Def3;
+     assume x <= y & y <= z;
+      then A is SubRelStr of B & B is SubRelStr of C by Th16;
+      then the carrier of A c= the carrier of B &
+      the carrier of B c= the carrier of C &
+      the InternalRel of A c= the InternalRel of B &
+      the InternalRel of B c= the InternalRel of C by YELLOW_0:def 13;
+      then the carrier of A c= the carrier of C &
+      the InternalRel of A c= the InternalRel of C by XBOOLE_1:1;
+      then A is SubRelStr of C by YELLOW_0:def 13;
+     hence thesis by Th16;
+    end;
+  end;
 end;
 
-definition
+
+registration
  let L be RelStr;
  cluster Sub L -> complete;
+ coherence
+  proof
+      now let X be Subset of Sub L;
+        now defpred P[set] means
+          ex R being RelStr st R in X & $1 in the carrier of R;
+          consider Y being set such that
+A1:      for x being set holds x in Y iff x in the carrier of L & P[x]
+          from XBOOLE_0:sch 1;
+A2:      Y c= the carrier of L proof let x be set; thus thesis by A1; end;
+       defpred Q[set] means
+         ex R being RelStr st R in X & $1 in the InternalRel of R;
+       consider S being set such that
+A3:      for x being set holds x in S iff x in the InternalRel of L & Q[x]
+          from XBOOLE_0:sch 1;
+A4:      S c= the InternalRel of L proof let x be set; thus thesis by A3; end;
+          S c= [:Y,Y:]
+         proof let x be set; assume x in S;
+          then consider R being RelStr such that
+A5:         R in X & x in the InternalRel of R by A3;
+             the carrier of R c= Y
+            proof let x be set;
+                R is Element of Sub L by A5;
+              then R is SubRelStr of L by Def3;
+then A6:            the carrier of R c= the carrier of L by YELLOW_0:def 13;
+             assume x in the carrier of R;
+             hence thesis by A1,A5,A6;
+            end;
+           then [:the carrier of R, the carrier of R:] c= [:Y,Y:] &
+           x in [:the carrier of R, the carrier of R:] by A5,ZFMISC_1:119;
+          hence thesis;
+         end;
+       then reconsider S as Relation of Y by RELSET_1:def 1;
+       reconsider A = RelStr(#Y, S#)
+ as SubRelStr of L by A2,A4,YELLOW_0:def 13;
+       reconsider a = A as Element of Sub L by Def3;
+       take a;
+       thus X is_<=_than a
+        proof let b be Element of Sub L; assume
+A7:        b in X;
+         reconsider R = b as strict SubRelStr of L by Def3;
+A8:        the carrier of R c= Y
+           proof let x be set; assume
+A9:          x in the carrier of R;
+               the carrier of R c= the carrier of L by YELLOW_0:def 13;
+            hence thesis by A1,A7,A9;
+           end;
+            the InternalRel of R c= S
+           proof let x,y be set; assume
+A10:          [x,y] in the InternalRel of R;
+               the InternalRel of R c= the InternalRel of L
+              by YELLOW_0:def 13;
+            hence thesis by A3,A7,A10;
+           end;
+          then R is SubRelStr of A by A8,YELLOW_0:def 13;
+         hence b <= a by Th16;
+        end;
+       let b be Element of Sub L; assume
+A11:      X is_<=_than b;
+       reconsider B = b as strict SubRelStr of L by Def3;
+A12:      Y c= the carrier of B
+         proof let x be set; assume x in Y;
+          then consider R being RelStr such that
+A13:         R in X & x in the carrier of R by A1;
+          reconsider c = R as Element of Sub L by A13;
+             c <= b by A11,A13,LATTICE3:def 9;
+           then R is SubRelStr of B by Th16;
+           then the carrier of R c= the carrier of B by YELLOW_0:def 13;
+          hence thesis by A13;
+         end;
+          S c= the InternalRel of B
+         proof let x,y be set; assume [x,y] in S;
+          then consider R being RelStr such that
+A14:         R in X & [x,y] in the InternalRel of R by A3;
+          reconsider c = R as Element of Sub L by A14;
+             c <= b by A11,A14,LATTICE3:def 9;
+           then R is SubRelStr of B by Th16;
+           then the InternalRel of R c= the InternalRel of B by YELLOW_0:def 13
+;
+          hence thesis by A14;
+         end;
+        then a is SubRelStr of B by A12,YELLOW_0:def 13;
+       hence a <= b by Th16;
+      end;
+     hence ex_sup_of X, Sub L by YELLOW_0:15;
+    end;
+   hence thesis by YELLOW_0:53;
+  end;
 end;
 
-definition
+
+registration
  let L be complete LATTICE;
  cluster infs-inheriting -> non empty SubRelStr of L;
+ coherence
+  proof let S be SubRelStr of L such that
+A1:  S is infs-inheriting;
+   consider X being Subset of S;
+      ex_inf_of X,L by YELLOW_0:17;
+    then "/\"(X,L) in the carrier of S by A1,YELLOW_0:def 18;
+   hence thesis by STRUCT_0:def 1;
+  end;
  cluster sups-inheriting -> non empty SubRelStr of L;
+ coherence
+  proof let S be SubRelStr of L such that
+A2:  S is sups-inheriting;
+   consider X being Subset of S;
+      ex_sup_of X,L by YELLOW_0:17;
+    then "\/"(X,L) in the carrier of S by A2,YELLOW_0:def 19;
+   hence thesis by STRUCT_0:def 1;
+  end;
 end;
+
 
 definition
  let L be RelStr;
  mode System of L is full SubRelStr of L;
 end;
 
-definition
+
+notation
  let L be non empty RelStr;
  let S be System of L;
- redefine attr S is infs-inheriting;
- synonym S is closure;
-end;
+ synonym S is closure for S is infs-inheriting;
+ end;
 
-definition
+
+registration
  let L be non empty RelStr;
  cluster subrelstr [#]L -> infs-inheriting sups-inheriting;
+ coherence
+  proof set SL = subrelstr [#]L;
+A1:  the carrier of SL = [#]L by YELLOW_0:def 15 .= the carrier of L
+      by PRE_TOPC:12;
+   thus SL is infs-inheriting
+    proof let X be Subset of SL; thus thesis by A1; end;
+   let X be Subset of SL; thus thesis by A1;
+  end;
 end;
+
 
 definition
  let L be non empty RelStr;
@@ -254,6 +562,7 @@ definition
   for R being strict SubRelStr of L holds
    R is Element of it iff R is infs-inheriting full;
 end;
+
 
 theorem :: WAYBEL10:17
  for L being non empty RelStr, x being set holds
@@ -266,11 +575,13 @@ theorem :: WAYBEL10:18
 
 begin :: Isomorphism between closure operators and closure systems
 
-definition
+registration
  let L be non empty Poset;
  let h be closure map of L,L;
  cluster Image h -> infs-inheriting;
+ coherence by WAYBEL_1:56;
 end;
+
 
 definition
  let L be non empty Poset;
@@ -279,6 +590,7 @@ definition
 
   for c being closure map of L,L holds it.c = Image c;
 end;
+
 
 definition
  let L be non empty RelStr;
@@ -290,11 +602,56 @@ definition
  the carrier of S,L);
 end;
 
-definition
+
+registration
  let L be complete LATTICE;
  let S be closure System of L;
  cluster closure_op S -> closure;
+ coherence
+  proof set c = closure_op S;
+   reconsider cc = c*c as map of L,L;
+A1: now let x be Element of L; thus
+A2:    (id L).x = x by TMAP_1:91;
+A3:    c.x = "/\" ((uparrow x) /\ the carrier of S,L) by Def6;
+        x is_<=_than uparrow x & (uparrow x) /\ the carrier of S c= uparrow x
+       by XBOOLE_1:17,YELLOW_2:2;
+      then x is_<=_than (uparrow x) /\ the carrier of S by YELLOW_0:9;
+     hence (id L).x <= c.x by A2,A3,YELLOW_0:33;
+    end;
+      now let x be Element of L;
+     set y = c.x;
+A4:    y = "/\"((uparrow x) /\ the carrier of S,L) by Def6;
+A5:    c.y = "/\"((uparrow y) /\ the carrier of S,L) by Def6;
+     set X = (uparrow x) /\ the carrier of S;
+        X c= the carrier of S by XBOOLE_1:17;
+     then reconsider X as Subset of S;
+A6:    y <= y & ex_inf_of X,L by YELLOW_0:17;
+      then "/\"(X,L) in the carrier of S by YELLOW_0:def 18;
+      then y in uparrow y & y = inf X & inf X in the carrier of S
+       by A4,A6,WAYBEL_0:18,YELLOW_0:64;
+      then y in (uparrow y) /\ the carrier of S by XBOOLE_0:def 3;
+then A7:    c.y <= y by A5,YELLOW_2:24;
+A8:    c.y >= (id L).y & (id L).y = y by A1;
+     thus cc.x = c.y by FUNCT_2:21 .= c.x by A7,A8,ORDERS_1:25;
+    end;
+   hence c*c = c by YELLOW_2:9;
+   hereby let x,y be Element of L; assume x <= y;
+     then uparrow y c= uparrow x by WAYBEL_0:22;
+     then (uparrow y) /\ the carrier of S c= (uparrow x) /\ the carrier of S &
+     ex_inf_of (uparrow x) /\ the carrier of S, L &
+     ex_inf_of (uparrow y) /\ the carrier of S, L &
+     c.x = "/\"((uparrow x) /\ the carrier of S,L) &
+     c.y = "/\"((uparrow y) /\
+ the carrier of S,L) by Def6,XBOOLE_1:26,YELLOW_0:17;
+    hence c.x <= c.y by YELLOW_0:35;
+   end;
+   let x be set; assume x in the carrier of L;
+   then reconsider x as Element of L;
+      (id L).x <= c.x by A1;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: WAYBEL10:19
  for L being complete LATTICE
@@ -305,10 +662,19 @@ theorem :: WAYBEL10:20
  for L being complete LATTICE
  for c being closure map of L,L holds closure_op Image c = c;
 
-definition
+registration
  let L be complete LATTICE;
  cluster ClImageMap L -> one-to-one;
+ coherence
+  proof set f = ClImageMap L;
+   let x,y be Element of ClOpers L;
+   reconsider a = x, b = y as closure map of L,L by Th11;
+   assume f.x = f.y;
+    then Image a = f.y by Def5 .= Image b by Def5;
+   hence x = closure_op Image b by Th20 .= y by Th20;
+  end;
 end;
+
 
 theorem :: WAYBEL10:21
  for L being complete LATTICE holds
@@ -319,10 +685,45 @@ theorem :: WAYBEL10:22
  for S being strict closure System of L holds
    (ClImageMap L)".S = closure_op S;
 
-definition
+registration
  let L be complete LATTICE;
  cluster ClImageMap L -> isomorphic;
+ correctness
+  proof set S = ClOpers L, T = (ClosureSystems L) opp;
+   set f = ClImageMap L;
+   reconsider g = f" as map of T,S by Th21;
+   per cases; case S is non empty & T is non empty;
+    thus f is one-to-one;
+    thus f is monotone
+     proof let x,y be Element of S;
+      reconsider c = x, d = y as closure map of L,L by Th11;
+      assume x <= y; then c <= d by Th13;
+then A1:     Image d is SubRelStr of Image c by Th15;
+A2:     f.x = Image c & f.y = Image d by Def5;
+         ~(f.x) = f.x & ~(f.y) = f.y by LATTICE3:def 7;
+       then ~(f.x) >= ~(f.y) by A1,A2,Th18;
+      hence f.x <= f.y by YELLOW_7:1;
+     end;
+    take g; thus g = f";
+    thus g is monotone
+     proof let x,y be Element of T;
+      reconsider A = ~x, B = ~y as infs-inheriting full strict SubRelStr of L
+        by Th17;
+      assume x <= y; then ~y <= ~x by YELLOW_7:1;
+then A3:     B is SubRelStr of A by Th18;
+         A = Image closure_op A & B = Image closure_op B by Th19;
+then A4:     closure_op A <= closure_op B by A3,Th15;
+A5:     g.A = closure_op A & g.B = closure_op B by Th22;
+         A = x & B = y by LATTICE3:def 7;
+      hence g.x <= g.y by A4,A5,Th13;
+     end;
+   end;
+   case S is empty or T is empty;
+    hence S is empty & T is empty;
+  end;
+  end;
 end;
+
 
 theorem :: WAYBEL10:23
    for L being complete LATTICE holds
@@ -352,17 +753,24 @@ theorem :: WAYBEL10:26
   iff
    Image h is directed-sups-inheriting;
 
-definition
+registration
  let L be complete LATTICE;
  let S be directed-sups-inheriting closure System of L;
  cluster closure_op S -> directed-sups-preserving;
+ coherence by Th25;
 end;
 
-definition
+
+registration
  let L be complete LATTICE;
  let h be directed-sups-preserving closure map of L,L;
  cluster Image h -> directed-sups-inheriting;
+ coherence
+  proof h = closure_op Image h by Th20;
+   hence thesis by Th25;
+  end;
 end;
+
 
 definition
  let L be non empty reflexive RelStr;
@@ -372,6 +780,7 @@ definition
   for f being closure map of L,L holds
     f is Element of it iff f is directed-sups-preserving;
 end;
+
 
 theorem :: WAYBEL10:27
  for L being non empty reflexive RelStr, x being set holds
@@ -388,6 +797,7 @@ definition
    R is Element of it iff R is directed-sups-inheriting;
 end;
 
+
 theorem :: WAYBEL10:28
  for L being non empty RelStr, x being set holds
    x is Element of Subalgebras L iff
@@ -397,10 +807,42 @@ theorem :: WAYBEL10:29
  for L being complete LATTICE holds
   Image ((ClImageMap L)|DsupClOpers L) = (Subalgebras L) opp;
 
-definition
+registration
  let L be complete LATTICE;
  cluster corestr ((ClImageMap L)|DsupClOpers L) -> isomorphic;
+ coherence
+  proof set f = ClImageMap L, R = DsupClOpers L, g = corestr (f|R);
+   per cases;
+   case DsupClOpers L is non empty & Image (f|R) is non empty;
+      f|R is one-to-one by Th8;
+   hence g is one-to-one monotone by WAYBEL_1:32;
+   consider f' being map of (ClosureSystems L) opp,ClOpers L such that
+A1:  f' = f" & f' is monotone by WAYBEL_0:def 38;
+   reconsider h = f'|Image (f|R) as map of Image (f|R), R by A1,Th9;
+   take h; thus h = (f|R)" by A1,Th9 .= g" by WAYBEL_1:32;
+   let x,y be Element of Image (f|R);
+   reconsider a = x, b = y as Element of (ClosureSystems L) opp by YELLOW_0:59;
+   reconsider A = ~a, B = ~b as strict closure System of L by Th17;
+   reconsider i = closure_op A, j = closure_op B as Element of ClOpers L
+     by Th11;
+      A = a & B = b by LATTICE3:def 7;
+    then f'.x = i & f'.y = j by A1,Th22;
+then A2:  h.x = i & h.y = j by Th7;
+   assume x <= y;
+    then a <= b by YELLOW_0:60;
+    then ~a >= ~b by YELLOW_7:1;
+    then B is SubRelStr of A & A = Image closure_op A & B = Image closure_op B
+     by Th18,Th19;
+    then closure_op A <= closure_op B by Th15;
+    then i <= j & the carrier of R is non empty by Th13;
+   hence h.x <= h.y by A2,YELLOW_0:61;
+   end;
+   case DsupClOpers L is empty or Image (f|R) is empty;
+   hence thesis;
+  end;
+  end;
 end;
+
 
 theorem :: WAYBEL10:30
    for L being complete LATTICE holds

@@ -103,13 +103,38 @@ definition
  redefine func la .--> a -> FinPartState of SCMPDS;
 end;
 
+
 theorem :: SCMPDS_3:16
  for p being autonomic FinPartState of SCMPDS st DataPart p <> {}
  holds IC SCMPDS in dom p;
 
-definition
+registration
  cluster autonomic non programmed FinPartState of SCMPDS;
+ existence
+ proof
+     2 = 2*0+2;
+   then reconsider il=2 as Instruction-Location of SCMPDS by SCMPDS_2:1,def 1;
+   set P = (IC SCMPDS, il)-->(il, halt SCMPDS);
+A1: {IC SCMPDS}-->il = IC SCMPDS .--> il by CQC_LANG:def 2
+             .= Start-At il by AMI_3:def 12;
+     P = ({IC SCMPDS}-->il) +* ({il}-->halt SCMPDS) by FUNCT_4:def 4
+    .= Start-At il +* (il .--> halt SCMPDS) by A1,CQC_LANG:def 2;
+   then reconsider P as FinPartState of SCMPDS;
+   take P;
+   A2: ObjectKind il = the Instructions of SCMPDS by AMI_1:def 14;
+      ObjectKind IC SCMPDS = the Instruction-Locations of SCMPDS
+              by AMI_1:def 11;
+   hence P is autonomic by A2,AMI_1:67;
+      now
+       dom P = { IC SCMPDS, il } by FUNCT_4:65;
+then A3:  IC SCMPDS in dom P by TARSKI:def 2;
+     assume dom P c= the Instruction-Locations of SCMPDS;
+     hence contradiction by A3,AMI_1:48;
+    end;
+   hence P is non programmed by AMI_3:def 13;
+  end;
 end;
+
 
 theorem :: SCMPDS_3:17
  for p being autonomic non programmed FinPartState of SCMPDS
@@ -226,6 +251,7 @@ definition let k;
   il.k;
 end;
 
+
 theorem :: SCMPDS_3:31   ::SF2_18
  for k1,k2 be Nat st k1 <> k2 holds inspos k1 <> inspos k2;
 
@@ -243,6 +269,7 @@ func loc -' k -> Instruction-Location of SCMPDS means
 :: SCMPDS_3:def 4
  ex m being Nat st loc = inspos m & it = inspos (m -' k);
 end;
+
 
 theorem :: SCMPDS_3:33
    for l being Instruction-Location of SCMPDS,m,n
@@ -269,19 +296,42 @@ definition let IT be FinPartState of SCMPDS;
     for m,n st inspos n in dom IT & m < n holds inspos m in dom IT;
 end;
 
+
 definition
  func SCMPDS-Stop -> FinPartState of SCMPDS equals
 :: SCMPDS_3:def 6
  (inspos 0).--> halt SCMPDS;
 end;
 
-definition
+
+registration
  cluster SCMPDS-Stop -> non empty initial programmed;
+ coherence
+  proof
+   thus SCMPDS-Stop is non empty by Def6;
+A1:  dom SCMPDS-Stop = {inspos 0} by Def6,CQC_LANG:5;
+   thus SCMPDS-Stop is initial
+    proof let m,n such that
+A2:   inspos n in dom SCMPDS-Stop and
+A3:   m < n;
+        inspos n = inspos 0 by A1,A2,TARSKI:def 1;
+      then n = 0 by Th31;
+     hence inspos m in dom SCMPDS-Stop by A3,NAT_1:18;
+    end;
+   thus dom SCMPDS-Stop c= the Instruction-Locations of SCMPDS
+          by A1,ZFMISC_1:37;
+  end;
 end;
 
-definition
+
+registration
  cluster initial programmed non empty FinPartState of SCMPDS;
+ existence
+ proof take SCMPDS-Stop;
+   thus thesis;
+ end;
 end;
+
 
 definition
  let p be programmed FinPartState of SCMPDS , k be Nat;
@@ -290,6 +340,7 @@ definition
   dom it = { inspos(m+k):inspos m in dom p } &
  for m st inspos m in dom p holds it.inspos(m+k) = p.inspos m;
 end;
+
 
 theorem :: SCMPDS_3:37
    for l being Instruction-Location of SCMPDS, k being Nat,

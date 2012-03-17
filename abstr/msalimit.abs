@@ -29,16 +29,30 @@ begin :: Inverse Limits of Many Sorted Algebras
          i, j, k for Element of P;
  reserve S for non void non empty ManySortedSign;
 
-definition let I be non empty set, S;
+registration let I be non empty set, S;
  let AF be MSAlgebra-Family of I,S; let i be Element of I;
  let o be OperSymbol of S;
   cluster ((OPER AF).i).o -> Function-like Relation-like;
+ coherence
+  proof
+A1: (the Charact of AF.i).o = Den (o,AF.i) by MSUALG_1:def 11;
+   consider U0 being MSAlgebra over S such that
+A2:   U0 = AF.i & (OPER AF).i = the Charact of U0 by PRALG_2:def 18;
+   thus ((OPER AF).i).o is Function-like Relation-like by A1,A2;
+  end;
 end;
 
-definition let I be non empty set, S;
+
+registration let I be non empty set, S;
  let AF be MSAlgebra-Family of I,S; let s be SortSymbol of S;
   cluster (SORTS AF).s -> functional;
+ coherence
+  proof
+     (SORTS AF).s = product Carrier (AF,s) by PRALG_2:def 17;
+   hence thesis;
+  end;
 end;
+
 
 definition let P, S;
  mode OrderedAlgFam of P,S -> MSAlgebra-Family of the carrier of P,S means
@@ -50,6 +64,7 @@ definition let P, S;
        f2 be ManySortedFunction of it.j, it.k st f1 = F.(j,i) & f2 = F.(k,j) &
      F.(k,i) = f2 ** f1 & f1 is_homomorphism it.i, it.j;
 end;
+
 
  reserve OAF for OrderedAlgFam of P, S;
 
@@ -63,12 +78,14 @@ definition let P, S, OAF;
     it.(k,i) = f2 ** f1 & f1 is_homomorphism OAF.i, OAF.j;
 end;
 
+
 definition let P, S, OAF; let B be Binding of OAF, i,j;
  assume  i >= j;
  func bind (B,i,j) -> ManySortedFunction of OAF.i, OAF.j equals
 :: MSALIMIT:def 3
    B.(j,i);
 end;
+
 
  reserve B for Binding of OAF;
 
@@ -82,6 +99,7 @@ definition let P, S, OAF;
   for i holds IT.(i,i) = id (the Sorts of OAF.i);
 end;
 
+
 theorem :: MSALIMIT:2
  for P,S,OAF,B,i,j st i >= j
   for f be ManySortedFunction of OAF.i,OAF.j st f = bind (B,i,j) holds
@@ -94,16 +112,33 @@ definition let P, S, OAF, B;
                     bind (B,i,j) ** id (the Sorts of OAF.i) );
 end;
 
+
 theorem :: MSALIMIT:3
   for i, j st i >= j & i <> j holds B.(j,i) = (Normalized B).(j,i);
 
-definition let P, S, OAF, B;
+registration let P, S, OAF, B;
  cluster Normalized B -> normalized;
+ coherence
+ proof
+  let i be Element of P;
+    i >= i by ORDERS_1:24;
+then (Normalized B).(i,i) = IFEQ (i, i, id (the Sorts of OAF.i),
+                     bind (B,i,i) ** id (the Sorts of OAF.i) ) by Def5;
+  hence thesis by CQC_LANG:def 1;
+ end;
 end;
 
-definition let P, S, OAF;
+
+registration let P, S, OAF;
  cluster normalized Binding of OAF;
+ existence
+ proof
+  consider B be Binding of OAF;
+  take Normalized B;
+  thus thesis;
+ end;
 end;
+
 
 theorem :: MSALIMIT:4
    for NB be normalized Binding of OAF
@@ -117,6 +152,7 @@ definition let P, S, OAF; let B be Binding of OAF;
     f in (the Sorts of it).s iff
   for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j;
 end;
+
 
 theorem :: MSALIMIT:5
     for DP be discrete non empty Poset, S for OAF be OrderedAlgFam of DP,S
@@ -132,9 +168,20 @@ definition let X be set;
     x in X implies x is strict non empty non void ManySortedSign;
 end;
 
-definition
+
+registration
   cluster non empty MSS-membered set;
+  existence
+  proof
+   consider S be strict non empty non void ManySortedSign;
+   set A = {S};
+  for x be set st x in A holds
+    x is strict non empty non void ManySortedSign by TARSKI:def 1;
+   then A is MSS-membered by Def7;
+   hence thesis;
+  end;
 end;
+
 
 definition
  func TrivialMSSign -> strict ManySortedSign means
@@ -142,12 +189,20 @@ definition
    it is empty void;
 end;
 
-definition
+
+registration
   cluster TrivialMSSign -> empty void;
+  coherence by Def8;
 end;
 
-definition
+
+registration
   cluster strict empty void ManySortedSign;
+  existence
+  proof
+   take TrivialMSSign;
+   thus thesis;
+  end;
 end;
 
 theorem :: MSALIMIT:6
@@ -163,13 +218,42 @@ definition let A;
      ( the carrier of S c= A & the OperSymbols of S c= A );
 end;
 
-definition let A;
+
+registration let A;
   cluster MSS_set A -> non empty MSS-membered;
+  coherence
+  proof
+    consider a be Element of A;
+    set X = MSS_set A;
+A1:  {a} c= A by ZFMISC_1:37;
+      a in {a} by TARSKI:def 1;
+    then <*a*> in {a}* by FUNCT_7:20;
+    then reconsider f = {a}--><*a*> as Function of {a},{a}* by FUNCOP_1:58;
+      dom ({a} --> a) = {a} & rng ({a} --> a) c= {a} by FUNCOP_1:19;
+    then reconsider g = {a} --> a as Function of {a},{a} by FUNCT_2:4;
+      ManySortedSign(#{a},{a},f,g#) in X
+    proof
+      set SI = ManySortedSign(#{a},{a},f,g#);
+        SI is non void non empty by MSUALG_1:def 5;
+      hence thesis by A1,Def9;
+    end;
+    hence X is non empty;
+    thus X is MSS-membered
+    proof
+      let x be set; assume x in X;
+      then consider S be strict non empty non void ManySortedSign such that
+A2:      x = S &
+      the carrier of S c= A & the OperSymbols of S c= A by Def9;
+      thus thesis by A2;
+    end;
+  end;
 end;
+
 
 definition let A be non empty MSS-membered set;
   redefine mode Element of A -> strict non empty non void ManySortedSign;
 end;
+
 
 definition let S1,S2 be ManySortedSign;
   func MSS_morph (S1,S2) means
@@ -177,3 +261,4 @@ definition let S1,S2 be ManySortedSign;
      x in it iff
      ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2;
 end;
+

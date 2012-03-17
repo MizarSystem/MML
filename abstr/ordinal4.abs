@@ -24,9 +24,15 @@ begin
          X for set,
          x,y,z for set;
 
-definition let L be Ordinal-Sequence;
+registration let L be Ordinal-Sequence;
   cluster last L -> ordinal;
+  coherence
+  proof
+      last L = L.(union dom L) by ORDINAL2:def 1;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: ORDINAL4:1
    dom fi = succ A implies last fi is_limes_of fi & lim fi = last fi;
@@ -39,9 +45,45 @@ definition let fi,psi be T-Sequence;
    (for A st A in dom psi holds it.((dom fi)+^A) = psi.A);
 end;
 
-definition let fi,psi;
+
+registration let fi,psi;
  cluster fi^psi -> Ordinal-yielding;
+ coherence
+  proof set f = fi^psi;
+A1:  dom f = dom fi +^ dom psi by Def1;
+    consider A1 being Ordinal such that
+A2:  rng fi c= A1 by ORDINAL2:def 8;
+    consider A2 being Ordinal such that
+A3:  rng psi c= A2 by ORDINAL2:def 8;
+       rng f c= A1+^A2
+      proof let y; assume y in rng f;
+       then consider x such that
+A4:     x in dom f & y = f.x by FUNCT_1:def 5;
+       reconsider x as Ordinal by A4,ORDINAL1:23;
+A5:     A1 c= A1+^A2 & A2 c= A1+^A2 by ORDINAL3:27;
+          now per cases;
+         suppose x in dom fi;
+           then y = fi.x & fi.x in rng fi by A4,Def1,FUNCT_1:def 5;
+           then y in A1 by A2;
+          hence thesis by A5;
+         end;
+         suppose not x in dom fi;
+           then dom fi c= x by ORDINAL1:26;
+then A6:        (dom fi)+^(x-^dom fi) = x
+             by ORDINAL3:def 6;
+then A7:        x-^dom fi in dom psi by A1,A4,ORDINAL3:25;
+           then y = psi.(x-^dom fi) by A4,A6,Def1;
+           then y in rng psi by A7,FUNCT_1:def 5;
+           then y in A2 by A3;
+          hence thesis by A5;
+        end;
+        end;
+       hence thesis;
+      end;
+   hence f is Ordinal-yielding by ORDINAL2:def 8;
+  end;
 end;
+
 
 canceled;
 
@@ -151,13 +193,120 @@ theorem :: ORDINAL4:31
 theorem :: ORDINAL4:32
    one in C implies A c= exp(C,A);
 
-scheme CriticalNumber { phi(Ordinal) -> Ordinal } :
+scheme :: ORDINAL4:sch 1
+ CriticalNumber { phi(Ordinal) -> Ordinal } :
  ex A st phi(A) = A
   provided
  for A,B st A in B holds phi(A) in phi(B) and
  for A st A <> {} & A is_limit_ordinal
     for phi st dom fi = A & for B st B in A holds phi.B = phi(B) holds
-     phi(A) is_limes_of phi;
+     phi(A) is_limes_of phi
+proof   assume
+A3:  not thesis;
+   deffunc F(Ordinal,Ordinal) = phi($2);
+   deffunc G(Ordinal,T-Sequence) = {};
+   consider phi such that
+   A4: dom phi = omega and
+A5: {} in omega implies phi.{} = phi({}) and
+A6: for A st succ A in omega holds phi.(succ A) = F(A,phi.A) and
+    for A st A in omega & A <> {} & A is_limit_ordinal
+          holds phi.A = G(A,phi|A) from ORDINAL2:sch 11;
+A7: now
+     defpred P[Ordinal] means not $1 c= phi($1);
+     assume
+A8:    ex A st P[A];
+     consider A such that
+A9:    P[A] and
+A10:    for B st P[B] holds A c= B from ORDINAL1:sch 1(A8);
+      phi(A) in A by A9,ORDINAL1:26;
+      then phi(phi(A)) in phi(A) by A1;
+      then not phi(A) c= phi(phi(A)) by ORDINAL1:7;
+     hence contradiction by A9,A10;
+    end;
+A11:  now let A; A c= phi(A) & A <> phi(A) by A3,A7;
+     then A c< phi(A) by XBOOLE_0:def 8;
+     hence A in phi(A) by ORDINAL1:21;
+    end;
+A12:  phi is increasing
+     proof let A,B; assume
+A13:    A in B & B in dom phi;
+ then A14:      ex C st B = A+^C & C <> {} by ORDINAL3:31;
+        defpred R[Ordinal] means
+          A+^$1 in omega & $1 <> {} implies phi.A in phi.(A+^$1);
+A15:    R[{}];
+A16:    for C st R[C] holds R[succ C]
+        proof let C such that
+A17:       A+^C in omega & C <> {} implies phi.A in phi.(A+^C) and
+A18:       A+^succ C in omega & succ C <> {};
+A19:       A+^C in succ(A+^C) & A+^succ C = succ(A+^C)
+           by ORDINAL1:10,ORDINAL2:45;
+         reconsider D = phi.(A+^C) as Ordinal;
+        phi.(A+^succ C) = phi(D) & D in phi(D) & A+^{} = A
+           by A6,A11,A18,A19,ORDINAL2:44;
+          hence thesis by A17,A18,A19,ORDINAL1:19;
+        end;
+A20:    for B st B <> {} & B is_limit_ordinal &
+        for C st C in B holds R[C] holds R[B]
+        proof let B such that
+A21:       B <> {} & B is_limit_ordinal and
+            for C st C in B holds A+^C in omega & C <> {} implies
+           phi.A in phi.(A+^C) and
+A22:       A+^B in omega & B <> {};
+            A+^B <> {} by A22,ORDINAL3:29;
+          then A+^B is_limit_ordinal & {} in A+^B by A21,ORDINAL3:10,32;
+          then omega c= A+^B by ORDINAL2:def 5;
+         hence thesis by A22,ORDINAL1:7;
+        end;
+         for C holds R[C] from ORDINAL2:sch 1(A15,A16,A20);
+      hence thesis by A4,A13,A14;
+     end;
+   deffunc F(Ordinal) = phi ($1);
+   consider fi such that
+A23:  dom fi = sup phi & for A st A in sup phi holds fi.A = F(A)
+     from ORDINAL2:sch 3;
+      phi({}) in rng phi & sup rng phi = sup phi
+     by A4,A5,FUNCT_1:def 5,ORDINAL2:19,35;
+then A24: sup phi <> {} & sup phi is_limit_ordinal
+     by A4,A12,Th16,ORDINAL2:19,27;
+then A25:  phi(sup phi) is_limes_of fi by A2,A23;
+      fi is increasing
+     proof let A,B; assume
+A26:    A in B & B in dom fi;
+       then A in dom fi by ORDINAL1:19;
+       then fi.A = phi(A) & fi.B = phi(B) by A23,A26;
+      hence thesis by A1,A26;
+     end;
+then A27:  sup fi = lim fi by A23,A24,Th8 .= phi(sup phi) by A25,ORDINAL2:def
+14;
+      sup fi c= sup phi
+     proof let x; assume
+A28:    x in sup fi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+A29:    sup fi = sup rng fi & sup phi = sup rng phi by ORDINAL2:35;
+      then consider B such that
+A30:    B in rng fi & A c= B by A28,ORDINAL2:29;
+      consider y such that
+A31:    y in dom fi & B = fi.y by A30,FUNCT_1:def 5;
+      reconsider y as Ordinal by A31,ORDINAL1:23;
+      consider C such that
+A32:    C in rng phi & y c= C by A23,A29,A31,ORDINAL2:29;
+      consider z such that
+A33:    z in dom phi & C = phi.z by A32,FUNCT_1:def 5;
+      reconsider z as Ordinal by A33,ORDINAL1:23;
+         succ z in omega by A4,A33,ORDINAL1:41,ORDINAL2:19;
+then A34:    phi.succ z = phi(C) & phi.succ z in rng phi & B = phi(y)
+        by A4,A6,A23,A31,A33,FUNCT_1:def 5;
+         y c< C iff y <> C & y c= C by XBOOLE_0:def 8;
+       then y in C or y = C by A32,ORDINAL1:21;
+       then phi(y) in phi(C) or y = C by A1;
+       then B c= phi(C) & phi(C) in sup phi
+        by A29,A34,ORDINAL1:def 2,ORDINAL2:27;
+       then B in sup phi by ORDINAL1:22;
+      hence thesis by A30,ORDINAL1:22;
+     end;
+    then not sup phi in phi(sup phi) by A27,ORDINAL1:7;
+   hence contradiction by A11;
+  end;
 
  reserve W for Universe;
 
@@ -170,16 +319,44 @@ scheme CriticalNumber { phi(Ordinal) -> Ordinal } :
    dom it = On W & rng it c= On W;
  end;
 
-definition let W;
+
+registration let W;
  cluster non empty Ordinal of W;
+  existence
+ proof On W <> {} by CLASSES2:55;
+  then {} in On W & On W c= W by ORDINAL2:9,ORDINAL3:10;
+  then one in W by CLASSES2:6,ORDINAL2:def 4;
+  then one is non empty & one is Ordinal of W by Def2;
+  hence thesis;
+ end;
 end;
+
 
  reserve A1,B1 for Ordinal of W,
          phi for Ordinal-Sequence of W;
 
-scheme UOS_Lambda { W() -> Universe, F(set) -> Ordinal of W() } :
+scheme :: ORDINAL4:sch 2
+ UOS_Lambda { W() -> Universe, F(set) -> Ordinal of W() } :
  ex phi being Ordinal-Sequence of W() st
-   for a being Ordinal of W() holds phi.a = F(a);
+   for a being Ordinal of W() holds phi.a = F(a)
+proof
+    deffunc FF(Ordinal) = F($1);
+    consider psi such that
+A1:dom psi = On W() & for A st A in On W() holds psi.A = FF(A) from
+ORDINAL2:sch 3;
+      rng psi c= On W()
+     proof let x; assume x in rng psi;
+      then consider y such that
+A2:     y in dom psi & x = psi.y by FUNCT_1:def 5;
+      reconsider y as Ordinal by A2,ORDINAL1:23;
+         x = F(y) & F(y) in W() by A1,A2,Def2;
+      hence thesis by ORDINAL2:def 2;
+     end;
+   then reconsider phi = psi as Ordinal-Sequence of W() by A1,Def3;
+   take phi; let a be Ordinal of W(); a in W() by Def2;
+    then a in On W() by ORDINAL2:def 2;
+   hence thesis by A1;
+  end;
 
  definition let W;
   func 0-element_of W -> Ordinal of W equals
@@ -192,9 +369,11 @@ scheme UOS_Lambda { W() -> Universe, F(set) -> Ordinal of W() } :
   redefine func phi.A1 -> Ordinal of W;
  end;
 
+
  definition let W; let p2,p1 be Ordinal-Sequence of W;
   redefine func p1*p2 -> Ordinal-Sequence of W;
  end;
+
 
 canceled 2;
 
@@ -207,9 +386,11 @@ theorem :: ORDINAL4:35
    func A1 +^ B1 -> Ordinal of W;
  end;
 
+
  definition let W,A1,B1;
   redefine func A1 *^ B1 -> Ordinal of W;
  end;
+
 
 theorem :: ORDINAL4:36
   A1 in dom phi;

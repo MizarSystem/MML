@@ -29,18 +29,22 @@ definition let B be set;
 :Def1: for X,Y holds X in B & Y c= X implies Y in B;
 end;
 
+
 definition let B be set;
  attr B is being_Tarski-Class means
 :Def2:  B is subset-closed &
        (for X holds X in B implies bool X in B) &
        (for X holds X c= B implies X,B are_equipotent or X in B);
-  synonym B is_Tarski-Class;
-end;
+  end;
+notation let B be set;
+ synonym B is_Tarski-Class for B is being_Tarski-Class ; end;
+
 
 definition let A,B be set;
  pred B is_Tarski-Class_of A means
 :Def3: A in B & B is_Tarski-Class;
 end;
+
 
 definition let A be set;
  func Tarski-Class A -> set means
@@ -58,7 +62,7 @@ A1:   A in Big &
 then A2:  Big is_Tarski-Class by A1,Def2;
 defpred P[set] means $1 is_Tarski-Class_of A;
     consider Classes being set such that
-A3:   X in Classes iff X in bool Big & P[X] from Separation;
+A3:   X in Classes iff X in bool Big & P[X] from XBOOLE_0:sch 1;
     set IT = meet Classes;
 A4: Big in bool Big & Big is_Tarski-Class_of A by A1,A2,Def3,ZFMISC_1:def 1;
 then A5:  Big in Classes by A3;
@@ -164,13 +168,15 @@ A30:  D2 is_Tarski-Class_of A &
    end;
 end;
 
-definition let A be set;
+
+registration let A be set;
  cluster Tarski-Class A -> non empty;
 coherence
  proof
       Tarski-Class A is_Tarski-Class_of A by Def4; hence thesis by Def3;
  end;
 end;
+
 
 canceled;
 
@@ -276,9 +282,10 @@ proof
       (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
        for C st C in succ A & C <> {} & C is_limit_ordinal
               holds L.C = D(C,L|C) )
-     holds x1 = x2 from TS_Def;
+     holds x1 = x2 from ORDINAL2:sch 7;
   end;
 end;
+
 
 Lm1:
  now let X;
@@ -292,8 +299,8 @@ A1: for A,x holds x = F(A) iff
      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
       for C st C in succ A & C <> {} & C is_limit_ordinal
               holds L.C = D(C,L|C) by Def5;
-  thus F({}) = { X } from TS_Result0(A1);
-  thus for A holds F(succ A) = C(A,F(A)) from TS_ResultS(A1);
+  thus F({}) = { X } from ORDINAL2:sch 8(A1);
+  thus for A holds F(succ A) = C(A,F(A)) from ORDINAL2:sch 9(A1);
   thus A <> {} & A is_limit_ordinal & dom L = A &
      (for B st B in A holds L.B = Tarski-Class(X,B)) implies
       Tarski-Class(X,A) = (union rng L) /\ Tarski-Class X
@@ -301,7 +308,7 @@ A1: for A,x holds x = F(A) iff
 A2:    A <> {} & A is_limit_ordinal and
 A3:    dom L = A and
 A4:    for B st B in A holds L.B = F(B);
-     thus F(A) = D(A,L) from TS_ResultL(A1,A2,A3,A4);
+     thus F(A) = D(A,L) from ORDINAL2:sch 10(A1,A2,A3,A4);
     end;
  end;
 
@@ -346,16 +353,17 @@ A6:     B <> {} & B is_limit_ordinal and
           for C st C in B holds Tarski-Class(X,C) is Subset of Tarski-Class X;
         deffunc f(Ordinal) = Tarski-Class(X,$1);
        consider L such that
-A7:     dom L = B & for C st C in B holds L.C = f(C) from TS_Lambda;
+A7:     dom L = B & for C st C in B holds L.C = f(C) from ORDINAL2:sch 2;
           Tarski-Class(X,B) = (union rng L) /\ Tarski-Class X &
          (union rng L) /\ Tarski-Class X c= Tarski-Class X
           by A6,A7,Lm1,XBOOLE_1:17;
        hence thesis;
       end;
-      for A holds P[A] from Ordinal_Ind(A1,A2,A5);
+      for A holds P[A] from ORDINAL2:sch 1(A1,A2,A5);
     hence thesis;
    end;
 end;
+
 
 theorem
    Tarski-Class(X,{}) = { X } by Lm1;
@@ -373,7 +381,7 @@ theorem
 A1:  A <> {} & A is_limit_ordinal;
    deffunc f(Ordinal) = Tarski-Class(X,$1);
    consider L such that
-A2:  dom L = A & for B st B in A holds L.B = f(B) from TS_Lambda;
+A2:  dom L = A & for B st B in A holds L.B = f(B) from ORDINAL2:sch 2;
 A3:  Tarski-Class(X,A) = (union rng L) /\ Tarski-Class X by A1,A2,Lm1;
    thus Tarski-Class(X,A) c= { u : ex B st B in A & u in Tarski-Class(X,B) }
      proof let x; assume x in Tarski-Class(X,A);
@@ -539,7 +547,7 @@ A9:        B = succ C;
        end;
       hence thesis by A4;
      end;
-      for B holds OnP[B] from Transfinite_Ind(A1);
+      for B holds OnP[B] from ORDINAL1:sch 2(A1);
    hence thesis;
   end;
 
@@ -549,7 +557,7 @@ theorem
 A1:  for A holds Tarski-Class(X,A) <> Tarski-Class(X,succ A);
 defpred P[set] means ex A st $1 in Tarski-Class(X,A);
    consider Z such that
-A2:  x in Z iff x in Tarski-Class X & P[x] from Separation;
+A2:  x in Z iff x in Tarski-Class X & P[x] from XBOOLE_0:sch 1;
    defpred P[set,set] means
     ex A st $2 = A & $1 in Tarski-Class(X,succ A) & not $1 in
  Tarski-Class(X,A);
@@ -574,7 +582,7 @@ then A7:     A c< B or B c< A by A4,A5,A6,XBOOLE_0:def 8;
       hence contradiction by A4,A5;
      end;
    consider Y such that
-A8:  x in Y iff ex y st y in Z & P[y,x] from Fraenkel(A3);
+A8:  x in Y iff ex y st y in Z & P[y,x] from TARSKI:sch 1(A3);
       now let A;
 A9:    Tarski-Class(X,A) <> Tarski-Class(X,succ A) &
        Tarski-Class(X,A) c= Tarski-Class(X,succ A) by A1,Th18;
@@ -652,7 +660,7 @@ theorem
     defpred P[Ordinal] means Tarski-Class(X,$1) = Tarski-Class X;
 A1:  ex A st P[A] by Th22;
    consider A such that
-A2:  P[A] & for B st P[B] holds A c= B from Ordinal_Min(A1);
+A2:  P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
    take A;
    thus Tarski-Class(X,A) = Tarski-Class X by A2;
    let B; assume B in A;
@@ -669,7 +677,7 @@ A1:  Y <> X & Y in Tarski-Class X;
       ex A st Tarski-Class(X,A) = Tarski-Class X by Th22;
 then A2:  ex A st P[A] by A1;
    consider A such that
-A3:  P[A] & for B st P[B] holds A c= B from Ordinal_Min(A2);
+A3:  P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A2);
 A4:    not Y in { X } & Tarski-Class(X,{}) = { X } by A1,Lm1,TARSKI:def 1;
       now assume A is_limit_ordinal;
      then consider B such that
@@ -755,7 +763,7 @@ then A21:       succ B in A & succ B <> {} & Y in Tarski-Class(X,succ B) &
        end;
       hence thesis by A6;
      end;
-   thus for A holds OnP[A] from Transfinite_Ind(A2);
+   thus for A holds OnP[A] from ORDINAL1:sch 2(A2);
   end;
 
 theorem
@@ -830,7 +838,7 @@ A4:    x <> y;
          consider f such that
 A5:       dom f = {{},{x}} & for z st z in {{},{x}} holds
           (C[z] implies f.z = f(z)) & (not C[z] implies f.z = g(z))
-           from LambdaC;
+           from PARTFUN1:sch 1;
         take f;
         thus f is one-to-one
           proof let x1,x2 be set; assume x1 in dom f & x2 in dom f;
@@ -906,9 +914,10 @@ proof
       (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
        for C st C in succ A & C <> {} & C is_limit_ordinal
               holds L.C = D(C,L|C) )
-     holds x1 = x2 from TS_Def;
+     holds x1 = x2 from ORDINAL2:sch 7;
   end;
 end;
+
 
 deffunc F(Ordinal) = Rank $1;
 
@@ -921,15 +930,15 @@ Lm2:
       (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
        for C st C in succ A & C <> {} & C is_limit_ordinal
               holds L.C = D(C,L|C) by Def6;
-  thus F({}) = {} from TS_Result0(A1);
-  thus for A holds F(succ A) = C(A,F(A)) from TS_ResultS(A1);
+  thus F({}) = {} from ORDINAL2:sch 8(A1);
+  thus for A holds F(succ A) = C(A,F(A)) from ORDINAL2:sch 9(A1);
   thus A <> {} & A is_limit_ordinal & dom L = A &
      (for B st B in A holds L.B = Rank B) implies Rank A = union rng L
     proof assume that
 A2:    A <> {} & A is_limit_ordinal and
 A3:    dom L = A and
 A4:    for B st B in A holds L.B = F(B);
-     thus F(A) = D(A,L) from TS_ResultL(A1,A2,A3,A4);
+     thus F(A) = D(A,L) from ORDINAL2:sch 10(A1,A2,A3,A4);
     end;
  end;
 
@@ -945,7 +954,7 @@ theorem
   proof assume
 A1:  A <> {} & A is_limit_ordinal;
    consider L such that
-A2:  dom L = A & for B st B in A holds L.B = F(B) from TS_Lambda;
+A2:  dom L = A & for B st B in A holds L.B = F(B) from ORDINAL2:sch 2;
 A3:  Rank A = union rng L by A1,A2,Lm2;
    let x;
    thus x in Rank A implies ex B st B in A & x in Rank B
@@ -1004,7 +1013,7 @@ A8:      A = succ B by ORDINAL1:42;
        end;
       hence thesis by A5;
      end;
-      for A holds P[A] from Transfinite_Ind(A1);
+      for A holds P[A] from ORDINAL1:sch 2(A1);
    hence P[A];
   end;
 
@@ -1092,7 +1101,7 @@ then A9:        B is_limit_ordinal & B <> succ A by ORDINAL1:42;
          end;
         hence thesis by A5;
        end;
-     thus for B holds P[B] from Transfinite_Ind(A2);
+     thus for B holds P[B] from ORDINAL1:sch 2(A2);
     end;
    hence OnP[A,B];
    assume
@@ -1143,7 +1152,7 @@ A6:    x in A;
        then B in Rank succ B & Rank succ B c= Rank A by Th36,Th43;
       hence thesis;
      end;
-     for B holds P[B] from Ordinal_Ind(A1,A2,A3);
+     for B holds P[B] from ORDINAL2:sch 1(A1,A2,A3);
    hence thesis;
   end;
 
@@ -1179,7 +1188,7 @@ A8:      not X,Rank B are_equipotent by A2,A7;
        end;
       hence thesis by A3,A4,Lm2;
      end;
-A9:  for A holds OnP[A] from Transfinite_Ind(A1);
+A9:  for A holds OnP[A] from ORDINAL1:sch 2(A1);
    let A,X; assume A10: X in Rank A;
   then X c= Rank A & not X,Rank A are_equipotent by A9,Th38;
     then Card X <=` Card Rank A & Card X <> Card Rank A by CARD_1:21,27;
@@ -1312,7 +1321,7 @@ A3:  Rank A /\ Tarski-Class X <> Rank succ A /\ Tarski-Class X
      end;
      defpred P[set] means ex A st $1 in Rank A;
    consider Power being set such that
-A4:  x in Power iff x in Tarski-Class X & P[x] from Separation;
+A4:  x in Power iff x in Tarski-Class X & P[x] from XBOOLE_0:sch 1;
    defpred P[set,set] means
     ex A st $2 = A & not $1 in Rank A & $1 in Rank succ A;
 A5:  for x,y,z st P[x,y] & P[x,z] holds y = z
@@ -1332,7 +1341,7 @@ then A8:    succ A1 c= A2 or succ A2 c= A1 by ORDINAL1:33;
       hence contradiction by A6,A7;
      end;
    consider Y such that
-A9:  x in Y iff ex y st y in Power & P[y,x] from Fraenkel(A5);
+A9:  x in Y iff ex y st y in Power & P[y,x] from TARSKI:sch 1(A5);
       now let A;
         Rank A /\ Tarski-Class X <> Rank succ A /\ Tarski-Class X by A3;
      then consider y such that
@@ -1400,7 +1409,7 @@ definition let X;
    proof
      consider f such that
 A1:   dom f = NAT & f.0 = X &
-     for n being Element of NAT holds f.(n+1) = f(n,f.n) from LambdaRecEx;
+     for n being Element of NAT holds f.(n+1) = f(n,f.n) from RECDEF_1:sch 3;
     take UNI = union rng f;
     let x;
     thus x in UNI implies
@@ -1421,7 +1430,7 @@ A5:   dom g = NAT & g.0 = X &
      for k holds g.(k+1) = f(k,g.k);
 A6:   dom f = NAT & f.0 = X &
      for n holds f.(n+1) = f(n,f.n) by A1;
-     g = f from LambdaRecUn(A5,A6);
+     g = f from RECDEF_1:sch 11(A5,A6);
      then g.n in rng f by A1,FUNCT_1:def 5;
     hence x in UNI by A4,TARSKI:def 4;
    end;
@@ -1433,9 +1442,10 @@ A6:   dom f = NAT & f.0 = X &
      let U1,U2 be set such that
 A7:  x in U1 iff P[x] and
 A8:  x in U2 iff P[x];
-    thus U1 = U2 from Extensionality(A7,A8);
+    thus U1 = U2 from XBOOLE_0:sch 2(A7,A8);
    end;
 end;
+
 
 canceled;
 
@@ -1458,7 +1468,7 @@ theorem
 A1:  x in X;
    ex f st dom f = NAT & f.0 = X &
      for n being Element of NAT holds f.(n+1) = f(n,f.n)
-     from LambdaRecEx;
+     from RECDEF_1:sch 3;
    hence x in the_transitive-closure_of X by A1,Def7;
   end;
 
@@ -1480,7 +1490,7 @@ A4:  for k st P[k] holds P[k+1]
         union Y c= Y by A1,A2,Th54,ZFMISC_1:95;
       hence thesis by XBOOLE_1:1;
      end;
-     P[k] from Ind(A3,A4);
+     P[k] from NAT_1:sch 1(A3,A4);
     then f.n = f.n & f.n c= Y;
    hence x in Y by A2;
   end;
@@ -1582,7 +1592,7 @@ definition let X;
    proof
       defpred P[Ordinal] means X c= Rank $1;
 A1:   ex A st P[A] by Th69;
-    thus ex A st P[A] & for B st P[B] holds A c= B from Ordinal_Min(A1);
+    thus ex A st P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
    end;
   uniqueness
    proof let A1,A2 be Ordinal such that
@@ -1591,6 +1601,7 @@ A3:  X c= Rank A2 & for B st X c= Rank B holds A2 c= B;
     thus A1 c= A2 & A2 c= A1 by A2,A3;
    end;
 end;
+
 
 canceled;
 
@@ -1613,7 +1624,7 @@ A3:     bool X c= Rank A;
        A4: X in bool X by ZFMISC_1:def 1;
 then A5:     ex A st P[A] by A3;
       consider B such that
-A6:     P[B] & for C st P[C] holds B c= C from Ordinal_Min(A5);
+A6:     P[B] & for C st P[C] holds B c= C from ORDINAL1:sch 1(A5);
          now assume for C holds B <> succ C;
          then B is_limit_ordinal by ORDINAL1:42;
         then consider C such that
@@ -1781,7 +1792,7 @@ A3:       B in A;
        end;
       hence thesis by Th78;
      end;
-     P[B] from Transfinite_Ind(A1);
+     P[B] from ORDINAL1:sch 2(A1);
    hence thesis;
   end;
 

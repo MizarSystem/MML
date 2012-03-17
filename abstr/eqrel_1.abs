@@ -39,14 +39,33 @@ func nabla X -> Relation of X equals
  [:X,X:];
 end;
 
-definition let X;
+
+registration let X;
  cluster nabla X -> total reflexive;
+ coherence
+  proof
+   thus dom nabla X c= X;
+   thus X c= dom nabla X
+    proof let x be set;
+     assume x in X;
+      then [x,x] in [:X,X:] by ZFMISC_1:106;
+      then [x,x] in nabla X by Def1;
+     hence x in dom nabla X by RELAT_1:def 4;
+    end;
+   let x;
+   assume x in field nabla X;
+    then x in dom nabla X \/ rng nabla X by RELAT_1:def 6;
+    then [x,x] in [:X,X:] by ZFMISC_1:106;
+   hence [x,x] in nabla X by Def1;
+ end;
 end;
+
 
 definition let X; let R1,R2;
 redefine func R1 /\ R2 -> Relation of X;
 func R1 \/ R2 -> Relation of X;
 end;
+
 
 canceled 2;
 
@@ -59,6 +78,7 @@ definition let X;
   mode Equivalence_Relation of X is total symmetric transitive Relation of X;
 end;
 
+
 canceled;
 
 theorem :: EQREL_1:6
@@ -67,9 +87,11 @@ theorem :: EQREL_1:6
 theorem :: EQREL_1:7
   nabla X is Equivalence_Relation of X;
 
-definition let X;
+registration let X;
   cluster nabla X -> total symmetric transitive;
+  coherence by Th7;
 end;
+
 
 reserve EqR,EqR1,EqR2,EqR3 for Equivalence_Relation of X;
 
@@ -103,6 +125,7 @@ definition let X; let EqR1,EqR2;
   redefine func EqR1 /\ EqR2 -> Equivalence_Relation of X;
 end;
 
+
 theorem :: EQREL_1:17
   id X /\ EqR = id X;
 
@@ -125,6 +148,7 @@ func EqR1 "\/" EqR2 -> Equivalence_Relation of X means
 EqR1 \/ EqR2 c= it & for EqR st EqR1 \/ EqR2 c= EqR holds it c= EqR;
 end;
 
+
 canceled;
 
 theorem :: EQREL_1:22
@@ -138,19 +162,52 @@ definition let X; let EqR1,EqR2;
   commutativity;
 end;
 
+
 theorem :: EQREL_1:24
   EqR1 /\ (EqR1 "\/" EqR2) = EqR1;
 
 theorem :: EQREL_1:25
   EqR1 "\/" (EqR1 /\ EqR2) = EqR1;
 
-scheme Ex_Eq_Rel {X() -> set,P[set,set]}:
+scheme :: EQREL_1:sch 1
+ Ex_Eq_Rel {X() -> set,P[set,set]}:
        ex EqR being Equivalence_Relation of X() st
        for x,y holds [x,y] in EqR iff x in X() & y in X() & P[x,y]
        provided
         for x st x in X() holds P[x,x] and
         for x,y st P[x,y] holds P[y,x] and
-        for x,y,z st P[x,y] & P[y,z] holds P[x,z];
+        for x,y,z st P[x,y] & P[y,z] holds P[x,z]
+proof
+ defpred R[set,set] means P[$1,$2];
+ consider Y being Relation of X(),X() such that A4:
+ for x,y holds [x,y] in Y iff x in X() & y in X() & R[x,y] from RELSET_1:sch 1;
+ A5: Y is_reflexive_in X()
+ proof let x; assume A6: x in X();
+  then P[x,x] by A1;
+  hence thesis by A4,A6;
+ end;
+ A7: Y is_symmetric_in X()
+ proof let x,y;
+  assume A8: x in X() & y in X() & [x,y] in Y;
+  then P[x,y] by A4;
+  then y in X() & x in X() & P[y,x] by A2,A8;
+  hence thesis by A4;
+ end;
+A9:   Y is_transitive_in X()
+ proof let x,y,z;
+  assume A10: x in X() & y in X() & z in X() & [x,y] in Y & [y,z] in Y;
+  then A11: P[x,y] by A4;
+    P[y,z] by A4,A10;
+  then P[x,z] by A3,A11;
+  hence thesis by A4,A10;
+ end;
+A12: field Y = X() by A5,ORDERS_1:98;
+  dom Y = X() by A5,ORDERS_1:98;
+ then reconsider R1 = Y as Equivalence_Relation of X()
+                        by A7,A9,A12,RELAT_2:def 11,def 16,PARTFUN1:def 4;
+ take R1;
+ thus thesis by A4;
+end;
 
 :: Classes of abstraction
 
@@ -161,6 +218,7 @@ definition let X be set,
 :: EQREL_1:def 4
     R.:{x};
 end;
+
 
 canceled;
 
@@ -216,6 +274,7 @@ definition let X; let EqR;
  A in it iff ex x st x in X & A = Class(EqR,x);
  end;
 
+
 canceled;
 
 theorem :: EQREL_1:40
@@ -228,6 +287,7 @@ mode a_partition of X -> Subset-Family of X means
 union it = X & for A st A in it holds A<>{} &
 for B st B in it holds A = B or A misses B if X <> {} otherwise it = {};
 end;
+
 
 canceled;
 

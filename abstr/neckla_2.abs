@@ -34,20 +34,51 @@ theorem :: NECKLA_2:2
   the InternalRel of Necklace 4 =
     {[0,1],[1,0],[1,2],[2,1],[2,3],[3,2]};
 
-definition let n be natural number;
+registration let n be natural number;
   cluster -> finite Element of Rank n;
+  coherence
+    proof
+      let x be Element of Rank n;
+      defpred P[natural number] means
+           for x being set st x is Element of Rank $1
+           holds x is finite;
+      A1: P[0] by CLASSES1:33,SUBSET_1:def 2;
+      A2: for k being natural number st P[k] holds P[k + 1]
+       proof
+         let k being natural number such that P[k];
+         let x be set such that A3: x is Element of Rank (k+1);
+         consider m being Nat such that A4: m = k by CARD_1:54;
+             x is Element of Rank (succ m) by A3,A4,CARD_1:52;
+           then A5: x is Element of bool Rank m by CLASSES1:34;
+             Rank m is finite by CARD_3:57;
+         hence thesis by A5,FINSET_1:13;
+       end;
+          for k being natural number holds P[k] from NAT_1:sch 2(A1,A2);
+      hence thesis;
+    end;
  end;
+
 
 theorem :: NECKLA_2:3
   for x be set st x in FinSETS holds x is finite;
 
-definition
+registration
   cluster -> finite Element of FinSETS;
+  coherence by Th3;
  end;
 
-definition
+
+registration
   cluster finite ordinal -> natural number;
+  coherence
+   proof
+     let n be number;
+     assume n is finite ordinal;
+       then n in omega by CARD_4:7;
+     hence n is natural by ORDINAL2:def 21;
+   end;
 end;
+
 
 
 definition let G be non empty RelStr;
@@ -56,9 +87,40 @@ definition let G be non empty RelStr;
  not G embeds Necklace 4;
 end;
 
-definition
+
+registration
  cluster strict finite N-free (non empty RelStr);
+ existence
+  proof
+   set X = {0,1},
+       Y = Necklace 4;
+   reconsider r = id X as Relation of X by RELSET_1:29;
+   take R = RelStr(#X,r#);
+      now let f being map of Y,R;
+     assume A1: f is one-to-one;
+A2: dom f = the carrier of Y by FUNCT_2:def 1
+             .= {0,1,2,3} by NECKLACE:2,21;
+then A3: 1 in dom f by ENUMSET1:19;
+A4: 2 in dom f by A2,ENUMSET1:19;
+A5: 3 in dom f by A2,ENUMSET1:19;
+then A6: f.1 <> f.3 by A1,A3,FUNCT_1:def 8;
+A7: f.2 <> f.3 by A1,A4,A5,FUNCT_1:def 8;
+A8: f.1 in X by A3,PARTFUN1:27;
+A9: f.2 in X by A4,PARTFUN1:27;
+A10: f.3 in X by A5,PARTFUN1:27;
+A11: f.1 = 0 or f.1 = 1 by A8,TARSKI:def 2;
+       f.2 = 0 or f.2 = 1 by A9,TARSKI:def 2;
+     hence ex x,y being Element of Y st
+     not ([x,y] in the InternalRel of Y
+                iff [f.x,f.y] in the InternalRel of R) by A1,A3,A4,A6,A7,A10,
+A11,FUNCT_1:def 8,TARSKI:def 2;
+   end;
+   then A12: not R embeds Y by NECKLACE:def 2;
+   R is finite by GROUP_1:def 13;
+   hence thesis by A12,Def1;
+  end;
 end;
+
 
 definition let R,S be RelStr;
   func union_of(R,S) -> strict RelStr means
@@ -66,6 +128,7 @@ definition let R,S be RelStr;
  the carrier of it = (the carrier of R) \/ (the carrier of S) &
     the InternalRel of it = (the InternalRel of R) \/ (the InternalRel of S);
 end;
+
 
 definition let R, S be RelStr;
   func sum_of(R,S) -> strict RelStr means
@@ -76,6 +139,7 @@ definition let R, S be RelStr;
                          \/ [:the carrier of S, the carrier of R:];
 end;
 
+
 definition
  func fin_RelStr means
 :: NECKLA_2:def 4
@@ -84,9 +148,22 @@ definition
        ex R being strict RelStr st X = R & the carrier of R in FinSETS;
 end;
 
-definition
+
+registration
    cluster fin_RelStr -> non empty;
+   correctness
+   proof
+     reconsider R = {}[:{},{}:] as Relation of {} by RELSET_1:25;
+        RelStr(#{},R#) in fin_RelStr
+      proof
+        set X = RelStr(#{},R#);
+          the carrier of X in FinSETS by CLASSES1:5,CLASSES2:def 2;
+        hence thesis by Def4;
+      end;
+     hence thesis;
+    end;
   end;
+
 
 definition
   func fin_RelStr_sp -> Subset of fin_RelStr means
@@ -106,9 +183,24 @@ definition
       holds it c= M;
 end;
 
-definition
+
+registration
    cluster fin_RelStr_sp -> non empty;
+   correctness
+    proof
+      reconsider R = [:{0},{0}:] as Relation of {0} by RELSET_1:def 1;
+         RelStr(#{0},R#) in fin_RelStr_sp
+       proof
+         set X = RelStr(#{0},R#);
+         A1: the carrier of X is non empty trivial by REALSET1:def 12;
+             0 in Tarski-Class {} by CLASSES2:62;
+          then the carrier of X in FinSETS by CLASSES2:63,def 2;
+         hence thesis by A1,Def5;
+       end;
+      hence thesis;
+    end;
 end;
+
 
 
 theorem :: NECKLA_2:4

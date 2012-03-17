@@ -58,13 +58,39 @@ begin  :: Preliminaries
    for x1,y1,x2,y2 be Real holds
     [**x1,y1**] - [**x2,y2**] = [**x1 - x2,y1 - y2**];
 
-  scheme ExDHGrStrSeq { R() -> non empty HGrStr,
+  scheme :: POLYNOM5:sch 1
+ ExDHGrStrSeq { R() -> non empty HGrStr,
                         F(set) -> Element of R() } :
-   ex S be sequence of R() st for n be Nat holds S.n = F(n);
+   ex S be sequence of R() st for n be Nat holds S.n = F(n)
+proof
+    set Y = the carrier of R();
+    deffunc G(set) = F($1);
+A1: for x be set st x in NAT holds G(x) in Y;
+      ex f be Function of NAT,Y st for x be set st x in NAT holds f.x = G(x)
+      from FUNCT_2:sch 2(A1);
+    then consider f be Function of NAT,Y such that
+A2: for x be set st x in NAT holds f.x = F(x);
+    reconsider f as sequence of R() by NORMSP_1:def 3;
+    take f;
+    thus thesis by A2;
+   end;
 
-  scheme ExDdoubleLoopStrSeq { R() -> non empty doubleLoopStr,
+  scheme :: POLYNOM5:sch 2
+ ExDdoubleLoopStrSeq { R() -> non empty doubleLoopStr,
                         F(set) -> Element of R() } :
-   ex S be sequence of R() st for n be Nat holds S.n = F(n);
+   ex S be sequence of R() st for n be Nat holds S.n = F(n)
+proof
+    set Y = the carrier of R();
+    deffunc G(set) = F($1);
+A1: for x be set st x in NAT holds G(x) in Y;
+    ex f be Function of NAT,Y st for x be set st x in NAT holds f.x = G(x)
+     from FUNCT_2:sch 2(A1);
+    then consider f be Function of NAT,Y such that
+A2: for x be set st x in NAT holds f.x = F(x);
+    reconsider f as sequence of R() by NORMSP_1:def 3;
+    take f;
+    thus thesis by A2;
+   end;
 
 canceled;
 
@@ -80,6 +106,7 @@ canceled;
     len it = len p &
     for n be Nat st n in dom p holds it/.n = |.p/.n.|;
   end;
+
 
   theorem :: POLYNOM5:9
    |.<*>the carrier of F_Complex.| = <*>REAL;
@@ -122,13 +149,22 @@ begin  :: Operations on Polynomials
     (power Polynom-Ring L).(p,n);
   end;
 
-  definition
+
+  registration
    let L be Abelian add-associative right_zeroed right_complementable
     right_unital commutative distributive (non empty doubleLoopStr);
    let p be Polynomial of L;
    let n be Nat;
    cluster p`^n -> finite-Support;
+   coherence
+   proof
+    reconsider p1 = p as Element of Polynom-Ring L
+                                                         by POLYNOM3:def 12;
+    (power Polynom-Ring L).(p1,n) is Polynomial of L by POLYNOM3:def 12;
+    hence thesis by Def2;
+   end;
   end;
+
 
   theorem :: POLYNOM5:16
    for L be Abelian add-associative right_zeroed right_complementable
@@ -195,13 +231,24 @@ begin  :: Operations on Polynomials
     for n be Nat holds it.n = v*p.n;
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable
     right-distributive (non empty doubleLoopStr);
    let p be Polynomial of L;
    let v be Element of L;
    cluster v*p -> finite-Support;
+   coherence
+   proof
+    take s = len p;
+    let i be Nat;
+     assume A1: i >= s;
+     thus (v*p).i = v*p.i by Def3
+        .= v*0.L by A1,ALGSEQ_1:22
+        .= 0.L by VECTSP_1:36;
+   end;
   end;
+
 
   theorem :: POLYNOM5:25
    for L be add-associative right_zeroed right_complementable distributive
@@ -260,6 +307,7 @@ begin  :: Operations on Polynomials
     0_.(L)+*(0,z0)+*(1,z1);
   end;
 
+
   theorem :: POLYNOM5:33
    for L be non empty ZeroStr
    for z0 be Element of L holds
@@ -302,11 +350,19 @@ begin  :: Operations on Polynomials
     <%z0,z1%>.1 = z1 &
     for n be Nat st n >= 2 holds <%z0,z1%>.n = 0.L;
 
-  definition
+  registration
    let L be non empty ZeroStr;
    let z0,z1 be Element of L;
    cluster <%z0,z1%> -> finite-Support;
+   coherence
+   proof
+    take 2;
+    let n be Nat;
+    assume n >= 2;
+    hence thesis by Th39;
+   end;
   end;
+
 
   theorem :: POLYNOM5:40
    for L be non empty ZeroStr
@@ -376,6 +432,7 @@ begin  :: Substitution in Polynomials
      for n be Nat st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1));
   end;
 
+
   theorem :: POLYNOM5:50
    for L be Abelian add-associative right_zeroed right_complementable
     right_unital commutative distributive (non empty doubleLoopStr)
@@ -418,6 +475,7 @@ begin  :: Fundamental Theorem of Algebra
     eval(p,x) = 0.L;
   end;
 
+
   definition
    let L be unital (non empty doubleLoopStr);
    let p be Polynomial of L;
@@ -426,24 +484,33 @@ begin  :: Fundamental Theorem of Algebra
     ex x be Element of L st x is_a_root_of p;
   end;
 
+
   theorem :: POLYNOM5:55
    for L be unital (non empty doubleLoopStr) holds
     0_.(L) is with_roots;
 
-  definition
+  registration
    let L be unital (non empty doubleLoopStr);
    cluster 0_.(L) -> with_roots;
+   coherence by Th55;
   end;
+
 
   theorem :: POLYNOM5:56
      for L be unital (non empty doubleLoopStr)
    for x be Element of L holds
     x is_a_root_of 0_.(L);
 
-  definition
+  registration
    let L be unital (non empty doubleLoopStr);
    cluster with_roots Polynomial of L;
+   existence
+   proof
+    take 0_.(L);
+    thus thesis;
+   end;
   end;
+
 
   definition
    let L be unital (non empty doubleLoopStr);
@@ -451,6 +518,7 @@ begin  :: Fundamental Theorem of Algebra
 :: POLYNOM5:def 8
     for p be Polynomial of L st len p > 1 holds p is with_roots;
   end;
+
 
   definition
    let L be unital (non empty doubleLoopStr);
@@ -461,6 +529,7 @@ begin  :: Fundamental Theorem of Algebra
      x in it iff x is_a_root_of p;
   end;
 
+
   definition
    let L be commutative associative left_unital distributive Field-like
     (non empty doubleLoopStr);
@@ -470,12 +539,25 @@ begin  :: Fundamental Theorem of Algebra
     for n be Nat holds it.n = p.n / p.(len p-'1);
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable commutative
     associative left_unital distributive Field-like (non empty doubleLoopStr);
    let p be Polynomial of L;
    cluster NormPolynomial(p) -> finite-Support;
+   coherence
+   proof
+      now let n be Nat;
+     assume A1: n >= len p;
+     thus (NormPolynomial(p)).n = p.n / p.(len p-'1) by Def10
+        .= 0.L / p.(len p-'1) by A1,ALGSEQ_1:22
+        .= 0.L * (p.(len p-'1))" by VECTSP_1:def 23
+        .= 0.L by VECTSP_1:39;
+    end;
+    hence thesis by ALGSEQ_1:def 2;
+   end;
   end;
+
 
   theorem :: POLYNOM5:57
    for L be commutative associative left_unital distributive Field-like
@@ -526,6 +608,7 @@ begin  :: Fundamental Theorem of Algebra
     for y be Element of L holds it.y = x*(power L).(y,n);
   end;
 
+
   theorem :: POLYNOM5:65
      for L be unital (non empty HGrStr) holds
     FPower(1.(L),1) = id(the carrier of L);
@@ -568,6 +651,7 @@ begin  :: Fundamental Theorem of Algebra
     for x be Element of L holds it.x = eval(p,x);
   end;
 
+
   theorem :: POLYNOM5:72
    for p be Polynomial of F_Complex
    ex f be Function of COMPLEX,COMPLEX st
@@ -591,13 +675,21 @@ begin  :: Fundamental Theorem of Algebra
    for p be Polynomial of F_Complex st len p > 1 holds
     p is with_roots;
 
-  definition
+  registration
    cluster F_Complex -> algebraic-closed;
+   coherence by Def8,Th75;
   end;
 
-  definition
+
+  registration
    cluster algebraic-closed add-associative right_zeroed right_complementable
       Abelian commutative associative distributive Field-like
       non degenerated (left_unital right_unital (non empty doubleLoopStr));
+   existence
+   proof
+    take F_Complex;
+    thus thesis;
+   end;
   end;
+
 

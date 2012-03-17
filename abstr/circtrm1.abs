@@ -38,6 +38,7 @@ definition let D be non empty set;
  redefine func id X -> Function of X, D;
 end;
 
+
 definition
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
@@ -52,12 +53,23 @@ definition
        #);
 end;
 
-definition
+
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let X be non empty Subset of S-Terms V;
  cluster X-CircuitStr -> unsplit;
+ coherence
+  proof
+      X-CircuitStr = ManySortedSign(#
+        Subtrees X, [:the OperSymbols of S,{the carrier of S}:]-Subtrees X,
+        [:the OperSymbols of S,{the carrier of S}:]-ImmediateSubtrees X,
+        id ([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
+       #) by Def1;
+   hence the ResultSort of X-CircuitStr = id the OperSymbols of X-CircuitStr;
+  end;
 end;
+
 
 reserve S for non empty non void ManySortedSign,
  V for non-empty ManySortedSet of the carrier of S,
@@ -73,12 +85,14 @@ theorem :: CIRCTRM1:2
 theorem :: CIRCTRM1:3
  X is SetWithCompoundTerm of S,V iff X-CircuitStr is non void;
 
-definition
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let X be SetWithCompoundTerm of S,V;
  cluster X-CircuitStr -> non void;
+  coherence by Th3;
 end;
+
 
 theorem :: CIRCTRM1:4
  (for v being Vertex of X-CircuitStr holds v is Term of S,V) &
@@ -93,39 +107,55 @@ theorem :: CIRCTRM1:6
  for X being SetWithCompoundTerm of S,V, g being Gate of X-CircuitStr holds
    (the ResultSort of X-CircuitStr).g = g & the_result_sort_of g = g;
 
-definition
+registration
  let S,V;
  let X be SetWithCompoundTerm of S,V, g be Gate of X-CircuitStr;
  cluster the_arity_of g -> DTree-yielding;
+ coherence
+  proof set C = [:the OperSymbols of S,{the carrier of S}:];
+      X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
+        C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
+    then the_arity_of g is FinSequence of Subtrees X;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let X be non empty Subset of S-Terms V;
  cluster -> finite Function-like Relation-like Vertex of X-CircuitStr;
+  coherence by Th4;
 end;
 
-definition
+
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let X be non empty Subset of S-Terms V;
  cluster -> DecoratedTree-like Vertex of X-CircuitStr;
+  coherence by Th4;
 end;
 
-definition
+
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let X be SetWithCompoundTerm of S,V;
  cluster -> finite Function-like Relation-like Gate of X-CircuitStr;
+  coherence by Th4;
 end;
 
-definition
+
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let X be SetWithCompoundTerm of S,V;
  cluster -> DecoratedTree-like Gate of X-CircuitStr;
+  coherence by Th4;
 end;
+
 
 ::theorem
 :: for X being SetWithCompoundTerm of A,V, g being Gate of X-CircuitStr
@@ -137,10 +167,12 @@ theorem :: CIRCTRM1:7
   the Arity of X1-CircuitStr tolerates the Arity of X2-CircuitStr &
   the ResultSort of X1-CircuitStr tolerates the ResultSort of X2-CircuitStr;
 
-definition
+registration
  let X,Y be constituted-DTrees set;
  cluster X \/ Y -> constituted-DTrees;
+ coherence by TREES_3:9;
 end;
+
 
 theorem :: CIRCTRM1:8
  for X1,X2 being constituted-DTrees non empty set holds
@@ -184,14 +216,22 @@ definition
   for u being Term of S,V st u = v holds it = (the Sorts of A).the_sort_of u;
 end;
 
-definition
+
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let X be non empty Subset of S-Terms V;
  let v be Vertex of X-CircuitStr;
  let A be non-empty MSAlgebra over S;
- cluster the_sort_of (v, A) -> non empty;
+    cluster the_sort_of (v, A) -> non empty;
+ coherence
+  proof
+    reconsider u = v as Term of S,V by Th4;
+  the_sort_of (v, A) = (the Sorts of A).the_sort_of u by Def2;
+   hence thesis;
+  end;
 end;
+
 
 definition
  let S be non empty non void ManySortedSign;
@@ -199,7 +239,6 @@ definition
  let X be non empty Subset of S-Terms V; assume
        X is SetWithCompoundTerm of S,V;
  let o be Gate of X-CircuitStr;
-
  let A be MSAlgebra over S;
  func the_action_of (o, A) -> Function means
 :: CIRCTRM1:def 3
@@ -209,13 +248,51 @@ definition
     it = (the Charact of A).(o'.{})`1;
 end;
 
-scheme MSFuncEx {I() -> non empty set, A,B() -> non-empty ManySortedSet of I(),
+
+scheme :: CIRCTRM1:sch 1
+ MSFuncEx {I() -> non empty set, A,B() -> non-empty ManySortedSet of I(),
           P[set,set,set]}:
  ex f being ManySortedFunction of A(),B() st
   for i being Element of I(), a being Element of A().i holds P[i,a,f.i.a]
  provided
   for i being Element of I(), a being Element of A().i
-     ex b being Element of B().i st P[i,a,b];
+     ex b being Element of B().i st P[i,a,b]
+proof
+    defpred R[set,set] means ex g being Function of A().$1, B().$1 st $2 = g &
+      for a being set st a in A().$1 holds P[$1,a,g.a];
+A2:  for i being set st i in I() ex y being set st R[i,y]
+     proof let i be set; assume i in I();
+      then reconsider i as Element of I();
+      defpred R[set,set] means P[i,$1,$2];
+A3:     for a being set st a in A().i ex b being set st b in B().i & R[a,b]
+        proof let a be set; assume a in A().i;
+          then ex b being Element of B().i st P[i,a,b] by A1;
+         hence thesis;
+        end;
+      consider g being Function such that
+A4:     dom g = A().i & rng g c= B().i and
+A5:     for a being set st a in A().i holds R[a,g.a]
+           from COMPTS_1:sch 1(A3);
+      take g;
+         g is Function of A().i, B().i by A4,FUNCT_2:4;
+      hence thesis by A5;
+     end;
+   consider f being Function such that
+A6:  dom f = I() and
+A7:  for i being set st i in I() holds R[i,f.i] from ZFREFLE1:sch 1(A2);
+   reconsider f as ManySortedSet of I() by A6,PBOOLE:def 3;
+      f is ManySortedFunction of A(),B()
+     proof let i be set; assume i in I();
+       then ex g being Function of A().i, B().i st f.i = g &
+        for a being set st a in A().i holds P[i,a,g.a] by A7;
+      hence thesis;
+     end;
+   then reconsider f as ManySortedFunction of A(),B();
+   take f; let i being Element of I(), a being Element of A().i;
+      ex g being Function of A().i, B().i st f.i = g &
+     for a being set st a in A().i holds P[i,a,g.a] by A7;
+   hence P[i,a,f.i.a];
+  end;
 
 definition
  let S be non empty non void ManySortedSign;
@@ -229,13 +306,22 @@ definition
   for v being Vertex of X-CircuitStr holds it.v = the_sort_of (v, A);
 end;
 
-definition
+
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let X be non empty Subset of S-Terms V;
  let A be non-empty MSAlgebra over S;
  cluster X-CircuitSorts A -> non-empty;
+ coherence
+  proof
+   let i be set; assume i in the carrier of X-CircuitStr;
+   then reconsider i as Vertex of X-CircuitStr;
+      (X-CircuitSorts A).i = the_sort_of (i, A) by Def4;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: CIRCTRM1:14
  for X being SetWithCompoundTerm of S,V,
@@ -258,6 +344,7 @@ definition
    holds it.g = the_action_of (g, A);
 end;
 
+
 definition
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
@@ -268,6 +355,7 @@ definition
 
    MSAlgebra(#X-CircuitSorts A, X-CircuitCharact A#);
 end;
+
 
 theorem :: CIRCTRM1:15
    for v being Vertex of X-CircuitStr
@@ -291,13 +379,15 @@ theorem :: CIRCTRM1:18
      X being non empty Subset of S-Terms V holds
  X-Circuit A is locally-finite;
 
-definition
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let X be SetWithCompoundTerm of S,V;
  let A be locally-finite non-empty MSAlgebra over S;
  cluster X-Circuit A -> locally-finite;
+ coherence by Th18;
 end;
+
 
 theorem :: CIRCTRM1:19
  for S being non empty non void ManySortedSign
@@ -332,6 +422,7 @@ definition
   ex t' being c-Term of A,V st t' = t & it = t'@f;
 end;
 
+
 definition
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
@@ -347,18 +438,26 @@ definition
    holds it.x.v = s.root-tree [v,x];
 end;
 
+
 theorem :: CIRCTRM1:21
    for s being State of X-Circuit A
  for f being CompatibleValuation of s, n being Nat
   holds f is CompatibleValuation of Following(s,n);
 
-definition
+registration
  let x be set;
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let p be FinSequence of S-Terms V;
  cluster x-tree p -> finite;
+ coherence
+  proof
+   reconsider q = doms p as FinTree-yielding FinSequence;
+      dom (x-tree p) = tree q by TREES_4:10;
+   hence thesis by AMI_1:21;
+  end;
 end;
+
 
 theorem :: CIRCTRM1:22
  for s being State of X-Circuit A
@@ -379,17 +478,22 @@ theorem :: CIRCTRM1:23
 
 begin :: <section4>Circuit similarity</section4>
 
-definition
+registration
  let X be set;
  cluster id X -> one-to-one;
+ coherence by FUNCT_1:52;
 end;
 
-definition
+
+registration
  let f be one-to-one Function;
  cluster f" -> one-to-one;
+ coherence by FUNCT_1:62;
  let g be one-to-one Function;
  cluster g*f -> one-to-one;
+ coherence by FUNCT_1:46;
 end;
+
 
 definition
  let S1, S2 be non empty ManySortedSign;
@@ -401,6 +505,7 @@ definition
    f, g form_morphism_between S1, S2 &
    f", g" form_morphism_between S2, S1;
 end;
+
 
 theorem :: CIRCTRM1:24
  for S1, S2 being non empty ManySortedSign, f,g being Function
@@ -443,6 +548,7 @@ definition
  symmetry;
 end;
 
+
 theorem :: CIRCTRM1:30
    for S1, S2, S3 being non empty ManySortedSign
   st S1, S2 are_equivalent & S2, S3 are_equivalent
@@ -455,6 +561,7 @@ definition
 :: CIRCTRM1:def 11
    f.:InputVertices S1 c= InputVertices S2;
 end;
+
 
 theorem :: CIRCTRM1:31
  for S1, S2 being non empty ManySortedSign
@@ -491,6 +598,7 @@ definition
   the Charact of C1 = (the Charact of C2)*g;
 end;
 
+
 theorem :: CIRCTRM1:35
  for S being non empty ManySortedSign
  for C being non-empty MSAlgebra over S
@@ -515,6 +623,7 @@ definition
 
   f, g form_embedding_of C1, C2 & f", g" form_embedding_of C2, C1;
 end;
+
 
 theorem :: CIRCTRM1:37
  for S1, S2 being non empty ManySortedSign
@@ -566,6 +675,7 @@ definition
 :: CIRCTRM1:def 14
     ex f, g being Function st C1, C2 are_similar_wrt f, g;
 end;
+
 
 
 reserve
@@ -684,6 +794,7 @@ definition
      C, X-Circuit A are_similar;
 end;
 
+
 definition
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
@@ -700,6 +811,7 @@ definition
   ex g st it, g form_embedding_of X-Circuit A, C;
 end;
 
+
 definition
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
@@ -714,6 +826,7 @@ definition
 :: CIRCTRM1:def 18
     f, it form_embedding_of X-Circuit A, C;
 end;
+
 
 theorem :: CIRCTRM1:59
  for G being Circuit-like non void (non empty ManySortedSign)

@@ -37,18 +37,19 @@ reserve
         S for non empty FSM over I,
         q, q1 for State of S;
 
-definition let I, S, q, w;
- redefine func (q,w)-admissible;
- synonym GEN(w,q);
-end;
+notation let I, S, q, w;
+ synonym GEN(w,q) for (q,w)-admissible;
+ end;
 
-definition let I, S, q, w;
+
+registration let I, S, q, w;
  cluster GEN(w, q) -> non empty;
  coherence
   proof len GEN(w, q) = len w + 1 by FSM_1:def 2;
    hence thesis by FINSEQ_1:25;
   end;
 end;
+
 
 theorem Th1:
     GEN(<*s*>, q) = <*q, (the Tran of S).[q, s]*>
@@ -131,6 +132,7 @@ definition
     j <= len(w2)+1 holds
   GEN(w1, the InitS of S).j = GEN(w2, the InitS of S).j;
 end;
+
 
 theorem Th4:
   S is calculating_type implies
@@ -250,6 +252,7 @@ A2:   w1.1 = w2.1;
       proof per cases;
        suppose w1 = <*> I or w2 = <*> I;
         hence thesis by Lm1;
+       end;
        suppose
 A3:      w1 <> {} & w2 <> {};
         reconsider v1 = w2|Seg len w1, v2 = w1|Seg len w2 as
@@ -330,6 +333,7 @@ then A16:     GEN(w2, the InitS of S)
           by A6,A16,TREES_1:8;
         hence thesis by XBOOLE_0:def 9;
       end;
+      end;
     end;
    hence S is calculating_type by Th5;
   end;
@@ -342,12 +346,14 @@ definition
      the InitS of S,<*s*>^w-leads_to q;
 end;
 
+
 definition
  let I, S, q;
  attr q is accessible means
  :Def3:
    ex w be FinSequence of I st the InitS of S,w-leads_to q;
 end;
+
 
 theorem
     q is_accessible_via s implies q is accessible
@@ -405,7 +411,7 @@ A2: the InitS of S, <*s*>^w-leads_to q;
 then A3: ex m being Nat st P[m];
    consider m being Nat such that
 A4: P[m] and
-A5: for k being Nat st P[k] holds m <= k from Min(A3);
+A5: for k being Nat st P[k] holds m <= k from NAT_1:sch 5(A3);
       m <> 0 by A4;
     then reconsider m as non empty Nat;
    take m; let w1 such that
@@ -451,6 +457,7 @@ definition
  :Def4:
   for q being State of S holds q is accessible;
 end;
+
 
 theorem
     (for s1,s2,q holds
@@ -508,7 +515,7 @@ proof
         then WI-succ_of QI = (the Tran of S).[QI2,WI2] by FSM_1:def 1;
       hence thesis by A9,A12,FSM_1:def 1;
     end;
-      for j holds P[j] from Ind_from_1(A3,A4);
+      for j holds P[j] from BINARITH:sch 1(A3,A4);
     hence thesis by A2;
   end;
   hence thesis by Def1;
@@ -572,7 +579,7 @@ A2: for j st j >= 2 holds for w1 st j <= len(w1)+1 holds
          = (the Tran of S).[QI, WI] by A9,FSM_1:def 1;
       hence thesis by A1;
     end;
-      for h being non trivial Nat holds P[h] from Ind_from_2(A4,A6);
+      for h being non trivial Nat holds P[h] from NAT_2:sch 2(A4,A6);
    hence thesis by A3;
   end;
     for j holds for w1,w2 st w1.1 = w2.1 & j <= len(w1)+1 &
@@ -629,7 +636,7 @@ A2: for j st j >= 2 holds for w1 st j <= len(w1)+1 holds
         then WI-succ_of QI = (the Tran of S).[QI2,WI2] by FSM_1:def 1;
       hence thesis by A18,A21,FSM_1:def 1;
     end;
-      for j holds P[j] from Ind_from_1(A11,A12);
+      for j holds P[j] from BINARITH:sch 1(A11,A12);
     hence thesis by A10;
   end;
   hence thesis by Def1;
@@ -803,6 +810,7 @@ proof
       .= (the Tran of S).[the InitS of S, s2]
         by A4,A5,A10,FSM_1:def 2;
   hence contradiction by A1,A2,A12,A13,A14,Def1;
+  end;
   suppose w <> {};
     then consider s' being set, w' being FinSequence such that
       A15: w = <*s'*>^w' & len w = len w'+1 by REWRITE1:5;
@@ -818,6 +826,7 @@ proof
       by XCMPLX_1:1;
   hence contradiction by A1,A2,A9,A18,Def1;
 end;
+end;
 
 begin :: Machines with final states
 
@@ -829,7 +838,8 @@ definition let I be set;
      FinalS -> Subset of the carrier #);
 end;
 
-definition let I be set;
+
+registration let I be set;
   cluster non empty SM_Final over I;
   existence
   proof
@@ -842,6 +852,7 @@ definition let I be set;
   end;
 end;
 
+
 definition
  let I, s;
  let S be non empty SM_Final over I;
@@ -850,6 +861,7 @@ definition
  ex q being State of S st q is_accessible_via s & q in the FinalS of S;
 end;
 
+
 definition
  let I;
  let S be non empty SM_Final over I;
@@ -857,6 +869,7 @@ definition
 :Def6:
   s leads_to_final_state_of S;
 end;
+
 
 definition let I be set, O be non empty set;
  struct (SM_Final over I, Moore-FSM over I, O)
@@ -869,7 +882,8 @@ definition let I be set, O be non empty set;
       FinalS -> Subset of the carrier #);
 end;
 
-definition let I be set, O be non empty set;
+
+registration let I be set, O be non empty set;
   cluster non empty strict Moore-SM_Final over I, O;
   existence
   proof
@@ -883,6 +897,7 @@ definition let I be set, O be non empty set;
     thus thesis;
   end;
 end;
+
 
 definition
  let I, O;
@@ -905,6 +920,7 @@ definition
    hence thesis;
   end;
 end;
+
 
 theorem Th17:
  for i,f being set, o being Function of {i,f}, O
@@ -955,11 +971,11 @@ A8:   WI = w.k &
      hence thesis;
    end;
 A9: j is non trivial Nat by A1,NAT_2:def 1;
-     for k be non trivial Nat holds P[k] from Ind_from_2(A4,A6);
+     for k be non trivial Nat holds P[k] from NAT_2:sch 2(A4,A6);
    hence thesis by A9;
 end;
 
-definition
+registration
  let I, O;
  let i,f be set;
  let o be Function of {i,f}, O;
@@ -991,7 +1007,8 @@ A4:   1 <= j;
  end;
 end;
 
-definition
+
+registration
  let I, O;
  let i,f be set;
  let o be Function of {i,f}, O;
@@ -1013,6 +1030,7 @@ definition
    hence thesis by TARSKI:def 1;
   end;
 end;
+
 
 reserve n, m, o, p for non empty Nat,
         M for non empty Moore-SM_Final over I, O,
@@ -1042,7 +1060,7 @@ A3: the InitS of M,<*s*>^w-leads_to q by A2,Def2;
 then A4: ex m being Nat st P[m] by A2;
    consider m being Nat such that
 A5: P[m] and
-A6: for k being Nat st P[k] holds m <= k from Min(A4);
+A6: for k being Nat st P[k] holds m <= k from NAT_1:sch 5(A4);
       m <> 0 by A5;
    then reconsider m as non empty Nat;
    take m;
@@ -1109,6 +1127,7 @@ definition let I, O, M, s;
         for n st n < m & n <= len w+1 holds
          not GEN(w, the InitS of M).n in the FinalS of M;
 end;
+
 
 theorem Th19:
  the InitS of M in the FinalS of M
@@ -1312,7 +1331,7 @@ theorem Th23:
 proof
   deffunc F(Real,Real) = max($1,$2);
   consider f being BinOp of REAL such that
-A1: for x,y holds f.(x,y) = F(x,y) from BinOpLambda;
+A1: for x,y holds f.(x,y) = F(x,y) from BINOP_1:sch 2;
   let M being non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL};
   assume
 A2: M is calculating_type &
@@ -1348,7 +1367,7 @@ theorem Th24:
 proof
   deffunc F(Real,Real) = min($1,$2);
   consider f being BinOp of REAL such that
-A1: for x,y holds f.(x,y) = F(x,y) from BinOpLambda;
+A1: for x,y holds f.(x,y) = F(x,y) from BINOP_1:sch 2;
   let M being non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL};
   assume
 A2: M is calculating_type &
@@ -1383,7 +1402,7 @@ theorem Th25:
 proof
   deffunc F(Real,Real) = $1+$2;
   consider f being BinOp of REAL such that
-A1: for x,y holds f.(x,y) = F(x,y) from BinOpLambda;
+A1: for x,y holds f.(x,y) = F(x,y) from BINOP_1:sch 2;
   let M being non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL};
   assume
 A2: M is calculating_type &
@@ -1417,7 +1436,7 @@ theorem Th26:
 proof
   deffunc F(Real,Real) = max(sgn $1,sgn $2);
   consider f being BinOp of REAL such that
-A1: for x,y holds f.(x,y) = F(x,y) from BinOpLambda;
+A1: for x,y holds f.(x,y) = F(x,y) from BINOP_1:sch 2;
   let M being non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL};
   assume
 A2: M is calculating_type &
@@ -1443,18 +1462,22 @@ then A5:     sgn x = 1 by ABSVALUE:def 2;
              y > 0;
             then sgn y = 1 by ABSVALUE:def 2;
             hence thesis by A3,A4,A5;
+          end;
           suppose
              y = 0;
             then sgn y = 0 by ABSVALUE:def 2;
             then max(sgn x, sgn y) = 1 by A5,SQUARE_1:def 2;
             hence thesis by A3,A4;
+          end;
           suppose
              y < 0;
             then sgn y = -1 by ABSVALUE:def 2;
             then max(sgn x, sgn y) = 1 by A5,SQUARE_1:def 2;
             hence thesis by A3,A4;
         end;
+        end;
         hence thesis;
+        end;
         suppose
 A6:     x = 0;
 then A7:     sgn x = 0 by ABSVALUE:def 2;
@@ -1464,17 +1487,21 @@ A8:        y > 0;
             then sgn y = 1 by ABSVALUE:def 2;
             then max(sgn x, sgn y) = 1 by A7,SQUARE_1:def 2;
             hence thesis by A3,A8;
+          end;
           suppose
 A9:        y = 0;
             then sgn y = 0 by ABSVALUE:def 2;
             hence thesis by A3,A6,A9;
+          end;
           suppose
 A10:        y < 0;
             then sgn y = -1 by ABSVALUE:def 2;
             then max(sgn x, sgn y) = 0 by A7,SQUARE_1:def 2;
             hence thesis by A3,A6,A10;
         end;
+        end;
         hence thesis;
+        end;
         suppose
 A11:     x < 0;
 then A12:     sgn x = -1 by ABSVALUE:def 2;
@@ -1484,17 +1511,21 @@ A13:        y > 0;
             then sgn y = 1 by ABSVALUE:def 2;
             then max(sgn x, sgn y) = 1 by A12,SQUARE_1:def 2;
             hence thesis by A3,A13;
+          end;
           suppose
 A14:        y = 0;
             then sgn y = 0 by ABSVALUE:def 2;
             then max(sgn x, sgn y) = 0 by A12,SQUARE_1:def 2;
             hence thesis by A3,A11,A14;
+          end;
           suppose
 A15:        y < 0;
             then sgn y = -1 by ABSVALUE:def 2;
             hence thesis by A3,A11,A12,A15;
         end;
+        end;
         hence thesis;
+      end;
       end;
       hence thesis;
     end;
@@ -1504,7 +1535,7 @@ A15:        y < 0;
   hence thesis by A1;
  end;
 
-definition
+registration
  let I, O;
  cluster calculating_type halting (non empty Moore-SM_Final over I, O);
  existence
@@ -1514,7 +1545,8 @@ definition
   end;
 end;
 
-definition
+
+registration
  let I;
  cluster calculating_type halting (non empty SM_Final over I);
  existence
@@ -1524,6 +1556,7 @@ definition
    take M; thus thesis;
   end;
 end;
+
 
 definition
  let I, O;
@@ -1542,6 +1575,7 @@ A1:    s leads_to_final_state_of M by Def6;
    hence thesis by A1,Th20;
   end;
 end;
+
 
 theorem
    for f being Function of {0, 1}, O holds

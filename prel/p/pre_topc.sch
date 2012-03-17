@@ -11,9 +11,6 @@ RELSET_1
 FUNCT_2
 PRE_TOPC
 #
-SubFamExS
-TopAbstr
-#
 G3 ;;
 ªM5 U1 F1 ;;;ªM2 K10 U1 F1 ;;;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;
 #

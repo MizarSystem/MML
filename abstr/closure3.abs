@@ -22,9 +22,11 @@ environ
 
 begin  :: Preliminaries
 
-definition let S be non empty 1-sorted;
+registration let S be non empty 1-sorted;
  cluster the 1-sorted of S -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
+
 
 theorem :: CLOSURE3:1
  for I be non empty set, M, N be ManySortedSet of I holds
@@ -56,6 +58,7 @@ definition let I be set, M be ManySortedSet of I,
   reflexivity;
  end;
 
+
 theorem :: CLOSURE3:4
    for I be set, M be ManySortedSet of I
  for A,B,C be SubsetFamily of M holds
@@ -72,6 +75,7 @@ func supp M -> set means
 
      it = { x where x is Element of I : M.x <> {} };
 end;
+
 
 theorem :: CLOSURE3:6
    for I be non empty set, M be non-empty ManySortedSet of I holds
@@ -102,16 +106,38 @@ func MSUnion A -> ManySortedSubset of M means
      it.i = union { f.i where f is Element of Bool M: f in A };
 end;
 
+
 definition let I be set, M be ManySortedSet of I;
  let B be non empty SubsetFamily of M;
  redefine
   mode Element of B -> ManySortedSet of I;
 end;
 
-definition let I be set, M be ManySortedSet of I,
+
+registration let I be set, M be ManySortedSet of I,
  A be empty SubsetFamily of M;
  cluster MSUnion A -> empty-yielding;
+ coherence
+  proof
+    set MA = MSUnion A;
+     let i be set; assume
+        i in I;
+then A1:      MA.i = union {f.i where f is Element of Bool M : f in A}
+          by Def4;
+        assume MA.i is non empty;
+        then consider v being set such that
+A2:        v in MA.i by XBOOLE_0:def 1;
+           consider h be set such that
+               v in h and
+A3:        h in {f.i where f is Element of Bool M : f in A} by A1,A2,TARSKI:def
+4;
+          consider g be Element of Bool M such that
+              h = g.i and
+A4:        g in A by A3;
+          thus contradiction by A4;
+  end;
 end;
+
 
 theorem :: CLOSURE3:10
    for I be set, M be ManySortedSet of I,
@@ -122,6 +148,7 @@ definition let I be set, M be ManySortedSet of I,
  A, B be SubsetFamily of M;
  redefine func A \/ B -> SubsetFamily of M;
  end;
+
 
 theorem :: CLOSURE3:11
   for I be set, M be ManySortedSet of I
@@ -137,6 +164,7 @@ definition let I be set, M be ManySortedSet of I,
  A, B be SubsetFamily of M;
  redefine func A /\ B -> SubsetFamily of M;
  end;
+
 
 theorem :: CLOSURE3:13
    for I be set, M be ManySortedSet of I
@@ -162,9 +190,97 @@ attr S is algebraic means
           x = MSUnion A;
 end;
 
-definition let I be non empty set, M be ManySortedSet of I;
+
+registration let I be non empty set, M be ManySortedSet of I;
  cluster algebraic reflexive monotonic idempotent SetOp of M;
+existence
+  proof
+    reconsider f = id (Bool M) as SetOp of M;
+    take f;
+    thus f is algebraic
+     proof
+       let x be Element of Bool M such that
+             x = f.x;
+       set A = { f.a where a is Element of Bool M :
+                 a is locally-finite & supp a is finite & a c= x};
+         A c= Bool M
+         proof
+           let v be set;
+           assume
+             v in A;
+           then consider a be Element of Bool M such that
+A1:             v = f.a and
+                  a is locally-finite & supp a is finite & a c= x;
+           thus v in Bool M by A1;
+         end;
+       then reconsider A as SubsetFamily of M;
+      take A;
+      thus A = { f.a where a is Element of Bool M :
+                 a is locally-finite & supp a is finite & a c= x};
+      thus x c= MSUnion A
+       proof
+          let i be set such that
+A2:           i in I;
+          let y be set such that
+A3:           y in x.i;
+          consider a be Element of Bool M such that
+A4:           y in a.i & a is locally-finite & supp a is finite & a c= x
+                 by A2,A3,Th9;
+            a = f.a by FUNCT_1:35;
+          then a in A by A4;
+          then a.i in {g.i where g is Element of Bool M : g in A};
+          then y in union {g.i where g is Element of Bool M : g in A}
+             by A4,TARSKI:def 4;
+          hence thesis by A2,Def4;
+       end;
+       thus MSUnion A c= x
+         proof
+           let i be set such that
+A5:          i in I;
+             for v be set holds v in (MSUnion A).i implies v in x.i
+             proof
+               let v be set;
+               assume
+                v in (MSUnion A).i;
+               then v in union {ff.i where ff is Element of Bool M: ff in A}
+                 by A5,Def4;
+               then consider Y be set such that
+A6:               v in Y and
+A7:               Y in {ff.i where ff is Element of Bool M: ff in A}
+                     by TARSKI:def 4;
+               consider ff be Element of Bool M such that
+A8:               Y = ff.i and
+A9:               ff in A by A7;
+               consider a be Element of Bool M such that
+A10:               ff = f.a and
+A11:               a is locally-finite & supp a is finite & a c= x by A9;
+                 ff = a by A10,FUNCT_1:35;
+then ff.i c= x.i by A5,A11,PBOOLE:def 5;
+               hence thesis by A6,A8;
+             end;
+             hence thesis by TARSKI:def 3;
+           end;
+     end;
+    thus f is reflexive
+    proof
+      let X be Element of Bool M;
+      thus thesis by FUNCT_1:35;
+    end;
+    thus f is monotonic
+    proof
+      let X, Y be Element of Bool M such that
+A12:     X c= Y;
+        f.X = X & f.Y = Y by FUNCT_1:35;
+      hence thesis by A12;
+    end;
+    thus f is idempotent
+    proof
+      let X be Element of Bool M;
+      thus f.(f.X) = f.X by FUNCT_1:35;
+    end;
+  end;
 end;
+
 
 definition let S be non empty 1-sorted,
                IT be ClosureSystem of S;
@@ -172,6 +288,7 @@ attr IT is algebraic means
 :: CLOSURE3:def 6
    ClSys->ClOp IT is algebraic;
 end;
+
 
 definition let S be non void non empty ManySortedSign,
                MA be non-empty MSAlgebra over S;
@@ -182,6 +299,7 @@ func SubAlgCl MA -> strict ClosureStr over the 1-sorted of S means
   the Family of it = SubSort MA;
 end;
 
+
 canceled;
 
 theorem :: CLOSURE3:16
@@ -190,13 +308,111 @@ for S be non void non empty ManySortedSign,
 SubSort MA is absolutely-multiplicative SubsetFamily of the Sorts of MA;
 
 
-definition let S be non void non empty ManySortedSign,
+registration let S be non void non empty ManySortedSign,
                MA be strict non-empty MSAlgebra over S;
  cluster SubAlgCl MA -> absolutely-multiplicative;
+coherence
+ proof
+  thus SubAlgCl MA is absolutely-multiplicative
+   proof
+A1:     the Sorts of SubAlgCl MA = the Sorts of MA by Def7;
+       set F = the Family of SubAlgCl MA;
+       reconsider SF = SubSort MA as
+         absolutely-multiplicative SubsetFamily of the Sorts of MA by Th16;
+         F = SF by Def7;
+       hence thesis by A1,CLOSURE2:def 19;
+     end;
+   end;
 end;
 
-definition let S be non void non empty ManySortedSign,
+
+registration let S be non void non empty ManySortedSign,
                MA be strict non-empty MSAlgebra over S;
  cluster SubAlgCl MA -> algebraic;
+coherence
+   proof
+    set SS = ClSys->ClOp SubAlgCl MA,
+        M = the Sorts of SubAlgCl MA;
+    let x be Element of Bool M such that
+A1:    x = SS.x;
+    set A = { SS.a where a is Element of Bool M :
+                 a is locally-finite & supp a is finite & a c= x};
+      A c= Bool M
+       proof
+          let v be set;
+          assume
+            v in A;
+          then consider a be Element of Bool M such that
+A2:          v = SS.a and
+               a is locally-finite & supp a is finite & a c= x;
+          reconsider vv = v as Element of Bool M by A2;
+            vv in Bool M;
+          hence thesis;
+          end;
+     then reconsider A as SubsetFamily of M;
+    take A;
+    reconsider I = the carrier of S as non empty set;
+    thus A = { SS.b where b is Element of Bool M :
+                 b is locally-finite & supp b is finite & b c= x};
+    thus x c= MSUnion A
+      proof
+          for i be set st i in I holds x.i c= (MSUnion A).i
+          proof
+            let i be set such that
+A3:              i in I;
+            let v be set such that
+A4:             v in x.i;
+            consider b be Element of Bool M such that
+A5:             v in b.i and
+A6:             b is locally-finite & supp b is finite & b c= x
+                   by A3,A4,Th9;
+A7:          SS.b in A by A6;
+             reconsider SS' = SS as reflexive SetOp of M;
+               b c=' SS'.b by CLOSURE2:def 12;
+             then A8: b.i c= (SS'.b).i by A3,PBOOLE:def 5;
+               (SS'.b).i in {f.i where f is Element of Bool M : f in
+ A} by A7;
+             then v in union {f.i where f is Element of Bool M : f in A}
+                 by A5,A8,TARSKI:def 4;
+             hence v in (MSUnion A).i by A3,Def4;
+        end;
+        hence thesis by PBOOLE:def 5;
+      end;
+
+    thus MSUnion A c= x
+      proof
+          for i be set st i in I holds (MSUnion A).i c= x.i
+        proof
+           let i be set such that
+A9:          i in I;
+             for v be set holds v in (MSUnion A).i implies v in x.i
+             proof
+               let v be set;
+               assume
+                 v in (MSUnion A).i;
+               then v in union {ff.i where ff is Element of Bool M: ff in A}
+                 by A9,Def4;
+               then consider Y be set such that
+A10:               v in Y and
+A11:               Y in {ff.i where ff is Element of Bool M: ff in A}
+                   by TARSKI:def 4;
+               consider ff be Element of Bool M such that
+A12:               Y = ff.i and
+A13:               ff in A by A11;
+               consider a be Element of Bool M such that
+A14:               ff = SS.a and
+                    a is locally-finite & supp a is finite and
+A15:              a c=' x by A13;
+               reconsider SS' = SS as monotonic SetOp of M;
+                 SS'.a c=' SS'.x by A15,CLOSURE2:def 13;
+then ff.i c= x.i by A1,A9,A14,PBOOLE:def 5;
+               hence thesis by A10,A12;
+             end;
+             hence (MSUnion A).i c= x.i by TARSKI:def 3;
+           end;
+           hence thesis by PBOOLE:def 5;
+        end;
+ end;
 end;
+
 

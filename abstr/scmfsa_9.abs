@@ -50,6 +50,7 @@ definition
   ( insloc (card I +4) .--> goto insloc 0 );
 end;
 
+
 theorem :: SCMFSA_9:3
  for I being Macro-Instruction, a being Int-Location holds
      card if=0(a,SCM+FSA-Stop,if>0(a,SCM+FSA-Stop,I ';' Goto insloc 0))
@@ -64,6 +65,7 @@ definition
   if=0(a,SCM+FSA-Stop,if>0(a,SCM+FSA-Stop,I ';' Goto insloc 0)) +*
   ( insloc (card I +4) .--> goto insloc 0 );
 end;
+
 
 theorem :: SCMFSA_9:4
  for I being Macro-Instruction, a being Int-Location holds
@@ -195,6 +197,7 @@ definition
       (LifeSpan (it.i +* (I +* sl0)) + 3);
 end;
 
+
  reserve i,k,m,n for Nat;
 
 canceled 2;
@@ -202,11 +205,28 @@ canceled 2;
 theorem :: SCMFSA_9:25
  StepWhile=0(a,I,s).(k+1)=StepWhile=0(a,I,StepWhile=0(a,I,s).k).1;
 
-scheme MinIndex { F(Nat)->Nat,j() -> Nat} :
+scheme :: SCMFSA_9:sch 1
+ MinIndex { F(Nat)->Nat,j() -> Nat} :
   ex k st F(k)=0 & for n st F(n)=0 holds k <= n
    provided
  F(0) = j() and
- for k holds (F(k+1) < F(k) or F(k) = 0);
+ for k holds (F(k+1) < F(k) or F(k) = 0)
+proof
+    defpred P[Nat] means ex n st $1 = F(n);
+A3:  ex k st P[k] by A1;
+A4:  for k st k <> 0 & P[k] ex m st m < k & P[m]
+    proof let k; assume
+A5:    k <> 0 & P[k];
+       then consider n such that
+A6:    k = F(n);
+       take F(n + 1);
+       thus thesis by A2,A5,A6;
+    end;
+    defpred X[Nat] means F($1)=0;
+      P[0] from NAT_1:sch 7(A3,A4);
+then A7:  ex k st X[k];
+    thus ex k st X[k] & for n st X[n] holds k <= n from NAT_1:sch 5(A7);
+end;
 
 theorem :: SCMFSA_9:26
    for f,g being Function holds f +* g +* g = f +* g;
@@ -281,15 +301,38 @@ theorem :: SCMFSA_9:36
 for i being Instruction of SCM+FSA st i does_not_destroy intloc 0 holds
 Macro i is good;
 
-definition
+registration
  let I,J be good Macro-Instruction,a be Int-Location;
  cluster if=0(a,I,J) -> good;
+ correctness
+ proof
+     set i = a =0_goto insloc (card J + 3);
+       i does_not_destroy intloc 0 by SCMFSA7B:18;
+     then reconsider Mi=Macro i as good Macro-Instruction by Th36;
+       if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';'
+     SCM+FSA-Stop by SCMFSA8B:def 1
+     .= Mi ';' J ';' Goto insloc (card I + 1) ';' I ';'
+     SCM+FSA-Stop by SCMFSA6A:def 5;
+     hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let I be good Macro-Instruction,a be Int-Location;
  cluster while=0(a,I) -> good;
+ correctness
+ proof
+     set J=insloc (card I +4) .--> goto insloc 0;
+     set F=if=0(a, I ';' Goto insloc 0, SCM+FSA-Stop);
+A1:  J does_not_destroy intloc 0 by Th35;
+A2:  F does_not_destroy intloc 0 by SCMFSA7B:def 5;
+       while=0(a,I) = F+*J by Def1;
+     then while=0(a,I) does_not_destroy intloc 0 by A1,A2,SCMFSA8A:25;
+     hence thesis by SCMFSA7B:def 5;
+ end;
 end;
+
 
 :: -----------------------------------------------------------
 :: WHILE>0  Statement
@@ -379,6 +422,7 @@ definition
       (LifeSpan (it.i +* (I +* sl0)) + 3);
 end;
 
+
 canceled 2;
 
 theorem :: SCMFSA_9:50
@@ -432,14 +476,37 @@ theorem :: SCMFSA_9:55
       or f.s = 0) & ( f.s =0 iff s.a <= 0 ))
      holds while>0(a,I) is parahalting;
 
-definition
+registration
  let I,J be good Macro-Instruction,a be Int-Location;
  cluster if>0(a,I,J) -> good;
+ correctness
+ proof
+     set i = a >0_goto insloc (card J + 3);
+       i does_not_destroy intloc 0 by SCMFSA7B:19;
+     then reconsider Mi=Macro i as good Macro-Instruction by Th36;
+       if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';'
+        SCM+FSA-Stop by SCMFSA8B:def 2
+     .= Mi ';' J ';' Goto insloc (card I + 1) ';' I ';'
+        SCM+FSA-Stop by SCMFSA6A:def 5;
+     hence thesis;
+ end;
 end;
 
-definition
+
+registration
  let I be good Macro-Instruction,a be Int-Location;
  cluster while>0(a,I) -> good;
+ correctness
+ proof
+     set J=insloc (card I +4) .--> goto insloc 0;
+     set F=if>0(a, I ';' Goto insloc 0, SCM+FSA-Stop);
+A1:  J does_not_destroy intloc 0 by Th35;
+A2:  F does_not_destroy intloc 0 by SCMFSA7B:def 5;
+       while>0(a,I) = F+*J by Def2;
+     then while>0(a,I) does_not_destroy intloc 0 by A1,A2,SCMFSA8A:25;
+     hence thesis by SCMFSA7B:def 5;
+ end;
 end;
+
 
 

@@ -1,0 +1,10 @@
+HIDDEN
+TARSKI
+RELAT_1
+FUNCT_1
+ORDINAL1
+#
+M1 ;M1 ;M1 ;;
+ªM1 V1 ;V3 ;;ª&R1 K5 B1 ;F1 ;;M1 V7 ;;ª&R2 B2 F1 ;;ª&ª&P1 B2 ;ªR1 K15 B1 B2 ;F2 B2 ;;;ª&ªP1 B2 ;ªR1 K15 B1 B2 ;F3 B2 ;;;;;;;
+#
+!

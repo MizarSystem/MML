@@ -22,12 +22,14 @@ environ
 
 begin :: One gate circuits
 
-definition
+registration
  let n be Nat;
  let f be Function of n-tuples_on BOOLEAN, BOOLEAN;
  let p be FinSeqLen of n;
  cluster 1GateCircuit(p,f) -> Boolean;
+ coherence by CIRCCOMB:69;
 end;
+
 
 theorem :: CIRCCMB2:1
  for X being finite non empty set, n being Nat
@@ -59,7 +61,8 @@ theorem :: CIRCCMB2:4
 
 begin :: Defining Many Cell Circuit Structures
 
-scheme CIRCCMB2'sch_1 ::CircSch0
+scheme :: CIRCCMB2:sch 1
+ CIRCCMB2'sch_1 ::CircSch0
  {S0() -> non empty ManySortedSign, o0()-> set,
   S(set,set,set) -> non empty ManySortedSign,
   o(set,set) -> set}:
@@ -67,9 +70,31 @@ scheme CIRCCMB2'sch_1 ::CircSch0
   f.0 = S0() & h.0 = o0() &
   for n being Nat, S being non empty ManySortedSign, x being set
    st S = f.n & x = h.n
-   holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n);
+   holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n)
+proof
+    deffunc f(set,set) = [S($2`1,$2`2,$1), o($2`2,$1)];
+   consider F being Function such that
+A1:  dom F = NAT & F.0 = [S0(),o0()] and
+A2:  for n being Nat holds F.(n+1) = f(n,F.n) from RECDEF_1:sch 3;
+   deffunc f(set) = (F.$1)`1;
+   consider f being ManySortedSet of NAT such that
+A3:  for n being set st n in NAT holds f.n = f(n) from MSUALG_1:sch 2;
+   deffunc h(set) = (F.$1)`2;
+   consider h being ManySortedSet of NAT such that
+A4:  for n being set st n in NAT holds h.n = h(n) from MSUALG_1:sch 2;
+   take f,h;
+      (F.0)`1 = S0() & (F.0)`2 = o0() by A1,MCART_1:7;
+   hence f.0 = S0() & h.0 = o0() by A3,A4;
+   let n be Nat, S be non empty ManySortedSign, x be set; set x = F.n;
+   assume S = f.n;
+    then S = x`1 & h.n = x`2 by A3,A4;
+    then F.(n+1) = [S(S,h.n,n), o(h.n,n)] by A2;
+    then (F.(n+1))`1 = S(S,h.n,n) & (F.(n+1))`2 = o(h.n,n) by MCART_1:7;
+   hence thesis by A3,A4;
+  end;
 
-scheme CIRCCMB2'sch_2 ::CircSch1
+scheme :: CIRCCMB2:sch 2
+ CIRCCMB2'sch_2 ::CircSch1
  {S(set,set,set) -> non empty ManySortedSign,
   o(set,set) -> set, P[set,set,set],
   f,h() -> ManySortedSet of NAT}:
@@ -83,9 +108,24 @@ scheme CIRCCMB2'sch_2 ::CircSch1
       holds f().(n+1) = S(S,x,n) & h().(n+1) = o(x,n) and
   for n being Nat, S being non empty ManySortedSign, x being set
       st S = f().n & x = h().n & P[S,x,n]
-      holds P[S(S,x,n), o(x,n), n+1];
+      holds P[S(S,x,n), o(x,n), n+1]
+proof
+   defpred Q[Nat] means
+    ex S being non empty ManySortedSign st S = f().$1 & P[S,h().$1,$1];
+A4:  for n being Nat st Q[n] holds Q[n+1]
+     proof let n be Nat;
+      given S being non empty ManySortedSign such that
+A5:    S = f().n & P[S,h().n,n];
+      take S' = S(S,h().n,n);
+         f().(n+1) = S(S,h().n,n) & h().(n+1) = o(h().n, n) by A2,A5;
+      hence S' = f().(n+1) & P[S',h().(n+1),n+1] by A3,A5;
+     end;
+A6:  Q[0] by A1;
+    thus for n being Nat holds Q[n] from NAT_1:sch 1(A6,A4);
+  end;
 
-scheme CIRCCMB2'sch_3 :: CircSchR0
+scheme :: CIRCCMB2:sch 3
+ CIRCCMB2'sch_3 :: CircSchR0
  {S0() -> non empty ManySortedSign, S(set,set,set) -> non empty ManySortedSign,
   o(set,set) -> set, f,h() -> ManySortedSet of NAT}:
  for n being Nat, x being set st x = h().n holds h().(n+1) = o(x,n)
@@ -93,9 +133,27 @@ scheme CIRCCMB2'sch_3 :: CircSchR0
  f().0 = S0() and
  for n being Nat, S being non empty ManySortedSign, x being set
      st S = f().n & x = h().n
-     holds f().(n+1) = S(S,x,n) & h().(n+1) = o(x,n);
+     holds f().(n+1) = S(S,x,n) & h().(n+1) = o(x,n)
+proof   let n be Nat, x be set; assume
+A3:  x = h().n;
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+A4:  for n being Nat, S being non empty ManySortedSign, x being set
+      st S = f().n & x = h().n
+      holds f().(n+1) = Sl(S,x,n) & h().(n+1) = ol(x,n) by A2;
+A5: ex S being non empty ManySortedSign, x being set st S = f().0 & x = h().0
+  & Pl[S, x, 0] by A1;
+A6:  for n being Nat, S being non empty ManySortedSign, x being set
+      st S = f().n & x = h().n & Pl[S,x,n]
+      holds Pl[Sl(S,x,n), ol(x,n), n+1];
+    for n being Nat ex S being non empty ManySortedSign st S = f().n &
+     Pl[S,h().n,n] from CIRCCMB2'sch_2(A5,A4,A6);
+    then ex S being non empty ManySortedSign st S = f().n;
+   hence thesis by A2,A3;
+  end;
 
-scheme CIRCCMB2'sch_4 :: CircStrExSch
+scheme :: CIRCCMB2:sch 4
+ CIRCCMB2'sch_4 :: CircStrExSch
  {S0() -> non empty ManySortedSign, o0()-> set,
   S(set,set,set) -> non empty ManySortedSign,
   o(set,set) -> set, n() -> Nat}:
@@ -103,9 +161,28 @@ scheme CIRCCMB2'sch_4 :: CircStrExSch
   S = f.n() & f.0 = S0() & h.0 = o0() &
   for n being Nat, S being non empty ManySortedSign, x being set
    st S = f.n & x = h.n
-   holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n);
+   holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n)
+proof
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+    consider f,h being ManySortedSet of NAT such that
+A1:  f.0 = S0() & h.0 = o0() and
+A2:  for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f.n & x = h.n
+     holds f.(n+1) = Sl(S,x,n) & h.(n+1) = ol(x,n) from CIRCCMB2'sch_1;
+A3: ex S being non empty ManySortedSign, x being set st S = f.0 & x = h.0
+     &  Pl[S, x, 0] by A1;
+A4: for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f.n & x = h.n & Pl[S,x,n] holds Pl[Sl(S,x,n), ol(x,n), n+1];
+      for n being Nat ex S being non empty ManySortedSign st S = f.n &
+       Pl[S,h.n,n] from CIRCCMB2'sch_2(A3,A2,A4);
+   then consider S being non empty ManySortedSign such that
+A5:  S = f.n();
+   take S,f,h; thus thesis by A1,A2,A5;
+  end;
 
-scheme CIRCCMB2'sch_5 :: CircStrUniqSch
+scheme :: CIRCCMB2:sch 5
+ CIRCCMB2'sch_5 :: CircStrUniqSch
  {S0() -> non empty ManySortedSign, o0()-> set,
   S(set,set,set) -> non empty ManySortedSign,
   o(set,set) -> set, n() -> Nat}:
@@ -120,9 +197,68 @@ scheme CIRCCMB2'sch_5 :: CircStrUniqSch
     for n being Nat, S being non empty ManySortedSign, x being set
      st S = f.n & x = h.n
      holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n))
- holds S1 = S2;
+ holds S1 = S2
+proof   let S1,S2 be non empty ManySortedSign;
+   given f1,h1 being ManySortedSet of NAT such that
+A1: S1 = f1.n() and
+A2: f1.0 = S0() & h1.0 = o0() and
+A3: for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f1.n & x = h1.n
+     holds f1.(n+1) = S(S,x,n) & h1.(n+1) = o(x,n);
+   given f2,h2 being ManySortedSet of NAT such that
+A4: S2 = f2.n() and
+A5: f2.0 = S0() & h2.0 = o0() and
+A6: for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f2.n & x = h2.n
+     holds f2.(n+1) = S(S,x,n) & h2.(n+1) = o(x,n);
+defpred A[Nat] means h1.$1 = h2.$1;
+A7: A[0] by A2,A5;
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+defpred Pl[set,set] means $1 = $2;
+A8: ex S being non empty ManySortedSign, x being set st S = f1.0 & x = h1.0 &
+     Pl[S,x,0] by A2;
+A9:   for n being Nat, S being non empty ManySortedSign, x being set
+       st S = f1.n & x = h1.n
+       holds f1.(n+1) = Sl(S,x,n) & h1.(n+1) = ol(x,n) by A3;
+A10:   for n being Nat, S being non empty ManySortedSign, x being set
+       st S = f1.n & x = h1.n & Pl[S,x,n] holds Pl[Sl(S,x,n), ol(x,n), n+1];
+A11:   for n being Nat ex S being non empty ManySortedSign st S = f1.n
+        & Pl[S,h1.n,n] from CIRCCMB2'sch_2(A8,A9,A10);
+A12: ex S being non empty ManySortedSign, x being set st S = f2.0 & x = h2.0 &
+     Pl[S,x,0] by A5;
+A13:   for n being Nat, S being non empty ManySortedSign, x being set
+       st S = f2.n & x = h2.n
+       holds f2.(n+1) = Sl(S,x,n) & h2.(n+1) = ol(x,n) by A6;
+A14:   for n being Nat, S being non empty ManySortedSign, x being set
+       st S = f2.n & x = h2.n & Pl[S,x,n] holds Pl[Sl(S,x,n), ol(x,n), n+1];
+A15:   for n being Nat ex S being non empty ManySortedSign st S = f2.n &
+        Pl[S,h2.n,n] from CIRCCMB2'sch_2(A12,A13,A14);
+A16: now let n be Nat; assume
+A17:   A[n];
+        ex S being non empty ManySortedSign st S = f1.n & Pl[S,h1.n,n] by A11;
+then A18:   h1.(n+1) = o(h1.n,n) by A3;
+        ex S being non empty ManySortedSign st S = f2.n & Pl[S,h2.n,n] by A15;
+     hence A[n+1] by A6,A17,A18;
+    end;
+      for i being Nat holds A[i] from NAT_1:sch 1(A7,A16);
+    then for i being set st i in NAT holds h1.i = h2.i;
+then A19:  h1 = h2 by PBOOLE:3;
+defpred B[Nat] means f1.$1 = f2.$1;
+A20: B[0] by A2,A5;
+A21: now let n be Nat; assume
+A22:   B[n];
+     consider S being non empty ManySortedSign such that
+A23:   S = f1.n & Pl[S,h1.n,n] by A11;
+     f1.(n+1) = S(S,h1.n,n) by A3,A23 .= f2.(n+1) by A6,A19,A22,A23;
+     hence B[n+1];
+    end;
+      for i being Nat holds B[i] from NAT_1:sch 1(A20,A21);
+   hence S1 = S2 by A1,A4;
+  end;
 
-scheme CIRCCMB2'sch_6 :: CircStrDefSch
+scheme :: CIRCCMB2:sch 6
+ CIRCCMB2'sch_6 :: CircStrDefSch
  {S0() -> non empty ManySortedSign, o0()-> set,
   S(set,set,set) -> non empty ManySortedSign,
   o(set,set) -> set, n() -> Nat}:
@@ -142,9 +278,32 @@ scheme CIRCCMB2'sch_6 :: CircStrDefSch
     for n being Nat, S being non empty ManySortedSign, x being set
      st S = f.n & x = h.n
      holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n))
- holds S1 = S2;
+ holds S1 = S2
+proof
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+   thus
+      ex S being non empty ManySortedSign, f,h being ManySortedSet of NAT st
+     S = f.n() & f.0 = S0() & h.0 = o0() &
+     for n being Nat, S being non empty ManySortedSign, x being set
+      st S = f.n & x = h.n
+      holds f.(n+1) = Sl(S,x,n) & h.(n+1) = ol(x,n) from CIRCCMB2'sch_4;
+thus for S1,S2 being non empty ManySortedSign st
+  (ex f,h being ManySortedSet of NAT st S1 = f.n() &
+    f.0 = S0() & h.0 = o0() &
+    for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f.n & x = h.n
+     holds f.(n+1) = Sl(S,x,n) & h.(n+1) = ol(x,n)) &
+  (ex f,h being ManySortedSet of NAT st S2 = f.n() &
+    f.0 = S0() & h.0 = o0() &
+    for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f.n & x = h.n
+     holds f.(n+1) = Sl(S,x,n) & h.(n+1) = ol(x,n))
+ holds S1 = S2 from CIRCCMB2'sch_5;
+  end;
 
-scheme CIRCCMB2'sch_7 :: attrCircStrExSch
+scheme :: CIRCCMB2:sch 7
+ CIRCCMB2'sch_7 :: attrCircStrExSch
  {S0() -> non empty ManySortedSign, S(set,set,set) -> non empty ManySortedSign,
   o0()-> set, o(set,set) -> set, n() -> Nat}:
  ex S being unsplit gate`1=arity gate`2isBoolean
@@ -161,9 +320,33 @@ scheme CIRCCMB2'sch_7 :: attrCircStrExSch
                  non empty ManySortedSign,
          x being set, n being Nat
      holds S(S,x,n) is
-       unsplit gate`1=arity gate`2isBoolean non void non empty strict;
+       unsplit gate`1=arity gate`2isBoolean non void non empty strict
+proof
+   defpred P[non empty ManySortedSign, set] means
+    $1 is unsplit gate`1=arity gate`2isBoolean non void strict;
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+defpred Pl[non empty ManySortedSign, set,set] means P[$1,$2];
+  consider S being non empty ManySortedSign, f,h being ManySortedSet of NAT
+  such that
+A3:  S = f.n() & f.0 = S0() & h.0 = o0() and
+A4:  for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f.n & x = h.n
+     holds f.(n+1) = Sl(S,x,n) & h.(n+1) = ol(x,n) from CIRCCMB2'sch_4;
+A5: ex S being non empty ManySortedSign, x being set st
+     S = f.0 & x = h.0 & Pl[S,x,0] by A1,A3;
+A6: for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f.n & x = h.n & Pl[S,x,n] holds Pl[Sl(S,x,n), ol(x,n), n+1] by A2;
+   for n being Nat ex S being non empty ManySortedSign st S = f.n & Pl[S,h.n,n]
+      from CIRCCMB2'sch_2(A5,A4,A6);
+    then ex S being non empty ManySortedSign st S = f.n() & P[S,n()];
+   then reconsider S as unsplit gate`1=arity gate`2isBoolean non void strict
+                   non empty ManySortedSign by A3;
+   take S,f,h; thus thesis by A3,A4;
+  end;
 
-scheme CIRCCMB2'sch_8 :: ManyCellCircStrExSch
+scheme :: CIRCCMB2:sch 8
+ CIRCCMB2'sch_8 :: ManyCellCircStrExSch
  {S0() -> non empty ManySortedSign,
   S(set,set) -> unsplit gate`1=arity gate`2isBoolean non void non empty
                 ManySortedSign,
@@ -177,9 +360,26 @@ scheme CIRCCMB2'sch_8 :: ManyCellCircStrExSch
    holds f.(n+1) = S +* S(x,n) & h.(n+1) = o(x,n)
  provided
   S0() is
-     unsplit gate`1=arity gate`2isBoolean non void non empty strict;
+     unsplit gate`1=arity gate`2isBoolean non void non empty strict
+proof
+deffunc Sl(non empty ManySortedSign,set,set) = $1+*S($2,$3);
+deffunc ol(set,set) = o($1,$2);
+A2:  for S being unsplit gate`1=arity gate`2isBoolean non void strict
+                 non empty ManySortedSign,
+         x being set, n being Nat
+     holds Sl(S,x,n) is
+       unsplit gate`1=arity gate`2isBoolean non void non empty strict;
+   thus ex S being unsplit gate`1=arity gate`2isBoolean
+      non void non empty non empty strict ManySortedSign,
+    f,h being ManySortedSet of NAT st
+  S = f.n() & f.0 = S0() & h.0 = o0() &
+  for n being Nat, S being non empty ManySortedSign, x being set
+   st S = f.n & x = h.n
+   holds f.(n+1) = Sl(S,x,n) & h.(n+1) = ol(x,n)  from CIRCCMB2'sch_7(A1,A2);
+  end;
 
-scheme CIRCCMB2'sch_9 :: attrCircStrUniqSch
+scheme :: CIRCCMB2:sch 9
+ CIRCCMB2'sch_9 :: attrCircStrUniqSch
  {S0() -> non empty ManySortedSign, o0()-> set,
   S(set,set,set) -> non empty ManySortedSign,
   o(set,set) -> set, n() -> Nat}:
@@ -195,7 +395,24 @@ scheme CIRCCMB2'sch_9 :: attrCircStrUniqSch
     for n being Nat, S being non empty ManySortedSign, x being set
      st S = f.n & x = h.n
      holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n))
- holds S1 = S2;
+ holds S1 = S2
+proof
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+   for S1,S2 being non empty ManySortedSign st
+     (ex f,h being ManySortedSet of NAT st S1 = f.n() &
+       f.0 = S0() & h.0 = o0() &
+       for n being Nat, S being non empty ManySortedSign, x being set
+        st S = f.n & x = h.n
+        holds f.(n+1) = Sl(S,x,n) & h.(n+1) = ol(x,n)) &
+     (ex f,h being ManySortedSet of NAT st S2 = f.n() &
+       f.0 = S0() & h.0 = o0() &
+       for n being Nat, S being non empty ManySortedSign, x being set
+        st S = f.n & x = h.n
+        holds f.(n+1) = Sl(S,x,n) & h.(n+1) = ol(x,n))
+    holds S1 = S2 from CIRCCMB2'sch_5;
+   hence thesis;
+  end;
 
 begin :: Input of Many Cell Circuit
 
@@ -222,7 +439,8 @@ theorem :: CIRCCMB2:9
   st Z c= Y & X \ Z is without_pairs
   holds X \ Y = X \ Z;
 
-scheme CIRCCMB2'sch_10 :: InputOfManyCellCircStr
+scheme :: CIRCCMB2:sch 10
+ CIRCCMB2'sch_10 :: InputOfManyCellCircStr
  {S0() -> unsplit gate`1=arity gate`2isBoolean non void non empty
           ManySortedSign,
   f(set) -> set, h() -> ManySortedSet of NAT,
@@ -246,9 +464,109 @@ scheme CIRCCMB2'sch_10 :: InputOfManyCellCircStr
   for n being Nat, S being non empty ManySortedSign, x being set
      st S = f(n) & x = h().n
      holds f(n+1) = S +* S(x,n) & h().(n+1) = o(x,n) &
-           x in InputVertices S(x,n) & o(x,n) in InnerVertices S(x,n);
+           x in InputVertices S(x,n) & o(x,n) in InnerVertices S(x,n)
+proof
+A7: InnerVertices S(h().0, 0) is Relation by A4;
+A8: S0() tolerates S(h().0,0) by CIRCCOMB:55;
+then A9: InputVertices (S0() +* S(h().0,0))
+      = ((InputVertices S0())\(InnerVertices S(h().0,0))) \/
+        ((InputVertices S(h().0,0))\(InnerVertices S0())) by Th6
+     .= InputVertices S0() \/
+     ((InputVertices S(h().0,0))\(InnerVertices S0())) by A2,A7,Th7;
+defpred P[Nat] means
+ ex S1,S2 being unsplit gate`1=arity gate`2isBoolean non void non empty
+                   ManySortedSign st S1 = f($1) & S2 = f($1+1) &
+        InputVertices S2 =
+            (InputVertices S1)\/((InputVertices S(h().$1,$1)) \ {h().$1}) &
+        h().($1+1) in InnerVertices S2 &
+        InputVertices S2 is without_pairs &
+        InnerVertices S2 is Relation;
+A10: P[0] proof take S0 = S0(), S1 = S0()+* S(h().0,0);
+      thus S0 = f(0) & S1 = f(0+1) by A3,A6;
+         for x being set st x in {h().0} holds x in InnerVertices S0()
+        by A3,TARSKI:def 1;
+then A11:    {h().0} c= InnerVertices S0() by TARSKI:def 3;
+      reconsider A = InputVertices S(h().0,0) \ {h().0},
+                 B = InputVertices S0() as without_pairs set by A2,A5;
+      reconsider R1 = InnerVertices S0(),
+                 R2 = InnerVertices S(h().0,0) as Relation by A1,A4;
+         h().(0+1) = o(h().(0),0) & o(h().(0),0) in R2 by A3,A6;
+       then A12: h().(0+1) in R1 \/ R2 by XBOOLE_0:def 2;
+         InputVertices S1= B\/A by A1,A9,A11,Th9;
+      hence thesis by A8,A12,CIRCCOMB:15;
+     end;
+A13: for i being Nat st P[i] holds P[i+1]
+     proof
+      let i being Nat;
+      given S1,S2 being unsplit gate`1=arity gate`2isBoolean non void
+       non empty ManySortedSign such that
+A14:    S1 = f(i) & S2 = f(i+1) and
+         InputVertices S2 =
+          (InputVertices S1)\/((InputVertices S(h().(i),i)) \ {h().(i)}) and
+A15:    h().(i+1) in InnerVertices S2 and
+A16:    InputVertices S2 is without_pairs and
+A17:    InnerVertices S2 is Relation;
+A18:    S2 tolerates S(h().(i+1),i+1) by CIRCCOMB:55;
+A19:    InnerVertices S(h().(i+1),i+1) is Relation by A4;
+A20:    InputVertices S(h().(i+1),i+1) \ {h().(i+1)} is without_pairs by A5;
+A21:    {h().(i+1)} c= InnerVertices S2 by A15,ZFMISC_1:37;
+      take S2, S3 = S2+*S(h().(i+1),i+1);
+      thus S2 = f(i+1) & S3 = f(i+1+1) by A6,A14;
+      thus
+A22:   InputVertices S3
+         = ((InputVertices S2)\(InnerVertices S(h().(i+1),i+1))) \/
+           ((InputVertices S(h().(i+1),i+1))\(InnerVertices S2))
+            by A18,Th6
+        .= InputVertices S2 \/
+           ((InputVertices S(h().(i+1),i+1))\(InnerVertices S2))
+            by A16,A19,Th7
+        .= (InputVertices S2)\/((InputVertices S(h().(i+1),i+1)) \ {h().(i+1)})
+            by A17,A20,A21,Th9;
+       A23: h().(i+1+1) = o(h().(i+1),i+1) &
+       o(h().(i+1),i+1) in InnerVertices S(h().(i+1), i+1) by A6,A14;
+      reconsider X1 = InputVertices S2,
+                 X2 = (InputVertices S(h().(i+1),i+1)) \ {h().(i+1)}
+                   as without_pairs set by A5,A16;
+A24:   InputVertices S3 = X1 \/ X2 by A22;
+      reconsider X1 = InnerVertices S2,
+                 X2 = InnerVertices S(h().(i+1), i+1)
+                   as Relation by A4,A17;
+        InnerVertices S3 = X1 \/ X2 by A18,CIRCCOMB:15;
+      hence thesis by A23,A24,XBOOLE_0:def 2;
+     end;
+A25:  for i being Nat holds P[i] from NAT_1:sch 1(A10,A13);
+   let n be Nat;
+   consider S1,S2 being unsplit gate`1=arity gate`2isBoolean non void non empty
+                        ManySortedSign such that
+A26: S1 = f(n) & S2 = f(n+1) &
+    InputVertices S2 =
+         (InputVertices S1)\/((InputVertices S(h().(n),n)) \ {h().(n)}) and
+          h().(n+1) in InnerVertices S2 &
+        InputVertices S2 is without_pairs &
+        InnerVertices S2 is Relation by A25;
+   take S1,S2; thus S1 = f(n) & S2 = f(n+1) &
+    InputVertices S2 =
+         (InputVertices S1)\/((InputVertices S(h().(n),n)) \ {h().(n)}) by A26;
+   per cases by NAT_1:22;
+   suppose n = 0; hence thesis by A1,A2,A3,A26;
+   end;
+   suppose ex i being Nat st n = i+1;
+    then consider i being Nat such that
+A27:  n = i+1;
+       ex T1,T2 being unsplit gate`1=arity gate`2isBoolean non void
+        non empty ManySortedSign st
+      T1 = f(i) & T2 = f(i+1) &
+      InputVertices T2 =
+       (InputVertices T1)\/((InputVertices S(h().(i),i)) \ {h().(i)}) &
+      h().(i+1) in InnerVertices T2 &
+      InputVertices T2 is without_pairs &
+      InnerVertices T2 is Relation by A25;
+    hence thesis by A26,A27;
+  end;
+  end;
 
-scheme CIRCCMB2'sch_11 :: InputOfManyCellCircStr
+scheme :: CIRCCMB2:sch 11
+ CIRCCMB2'sch_11 :: InputOfManyCellCircStr
  {Sn(set) -> unsplit gate`1=arity gate`2isBoolean non void non empty
              ManySortedSign,
   h() -> ManySortedSet of NAT,
@@ -270,11 +588,41 @@ scheme CIRCCMB2'sch_11 :: InputOfManyCellCircStr
   for n being Nat, S being non empty ManySortedSign, x being set
      st S = Sn(n) & x = h().(n)
      holds Sn(n+1) = S +* S(x,n) & h().(n+1) = o(x,n) &
-           x in InputVertices S(x,n) & o(x,n) in InnerVertices S(x,n);
+           x in InputVertices S(x,n) & o(x,n) in InnerVertices S(x,n)
+proof
+deffunc SN(set) = Sn($1);
+deffunc Sl(set,set) = S($1,$2);
+deffunc ol(set,set) = o($1,$2);
+    let n be Nat;
+A7: for n being Nat, x being set holds InnerVertices Sl(x,n) is Relation by A4;
+A8: for n being Nat, x being set st x = h().n holds
+      (InputVertices Sl(x,n)) \ {x} is without_pairs by A5;
+A9:  for n being Nat, S being non empty ManySortedSign, x being set
+     st S = SN(n) & x = h().n
+     holds SN(n+1) = S +* Sl(x,n) & h().(n+1) = ol(x,n) &
+          x in InputVertices Sl(x,n) & ol(x,n) in InnerVertices Sl(x,n) by A6;
+A10: SN(0) = SN(0) & h().0 in InnerVertices SN(0) by A3;
+      for n being Nat
+    ex S1,S2 being unsplit gate`1=arity gate`2isBoolean non void non empty
+                   ManySortedSign st S1 = SN(n) & S2 = SN(n+1) &
+     InputVertices S2 =
+       (InputVertices S1)\/((InputVertices Sl(h().n,n)) \ {h().n}) &
+     InnerVertices S1 is Relation &
+     InputVertices S1 is without_pairs from CIRCCMB2'sch_10(A1,A2,A10,A7,A8,A9)
+;
+    then ex S1,S2 being unsplit gate`1=arity gate`2isBoolean non void non
+empty ManySortedSign st S1 = Sn(n) & S2 = Sn(n+1) &
+     InputVertices S2 =
+       (InputVertices S1)\/((InputVertices S(h().(n),n)) \ {h().(n)}) &
+     InnerVertices S1 is Relation &
+     InputVertices S1 is without_pairs;
+   hence thesis;
+  end;
 
 begin :: Defining Many Cell Circuits
 
-scheme CIRCCMB2'sch_12 :: CircSch2
+scheme :: CIRCCMB2:sch 12
+ CIRCCMB2'sch_12 :: CircSch2
  {S0() -> non empty ManySortedSign,
   A0() -> non-empty MSAlgebra over S0(), o0()-> set,
   S(set,set,set) -> non empty ManySortedSign, A(set,set,set,set) -> set,
@@ -284,9 +632,40 @@ scheme CIRCCMB2'sch_12 :: CircSch2
   for n being Nat, S being non empty ManySortedSign,
       A being non-empty MSAlgebra over S
   for x being set st S = f.n & A = g.n & x = h.n
-   holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x,n);
+   holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x,n)
+proof
+    deffunc F(set,set) =
+     [[S($2`11,$2`2,$1), A($2`11,$2`12,$2`2,$1)], o($2`2,$1)];
+   consider F being Function such that
+A1:  dom F = NAT & F.0 = [[S0(),A0()],o0()] and
+A2:  for n being Nat holds F.(n+1) = F(n,F.n) from RECDEF_1:sch 3;
+   deffunc f(set) = (F.$1)`11;
+   consider f being ManySortedSet of NAT such that
+A3:  for n being set st n in NAT holds f.n = f(n) from MSUALG_1:sch 2;
+   deffunc g(set) = (F.$1)`12;
+   consider g being ManySortedSet of NAT such that
+A4:  for n being set st n in NAT holds g.n = g(n) from MSUALG_1:sch 2;
+   deffunc h(set) = (F.$1)`2;
+   consider h being ManySortedSet of NAT such that
+A5:  for n being set st n in NAT holds h.n = h(n) from MSUALG_1:sch 2;
+   take f,g,h;
+      (F.0)`11 = S0() & (F.0)`12 = A0() & (F.0)`2 = o0()
+     by A1,COMMACAT:1,MCART_1:7;
+   hence f.0 = S0() & g.0 = A0() & h.0 = o0() by A3,A4,A5;
+   let n be Nat, S be non empty ManySortedSign,
+       A be non-empty MSAlgebra over S,
+       x be set;
+   set x = F.n;
+   assume S = f.n & A = g.n;
+    then S = x`11 & A = x`12 & h.n = x`2 by A3,A4,A5;
+    then F.(n+1) = [[S(S,h.n,n), A(S,A,h.n,n)], o(h.n,n)] by A2;
+    then (F.(n+1))`11 = S(S,h.n,n) & (F.(n+1))`12 = A(S,A,h.n,n) &
+    (F.(n+1))`2 = o(h.n,n) by COMMACAT:1,MCART_1:7;
+   hence thesis by A3,A4,A5;
+  end;
 
-scheme CIRCCMB2'sch_13 :: CircSch3
+scheme :: CIRCCMB2:sch 13
+ CIRCCMB2'sch_13 :: CircSch3
  {S(set,set,set) -> non empty ManySortedSign, A(set,set,set,set) -> set,
   o(set,set) -> set, P[set,set,set,set],
   f,g,h() -> ManySortedSet of NAT}:
@@ -308,9 +687,35 @@ scheme CIRCCMB2'sch_13 :: CircSch3
       holds P[S(S,x,n), A(S,A,x,n), o(x,n), n+1] and
   for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
      for x being set, n being Nat holds
-      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
+      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n)
+proof   let n be Nat;
+   defpred Q[Nat] means
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+     st S = f().$1 & A = g().$1 & x = h().$1 & P[S,A,x,$1];
+A5:  for n being Nat st Q[n] holds Q[n+1]
+     proof let n be Nat;
+      given S being non empty ManySortedSign,
+            A being non-empty MSAlgebra over S,
+            x being set such that
+A6:    S = f().n & A = g().n & x = h().n & P[S,A,x,n];
+      take S' = S(S,x,n);
+      reconsider A' = A(S,A,x,n) as non-empty MSAlgebra over S' by A4;
+      take A', y = h().(n+1);
+         f().(n+1) = S' & g().(n+1) = A' & y = o(x,n) by A2,A6;
+      hence thesis by A3,A6;
+     end;
+A7: Q[0] by A1;
+    for n being Nat holds Q[n] from NAT_1:sch 1(A7,A5);
+   then consider S being non empty ManySortedSign,
+            A being non-empty MSAlgebra over S,
+            x being set such that
+A8:  S = f().n & A = g().n & x = h().n & P[S,A,x,n];
+   take S,A; thus thesis by A8;
+  end;
 
-scheme CIRCCMB2'sch_14 :: CircSchU2
+scheme :: CIRCCMB2:sch 14
+ CIRCCMB2'sch_14 :: CircSchU2
  {S(set,set,set) -> non empty ManySortedSign, A(set,set,set,set) -> set,
   o(set,set) -> set,
   f1,f2, g1,g2, h1,h2() -> ManySortedSet of NAT}:
@@ -331,9 +736,78 @@ scheme CIRCCMB2'sch_14 :: CircSchU2
             h2().(n+1) = o(x,n) and
   for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
      for x being set, n being Nat holds
-      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
+      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n)
+proof   set f1 = f1(), g1 = g1(), h1 = h1();
+   set f2 = f2(), g2 = g2(), h2 = h2();
+deffunc Al(set,set,set,set) = A($1,$2,$3,$4);
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+A6: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+    st S = f1.0 & A = g1.0 & x = h1.0 & R[S, A, x, 0] by A1;
+A7:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f1().n & A = g1().n & x = h1().n
+      holds f1().(n+1) = Sl(S,x,n) & g1().(n+1) = Al(S,A,x,n) &
+            h1().(n+1) = ol(x,n) by A3;
+A8:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f1.n & A = g1.n & x = h1.n & R[S,A,x,n]
+      holds R[Sl(S,x,n), Al(S,A,x,n), ol(x,n), n+1];
+A9:  for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+     for x being set, n being Nat holds
+      Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n) by A5;
+A10: for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f1.n & A = g1.n & R[S,A,h1.n,n] from CIRCCMB2'sch_13(A6,A7,A8,A9);
+A11: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+    st S = f2.0 & A = g2.0 & x = h2.0 & R[S, A, x, 0] by A1,A2;
+A12:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f2.n & A = g2.n & x = h2.n & R[S,A,x,n]
+      holds R[Sl(S,x,n), Al(S,A,x,n), ol(x,n), n+1];
+A13:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f2().n & A = g2().n & x = h2().n
+      holds f2().(n+1) = Sl(S,x,n) & g2().(n+1) = Al(S,A,x,n) &
+            h2().(n+1) = ol(x,n) by A4;
+A14: for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f2.n & A = g2.n & R[S,A,h2.n,n] from CIRCCMB2'sch_13(A11,A13,A12,A9);
+defpred P[Nat] means h1.$1 = h2.$1;
+A15: P[0] by A2;
+A16: now let n be Nat; assume
+A17:   P[n];
+        ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+       st S = f1.n & A = g1.n by A10;
+then A18:   h1.(n+1) = o(h1.n,n) by A3;
+        ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+       st S = f2.n & A = g2.n by A14;
+     hence P[n+1] by A4,A17,A18;
+    end;
+    for i being Nat holds P[i] from NAT_1:sch 1(A15,A16);
+    then A19: for i being set st i in NAT holds h1.i = h2.i;
+then A20:  h1 = h2 by PBOOLE:3;
+defpred P[Nat] means f1.$1 = f2.$1 & g1.$1 = g2.$1;
+A21: P[0] by A2;
+A22: now let n be Nat; assume
+A23:   P[n];
+     consider S being non empty ManySortedSign,
+              A being non-empty MSAlgebra over S such that
+A24:   S = f1.n & A = g1.n by A10;
+A25:  f1.(n+1) = S(S,h1.n,n) by A3,A24 .= f2.(n+1) by A4,A20,A23,A24;
+      g1.(n+1) = A(S,A,h1.n,n) by A3,A24 .= g2.(n+1) by A4,A20,A23,A24;
+      hence P[n+1] by A25;
+    end;
+      for i being Nat holds P[i] from NAT_1:sch 1(A21,A22);
+    then (for i being set st i in NAT holds f1.i = f2.i) &
+    (for i being set st i in NAT holds g1.i = g2.i);
+   hence thesis by A19,PBOOLE:3;
+  end;
 
-scheme CIRCCMB2'sch_15 :: CircSchR2
+scheme :: CIRCCMB2:sch 15
+ CIRCCMB2'sch_15 :: CircSchR2
  {S0() -> non empty ManySortedSign, A0() -> non-empty MSAlgebra over S0(),
   S(set,set,set) -> non empty ManySortedSign, A(set,set,set,set) -> set,
   o(set,set) -> set,
@@ -350,9 +824,37 @@ scheme CIRCCMB2'sch_15 :: CircSchR2
             h().(n+1) = o(x,n) and
   for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
      for x being set, n being Nat holds
-      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
+      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n)
+proof   let n be Nat, S be non empty ManySortedSign, x be set; assume
+A4:  S = f().n & x = h().n;
+deffunc Al(set,set,set,set) = A($1,$2,$3,$4);
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+A5:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f().n & A = g().n & x = h().n
+      holds f().(n+1) = Sl(S,x,n) & g().(n+1) = Al(S,A,x,n) &
+            h().(n+1) = ol(x,n) by A2;
+A6: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+     st S = f().0 & A = g().0 & x = h().0 & R[S,A,x,0] by A1;
+A7:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f().n & A = g().n & x = h().n & R[S,A,x,n]
+      holds R[Sl(S,x,n), Al(S,A,x,n), ol(x,n), n+1];
+A8:  for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+     for x being set, n being Nat holds
+      Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n) by A3;
+      for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f().n & A = g().n & R[S,A,h().n,n] from CIRCCMB2'sch_13(A6,A5,A7,A8);
+    then ex S being non empty ManySortedSign, A being non-empty MSAlgebra over
+S st S = f().n & A = g().n;
+   hence thesis by A2,A4;
+  end;
 
-scheme CIRCCMB2'sch_16 :: CircuitExSch1
+scheme :: CIRCCMB2:sch 16
+ CIRCCMB2'sch_16 :: CircuitExSch1
  {S0() -> non empty ManySortedSign,
   A0() -> non-empty MSAlgebra over S0(), o0()-> set,
   S(set,set,set) -> non empty ManySortedSign, A(set,set,set,set) -> set,
@@ -367,9 +869,40 @@ scheme CIRCCMB2'sch_16 :: CircuitExSch1
  provided
   for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
      for x being set, n being Nat holds
-      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
+      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n)
+proof
+deffunc Al(set,set,set,set) = A($1,$2,$3,$4);
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+A2:  for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+     for x being set, n being Nat holds
+      Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n) by A1;
+    consider f,g,h being ManySortedSet of NAT such that
+A3:  f.0 = S0() & g.0 = A0() & h.0 = o0() and
+A4:  for n being Nat, S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+    for x being set st S = f.n & A = g.n & x = h.n
+     holds f.(n+1) = Sl(S,x,n) & g.(n+1) = Al(S,A,x,n) & h.(n+1) = ol(x,n)
+      from CIRCCMB2'sch_12;
+A5: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+    st S = f.0 & A = g.0 & x = h.0 & R[S,A,x,0] by A3;
+A6:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f.n & A = g.n & x = h.n & R[S,A,x,n]
+      holds R[Sl(S,x,n), Al(S,A,x,n), ol(x,n), n+1];
+      for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f.n & A = g.n & R[S,A,h.n,n] from CIRCCMB2'sch_13(A5,A4,A6,A2);
+   then consider S being non empty ManySortedSign,
+            A being non-empty MSAlgebra over S such
+   that
+A7:  S = f.n() & A = g.n();
+   take S,A,f,g,h; thus thesis by A3,A4,A7;
+  end;
 
-scheme CIRCCMB2'sch_17 :: CircuitExSch2
+scheme :: CIRCCMB2:sch 17
+ CIRCCMB2'sch_17 :: CircuitExSch2
  {S0,Sn() -> non empty ManySortedSign, A0() -> non-empty MSAlgebra over S0(),
   o0()-> set,
   S(set,set,set) -> non empty ManySortedSign, A(set,set,set,set) -> set,
@@ -389,9 +922,87 @@ scheme CIRCCMB2'sch_17 :: CircuitExSch2
       holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n) and
   for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
      for x being set, n being Nat holds
-      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
+      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n)
+proof
+deffunc Al(set,set,set,set) = A($1,$2,$3,$4);
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+A3:  for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+     for x being set, n being Nat holds
+      Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n) by A2;
+    consider f,g,h being ManySortedSet of NAT such that
+A4:  f.0 = S0() & g.0 = A0() & h.0 = o0() and
+A5:  for n being Nat, S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+    for x being set st S = f.n & A = g.n & x = h.n
+     holds f.(n+1) = Sl(S,x,n) & g.(n+1) = Al(S,A,x,n) & h.(n+1) = ol(x,n)
+      from CIRCCMB2'sch_12;
+   consider f1,h1 being ManySortedSet of NAT such that
+A6:  Sn() = f1.n() & f1.0 = S0() & h1.0 = o0() and
+A7:  for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f1.n & x = h1.n
+     holds f1.(n+1) = Sl(S,x,n) & h1.(n+1) = ol(x,n) by A1;
+defpred P[Nat] means h1.$1 = h.$1;
+A8: P[0] by A4,A6;
+A9: ex S being non empty ManySortedSign, x being set st S = f1.0 & x = h1.0
+     & Pl[S,x,0] by A6;
+A10: for n being Nat, S being non empty ManySortedSign, x being set
+      st S = f1.n & x = h1.n & Pl[S,x,n] holds Pl[Sl(S,x,n), ol(x,n), n+1];
+A11: for n being Nat ex S being non empty ManySortedSign st S = f1.n &
+   Pl[S,h1.n,n] from CIRCCMB2'sch_2(A9,A7,A10);
+A12: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+    st S = f.0 & A = g.0 & x = h.0 & R[S,A,x,0] by A4;
+A13:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f.n & A = g.n & x = h.n & R[S,A,x,n]
+      holds R[Sl(S,x,n), Al(S,A,x,n), ol(x,n), n+1];
+A14: for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f.n & A = g.n & R[S,A,h.n,n] from CIRCCMB2'sch_13(A12,A5,A13,A3);
+A15: now let n be Nat; assume
+A16:   P[n];
+        ex S being non empty ManySortedSign st S = f1.n by A11;
+then A17:   h1.(n+1) = o(h1.n,n) by A7;
+        ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+       st S = f.n & A = g.n by A14;
+     hence P[n+1] by A5,A16,A17;
+    end;
+      for i being Nat holds P[i] from NAT_1:sch 1(A8,A15);
+    then for i being set st i in NAT holds h1.i = h.i;
+then A18:  h1 = h by PBOOLE:3;
+defpred P[Nat] means f1.$1 = f.$1;
+A19: P[0] by A4,A6;
+A20: now let n be Nat; assume
+A21:   P[n];
+     consider S being non empty ManySortedSign,
+              A being non-empty MSAlgebra over S such that
+A22:   S = f.n & A = g.n by A14;
+     f1.(n+1) = S(S,h1.n,n) by A7,A21,A22 .= f.(n+1) by A5,A18,A22;
+     hence P[n+1];
+    end;
+    A23: for i being Nat holds P[i] from NAT_1:sch 1(A19,A20);
+    then for i being set st i in NAT holds f1.i = f.i;
+then A24:  f1 = f by PBOOLE:3;
+A25: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+    st S = f.0 & A = g.0 & x = h.0 & R[S,A,x,0] by A4;
+A26:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f.n & A = g.n & x = h.n & R[S,A,x,n]
+      holds R[Sl(S,x,n), Al(S,A,x,n), ol(x,n), n+1];
+      for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f.n & A = g.n & R[S,A,h.n,n] from CIRCCMB2'sch_13(A25,A5,A26,A3);
+   then consider S being non empty ManySortedSign,
+            A being non-empty MSAlgebra over S such that
+A27:  S = f.n() & A = g.n();
+   reconsider A as non-empty MSAlgebra over Sn() by A6,A24,A27;
+   take A,f,g,h; thus thesis by A4,A5,A6,A23,A27;
+  end;
 
-scheme CIRCCMB2'sch_18 :: CircuitUniqSch
+scheme :: CIRCCMB2:sch 18
+ CIRCCMB2'sch_18 :: CircuitUniqSch
  {S0,Sn() -> non empty ManySortedSign, A0() -> non-empty MSAlgebra over S0(),
   o0()-> set,
   S(set,set,set) -> non empty ManySortedSign, A(set,set,set,set) -> set,
@@ -413,9 +1024,37 @@ scheme CIRCCMB2'sch_18 :: CircuitUniqSch
  provided
   for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
      for x being set, n being Nat holds
-      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
+      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n)
+proof   let A1,A2 be non-empty MSAlgebra over Sn();
+deffunc Al(set,set,set,set) = A($1,$2,$3,$4);
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+A2: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+     for x being set, n being Nat holds
+      Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n) by A1;
+   given f1,g1,h1 being ManySortedSet of NAT such that
+A3: Sn() = f1.n() & A1 = g1.n() and
+A4: f1.0 = S0() & g1.0 = A0() & h1.0 = o0() and
+A5: for n being Nat, S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+    for x being set st S = f1.n & A = g1.n & x = h1.n
+     holds f1.(n+1) = Sl(S,x,n) & g1.(n+1) = Al(S,A,x,n) & h1.(n+1) = ol(x,n);
+   given f2,g2,h2 being ManySortedSet of NAT such that
+A6: Sn() = f2.n() & A2 = g2.n() and
+A7: f2.0 = S0() & g2.0 = A0() & h2.0 = o0() and
+A8: for n being Nat, S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+    for x being set st S = f2.n & A = g2.n & x = h2.n
+     holds f2.(n+1) = Sl(S,x,n) & g2.(n+1) = Al(S,A,x,n) & h2.(n+1) = ol(x,n);
+A9:  ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f1.0 & A = g1.0 by A4;
+A10:  f1.0 = f2.0 & g1.0 = g2.0 & h1.0 = h2.0 by A4,A7;
+      f1 = f2 & g1 = g2 & h1 = h2 from CIRCCMB2'sch_14(A9,A10,A5,A8,A2);
+   hence A1 = A2 by A3,A6;
+  end;
 
-scheme CIRCCMB2'sch_19 :: attrCircuitExSch
+scheme :: CIRCCMB2:sch 19
+ CIRCCMB2'sch_19 :: attrCircuitExSch
  {S0, Sn() -> unsplit gate`1=arity gate`2isBoolean non void strict
               non empty ManySortedSign,
   A0() -> Boolean gate`2=den strict Circuit of S0(),
@@ -447,7 +1086,104 @@ scheme CIRCCMB2'sch_19 :: attrCircuitExSch
                     non empty ManySortedSign,
          A being Boolean gate`2=den strict Circuit of S
      for x being set, n being Nat st S1 = S(S,x,n) holds
-      A(S,A,x,n) is Boolean gate`2=den strict Circuit of S1;
+      A(S,A,x,n) is Boolean gate`2=den strict Circuit of S1
+proof
+deffunc Al(set,set,set,set) = A($1,$2,$3,$4);
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+A5:  for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+     for x being set, n being Nat holds
+      Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n) by A3;
+    consider f,g,h being ManySortedSet of NAT such that
+A6:  f.0 = S0() & g.0 = A0() & h.0 = o0() and
+A7:  for n being Nat, S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+    for x being set st S = f.n & A = g.n & x = h.n
+     holds f.(n+1) = Sl(S,x,n) & g.(n+1) = Al(S,A,x,n) & h.(n+1) = ol(x,n)
+      from CIRCCMB2'sch_12;
+   consider f1,h1 being ManySortedSet of NAT such that
+A8:  Sn() = f1.n() & f1.0 = S0() & h1.0 = o0() and
+A9:  for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f1.n & x = h1.n
+     holds f1.(n+1) = Sl(S,x,n) & h1.(n+1) = ol(x,n) by A2;
+defpred P[Nat] means h1.$1 = h.$1;
+A10: P[0] by A6,A8;
+A11: ex S being non empty ManySortedSign, x being set st S = f1.0 & x = h1.0
+     & Pl[S,x,0]  by A8;
+A12: for n being Nat, S being non empty ManySortedSign, x being set
+      st S = f1.n & x = h1.n & Pl[S,x,n] holds Pl[Sl(S,x,n), ol(x,n), n+1];
+A13: for n being Nat ex S being non empty ManySortedSign st S = f1.n &
+   Pl[S,h1.n,n] from CIRCCMB2'sch_2(A11,A9,A12);
+A14: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+    st S = f.0 & A = g.0 & x = h.0 & R[S,A,x,0] by A6;
+A15:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f.n & A = g.n & x = h.n & R[S,A,x,n]
+      holds R[Sl(S,x,n), Al(S,A,x,n), ol(x,n), n+1];
+A16: for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f.n & A = g.n & R[S,A,h.n,n] from CIRCCMB2'sch_13(A14,A7,A15,A5);
+A17: now let n be Nat; assume
+A18:   P[n];
+        ex S being non empty ManySortedSign st S = f1.n by A13;
+then A19:   h1.(n+1) = o(h1.n,n) by A9;
+        ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+       st S = f.n & A = g.n by A16;
+     hence P[n+1] by A7,A18,A19;
+    end;
+      for i being Nat holds P[i] from NAT_1:sch 1(A10,A17);
+    then for i being set st i in NAT holds h1.i = h.i;
+then A20:  h1 = h by PBOOLE:3;
+defpred P[Nat] means f1.$1 = f.$1;
+A21: P[0] by A6,A8;
+A22: now let n be Nat; assume
+A23:   P[n];
+     consider S being non empty ManySortedSign,
+              A being non-empty MSAlgebra over S such
+     that
+A24:   S = f.n & A = g.n by A16;
+     f1.(n+1) = S(S,h1.n,n) by A9,A23,A24 .= f.(n+1) by A7,A20,A24;
+     hence P[n+1];
+    end;
+    A25: for i being Nat holds P[i] from NAT_1:sch 1(A21,A22);
+    then for i being set st i in NAT holds f1.i = f.i;
+then A26:  f1 = f by PBOOLE:3;
+   defpred P[set,set,Nat] means
+    ex S being unsplit gate`1=arity gate`2isBoolean non void strict
+               non empty ManySortedSign,
+       A being Boolean gate`2=den strict Circuit of S st
+     S = $1 & A = $2;
+defpred R[set,set,set,Nat] means P[$1,$2,$4];
+A27: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+    st S = f.0 & A = g.0 & x = h.0 & R[S,A,x,0] by A6;
+A28:  for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f.n & A = g.n & x = h.n & R[S,A,x,n]
+      holds R[Sl(S,x,n), Al(S,A,x,n), ol(x,n), n+1]
+     proof let n be Nat, S be non empty ManySortedSign,
+        A be non-empty MSAlgebra over S;
+      let x be set; assume
+A29:     S = f.n & A = g.n & x = h.n & P[S,A,n];
+        then reconsider S as unsplit gate`1=arity gate`2isBoolean non void
+                        non empty strict non empty ManySortedSign;
+        reconsider A as Boolean gate`2=den strict Circuit of S by A29;
+        reconsider S1 = S(S,x,n) as unsplit gate`1=arity
+           gate`2isBoolean non void non empty strict non empty ManySortedSign
+            by A1;
+           A(S,A,x,n) is Boolean gate`2=den strict Circuit of S1 by A4;
+       hence thesis;
+     end;
+      for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f.n & A = g.n & R[S,A,h.n,n] from CIRCCMB2'sch_13(A27,A7,A28,A5);
+   then consider S being non empty ManySortedSign,
+            A being non-empty MSAlgebra over S such that
+A30:  S = f.n() & A = g.n() & P[S,A,n()];
+   reconsider A as Boolean gate`2=den strict Circuit of Sn() by A8,A26,A30;
+   take A,f,g,h; thus thesis by A6,A7,A8,A25,A30;
+  end;
 
 definition
  let S be non empty ManySortedSign;
@@ -458,7 +1194,9 @@ definition
  it = A;
 end;
 
-scheme CIRCCMB2'sch_20 :: ManyCellCircuitExSch
+
+scheme :: CIRCCMB2:sch 20
+ CIRCCMB2'sch_20 :: ManyCellCircuitExSch
  {S0, Sn() -> unsplit gate`1=arity gate`2isBoolean non void strict
               non empty ManySortedSign,
   A0() -> Boolean gate`2=den strict Circuit of S0(),
@@ -482,9 +1220,129 @@ scheme CIRCCMB2'sch_20 :: ManyCellCircuitExSch
       st S = f.n & x = h.n
       holds f.(n+1) = S +* S(x,n) & h.(n+1) = o(x,n) and
   for x being set, n being Nat holds
-      A(x,n) is Boolean gate`2=den strict Circuit of S(x,n);
+      A(x,n) is Boolean gate`2=den strict Circuit of S(x,n)
+proof
+deffunc Sl(non empty ManySortedSign,set,set) = $1+*S($2,$3);
+deffunc ol(set,set) = o($1,$2);
+deffunc Al(non empty ManySortedSign,non-empty MSAlgebra over $1,
+  non empty ManySortedSign,set) =
+  $2+*MSAlg(A($3,$4),S($3,$4));
+    consider f,g,h being ManySortedSet of NAT such that
+A3:  f.0 = S0() & g.0 = A0() & h.0 = o0() and
+A4:  for n being Nat, S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+    for x being set st S = f.n & A = g.n & x = h.n
+     holds f.(n+1) = Sl(S,x,n) & g.(n+1) = Al(S,A,x,n) &
+           h.(n+1) = ol(x,n) from CIRCCMB2'sch_12;
+defpred R[set,set,set,set] means not contradiction;
+   consider f1,h1 being ManySortedSet of NAT such that
+A5:  Sn() = f1.n() & f1.0 = S0() & h1.0 = o0() and
+A6:  for n being Nat, S being non empty ManySortedSign, x being set
+     st S = f1.n & x = h1.n
+     holds f1.(n+1) = Sl(S,x,n) & h1.(n+1) = ol(x,n) by A1;
+ defpred P[Nat] means h1.$1 = h.$1;
+A7: P[0] by A3,A5;
+A8: ex S being non empty ManySortedSign, x being set st S = f1.0 & x = h1.0
+    & Pl[S,x,0] by A5;
+A9: for n being Nat, S being non empty ManySortedSign, x being set
+      st S = f1.n & x = h1.n & Pl[S,x,n] holds Pl[Sl(S,x,n), ol(x,n), n+1];
+A10: for n being Nat ex S being non empty ManySortedSign st S = f1.n &
+  Pl[S,h1.n,n] from CIRCCMB2'sch_2(A8,A6,A9);
+A11: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+    st S = f.0 & A = g.0 & x = h.0 & R[S,A,x,0] by A3;
+A12: for n being Nat, S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+    for x being set st S = f.n & A = g.n & x = h.n & R[S,A,x,n]
+      holds R[Sl(S,x,n), Al(S,A,x,n), ol(x, n), n+1];
+A13: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+     for x being set, n being Nat holds
+      Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n);
+A14: for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f.n & A = g.n & R[S,A,h.n,n] from CIRCCMB2'sch_13(A11,A4,A12,A13);
+A15: now let n be Nat; assume
+A16:   P[n];
+        ex S being non empty ManySortedSign st S = f1.n by A10;
+then A17:   h1.(n+1) = o(h1.n,n) by A6;
+        ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+       st S = f.n & A = g.n by A14;
+     hence P[n+1] by A4,A16,A17;
+    end;
+      for i being Nat holds P[i] from NAT_1:sch 1(A7,A15);
+    then for i being set st i in NAT holds h1.i = h.i;
+then A18:  h1 = h by PBOOLE:3;
+defpred P[Nat] means f1.$1 = f.$1;
+A19: P[0] by A3,A5;
+A20: now let n be Nat; assume
+A21:   P[n];
+     consider S being non empty ManySortedSign,
+              A being non-empty MSAlgebra over S such that
+A22:   S = f.n & A = g.n by A14;
+     f1.(n+1) = S+*S(h1.n,n) by A6,A21,A22 .= f.(n+1) by A4,A18,A22;
+     hence P[n+1];
+    end;
+    A23: for i being Nat holds P[i] from NAT_1:sch 1(A19,A20);
+    then for i being set st i in NAT holds f1.i = f.i;
+then A24:  f1 = f by PBOOLE:3;
+   defpred P[set,set,Nat] means $3 <> 0 implies
+    ex S being unsplit gate`1=arity gate`2isBoolean non void strict
+               non empty ManySortedSign,
+       A being Boolean gate`2=den strict Circuit of S st
+     S = $1 & A = $2;
+    defpred R[set,set,set,set] means P[$1,$2,$4];
+A25: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+    st S = f.0 & A = g.0 & x = h.0 & R[S,A,x,0] by A3;
+A26: for n being Nat, S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+    for x being set st S = f.n & A = g.n & x = h.n & R[S,A,x,n]
+     holds R[Sl(S,x,n), Al(S,A,x,n), ol(x, n), n+1]
+     proof let n be Nat, S be non empty ManySortedSign,
+        A be non-empty MSAlgebra over S;
+      let x be set; assume
+A27:     S = f.n & A = g.n & x = h.n & P[S,A,n] & n+1 <> 0;
+      per cases;
+       suppose
+A28:       n = 0;
+        reconsider A2 = A(x,0) as Boolean gate`2=den strict Circuit of S(x,0)
+          by A2;
+           A0()+*MSAlg(A(x,0),S(x,0)) = A0()+*A2 by Def1;
+        hence thesis by A3,A27,A28;
+       end;
+       suppose
+A29:       n <> 0;
+        then reconsider S as unsplit gate`1=arity gate`2isBoolean non void
+                        non empty strict non empty ManySortedSign by A27;
+        reconsider A as Boolean gate`2=den strict Circuit of S by A27,A29;
+        reconsider A' = A(x,n) as Boolean gate`2=den strict Circuit of S(x,n)
+         by A2;
+           A+*MSAlg(A(x,n),S(x,n)) = A+*A' by Def1;
+       hence thesis;
+     end;
+     end;
+    for n being Nat
+    ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
+     S = f.n & A = g.n & R[S,A,h.n,n] from CIRCCMB2'sch_13(A25,A4,A26,A13);
+   then consider S being non empty ManySortedSign,
+            A being non-empty MSAlgebra over S such
+   that
+A30:  S = f.n() & A = g.n() & P[S,A,n()];
+   reconsider A as Boolean gate`2=den strict Circuit of Sn() by A3,A5,A24,A30;
+   take A,f,g,h;
+   thus Sn() = f.n() & A = g.n() &
+        f.0 = S0() & g.0 = A0() & h.0 = o0() by A3,A5,A23,A30;
+   let n being Nat, S being non empty ManySortedSign,
+      A1 being non-empty MSAlgebra over S;
+   let x being set, A2 being non-empty MSAlgebra over S(x,n); assume
+A31:  S = f.n & A1 = g.n & x = h.n & A2 = A(x,n);
+      A2 = MSAlg(A2, S(x,n)) by Def1;
+   hence f.(n+1) = S +* S(x,n) & g.(n+1) = A1 +* A2 & h.(n+1) = o(x,n)
+     by A4,A31;
+  end;
 
-scheme CIRCCMB2'sch_21 :: attrCircuitUniqSch
+scheme :: CIRCCMB2:sch 21
+ CIRCCMB2'sch_21 :: attrCircuitUniqSch
  {S0() -> non empty ManySortedSign,
   Sn() -> unsplit gate`1=arity gate`2isBoolean non void strict
          non empty ManySortedSign,
@@ -508,7 +1366,30 @@ scheme CIRCCMB2'sch_21 :: attrCircuitUniqSch
  provided
   for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
      for x being set, n being Nat holds
-      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
+      A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n)
+proof
+deffunc Al(set,set,set,set) = A($1,$2,$3,$4);
+deffunc Sl(set,set,set) = S($1,$2,$3);
+deffunc ol(set,set) = o($1,$2);
+A2:  for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+     for x being set, n being Nat holds
+      Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n) by A1;
+      for A1,A2 being non-empty MSAlgebra over Sn() st
+     (ex f,g,h being ManySortedSet of NAT st Sn() = f.n() & A1 = g.n() &
+       f.0 = S0() & g.0 = A0() & h.0 = o0() &
+       for n being Nat, S being non empty ManySortedSign,
+           A being non-empty MSAlgebra over S
+       for x being set st S = f.n & A = g.n & x = h.n
+       holds f.(n+1) = Sl(S,x,n) & g.(n+1) = Al(S,A,x,n) & h.(n+1) = ol(x,n)) &
+     (ex f,g,h being ManySortedSet of NAT st Sn() = f.n() & A2 = g.n() &
+       f.0 = S0() & g.0 = A0() & h.0 = o0() &
+       for n being Nat, S being non empty ManySortedSign,
+           A being non-empty MSAlgebra over S
+       for x being set st S = f.n & A = g.n & x = h.n
+        holds f.(n+1) = Sl(S,x,n) & g.(n+1) = Al(S,A,x,n) & h.(n+1) = ol(x,n))
+    holds A1 = A2 from CIRCCMB2'sch_18(A2);
+   hence thesis;
+  end;
 
 begin :: Correctness of Many Cell Circuit
 
@@ -702,7 +1583,8 @@ theorem :: CIRCCMB2:25
    (for s being State of A2 holds Following(s, n2) is stable)
  for s being State of A holds Following(s, max(n1,n2)) is stable;
 
-scheme CIRCCMB2'sch_22
+scheme :: CIRCCMB2:sch 22
+ CIRCCMB2'sch_22
  {S0, Sn() -> unsplit gate`1=arity gate`2isBoolean non void strict
               non empty ManySortedSign,
   A0() -> Boolean gate`2=den strict Circuit of S0(),
@@ -735,4 +1617,123 @@ scheme CIRCCMB2'sch_22
        (InputVertices S(x,n)) \ {x} is without_pairs and
   for n being Nat, x being set st x = h().(n)
      holds h().(n+1) = o(x,n) &
-           x in InputVertices S(x,n) & o(x,n) in InnerVertices S(x,n);
+           x in InputVertices S(x,n) & o(x,n) in InnerVertices S(x,n)
+proof   consider f,g being ManySortedSet of NAT such that
+A10: Sn() = f.n(2) & An() = g.n(2) and
+A11: f.0 = S0() & g.0 = A0() & h().0 = o0() and
+A12: for n being Nat, S being non empty ManySortedSign,
+      A1 being non-empty MSAlgebra over S
+    for x being set, A2 being non-empty MSAlgebra over S(x,n)
+     st S = f.n & A1 = g.n & x = h().n & A2 = A(x,n)
+     holds f.(n+1) = S +* S(x,n) & g.(n+1) = A1 +* A2 & h().(n+1) = o(x,n)
+      by A4;
+   deffunc h(set) = h().$1;
+   defpred Q[set, set, set, Nat] means
+    ex S being unsplit gate`1=arity gate`2isBoolean non void strict
+               non empty ManySortedSign,
+       A being Boolean gate`2=den strict Circuit of S
+     st $1 = S & $2 = A & $3 = h().$4 &
+        for s being State of A holds Following(s, n(0)+$4*n(1)) is stable;
+A13: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
+       x being set
+     st S = f.0 & A = g.0 & x = h().0 & Q[S, A, x, 0] by A2,A11;
+deffunc Sl(non empty ManySortedSign,set,set) = $1+*S($2,$3);
+deffunc ol(set,set) = o($1,$2);
+deffunc Al(non empty ManySortedSign,non-empty MSAlgebra over $1,
+non empty ManySortedSign,set) = $2+*MSAlg(A($3,$4),S($3,$4));
+deffunc f(set) = f.$1;
+deffunc Sl(set,set) = S($1,$2);
+ A14: for n being Nat, S being non empty ManySortedSign,
+         A being non-empty MSAlgebra over S
+     for x being set st S = f.n & A = g.n & x = h().n
+      holds f.(n+1) = Sl(S,x,n) & g.(n+1) = Al(S,A,x,n) & h().(n+1) = ol(x,n)
+     proof let n be Nat, S be non empty ManySortedSign;
+      let A be non-empty MSAlgebra over S, x be set;
+      reconsider A2 = A(x,n) as
+         Boolean gate`2=den strict Circuit of S(x,n) by A1;
+         A2 = MSAlg(A(x,n),S(x,n)) by Def1;
+      hence thesis by A12;
+     end;
+A15: for n being Nat, S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+    for x being set st S = f.n & A = g.n & x = h().n & Q[S,A,x,n]
+     holds Q[Sl(S,x,n), Al(S,A,x,n), ol(x,n), n+1]
+     proof let n be Nat, S be non empty ManySortedSign;
+      let A being non-empty MSAlgebra over S, x being set such that
+A16:    S = f.n & A = g.n & x = h().n;
+      given S' being unsplit gate`1=arity gate`2isBoolean non void strict
+                     non empty ManySortedSign,
+            A' being Boolean gate`2=den strict Circuit of S' such that
+A17:    S = S' & A = A' & x = h().(n) and
+A18:    for s being State of A' holds Following(s, n(0)+n*n(1)) is stable;
+      thus Q[S+*S(x,n), A+*MSAlg(A(x,n),S(x,n)), o(x,n), n+1]
+        proof take S'+*S(x,n);
+         reconsider A2 = A(x,n) as
+           Boolean gate`2=den strict Circuit of S(x,n) by A1;
+A19:       A2 = MSAlg(A(x,n),S(x,n)) by Def1;
+            A'+*A2 = A+*MSAlg(A(x,n),S(x,n)) by A17,Def1;
+         then reconsider AA = A+*MSAlg(A(x,n),S(x,n)) as
+           Boolean gate`2=den strict Circuit of S'+*S(x,n);
+         take AA;
+         thus S'+*S(x,n) = S+*S(x,n) & A+*MSAlg(A(x,n),S(x,n)) = AA by A17;
+         thus o(x,n) = h(n+1) by A9,A17;
+         let s be State of AA;
+A20:       InnerVertices S0() is Relation by A5;
+A21:       InputVertices S0() is without_pairs by A5;
+A22:       f(0) = S0() & h().0 in InnerVertices S0() by A6,A11;
+A23:      f.0 = S0() & g.0 = A0() by A11;
+A24:      for S being non empty ManySortedSign,
+              A being non-empty MSAlgebra over S
+          for x being set, n being Nat holds
+           Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n);
+            for n being Nat, S being non empty ManySortedSign, x being set
+           st S = f.n & x = h().n
+           holds f.(n+1) = Sl(S,x,n) & h().(n+1) = ol(x,n)
+            from CIRCCMB2'sch_15(A23,A14,A24);
+then A25:  for n being Nat, S being non empty ManySortedSign, x being set
+           st S = f(n) & x = h().n
+           holds f(n+1) = S +* Sl(x,n) & h().(n+1) = ol(x,n) &
+           x in InputVertices Sl(x,n) & ol(x,n) in InnerVertices Sl(x,n) by A9;
+A26:  for n being Nat, x being set holds InnerVertices Sl(x,n) is Relation
+by A7;
+A27:  for n being Nat, x being set st x = h().n holds
+       (InputVertices Sl(x,n)) \ {x} is without_pairs by A8;
+            for n being Nat
+          ex S1,S2 being unsplit gate`1=arity gate`2isBoolean non void
+              non empty ManySortedSign st S1 = f(n) & S2 = f(n+1) &
+           InputVertices S2 =
+            (InputVertices S1)\/((InputVertices Sl(h().n,n)) \ {h().n}) &
+           InnerVertices S1 is Relation &
+           InputVertices S1 is without_pairs
+            from CIRCCMB2'sch_10(A20,A21,A22,A26,A27,A25);
+          then S'+*S(x,n) = f.(n+1) &
+          ex S1,S2 being unsplit gate`1=arity gate`2isBoolean non void
+              non empty ManySortedSign st S1 = f.(n) & S2 = f.(n+1) &
+           InputVertices S2 =
+            (InputVertices S1)\/((InputVertices S(h(n),n)) \ {h(n)}) &
+           InnerVertices S1 is Relation &
+           InputVertices S1 is without_pairs by A14,A16,A17;
+          then InputVertices S' is without_pairs &
+          InnerVertices S(x,n) is Relation by A7,A16,A17;
+then A28:       InputVertices S' misses InnerVertices S(x,n) by FACIRC_1:5;
+A29:       A' tolerates A2 by CIRCCOMB:68;
+A30:       for s being State of A2 holds Following(s, n(1)) is stable
+           by A3,A17;
+            n(0)+(n+1)*n(1) = n(0)+(n*n(1)+1*n(1)) by XCMPLX_1:8
+                         .= n(0)+n*n(1)+n(1) by XCMPLX_1:1;
+         hence Following(s, n(0)+(n+1)*n(1)) is stable
+           by A17,A18,A19,A28,A29,A30,Th21;
+        end;
+     end;
+A31: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
+    for x being set, n being Nat holds
+     Al(S,A,x,n) is non-empty MSAlgebra over Sl(S,x,n);
+      for n being Nat ex S being non empty ManySortedSign,
+        A being non-empty MSAlgebra over S
+     st S = f.n & A = g.n & Q[S,A,h().n,n]
+      from CIRCCMB2'sch_13(A13,A14,A15,A31);
+    then ex S being non empty ManySortedSign,
+       A being non-empty MSAlgebra over S
+     st S = f.n(2) & A = g.n(2) & Q[S,A,h().n(2),n(2)];
+   hence thesis by A10;
+  end;

@@ -11,8 +11,8 @@ environ
       RCOMP_1, SIN_COS, ARYTM_3, RFUNCT_2, FDIFF_1, PRE_TOPC, BOOLE, RELAT_1,
       FCONT_1, PARTFUN1, COMPTRIG, ARYTM;
  notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, ORDINAL1, NUMBERS, ARYTM_0,
-      XREAL_0, REAL_1, SQUARE_1, NAT_1, RAT_1, ABSVALUE, PREPOWER, POWER,
-      RLVECT_1, VECTSP_1, BINOP_1, RELAT_1, FUNCT_1, RFUNCT_2, FCONT_1,
+      XREAL_0, REAL_1, SQUARE_1, NAT_1, RAT_1, ABSVALUE, NEWTON, PREPOWER,
+      POWER, RLVECT_1, VECTSP_1, BINOP_1, RELAT_1, FUNCT_1, RFUNCT_2, FCONT_1,
       FDIFF_1, SEQ_1, PARTFUN1, PARTFUN2, COMPLEX1, BINARITH, RCOMP_1, GROUP_1,
       SIN_COS, COMPLFLD, HAHNBAN1;
  constructors REAL_1, BINOP_1, TRIANG_1, SQUARE_1, PREPOWER, POWER, SEQ_1,
@@ -26,12 +26,39 @@ environ
 
 begin
 
-  scheme Regr_without_0 { P[Nat] } :
+  scheme :: COMPTRIG:sch 1
+ Regr_without_0 { P[Nat] } :
    P[1]
   provided
     ex k be non empty Nat st P[k] and
     for k be non empty Nat st k <> 1 & P[k]
-    ex n be non empty Nat st n < k & P[n];
+    ex n be non empty Nat st n < k & P[n]
+proof
+  defpred R[Nat] means P[$1+1];
+   consider t be non empty Nat such that
+    A3: P[t] by A1;
+   consider s be Nat such that
+    A4: t = s+1 by NAT_1:22;
+   A5: ex k be Nat st R[k] by A3,A4;
+   A6: now let k be Nat;
+    assume that
+     A7: k <> 0 and
+     A8: R[k];
+    reconsider k1=k+1 as non empty Nat;
+      k > 0 by A7,NAT_1:19;
+    then k+1 > 0+1 by REAL_1:53;
+    then consider n be non empty Nat such that
+     A9: n < k1 and
+     A10: P[n] by A2,A8;
+    consider l be Nat such that
+     A11: n = l+1 by NAT_1:22;
+    take l;
+    thus l < k by A9,A11,AXIOMS:24;
+    thus R[l] by A10,A11;
+   end;
+   R[0] from NAT_1:sch 7(A5,A6);
+   hence thesis;
+  end;
 
 canceled 2;
 
@@ -222,6 +249,7 @@ begin  :: Argument of Complex Number
      otherwise it = 0;
   end;
 
+
   theorem :: COMPTRIG:52
    for z be Element of F_Complex holds
     0 <= Arg z & Arg z < 2*PI;
@@ -325,6 +353,7 @@ begin  :: Argument of Complex Number
 :: COMPTRIG:def 2
     (power F_Complex).(it,n) = x;
   end;
+
 
   theorem :: COMPTRIG:75
      for x be Element of F_Complex

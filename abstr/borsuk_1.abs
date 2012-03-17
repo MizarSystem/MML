@@ -131,6 +131,7 @@ definition let B be non empty set, A be set;
  redefine func A --> x -> Function of A,B;
 end;
 
+
 begin
 ::
 :: Partitions
@@ -152,15 +153,24 @@ theorem :: BORSUK_1:27
 theorem :: BORSUK_1:28  ::Class(id X) is non-empty
  for E being Equivalence_Relation of X holds Class(E) is non empty;
 
-definition let X be non empty set;
+registration let X be non empty set;
  cluster non empty a_partition of X;
+  existence
+   proof reconsider P = Class nabla X as a_partition of X by EQREL_1:42;
+    take P;
+     consider x being Element of X;
+       Class(nabla X, x) in Class nabla X by EQREL_1:def 5;
+    hence thesis;
+   end;
 end;
+
 
 definition let X; let D be non empty a_partition of X;
  func proj D -> Function of X, D means
 :: BORSUK_1:def 1
  for p being Element of X holds p in it.p;
 end;
+
 
 theorem :: BORSUK_1:29
  for D being non empty a_partition of X,
@@ -204,6 +214,7 @@ definition let X, Y be non empty TopSpace, F be map of X, Y;
     ex H being a_neighborhood of W st F.:H c= G;
 end;
 
+
 definition
  let X be 1-sorted,Y be non empty 1-sorted, y be Element of Y;
  func X --> y -> map of X,Y equals
@@ -211,21 +222,30 @@ definition
   (the carrier of X) --> y;
 end;
 
+
 reserve X, Y for non empty TopSpace;
 
 theorem :: BORSUK_1:36
  for y being Point of Y holds X --> y is continuous;
 
-definition
+registration
   let S, T be non empty TopSpace;
   cluster continuous map of S, T;
+  existence
+  proof
+   consider a be Point of T;
+     S --> a is continuous by Th36;
+   hence thesis;
+  end;
 end;
+
 
 definition let X,Y,Z be non empty TopSpace,
                F be continuous map of X,Y,
                G be continuous map of Y,Z;
  redefine func G*F -> continuous map of X,Z;
 end;
+
 
 theorem :: BORSUK_1:37
  for A being continuous map of X,Y, G being Subset of Y
@@ -239,6 +259,7 @@ definition let X,Y be non empty TopSpace, W be Point of Y,
                A be continuous map of X,Y, G be a_neighborhood of W;
  redefine func A"G -> a_neighborhood of A"{W};
 end;
+
 
 theorem :: BORSUK_1:39
  for X being non empty TopSpace,
@@ -275,9 +296,16 @@ definition let X,Y be TopSpace;
                     X1 in the topology of X & Y1 in the topology of Y}};
 end;
 
-definition let X,Y be non empty TopSpace;
+
+registration let X,Y be non empty TopSpace;
  cluster [:X,Y:] -> non empty;
+ coherence
+  proof
+      the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+    hence the carrier of [:X,Y:] is non empty;
+  end;
 end;
+
 
 canceled 2;
 
@@ -296,11 +324,13 @@ definition
  redefine func [:A,B:] -> Subset of [:X,Y:];
 end;
 
+
 definition
  let X,Y be non empty TopSpace,
      x be Point of X, y be Point of Y;
  redefine func [x,y] -> Point of [:X,Y:];
 end;
+
 
 theorem :: BORSUK_1:46
  for X, Y being TopSpace
@@ -329,6 +359,7 @@ definition
  redefine func [:V,W:] -> a_neighborhood of [x,y];
 end;
 
+
 theorem :: BORSUK_1:50
  for XT being Point of [:X,Y:]
   ex W being Point of X, T being Point of Y st XT=[W,T];
@@ -340,6 +371,7 @@ definition
  redefine func [:V,W:] -> a_neighborhood of [:A,{t}:];
 end;
 
+
 definition let X,Y be TopSpace; let A be Subset of [:X,Y:];
  func Base-Appr A -> Subset-Family of [:X,Y:] equals
 :: BORSUK_1:def 6
@@ -347,6 +379,7 @@ definition let X,Y be TopSpace; let A be Subset of [:X,Y:];
                          Y1 is Subset of Y:
      [:X1,Y1:] c= A & X1 is open & Y1 is open};
 end;
+
 
 theorem :: BORSUK_1:51
  for X, Y being TopSpace
@@ -380,6 +413,7 @@ definition let X,Y be non empty TopSpace;
  .:pr2(the carrier of X,the carrier of Y);
 end;
 
+
 theorem :: BORSUK_1:56
  for A being Subset of [:X,Y:],
      H being Subset-Family of [:X,Y:] st
@@ -410,6 +444,7 @@ definition let X, Y be set, f be Function of bool X, bool Y;
            let R be Subset-Family of X;
   redefine func f.:R -> Subset-Family of Y;
 end;
+
 
 theorem :: BORSUK_1:60
  for H being Subset-Family of [:X,Y:] st H is open holds
@@ -464,9 +499,17 @@ definition let X be 1-sorted;
   Class(id the carrier of X);
 end;
 
-definition let X be non empty 1-sorted;
+
+registration let X be non empty 1-sorted;
  cluster TrivDecomp X -> non empty;
+ coherence
+ proof
+     Class(id the carrier of X) is non empty
+      a_partition of the carrier of X by Th28,EQREL_1:42;
+   hence thesis by Def9;
+  end;
 end;
+
 
 theorem :: BORSUK_1:68
  for A being Subset of X st A in TrivDecomp X
@@ -480,10 +523,15 @@ definition let X be TopSpace,
   = { A where A is Subset of D : union A in the topology of X};
 end;
 
-definition let X be non empty TopSpace,
+
+registration let X be non empty TopSpace,
   D be non empty a_partition of the carrier of X;
  cluster space D -> non empty;
+ coherence
+  proof thus the carrier of space D is non empty by Def10;
+  end;
 end;
+
 
 theorem :: BORSUK_1:69
  for D being non empty a_partition of the carrier of X,
@@ -496,6 +544,7 @@ definition let X be non empty TopSpace,
 :: BORSUK_1:def 11
   proj D;
 end;
+
 
 theorem :: BORSUK_1:70
  for D being non empty a_partition of the carrier of X,
@@ -518,6 +567,7 @@ definition
 :: BORSUK_1:def 12
  D \/ {{p} where p is Point of XX : not p in the carrier of X};
 end;
+
 
 theorem :: BORSUK_1:73
  for XX being non empty TopSpace, X being non empty SubSpace of XX,
@@ -585,6 +635,7 @@ definition let X be non empty TopSpace;
    for B being Subset of X st B in it & B meets W holds B c= W;
 end;
 
+
 theorem :: BORSUK_1:81
  for D being u.s.c._decomposition of X,
      t being Point of space D,
@@ -601,19 +652,45 @@ definition let X be TopSpace;
  for A being Subset of X st A = the carrier of IT holds A is closed;
 end;
 
-definition let X be TopSpace;
+registration let X be TopSpace;
  cluster strict closed SubSpace of X;
+ existence
+  proof
+   reconsider Y = the TopStruct of X as strict SubSpace of X by Lm2;
+    take Y;
+    Y is closed
+    proof let A be Subset of X;
+     assume A = the carrier of Y;
+      then A = [#]X by PRE_TOPC:12;
+     hence A is closed;
+    end;
+   hence thesis;
+  end;
 end;
 
-definition let X;
+
+registration let X;
  cluster strict closed non empty SubSpace of X;
+ existence
+  proof
+      X|[#]X is closed
+     proof let A be Subset of X;
+      assume A = the carrier of X|[#]X;
+       then A = [#](X|[#]X) by PRE_TOPC:12
+             .= [#] X by PRE_TOPC:def 10;
+      hence A is closed;
+     end;
+   hence thesis;
+  end;
 end;
+
 
 definition
  let XX be non empty TopSpace,
      X be closed non empty SubSpace of XX,D be u.s.c._decomposition of X;
  redefine func TrivExt D -> u.s.c._decomposition of XX;
 end;
+
 
 definition let X be non empty TopSpace;
  let IT be u.s.c._decomposition of X;
@@ -624,13 +701,24 @@ definition let X be non empty TopSpace;
 :: upper semicontinuous decomposition into compacta
 end;
 
-definition let X be non empty TopSpace;
+
+registration let X be non empty TopSpace;
  cluster DECOMPOSITION-like u.s.c._decomposition of X;
+ existence
+  proof
+    reconsider D = TrivDecomp X as u.s.c._decomposition of X by Th82;
+   take D; let A be Subset of X;
+   assume A in D;
+    then ex x being Point of X st A = {x} by Th68;
+   hence A is compact by Th41;
+  end;
 end;
+
 
 definition let X be non empty TopSpace;
     mode DECOMPOSITION of X is DECOMPOSITION-like u.s.c._decomposition of X;
 end;
+
 
 definition
  let XX be non empty TopSpace, X be closed non empty SubSpace of XX,
@@ -638,10 +726,12 @@ definition
  redefine func TrivExt D -> DECOMPOSITION of XX;
 end;
 
+
 definition let X be non empty TopSpace, Y be closed non empty SubSpace of X,
                D be DECOMPOSITION of Y;
   redefine func space D -> strict closed SubSpace of space TrivExt D;
 end;
+
 
 begin
 
@@ -653,9 +743,18 @@ definition
   holds it = (TopSpaceMetr RealSpace)|P;
 end;
 
-definition
+
+registration
  cluster I[01] -> strict non empty TopSpace-like;
+ coherence
+  proof
+    reconsider P = [.0,1.] as non empty Subset of
+     TopSpaceMetr RealSpace by Lm3,METRIC_1:def 14,RCOMP_1:15;
+     I[01] = (TopSpaceMetr RealSpace)|P by Def16;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: BORSUK_1:83
  the carrier of I[01] = [.0,1.];
@@ -669,13 +768,17 @@ definition
 1;
 end;
 
+
 definition let A be non empty TopSpace, B be non empty SubSpace of A,
                F be map of A,B;
  attr F is being_a_retraction means
 :: BORSUK_1:def 19
  for W being Point of A st W in the carrier of B holds F.W=W;
-  synonym F is_a_retraction;
-end;
+  end;
+notation let A be non empty TopSpace, B be non empty SubSpace of A,
+               F be map of A,B;
+ synonym F is_a_retraction for F is being_a_retraction ; end;
+
 
 definition let X be non empty TopSpace,Y be non empty SubSpace of X;
  pred Y is_a_retract_of X means
@@ -689,6 +792,7 @@ definition let X be non empty TopSpace,Y be non empty SubSpace of X;
     (A in the carrier of Y implies
        for T being Point of I[01] holds H. [A,T] =A);
 end;
+
 
 theorem :: BORSUK_1:84
    for XX being non empty TopSpace, X being closed non empty SubSpace of XX,

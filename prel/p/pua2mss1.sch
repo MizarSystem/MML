@@ -23,11 +23,6 @@ FINSEQ_2
 MATRIX_1
 PBOOLE
 #
-IndRelationEx
-RelationUniq
-IndRelationUniq
-FiniteTransitivity
-#
 M1 W1 ;;M1 W1 ;;M4 K52 ;K56 ;;M6 F1 ;F2 ;;M6 F1 ;F2 ;;;
 ªM6 F1 ;F2 ;;M16 K56 ;;ª&R1 B1 K20 B2 F3 ;;;R1 K20 B2 N0 ;F4 ;;M4 K52 ;K56 ;;M6 F1 ;F2 ;;ª&R1 B4 K20 B2 B3 ;;ªR1 K20 B2 K64 B3 N1 ;;F5 B4 B3 ;;;;;
 #

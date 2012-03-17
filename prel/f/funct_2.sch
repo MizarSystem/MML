@@ -8,16 +8,6 @@ SUBSET_1
 RELSET_1
 FUNCT_2
 #
-FuncEx1
-Lambda1
-FuncExD
-LambdaD
-FuncEx2
-Lambda2
-FuncEx2D
-Lambda2D
-Lambda1C
-#
 M1 ;M1 ;;
 ªM5 V3 ;V6 F1 ;F2 ;;F1 ;F2 ;;ªM1 ;ª&R2 B2 F1 ;;ªP1 B2 K15 B1 B2 ;;;M1 ;ª&R2 B1 F1 ;;M1 ;ª&R2 B2 F2 ;;P1 B1 B2 ;;;;
 #

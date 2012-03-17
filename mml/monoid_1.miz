@@ -38,12 +38,14 @@ definition let D1,D2,D be non empty set;
  mode Function of D1,D2,D is Function of [:D1,D2:],D;
 end;
 
+
 definition let f be Function, x1,x2,y be set;
  func f..(x1,x2,y) equals:
 Def1:
    f..([x1,x2],y);
   correctness;
 end;
+
 
 theorem Th1:
  for f,g being Function, x1,x2,x being set st
@@ -69,6 +71,7 @@ definition let A,D1,D2,D be non empty set;
    end;
 end;
 
+
 definition let A be set;
  let D1,D2,D be non empty set, f be Function of D1,D2,D;
  let g1 be Function of A,D1;
@@ -82,12 +85,17 @@ RELSET_1:12;
    end;
 end;
 
+
+notation let A be non empty set;
+ let n be Nat, x be Element of A;
+ synonym n .--> x for n |-> x ;
+end;
 definition let A be non empty set;
  let n be Nat, x be Element of A;
- redefine func n |-> x -> FinSequence of A;
+ redefine func n .--> x -> FinSequence of A;
   coherence by FINSEQ_2:77;
- synonym n .--> x;
-end;
+ end;
+
 
 definition let D be non empty set, A be set, d be Element of D;
  redefine func A --> d -> Element of Funcs(A,D);
@@ -99,6 +107,7 @@ A1:   dom (A --> d) = A & rng (A --> d) c= {d} & {d} c= D
     hence thesis by A1,FUNCT_2:def 2;
    end;
 end;
+
 
 definition let A be set;
  let D1,D2,D be non empty set, f be Function of D1,D2,D;
@@ -114,6 +123,7 @@ definition let A be set;
    end;
 end;
 
+
 definition let A be set;
  let D1,D2,D be non empty set, f be Function of D1,D2,D;
  let g be Function of A,D1;
@@ -127,6 +137,7 @@ definition let A be set;
     hence thesis by FUNCT_2:def 2;
    end;
 end;
+
 
 theorem
    for f,g being Function, X being set holds (f|X)*g = f*(X|g)
@@ -162,7 +173,7 @@ scheme NonUniqFuncDEx
  ex f being Function of X(), Y() st for x st x in X() holds P[x,f.x]
   provided
 A1:  for x st x in X() ex y being Element of Y() st P[x,y]
-  proof
+proof
    defpred Q[set,set] means P[$1,$2];
 A2:  for x st x in X() ex y st y in Y() & Q[x,y]
      proof let x; assume x in X();
@@ -172,7 +183,7 @@ A3:    P[x,y] by A1;
      end;
    consider f being Function such that
 A4:  dom f = X() & rng f c= Y() & for x st x in X() holds Q[x,f.x]
-     from NonUniqBoundFuncEx(A2);
+     from COMPTS_1:sch 1(A2);
    reconsider f as Function of X(), Y() by A4,FUNCT_2:def 1,RELSET_1:11;
    take f; thus thesis by A4;
   end;
@@ -194,7 +205,7 @@ Def2:
     such that
 A1:   for f1 being Element of Funcs(A,D1)
      for f2 being Element of Funcs(A,D2) holds
-      b.[f1,f2] = G(f1,f2) from Lambda2D;
+      b.[f1,f2] = G(f1,f2) from FUNCT_2:sch 8;
     take b; let f1 be Element of Funcs(A,D1), f2 be Element of Funcs(A,D2);
     thus b.(f1,f2) = b.[f1,f2] by BINOP_1:def 1 .= f.:(f1,f2) by A1;
    end;
@@ -211,6 +222,7 @@ A3:  for f1 being Element of Funcs(A,D1) for f2 being Element of Funcs(A,D2)
     hence thesis by BINOP_1:2;
    end;
 end;
+
 
 theorem
    for D1,D2,D being non empty set for f being Function of D1,D2,D
@@ -529,7 +541,8 @@ Def3:
   correctness;
 end;
 
-definition let G be non empty HGrStr; let A be set;
+
+registration let G be non empty HGrStr; let A be set;
  cluster .:(G,A) -> non empty;
  coherence
   proof
@@ -539,12 +552,15 @@ definition let G be non empty HGrStr; let A be set;
    (the mult of G,the carrier of G).:A,
    (A --> the_unity_wrt the mult of G)#) by Def3;
    hence the carrier of .:(G,A) is non empty;
+   end;
    suppose G is not unital;
     then .:(G,A) = HGrStr (# Funcs(A, the carrier of G),
    (the mult of G,the carrier of G).:A #) by Def3;
    hence the carrier of .:(G,A) is non empty;
   end;
+  end;
 end;
+
 
 reserve G for non empty HGrStr;
 
@@ -586,10 +602,11 @@ Lm1: .:(G,X) is constituted-Functions
   hence thesis;
  end;
 
-definition let G be non empty HGrStr, A be set;
+registration let G be non empty HGrStr, A be set;
  cluster .:(G,A) -> constituted-Functions;
   coherence by Lm1;
 end;
+
 
 theorem Th20:
  for f being Element of .:(G,X)
@@ -609,12 +626,6 @@ theorem Th21:
 
 definition let G be non empty HGrStr, A be non empty set;
  let f be Element of .:(G,A);
- cluster rng f -> non empty;
-  coherence
-   proof consider a being Element of A;
-     rng f c= carr(G) & dom f = A by Th20; then f.a in rng f by FUNCT_1:def 5;
-    hence thesis;
-   end;
  let a be Element of A;
  redefine func f.a -> Element of G;
   coherence
@@ -624,6 +635,16 @@ A1:   rng f c= carr(G) & dom f = A by Th20; then f.a in rng f by FUNCT_1:def 5
     hence thesis by A1;
    end;
 end;
+registration let G be non empty HGrStr, A be non empty set;
+ let f be Element of .:(G,A);
+ cluster rng f -> non empty;
+  coherence
+   proof consider a being Element of A;
+     rng f c= carr(G) & dom f = A by Th20; then f.a in rng f by FUNCT_1:def 5;
+    hence thesis;
+   end;
+ end;
+
 
 theorem Th22:
  for f1,f2 being Element of .:(G,D), a being Element of D holds
@@ -653,6 +674,7 @@ A2:   a = the_unity_wrt op(G) &
     hence thesis by A2,MONOID_0:def 21;
    end;
 end;
+
 
 theorem Th23:
  for G being unital (non empty HGrStr) holds
@@ -736,6 +758,7 @@ definition
    end;
 end;
 
+
 begin :: Monoid of multisets over a set
 
 definition let A be set;
@@ -745,6 +768,7 @@ Def4:
    .:(<NAT,+,0>, A);
   correctness;
 end;
+
 
 theorem Th27:
  the carrier of MultiSet_over X = Funcs(X,NAT) &
@@ -759,6 +783,7 @@ theorem Th27:
 definition let A be set;
  mode Multiset of A is Element of MultiSet_over A;
 end;
+
 
 theorem Th28:
  x is Multiset of X iff x is Function of X,NAT
@@ -800,6 +825,7 @@ then A2:   rng m c= NAT & dom m = A by Th20; then m.a in rng m by FUNCT_1:def 5
    end;
 end;
 
+
 theorem Th30:
  for m1,m2 being Multiset of D, a being Element of D holds
    (m1 [*] m2).a = (m1.a)+(m2.a)
@@ -824,11 +850,13 @@ definition let Y,X;
   coherence by Th31;
 end;
 
+
 definition let X; let n be Nat;
  redefine func X --> n -> Multiset of X;
   coherence
    proof thus X --> n is Multiset of X by Th28; end;
 end;
+
 
 definition let A be non empty set, a be Element of A;
  func chi a -> Multiset of A equals:
@@ -836,6 +864,7 @@ Def5:
    chi({a},A);
   coherence;
 end;
+
 
 theorem Th32:
  for A being non empty set, a,b being Element of A holds
@@ -907,7 +936,7 @@ then A10: P[the unity of MultiSet_over A] by A9;
     consider M being strict non empty MonoidalSubStr of MultiSet_over A
     such that
 A11:   for a being Multiset of A holds a in the carrier of M iff P[a]
-       from MonoidalSubStrEx2(A1,A10);
+       from MONOID_0:sch 4(A1,A10);
     reconsider M as strict non empty MonoidalSubStr of MultiSet_over A;
     take M;
     let f be Multiset of A; reconsider g = f as Function of A,NAT by Th28;
@@ -949,6 +978,7 @@ A16:     x in carr(M2);
     hence thesis by MONOID_0:29;
    end;
 end;
+
 
 theorem Th34:
  chi a is Element of finite-MultiSet_over A
@@ -1027,7 +1057,7 @@ then A6:  a in dom (p^<*y*>) by A5,XBOOLE_0:def 2;
    hence thesis by A5,A6,FUNCT_1:86;
   end;
 
-definition let A be set, F be finite Relation;
+registration let A be set, F be finite Relation;
  cluster A|F -> finite;
  coherence
   proof
@@ -1035,6 +1065,7 @@ definition let A be set, F be finite Relation;
    hence thesis by FINSET_1:13;
   end;
 end;
+
 
 definition let A be non empty set, p be FinSequence of A;
  func |.p.| -> Multiset of A means:
@@ -1044,7 +1075,7 @@ Def7:
    proof
      deffunc F(Element of A)=card dom ({$1}|p);
      consider m being Function of A,NAT such that
-A1:   for a being Element of A holds m.a = F(a) from LambdaD;
+A1:   for a being Element of A holds m.a = F(a) from FUNCT_2:sch 4;
        m is Multiset of A by Th28;
     hence thesis by A1;
    end;
@@ -1058,6 +1089,7 @@ A3:  for a being Element of A holds m2.a = card dom ({a}|p);
     hence thesis by Th33;
    end;
 end;
+
 
 theorem
    |.<*> A.|.a = 0
@@ -1152,7 +1184,7 @@ then A6:    len r = n by XCMPLX_1:2;
          .= |.p.|[*]|.q.| by A5,Th40;
      end;
 
-A7:  for n holds P[n] from Ind(A1,A2);
+A7:  for n holds P[n] from NAT_1:sch 1(A1,A2);
       len q = len q;
    hence thesis by A7;
   end;
@@ -1172,7 +1204,7 @@ A4:    |.n .--> a.|.a = n;
             .= (|.n .--> a.|[*]chi a).a by Th40
             .= n+(chi a).a by A4,Th30 .= n+1 by Th32;
      end;
-      for n holds P[n] from Ind(A2,A3);
+      for n holds P[n] from NAT_1:sch 1(A2,A3);
    hence |.n .--> a.|.a = n;
    let b be Element of A such that
 A5:  b <> a;
@@ -1186,7 +1218,7 @@ A8:    |.n .--> a.|.b = 0;
             .= (|.n .--> a.|[*]chi a).b by Th40
             .= 0+(chi a).b by A8,Th30 .= 0 by A5,Th32;
      end;
-      for n holds P[n] from Ind(A6,A7);
+      for n holds P[n] from NAT_1:sch 1(A6,A7);
    hence thesis;
   end;
 
@@ -1226,7 +1258,7 @@ then A6:    len r = n by XCMPLX_1:2;
        then r'[*]a = |.r.|[*]chi x by MONOID_0:27 .= |.p.| by A5,Th40;
       hence thesis;
      end;
-A7:  for n holds Q[n] from Ind(A1,A2);
+A7:  for n holds Q[n] from NAT_1:sch 1(A1,A2);
       len p = len p;
    hence thesis by A7;
   end;
@@ -1282,7 +1314,7 @@ then A10:   x in dom fm & fm.x in NAT\{0} & dom m = A by Th29,CARD_1:47,FUNCT_1
       deffunc G(set) = fm.$1;
       consider f being Function such that
 A11:    dom f = A & for a being set st a in A holds (C[a] implies f.a = F(a)) &
-        (not C[a] implies f.a = G(a)) from LambdaC;
+        (not C[a] implies f.a = G(a)) from PARTFUN1:sch 1;
          rng f c= NAT
         proof let y; assume y in rng f;
          then consider z being set such that
@@ -1335,7 +1367,7 @@ A19:      f.x = 0 & g.x = m.x & 0 + m.a = m.a & m.a + 0 = m.a
        end;
       hence fm = f[*]g by Th33 .= |.q.| by A18,Th41;
      end;
-A20:  for n holds Z[n] from Ind(A1,A6);
+A20:  for n holds Z[n] from NAT_1:sch 1(A1,A6);
    assume x is Element of finite-MultiSet_over A;
    then reconsider m = x as Element of finite-MultiSet_over A;
       carr(finite-MultiSet_over A) c= carr(MultiSet_over A)
@@ -1360,7 +1392,7 @@ Def8:
      deffunc F(Element of [:bool D1, bool D2:]) = f.:[:$1`1,$1`2:];
      ex f being Function of bool D1,bool D2,bool D st
         for x being Element of [:bool D1, bool D2:] holds f.x = F(x)
-     from LambdaD;
+     from FUNCT_2:sch 4;
      hence thesis;
    end;
   uniqueness
@@ -1375,6 +1407,7 @@ A2:  for x being Element of [:bool D1, bool D2:] holds
     hence thesis by FUNCT_2:113;
    end;
 end;
+
 
 theorem Th45:
  for D1,D2,D being non empty set, f being Function of D1,D2,D
@@ -1643,7 +1676,8 @@ Def9:
   correctness;
 end;
 
-definition let G be non empty HGrStr;
+
+registration let G be non empty HGrStr;
  cluster bool G -> non empty;
  coherence
   proof
@@ -1652,12 +1686,15 @@ definition let G be non empty HGrStr;
     then bool G = multLoopStr(#bool the carrier of G, (the mult of G).:^2,
      {the_unity_wrt the mult of G}#) by Def9;
     hence the carrier of bool G is non empty;
+   end;
    suppose G is not unital;
     then bool G = HGrStr(#bool the carrier of G, (the mult of G).:^2#) by Def9
 ;
     hence the carrier of bool G is non empty;
   end;
+  end;
 end;
+
 
 definition let G be unital (non empty HGrStr);
  redefine func bool G -> well-unital strict (non empty multLoopStr);
@@ -1669,6 +1706,7 @@ definition let G be unital (non empty HGrStr);
     hence thesis by MONOID_0:def 21;
    end;
 end;
+
 
 theorem Th56:
  the carrier of bool G = bool the carrier of G &

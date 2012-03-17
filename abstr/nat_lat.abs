@@ -33,6 +33,7 @@ definition let n;
  redefine func n! -> Nat;
 end;
 
+
 theorem :: NAT_LAT:3
  l >= 1 & n >= k*l implies n>=k;
 
@@ -160,6 +161,7 @@ definition
   it.(m,n)=m lcm n;
 end;
 
+
 reserve p,q,r for Element of LattStr (# NAT, lcmlat, hcflat #);
 
 definition
@@ -168,6 +170,7 @@ definition
 :: NAT_LAT:def 5
   m;
  end;
+
 
 theorem :: NAT_LAT:48
  p"\/"q =@p lcm @q;
@@ -193,6 +196,7 @@ definition
 0;
  end;
 
+
 canceled 2;
 
 theorem :: NAT_LAT:55
@@ -208,9 +212,12 @@ definition
   LattStr (# NAT, lcmlat, hcflat #);
 end;
 
-definition
+
+registration
  cluster Nat_Lattice -> strict;
+ coherence by Def8;
 end;
+
 
 reserve p,q,r for Element of Nat_Lattice;
 
@@ -259,26 +266,39 @@ definition
  for n being Nat holds n in it iff 0 < n;
 end;
 
-definition
+
+registration
   cluster NATPLUS -> non empty;
+  coherence
+ proof
+     0 < 1;
+   hence thesis by Def9;
   end;
+  end;
+
 
 definition let D be non empty set, S be non empty Subset of D,
                N be non empty Subset of S;
 redefine mode Element of N -> Element of S;
 end;
 
-definition let D be Subset of REAL;
+
+registration let D be Subset of REAL;
   cluster -> real Element of D;
+coherence;
 end;
 
-definition let D be Subset of NAT;
+
+registration let D be Subset of NAT;
   cluster -> real Element of D;
+coherence;
 end;
+
 
 definition
   mode NatPlus is Element of NATPLUS;
 end;
+
 
 :: LATTICE of NATURAL NUMBERS > 0
 
@@ -290,12 +310,14 @@ definition
   k;
 end;
 
+
 definition
  let k be Element of NATPLUS;
  func @k -> NatPlus equals
 :: NAT_LAT:def 11
   k;
  end;
+
 
 reserve m,n for NatPlus;
 
@@ -309,6 +331,7 @@ definition
   it.(m,n)=m lcm n;
 end;
 
+
 reserve p,q,r for Element of LattStr
                             (# NATPLUS, lcmlatplus, hcflatplus #);
 
@@ -319,6 +342,7 @@ definition
 :: NAT_LAT:def 14
   m;
  end;
+
 
 theorem :: NAT_LAT:69
  p"\/"q =@p lcm @q;
@@ -332,9 +356,12 @@ definition
   LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
 end;
 
-definition
+
+registration
  cluster NatPlus_Lattice -> strict;
+ coherence by Def15;
 end;
+
 
 reserve x,y1,y2 for set;
 
@@ -348,9 +375,72 @@ definition let L be Lattice;
    the carrier of it:];
 end;
 
-definition let L be Lattice;
+
+registration let L be Lattice;
  cluster strict SubLattice of L;
+  existence
+   proof set S =
+     LattStr(#the carrier of L, the L_join of L, the L_meet of L#);
+A1:  now let a,b be Element of S,
+         a',b' be Element of L;
+      assume
+A2:     a = a' & b = b';
+      hence a"\/"b = (the L_join of L).(a',b') by LATTICES:def 1
+               .= a'"\/"b' by LATTICES:def 1;
+      thus a"/\"b = (the L_meet of L).(a',b') by A2,LATTICES:def 2
+               .= a'"/\"b' by LATTICES:def 2;
+     end;
+A3:  now let a,b be Element of S;
+       reconsider a' = a, b' = b as Element of L;
+      thus a"\/"b = b'"\/"a' by A1
+        .= b"\/"a by A1;
+     end;
+A4:  now let a,b,c be Element of S;
+       reconsider a' = a, b' = b, c' = c as Element of L;
+A5:    a'"\/"b' = a"\/"b by A1;
+         b"\/"c = b'"\/"c' by A1;
+      hence a"\/"(b"\/"c) = a'"\/"(b'"\/"c') by A1
+        .= (a'"\/"b')"\/"c' by LATTICES:def 5
+        .= (a"\/"b)"\/"c by A1,A5;
+     end;
+A6:  now let a,b be Element of S;
+       reconsider a' = a, b' = b as Element of L;
+         a"/\"b = a'"/\"b' by A1;
+      hence (a"/\"b)"\/"b = (a'"/\"b')"\/"b' by A1
+         .= b by LATTICES:def 8;
+     end;
+A7:  now let a,b be Element of S;
+       reconsider a' = a, b' = b as Element of L;
+      thus a"/\"b = b'"/\"a' by A1
+          .= b"/\"a by A1;
+     end;
+A8:  now let a,b,c be Element of S;
+       reconsider a' = a, b' = b, c' = c as Element of L;
+A9:    a'"/\"b' = a"/\"b by A1;
+         b"/\"c = b'"/\"c' by A1;
+      hence a"/\"(b"/\"c) = a'"/\"(b'"/\"c') by A1
+          .= (a'"/\"b')"/\"c' by LATTICES:def 7
+          .= (a"/\"b)"/\"c by A1,A9;
+     end;
+    now let a,b be Element of S;
+       reconsider a' = a, b' = b as Element of L;
+         a"\/"b = a'"\/"b' by A1;
+      hence a"/\"(a"\/"b) = a'"/\"(a'"\/"b') by A1
+          .=a by LATTICES:def 9;
+     end;
+     then S is join-commutative join-associative meet-absorbing
+          meet-commutative meet-associative join-absorbing
+     by A3,A4,A6,A7,A8,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+     then reconsider S as Lattice by LATTICES:def 10;
+       the L_join of S = (the L_join of L) | [:the carrier of S,
+     the carrier of S:] &
+     the L_meet of S = (the L_meet of L) | [:the carrier of S,
+     the carrier of S:] by FUNCT_2:40;
+     then S is SubLattice of L by Def16;
+    hence thesis;
+   end;
 end;
+
 
 canceled 4;
 
@@ -371,13 +461,17 @@ definition
  for n being Nat holds n in it iff n is prime;
 end;
 
-definition
+
+registration
   cluster prime Nat;
+existence by INT_2:44;
 end;
+
 
 definition
   mode Prime is prime Nat;
 end;
+
 
 reserve p,f for Prime;
 reserve x for set;
@@ -389,6 +483,7 @@ definition let p;
 :: NAT_LAT:def 19
  for q being Nat holds q in it iff (q < p & q is prime);
 end;
+
 
 theorem :: NAT_LAT:77
  SetPrimenumber p c= SetPrimes;
@@ -442,6 +537,7 @@ definition let n;
 
  ex B being finite set st B = {k:k<it & k is prime} & n = card B;
 end;
+
 
 theorem :: NAT_LAT:93
   SetPrimenumber p = {k:k<p & k is prime};

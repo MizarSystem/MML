@@ -25,11 +25,13 @@ definition let E be set;
       <*0*>in E;
 end;
 
+
 definition let E be set;
   attr E is with_int_implication means :Def2:
   for p, q being FinSequence st
          p in E & q in E holds <*1*>^p^q in E;
 end;
+
 
 definition let E be set;
   attr E is with_int_conjunction means :Def3:
@@ -37,22 +39,26 @@ definition let E be set;
      p in E & q in E holds <*2*>^p^q in E;
 end;
 
+
 definition let E be set;
   attr E is with_int_disjunction means :Def4:
      for p, q being FinSequence st
          p in E & q in E holds <*3*>^p^q in E;
 end;
 
+
 definition let E be set;
   attr E is with_int_propositional_variables means :Def5:
      for n being Nat holds <* 5+2*n *> in E;
 end;
+
 
 definition let E be set;
   attr E is with_modal_operator means :Def6:
   for p being FinSequence st
          p in E holds <*6*>^p in E;
 end;
+
 
 :: We reserve <*4*> for verum for a possible formulation.
 :: So do we <* 5+2*n+1 *> for every n >= 1 for introduction of a number of
@@ -68,6 +74,7 @@ definition let E be set;
         with_modal_operator;
 end;
 
+
 Lm1: for E be set st E is MC-closed holds E is non empty
 proof
   let E be set;
@@ -76,7 +83,7 @@ proof
   hence thesis by Def1;
 end;
 
-definition
+registration
   cluster MC-closed ->
      with_FALSUM with_int_implication
      with_int_conjunction with_int_disjunction
@@ -91,6 +98,7 @@ definition
   coherence by Def7;
 end;
 
+
 definition
   func MC-wff -> set means :Def8:
    it is MC-closed &
@@ -101,7 +109,7 @@ existence
     for E being set st E is MC-closed holds $1 in E;
      consider E0 being set such that
 A1:   for x being set holds x in E0 iff x in NAT* & P[x]
-               from Separation;
+               from XBOOLE_0:sch 1;
   A2: <*0*> in NAT* by FINSEQ_1:def 11;
   A3: for E being set st E is MC-closed holds <*0*> in E
       proof
@@ -230,12 +238,14 @@ A29:  E2 is MC-closed & for E being set
   end;
 end;
 
-definition
+
+registration
   cluster MC-wff -> MC-closed;
   coherence by Def8;
 end;
 
-definition
+
+registration
   cluster MC-closed non empty set;
   existence
   proof
@@ -244,7 +254,8 @@ definition
   end;
 end;
 
-definition
+
+registration
   cluster -> Relation-like Function-like Element of MC-wff;
 coherence
    proof let p be Element of MC-wff;
@@ -253,7 +264,8 @@ coherence
    end;
 end;
 
-definition
+
+registration
   cluster -> FinSequence-like Element of MC-wff;
 coherence
    proof let p be Element of MC-wff;
@@ -262,9 +274,11 @@ coherence
    end;
 end;
 
+
 definition
   mode MC-formula is Element of MC-wff;
 end;
+
 
 definition
   func FALSUM -> MC-formula equals
@@ -285,12 +299,14 @@ correctness by Def3;
 correctness by Def4;
 end;
 
+
 definition
 let p be Element of MC-wff;
   func Nes p -> MC-formula equals
     <*6*>^p;
 correctness by Def6;
 end;
+
 
  reserve T, X, Y for Subset of MC-wff;
  reserve p, q, r, s for Element of MC-wff;
@@ -311,6 +327,7 @@ definition let T be Subset of MC-wff;
  correctness;
 end;
 
+
 definition let X;
   func CnIPC X -> Subset of MC-wff means :Def15:
   r in it iff for T st T is IPC_theory & X c= T holds r in T;
@@ -320,7 +337,7 @@ definition let X;
     for T st T is IPC_theory & X c= T holds $1 in T;
    consider Y being set such that
 A1: for a being set holds a in Y iff
-     a in MC-wff & P[a] from Separation;
+     a in MC-wff & P[a] from XBOOLE_0:sch 1;
       Y c= MC-wff
     proof
      let a be set; assume a in Y;
@@ -352,11 +369,13 @@ A1: for a being set holds a in Y iff
   end;
 end;
 
+
 definition
   func IPC-Taut -> Subset of MC-wff equals :Def16:
     CnIPC({}(MC-wff));
   correctness;
 end;
+
 
 definition
   let p be Element of MC-wff;
@@ -365,11 +384,13 @@ definition
 correctness;
 end;
 
+
 definition
   func IVERUM -> MC-formula equals :Def18:
   (FALSUM => FALSUM);
 correctness;
 end;
+
 
 theorem Th1:
   p => (q => p) in CnIPC (X)
@@ -520,10 +541,11 @@ CnIPC(X) is IPC_theory
   thus (p in CnIPC(X) & p => q in CnIPC(X) implies q in CnIPC(X)) by Th10;
  end;
 
-definition let X be Subset of MC-wff;
+registration let X be Subset of MC-wff;
   cluster CnIPC(X) -> IPC_theory;
   coherence by Lm3;
 end;
+
 
 theorem Th15:
   T is IPC_theory iff CnIPC(T) = T
@@ -549,10 +571,11 @@ theorem :: Th16:
   hence thesis by A1,Th15;
  end;
 
-definition
+registration
   cluster IPC-Taut -> IPC_theory;
   coherence by Def16;
 end;
+
 
 begin  :: Formulas provable in IPC : implication
 
@@ -1101,9 +1124,11 @@ proof
    case A2: p in IPC-Taut;
        p => (p 'or' q) in IPC-Taut by Def14;
      hence thesis by A2,Def14;
+   end;
    case A3: q in IPC-Taut;
        q => (p 'or' q) in IPC-Taut by Def14;
      hence thesis by A3,Def14;
+  end;
   end;
 hence thesis;
 end;
@@ -1259,6 +1284,7 @@ definition let T be Subset of MC-wff;
  correctness;
 end;
 
+
 theorem Th67:
 T is CPC_theory implies T is IPC_theory
 proof
@@ -1276,7 +1302,7 @@ definition let X;
     for T st T is CPC_theory & X c= T holds $1 in T;
    consider Y being set such that
 A1: for a being set holds a in Y iff
-     a in MC-wff & P[a] from Separation;
+     a in MC-wff & P[a] from XBOOLE_0:sch 1;
       Y c= MC-wff
     proof
      let a be set; assume a in Y;
@@ -1308,11 +1334,13 @@ A1: for a being set holds a in Y iff
   end;
 end;
 
+
 definition
   func CPC-Taut -> Subset of MC-wff equals :Def21:
     CnCPC({}(MC-wff));
   correctness;
 end;
+
 
 theorem Th68:
 CnIPC (X) c= CnCPC (X)
@@ -1498,10 +1526,11 @@ CnCPC(X) is CPC_theory
   thus (p in CnCPC(X) & p => q in CnCPC(X) implies q in CnCPC(X)) by Th70;
  end;
 
-definition let X be Subset of MC-wff;
+registration let X be Subset of MC-wff;
   cluster CnCPC(X) -> CPC_theory;
   coherence by Lm22;
 end;
+
 
 theorem Th75:
   T is CPC_theory iff CnCPC(T) = T
@@ -1527,10 +1556,11 @@ theorem :: Th8C:
   hence thesis by A1,Th75;
  end;
 
-definition
+registration
   cluster CPC-Taut -> CPC_theory;
   coherence by Def21;
 end;
+
 
 theorem :: CPCincIPC:
   IPC-Taut c= CPC-Taut by Def16,Def21,Th68;
@@ -1561,6 +1591,7 @@ definition let T be Subset of MC-wff;
  correctness;
 end;
 
+
 theorem Th78:
 T is S4_theory implies T is CPC_theory
 proof
@@ -1586,7 +1617,7 @@ definition let X;
     for T st T is S4_theory & X c= T holds $1 in T;
    consider Y being set such that
 A1: for a being set holds a in Y iff
-     a in MC-wff & P[a] from Separation;
+     a in MC-wff & P[a] from XBOOLE_0:sch 1;
       Y c= MC-wff
     proof
      let a be set; assume a in Y;
@@ -1618,11 +1649,13 @@ A1: for a being set holds a in Y iff
   end;
 end;
 
+
 definition
   func S4-Taut -> Subset of MC-wff equals :Def24:
     CnS4({}(MC-wff));
   correctness;
 end;
+
 
 theorem Th80:
 CnCPC (X) c= CnS4 (X)
@@ -1854,10 +1887,11 @@ CnS4(X) is S4_theory
   thus (p in CnS4(X) implies Nes p in CnS4(X)) by Th87;
  end;
 
-definition let X be Subset of MC-wff;
+registration let X be Subset of MC-wff;
   cluster CnS4(X) -> S4_theory;
   coherence by Lm24;
 end;
+
 
 theorem Th92:
   T is S4_theory iff CnS4(T) = T
@@ -1883,10 +1917,11 @@ theorem :: Th12M:
   hence thesis by A1,Th92;
  end;
 
-definition
+registration
   cluster S4-Taut -> S4_theory;
   coherence by Def24;
 end;
+
 
 theorem :: S4incCPC:
   CPC-Taut c= S4-Taut by Def21,Def24,Th80;

@@ -14,10 +14,10 @@ environ
       FINSEQ_4, WAYBEL_6, HAHNBAN;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
       FINSET_1, RELAT_1, ORDINAL1, RELAT_2, REALSET1, STRUCT_0, ORDERS_1,
-      PRE_TOPC, CARD_3, FRAENKEL, LATTICE3, FUNCT_1, FUNCT_2, FUNCT_3, FUNCT_6,
-      PBOOLE, PRALG_1, PRALG_2, YELLOW_0, YELLOW_1, WAYBEL_0, WAYBEL_1,
-      YELLOW_2, YELLOW_4, WAYBEL_2, WAYBEL_3, WAYBEL_4, WAYBEL_5, BORSUK_1,
-      YELLOW_7, FUNCT_7;
+      PRE_TOPC, CARD_3, FRAENKEL, LATTICE3, FUNCT_1, PARTFUN1, FUNCT_2,
+      FUNCT_3, FUNCT_6, PBOOLE, PRALG_1, PRALG_2, YELLOW_0, YELLOW_1, WAYBEL_0,
+      WAYBEL_1, YELLOW_2, YELLOW_4, WAYBEL_2, WAYBEL_3, WAYBEL_4, PRE_CIRC,
+      WAYBEL_5, BORSUK_1, YELLOW_7, FUNCT_7;
  constructors WAYBEL_5, WAYBEL_4, NAT_1, RELAT_2, BORSUK_1, YELLOW_4, ORDERS_3,
       WAYBEL_1, WAYBEL_2, WAYBEL_3, PRALG_2, FUNCT_7, MEMBERED;
  clusters SUBSET_1, WAYBEL_0, WAYBEL_2, WAYBEL_3, YELLOW_0, STRUCT_0, ORDERS_1,
@@ -36,14 +36,43 @@ reserve x,y,Y,Z for set,
 
 :: Preliminaries
 
-scheme NonUniqExD1 { Z() ->non empty RelStr, X() -> Subset of Z(),
+scheme :: WAYBEL_6:sch 1
+ NonUniqExD1 { Z() ->non empty RelStr, X() -> Subset of Z(),
                    Y() -> non empty Subset of Z(), P[set,set] }:
  ex f being Function of X(),Y() st
    for e be Element of Z() st e in X()
     ex u be Element of Z() st u in Y() & u = f.e & P[e,u]
   provided
  for e be Element of Z() st e in X() ex u be Element of Z()
-  st u in Y() & P[e,u];
+  st u in Y() & P[e,u]
+proof
+   defpred p[set,set] means P[$1,$2];
+A2: for e be set st e in X() ex u be set st u in Y() & p[e,u]
+   proof
+    let e be set; assume A3: e in X();
+     then reconsider e1 = e as Element of X();
+     reconsider e1 as Element of Z() by A3;
+     consider u be Element of Z() such that A4: u in Y() & P[e1,u] by A1,A3;
+     reconsider u1 = u as set;
+     take u1;
+     thus thesis by A4;
+   end;
+  consider f being Function such that
+A5: dom f = X() & rng f c= Y() and
+A6: for e be set st e in X() holds p[e,f.e] from COMPTS_1:sch 1(A2);
+  reconsider f as Function of X(),Y() by A5,FUNCT_2:def 1,RELSET_1:11;
+A7: for e be Element of Z() st e in X()
+  ex u be Element of Z() st u in Y() & u = f.e & P[e,u]
+   proof
+    let e be Element of Z(); assume A8: e in X();
+    then reconsider e1 = f.e as Element of Y() by FUNCT_2:7;
+    reconsider fe = e1 as Element of Z();
+    take fe;
+    thus thesis by A6,A8;
+   end;
+  take f;
+  thus thesis by A7;
+ end;
 
 
 definition
@@ -55,6 +84,7 @@ let n be Element of NAT;
 end;
 
 
+
 definition
 let L be LATTICE;
 let C,D be non empty Subset of L;
@@ -63,14 +93,44 @@ let c be Element of C;
  redefine func f.c -> Element of L;
 end;
 
-definition
+
+registration
 let L be non empty Poset;
 cluster -> filtered directed Chain of L;
+coherence
+ proof
+  let C be Chain of L;
+A1:the InternalRel of L is_strongly_connected_in C by ORDERS_1:def 11;
+  thus C is filtered
+   proof
+    let x,y be Element of L; assume A2: x in C & y in C;
+    then [x,y] in the InternalRel of L or [y,x] in the InternalRel of L
+                             by A1,RELAT_2:def 7;
+then A3:  x <= y or y <= x by ORDERS_1:def 9;
+      x <= x & y <= y;
+    hence thesis by A2,A3;
+   end;
+  let x,y be Element of L; assume A4: x in C & y in C;
+  then [x,y] in the InternalRel of L or [y,x] in the InternalRel of L
+                           by A1,RELAT_2:def 7;
+then A5:x <= y or y <= x by ORDERS_1:def 9;
+    x <= x & y <= y;
+  hence thesis by A4,A5;
+ end;
 end;
 
-definition
+
+registration
 cluster strict continuous distributive lower-bounded LATTICE;
+existence
+ proof
+  consider x1 being set, R be Order of {x1};
+   reconsider RS = RelStr(#{x1},R#) as trivial reflexive non empty RelStr;
+  take RS;
+  thus thesis;
+ end;
 end;
+
 
 theorem :: WAYBEL_6:1
 for S,T being Semilattice, f being map of S,T
@@ -90,9 +150,36 @@ f is meet-preserving join-preserving one-to-one holds
 S is distributive;
 
 
-definition
+registration
 let S,T be complete LATTICE;
 cluster sups-preserving map of S,T;
+ existence
+  proof
+set t = Bottom T;
+set f = S --> t;
+   take f;
+   let X be Subset of S;
+   assume ex_sup_of X,S;
+   thus ex_sup_of f.:X,T by YELLOW_0:17;
+A1: (f.:X) c= rng f by RELAT_1:144;
+A2: f = (the carrier of S) --> t by BORSUK_1:def 3;
+   then rng f c= {t} by FUNCOP_1:19;
+   then (f.:X) c= {t} by A1,XBOOLE_1:1;
+then A3:(f.:X) = {t} or (f.:X) = {} by ZFMISC_1:39;
+   per cases;
+   suppose X = {};
+   then (f.:X) = {} by RELAT_1:149;
+   then sup (f.:X) = t by YELLOW_0:def 11;
+   hence sup (f.:X) = f.sup X by A2,FUNCOP_1:13;
+   end;
+   suppose X <> {};
+   then reconsider X1 = X as non empty Subset of S;
+   consider x be Element of X1;
+     f.x in (f.:X) by FUNCT_2:43;
+   hence sup (f.:X) = t by A3,YELLOW_0:39
+                  .= f.sup X by A2,FUNCOP_1:13;
+  end;
+  end;
 end;
 
 
@@ -113,6 +200,7 @@ for x be Element of L st x in X ex y be Element of L st y in X & y << x;
 end;
 
 
+
 theorem :: WAYBEL_6:5
   for L be up-complete LATTICE, X be upper Subset of L holds
 X is Open iff for x be Element of L st x in X holds waybelow x meets X;
@@ -123,10 +211,21 @@ theorem :: WAYBEL_6:6  ::3.2, p.68
 X is Open iff X = union {wayabove x where x is Element of L : x in X};
 
 
-definition
+registration
 let L be up-complete lower-bounded LATTICE;
 cluster Open Filter of L;
+existence
+ proof
+  take [#]L;
+    now let x be Element of L; assume x in [#]L;
+   A1: [#]L = the carrier of L by PRE_TOPC:12;
+     Bottom L << x by WAYBEL_3:4;
+   hence ex y be Element of L st y in [#]L & y << x by A1;
+  end;
+  hence thesis by Def1;
+ end;
 end;
+
 
 
 theorem :: WAYBEL_6:7
@@ -153,8 +252,12 @@ let G be non empty RelStr,
 attr g is meet-irreducible means
 :: WAYBEL_6:def 2
 for x,y being Element of G st g = x "/\" y holds x = g or y = g;
-synonym g is irreducible;
 end;
+notation   ::def 3.5, p.69
+let G be non empty RelStr,
+    g be Element of G;
+synonym g is irreducible for g is meet-irreducible ; end;
+
 
 
 definition
@@ -166,6 +269,7 @@ attr g is join-irreducible means
 end;
 
 
+
 definition
 let L be non empty RelStr;
 func IRR L -> Subset of L means
@@ -174,15 +278,22 @@ for x be Element of L holds x in it iff x is irreducible;
 end;
 
 
+
 theorem :: WAYBEL_6:10
 for L being upper-bounded antisymmetric with_infima non empty RelStr holds
 Top L is irreducible;
 
 
-definition
+registration
 let L be upper-bounded antisymmetric with_infima non empty RelStr;
 cluster irreducible Element of L;
+existence
+ proof
+  take Top L;
+  thus thesis by Th10;
+ end;
 end;
+
 
 
 theorem :: WAYBEL_6:11
@@ -215,6 +326,7 @@ attr X is order-generating means
 for x be Element of L holds
  ex_inf_of (uparrow x) /\ X,L & x = inf ((uparrow x) /\ X);
 end;
+
 
 
 theorem :: WAYBEL_6:15   ::3.9 (1-2), p.70
@@ -258,12 +370,14 @@ for x,y be Element of L st x "/\" y <= l holds x <= l or y <= l;
 end;
 
 
+
 definition
 let L be non empty RelStr;
 func PRIME L -> Subset of L means
 :: WAYBEL_6:def 7
 for x be Element of L holds x in it iff x is prime;
 end;
+
 
 
 definition
@@ -275,6 +389,7 @@ l~ is prime;
 end;
 
 
+
 theorem :: WAYBEL_6:20
 for L being upper-bounded antisymmetric non empty RelStr holds Top L is prime;
 
@@ -284,10 +399,16 @@ theorem :: WAYBEL_6:21
 L is co-prime;
 
 
-definition
+registration
 let L be upper-bounded antisymmetric non empty RelStr;
 cluster prime Element of L;
+existence
+ proof
+  take Top L;
+  thus thesis by Th20;
+ end;
 end;
+
 
 
 theorem :: WAYBEL_6:22

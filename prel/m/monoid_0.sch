@@ -27,11 +27,6 @@ GR_CY_1
 VECTSP_2
 MONOID_0
 #
-SubStrEx1
-SubStrEx2
-MonoidalSubStrEx1
-MonoidalSubStrEx2
-#
 G5 W27 ;;M2 W1 ;K10 U1 F1 ;;;;;
 ™ùM15 W27 ;V36 ;F1 ;;™R1 U1 B1 ;F2 ;;ùM13 F1 ;F2 ;;ùM13 F1 ;F2 ;;R2 K134 F1 ;B1 B2 ;F2 ;;;
 #

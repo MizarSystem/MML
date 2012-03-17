@@ -30,9 +30,11 @@ definition let i be Integer;
  redefine func abs i -> Nat;
 end;
 
-definition
+
+registration
  let A be non empty set, m be BinOp of A;
  cluster HGrStr(#A,m#) -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
 
 definition
@@ -52,17 +54,37 @@ definition
          ex g being Element of IT st h * g = e & g * h = e;
 end;
 
-definition
+
+registration
  cluster Group-like -> unital (non empty HGrStr);
+ coherence
+  proof let IT be non empty HGrStr;
+   assume ex e being Element of IT st
+        for h being Element of IT holds
+         h * e = h & e * h = h &
+         ex g being Element of IT st h * g = e & g * h = e;
+   hence ex e being Element of IT st
+        for h being Element of IT holds
+         h * e = h & e * h = h;
+  end;
 end;
 
-definition
+
+registration
  cluster strict Group-like associative (non empty HGrStr);
+  existence
+   proof
+       HGrStr (# REAL, addreal #) is Group-like associative
+      by Def3,Lm1,VECTSP_1:def 16;
+    hence thesis;
+   end;
 end;
+
 
 definition
  mode Group is Group-like associative (non empty HGrStr);
 end;
+
 
 canceled 4;
 
@@ -91,6 +113,7 @@ definition let G be unital (non empty HGrStr);
     holds h * it = h & it * h = h;
 end;
 
+
 canceled 2;
 
 theorem :: GROUP_1:10
@@ -104,6 +127,7 @@ definition let G,h;
 :: GROUP_1:def 5
    h * it = 1.G & it * h = 1.G;
 end;
+
 
 canceled;
 
@@ -165,6 +189,7 @@ definition let G;
    it.h = h";
 end;
 
+
 canceled 2;
 
 theorem :: GROUP_1:31
@@ -201,12 +226,14 @@ end;
 
 
 
+
 definition let G,i,h;
  func h |^ i -> Element of G equals
 :: GROUP_1:def 8
     power(G).(h,abs(i)) if 0 <= i otherwise
         (power(G).(h,abs(i)))";
 end;
+
 
 definition let G,n,h;
  redefine func h |^ n equals
@@ -323,9 +350,11 @@ definition let G,h;
  attr h is being_of_order_0 means
 :: GROUP_1:def 10
    h |^ n = 1.G implies n = 0;
- antonym h is_not_of_order_0;
-  synonym h is_of_order_0;
-end;
+ end;
+notation let G,h;
+ antonym h is_not_of_order_0 for h is being_of_order_0 ; synonym
+ h is_of_order_0 for h is being_of_order_0 ; end;
+
 
 canceled;
 
@@ -339,6 +368,7 @@ definition let G,h;
          h |^ it = 1.G & it <> 0 &
           for m st h |^ m = 1.G & m <> 0 holds it <= m;
 end;
+
 
 canceled 2;
 
@@ -362,12 +392,15 @@ definition let G;
       Card(the carrier of G);
 end;
 
+
 definition let S be 1-sorted;
   attr S is finite means
 :: GROUP_1:def 13
    the carrier of S is finite;
- antonym S is infinite;
-end;
+ end;
+notation let S be 1-sorted;
+  antonym S is infinite for S is finite ; end;
+
 
 definition let G;
  assume
@@ -377,14 +410,25 @@ definition let G;
    ex B being finite set st B = the carrier of G & it = card B;
 end;
 
+
 canceled 3;
 
 theorem :: GROUP_1:90
    G is finite implies ord G >= 1;
 
-definition
+registration
  cluster strict commutative Group;
+  existence
+   proof take G0; thus G0 is strict;
+    let a,g be Element of G0;
+      reconsider A = a, B = g as Real;
+    thus a * g = addreal.(A,B) by VECTSP_1:def 10
+            .= B + A by VECTSP_1:def 4
+            .= addreal.(g,a) by VECTSP_1:def 4
+            .= g * a by VECTSP_1:def 10;
+   end;
 end;
+
 
 canceled;
 
@@ -405,10 +449,12 @@ theorem :: GROUP_1:95
 theorem :: GROUP_1:96
    (a * b) |^ i = a |^ i * (b |^ i);
 
-definition
+registration
  let A be non empty set, m be BinOp of A, u be Element of A;
  cluster LoopStr(#A,m,u#) -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
+
 
 theorem :: GROUP_1:97
    LoopStr (# the carrier of A, the mult of A, 1.A #)

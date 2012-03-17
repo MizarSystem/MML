@@ -32,7 +32,8 @@ definition let X,Y; let R be Relation of X,Y;
   consistency;
 end;
 
-definition let X,Y;
+
+registration let X,Y;
  cluster quasi_total Function-like Relation of X,Y;
   existence
    proof
@@ -42,6 +43,7 @@ A1:    Y = {} & X <> {};
      reconsider R = {} as Relation of X,Y by RELSET_1:25;
     take R;
     thus thesis by A1,Def1;
+    end;
     suppose
 A2:    Y <> {} or X = {};
      then consider f being Function such that
@@ -50,9 +52,11 @@ A3:    X = dom f & rng f c= Y by FUNCT_1:18;
     take R;
     thus thesis by A2,A3,Def1;
    end;
+   end;
 end;
 
-definition let X,Y;
+
+registration let X,Y;
  cluster total -> quasi_total PartFunc of X,Y;
  coherence
   proof let f be PartFunc of X,Y;
@@ -61,14 +65,18 @@ A1:   dom f = X;
    per cases;
    case Y = {} implies X = {};
    thus X = dom f by A1;
+   end;
    case Y = {} & X <> {};
    hence f = {} by PARTFUN1:64;
   end;
+  end;
 end;
+
 
 definition let X,Y;
  mode Function of X,Y is quasi_total Function-like Relation of X,Y;
 end;
+
 
 canceled 2;
 
@@ -80,8 +88,10 @@ theorem
    proof per cases;
     case rng f = {} implies dom f = {};
     thus thesis;
+    end;
     case rng f = {} & dom f <> {};
     hence thesis by RELAT_1:65;
+   end;
    end;
   hence thesis;
  end;
@@ -97,10 +107,12 @@ A1:  rng f c= Y;
    per cases;
    case Y = {} implies dom f = {};
    thus thesis;
+   end;
    case
 A2:  Y = {} & dom f <> {};
    then rng f = {} by A1,XBOOLE_1:3;
   hence thesis by A2,RELAT_1:65;
+  end;
   end;
   hence thesis;
  end;
@@ -125,12 +137,14 @@ A2:  for x st x in X holds f.x in Y;
    case Y = {} implies dom f = {};
     thus dom f = dom R;
     thus thesis;
+   end;
    case that
 A3:  Y = {} and
 A4:  dom f <> {};
       consider x being Element of dom f;
          x in dom f by A4;
     hence thesis by A1,A2,A3;
+  end;
   end;
   hence thesis by A1;
  end;
@@ -179,8 +193,10 @@ A2:  Y c= Z;
    per cases;
    case Z = {} implies X = {};
    thus X = dom R by A1,Def1;
+   end;
    case Z = {} & X <> {};
    hence thesis by A1,A2,XBOOLE_1:3;
+  end;
   end;
   hence thesis;
  end;
@@ -189,7 +205,7 @@ scheme FuncEx1{X, Y() -> set, P[set,set]}:
  ex f being Function of X(),Y() st for x st x in X() holds P[x,f.x]
 provided
 A1: for x st x in X() ex y st y in Y() & P[x,y]
- proof
+proof
   per cases;
   suppose
 A2: Y() = {};
@@ -201,11 +217,13 @@ A3: now let x;
      consider f being Function of X(),Y();
      take f;
      thus for x st x in X() holds P[x,f.x] by A3;
+  end;
   suppose
 A4: X() = {};
      consider f being Function of X(),Y();
      take f;
    thus for x st x in X() holds P[x,f.x] by A4;
+  end;
   suppose X() <> {} & Y() <> {};
    then reconsider X = X(), Y = Y() as non empty set;
    set M = { { ff where ff is Element of Y : P[tt,ff] }
@@ -227,7 +245,7 @@ A8: for x holds x in M implies C.x in x by WELLORD2:28;
    deffunc F(set) = C.{ ff where ff is Element of Y : P[$1,ff] };
    consider f being Function such that
 A9: dom f = X and
-A10: for x st x in X holds f.x = F(x) from Lambda;
+A10: for x st x in X holds f.x = F(x) from FUNCT_1:sch 3;
      rng f c= Y
     proof let x be set;
      assume x in rng f;
@@ -253,12 +271,13 @@ A14: x in X();
    then ex ff being Element of Y st ff = f.x & P[x,ff];
   hence P[x,f.x];
  end;
+ end;
 
 scheme Lambda1{X, Y() -> set, F(set)->set}:
  ex f being Function of X(),Y() st for x st x in X() holds f.x = F(x)
 provided
 A1: for x st x in X() holds F(x) in Y()
-  proof
+proof
    defpred P[set,set] means $2 = F($1);
 A2: for x st x in X() ex y st y in Y() & P[x,y]
      proof let x;
@@ -283,7 +302,7 @@ definition let X,Y;
      defpred P[set] means
        ex f being Function st $1 = f & dom f = X & rng f c= Y;
      consider F being set such that
-A1:    z in F iff z in bool [:X,Y:] & P[z] from Separation;
+A1:    z in F iff z in bool [:X,Y:] & P[z] from XBOOLE_0:sch 1;
      take F;
      let z;
      thus z in F implies
@@ -319,6 +338,7 @@ A9: x in F2 iff ex f being Function st x = f & dom f = X & rng f c= Y;
   end;
 end;
 
+
 canceled;
 
 theorem Th11:
@@ -333,15 +353,17 @@ theorem Th12:
    for f being Function of X,X holds f in Funcs(X,X)
  proof X = {} implies X = {}; hence thesis by Th11; end;
 
-definition let X be set, Y be non empty set;
+registration let X be set, Y be non empty set;
   cluster Funcs(X,Y) -> non empty;
   coherence by Th11;
 end;
 
-definition let X be set;
+
+registration let X be set;
   cluster Funcs(X,X) -> non empty;
   coherence by Th12;
 end;
+
 
 canceled;
 
@@ -393,9 +415,11 @@ theorem Th18:
   suppose Y = {};
     then f1 = {} & f2 = {} by RELSET_1:27;
    hence thesis;
+  end;
   suppose Y <> {};
    then dom f1 = X & dom f2 = X by Def1;
    hence thesis by FUNCT_1:9;
+ end;
  end;
 
 theorem Th19:
@@ -415,6 +439,7 @@ A2: Z <> {} or X = {};
       then dom g = Y & dom f = X & rng f c= Y by A1,A2,Def1,RELSET_1:12;
      hence X = dom(g*f) by RELAT_1:46;
      thus rng(g*f) c= Z by RELSET_1:12;
+     end;
      suppose that
 A3:   Y <> {} and
 A4:   Z = {};
@@ -423,12 +448,15 @@ then A6:     g*f = {} by RELAT_1:62;
      thus X = dom(g*f) by A2,A4,A5,RELAT_1:60,62;
      thus rng(g*f) c= Z by A6,RELAT_1:60,XBOOLE_1:2;
     end;
+    end;
    hence thesis;
+  end;
   case that
 A7: Z = {} & X <> {};
      Y = {} or Y <> {};
    then f = {} or g = {} by A7,Def1;
   hence thesis by RELAT_1:62;
+  end;
   end;
   hence thesis;
  end;
@@ -605,11 +633,13 @@ A3: rng(f") c= X
   per cases;
   case X = {} implies Y = {};
   thus Y = dom R by A1,A2,FUNCT_1:55;
+  end;
   case X = {} & Y <> {};
    then dom f = {} by Def1;
    then rng f = {} by RELAT_1:65;
    then dom(f") = {} by A1,FUNCT_1:54;
   hence thesis by RELAT_1:64;
+  end;
   end;
   hence thesis;
  end;
@@ -686,8 +716,10 @@ A2:  Z c= X;
     dom f = X by A1,Def1;
   hence Z = dom R by A2,RELAT_1:91;
   thus thesis;
+  end;
   case Y = {} & Z <> {};
   hence thesis by A1,A2,XBOOLE_1:3;
+  end;
   end;
   hence thesis;
  end;
@@ -701,9 +733,11 @@ theorem
   suppose Y = {} implies X = {};
    then dom f = X by Def1;
    hence thesis by RELAT_1:97;
+  end;
   suppose Y = {} & X <> {};
    then f = {} by Def1;
   hence thesis by RELAT_1:111;
+ end;
  end;
 
 theorem
@@ -745,6 +779,7 @@ definition let X,Y; let f be Function of X,Y; let P;
   coherence by Th44;
 end;
 
+
 theorem Th45:
    for f being Function of X,Y st Y = {} implies X = {} holds f.:X = rng f
  proof let f be Function of X,Y;
@@ -775,6 +810,7 @@ definition let X,Y; let f be PartFunc of X,Y; let Q;
   redefine func f"Q -> Subset of X;
   coherence by Th47;
 end;
+
 
 theorem
      for f being Function of X,Y st Y = {} implies X = {} holds f"Y = X
@@ -846,8 +882,10 @@ theorem Th55:
    per cases;
    case Y = {} implies {} = {};
    thus dom f = {} by A1;
+   end;
    case Y = {} & {} <> {};
    hence thesis;
+  end;
   end;
   hence thesis;
  end;
@@ -934,6 +972,7 @@ definition let X;
   coherence proof X <> {} or X = {}; hence thesis by Th19; end;
 end;
 
+
 theorem Th67:
    for f being Function of X,X holds dom f = X & rng f c= X
  proof X = {} implies X = {}; hence thesis by Def1,RELSET_1:12; end;
@@ -1013,19 +1052,22 @@ definition let X, Y be set; let f be Function of X, Y;
   rng f = Y;
 end;
 
+
 definition let X, Y; let f be Function of X,Y;
  attr f is bijective means
 :Def4: f is one-to-one onto;
 end;
 
-definition let X, Y be set;
+
+registration let X, Y be set;
   cluster bijective -> one-to-one onto Function of X,Y;
   coherence by Def4;
   cluster one-to-one onto -> bijective Function of X,Y;
   coherence by Def4;
 end;
 
-definition let X;
+
+registration let X;
  cluster bijective Function of X,X;
   existence
    proof take id X;
@@ -1033,9 +1075,11 @@ definition let X;
    end;
 end;
 
+
 definition let X;
  mode Permutation of X is bijective Function of X,X;
 end;
+
 
 theorem Th83:
   for f being Function of X, X st f is one-to-one & rng f = X
@@ -1062,7 +1106,8 @@ definition let X; let f,g be Permutation of X;
    end;
 end;
 
-definition let X;
+
+registration let X;
  cluster reflexive total -> bijective Function of X,X;
  coherence
   proof let f be Function of X,X;
@@ -1091,6 +1136,7 @@ A6:   f.x1 = f.x2;
   end;
 end;
 
+
 definition let X; let f be Permutation of X;
   redefine func f" -> Permutation of X;
   coherence
@@ -1101,6 +1147,7 @@ definition let X; let f be Permutation of X;
     hence f" is Permutation of X by Th83;
    end;
 end;
+
 
 theorem
      for f,g being Permutation of X st g*f = g holds f = id X
@@ -1141,7 +1188,7 @@ A1: P c= X;
 
  reserve C,D,E for non empty set;
 
-definition let X,D;
+registration let X,D;
  cluster quasi_total -> total PartFunc of X,D;
  coherence
   proof let f be PartFunc of X,D;
@@ -1151,11 +1198,13 @@ definition let X,D;
   end;
 end;
 
+
 definition let X,D,Z;
   let f be Function of X,D; let g be Function of D,Z;
   redefine func g*f -> Function of X,Z;
  coherence by Th19;
 end;
+
 
 reserve c for Element of C;
 reserve d for Element of D;
@@ -1168,19 +1217,22 @@ definition let C be non empty set, D be set; let f be Function of C,D;
    per cases;
    suppose D is non empty;
    hence thesis by Th7;
+   end;
    suppose
 A1:  D is empty;
    then dom f = {} by PARTFUN1:64,RELAT_1:60;
    then f.c = {} by FUNCT_1:def 4;
    hence thesis by A1,SUBSET_1:def 2;
  end;
+ end;
 end;
+
 
 scheme FuncExD{C, D() -> non empty set, P[set,set]}:
  ex f being Function of C(),D() st for x being Element of C() holds P[x,f.x]
 provided
 A1: for x being Element of C() ex y being Element of D() st P[x,y]
- proof
+proof
    defpred R[set,set] means $1 in C() & $2 in D() & P[$1,$2];
 A2: for x being set st x in C()
      ex y being set st y in D() & R[x,y]
@@ -1201,7 +1253,7 @@ A4: for x being set st x in C()
 scheme LambdaD{C, D() -> non empty set, F(Element of C()) -> Element of D()}:
  ex f being Function of C(),D() st
   for x being Element of C() holds f.x = F(x)
- proof
+proof
   defpred P[Element of C(),set] means $2 = F($1);
 A1: for x being Element of C() ex y being Element of D() st P[x,y];
   thus ex f being Function of C(),D() st
@@ -1283,7 +1335,7 @@ scheme FuncEx2{X, Y, Z() -> set, P[set,set,set]}:
    for x,y st x in X() & y in Y() holds P[x,y,f.[x,y]]
 provided
 A1: for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z]
- proof
+proof
    defpred R[set,set] means
    for x1,y1 st $1 = [x1,y1] holds P[x1,y1,$2];
 A2: for x st x in [:X(),Y():] ex z st z in Z() & R[x,z]
@@ -1316,7 +1368,7 @@ scheme Lambda2{X, Y, Z() -> set, F(set,set)->set}:
   st for x,y st x in X() & y in Y() holds f.[x,y] = F(x,y)
 provided
 A1: for x,y st x in X() & y in Y() holds F(x,y) in Z()
-  proof
+proof
     defpred P[set,set,set] means $3 = F($1,$2);
 A2: for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z]
      proof let x,y such that
@@ -1343,7 +1395,7 @@ scheme FuncEx2D{X, Y, Z() -> non empty set, P[set,set,set]}:
 provided
 A1: for x being Element of X() for y being Element of Y()
       ex z being Element of Z() st P[x,y,z]
- proof
+proof
   defpred R[set,set] means
     for x being (Element of X()),y being Element of Y()
        st $1 = [x,y] holds P[x,y,$2];
@@ -1377,7 +1429,8 @@ scheme Lambda2D{X, Y, Z() -> non empty set,
                 F(Element of X(),Element of Y()) -> Element of Z()}:
  ex f being Function of [:X(),Y():],Z()
   st for x being Element of X() for y being Element of Y() holds f.[x,y]=F(x,y)
-  proof
+
+proof
    defpred P[Element of X(),Element of Y(),set] means $3 = F($1,$2);
 A1: for x being Element of X() for y being Element of Y()
       ex z being Element of Z() st P[x,y,z];
@@ -1405,7 +1458,7 @@ scheme Lambda1C{A, B() -> set, C[set], F(set)->set, G(set)->set}:
  provided
 A1: for x st x in A() holds
      (C[x] implies F(x) in B()) & (not C[x] implies G(x) in B())
- proof
+proof
   deffunc F'(set) = F($1);
   deffunc G'(set) = G($1);
   defpred P[set] means C[$1];
@@ -1413,7 +1466,7 @@ A1: for x st x in A() holds
 A2:  dom f = A() and
 A3:  for x st x in A() holds
       (P[x] implies f.x = F'(x)) &
-      (not P[x] implies f.x = G'(x)) from LambdaC;
+      (not P[x] implies f.x = G'(x)) from PARTFUN1:sch 1;
 A4: now assume
 A5:   B() = {};
     assume
@@ -1643,6 +1696,7 @@ theorem
     now per cases;
    suppose Y = {} & X <> {}; then TotFuncs f = {} by PARTFUN1:172;
      hence thesis by XBOOLE_1:2;
+   end;
    suppose
 A1:   Y <> {} or X = {};
     thus TotFuncs f c= Funcs(X,Y)
@@ -1651,6 +1705,7 @@ A1:   Y <> {} or X = {};
       then g is Function of X,Y by Th158;
       hence g in Funcs(X,Y) by A1,Th11;
      end;
+  end;
   end;
   hence thesis;
  end;
@@ -1662,6 +1717,7 @@ theorem
    suppose Y = {} & X <> {};
     then TotFuncs <:{},X,Y:> = {} & Funcs(X,Y) = {} by Th14,PARTFUN1:172;
     hence thesis;
+   end;
    suppose
 A1:   Y = {} implies X = {};
       for g being set holds g in TotFuncs <:{},X,Y:> iff g in Funcs(X,Y)
@@ -1678,6 +1734,7 @@ then A3:   g is Function of X,Y by Th121;
       hence thesis by PARTFUN1:def 7;
      end;
     hence thesis by TARSKI:2;
+   end;
    end;
   hence thesis;
  end;
@@ -1739,6 +1796,7 @@ A1:    dom g c= dom f;
     now per cases;
    suppose Y = {} & X <> {}; then g = {} by PARTFUN1:64;
     hence thesis by XBOOLE_1:2;
+   end;
    suppose
 A2:   Y = {} implies X = {};
     thus TotFuncs f c= TotFuncs g implies g c= f
@@ -1759,6 +1817,7 @@ A5:      f tolerates h by A2,Th148;
      hence thesis by A1,GRFUNC_1:8;
     end;
   end;
+  end;
   hence thesis;
  end;
 
@@ -1772,6 +1831,7 @@ A2: for y holds Y <> {y};
     now per cases;
    suppose Y = {}; then g = {} by PARTFUN1:64;
     hence dom g c= dom f by RELAT_1:60,XBOOLE_1:2;
+   end;
    suppose
 A3:   Y <> {};
     thus dom g c= dom f
@@ -1806,6 +1866,7 @@ A10:    x in X by A4;
       hence contradiction by A7,PARTFUN1:def 6;
      end;
   end;
+  end;
   hence thesis by A1,Th166;
  end;
 
@@ -1822,8 +1883,9 @@ A1:  for y holds Y <> {y};
 
 :: from WAYBEL_1
 
-definition let A,B be non empty set;
+registration let A,B be non empty set;
  cluster -> non empty Function of A,B;
   coherence by Def1,RELAT_1:60;
 end;
+
 

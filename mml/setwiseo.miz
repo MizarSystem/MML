@@ -126,9 +126,9 @@ theorem Th13:
 scheme SubsetEx { A() -> non empty set, P[set] } :
   ex B being Subset of A() st
    for x being Element of A() holds x in B iff P[x]
- proof defpred X[set] means P[$1];
+proof  defpred X[set] means P[$1];
    consider B being set such that
-A1: for x being set holds x in B iff x in A() & X[x] from Separation;
+A1: for x being set holds x in B iff x in A() & X[x] from XBOOLE_0:sch 1;
     for x being set holds x in B implies x in A() by A1;
   then reconsider B as Subset of A() by TARSKI:def 3;
   take B; let x be Element of A();
@@ -204,13 +204,14 @@ A2:  x in A by Th18;
    hence contradiction by A1;
   end;
 
-definition let X be set;
+registration let X be set;
  cluster empty Element of Fin X;
  existence
   proof {} is Element of Fin X by FINSUB_1:18;
    hence thesis;
   end;
 end;
+
 
 definition let X be set;
  func {}.X -> empty Element of Fin X equals
@@ -219,11 +220,12 @@ definition let X be set;
  correctness;
 end;
 
+
 scheme FinSubFuncEx{ A()->non empty set
 , B()->(Element of Fin A()), P[set,set] } :
  ex f being Function of A(), Fin A() st
   for b,a being Element of A() holds a in f.b iff a in B() & P[a,b]
-  proof
+proof
      defpred X[set,Element of Fin A()] means
        for a being Element of A() holds a in $2 iff a in B() & P[a,$1];
 A1:  now let x be Element of A();
@@ -239,7 +241,7 @@ A2:    for a being Element of A() holds a in y iff X[a] from SubsetEx;
      thus X[x,y'] by A2;
     end;
    thus ex f being Function of A(), Fin A() st
-         for x being Element of A() holds X[x,f.x] from FuncExD(A1);
+         for x being Element of A() holds X[x,f.x] from FUNCT_2:sch 3(A1);
   end;
 
 :: theorems related to BinOp of ...
@@ -247,8 +249,10 @@ A2:    for a being Element of A() holds a in y iff X[a] from SubsetEx;
 definition let X be non empty set, F be BinOp of X;
  attr F is having_a_unity means
 :Def2: ex x being Element of X st x is_a_unity_wrt F;
-  synonym F has_a_unity;
-end;
+  end;
+notation let X be non empty set, F be BinOp of X;
+ synonym F has_a_unity for F is having_a_unity ; end;
+
 
 canceled 2;
 
@@ -279,7 +283,7 @@ A1: F has_a_unity;
 
    ::  M a i n   p a r t
 
-definition let X be non empty set;
+registration let X be non empty set;
  cluster non empty Element of Fin X;
  existence
   proof consider x being Element of X;
@@ -288,6 +292,7 @@ definition let X be non empty set;
    hence thesis;
   end;
 end;
+
 
 definition let X be non empty set, x be Element of X;
  redefine func {x} -> Element of Fin X;
@@ -312,15 +317,18 @@ definition let X be non empty set, x be Element of X;
   end;
 end;
 
+
 definition let X be set; let A,B be Element of Fin X;
  redefine func A \/ B -> Element of Fin X;
  coherence by FINSUB_1:10;
 end;
 
+
 definition let X be set; let A,B be Element of Fin X;
  redefine func A \ B -> Element of Fin X;
   coherence by FINSUB_1:10;
 end;
+
 
 scheme FinSubInd1{ X() -> non empty set, P[set] } :
   for B being Element of Fin X() holds P[B]
@@ -328,7 +336,7 @@ scheme FinSubInd1{ X() -> non empty set, P[set] } :
 A1:  P[{}.X()] and
 A2:  for B' being (Element of Fin X()), b being Element of X()
       holds P[B'] & not b in B' implies P[B' \/ {b}]
- proof let B be Element of Fin X();
+proof  let B be Element of Fin X();
     defpred X[set] means ex B' being Element of Fin X() st B' = $1 & P[B'];
 A3: B is finite;
 A4: X[{}] by A1;
@@ -344,7 +352,7 @@ A8:  ex B' being Element of Fin X() st B' = A & P[B'];
         not x' in A or A \/ {x'} = A by ZFMISC_1:46;
      hence P[A' \/ {x'}] by A2,A8;
     end;
-   X[B] from Finite(A3,A4,A5);
+   X[B] from FINSET_1:sch 2(A3,A4,A5);
   hence thesis;
  end;
 
@@ -354,7 +362,7 @@ scheme FinSubInd2{ X() -> non empty set, P[Element of Fin X()] } :
 A1:  for x being Element of X() holds P[{x}] and
 A2:  for B1,B2 being Element of Fin X() st B1 <> {} & B2 <> {}
       holds P[B1] & P[B2] implies P[B1 \/ B2]
- proof let B be Element of Fin X();
+proof  let B be Element of Fin X();
 
 A3: B is finite;
    defpred X[set] means
@@ -374,13 +382,15 @@ A9:    P[{x'}] by A1;
         now per cases;
        suppose A = {};
         hence P[A' \/ {x'}] by A1;
+       end;
        suppose
        A <> {};
         hence P[A' \/ {x'}] by A2,A8,A9;
       end;
+      end;
      hence P[A' \/ {x'}];
     end;
-     X[B] from Finite(A3,A4,A5);
+     X[B] from FINSET_1:sch 2(A3,A4,A5);
   hence thesis;
  end;
 
@@ -449,7 +459,7 @@ A9:       not ex x' being Element of X st x = {x'};
       end;
     end;
     consider G' being Function of Fin X, Y such that
-A10:   for B' being Element of Fin X holds X[B',G'.B'] from FuncExD(A6);
+A10:   for B' being Element of Fin X holds X[B',G'.B'] from FUNCT_2:sch 3(A6);
     take G = G';
     thus for e being Element of Y st e is_a_unity_wrt F holds G.{} = e
      proof let e' be Element of Y such that
@@ -525,7 +535,8 @@ A24:           not ex C being Element of Fin X st
             end;
         end;
         consider H being Function of Fin X, Y such that
-A25:     for B' being Element of Fin X holds X[B',H.B'] from FuncExD(A17);
+A25:     for B' being Element of Fin X holds X[B',H.B'] from FUNCT_2:sch 3
+(A17);
        take J = H;
        thus for e being Element of Y st e is_a_unity_wrt F holds J.{} = e
         proof
@@ -576,6 +587,7 @@ A39:           B' = {x};
                        .= F.(f.x', f.x) by A14
                        .= F.(f.x, f.x') by A2,BINOP_1:def 2
                        .= F.(J.B', f.x') by A14,A34,A39;
+               end;
                suppose
 A40:              B' <> {x};
                  set C = (B' \ {x}) \/ {x'};
@@ -597,7 +609,9 @@ then A44:             x' in B \(B' \ {x}) by A37,XBOOLE_0:def 4;
                          .= F.(J.(B' \/ {x}), f.x') by XBOOLE_1:39
                          .= F.(J.B', f.x') by A36,ZFMISC_1:46;
                end;
+               end;
             hence J.(B' \/ {x'}) = F.(J.B', f.x');
+           end;
            suppose
 A45:         not x in B';
 then A46:          B' c= B by A29,Th5;
@@ -617,11 +631,14 @@ then A49:            x' in B \ B' by A35,XBOOLE_0:def 4;
                hence J.(B' \/ {x'}) = G.(B' \/ {x'}) by A25
                            .= F.(G.B', f.x') by A15,A30,A46,A49
                            .= F.(J.B', f.x') by A25,A47;
+              end;
               suppose x = x';
                hence J.(B' \/ {x'}) = F.(G.B', f.x') by A25,A30,A46
                       .= F.(J.B', f.x') by A25,A47;
              end;
+             end;
             hence J.(B' \/ {x'}) = F.(J.B', f.x');
+          end;
           end;
       hence thesis;
      end;
@@ -658,6 +675,7 @@ A59:    B = {};
 then A60:    the_unity_wrt F is_a_unity_wrt F by A1,Th22;
       hence x = the_unity_wrt F by A51,A52,A59
             .= y by A55,A56,A59,A60;
+     end;
      suppose
 A61:    B <> {};
       defpred X[set] means $1 c= B & $1 <> {} implies G1.$1 = G2.$1;
@@ -678,19 +696,23 @@ then A67:     x in B \ B' by A65,XBOOLE_0:def 4;
 A68:         B' = {};
           hence G1.(B' \/ {x}) = f.x by A53
                   .= G2.(B' \/ {x}) by A57,A68;
+         end;
          suppose
 A69:         B' <> {};
           hence G1.(B' \/ {x}) = F.(G1.B', f.x) by A54,A66,A67
                   .= G2.(B' \/ {x}) by A58,A64,A66,A67,A69;
+        end;
         end;
        hence G1.(B' \/ {x}) = G2.(B' \/ {x});
       end;
       for B' being Element of Fin X holds X[B'] from FinSubInd1(A62,A63);
      hence x = y by A51,A55,A61;
     end;
+    end;
    hence thesis;
   end;
 end;
+
 
 canceled;
 
@@ -749,6 +771,7 @@ A15:           B' = {x};
              hence G.(B' \/ {x}) = f.x by A7
                          .= F.(f.x, f.x) by A2,BINOP_1:def 4
                          .= F.(G.B',f.x) by A7,A15;
+            end;
             suppose B' <> {x};
               then not B' c= {x} by A13,XBOOLE_0:def 10;
               then B' \ {x} <> {} by XBOOLE_1:37;
@@ -758,10 +781,13 @@ then A16:           G.(B' \ {x} \/ {x}) = F.(G.(B' \ {x}), f.x) by A8,A11,A14;
                    .= F.(F.(G.(B' \ {x}),f.x), f.x) by A4,BINOP_1:def 3
                    .= F.(G.B',f.x) by A12,A16,XBOOLE_1:39;
            end;
+           end;
           hence G.(B' \/ {x}) = F.(G.B',f.x);
+         end;
          suppose not x in B';
            then x in B \ B' by A10,XBOOLE_0:def 4;
           hence G.(B' \/ {x}) = F.(G.B',f.x) by A8,A9;
+        end;
         end;
        hence G.(B' \/ {x}) = F.(G.B',f.x);
       end;
@@ -892,10 +918,12 @@ then A15:  C c= B \/ {x} by A13,XBOOLE_1:1;
         now per cases;
        suppose A16: C = {};
         hence G.(C \/ {y}) = f.y by A4 .= G'.(C \/ {y}) by A7,A16;
+       end;
        suppose
 A17:     C <> {};
         hence G.(C \/ {y}) = F.(G'.C, f.y) by A5,A11,A13,A14,A15
                         .= G'.(C \/ {y}) by A8,A13,A17;
+      end;
       end;
      hence G.(C \/ {y}) = G'.(C \/ {y});
     end;
@@ -929,6 +957,7 @@ A5:   B <> {} implies F $$ (B1 \/ B,f) = F.(F $$ (B1,f),F $$ (B,f)) and
 A6:      B = {};
         hence F $$ (B1 \/ (B \/ {x}),f) = F.(F $$ (B1,f), f.x) by A1,A2,Th29
                        .= F.(F $$ (B1,f),F $$ (B \/ {x},f)) by A1,A6,Th26;
+       end;
        suppose
 A7:      B <> {};
 then A8:     B1 \/ B <> {} by XBOOLE_1:15;
@@ -936,6 +965,7 @@ then A8:     B1 \/ B <> {} by XBOOLE_1:15;
                    .= F.(F.(F $$ (B1,f),F $$ (B,f)), f.x) by A1,A5,A7,A8,Th29
                    .= F.(F $$ (B1,f),F.(F $$ (B,f), f.x)) by A1,BINOP_1:def 3
                    .= F.(F $$ (B1,f),F $$ (B \/ {x},f)) by A1,A7,Th29;
+      end;
       end;
      hence F $$ (B1 \/ (B \/ {x}),f) = F.(F $$ (B1,f),F $$ (B \/ {x},f));
     end;
@@ -1069,6 +1099,7 @@ A11:     g.:B = f.:A \/ f.:{x} by A7,RELAT_1:153
                    .= F$$(A \/ {x'},f) by A1,A8,Th29
                    .= F$$(A,f) by A8,ZFMISC_1:46
                    .= F$$(B,g) by A6,A8,A11;
+      end;
       suppose
 A12:     not f.x in f.:A;
          now per cases;
@@ -1076,6 +1107,7 @@ A12:     not f.x in f.:A;
 then A14:      g.:B = {f.x} by A7,Th13;
          thus F$$(A \/ {x},f) = f.x by A1,A13,Th26
                       .= F$$(B,g) by A1,A14,Th34;
+        end;
         suppose
 A15:       A <> {};
             B /\ g"{f.x} c= B by XBOOLE_1:17;
@@ -1120,7 +1152,9 @@ A24:       for b being Element of X st b in B2 holds g.b = f.x
                       .= F.(F$$(B1,g), F$$(B2,g)) by A1,A22,A24,Th33
                       .= F$$(B,g) by A1,A16,A17,A22,Th30;
        end;
+       end;
       hence F$$(A \/ {x},f) = F$$(B,g);
+     end;
      end;
     hence F$$(A \/ {x},f) = F$$(B,g);
    end;
@@ -1209,6 +1243,7 @@ definition let X, Y be non empty set; let f be Function of X,Y;
  coherence by Lm1;
 end;
 
+
 theorem
 Th38: for A, X, Y being non empty set for F being BinOp of A
   st F is idempotent & F is commutative & F is associative
@@ -1279,12 +1314,14 @@ A7:     B = {};
        hence g.(F$$(B \/ {x},f)) = g.(f.x) by A1,Th26
                   .= (g*f).x by FUNCT_2:21
                   .= G$$(B \/ {x},g*f) by A2,A7,Th26;
+      end;
       suppose
 A8:     B <> {};
        hence g.(F$$(B \/ {x},f)) = g.(F.(F$$(B,f), f.x)) by A1,Th29
                   .= G.(g.(F$$(B,f)), g.(f.x)) by A3
                   .= G.(G$$(B,g*f), (g*f).x) by A6,A8,FUNCT_2:21
                   .= G$$(B \/ {x},g*f) by A2,A8,Th29;
+     end;
      end;
     hence g.(F$$(B \/ {x},f)) = G$$(B \/ {x},g*f);
    end;
@@ -1345,10 +1382,12 @@ A4:  {} = {}.X;
 A5:     B2 = {};
        hence F $$ (B1 \/ B2,f) = F.(F$$(B1,f),the_unity_wrt F) by A2,Th23
                     .= F.(F $$ (B1,f),F $$ (B2,f)) by A1,A2,A4,A5,Th40;
+      end;
       suppose
 A6:      B1 = {};
        hence F $$ (B1 \/ B2,f) = F.(the_unity_wrt F, F$$(B2,f)) by A2,Th23
                     .= F.(F $$ (B1,f),F $$ (B2,f)) by A1,A2,A4,A6,Th40;
+     end;
      end;
     hence thesis;
    end;
@@ -1425,8 +1464,10 @@ A4: for x,y being Element of Y holds g.(F.(x,y)) = G.(g.x,g.y);
 then A5:    B = {}.X;
      hence g.(F$$(B,f)) = g.the_unity_wrt F by A1,Th40
                 .= G$$(B,g*f) by A2,A3,A5,Th40;
+    end;
     suppose B <> {};
      hence g.(F$$(B,f)) = G$$(B,g*f) by A1,A2,A4,Th39;
+   end;
    end;
   hence g.(F$$(B,f)) = G$$(B,g*f);
  end;
@@ -1443,7 +1484,7 @@ then A5:    B = {}.X;
    proof deffunc U(Element of Fin A,Element of Fin A) = $1 \/ $2;
       ex IT being BinOp of Fin A st
      for x,y being Element of Fin A holds
-            IT.(x,y) = U(x,y) from BinOpLambda;
+            IT.(x,y) = U(x,y) from BINOP_1:sch 2;
     hence thesis;
    end;
   uniqueness
@@ -1459,6 +1500,7 @@ A2:  for x,y being Element of Fin A holds IT'.(x,y) = (x \/ y);
     hence IT = IT' by FUNCT_2:120;
    end;
  end;
+
 
 reserve A for set,
         x,y,z for Element of Fin A;
@@ -1528,6 +1570,7 @@ definition let X be non empty set, A be set;
 :Def5:  FinUnion A $$(B,f);
  correctness;
 end;
+
 
 theorem
    FinUnion({i},f) = f.i
@@ -1678,8 +1721,10 @@ then A7:  f.:B = {} by RELAT_1:149;
      thus g.(FinUnion(B,f)) = g.{}.Y by A4,A6,Th59
                 .= G$$(f.:B,g) by A1,A2,A5,A7,Th40
                 .= G$$(B,g*f) by A1,Th44;
+    end;
     suppose B <> {};
      hence g.(FinUnion(B,f)) = G$$(B,g*f) by A1,A3,Th64;
+   end;
    end;
   hence g.(FinUnion(B,f)) = G$$(B,g*f);
  end;
@@ -1698,7 +1743,7 @@ A2:    x in A;
      hence U(x) in Fin A;
     end;
    thus ex f being Function of A, Fin A st
-    for x being set st x in A holds f.x = U(x) from Lambda1(A1);
+    for x being set st x in A holds f.x = U(x) from FUNCT_2:sch 2(A1);
   end;
  uniqueness
   proof
@@ -1713,6 +1758,7 @@ A4: for x being set st x in A holds IT'.x = {x};
    hence thesis by FUNCT_2:18;
   end;
 end;
+
 
 canceled;
 

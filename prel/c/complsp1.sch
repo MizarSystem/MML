@@ -8,11 +8,6 @@ RELSET_1
 FUNCT_2
 BINOP_1
 #
-FuncDefUniq
-BinOpDefuniq
-SubsetFD
-SubsetFD2
-#
 M1 W1 ;;M1 W1 ;;M1 ;;
 M5 V4 ;V6 F1 ;F2 ;;F1 ;F2 ;;M5 V4 ;V6 F1 ;F2 ;;F1 ;F2 ;;ª&M2 F1 ;;R1 K48 F1 ;F2 ;B1 B3 ;F3 B3 ;;M2 F1 ;;R1 K48 F1 ;F2 ;B2 B3 ;F3 B3 ;;ªR1 B1 B2 ;;;
 #

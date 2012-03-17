@@ -14,13 +14,10 @@ CARD_1
 FINSEQ_1
 REWRITE1
 #
-MinimalFiniteSet
-RedInd
-#
 ;
-ªM1 V16 ;;ª&P1 B1 ;M1 ;ª&R7 B2 B1 ;P1 B2 ;ªR1 B2 B1 ;;;ªM1 V16 ;;ªP1 B1 ;;
+ªM1 V16 ;;ª&P1 B1 ;M1 ;ª&R8 B2 B1 ;P1 B2 ;ªR1 B2 B1 ;;;ªM1 V16 ;;ªP1 B1 ;;
 #
 M1 W1 ;;M6 F1 ;F1 ;;;
-M2 F1 ;;M2 F1 ;;ª&R11 F2 ;B1 B2 ;ªP1 B1 B2 ;;M2 F1 ;;M2 F1 ;;ª&R2 K21 B1 B2 ;F2 ;;ªP1 B1 B2 ;;M2 F1 ;;P1 B1 B1 ;M2 F1 ;;M2 F1 ;;M2 F1 ;;ª&P1 B1 B2 ;P1 B2 B3 ;ªP1 B1 B3 ;;;
+M2 F1 ;;M2 F1 ;;ª&R12 F2 ;B1 B2 ;ªP1 B1 B2 ;;M2 F1 ;;M2 F1 ;;ª&R2 K21 B1 B2 ;F2 ;;ªP1 B1 B2 ;;M2 F1 ;;P1 B1 B1 ;M2 F1 ;;M2 F1 ;;M2 F1 ;;ª&P1 B1 B2 ;P1 B2 B3 ;ªP1 B1 B3 ;;;
 #
 !

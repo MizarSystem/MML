@@ -14,7 +14,7 @@ environ
  notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELAT_2, RELSET_1, FUNCT_1,
       FUNCT_2, FINSET_1, CARD_3, FUNCT_6, REALSET1, PRE_TOPC, PRALG_1, PBOOLE,
       STRUCT_0, ORDERS_1, LATTICE3, YELLOW_0, YELLOW_2, WAYBEL_1, WAYBEL_0,
-      WAYBEL_5;
+      PRE_CIRC, WAYBEL_5;
  constructors LATTICE3, WAYBEL_1, ORDERS_3, WAYBEL_5, PRALG_2;
  clusters RELSET_1, STRUCT_0, PRALG_1, MSUALG_1, LATTICE3, YELLOW_0, WAYBEL_0,
       WAYBEL_1, WAYBEL_5, FINSET_1, PBOOLE, PRVECT_1, CANTOR_1, SUBSET_1,
@@ -24,10 +24,10 @@ environ
 
 begin
 
-definition
+notation
  let L be RelStr;
- redefine func L~; synonym L opp;
-end;
+ synonym L opp for L~; end;
+
 
 theorem :: YELLOW_7:1
  for L being RelStr, x,y being Element of L opp holds x <= y iff ~x >= ~y;
@@ -51,25 +51,33 @@ theorem :: YELLOW_7:6
 theorem :: YELLOW_7:7
  for L being non empty RelStr holds L is connected iff L opp is connected;
 
-definition
+registration
  let L be reflexive RelStr;
  cluster L opp -> reflexive;
+ coherence by Th4;
 end;
 
-definition
+
+registration
  let L be transitive RelStr;
  cluster L opp -> transitive;
+ coherence by Th6;
 end;
 
-definition
+
+registration
  let L be antisymmetric RelStr;
  cluster L opp -> antisymmetric;
+ coherence by Th5;
 end;
 
-definition
+
+registration
  let L be connected (non empty RelStr);
  cluster L opp -> connected;
+ coherence by Th7;
 end;
+
 
 theorem :: YELLOW_7:8
  for L being RelStr, x being Element of L, X being set holds
@@ -118,20 +126,26 @@ theorem :: YELLOW_7:17
  for L being non empty RelStr holds
   L is complete iff L opp is complete;
 
-definition
+registration
  let L be with_infima RelStr;
  cluster L opp -> with_suprema;
+ coherence by Th16;
 end;
 
-definition
+
+registration
  let L be with_suprema RelStr;
  cluster L opp -> with_infima;
+ coherence by LATTICE3:10;
 end;
 
-definition
+
+registration
  let L be complete (non empty RelStr);
  cluster L opp -> complete;
+ coherence by Th17;
 end;
+
 
 theorem :: YELLOW_7:18
    for L being non empty RelStr
@@ -168,10 +182,12 @@ theorem :: YELLOW_7:25
  for L being LATTICE holds
   L is distributive iff L opp is distributive;
 
-definition
+registration
  let L be distributive LATTICE;
  cluster L opp -> distributive;
+ coherence by Th25;
 end;
+
 
 theorem :: YELLOW_7:26
  for L being RelStr, x be set holds
@@ -213,20 +229,26 @@ theorem :: YELLOW_7:35
 theorem :: YELLOW_7:36
  for L being bounded LATTICE holds L is complemented iff L opp is complemented;
 
-definition
+registration
  let L be lower-bounded RelStr;
  cluster L opp -> upper-bounded;
+ coherence by Th30;
 end;
 
-definition
+
+registration
  let L be upper-bounded RelStr;
  cluster L opp -> lower-bounded;
+ coherence by Th31;
 end;
 
-definition
+
+registration
  let L be complemented (bounded LATTICE);
  cluster L opp -> complemented;
+ coherence by Th36;
 end;
+
 
 :: Collorary:  L is Boolean -> L opp is Boolean
 
@@ -242,15 +264,48 @@ definition
   for x being Element of L holds it.x = 'not' x;
 end;
 
-definition
+
+registration
  let L be Boolean LATTICE;
  cluster ComplMap L -> one-to-one;
+ coherence
+  proof set f = ComplMap L;
+   let a,b be Element of L;
+      f.a = 'not' a & f.b = 'not' b & 'not' 'not' a = a & 'not' 'not'
+b = b by Def1,WAYBEL_1:90;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let L be Boolean LATTICE;
  cluster ComplMap L -> isomorphic;
+ coherence
+  proof set f = ComplMap L;
+A1:  L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5;
+A2:  dom f = the carrier of L by FUNCT_2:def 1;
+A3:  rng f = the carrier of L opp
+     proof thus rng f c= the carrier of L opp;
+      let x be set; assume x in the carrier of L opp;
+      then reconsider x as Element of L by A1;
+         x = 'not' 'not' x by WAYBEL_1:90;
+       then f.'not' x = x by Def1;
+      hence thesis by A2,FUNCT_1:def 5;
+     end;
+      now let x,y be Element of L;
+        f.x = 'not' x & f.y = 'not' y by Def1;
+      then f.x = ('not' x)~ & f.y = ('not' y)~ by LATTICE3:def 6;
+      then ('not' x >= 'not' y iff f.x <= f.y) & x = 'not' 'not' x &
+      y = 'not' 'not'
+y by LATTICE3:9,WAYBEL_1:90;
+     hence x <= y iff f.x <= f.y by WAYBEL_1:86;
+    end;
+   hence thesis by A3,WAYBEL_0:66;
+  end;
 end;
+
 
 theorem :: YELLOW_7:38
    for L being Boolean LATTICE holds L, L opp are_isomorphic;
@@ -303,6 +358,7 @@ definition
  redefine func F..(j,k) -> Element of D;
 end;
 
+
 theorem :: YELLOW_7:46
  for L being non empty RelStr
  for J being set, K being ManySortedSet of J
@@ -330,13 +386,20 @@ theorem :: YELLOW_7:50
  for F be Function-yielding Function holds
    \//(F, L) = /\\(F, L opp) & /\\(F, L) = \//(F, L opp);
 
-definition
+registration
  cluster completely-distributive -> complete (non empty RelStr);
+ coherence by WAYBEL_5:def 3;
 end;
 
-definition
+
+registration
  cluster completely-distributive trivial strict (non empty Poset);
+ existence
+  proof consider R being trivial strict (non empty Poset);
+   take R; thus thesis;
+  end;
 end;
+
 
 theorem :: YELLOW_7:51
    for L being non empty Poset holds

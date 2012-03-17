@@ -1,6 +1,6 @@
 :: Witt's Proof of the {W}edderburn Theorem
 ::  by Broderic Arneson , Matthias Baaz and Piotr Rudnicki
-:: 
+::
 :: Received December 30, 2003
 :: Copyright (c) 2003 Association of Mizar Users
 
@@ -59,14 +59,20 @@ holds card X = Sum c;
 
 begin :: Class formula for groups
 
-definition
+registration
   cluster finite Group;
+  existence proof consider G being Group; (1).G is finite by GROUP_2:80;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
   let G be finite Group;
   cluster center G -> finite;
+  correctness by GROUP_2:48;
 end;
+
 
 definition let G be Group, a be Element of G;
   func Centralizer a -> strict Subgroup of G means
@@ -74,10 +80,13 @@ definition let G be Group, a be Element of G;
      the carrier of it = { b where b is Element of G : a*b = b*a };
 end;
 
-definition let G be finite Group;
+
+registration let G be finite Group;
   let a be Element of G;
   cluster Centralizer a -> finite;
+  correctness by GROUP_2:48;
 end;
+
 
 theorem :: WEDDWITT:7   :: GCTR2:
 for G being Group, a being Element of G, x being set
@@ -87,16 +96,19 @@ theorem :: WEDDWITT:8   :: GCTR1:
 for G being Group, a, x being Element of G
  holds a*x = x*a iff x is Element of Centralizer a;
 
-definition
+registration
   let G be Group, a be Element of G;
   cluster con_class a -> non empty;
+  correctness by GROUP_3:98;
 end;
+
 
 definition let G be Group, a be Element of G;
   func a-con_map -> Function of the carrier of G, con_class a means
 :: WEDDWITT:def 2
    for x being Element of G holds it.x = a |^ x;
 end;
+
 
 theorem :: WEDDWITT:9   :: Br1:
 for G being finite Group, a being Element of G, x being Element of con_class a
@@ -126,6 +138,7 @@ definition let G be Group;
   {S where S is Subset of G :
                  ex a being Element of G st S = con_class a };
 end;
+
 
 theorem :: WEDDWITT:14   :: Conj1:
 for G being Group, x being set
@@ -157,12 +170,19 @@ definition
    the unity of it = the unity of R;
 end;
 
+
 theorem :: WEDDWITT:17   :: Center0:
 for R being Skew-Field holds the carrier of center R c= the carrier of R;
 
-definition let R be finite Skew-Field;
+registration let R be finite Skew-Field;
   cluster center R -> finite;
+  correctness proof
+     the carrier of center R c= the carrier of R by Center0; then
+     the carrier of center R is finite by FINSET_1:13;
+     hence thesis by GROUP_1:def 13;
+  end;
 end;
+
 
 theorem :: WEDDWITT:18   :: Center1:
 for R being Skew-Field, y being Element of R
@@ -196,6 +216,7 @@ definition
    the unity of it = the unity of R;
 end;
 
+
 theorem :: WEDDWITT:24   :: Central00:
 for R be Skew-Field, s be Element of R
  holds the carrier of centralizer s c= the carrier of R;
@@ -217,10 +238,16 @@ theorem :: WEDDWITT:28   :: Central0:
 for R be Skew-Field, s be Element of R
   holds 0.R is Element of centralizer s & 1_ R is Element of centralizer s;
 
-definition let R be finite Skew-Field;
+registration let R be finite Skew-Field;
   let s be Element of R;
   cluster centralizer s -> finite;
+  correctness proof
+   the carrier of centralizer s c= the carrier of R by Central00; then
+   the carrier of centralizer s is finite by FINSET_1:13;
+   hence thesis by GROUP_1:def 13;
+  end;
 end;
+
 
 theorem :: WEDDWITT:29   :: Central1:
 for R be finite Skew-Field, s be Element of R
@@ -247,6 +274,7 @@ definition
                      | [:the carrier of center R, the carrier of R:];
 end;
 
+
 theorem :: WEDDWITT:32   :: CardCenter1:
 for R being finite Skew-Field
  holds card the carrier of R =
@@ -263,6 +291,7 @@ definition let R be Skew-Field, s be Element of R;
   the lmult of it = (the mult of R)
                  | [:the carrier of center R, the carrier of centralizer s:];
 end;
+
 
 theorem :: WEDDWITT:34   :: CardCentral:
 for R being finite Skew-Field, s being Element of R

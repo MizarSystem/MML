@@ -37,9 +37,16 @@ definition
   {(downarrow x)` where x is Element of T: not contradiction} is prebasis of T;
 end;
 
-definition
+
+registration
  cluster Scott up-complete strict TopLattice;
+ existence
+  proof consider R being complete LATTICE;
+   consider T being strict Scott correct TopAugmentation of R;
+   take T; thus thesis;
+  end;
 end;
+
 
 definition
  let T be TopSpace-like non empty reflexive TopRelStr;
@@ -51,13 +58,78 @@ definition
   for V being a_neighborhood of x holds N is_eventually_in V;
 end;
 
-definition
+
+registration
 cluster trivial -> upper (non empty reflexive TopSpace-like TopRelStr);
+ coherence
+  proof let T be non empty reflexive TopSpace-like TopRelStr;
+   assume
+A1:  T is trivial;
+   set BB = {(downarrow x)` where x is Element of T: not contradiction};
+      BB c= bool the carrier of T
+     proof let a be set; assume a in BB;
+       then ex x being Element of T st a = (downarrow x)`;
+      hence thesis;
+     end;
+   then reconsider C = BB as Subset-Family of T by SETFAM_1:def
+7;
+   reconsider C as Subset-Family of T;
+A2: BB c= the topology of T
+     proof let a be set; assume a in BB;
+      then consider x being Element of T such that
+A3:    a = (downarrow x)`;
+         a c= {}
+        proof let y be set; assume
+A4:       y in a;
+          then y in the carrier of T & x <= x by A3;
+          then y = x & x in downarrow x by A1,REALSET1:def 20,WAYBEL_0:17;
+          then x in (downarrow x) /\ a & (downarrow x) misses a
+           by A3,A4,PRE_TOPC:26,XBOOLE_0:def 3;
+         hence thesis by XBOOLE_0:def 7;
+        end;
+       then a = {} by XBOOLE_1:3;
+      hence thesis by PRE_TOPC:5;
+     end;
+   reconsider F = {the carrier of T} as Basis of T by A1,YELLOW_9:10;
+      BB = {{}}
+     proof
+      thus BB c= {{}}
+       proof let a be set; assume a in BB;
+        then consider x being Element of T such that
+A5:      a = (downarrow x)`;
+           x <= x;
+         then the carrier of T = {x} & x in downarrow x
+          by A1,WAYBEL_0:17,YELLOW_9:9;
+         then a = {} or a = the carrier of T & not x in a
+          by A5,YELLOW_6:10,ZFMISC_1:39;
+        hence thesis by TARSKI:def 1;
+       end;
+      consider x being Element of T;
+         x <= x;
+       then the carrier of T = {x} & x in downarrow x by A1,WAYBEL_0:17,
+YELLOW_9:9;
+       then (downarrow x)` = {} or (downarrow x)` = the carrier of T &
+       not x in (downarrow x)` by YELLOW_6:10,ZFMISC_1:39;
+       then {} in BB;
+      hence thesis by ZFMISC_1:37;
+     end;
+    then FinMeetCl C = {{}, the carrier of T} by YELLOW_9:11;
+    then F c= FinMeetCl C by ZFMISC_1:12;
+   hence BB is prebasis of T by A2,CANTOR_1:def 5;
+ end;
 end;
 
-definition
+
+registration
  cluster upper trivial up-complete strict TopLattice;
+  existence
+   proof
+    consider T being trivial up-complete strict TopLattice;
+     take T;
+    thus thesis;
+   end;
   end;
+
 
 theorem :: WAYBEL32:1
  for T being upper up-complete (non empty TopPoset)
@@ -78,17 +150,26 @@ theorem :: WAYBEL32:8
  for R being up-complete (non empty Poset)
   for T being TopAugmentation of R holds T is Scott implies T is correct;
 
-definition
+registration
  let R be up-complete (non empty reflexive transitive antisymmetric
      RelStr);
  cluster Scott -> correct TopAugmentation of R;
+ coherence by Th8;
 end;
 
-definition
+
+registration
  let R be up-complete (non empty reflexive transitive antisymmetric
      RelStr);
  cluster Scott correct TopAugmentation of R;
+ existence
+  proof
+   consider T being TopAugmentation of R such that A1: T is Scott by Th7;
+   take T;
+   thus thesis by A1,Th8;
+  end;
 end;
+
 
 theorem :: WAYBEL32:9   :: Remark 1.4 (ii)
  for T being Scott up-complete (non empty reflexive transitive antisymmetric
@@ -129,10 +210,19 @@ theorem :: WAYBEL32:15
   st the topology of T = sigma R
   holds T is Scott;
 
-definition
+registration
  let R be /\-complete up-complete Semilattice;
  cluster strict Scott correct TopAugmentation of R;
+  existence
+   proof
+    set T = TopRelStr(#the carrier of R, the InternalRel of R, sigma R#);
+       the RelStr of T = the RelStr of R;
+     then reconsider T as TopAugmentation of R by YELLOW_9:def 4;
+     take T;
+    thus thesis by Th15,YELLOW_9:48;
+  end;
 end;
+
 
 theorem :: WAYBEL32:16
   for S being up-complete /\-complete Semilattice,
@@ -144,10 +234,12 @@ theorem :: WAYBEL32:17     :: Remark 1.4 (iii)
      TopRelStr)
  holds T is T_0-TopSpace;
 
-definition
+registration
 let R be up-complete (non empty reflexive transitive antisymmetric RelStr);
 cluster -> up-complete TopAugmentation of R;
+coherence;
 end;
+
 
 theorem :: WAYBEL32:18
  for R being up-complete (non empty reflexive transitive antisymmetric
@@ -179,10 +271,27 @@ theorem :: WAYBEL32:21
   a in S implies a <= "\/"(S, R);
 
 ::Remark 1.4 (vi)
-definition let T be up-complete (non empty reflexive transitive antisymmetric
+registration let T be up-complete (non empty reflexive transitive antisymmetric
      TopRelStr);
  cluster lower -> property(S) Subset of T;
+ coherence
+  proof
+  let S be Subset of T;
+   assume
+A1: S is lower;
+   let D be non empty directed Subset of T such that
+A2:  sup D in S;
+   consider y being Element of T such that
+A3:  y in D by SUBSET_1:10;
+   take y;
+   thus y in D by A3;
+   let x be Element of T such that
+A4: x in D and x >= y;
+      x <= sup D by A4,Th21;
+   hence x in S by A1,A2,WAYBEL_0:def 19;
+  end;
 end;
+
 
 theorem :: WAYBEL32:22
    for T being finite up-complete (non empty Poset),
@@ -199,14 +308,28 @@ theorem :: WAYBEL32:24
      S is open iff S = the carrier of T or S in {(downarrow x)`
                               where x is Element of T: not contradiction};
 
-definition
+registration
 let R be up-complete (non empty Poset);
 cluster order_consistent (correct TopAugmentation of R);
+correctness
+ proof
+  consider T being Scott correct TopAugmentation of R;
+  take T;
+  thus T is order_consistent by Th10;
+ end;
 end;
 
-definition
+
+registration
 cluster order_consistent complete TopLattice;
+correctness
+proof
+ consider T being Scott complete TopLattice;
+ take T;
+ thus thesis by Th10;
 end;
+end;
+
 
 theorem :: WAYBEL32:25
 for R being non empty TopRelStr
@@ -235,19 +358,38 @@ the RelStr of it = the RelStr of R &
 the mapping of it = f;
 end;
 
-definition
+
+registration
 let S be non empty 1-sorted,
     R be non empty transitive RelStr,
     f be Function of the carrier of R,the carrier of S;
 cluster R*'f -> transitive;
+coherence
+ proof
+    the RelStr of R*'f = the RelStr of R & R is transitive by Def3;
+  hence R*'f is transitive by WAYBEL_8:13;
+ end;
 end;
 
-definition
+
+registration
 let S be non empty 1-sorted,
     R be non empty directed RelStr,
     f be Function of the carrier of R,the carrier of S;
 cluster R*'f -> directed;
+coherence
+proof
+A1:  the RelStr of R*'f = the RelStr of R & R is directed by Def3;
+  thus [#](R*'f) is directed
+   proof
+A2: [#]R is directed by WAYBEL_0:def 6;
+      [#](R*'f) = the carrier of R*'f by PRE_TOPC:12
+            .= [#]R by A1,PRE_TOPC:12;
+      hence thesis by A1,A2,WAYBEL_0:3;
+   end;
 end;
+end;
+
 
 definition
  let R be non empty RelStr,
@@ -260,29 +402,87 @@ ex f being map of N,R st
   f.i = "/\"({N.k where k is Element of N: k >= i},R);
 end;
 
-definition
+
+registration
 let R be non empty RelStr,
     N be net of R;
 cluster inf_net N -> transitive;
+coherence
+ proof
+    ex f being map of N,R st inf_net N = N*'f &
+      for i being Element of N holds
+  f.i = "/\"({N.k where k is Element of N: k >= i},R) by Def4;
+  hence thesis;
+ end;
 end;
 
-definition
+
+registration
 let R be non empty RelStr,
     N be net of R;
 cluster inf_net N -> directed;
+coherence;
 end;
 
-definition
+
+registration
 let R be /\-complete (non empty reflexive antisymmetric RelStr),
     N be net of R;
 cluster inf_net N -> monotone;
+coherence
+proof
+ let i,j be Element of inf_net N such that A1: i <= j;
+ consider f being map of N,R such that A2: inf_net N = N*'f &
+      for i being Element of N holds
+       f.i = "/\"({N.k where k is Element of N: k >= i},R)
+        by Def4;
+A3:   the RelStr of inf_net N = the RelStr of N by A2,Def3;
+  then reconsider i'=i,j'=j as Element of N;
+  deffunc F(Element of N) = N.$1;
+  defpred P[Element of N] means $1 >= j';
+  defpred Q[Element of N] means $1 >= i';
+set J= {F(k) where k is Element of N: P[k]};
+set I= {F(k) where k is Element of N: Q[k]};
+A4:     J is Subset of R from COMPLSP1:sch 3;
+        consider j0 being Element of N such that
+A5:      j0 >= j' & j0 >= j' by YELLOW_6:def 5;
+           N.j0 in J by A5;
+        then reconsider J'= J as non empty Subset of R by A4;
+A6:     I is Subset of R from COMPLSP1:sch 3;
+        consider j1 being Element of N such that
+A7:      j1 >= i' & j1 >= i' by YELLOW_6:def 5;
+           N.j1 in I by A7;
+        then reconsider I'= I as non empty Subset of R by A6;
+A8: ex_inf_of J',R & ex_inf_of I',R by WAYBEL_0:76;
+A9:J' c= I'
+     proof
+      let a be set; assume A10: a in J';
+      then reconsider x = a as Element of R;
+       consider k being Element of N such that
+A11:     x = N.k and
+A12:     k >= j' by A10;
+       reconsider i0 = i,j0 = j as Element of inf_net N;
+       reconsider k' = k as Element of N;
+         i0 <= j0 & i' = i0 & j' = j0 by A1;
+       then i' <= j' & j' <= k' by A3,A12,YELLOW_0:1;
+       then i' <= k' by YELLOW_0:def 2;
+      hence a in I' by A11;
+     end;
+A13:  f.i' = "/\"(I,R) & f.j' = "/\"(J,R) by A2;
+    the mapping of (inf_net N) = f by A2,Def3;
+  then (inf_net N).i = f.i' & (inf_net N).j = f.j' by WAYBEL_0:def 8;
+ hence (inf_net N).i <= (inf_net N).j by A8,A9,A13,YELLOW_0:35;
+end;
 end;
 
-definition
+
+registration
 let R be /\-complete (non empty reflexive antisymmetric RelStr),
     N be net of R;
 cluster inf_net N -> eventually-directed;
+coherence;
 end;
+
 
 theorem :: WAYBEL32:28
 for R being non empty RelStr,

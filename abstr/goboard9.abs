@@ -65,9 +65,15 @@ theorem :: GOBOARD9:7
 theorem :: GOBOARD9:8
  LSeg(p,q) is connected;
 
-definition
+registration
  cluster convex non empty Subset of TOP-REAL 2;
+ existence
+  proof consider p being Point of TOP-REAL 2;
+   take LSeg(p,p);
+   thus thesis by Th7;
+  end;
 end;
+
 
 theorem :: GOBOARD9:9
  for P,Q being convex Subset of TOP-REAL 2 holds P /\ Q is convex;
@@ -80,17 +86,53 @@ theorem :: GOBOARD9:11
 for f being FinSequence of TOP-REAL 2
  holds Rev Y_axis f = Y_axis Rev f;
 
-definition
+registration
  cluster non constant FinSequence;
+ existence
+  proof take <*1,2*>,1,2;
+      1 in {1,2} & 2 in {1,2} by TARSKI:def 2;
+   hence 1 in dom <*1,2*> & 2 in dom <*1,2*> by FINSEQ_1:4,FINSEQ_3:29;
+      <*1,2*>.1 = 1 & <*1,2*>.2 = 2 by FINSEQ_1:61;
+   hence thesis;
+  end;
 end;
 
-definition let f be non constant FinSequence;
+
+registration let f be non constant FinSequence;
  cluster Rev f -> non constant;
+ coherence
+ proof
+  consider i,j such that
+A1: i in dom f & j in dom f and
+A2: f.i <> f.j by GOBOARD1:def 2;
+     i <= len f & j <= len f by A1,FINSEQ_3:27;
+   then reconsider k1 = len f -i, l1 = len f -j as Nat by INT_1:18;
+  take k = k1+1, l = l1+1;
+     k + i = len f -i +i +1 by XCMPLX_1:1
+         .= len f +1 by XCMPLX_1:27;
+  hence k in dom Rev f by A1,FINSEQ_5:62;
+   then A3: (Rev f).k = f.(len f -k +1) by FINSEQ_5:def 3
+           .= f.(len f -(len f - i) -1 +1) by XCMPLX_1:36
+           .= f.(len f -(len f - i)) by XCMPLX_1:27
+           .= f.(len f -len f + i) by XCMPLX_1:37
+           .= f.(0 + i) by XCMPLX_1:14;
+     l + j = len f -j +j +1 by XCMPLX_1:1
+         .= len f +1 by XCMPLX_1:27;
+  hence l in dom Rev f by A1,FINSEQ_5:62;
+   then (Rev f).l = f.(len f -l +1) by FINSEQ_5:def 3
+           .= f.(len f -(len f - j) -1 +1) by XCMPLX_1:36
+           .= f.(len f -(len f - j)) by XCMPLX_1:27
+           .= f.(len f -len f + j) by XCMPLX_1:37
+           .= f.(0 + j) by XCMPLX_1:14;
+  hence thesis by A2,A3;
+ end;
 end;
+
 
 definition let f be standard special_circular_sequence;
  redefine func Rev f -> standard special_circular_sequence;
 end;
+
 
 theorem :: GOBOARD9:12
  i >= 1 & j >= 1 & i+j = len f implies left_cell(f,i) = right_cell(Rev f,j);
@@ -138,6 +180,7 @@ definition let f;
 :: GOBOARD9:def 2
   it is_a_component_of (L~f)` & Int right_cell(f,1) c= it;
 end;
+
 
 theorem :: GOBOARD9:24
  for k st 1 <= k & k+1 <= len f holds Int left_cell(f,k) c= LeftComp f;

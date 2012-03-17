@@ -39,6 +39,7 @@ definition
 :Def1:  for i be Nat st 1 <= i & i <= len f holds f.i=s.intpos(m+i);
 end;
 
+
 Lm1:
  for f being FinSequence of INT,k be Nat holds f is_non_decreasing_on k,k
 proof
@@ -62,6 +63,7 @@ proof
    per cases by A1,AXIOMS:21;
    suppose m=n;
      hence thesis by Lm1;
+   end;
    suppose A2:m>n;
        now
       let i, j be Nat;
@@ -72,6 +74,7 @@ proof
      end;
      hence thesis by SFMASTR3:def 4;
 end;
+end;
 
 theorem Th2:
   for s being State of SCMPDS,n,m be Nat holds
@@ -81,7 +84,7 @@ proof
    let s be State of SCMPDS,n,m be Nat;
    deffunc U(Nat) = s.intpos (m+$1);
    consider f being FinSequence such that
-A1:  len f = n & for i be Nat st i in Seg n holds f.i=U(i) from SeqLambda;
+A1:  len f = n & for i be Nat st i in Seg n holds f.i=U(i) from FINSEQ_1:sch 2;
 
       now
        let i be Nat;
@@ -292,7 +295,7 @@ A2: P[Dstate s()] and
 A3: for t be State of SCMPDS st
        P[Dstate t] & t.a()=s().a() & t.DataLoc(s().a(),i()) > 0
     holds IExec(I() ';' AddTo(a(),i(),-n()),t).a()=t.a() &
-        IExec(I() ';' AddTo(a(),i(),-n()),t).DataLoc(s().a(),i())
+     IExec(I() ';' AddTo(a(),i(),-n()),t).DataLoc(s().a(),i())
         =t.DataLoc(s().a(),i())-n() &
         I() is_closed_on t & I() is_halting_on t &
         P[Dstate(IExec(I() ';' AddTo(a(),i(),-n()),t))]
@@ -326,6 +329,7 @@ A5:  for k be Nat st Q[k] holds Q[k + 1]
         suppose t.b <= 0;
         hence FOR is_closed_on t & FOR is_halting_on t
          by A9,SCMPDS_7:63;
+        end;
         suppose A10: t.b > 0;
         set t2 = t +* IsJ,
             t3 = t +* iFOR,
@@ -449,6 +453,7 @@ A53:    t7 +* iFOR=t7 by A47,SCMPDS_7:37;
                  suppose k=0;
                  hence IC (Computation t3).k in dom pFOR by A19,A20,AMI_1:def
 19;
+                 end;
                  suppose k<>0;
                   then consider kn be Nat such that
               A56: k=kn+1 by NAT_1:22;
@@ -470,33 +475,41 @@ A53:    t7 +* iFOR=t7 by A47,SCMPDS_7:37;
                   .=inspos (lm+1) by SCMPDS_3:def 3;
                   hence IC (Computation t3).k in dom pFOR by A61,SCMPDS_4:1;
                end;
+               end;
+              end;
               suppose A62:k=m3;
                  l1 in dom pFOR by A34,SCMPDS_6:18;
                hence IC (Computation t3).k in dom pFOR by A12,A15,A17,A18,A26,
 A28,A37,A44,A62,SCMPDS_7:36;
             end;
+            end;
+          end;
           suppose k >= m4;
           then consider nn be Nat such that
          A63: k=m4+nn by NAT_1:28;
                C3.k=(Computation (t7 +* iFOR)).nn by A53,A63,AMI_1:51;
            hence IC (Computation t3).k in dom pFOR by A52,SCMPDS_6:def 2;
        end;
+       end;
        hence FOR is_closed_on t by SCMPDS_6:def 2;
          t7 is halting by A52,A53,SCMPDS_6:def 3;
        then t3 is halting by SCM_1:27;
        hence FOR is_halting_on t by SCMPDS_6:def 3;
      end;
+     end;
      hence Q[k+1];
      end;
-A64:  for k being Nat holds Q[k] from Ind(A4,A5);
+A64:  for k being Nat holds Q[k] from NAT_1:sch 1(A4,A5);
      thus P[s()] or not P[s()];
      per cases;
      suppose s().b <= 0;
        hence FOR is_closed_on s() & FOR is_halting_on s() by SCMPDS_7:63;
+     end;
      suppose s().b > 0;
      then reconsider m=s().b as Nat by INT_1:16;
        Q[m] by A64;
      hence FOR is_closed_on s() & FOR is_halting_on s() by A2;
+end;
 end;
 
 scheme ForDownExec { P[set],
@@ -505,7 +518,7 @@ scheme ForDownExec { P[set],
     (P[s()] or not P[s()]) &
     IExec(for-down(a(),i(),n(),I()),s()) =
  IExec(for-down(a(),i(),n(),I()),IExec(I() ';' AddTo(a(),i(),-n()),s()))
-provided
+ provided
 A1: n() > 0 and
 A2: s().DataLoc(s().a(),i()) > 0 and
 A3: P[Dstate s()] and
@@ -693,7 +706,7 @@ A2: P[Dstate s()] and
 A3: for t be State of SCMPDS st
        P[Dstate t] & t.a()=s().a() & t.DataLoc(s().a(),i()) > 0
     holds IExec(I() ';' AddTo(a(),i(),-n()),t).a()=t.a() &
-        IExec(I() ';' AddTo(a(),i(),-n()),t).DataLoc(s().a(),i())
+     IExec(I() ';' AddTo(a(),i(),-n()),t).DataLoc(s().a(),i())
         =t.DataLoc(s().a(),i())-n() &
         I() is_closed_on t & I() is_halting_on t &
         P[Dstate(IExec(I() ';' AddTo(a(),i(),-n()),t))]
@@ -722,6 +735,7 @@ A7: now
          per cases;
          suppose u.b <= 0;
          hence IExec(FR,u).b <= 0 & P[Dstate IExec(FR,u)] by A4,A9;
+         end;
          suppose A10: u.b > 0;
         then A11: u.DataLoc(u.a(),i()) > 0 by A9;
       defpred X[set] means P[$1];
@@ -746,17 +760,20 @@ A7: now
               P[Dstate Iu] by A3,A9,A10;
          hence IExec(FR,u).b <= 0 & P[Dstate IExec(FR,u)] by A8,A14,A16,A17;
       end;
+      end;
       hence Q[k+1];
    end;
-A18:  for k being Nat holds Q[k] from Ind(A4,A7);
+A18:  for k being Nat holds Q[k] from NAT_1:sch 1(A4,A7);
      thus (P[s()] or not P[s()]);
      per cases;
      suppose s().b > 0;
        then reconsider m=s().b as Nat by INT_1:16;
          Q[m] by A18;
        hence thesis by A2;
+     end;
      suppose s().b <= 0;
        hence thesis by A2,A4;
+end;
 end;
 
 theorem Th12:
@@ -933,6 +950,7 @@ definition
       );
     coherence;
 end;
+
 
  set j1= AddTo(GBP,3,1),
       j2= (GBP,4):=(GBP,3),
@@ -1301,10 +1319,12 @@ A140:  DataLoc(t02.a,6)=intpos (0+6) by A60,SCMP_GCD:5;
               .=Exec(Fi,t02).a by SCMPDS_5:45
               .=0 by A60,A142,SCMPDS_2:58;
 
+         end;
          suppose t2.DataLoc(t2.a,5) > 0;
           hence IExec(IF,t2).a=IExec(TR,t2).a by SCMPDS_6:87
           .=Exec(k7,t3).a by SCMPDS_5:46
           .=0 by A121,A139,SCMPDS_2:60;
+     end;
      end;
      hence IExec(B1,s).a=0 by SCMPDS_5:39;
        now
@@ -1314,11 +1334,13 @@ A140:  DataLoc(t02.a,6)=intpos (0+6) by A60,SCMP_GCD:5;
          thus IExec(IF,t2).a1=IExec(FA,t2).a1 by A143,SCMPDS_6:88
               .=Exec(Fi,t02).a1 by SCMPDS_5:45
               .=s.a1 by A61,A144,SCMPDS_2:58;
+         end;
          suppose A145:t2.DataLoc(t2.a,5) > 0;
      A146:  a1<>DataLoc(t3.a,6) by A138,SCMP_GCD:4;
           thus IExec(IF,t2).a1=IExec(TR,t2).a1 by A145,SCMPDS_6:87
           .=Exec(k7,t3).a1 by SCMPDS_5:46
           .=s.a1 by A123,A146,SCMPDS_2:60;
+     end;
      end;
      hence IExec(B1,s).a1=s.a1 by SCMPDS_5:39;
        now
@@ -1328,11 +1350,13 @@ A140:  DataLoc(t02.a,6)=intpos (0+6) by A60,SCMP_GCD:5;
          thus IExec(IF,t2).a2=IExec(FA,t2).a2 by A147,SCMPDS_6:88
               .=Exec(Fi,t02).a2 by SCMPDS_5:45
               .=s.a2 by A62,A148,SCMPDS_2:58;
+         end;
          suppose A149: t2.DataLoc(t2.a,5) > 0;
      A150:  a2<>DataLoc(t3.a,6) by A138,SCMP_GCD:4;
           thus IExec(IF,t2).a2=IExec(TR,t2).a2 by A149,SCMPDS_6:87
           .=Exec(k7,t3).a2 by SCMPDS_5:46
           .=s.a2 by A125,A150,SCMPDS_2:60;
+     end;
      end;
      hence IExec(B1,s).a2=s.a2 by SCMPDS_5:39;
        now
@@ -1342,11 +1366,13 @@ A140:  DataLoc(t02.a,6)=intpos (0+6) by A60,SCMP_GCD:5;
          thus IExec(IF,t2).a3=IExec(FA,t2).a3 by A151,SCMPDS_6:88
               .=Exec(Fi,t02).a3 by SCMPDS_5:45
               .=s.a3 by A63,A152,SCMPDS_2:58;
+         end;
          suppose A153: t2.DataLoc(t2.a,5) > 0;
      A154:  a3<>DataLoc(t3.a,6) by A138,SCMP_GCD:4;
           thus IExec(IF,t2).a3=IExec(TR,t2).a3 by A153,SCMPDS_6:87
           .=Exec(k7,t3).a3 by SCMPDS_5:46
           .=s.a3 by A127,A154,SCMPDS_2:60;
+     end;
      end;
      hence IExec(B1,s).a3=s.a3 by SCMPDS_5:39;
 A155:  now
@@ -1373,8 +1399,10 @@ A156:  now
          per cases;
          suppose t2.DataLoc(t2.a,5) <= 0;
           hence IExec(B1,s).a6 < s.a6 by A1,A155;
+         end;
          suppose t2.DataLoc(t2.a,5) > 0;
           hence IExec(B1,s).a6 < s.a6 by A156,INT_1:26;
+     end;
      end;
      hereby
         per cases;
@@ -1386,9 +1414,11 @@ A156:  now
       then IExec(B1,s).a4=s.a4 by SCMPDS_5:39;
         hence IExec(B1,s).a4 >= 7+IExec(B1,s).a6 by A1,A8,A155,A159,AXIOMS:22;
 
+        end;
         suppose A161:t2.DataLoc(t2.a,5) > 0;
               s.a4-1 >= 7+s.a6-1 by A1,REAL_1:49;
         hence IExec(B1,s).a4 >= 7+IExec(B1,s).a6 by A156,A161,XCMPLX_1:29;
+      end;
       end;
       hereby let i be Nat;
          set xi=intpos i;
@@ -1404,6 +1434,7 @@ A156:  now
          .=s.xi by A57,A162;
          hence IExec(B1,s).xi=s.xi by SCMPDS_5:39;
 
+         end;
          suppose A166: t2.DataLoc(t2.a,5) > 0;
         A167: xi<>DataLoc(t3.a,6) by A138,A163,SCMP_GCD:4;
              IExec(IF,t2).xi=IExec(TR,t2).xi by A166,SCMPDS_6:87
@@ -1411,6 +1442,7 @@ A156:  now
           .=t3.xi by A167,SCMPDS_2:60
           .=s.xi by A135,A162;
           hence IExec(B1,s).xi=s.xi by SCMPDS_5:39;
+    end;
     end;
 
     hereby
@@ -1512,6 +1544,7 @@ A5: for k be Nat st P[k] holds P[k+1]
              per cases;
              suppose t.bt <= 0;
               hence thesis by A7,SCMPDS_8:23;
+             end;
              suppose A9: t.bt > 0;
       A10:   for x st x in {a4} holds t.x >= 7+t.bt by A7,A8,TARSKI:def 1;
        A11:   now
@@ -1544,16 +1577,19 @@ A5: for k be Nat st P[k] holds P[k+1]
           thus IExec(WH,t).a2=t.a2 by A9,A10,A11,A17,A18,Lm5,SCMPDS_8:29;
           thus IExec(WH,t).a3=t.a3 by A9,A10,A11,A17,A18,Lm5,SCMPDS_8:29;
       end;
+      end;
     end;
 A19: b=intpos (0+6) by A1,SCMP_GCD:5;
     per cases;
     suppose s.a6 <= 0;
       hence thesis by A1,A19,SCMPDS_8:23;
+    end;
     suppose s.a6 > 0;
       then reconsider m=s.a6 as Nat by INT_1:16;
-      for k be Nat holds P[k] from Ind(A2,A5);
+      for k be Nat holds P[k] from NAT_1:sch 1(A2,A5);
 then P[m];
     hence thesis by A1,A19;
+end;
 end;
 
 Lm10:
@@ -2054,11 +2090,13 @@ Th4
               per cases by A50,NAT_1:26;
               suppose j <= k+1;
                 hence f2.i <= f2.j by A41,A50,SFMASTR3:def 4;
+              end;
               suppose A51:j = k+1+1;
                 hereby
                   per cases;
                   suppose i=j;
                     hence f2.i <= f2.j;
+                  end;
                   suppose i<>j;
                     then i < j by A50,REAL_1:def 5;
                     then i <= k+1 by A51,NAT_1:38;
@@ -2072,6 +2110,7 @@ A40,A43,A45;
                       per cases;
                       suppose mm=k+1;
                         hence f2.i <= f2.j by A12,A15,A20,A22,A48,A52,A53;
+                      end;
                       suppose A54: mm<>k+1;
                        mm < k+2 by A43,A52,AXIOMS:22;
                          then mm < len h by A22,A45,AXIOMS:22;
@@ -2079,7 +2118,10 @@ A40,A43,A45;
                        f2.j=f1.(k+1) by A12,A15,A42,A48,A53,Def1;
                       hence f2.i <= f2.j by A12,A52,A55,SFMASTR3:def 4;
                   end;
+                  end;
                end;
+               end;
+           end;
            end;
            hence f2 is_non_decreasing_on 1,(k+1)+1 by SFMASTR3:def 4;
            hereby
@@ -2104,6 +2146,7 @@ A40,A43,A45;
                thus j <= (k+1)+1 by NAT_1:29;
                thus f2.i=f1.j by A11,A12,A20,A22,A23,A24,A25,A26,A27,A40,A43,
 A45,A49,A62;
+           end;
            suppose i<>k+1+1;
                then i < k+1+1 by A61,REAL_1:def 5;
                then i <= k+1 by NAT_1:38;
@@ -2118,6 +2161,7 @@ A26,A27,A40,A61;
                       thus 1 <= j by A64,NAT_1:29;
                       thus j <= k+1+1 by A64;
                       thus f2.i=f1.j by A12,A18,A44,A45,A46,A63,A65,Def1;
+                  end;
                   suppose A66: mm<>k+1;
                        mm < k+2 by A43,A63,AXIOMS:22;
                          then A67: mm < len f1 by A45,AXIOMS:22;
@@ -2126,8 +2170,11 @@ A26,A27,A40,A61;
                         thus mm <= k+1+1 by A43,A63,A64,AXIOMS:22;
                         thus f2.i=f1.mm by A28,A43,A63,A66,A67;
                 end;
+                end;
+          end;
           end;
 
+          end;
           suppose A68: t.x <= t.y;
             A69: now let i be Nat;
                 assume A70: i>=1 & i <= len f1;
@@ -2141,15 +2188,18 @@ A26,A27,A40,A61;
               hence f1.i=IExec(WH,Bt).x by A14,A15,A20,A68,A72,A73,SCMPDS_8:23
                  .=IExec(WH,t).x by A12,A13,Lm14
                  .=f2.i by A12,A14,A15,A70,A74,Def1;
+               end;
                suppose A75: m+i=t.a4;
               hence f1.i=IExec(WH,Bt).y by A17,A18,A20,A68,A72,A73,SCMPDS_8:23
                  .=IExec(WH,t).y by A12,A13,Lm14
                  .=f2.i by A12,A17,A18,A70,A75,Def1;
+               end;
                suppose m+i<>t.a4-1 & m+i<>t.a4;
                 hence f1.i=Bt.intpos (m+i) by A12,A13,A71,A72,Lm7
                  .=IExec(WH,Bt).intpos (m+i) by A73,SCMPDS_8:23
                  .=IExec(WH,t).intpos (m+i) by A12,A13,Lm14
                  .=f2.i by A12,A70,Def1;
+           end;
            end;
           then A76: f1=f2 by A12,FINSEQ_1:18;
           thus f1,f2 are_fiberwise_equipotent by A12,A69,FINSEQ_1:18;
@@ -2159,11 +2209,13 @@ A26,A27,A40,A61;
               per cases by A77,NAT_1:26;
               suppose j <= k+1;
                 hence f1.i <= f1.j by A12,A77,SFMASTR3:def 4;
+              end;
               suppose A78:j = k+1+1;
                 hereby
                   per cases;
                   suppose i=j;
                     hence f1.i <= f1.j;
+                  end;
                   suppose i<>j;
                     then i < j by A77,REAL_1:def 5;
                     then i <= k+1 by A78,NAT_1:38;
@@ -2176,6 +2228,8 @@ A26,A27,A40,A61;
                     then f1.j=t.y by A12,A18,A78,A80,A82,Def1;
                   hence f1.i <= f1.j by A68,A79,A81,AXIOMS:22;
               end;
+              end;
+         end;
          end;
          hence f2 is_non_decreasing_on 1,(k+1)+1 by A76,SFMASTR3:def 4;
          thus for i be Nat st i>(k+1)+1 & i <= len f1 holds f1.i=f2.i by A12,
@@ -2183,9 +2237,10 @@ A69,FINSEQ_1:18;
          thus for i be Nat st 1 <= i & i <= (k+1)+1
            ex j be Nat st 1 <= j & j <= (k+1)+1 & f2.i=f1.j by A76;
       end;
+      end;
       hence P[k+1];
     end;
-      for k be Nat holds P[k] from Ind(A4,A10);
+      for k be Nat holds P[k] from NAT_1:sch 1(A4,A10);
     hence thesis by A1,A2,A3;
 end;
 
@@ -2207,6 +2262,7 @@ proof
         hence f,g are_fiberwise_equipotent;
         thus g is_non_decreasing_on 1,n by A2,Th1;
 
+    end;
     suppose n<>0;
 then A3: n>0 by NAT_1:19;
     defpred P[Nat] means
@@ -2313,7 +2369,7 @@ A28,A29,A33,A36;
        end;
        hence P[k+1];
      end;
-A37:  for k being Nat holds P[k] from Ind(A4,A9);
+A37:  for k being Nat holds P[k] from NAT_1:sch 1(A4,A9);
        n >= 1+0 by A3,INT_1:20;
      then n-1 >= 0 by REAL_1:84;
      then reconsider n1=n-1 as Nat by INT_1:16;
@@ -2323,6 +2379,7 @@ A40:  p0=s.a3-s.a1-1 by A1,XCMPLX_1:26;
 A41:  f is_non_decreasing_on 1,1 by Th1;
        P[n1] by A37;
      hence thesis by A1,A38,A39,A40,A41;
+end;
 end;
 
 theorem

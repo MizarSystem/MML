@@ -13,9 +13,9 @@ environ
       PRALG_1, YELLOW_2, FUNCT_6, CARD_3, FRAENKEL, WAYBEL22;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
       STRUCT_0, FUNCT_2, FUNCT_6, PRALG_3, GRCAT_1, WELLORD1, CARD_1, CARD_3,
-      PRE_TOPC, ORDERS_1, LATTICE3, PBOOLE, MSUALG_1, AMI_1, FRAENKEL,
-      YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_7, WAYBEL_0, WAYBEL_1, WAYBEL_3,
-      WAYBEL_5, WAYBEL16;
+      PRE_TOPC, TOPS_2, ORDERS_1, LATTICE3, PBOOLE, MSUALG_1, PRE_CIRC, AMI_1,
+      FRAENKEL, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_7, WAYBEL_0, WAYBEL_1,
+      WAYBEL_3, WAYBEL_5, WAYBEL16;
  constructors ORDERS_3, TOPS_2, GRCAT_1, TOLER_1, PRALG_3, WAYBEL_1, WAYBEL_5,
       WAYBEL_8, WAYBEL16;
  clusters STRUCT_0, FUNCT_1, LATTICE3, PBOOLE, PRALG_1, PRVECT_1, AMI_1,
@@ -49,15 +49,29 @@ theorem :: WAYBEL22:6
  for L being upper-bounded with_infima non empty Poset
   holds InclPoset Filt L is CLSubFrame of BoolePoset the carrier of L;
 
-definition
+registration
  let L be upper-bounded with_infima non empty Poset;
  cluster InclPoset Filt L -> continuous;
+ coherence proof
+     InclPoset Filt L is CLSubFrame of BoolePoset the carrier of L by Th6;
+  hence InclPoset Filt L is continuous by WAYBEL_5:28;
+ end;
 end;
 
-definition
+
+registration
  let L be upper-bounded non empty Poset;
  cluster -> non empty Element of InclPoset Filt L;
+ coherence proof let x be Element of InclPoset Filt L;
+     InclPoset Filt L = RelStr(#Filt L, RelIncl Filt L#) by YELLOW_1:def 1;
+   then x in Filt L;
+   then x in {X where X is Filter of L: not contradiction} by WAYBEL_0:def 24;
+   then consider X being Filter of L such that
+A1: x = X;
+  thus x is non empty by A1;
+ end;
 end;
+
 
 begin :: Free generators of continuous lattices
 
@@ -71,6 +85,7 @@ definition :: replaces :: WAYBEL16:def 2
     ex h be CLHomomorphism of S, T st
      h|A = f & for h' being CLHomomorphism of S,T st h'|A = f holds h' = h;
 end;
+
 
 theorem :: WAYBEL22:7
  for S being continuous complete (non empty Poset), A being set
@@ -95,6 +110,7 @@ definition :: See proof of Theorem 4.17, p. 90
    { uparrow x : ex z st x = {z} };
 end;
 
+
 theorem :: WAYBEL22:9
  FixedUltraFilters X c= Filt BoolePoset X;
 
@@ -118,6 +134,7 @@ definition :: See proof of Theorem 4.17, p. 90
               }, L);
 end;
 
+
 theorem :: WAYBEL22:12
    for L being continuous complete (non empty Poset),
      f being Function of FixedUltraFilters X, the carrier of L
@@ -128,17 +145,510 @@ theorem :: WAYBEL22:13
      f being Function of FixedUltraFilters X, the carrier of L
    holds (f-extension_to_hom).Top (InclPoset Filt BoolePoset X) = Top L;
 
-definition :: See proof of Theorem 4.17, p. 91
+registration :: See proof of Theorem 4.17, p. 91
  let X; let L be continuous complete (non empty Poset),
      f be Function of FixedUltraFilters X, the carrier of L;
  cluster f-extension_to_hom -> directed-sups-preserving;
+ coherence proof
+ set IP = InclPoset Filt BoolePoset X;
+ set F = f-extension_to_hom;
+ let Fs be Subset of IP such that
+A1: Fs is non empty directed; assume ex_sup_of Fs, IP;
+ thus ex_sup_of F.:Fs, L by YELLOW_0:17;
+A2: sup Fs = union Fs by A1,Th1;
+ reconsider Fs' = Fs as non empty Subset of IP by A1;
+ reconsider sFs = sup Fs as Element of IP;
+A3: F.sFs = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
+             }, L) where Y is Subset of X : Y in sFs }, L) by Def3;
+   set FFs = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
+                 }, L) where Y is Subset of X : Y in sFs };
+  set FFsU = {{"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
+                   where Y is Subset of X : Y in YY
+              } where YY is Element of Fs' : not contradiction
+             };
+   set Zs = {sup Z where Z is Subset of L : Z in FFsU};
+     FFsU c= bool the carrier of L proof let r be set; assume r in FFsU;
+     then consider YY being Element of Fs' such that
+   A4: r = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
+                   where Y is Subset of X : Y in YY};
+        r c= the carrier of L proof let s be set; assume s in r;
+        then consider Y being Subset of X such that
+      A5: s = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+            Y in YY by A4;
+       thus thesis by A5;
+      end;
+     hence r in bool the carrier of L;
+   end;
+then A6: "\/"(union FFsU, L) = "\/"(Zs, L) by Lm2;
+     now let p be set;
+    hereby assume p in FFs; then consider Y being Subset of X such that
+    A7: p = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+    A8: Y in sFs;
+        consider YY being set such that
+    A9: Y in YY and
+    A10: YY in Fs by A2,A8,TARSKI:def 4;
+    A11: p in {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y1}, L)
+                   where Y1 is Subset of X : Y1 in YY} by A7,A9;
+          {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y1}, L)
+                   where Y1 is Subset of X : Y1 in YY} in FFsU by A10;
+     hence p in union FFsU by A11,TARSKI:def 4;
+    end;
+    assume p in union FFsU; then consider r being set such that
+    A12: p in r and
+    A13: r in FFsU by TARSKI:def 4;
+        consider YY being Element of Fs' such that
+    A14: r = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
+                   where Y is Subset of X: Y in YY} by A13;
+        consider Y being Subset of X such that
+    A15: p = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+    A16: Y in YY by A12,A14;
+          Y in sFs by A2,A16,TARSKI:def 4;
+    hence p in FFs by A15;
+   end;
+then A17: FFs = union FFsU by TARSKI:2;
+    now let r be set;
+   hereby assume r in F.:Fs; then consider YY being set such that
+   A18: YY in the carrier of IP and
+   A19: YY in Fs and
+   A20: F.YY = r by FUNCT_2:115;
+      reconsider YY as Element of Fs by A19;
+      reconsider YY' = YY as Element of IP by A18;
+   A21: F.YY' = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
+               }, L) where Y is Subset of X : Y in YY'}, L) by Def3;
+      set Zi = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
+                 where Y is Subset of X : Y in YY' };
+        Zi c= the carrier of L proof let t be set; assume t in Zi;
+       then consider Y being Subset of X such that
+      A22: t = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+            Y in YY';
+       thus t in the carrier of L by A22;
+      end;
+      then reconsider Zi as Subset of L;
+        Zi in FFsU;
+    hence r in Zs by A20,A21;
+   end;
+   assume r in Zs; then consider Z being Subset of L such that
+   A23: r = sup Z and
+   A24: Z in FFsU;
+       consider YY being Element of Fs such that
+   A25: Z = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
+                   where Y is Subset of X : Y in YY} by A24;
+      reconsider YY as Element of Fs';
+      reconsider YY' = YY as Element of IP;
+     F.YY' = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
+               }, L) where Y is Subset of X : Y in YY'}, L) by Def3;
+   hence r in F.:Fs by A23,A25,FUNCT_2:43;
+  end;
+ hence sup (F.:Fs) = F.sup Fs by A3,A6,A17,TARSKI:2;
+end;
 end;
 
-definition :: See proof of Theorem 4.17, p. 91
+registration :: See proof of Theorem 4.17, p. 91
  let X; let L be continuous complete (non empty Poset),
      f be Function of FixedUltraFilters X, the carrier of L;
  cluster f-extension_to_hom -> infs-preserving;
+ coherence proof
+ set BP = BoolePoset X; set IP = InclPoset Filt BP;
+ set F = f-extension_to_hom;
+ set cIP = the carrier of IP; set cL = the carrier of L;
+ set FUF = FixedUltraFilters X;
+A1: FUF = { uparrow x where x is Element of BoolePoset X :
+               ex y being Element of X st x = {y} } by Def2;
+   A2: InclPoset Filt BP = RelStr(#Filt BP, RelIncl Filt BP#)
+      by YELLOW_1:def 1;
+A3: Filt BP = { FF where FF is Filter of BP : not contradiction }
+          by WAYBEL_0:def 24;
+  A4: BoolePoset X = InclPoset bool X by YELLOW_1:4;
+      A5: InclPoset bool X = RelStr(#bool X, RelIncl bool X#)
+           by YELLOW_1:def 1;
+then A6: the carrier of BoolePoset X = bool X by YELLOW_1:4;
+  let Fs be Subset of IP;
+  assume ex_inf_of Fs, IP;
+  thus ex_inf_of F.:Fs, L by YELLOW_0:17;
+  per cases;
+  suppose A7: Fs is empty;
+  then A8: "/\"(F.:Fs, L) = "/\"({}, L) by RELAT_1:149
+      .= Top L by YELLOW_0:def 12;
+      "/\"(Fs, IP) = Top IP by A7,YELLOW_0:def 12;
+   hence inf (F.:Fs) = F.inf Fs by A8,Th13;
+  end;
+  suppose Fs is non empty;
+   then reconsider Fs' = Fs as non empty Subset of IP;
+     now assume {} in Fs'; then {} is Element of Fs';
+     then {} is Element of IP;
+    hence contradiction;
+   end;
+   then Fs' is with_non-empty_elements by AMI_1:def 1;
+   then reconsider K = id Fs' as non-empty ManySortedSet of Fs' by Lm3;
+   defpred P[set, set, set] means
+      $1 = "/\"({f.(uparrow x) : ex z st x = {z} & z in $2}, L);
+A9: for i be set st i in Fs' holds
+     for s be set st s in K.i ex y be set st y in (Fs' --> cL).i &
+                     P[y, s, i] proof
+     let i be set such that
+    A10: i in Fs';
+     let s be set such that s in K.i;
+     take y = "/\"({f.(uparrow x) : ex z st x = {z} & z in s}, L);
+        y in cL;
+     hence y in (Fs' --> cL).i by A10,FUNCOP_1:13;
+     thus P[y, s, i];
+    end;
+  consider FD being ManySortedFunction of K, (Fs' --> cL) such that
+A11: for i being set st i in Fs' holds
+    ex g being Function of K.i, (Fs' --> cL).i st g = FD.i &
+     for s being set st s in K.i holds P[g.s, s, i] from MSSUBFAM:sch 1(A9);
+A12: dom FD = Fs' by PBOOLE:def 3;
+  deffunc FDi(Element of Fs')
+   = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
+                 }, L) where Y is Subset of X : Y in $1};
+  defpred rFD[Element of Fs'] means rng (FD.$1) = FDi($1);
+A13: for s being Element of Fs' holds rFD[s] proof
+    let s be Element of Fs';
+       now let t be set;
+      hereby assume t in rng (FD.s);
+        then consider u being set such that
+      A14: u in dom (FD.s) and
+      A15: t = (FD.s).u by FUNCT_1:def 5;
+      A16: dom (FD.s) = K.s by FUNCT_2:def 1;
+          consider g being Function of K.s, (Fs' --> cL).s such that
+      A17: g = FD.s and
+      A18: for u being set st u in K.s holds P[g.u, u, s] by A11;
+      A19: g.u = "/\"({f.(uparrow x) : ex z st x = {z} & z in u}, L)
+             by A14,A16,A18;
+      A20: K.s = s by FUNCT_1:35;
+            s in cIP; then consider FF being Filter of BP such that
+      A21: s = FF by A2,A3;
+          reconsider u as Subset of X by A5,A14,A16,A20,A21,YELLOW_1:4;
+            u in s by A14,A16,FUNCT_1:35;
+       hence t in FDi(s) by A15,A17,A19;
+      end;
+     assume t in FDi(s); then consider Y being Subset of X such that
+     A22: t = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+     A23: Y in s;
+     A24: dom (FD.s) = K.s by FUNCT_2:def 1;
+     A25: K.s = s by FUNCT_1:35;
+     A26: Y in dom (FD.s) by A23,A24,FUNCT_1:35;
+         consider g being Function of K.s, (Fs' --> cL).s such that
+     A27: g = FD.s and
+     A28: for u being set st u in K.s holds P[g.u, u, s] by A11;
+        g.Y = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
+             by A23,A25,A28;
+     hence t in rng (FD.s) by A22,A26,A27,FUNCT_1:def 5;
+     end;
+    hence rFD[s] by TARSKI:2;
+   end;
+   reconsider FD as DoubleIndexedSet of K, L;
+     now let r be set;
+    hereby assume r in F.:Fs; then consider s being set such that
+    A29: s in cIP and
+    A30: s in Fs and
+    A31: F.s = r by FUNCT_2:115;
+        reconsider s' = s as Element of cIP by A29;
+    A32: F.s' = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
+                         }, L) where Y is Subset of X : Y in s'
+                    }, L) by Def3;
+        reconsider s as Element of Fs' by A30;
+          rFD[s] by A13;
+        then r = Sup (FD.s) by A31,A32,YELLOW_2:def 5;
+     hence r in rng Sups FD by WAYBEL_5:14;
+    end;
+    assume r in rng Sups FD;
+      then consider s being Element of Fs' such that
+    A33: r = Sup (FD.s) by WAYBEL_5:14;
+      rFD[s] by A13;
+    then F.s = "\/"(rng (FD.s), L) by Def3
+           .= Sup (FD.s) by YELLOW_2:def 5;
+    hence r in F.:Fs by A33,FUNCT_2:43;
+   end;
+   then F.:Fs = rng Sups FD by TARSKI:2;
+then A34: inf (F.:Fs) = Inf Sups FD by YELLOW_2:def 6;
+     for j being Element of Fs' holds rng(FD.j) is directed proof
+    let j be Element of Fs';
+    let k, m be Element of L; assume
+   A35: k in rng(FD.j) & m in rng(FD.j);
+       then consider kd being set such that
+   A36: kd in dom (FD.j) and
+   A37: FD.j.kd = k by FUNCT_1:def 5;
+       consider md being set such that
+   A38: md in dom (FD.j) and
+   A39: FD.j.md = m by A35,FUNCT_1:def 5;
+   A40: dom (FD.j) = K.j by FUNCT_2:def 1;
+   A41: K.j = j by FUNCT_1:35;
+         j in cIP; then consider FF being Filter of BP such that
+   A42: j = FF by A2,A3;
+       reconsider kd as Element of BP by A36,A40,A41,A42;
+       reconsider md as Element of BP by A38,A40,A41,A42;
+       consider nd being Element of BP such that
+   A43: nd in FF & nd <= kd & nd <= md by A36,A38,A40,A41,A42,WAYBEL_0:def 2;
+   A44: rng(FD.j) = FDi(j) by A13;
+       set n = FD.j.nd;
+         n in rng(FD.j) by A40,A41,A42,A43,FUNCT_1:def 5;
+       then consider Y being Subset of X such that
+   A45: n = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+          Y in j by A44;
+       reconsider n as Element of L by A45;
+    take n;
+    thus n in rng(FD.j) by A40,A41,A42,A43,FUNCT_1:def 5;
+         consider g being Function of K.j, (Fs' --> cL).j such that
+    A46: g = FD.j and
+    A47: for u being set st u in K.j holds P[g.u, u, j] by A11;
+         set kds = {f.(uparrow x) : ex z st x = {z} & z in kd};
+    A48: g.kd = "/\"(kds, L) by A36,A40,A47;
+         set nds = {f.(uparrow x) : ex z st x = {z} & z in nd};
+    A49: g.nd = "/\"(nds, L) by A41,A42,A43,A47;
+    A50: nd c= kd by A43,YELLOW_1:2;
+    A51: ex_inf_of kds, L by YELLOW_0:17;
+    A52: ex_inf_of nds, L by YELLOW_0:17;
+           nds c= kds proof let w be set; assume w in nds;
+           then consider x such that
+         A53: w = f.(uparrow x) and
+         A54: ex z st x = {z} & z in nd;
+             consider z such that
+         A55: x = {z} & z in nd by A54;
+           thus w in kds by A50,A53,A55;
+         end;
+    hence k <= n by A37,A46,A48,A49,A51,A52,YELLOW_0:35;
+         set mds = {f.(uparrow x) : ex z st x = {z} & z in md};
+    A56: g.md = "/\"(mds, L) by A38,A40,A47;
+    A57: nd c= md by A43,YELLOW_1:2;
+    A58: ex_inf_of mds, L by YELLOW_0:17;
+           nds c= mds proof let w be set; assume w in nds;
+           then consider x such that
+         A59: w = f.(uparrow x) and
+         A60: ex z st x = {z} & z in nd;
+             consider z such that
+         A61: x = {z} & z in nd by A60;
+           thus w in mds by A57,A59,A61;
+         end;
+    hence m <= n by A39,A46,A49,A52,A56,A58,YELLOW_0:35;
+   end;
+then A62: Inf Sups FD = Sup Infs Frege FD by WAYBEL_5:19
+              .= "\/"(rng Infs Frege FD, L) by YELLOW_2:def 5;
+     meet Fs' is Filter of BoolePoset X by WAYBEL16:9;
+   then meet Fs' in Filt BP by A3;
+   then reconsider mFs = meet Fs' as Element of cIP by A2;
+A63: inf Fs' = meet Fs' by WAYBEL16:10;
+   set smFs = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
+                  }, L) where Y is Subset of X : Y in mFs};
+A64: F.(meet Fs') = "\/"(smFs, L) by Def3;
+     now let r be set;
+    reconsider pdFD = product doms FD as non empty functional set;
+    reconsider dFFD = product doms FD --> Fs' as ManySortedSet of pdFD;
+    reconsider FFD = Frege FD as DoubleIndexedSet of dFFD, L;
+ A65: dom FFD = pdFD by PBOOLE:def 3;
+
+  deffunc rFFDs(Element of pdFD) =
+     {"/\"({f.(uparrow x) : ex z st x = {z} & z in $1.u}, L)
+                          where u is Element of Fs' : u in dom (FFD.$1) };
+A66: now let s be Element of pdFD;
+    A67: dom FD = dom (FFD.s) by A65,WAYBEL_5:8;
+           now let t be set;
+          hereby assume t in rng (FFD.s);
+            then consider u being set such that
+          A68: u in dom (FFD.s) and
+          A69: t = FFD.s.u by FUNCT_1:def 5;
+          A70: FFD.s.u = (FD.u).(s.u) by A65,A67,A68,WAYBEL_5:9;
+              reconsider u as Element of Fs' by A67,A68,PBOOLE:def 3;
+              consider g being Function of K.u, (Fs' --> cL).u such that
+          A71: g = FD.u and
+          A72: for v being set st v in K.u holds P[g.v, v, u] by A11;
+             dom (FD.u) = K.u by FUNCT_2:def 1;
+          then s.u in K.u by A12,A65,WAYBEL_5:9;
+          then g.(s.u) = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L)
+                    by A72;
+           hence t in rFFDs(s) by A68,A69,A70,A71;
+          end;
+           assume t in rFFDs(s);
+             then consider u being Element of Fs' such that
+          A73: t = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L) and
+          A74: u in dom (FFD.s);
+              reconsider u as Element of Fs';
+              consider g being Function of K.u, (Fs' --> cL).u such that
+          A75: g = FD.u and
+          A76: for v being set st v in K.u holds P[g.v, v, u] by A11;
+             dom (FD.u) = K.u by FUNCT_2:def 1;
+          then s.u in K.u by A12,A65,WAYBEL_5:9;
+          then g.(s.u) = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L)
+                    by A76;
+           hence t in rng(FFD.s) by A65,A67,A73,A74,A75,WAYBEL_5:9;
+         end;
+        hence rng (FFD.s) = rFFDs(s) by TARSKI:2;
+       end; :: rFFDs
+    hereby assume r in rng Infs Frege FD;
+        then consider s being Element of pdFD such that
+    A77: r = Inf (FFD.s) by WAYBEL_5:14;
+    A78: dom FD = dom (FFD.s) by A65,WAYBEL_5:8;
+    A79: dom s = dom FD by A65,WAYBEL_5:8;
+          union rng s c= X proof let t be set; assume t in union rng s;
+          then consider te being set such that
+        A80: t in te & te in rng s by TARSKI:def 4;
+          consider u being set such that
+        A81: u in dom s & te = s.u by A80,FUNCT_1:def 5;
+              FD.u is Function of K.u, cL by A12,A79,A81,WAYBEL_5:6;
+         then dom (FD.u) = K.u by FUNCT_2:def 1
+                      .= u by A12,A79,A81,FUNCT_1:34;
+        then A82: te in u by A65,A79,A81,WAYBEL_5:9;
+              u in cIP by A12,A79,A81; then consider FF being Filter of BP such
+that
+        A83: u = FF by A2,A3;
+         thus t in X by A6,A80,A82,A83;
+        end;
+        then reconsider Y = union rng s as Subset of X;
+        set Ys = {f.(uparrow x) : ex z st x = {z} & z in Y};
+          now let Z be set; assume
+        A84: Z in Fs';
+            then Z in cIP; then consider FF being Filter of BP such that
+        A85: Z = FF by A2,A3;
+              s.Z in rng s by A12,A79,A84,FUNCT_1:def 5;
+        then A86: s.Z c= Y by ZFMISC_1:92;
+        A87: s.Z in dom (FD.Z) by A12,A65,A84,WAYBEL_5:9;
+              FD.Z is Function of K.Z, cL by A84,WAYBEL_5:6;
+        then A88: dom (FD.Z) = K.Z by FUNCT_2:def 1
+                      .= Z by A84,FUNCT_1:34;
+              s.Z c= X by A86,XBOOLE_1:1;
+            then reconsider sZ = s.Z as Element of BP by A4,A5;
+            reconsider Y' = Y as Element of BP by A4,A5;
+              sZ <= Y' by A86,YELLOW_1:2;
+         hence Y in Z by A85,A87,A88,WAYBEL_0:def 20;
+        end;
+        then Y in mFs by SETFAM_1:def 1;
+    then A89: "/\"(Ys, L) in smFs;
+    set idFFDs = {{f.(uparrow x) : ex z st x = {z} & z in s.u}
+                  where u is Element of Fs' : u in dom (FFD.s)};
+    A90: idFFDs c= bool the carrier of L proof let t be set; assume
+            t in idFFDs; then consider u being Element of Fs' such that
+        A91: t = {f.(uparrow x) : ex z st x = {z} & z in s.u} and
+              u in dom (FFD.s);
+              t c= cL proof let v be set; assume v in t;
+              then consider x such that
+            A92: v = f.(uparrow x) and
+            A93: ex z st x = {z} & z in s.u by A91;
+                consider z such that
+            A94: x = {z} and z in s.u by A93;
+                  uparrow x in FUF by A1,A94;
+             hence v in cL by A92,FUNCT_2:7;
+            end;
+         hence t in bool cL;
+        end;
+          now let t be set;
+         hereby assume t in rFFDs(s);
+              then consider u being Element of Fs' such that
+         A95: t = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L) and
+         A96: u in dom (FFD.s);
+              {f.(uparrow x) : ex z st x = {z} & z in s.u} c= cL proof
+              let v be set; assume
+                  v in {f.(uparrow x) : ex z st x = {z} & z in s.u};
+                then consider x such that
+            A97: v = f.(uparrow x) and
+            A98: ex z st x = {z} & z in s.u;
+                consider z such that
+            A99: x = {z} and
+                  z in s.u by A98;
+                  uparrow x in FUF by A1,A99;
+             hence v in cL by A97,FUNCT_2:7;
+            end;
+            then reconsider Y1 ={f.(uparrow x) : ex z st x = {z} & z in s.u}
+                    as Subset of L;
+               Y1 in idFFDs by A96;
+          hence t in {inf YY where YY is Subset of L : YY in idFFDs} by A95;
+         end;
+          assume t in {inf YY where YY is Subset of L : YY in idFFDs};
+            then consider YY being Subset of L such that
+          A100: t = inf YY and
+          A101: YY in idFFDs;
+              consider u1 being Element of Fs' such that
+          A102: YY = {f.(uparrow x) : ex z st x = {z} & z in s.u1} and
+          A103: u1 in dom (FFD.s) by A101;
+          thus t in rFFDs(s) by A100,A102,A103;
+        end;
+    then A104: rFFDs(s) = {inf YY where YY is Subset of L : YY in idFFDs}
+              by TARSKI:2;
+    A105:  "/\"(rng (FFD.s), L) = "/\"(rFFDs(s), L) by A66
+      .= "/\"(union idFFDs, L) by A90,A104,Lm1;
+           now let t be set;
+          hereby assume t in union idFFDs;
+              then consider te being set such that
+          A106: t in te and
+          A107: te in idFFDs by TARSKI:def 4;
+              consider u being Element of Fs' such that
+          A108: te = {f.(uparrow x) : ex z st x = {z} & z in s.u} and
+          A109: u in dom (FFD.s) by A107;
+              consider x such that
+          A110: t = f.(uparrow x) and
+          A111: ex z st x = {z} & z in s.u by A106,A108;
+              consider z such that
+          A112: x = {z} & z in s.u by A111;
+                s.u in rng s by A78,A79,A109,FUNCT_1:def 5;
+              then z in Y by A112,TARSKI:def 4;
+           hence t in Ys by A110,A112;
+          end;
+           assume t in Ys; then consider x such that
+          A113: t = f.(uparrow x) and
+          A114: ex z st x = {z} & z in Y;
+              consider z such that
+          A115: x = {z} & z in Y by A114;
+              consider ze being set such that
+          A116: z in ze & ze in rng s by A115,TARSKI:def 4;
+              consider u being set such that
+          A117: u in dom s & ze = s.u by A116,FUNCT_1:def 5;
+              reconsider u as Element of Fs' by A79,A117,PBOOLE:def 3;
+          A118: t in {f.(uparrow x1) where x1 is Element of BP :
+                   ex z st x1 = {z} & z in s.u} by A113,A115,A116,A117;
+                {f.(uparrow x1) where x1 is Element of BP :
+                    ex z st x1 = {z} & z in s.u} in idFFDs by A78,A79,A117;
+          hence t in union idFFDs by A118,TARSKI:def 4;
+         end;
+         then union idFFDs = Ys by TARSKI:2;
+     hence r in smFs by A77,A89,A105,YELLOW_2:def 6;
+    end;
+    assume r in smFs; then consider Y being Subset of X such that
+    A119: r = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+    A120: Y in mFs;
+        set s = Fs' --> Y;
+        set s' = s;
+    A121: dom doms FD = dom FD by EXTENS_1:3 .= dom s by A12,FUNCOP_1:19;
+         now let w be set; assume
+           w in dom doms FD;
+        then A122: w in Fs' by A121,FUNCOP_1:19;
+        then A123: (doms FD).w = dom (FD.w) by A12,FUNCT_6:31;
+        A124: FD.w is Function of K.w, (Fs' --> cL).w by A122,MSUALG_1:def 2;
+              (Fs' --> cL).w = cL by A122,FUNCOP_1:13;
+        then A125: dom (FD.w) = K.w by A124,FUNCT_2:def 1 .= w by A122,FUNCT_1:
+35;
+              s.w = Y by A122,FUNCOP_1:13;
+         hence s.w in (doms FD).w by A120,A122,A123,A125,SETFAM_1:def 1;
+        end;
+        then reconsider s as Element of pdFD by A121,CARD_3:18;
+    A126: Inf (FFD.s) = "/\"(rng (FFD.s), L) by YELLOW_2:def 6;
+    A127: rng (FFD.s) = rFFDs(s) by A66;
+          now let t be set;
+         hereby assume t in rFFDs(s);
+           then consider u being Element of Fs' such that
+         A128: t = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L) and
+               u in dom (FFD.s);
+               s.u = Y by FUNCOP_1:13;
+          hence t in {r} by A119,A128,TARSKI:def 1;
+         end;
+         assume t in {r};
+         then A129: t = r by TARSKI:def 1;
+             consider u being Element of Fs';
+         A130: dom FD = dom (FFD.s) by A65,WAYBEL_5:8;
+         A131: dom s = dom FD by A65,WAYBEL_5:8;
+              A132: s' = s & dom s' = Fs' by FUNCOP_1:19;
+               s.u = Y by FUNCOP_1:13;
+         hence t in rFFDs(s) by A119,A129,A130,A131,A132;
+        end;
+    then A133: {"/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L)
+                          where u is Element of Fs' : u in dom (FFD.s) }
+        = {r} by TARSKI:2;
+          "/\"({r}, L) = r by A119,YELLOW_0:39;
+    hence r in rng Infs Frege FD by A126,A127,A133,WAYBEL_5:14;
+   end;
+  hence inf (F.:Fs) = F.inf Fs by A34,A62,A63,A64,TARSKI:2;
+ end;
+ end;
 end;
+
 
 theorem :: WAYBEL22:14
 for L being continuous complete (non empty Poset),

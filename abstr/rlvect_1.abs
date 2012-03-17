@@ -26,6 +26,7 @@ definition
                     Zero -> Element of the carrier #);
 end;
 
+
 definition
  struct (LoopStr) RLSStruct (# carrier -> set,
               Zero -> Element of the carrier,
@@ -34,9 +35,18 @@ definition
             #);
 end;
 
-definition
+
+registration
  cluster non empty RLSStruct;
+ existence
+  proof
+   consider ZS being non empty set, O being Element of ZS,
+      F being BinOp of ZS, G being Function of [:REAL,ZS:],ZS;
+   take RLSStruct(#ZS,O,F,G#);
+   thus the carrier of RLSStruct(#ZS,O,F,G#) is non empty;
+  end;
 end;
+
 
 reserve V for non empty RLSStruct;
 reserve x,y,y1,y2 for set;
@@ -45,11 +55,13 @@ definition let V be RLSStruct;
   mode VECTOR of V is Element of V;
 end;
 
+
 definition let V be 1-sorted; let x;
  pred x in V means
 :: RLVECT_1:def 1
    x in the carrier of V;
 end;
+
 
 canceled 2;
 
@@ -69,12 +81,23 @@ theorem :: RLVECT_1:3
     the Zero of V;
  end;
 
+
 reserve v for VECTOR of V;
 reserve a,b for Real;
 
-definition
+registration
  cluster strict non empty LoopStr;
+ existence
+  proof
+   set ZS = {0};
+   reconsider O = 0 as Element of ZS by TARSKI:def 1;
+   consider F being BinOp of ZS;
+   take LoopStr (# ZS,F,O #);
+   thus LoopStr (# ZS,F,O #) is strict;
+   thus the carrier of LoopStr (# ZS,F,O #) is non empty;
+  end;
 end;
+
 
  definition let V be non empty LoopStr, v,w be Element of V;
   func v + w -> Element of V equals
@@ -82,11 +105,13 @@ end;
     (the add of V).[v,w];
  end;
 
+
  definition let V; let v; let a;
   func a * v -> Element of V equals
 :: RLVECT_1:def 4
     (the Mult of V).[a,v];
  end;
+
 
 ::
 ::   Definitional theorems of zero element, addition, multiplication.
@@ -98,9 +123,10 @@ theorem :: RLVECT_1:5
    for V being non empty LoopStr, v,w being Element of V
    holds v + w = (the add of V).(v,w);
 
-definition let ZS be non empty set, O be Element of ZS,
+registration let ZS be non empty set, O be Element of ZS,
       F be BinOp of ZS, G be Function of [:REAL,ZS:],ZS;
  cluster RLSStruct (# ZS,O,F,G #) -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
 
 definition let IT be non empty LoopStr;
@@ -120,6 +146,7 @@ definition let IT be non empty LoopStr;
          ex w being Element of IT st v + w = 0.IT;
 end;
 
+
 definition let IT be non empty RLSStruct;
   attr IT is RealLinearSpace-like means
 :: RLVECT_1:def 9
@@ -129,26 +156,100 @@ definition let IT be non empty RLSStruct;
   (for v being VECTOR of IT holds 1 * v = v);
 end;
 
-definition
+
+registration
  cluster strict Abelian add-associative right_zeroed right_complementable
                 (non empty LoopStr);
+  existence
+ proof
+   set ZS = {0};
+   reconsider O = 0 as Element of ZS by TARSKI:def 1;
+   deffunc A((Element of ZS), Element of ZS) = O;
+   consider F being BinOp of ZS such that
+A1: for x,y being Element of ZS holds F.(x,y) = A(x,y)
+        from BINOP_1:sch 2;
+   reconsider W = LoopStr (# ZS,F,O #) as non empty LoopStr by STRUCT_0:def 1;
+  take W;
+  thus W is strict;
+  thus for x,y being Element of W holds x + y = y + x
+   proof let x,y be Element of W;
+        x + y = F.[x,y] & y + x = F.[y,x] by Def3;
+      then A2: x + y = F.(x,y) & y + x = F.(y,x) by BINOP_1:def 1;
+     reconsider X = x, Y = y as Element of ZS;
+        x + y = A(X,Y) & y + x = A(Y,X) by A1,A2;
+    hence thesis;
+   end;
+  thus for x,y,z being Element of W
+     holds (x + y) + z = x + (y + z)
+   proof let x,y,z be Element of W;
+        (x + y) + z = F.[x + y,z] & x + (y + z) = F.[x,y + z] by Def3;
+      then A3: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z)
+                                                            by BINOP_1:def 1;
+     reconsider X = x, Y = y, Z = z as Element of ZS;
+        (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1,A3;
+    hence thesis;
+   end;
+  thus for x being Element of W holds x + 0.W = x
+   proof let x be Element of W;
+     reconsider X = x as Element of ZS;
+         x + 0.W = F.[x,0.W] by Def3
+                .= F.(x,0.W) by BINOP_1:def 1
+                .= A(X,O) by A1;
+    hence thesis by TARSKI:def 1;
+   end;
+  let x be Element of W;
+     reconsider y = O as Element of W;
+   take y;
+   thus x + y = F.[x,y] by Def3
+             .= F.(x,y) by BINOP_1:def 1
+             .= the Zero of W by A1
+             .= 0.W by Def2;
+ end;
 end;
 
-definition
+
+registration
  cluster non empty strict Abelian add-associative right_zeroed
      right_complementable RealLinearSpace-like (non empty RLSStruct);
+  existence
+   proof
+     consider ZS being non empty set, O being Element of ZS,
+      F being BinOp of ZS, G being Function of [:REAL,ZS:],ZS such that
+A1:   (for v,w being VECTOR of RLSStruct (# ZS,O,F,G #) holds v + w = w + v) &
+     (for u,v,w being VECTOR of RLSStruct (# ZS,O,F,G #) holds
+      (u + v) + w = u + (v + w)) &
+     (for v being VECTOR of RLSStruct (# ZS,O,F,G #) holds
+      v + 0.RLSStruct (# ZS,O,F,G #) = v) &
+     (for v being VECTOR of RLSStruct (# ZS,O,F,G #)
+       ex w being VECTOR of RLSStruct (# ZS,O,F,G #) st
+        v + w = 0.RLSStruct (# ZS,O,F,G #)) &
+     (for a for v,w being VECTOR of RLSStruct (# ZS,O,F,G #) holds
+      a * (v + w) = a * v + a * w) &
+     (for a,b for v being VECTOR of RLSStruct (# ZS,O,F,G #) holds
+      (a + b) * v = a * v + b * v) &
+     (for a,b for v being VECTOR of RLSStruct (# ZS,O,F,G #) holds
+      (a * b) * v = a * (b * v)) &
+     (for v being VECTOR of RLSStruct (# ZS,O,F,G #) holds 1 * v = v)
+      by Lm1;
+    take RLSStruct (# ZS,O,F,G #);
+    thus RLSStruct (# ZS,O,F,G #) is non empty;
+     thus thesis by A1,Def5,Def6,Def7,Def8,Def9;
+   end;
 end;
+
 
 definition
   mode RealLinearSpace is Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like (non empty RLSStruct);
 end;
 
+
 definition let V be Abelian (non empty LoopStr),
                    v,w be Element of V;
  redefine func v + w;
  commutativity;
 end;
+
 
 canceled;
 
@@ -198,6 +299,7 @@ definition let V be non empty LoopStr;
 :: RLVECT_1:def 11
     v + (- w);
 end;
+
 
 ::
 ::  Definitional theorems of reverse element and substraction.
@@ -377,10 +479,12 @@ definition let V be non empty 1-sorted; let v,u be Element of V;
  redefine func <* v,u *> -> FinSequence of the carrier of V;
 end;
 
+
 definition let V be non empty 1-sorted;
  let v,u,w be Element of V;
  redefine func <* v,u,w *> -> FinSequence of the carrier of V;
 end;
+
 
 reserve V for non empty LoopStr;
 reserve F,G,H for FinSequence of the carrier of V;
@@ -610,6 +714,7 @@ definition
 :: RLVECT_1:def 13
      a <> 0.R;
 end;
+
 
  reserve j, k, n for natural number;
 

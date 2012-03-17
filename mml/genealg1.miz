@@ -59,6 +59,7 @@ A12:    ((f1^f2)/^n).i = (f1^f2).(i+n) by A2,A7,RFINSEQ:def 2
           ((f1/^n)^f2).i = (f1/^n).i by A11,FINSEQ_1:def 7
          .= f1.(i+n) by A1,A11,RFINSEQ:def 2;
         hence thesis by A12;
+       end;
        suppose A13:len f1 - n < i;
 then A14:    len f1 < i+n & i+n <= len(f1^f2) by A3,A6,REAL_1:84;
 A15:    len(f1/^n) < i & i <= len((f1/^n)^f2)
@@ -70,6 +71,7 @@ A16:    ((f1^f2)/^n).i = (f1^f2).(i+n) by A2,A7,RFINSEQ:def 2
          .= f2.(i + (n - len f1)) by XCMPLX_1:38
          .= f2.(i+n - len f1) by XCMPLX_1:29;
         hence thesis by A16;
+     end;
      end;
      hence thesis;
    end;
@@ -91,12 +93,13 @@ definition
   mode Gene-Set is non-empty non empty FinSequence;
 end;
 
-definition let S be Gene-Set;
-  redefine func Union S;
-  synonym GA-Space S;
-end;
 
-definition let f be non-empty non empty Function;
+notation let S be Gene-Set;
+  synonym GA-Space S for Union S;
+  end;
+
+
+registration let f be non-empty non empty Function;
   cluster Union f -> non empty;
   coherence
 proof
@@ -104,6 +107,7 @@ proof
   hence thesis;
 end;
 end;
+
 
 definition let S be Gene-Set;
   mode Individual of S -> FinSequence of GA-Space S means
@@ -129,11 +133,12 @@ A4:  x in [#](S.k) by SUBSET_1:10;
    end;
    consider IT being FinSequence of GA-Space S such that
 A5:dom IT = Seg len S & for k st k in Seg len S holds P[k,IT.k]
-   from SeqDEx(A1);
+   from MATRIX_2:sch 1(A1);
    take IT;
    thus thesis by A5,FINSEQ_1:def 3;
 end;
 end;
+
 
 begin
 ::::::::::::::::::::::::::::::::::::::::::::::
@@ -146,11 +151,13 @@ func crossover(p1,p2,n) -> FinSequence of GA-Space S equals
 correctness;
 end;
 
+
 definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S, n1,n2;
 func crossover(p1,p2,n1,n2) -> FinSequence of GA-Space S equals
 :Def3:crossover(crossover(p1,p2,n1),crossover(p2,p1,n1),n2);
 correctness;
 end;
+
 
 definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S,
 n1,n2,n3;
@@ -159,12 +166,14 @@ func crossover(p1,p2,n1,n2,n3) -> FinSequence of GA-Space S equals
 correctness;
 end;
 
+
 definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S,
 n1,n2,n3,n4;
 func crossover(p1,p2,n1,n2,n3,n4) -> FinSequence of GA-Space S equals
 :Def5:crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4);
 correctness;
 end;
+
 
 definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S,
 n1,n2,n3,n4,n5;
@@ -174,6 +183,7 @@ crossover(crossover(p1,p2,n1,n2,n3,n4),crossover(p2,p1,n1,n2,n3,n4),n5);
 correctness;
 end;
 
+
 definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S,
 n1,n2,n3,n4,n5,n6;
 func crossover(p1,p2,n1,n2,n3,n4,n5,n6) -> FinSequence of GA-Space S equals
@@ -182,6 +192,7 @@ crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
    crossover(p2,p1,n1,n2,n3,n4,n5),n6);
 correctness;
 end;
+
 
 begin
 :::::::::::::::::::::::::::::::::::::
@@ -207,6 +218,7 @@ A2:  len crossover(p1,p2,n) = len ((p1|n)^(p2/^n)) by Def2
          .= len p1 - (n-n) by XCMPLX_1:37
          .= len p1 by XCMPLX_1:17;
         hence thesis by Def1;
+       end;
        suppose A4:n > len p1;
 then A5:     len p1 - n < 0 by REAL_2:105;
           p1|n = p1|Seg n by TOPREAL1:def 1;
@@ -216,6 +228,7 @@ then A6:     p1|n = p1 by A4,FINSEQ_2:23;
          .= len p1 -'n by Def1
          .= 0 by A5,BINARITH:def 3;
         hence thesis by A2,A6,Def1;
+     end;
      end;
      hence thesis;
    end;
@@ -231,6 +244,7 @@ A10:    dom(p1|n) c= dom p1 by FINSEQ_5:20;
          .= p1.i by A9,A10,FINSEQ_4:def 4;
         then (p1|n).i in S.i by A9,A10,Def1;
         hence thesis by A8,A9,FINSEQ_1:def 7;
+       end;
        suppose (ex k st k in dom(p2/^n) & i = len(p1|n)+k);
         then consider k such that
 A11:    k in dom(p2/^n) & i = len(p1|n)+k;
@@ -268,6 +282,7 @@ then A17:    n+k in dom p2 by FINSEQ_1:def 3;
          .= p2.(n+k) by A17,FINSEQ_4:def 4;
         hence thesis by A11,A12,A17,Def1;
      end;
+     end;
      hence thesis;
    end;
    hence thesis by A1,Def1;
@@ -277,6 +292,7 @@ definition let S be Gene-Set, p1,p2 be Individual of S, n;
   redefine func crossover(p1,p2,n) -> Individual of S;
   correctness by Th3;
 end;
+
 
 theorem Th4:crossover(p1,p2,0) = p2
 proof
@@ -315,6 +331,7 @@ definition let S be Gene-Set, p1,p2 be Individual of S, n1,n2;
 redefine func crossover(p1,p2,n1,n2) -> Individual of S;
 correctness by Th6;
 end;
+
 
 theorem Th7:crossover(p1,p2,0,n) = crossover(p2,p1,n)
 proof
@@ -374,6 +391,7 @@ A2:(((p1|n1)^(p2/^n1))|n1) = (p1|n1)
        suppose n1 <= len p1;
         then len (p1|n1) = n1 by TOPREAL1:3;
         hence thesis by FINSEQ_5:26;
+       end;
        suppose A3:n1 > len p1;
 then A4:     n1 > len S by Def1;
 then A5:     n1 > len p2 by Def1;
@@ -386,6 +404,7 @@ then A5:     n1 > len p2 by Def1;
          .= p1|n1 by A3,TOPREAL1:2;
         hence thesis;
      end;
+     end;
      hence thesis;
    end;
  (((p2|n1)^(p1/^n1))/^n1) = (p1/^n1)
@@ -394,6 +413,7 @@ then A5:     n1 > len p2 by Def1;
        suppose n1 <= len p2;
         then len (p2|n1) = n1 by TOPREAL1:3;
         hence thesis by FINSEQ_5:40;
+       end;
        suppose n1 > len p2;
 then A6:     n1 > len S by Def1;
 then A7:     n1 > len p1 by Def1;
@@ -401,6 +421,7 @@ then A7:     n1 > len p1 by Def1;
         then n1 > len ((p2|n1)^(p1/^n1)) by Def2;
         then (((p2|n1)^(p1/^n1))/^n1) = {} by FINSEQ_5:35;
         hence thesis by A7,FINSEQ_5:35;
+     end;
      end;
      hence thesis;
    end;
@@ -440,6 +461,7 @@ then A10:    (p2|n1)^(p1/^n1) = p2^{} by A8,FINSEQ_5:35
          by A2,A3,A6,A8,FINSEQ_5:35
          .= (p1|n2)^(p2/^n2) by FINSEQ_1:47;
         hence thesis by A1,A9,A10;
+       end;
        suppose A11:n1 < len p1;
     then n1 <= len p2 by A4,Def1;
 then A12:    n2 <= len(p2|n1) by A7,TOPREAL1:3;
@@ -465,7 +487,9 @@ A20:    ((p1|n2)^(p2/^n2))|n1=(p1|n2)^((p2/^n2)|i) by A17,Th2
          .= p1/^n1 by A3,A4,A14,A15,TOPREAL1:3;
         hence thesis by A2,A19,A20;
      end;
+     end;
      hence thesis;
+     end;
      suppose A21:n1 < n2 & n2 > 0;
        now per cases;
        suppose A22:n1 >= len p1;
@@ -488,6 +512,7 @@ then A28:    ((p1|n2)^(p2/^n2))|n1 = p1 by A22,TOPREAL1:2;
        .= p2 by FINSEQ_1:47;
        then ((p2|n2)^(p1/^n2))/^n1 = {} by A23,FINSEQ_5:35;
        hence thesis by A1,A2,A24,A26,A27,A28,TOPREAL1:2;
+       end;
        suppose A29:n1 < len p1;
 then A30:    len(p1|n1) = n1 by TOPREAL1:3;
 A31:    len(p2|n1) = n1 by A3,A4,A29,TOPREAL1:3;
@@ -499,8 +524,10 @@ A34:    n1 <= len(p1|n2)
            now per cases;
            suppose n2 >= len p1;
            hence thesis by A29,TOPREAL1:2;
+           end;
            suppose n2 < len p1;
            hence thesis by A21,TOPREAL1:3;
+         end;
          end;
          hence thesis;
        end;
@@ -509,8 +536,10 @@ A35:    n1 <= len(p2|n2)
            now per cases;
            suppose n2 >= len p2;
            hence thesis by A3,A4,A29,TOPREAL1:2;
+           end;
            suppose n2 < len p2;
            hence thesis by A21,TOPREAL1:3;
+         end;
          end;
          hence thesis;
        end;
@@ -527,11 +556,14 @@ A38:    ((p1|n2)^(p2/^n2))|n1 = (p1|n2)|n1 by A34,FINSEQ_5:25
         .=((p2/^n1)|i)^(p1/^n2) by A21,A36,SCMFSA_7:3;
        hence thesis by A2,A37,A38,FINSEQ_1:45;
      end;
+     end;
      hence thesis;
+     end;
      suppose A39:n2 = 0;
      then crossover(p1,p2,n1,n2)= crossover(p2,p1,n1) by Th8
       .= crossover(p1,p2,0,n1) by Th7;
      hence thesis by A39;
+   end;
    end;
    hence thesis;
 end;
@@ -553,6 +585,7 @@ definition let S be Gene-Set, p1,p2 be Individual of S, n1,n2,n3;
 redefine func crossover(p1,p2,n1,n2,n3) -> Individual of S;
 correctness by Th14;
 end;
+
 
 theorem Th15:crossover(p1,p2,0,n2,n3) = crossover(p2,p1,n2,n3) &
 crossover(p1,p2,n1,0,n3) = crossover(p2,p1,n1,n3) &
@@ -744,6 +777,7 @@ definition let S be Gene-Set, p1,p2 be Individual of S, n1,n2,n3,n4;
 redefine func crossover(p1,p2,n1,n2,n3,n4) -> Individual of S;
 correctness by Th28;
 end;
+
 
 theorem Th29:crossover(p1,p2,0,n2,n3,n4) = crossover(p2,p1,n2,n3,n4) &
 crossover(p1,p2,n1,0,n3,n4) = crossover(p2,p1,n1,n3,n4) &
@@ -1614,6 +1648,7 @@ definition let S be Gene-Set, p1,p2 be Individual of S, n1,n2,n3,n4,n5;
 redefine func crossover(p1,p2,n1,n2,n3,n4,n5) -> Individual of S;
 correctness by Th40;
 end;
+
 
 theorem Th41:crossover(p1,p2,0,n2,n3,n4,n5)=crossover(p2,p1,n2,n3,n4,n5) &
 crossover(p1,p2,n1,0,n3,n4,n5) = crossover(p2,p1,n1,n3,n4,n5) &
@@ -2572,6 +2607,7 @@ definition let S be Gene-Set,p1,p2 be Individual of S,n1,n2,n3,n4,n5,n6;
 redefine func crossover(p1,p2,n1,n2,n3,n4,n5,n6) -> Individual of S;
 correctness by Th53;
 end;
+
 
 theorem
   crossover(p1,p2,0,n2,n3,n4,n5,n6)=crossover(p2,p1,n2,n3,n4,n5,n6) &

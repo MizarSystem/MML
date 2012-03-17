@@ -14,10 +14,10 @@ environ
       FINSEQ_4, WAYBEL_6, HAHNBAN;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
       FINSET_1, RELAT_1, ORDINAL1, RELAT_2, REALSET1, STRUCT_0, ORDERS_1,
-      PRE_TOPC, CARD_3, FRAENKEL, LATTICE3, FUNCT_1, FUNCT_2, FUNCT_3, FUNCT_6,
-      PBOOLE, PRALG_1, PRALG_2, YELLOW_0, YELLOW_1, WAYBEL_0, WAYBEL_1,
-      YELLOW_2, YELLOW_4, WAYBEL_2, WAYBEL_3, WAYBEL_4, WAYBEL_5, BORSUK_1,
-      YELLOW_7, FUNCT_7;
+      PRE_TOPC, CARD_3, FRAENKEL, LATTICE3, FUNCT_1, PARTFUN1, FUNCT_2,
+      FUNCT_3, FUNCT_6, PBOOLE, PRALG_1, PRALG_2, YELLOW_0, YELLOW_1, WAYBEL_0,
+      WAYBEL_1, YELLOW_2, YELLOW_4, WAYBEL_2, WAYBEL_3, WAYBEL_4, PRE_CIRC,
+      WAYBEL_5, BORSUK_1, YELLOW_7, FUNCT_7;
  constructors WAYBEL_5, WAYBEL_4, NAT_1, RELAT_2, BORSUK_1, YELLOW_4, ORDERS_3,
       WAYBEL_1, WAYBEL_2, WAYBEL_3, PRALG_2, FUNCT_7, MEMBERED;
  clusters SUBSET_1, WAYBEL_0, WAYBEL_2, WAYBEL_3, YELLOW_0, STRUCT_0, ORDERS_1,
@@ -53,7 +53,7 @@ scheme NonUniqExD1 { Z() ->non empty RelStr, X() -> Subset of Z(),
   provided
 A1: for e be Element of Z() st e in X() ex u be Element of Z()
   st u in Y() & P[e,u]
- proof
+proof
    defpred p[set,set] means P[$1,$2];
 A2: for e be set st e in X() ex u be set st u in Y() & p[e,u]
    proof
@@ -67,7 +67,7 @@ A2: for e be set st e in X() ex u be set st u in Y() & p[e,u]
    end;
   consider f being Function such that
 A5: dom f = X() & rng f c= Y() and
-A6: for e be set st e in X() holds p[e,f.e] from NonUniqBoundFuncEx(A2);
+A6: for e be set st e in X() holds p[e,f.e] from COMPTS_1:sch 1(A2);
   reconsider f as Function of X(),Y() by A5,FUNCT_2:def 1,RELSET_1:11;
 A7: for e be Element of Z() st e in X()
   ex u be Element of Z() st u in Y() & u = f.e & P[e,u]
@@ -93,6 +93,7 @@ coherence by FUNCT_7:85;
 end;
 
 
+
 definition
 let L be LATTICE;
 let C,D be non empty Subset of L;
@@ -106,7 +107,8 @@ coherence
  end;
 end;
 
-definition
+
+registration
 let L be non empty Poset;
 cluster -> filtered directed Chain of L;
 coherence
@@ -131,7 +133,8 @@ then A5:x <= y or y <= x by ORDERS_1:def 9;
  end;
 end;
 
-definition
+
+registration
 cluster strict continuous distributive lower-bounded LATTICE;
 existence
  proof
@@ -141,6 +144,7 @@ existence
   thus thesis;
  end;
 end;
+
 
 theorem Th1:
 for S,T being Semilattice, f being map of S,T
@@ -231,7 +235,7 @@ A2: f is meet-preserving join-preserving one-to-one;
  end;
 
 
-definition
+registration
 let S,T be complete LATTICE;
 cluster sups-preserving map of S,T;
  existence
@@ -252,6 +256,7 @@ then A3:(f.:X) = {t} or (f.:X) = {} by ZFMISC_1:39;
    then (f.:X) = {} by RELAT_1:149;
    then sup (f.:X) = t by YELLOW_0:def 11;
    hence sup (f.:X) = f.sup X by A2,FUNCOP_1:13;
+   end;
    suppose X <> {};
    then reconsider X1 = X as non empty Subset of S;
    consider x be Element of X1;
@@ -259,7 +264,9 @@ then A3:(f.:X) = {t} or (f.:X) = {} by ZFMISC_1:39;
    hence sup (f.:X) = t by A3,YELLOW_0:39
                   .= f.sup X by A2,FUNCOP_1:13;
   end;
+  end;
 end;
+
 
 Lm1:
 for S,T being with_suprema non empty Poset
@@ -372,6 +379,7 @@ for x be Element of L st x in X ex y be Element of L st y in X & y << x;
 end;
 
 
+
 theorem
   for L be up-complete LATTICE, X be upper Subset of L holds
 X is Open iff for x be Element of L st x in X holds waybelow x meets X
@@ -454,7 +462,7 @@ A14:  z1 = x1 & z1 >> x;
  end;
 
 
-definition
+registration
 let L be up-complete lower-bounded LATTICE;
 cluster Open Filter of L;
 existence
@@ -468,6 +476,7 @@ existence
   hence thesis by Def1;
  end;
 end;
+
 
 
 theorem
@@ -600,7 +609,7 @@ then A31:      znk = (f*(iter(f,n+k))).y1 by A30,FUNCT_1:23
            znk <= nk by A30,WAYBEL_3:1;
          hence thesis by A29,A31,ORDERS_1:26;
         end;
-         for k holds P[k] from Ind(A27,A28);
+         for k holds P[k] from NAT_1:sch 1(A27,A28);
        hence thesis;
       end;
 set z = z1 "/\" z2;
@@ -609,10 +618,12 @@ A32: now per cases;
       then consider k such that A33: n1 + k = n2 by NAT_1:28;
         z2 <= z1 by A22,A25,A26,A33;
       hence uparrow z in V by A19,A23,YELLOW_0:25;
+      end;
       suppose n2 <= n1;
       then consider k such that A34: n2 + k = n1 by NAT_1:28;
         z1 <= z2 by A22,A25,A26,A34;
       hence uparrow z in V by A19,A20,YELLOW_0:25;
+     end;
      end;
        z <= z1 & z <= z2 by YELLOW_0:23;
      then uparrow z1 c= uparrow z & uparrow z2 c= uparrow z by WAYBEL_0:22;
@@ -762,6 +773,7 @@ set Y2 = Y \/ {y};
         the InternalRel of L is_strongly_connected_in Y by ORDERS_1:def 11;
       hence [a,b] in the InternalRel of L or
       [b,a] in the InternalRel of L by A21,RELAT_2:def 7;
+     end;
      suppose A22: a in Y & b in {y};
       then reconsider b1 = b as Element of L;
       reconsider a1 = a as Element of L by A22;
@@ -770,6 +782,7 @@ A23:   b1 = y by A22,TARSKI:def 1;
       then a1 <= b1 by A19,A23,ORDERS_1:26;
       hence [a,b] in the InternalRel of L or
       [b,a] in the InternalRel of L by ORDERS_1:def 9;
+     end;
      suppose A24: a in {y} & b in Y;
       then reconsider b1 = a as Element of L;
       reconsider a1 = b as Element of L by A24;
@@ -779,11 +792,13 @@ A25:   b1 = y by A24,TARSKI:def 1;
       hence [a,b] in the InternalRel of L or
       [b,a] in the InternalRel of L by ORDERS_1:def 9;
 
+     end;
      suppose A26: a in {y} & b in {y};
       then reconsider a1 = a as Element of L;
         a = y & b = y & a1 <= a1 by A26,TARSKI:def 1;
       hence [a,b] in the InternalRel of L or
       [b,a] in the InternalRel of L by ORDERS_1:def 9;
+    end;
     end;
    then reconsider Y2 as Chain of L by ORDERS_1:def 11;
      {y} c= (X`) by A18,ZFMISC_1:37;
@@ -810,8 +825,12 @@ let G be non empty RelStr,
     g be Element of G;
 attr g is meet-irreducible means :Def2:
 for x,y being Element of G st g = x "/\" y holds x = g or y = g;
-synonym g is irreducible;
 end;
+notation   ::def 3.5, p.69
+let G be non empty RelStr,
+    g be Element of G;
+synonym g is irreducible for g is meet-irreducible ; end;
+
 
 
 definition
@@ -822,6 +841,7 @@ attr g is join-irreducible means
 end;
 
 
+
 definition
 let L be non empty RelStr;
 func IRR L -> Subset of L means :Def4:
@@ -830,7 +850,7 @@ existence
  proof
    defpred P[Element of L] means $1 is irreducible;
   consider X being Subset of L such that
-A1: for x being Element of L holds x in X iff P[x] from SSubsetEx;
+A1: for x being Element of L holds x in X iff P[x] from WAYBEL_3:sch 1;
   take X;
   thus thesis by A1;
  end;
@@ -856,6 +876,7 @@ then A5: X c= Y by TARSKI:def 3;
 end;
 
 
+
 theorem Th10:
 for L being upper-bounded antisymmetric with_infima non empty RelStr holds
 Top L is irreducible
@@ -868,7 +889,7 @@ then A1: x >= Top L & y >= Top L by YELLOW_0:23;
  end;
 
 
-definition
+registration
 let L be upper-bounded antisymmetric with_infima non empty RelStr;
 cluster irreducible Element of L;
 existence
@@ -877,6 +898,7 @@ existence
   thus thesis by Th10;
  end;
 end;
+
 
 
 theorem
@@ -906,6 +928,7 @@ A7:      B \/ {x} is non empty & I = "/\"(B \/ {x},L);
           then "/\"(B \/ {a},L) = a & a in B \/ {a} by TARSKI:def 1,YELLOW_0:39
 ;
          hence I in B \/ {x} by A7;
+        end;
         suppose
 A8:       B <> {}; then ex_inf_of C, L & ex_inf_of {a}, L by YELLOW_0:55;
           then A9: "/\"(B \/ {x},L) = (inf C)"/\"inf {a} & inf {a} = a
@@ -915,14 +938,17 @@ A8:       B <> {}; then ex_inf_of C, L & ex_inf_of {a}, L by YELLOW_0:55;
             then consider b being Element of L such that
 A10:          b in B & b = I by A6,A8;
             thus I in B \/ {x} by A10,XBOOLE_0:def 2;
+           end;
            suppose
 A11:          a = I;
                a in {a} by TARSKI:def 1;
             hence I in B \/ {x} by A11,XBOOLE_0:def 2;
          end;
+         end;
+        end;
         end;
        end;
-         P[A] from Finite(A2,A3,A4);
+         P[A] from FINSET_1:sch 2(A2,A3,A4);
       hence thesis;
      end;
    assume
@@ -1030,6 +1056,7 @@ attr X is order-generating means :Def5:
 for x be Element of L holds
  ex_inf_of (uparrow x) /\ X,L & x = inf ((uparrow x) /\ X);
 end;
+
 
 
 theorem Th15:  ::3.9 (1-2), p.70
@@ -1158,7 +1185,7 @@ A14:      x = "/\"(S,L) & S c= X & "/\"(S,L) in Z;
         then
 A15:     "/\"(Z,L) = "/\"(N,L) by A13,XBOOLE_0:def 10
                .= "/\" (union {A where A is Subset of L : P[A]}, L)
-                 from Inf_of_Infs;
+                 from YELLOW_3:sch 4;
 set S = union {A where A is Subset of L : A c= X & "/\"(A,L) in Z};
           now let x; assume x in S;
          then consider Y be set such that
@@ -1241,8 +1268,10 @@ A9:  p in X & l <= p & not y <= p by A5;
        p in (uparrow l) by A9,WAYBEL_0:18;
      then p in (uparrow l) /\ X by A9,XBOOLE_0:def 3;
      hence contradiction by A6,A9,LATTICE3:def 8;
+    end;
     suppose y = l;
      hence contradiction by A7;
+    end;
     end;
     hence contradiction;
    end;
@@ -1302,6 +1331,7 @@ for x,y be Element of L st x "/\" y <= l holds x <= l or y <= l;
 end;
 
 
+
 definition
 let L be non empty RelStr;
 func PRIME L -> Subset of L means :Def7:
@@ -1309,7 +1339,7 @@ for x be Element of L holds x in it iff x is prime;
 existence
  proof defpred P[Element of L] means $1 is prime;
   consider X being Subset of L such that
-A1: for x being Element of L holds x in X iff P[x] from SSubsetEx;
+A1: for x being Element of L holds x in X iff P[x] from WAYBEL_3:sch 1;
   take X;
   thus thesis by A1;
  end;
@@ -1336,12 +1366,14 @@ A3: for x be Element of L holds x in Y iff x is prime;
 end;
 
 
+
 definition
 let L be non empty RelStr;
 let l be Element of L;
 attr l is co-prime means :Def8:
 l~ is prime;
 end;
+
 
 
 theorem Th20:
@@ -1363,7 +1395,7 @@ L is co-prime
  end;
 
 
-definition
+registration
 let L be upper-bounded antisymmetric non empty RelStr;
 cluster prime Element of L;
 existence
@@ -1372,6 +1404,7 @@ existence
   thus thesis by Th20;
  end;
 end;
+
 
 
 theorem Th22:
@@ -1405,6 +1438,7 @@ A7:      B \/ {x} is non empty & l >= "/\"(B \/ {x},L);
           then "/\"(B \/ {a},L) = a & a in B \/ {a} by TARSKI:def 1,YELLOW_0:39
 ;
          hence ex k being Element of L st k in B \/ {x} & l >= k by A7;
+        end;
         suppose
 A8:       B <> {}; then ex_inf_of C, L & ex_inf_of {a}, L by YELLOW_0:55;
           then A9: "/\"(B \/ {x},L) = (inf C)"/\"inf {a} & inf {a} = a
@@ -1415,15 +1449,18 @@ A8:       B <> {}; then ex_inf_of C, L & ex_inf_of {a}, L by YELLOW_0:55;
 A10:          b in B & b <= l by A6,A8;
                b in B \/ {x} by A10,XBOOLE_0:def 2;
             hence ex k being Element of L st k in B \/ {x} & l >= k by A10;
+           end;
            suppose
 A11:          a <= l;
                a in {a} by TARSKI:def 1;
              then a in B \/ {x} by XBOOLE_0:def 2;
             hence ex k being Element of L st k in B \/ {x} & l >= k by A11;
          end;
+         end;
+        end;
         end;
        end;
-         P[A] from Finite(A2,A3,A4);
+         P[A] from FINSET_1:sch 2(A2,A3,A4);
       hence thesis;
      end;
    assume A12: for A being finite non empty Subset of L st l >= inf A
@@ -1538,22 +1575,26 @@ A7:   now per cases by A4,TARSKI:def 2;
         then A9: z "/\" y <= l by ORDERS_1:26;
         thus f.z "/\" f.y = {} /\ {} by A8,YELLOW_1:17
                        .= f.(z "/\" y) by A2,A9;
+       end;
        suppose A10: f.z = {x} & f.y = {x};
         then z "/\" y <= y & not y <= l & not z <= l by A2,YELLOW_0:23;
         then not z "/\" y <= l by A1,Def6;
         then A11: not f.(z "/\" y) = {} by A2;
         thus f.z "/\" f.y = {x} /\ {x} by A10,YELLOW_1:17
                        .= f.(z "/\" y) by A4,A11,TARSKI:def 2;
+       end;
        suppose A12: f.z = {} & f.y = {x};
         then z "/\" y <= z & z <= l by A2,YELLOW_0:23;
         then A13: z "/\" y <= l by ORDERS_1:26;
         thus f.z "/\" f.y = {} /\ {x} by A12,YELLOW_1:17
                        .= f.(z "/\" y) by A2,A13;
+       end;
        suppose A14: f.z = {x} & f.y = {};
         then z "/\" y <= y & y <= l by A2,YELLOW_0:23;
         then A15: z "/\" y <= l by ORDERS_1:26;
         thus f.z "/\" f.y = {x} /\ {} by A14,YELLOW_1:17
                        .= f.(z "/\" y) by A2,A15;
+      end;
       end;
         inf (f.:{z,y}) = f.z "/\" f.y by A5,YELLOW_0:40
                    .= f.inf {z,y} by A7,YELLOW_0:40;
@@ -1572,24 +1613,28 @@ A18:   now per cases by A4,TARSKI:def 2;
         then A20: z "\/" y <= l by YELLOW_0:22;
         thus f.z "\/" f.y = {} \/ {} by A19,YELLOW_1:17
                        .= f.(z "\/" y) by A2,A20;
+       end;
        suppose A21: f.z = {x} & f.y = {x};
         then z "\/" y >= z & not z <= l by A2,YELLOW_0:22;
         then not z "\/" y <= l by ORDERS_1:26;
         then A22: not f.(z "\/" y) = {} by A2;
         thus f.z "\/" f.y = {x} \/ {x} by A21,YELLOW_1:17
                        .= f.(z "\/" y) by A4,A22,TARSKI:def 2;
+       end;
        suppose A23: f.z = {} & f.y = {x};
         then z "\/" y >= y & not y <= l by A2,YELLOW_0:22;
         then not z "\/" y <= l by ORDERS_1:26;
         then A24: not f.(z "\/" y) = {} by A2;
         thus f.z "\/" f.y = {} \/ {x} by A23,YELLOW_1:17
                        .= f.(z "\/" y) by A4,A24,TARSKI:def 2;
+       end;
        suppose A25: f.z = {x} & f.y = {};
         then z "\/" y >= z & not z <= l by A2,YELLOW_0:22;
         then not z "\/" y <= l by ORDERS_1:26;
         then A26: not f.(z "\/" y) = {} by A2;
         thus f.z "\/" f.y = {x} \/ {} by A25,YELLOW_1:17
                        .= f.(z "\/" y) by A4,A26,TARSKI:def 2;
+      end;
       end;
         sup (f.:{z,y}) = f.z "\/" f.y by A16,YELLOW_0:41
                    .= f.sup {z,y} by A18,YELLOW_0:41;
@@ -1622,6 +1667,7 @@ A30:  for a being Element of L ex b being Element of BoolePoset {x} st P[a,b]
        then reconsider b as Element of BoolePoset {x};
          a <= l iff b = {} by A31;
        hence thesis;
+      end;
       suppose A32: not a <= l;
        set b = {x};
          b in the carrier of BoolePoset {x} by A29,TARSKI:def 2;
@@ -1629,10 +1675,11 @@ A30:  for a being Element of L ex b being Element of BoolePoset {x} st P[a,b]
          a <= l iff b = {} by A32;
        hence thesis;
       end;
+      end;
       hence thesis;
      end;
     consider f being map of L,BoolePoset {x} such that
-A33:  for p be Element of L holds P[p, f.p] from NonUniqExMD(A30);
+A33:  for p be Element of L holds P[p, f.p] from YELLOW_2:sch 4(A30);
    dom f = the carrier of L & rng f c= the carrier of BoolePoset {x}
                                                 by FUNCT_2:def 1;
 then A34: f.:{z,y} = {f.z,f.y} by FUNCT_1:118;
@@ -1907,7 +1954,8 @@ A3: the carrier of BoolePoset H = the carrier of InclPoset bool H
   deffunc F(set) = {f where f is Element of H: f.$1 = 1};
   consider F being Function such that
 A4: dom F = the carrier of L and
-A5: for x being set st x in the carrier of L holds F.x = F(x) from Lambda;
+A5: for x being set st x in the carrier of L holds F.x = F(x) from
+FUNCT_1:sch 3;
      rng F c= the carrier of BoolePoset H
    proof
     let y; assume y in rng F;
@@ -2025,6 +2073,7 @@ A32:  f1.y <= Top BoolePoset {{}} by YELLOW_0:45;
       then f1.(x "\/" y) = (f1.x)"\/"(f1.y) by A30,WAYBEL_0:def 31
        .= 1 by A28,A31,A32,YELLOW_0:24;
       hence thesis by A28;
+      end;
       suppose p in {f where f is Element of H: f.y = 1};
       then consider f1 be Element of H such that A33: f1 = p & f1.y = 1;
         f1 in H;
@@ -2043,6 +2092,7 @@ A37:  f1.x <= Top BoolePoset {{}} by YELLOW_0:45;
       then f1.(x "\/" y) = (f1.y)"\/"(f1.x) by A35,WAYBEL_0:def 31
         .= 1 by A33,A36,A37,YELLOW_0:24;
       hence thesis by A33;
+     end;
      end;
 A38: {f where f is Element of H: f.(x "\/" y) = 1} c=
   {f where f is Element of H: f.x = 1} \/ {f where f is Element of H: f.y = 1}
@@ -2113,6 +2163,7 @@ then A54:  CH.l1 = 0 or CH.l1 = 1 by A53,TARSKI:def 2;
       hence contradiction by A52,Th32;
      end;
      hence contradiction by A48,A50,A52,A54,Th32;
+     end;
      suppose not l2 <= l1;
      then consider p be Element of L such that
 A55:  p in PRIME L & l1 <= p & not l2 <= p by A1,Th17;
@@ -2128,6 +2179,7 @@ then A57:  CH.l2 = 0 or CH.l2 = 1 by A56,TARSKI:def 2;
       hence contradiction by A55,Th32;
      end;
      hence contradiction by A48,A51,A55,A57,Th32;
+     end;
      end;
      hence thesis;
     end;
@@ -2264,7 +2316,7 @@ then X c= PRIME L~ by TARSKI:def 3;
   consider f being Function such that
 A6: dom f = the carrier of L and
 A7: for e be set st e in the carrier of L holds P[e, f.e]
-     from NonUniqFuncEx(A2);
+     from ZFREFLE1:sch 1(A2);
 A8:l = sup waybelow l by WAYBEL_3:def 5;
 A9: waybelow l c= {sup X where X is Subset of L :
      X in rng f & sup X in waybelow l}
@@ -2291,7 +2343,7 @@ A14: e = sup X & X in rng f & sup X in waybelow l;
    end;
    then
 A15:l = "\/"({sup X where X is Subset of L : P[X]}, L) by A8,A9,XBOOLE_0:def 10
-     .= "\/"(union {X where X is Subset of L : P[X]}, L) from Sup_of_Sups;
+     .= "\/"(union {X where X is Subset of L : P[X]}, L) from YELLOW_3:sch 6;
 set Z = union {X where X is Subset of L : X in rng f & sup X in waybelow l};
 A16: ex_sup_of Z,L by YELLOW_0:17;
 A17: ex_sup_of ((waybelow l) /\ PRIME(L~)),L by YELLOW_0:17;
@@ -2383,14 +2435,16 @@ A17:      k1 in dom (F.j) & a = F.j.k1 by A14,FUNCT_1:def 5;
          reconsider k1 as Element of K.j by A17,FUNCT_2:def 1;
            [p,(F.j).k1] in the InternalRel of L by A16,A17,ORDERS_1:def 9;
          hence thesis;
+        end;
         suppose a in {F.j.k};
          then a = F.j.k by TARSKI:def 1;
          then [p,(F.j).k] in the InternalRel of L by A16,ORDERS_1:def 9;
          hence thesis;
        end;
+       end;
      consider f1 being Function such that
 A18:    dom f1 = J and
-A19:    for j being set st j in J holds P[j, f1.j] from NonUniqFuncEx(A10);
+A19:    for j being set st j in J holds P[j, f1.j] from ZFREFLE1:sch 1(A10);
        now let g be set; assume A20: g in dom f1;
         F.g is Function;
       then g in F"SubFuncs rng F by A5,A18,A20,FUNCT_6:28;

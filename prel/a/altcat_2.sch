@@ -6,10 +6,6 @@ SUBSET_1
 RELAT_1
 FUNCT_1
 #
-OnSingletons
-DomOnSingletons
-ValOnSingletons
-#
 M1 W1 ;;M1 ;;
 êËM2 F1 ;;;K4 B1 F2 B1 ;;P1 B1 ;M1 V2 ;V4 ;;;
 #

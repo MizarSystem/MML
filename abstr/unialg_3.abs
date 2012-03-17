@@ -29,9 +29,21 @@ definition let U0;
      for U1 be set st U1 in it holds U1 is SubAlgebra of U0;
 end;
 
-definition let U0;
+
+registration let U0;
  cluster non empty SubAlgebra-Family of U0;
+  existence
+   proof
+    consider U1;
+      for U2 be set st
+        U2 in { U1 } holds
+        U2 is SubAlgebra of U0 by TARSKI:def 1;
+    then reconsider U00 = { U1 } as SubAlgebra-Family of U0 by Def1;
+    take U00;
+    thus thesis;
+   end;
 end;
+
 
 definition let U0;
   redefine func Sub(U0) -> non empty SubAlgebra-Family of U0;
@@ -40,10 +52,12 @@ let U00 be non empty SubAlgebra-Family of U0;
   mode Element of U00 -> SubAlgebra of U0;
 end;
 
+
 definition let U0;
  redefine func UniAlg_join(U0) -> BinOp of Sub(U0);
   func UniAlg_meet(U0) -> BinOp of Sub(U0);
 end;
+
 
 definition let U0;
  let u be Element of Sub(U0);
@@ -53,11 +67,13 @@ definition let U0;
                                         u = U1 & it = the carrier of U1;
 end;
 
+
 definition let U0;
  func Carr U0 -> Function of Sub(U0), bool the carrier of U0 means
 :: UNIALG_3:def 3
   for u being Element of Sub(U0) holds it.u = carr u;
 end;
+
 
 theorem :: UNIALG_3:1
  for u being set holds
@@ -82,10 +98,26 @@ theorem :: UNIALG_3:6
  for U0 be with_const_op Universal_Algebra
   for U1 be SubAlgebra of U0 holds Constants(U0) = Constants(U1);
 
-definition
+registration
  let U0 be with_const_op Universal_Algebra;
  cluster -> with_const_op SubAlgebra of U0;
+  coherence
+   proof
+    let U1 be SubAlgebra of U0;
+    reconsider U2 = U1 as Universal_Algebra;
+A1: Constants(U2) = { a where a is Element of U2:
+                       ex o be operation of U2 st arity o = 0 & a in rng o}
+                                                        by UNIALG_2:def 11;
+    consider u be Element of Constants(U2);
+      Constants(U2) = Constants (U0) by Th6;
+    then u in Constants(U2);
+    then consider u1 be Element of U2 such that
+A2:               u = u1 &
+                  ex o be operation of U2 st arity o = 0 & u1 in rng o by A1;
+    thus thesis by A2,UNIALG_2:def 12;
+   end;
   end;
+
 
 theorem :: UNIALG_3:7
    for U0 be with_const_op Universal_Algebra
@@ -97,6 +129,7 @@ definition let U0;
   for u being Element of Sub(U0),
      U1 being SubAlgebra of U0 st u = U1 holds it.u = the carrier of U1;
 end;
+
 
 theorem :: UNIALG_3:8
    for H being strict SubAlgebra of U0
@@ -138,6 +171,7 @@ definition
                                 the carrier of it = meet ((Carr U0).:H);
 end;
 
+
 theorem :: UNIALG_3:15
  for U0 being with_const_op Universal_Algebra
   for l1,l2 being Element of UnSubAlLattice(U0),
@@ -166,10 +200,12 @@ theorem :: UNIALG_3:19
  for U0 being with_const_op strict Universal_Algebra holds
                                    UnSubAlLattice(U0) is bounded;
 
-definition
+registration
   let U0 be with_const_op strict Universal_Algebra;
   cluster UnSubAlLattice U0 -> bounded;
+  coherence by Th19;
 end;
+
 
 theorem :: UNIALG_3:20
  for U0 being with_const_op strict Universal_Algebra
@@ -211,6 +247,7 @@ definition
                       H = F.: the carrier of U1 holds
                                                it.U1 = GenUnivAlg(H);
   end;
+
 
 theorem :: UNIALG_3:26
    for U0 being with_const_op strict Universal_Algebra

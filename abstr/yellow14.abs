@@ -41,9 +41,17 @@ theorem :: YELLOW14:2
 theorem :: YELLOW14:3
  for f being Function, a, b being set holds (f +* (a .--> b)).a = b;
 
-definition
+registration
  cluster strict empty RelStr;
+existence
+  proof
+    consider a being Relation of {};
+    take RelStr (#{},a#);
+    thus RelStr (#{},a#) is strict;
+    thus the carrier of RelStr (#{},a#) is empty;
+  end;
 end;
+
 
 theorem :: YELLOW14:4
  for S being empty 1-sorted, T being 1-sorted, f being map of S, T st
@@ -68,50 +76,115 @@ definition let S be non empty reflexive RelStr, T be non empty RelStr,
     for X being non empty directed Subset of S holds f preserves_sup_of X;
 end;
 
+
 definition let R be 1-sorted, N be NetStr over R;
  attr N is Function-yielding means
 :: YELLOW14:def 2
   the mapping of N is Function-yielding;
 end;
 
-definition
+
+registration
  cluster strict non empty constituted-Functions 1-sorted;
+existence
+  proof
+    take A = 1-sorted (#{{}}#);
+    thus A is strict non empty;
+    let a be Element of A;
+    thus a is Function by TARSKI:def 1;
+  end;
 end;
 
-definition
+
+registration
  cluster strict non empty constituted-Functions RelStr;
+existence
+  proof
+    take A = RelStr (#{{}}, id {{}}#);
+    thus A is strict non empty;
+    let a be Element of A;
+    thus a is Function by TARSKI:def 1;
+  end;
 end;
 
-definition let R be constituted-Functions 1-sorted;
+
+registration let R be constituted-Functions 1-sorted;
  cluster -> Function-yielding NetStr over R;
+coherence
+  proof
+    let N be NetStr over R;
+    let x be set;
+    assume x in dom the mapping of N;
+then (the mapping of N).x in rng the mapping of N by FUNCT_1:def 5;
+    hence (the mapping of N).x is Function by MONOID_0:def 1;
+  end;
 end;
 
-definition let R be constituted-Functions 1-sorted;
+
+registration let R be constituted-Functions 1-sorted;
  cluster strict Function-yielding NetStr over R;
+existence
+  proof
+    take A = NetStr (#the carrier of R, id the carrier of R,
+                     id the carrier of R#);
+    thus A is strict;
+    let x be set;
+    assume
+A1:   x in dom the mapping of A;
+    then (the mapping of A).x = x by FUNCT_1:35;
+    hence (the mapping of A).x is Function by A1,MONOID_0:def 1;
+  end;
 end;
 
-definition let R be non empty constituted-Functions 1-sorted;
+
+registration let R be non empty constituted-Functions 1-sorted;
  cluster strict non empty Function-yielding NetStr over R;
+existence
+  proof
+    take A = NetStr (#the carrier of R, id the carrier of R,
+                     id the carrier of R#);
+    thus A is strict non empty;
+    let x be set;
+    assume
+A1:   x in dom the mapping of A;
+    then (the mapping of A).x = x by FUNCT_1:35;
+    hence (the mapping of A).x is Function by A1,MONOID_0:def 1;
+  end;
 end;
 
-definition let R be constituted-Functions 1-sorted,
+
+registration let R be constituted-Functions 1-sorted,
                N be Function-yielding NetStr over R;
  cluster the mapping of N -> Function-yielding;
+coherence by Def2;
 end;
 
-definition let R be non empty constituted-Functions 1-sorted;
+
+registration let R be non empty constituted-Functions 1-sorted;
  cluster strict Function-yielding net of R;
+existence
+  proof
+    consider N being net of R;
+    consider p being Element of R;
+    take N --> p;
+    thus thesis;
+  end;
 end;
 
-definition let S be non empty 1-sorted,
+
+registration let S be non empty 1-sorted,
                N be non empty NetStr over S;
  cluster rng the mapping of N -> non empty;
+coherence;
 end;
 
-definition let S be non empty 1-sorted,
+
+registration let S be non empty 1-sorted,
                N be non empty NetStr over S;
  cluster rng netmap (N,S) -> non empty;
+coherence;
 end;
+
 
 theorem :: YELLOW14:8
    for A, B, C being non empty RelStr, f being map of B, C,
@@ -124,10 +197,19 @@ theorem :: YELLOW14:9
      x, y being Element of ContMaps(S,T) st x = f & y = g holds
   x <= y iff f <= g;
 
-definition let I be set,
+registration let I be set,
                R be non empty RelStr;
  cluster -> Function-like Relation-like Element of R |^ I;
+coherence
+  proof
+    let x be Element of R |^ I;
+      R |^ I = product (I --> R) by YELLOW_1:def 5;
+    then reconsider y = x as Element of product (I --> R);
+      y is Function;
+    hence thesis;
+  end;
 end;
+
 
 definition let I be non empty set,
                R be non empty RelStr,
@@ -136,15 +218,18 @@ definition let I be non empty set,
  redefine func f.i -> Element of R;
 end;
 
+
 begin  :: Some properties of isomorphism between relational structures
 
 theorem :: YELLOW14:10
  for S, T being RelStr, f being map of S, T st f is isomorphic holds
   f is onto;
 
-definition let S, T be RelStr;
+registration let S, T be RelStr;
  cluster isomorphic -> onto map of S, T;
+coherence by Th10;
 end;
+
 
 theorem :: YELLOW14:11
  for S, T being non empty RelStr, f being map of S, T st f is isomorphic holds
@@ -161,9 +246,11 @@ theorem :: YELLOW14:13
 theorem :: YELLOW14:14
  for L being RelStr st L is empty holds L is bounded;
 
-definition
+registration
  cluster empty -> bounded RelStr;
+coherence by Th14;
 end;
+
 
 theorem :: YELLOW14:15
    for S, T being RelStr st S, T are_isomorphic & S is lower-bounded
@@ -192,10 +279,13 @@ theorem :: YELLOW14:19
 theorem :: YELLOW14:20
    for T being non empty TopSpace holds T, the TopStruct of T are_homeomorphic;
 
-definition let T be Scott (reflexive non empty TopRelStr);
+registration let T be Scott (reflexive non empty TopRelStr);
  cluster open -> inaccessible upper Subset of T;
+coherence by WAYBEL11:def 4;
  cluster inaccessible upper -> open Subset of T;
+coherence by WAYBEL11:def 4;
 end;
+
 
 theorem :: YELLOW14:21
    for T being TopStruct, x, y being Point of T,
@@ -251,6 +341,7 @@ definition let I be non empty set,
  redefine func x.i -> Element of T;
 end;
 
+
 theorem :: YELLOW14:30
  for M being non empty set,
      J being TopSpace-yielding non-Empty ManySortedSet of M,
@@ -282,10 +373,12 @@ theorem :: YELLOW14:35
    for X, Y being non empty TopSpace, f being map of X, Y st
   corestr f is continuous holds f is continuous;
 
-definition let X be non empty TopSpace,
+registration let X be non empty TopSpace,
                Y be non empty SubSpace of X;
  cluster incl Y -> continuous;
+coherence by TMAP_1:98;
 end;
+
 
 theorem :: YELLOW14:36
    for T being non empty TopSpace, f being map of T, T st f*f = f
@@ -301,10 +394,17 @@ theorem :: YELLOW14:38
    for i being Element of M holds J.i is T_0 TopSpace holds
  product J is T_0;
 
-definition let I be non empty set,
+registration let I be non empty set,
                T be non empty T_0 TopSpace;
  cluster product (I --> T) -> T_0;
+coherence
+  proof
+      for i being Element of I holds (I --> T).i is T_0 TopSpace by FUNCOP_1:13
+;
+    hence thesis by Th38;
+  end;
 end;
+
 
 theorem :: YELLOW14:39
  for M being non empty set,
@@ -312,7 +412,14 @@ theorem :: YELLOW14:39
    for i being Element of M holds J.i is being_T1 TopSpace-like holds
  product J is_T1;
 
-definition let I be non empty set,
+registration let I be non empty set,
                T be non empty being_T1 TopSpace;
  cluster product (I --> T) -> being_T1;
+coherence
+  proof
+      for i being Element of I holds (I --> T).i is being_T1 TopSpace-like
+      by FUNCOP_1:13;
+    hence thesis by Th39;
+  end;
 end;
+

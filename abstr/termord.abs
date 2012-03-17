@@ -26,14 +26,28 @@ environ
 
 begin :: Preliminaries
 
-definition
+registration
 cluster non trivial LoopStr;
+existence
+ proof
+ consider R being Field;
+ take R;
+ thus thesis;
+ end;
 end;
 
-definition
+
+registration
 cluster add-associative right_complementable right_zeroed
         (non trivial LoopStr);
+existence
+ proof
+ consider F being Field;
+ take F;
+ thus thesis;
+ end;
 end;
+
 
 definition
 let X be set,
@@ -42,6 +56,7 @@ attr b is non-zero means
 :: TERMORD:def 1
     b <> EmptyBag X;
 end;
+
 
 theorem :: TERMORD:1
 for X being set,
@@ -55,21 +70,226 @@ for n being Ordinal,
     p being Series of n, L
  holds 0_(n,L) *' p = 0_(n,L);
 
-definition
+registration
 let n be Ordinal,
     L be add-associative right_complementable right_zeroed
          unital distributive (non empty doubleLoopStr),
     m1,m2 be Monomial of n,L;
 cluster m1 *' m2 -> monomial-like;
+coherence
+ proof
+ per cases;
+ suppose Support(m1*'m2) = {};
+   hence thesis by POLYNOM7:6;
+ end;
+ suppose A1: Support(m1*'m2) <> {};
+     now per cases;
+   case A2: Support(m1) <> {} & Support(m2) <> {};
+   then consider mb1 being bag of n such that
+   A3: Support(m1) = {mb1} by POLYNOM7:6;
+     mb1 in Support m1 by A3,TARSKI:def 1;
+   then A4: m1.mb1 <> 0.L by POLYNOM1:def 9;
+   A5: now let b be bag of n;
+        assume A6: b <> mb1;
+        consider b' being bag of n such that
+        A7: for b being bag of n st b <> b' holds m1.b = 0.L
+            by POLYNOM7:def 4;
+          b' = mb1 by A4,A7;
+        hence m1.b = 0.L by A6,A7;
+        end;
+   consider mb2 being bag of n such that
+   A8: Support(m2) = {mb2} by A2,POLYNOM7:6;
+     mb2 in Support m2 by A8,TARSKI:def 1;
+   then A9: m2.mb2 <> 0.L by POLYNOM1:def 9;
+   A10: now let b be bag of n;
+        assume A11: b <> mb2;
+        consider b' being bag of n such that
+        A12: for b being bag of n st b <> b' holds m2.b = 0.L
+            by POLYNOM7:def 4;
+          b' = mb2 by A9,A12;
+        hence m2.b = 0.L by A11,A12;
+        end;
+   consider b being Element of Support(m1*'m2);
+   A13: b in Support(m1*'m2) by A1;
+   then b is Element of Bags n;
+   then reconsider b as bag of n;
+   consider s being FinSequence of the carrier of L such that
+   A14: (m1*'m2).b = Sum s &
+       len s = len decomp b &
+       for k being Nat st k in dom s
+       ex b1,b2 being bag of n st (decomp b)/.k = <*b1, b2*> &
+                                  s/.k = m1.b1*m2.b2 by POLYNOM1:def 26;
+   A15: dom s = Seg(len decomp b) by A14,FINSEQ_1:def 3
+            .= dom(decomp b) by FINSEQ_1:def 3;
+   A16: now assume A17: b <> mb1 + mb2;
+       A18: now let k be Nat;
+            assume A19: k in dom s;
+            then consider b1,b2 being bag of n such that
+            A20: (decomp b)/.k = <*b1, b2*> & s/.k = m1.b1*m2.b2 by A14;
+            consider b1',b2' being bag of n such that
+            A21: (decomp b)/.k = <*b1',b2'*> & b = b1'+b2'
+                by A15,A19,POLYNOM1:72;
+            A22: b1 = <*b1', b2'*>.1 by A20,A21,FINSEQ_1:61
+               .= b1' by FINSEQ_1:61;
+            A23: b2 = <*b1', b2'*>.2 by A20,A21,FINSEQ_1:61
+              .= b2' by FINSEQ_1:61;
+              now per cases by A17,A21,A22,A23;
+            case b1 <> mb1;
+              then m1.b1 = 0.L by A5;
+              hence m1.b1*m2.b2 = 0.L by BINOM:1;
+            end;
+            case b2 <> mb2;
+              then m2.b2 = 0.L by A10;
+              hence m1.b1*m2.b2 = 0.L by BINOM:2;
+            end;
+            end;
+            hence s/.k = 0.L by A20;
+            end;
+         now per cases;
+       case dom s = {};
+         then s = <*>(the carrier of L) by FINSEQ_1:26;
+         hence (m1*'m2).b = 0.L by A14,RLVECT_1:60;
+       end;
+       case A24: dom s <> {};
+         consider k being Element of dom s;
+         A25: k in dom s by A24;
+           for k' being Nat st k' in dom s & k' <> k holds s/.k' = 0.L by A18;
+         then s/.k = (m1*'m2).b by A14,A25,POLYNOM2:5;
+         hence (m1*'m2).b = 0.L by A18,A25;
+       end;
+       end;
+       hence contradiction by A13,POLYNOM1:def 9;
+       end;
+     now let b' be bag of n;
+     assume A26: b' <> b;
+     consider s being FinSequence of the carrier of L such that
+     A27: (m1*'m2).b' = Sum s &
+         len s = len decomp b' &
+         for k being Nat st k in dom s
+         ex b1, b2 being bag of n st (decomp b')/.k = <*b1, b2*> &
+                                     s/.k = m1.b1*m2.b2 by POLYNOM1:def 26;
+     A28: dom s = Seg(len decomp b') by A27,FINSEQ_1:def 3
+              .= dom(decomp b') by FINSEQ_1:def 3;
+     A29: now let k be Nat;
+         assume A30: k in dom s;
+         then consider b1, b2 being bag of n such that
+         A31: (decomp b')/.k = <*b1,b2*> & s/.k = m1.b1*m2.b2 by A27;
+         consider b1',b2' being bag of n such that
+         A32: (decomp b')/.k = <*b1',b2'*> & b' = b1'+b2' by A28,A30,POLYNOM1:
+72;
+         A33: b1 = <*b1', b2'*>.1 by A31,A32,FINSEQ_1:61
+               .= b1' by FINSEQ_1:61;
+         A34: b2 = <*b1', b2'*>.2 by A31,A32,FINSEQ_1:61
+               .= b2' by FINSEQ_1:61;
+           now per cases by A16,A26,A32,A33,A34;
+         case b1 <> mb1;
+           then m1.b1 = 0.L by A5;
+           hence m1.b1*m2.b2 = 0.L by BINOM:1;
+         end;
+         case b2 <> mb2;
+           then m2.b2 = 0.L by A10;
+           hence m1.b1*m2.b2 = 0.L by BINOM:2;
+         end;
+         end;
+         hence s/.k = 0.L by A31;
+         end;
+       now per cases;
+     case dom s = {};
+       then s = <*>(the carrier of L) by FINSEQ_1:26;
+       hence (m1*'m2).b' = 0.L by A27,RLVECT_1:60;
+     end;
+     case A35: dom s <> {};
+       consider k being Element of dom s;
+       A36: k in dom s by A35;
+         for k' being Nat st k' in dom s & k' <> k holds s/.k' = 0.L by A29;
+       then s/.k = (m1*'m2).b' by A27,A36,POLYNOM2:5;
+       hence (m1*'m2).b' = 0.L by A29,A36;
+      end;
+      end;
+     hence (m1*'m2).b' = 0.L;
+     end;
+   hence thesis by POLYNOM7:def 4;
+   end;
+   case A37: Support(m1) = {} or Support(m2) = {};
+     now per cases by A37;
+   case Support(m1) = {};
+     then m1 = 0_(n,L) by POLYNOM7:1;
+     hence thesis by Th2;
+   end;
+   case Support(m2) = {};
+     then m2 = 0_(n,L) by POLYNOM7:1;
+     hence thesis by POLYNOM1:87;
+   end;
+   end;
+   hence thesis;
+   end;
+   end;
+ hence thesis;
+ end;
+ end;
 end;
 
-definition
+
+registration
 let n be Ordinal,
     L be add-associative right_complementable
          right_zeroed distributive (non empty doubleLoopStr),
     c1,c2 be ConstPoly of n,L;
 cluster c1 *' c2 -> Constant;
+coherence
+ proof
+ set p = c1 *' c2;
+   now let b be bag of n;
+   assume A1: b <> EmptyBag n;
+   consider s being FinSequence of the carrier of L such that
+   A2: p.b = Sum s &
+      len s = len decomp b &
+      for k being Nat st k in dom s
+      ex b1, b2 being bag of n st (decomp b)/.k = <*b1, b2*> &
+                                  s/.k = c1.b1*c2.b2 by POLYNOM1:def 26;
+
+   A3: dom s = Seg(len decomp b) by A2,FINSEQ_1:def 3
+            .= dom(decomp b) by FINSEQ_1:def 3;
+   A4: now let k be Nat;
+       assume A5: k in dom s;
+       then consider b1, b2 being bag of n such that
+       A6: (decomp b)/.k = <*b1,b2*> & s/.k = c1.b1*c2.b2 by A2;
+       consider b1',b2' being bag of n such that
+       A7: (decomp b)/.k = <*b1',b2'*> & b = b1'+b2' by A3,A5,POLYNOM1:72;
+       A8: b1 = <*b1', b2'*>.1 by A6,A7,FINSEQ_1:61
+             .= b1' by FINSEQ_1:61;
+         b2 = <*b1', b2'*>.2 by A6,A7,FINSEQ_1:61
+         .= b2' by FINSEQ_1:61;
+       then A9: b1 <> EmptyBag n or b2 <> EmptyBag n by A1,A7,A8,POLYNOM1:57;
+         now per cases by A9,POLYNOM7:def 8;
+       case c1.b1 = 0.L;
+         hence s/.k = 0.L by A6,BINOM:1;
+       end;
+       case c2.b2 = 0.L;
+         hence s/.k = 0.L by A6,BINOM:2;
+       end;
+       end;
+       hence s/.k = 0.L;
+       end;
+     now per cases;
+   case dom s = {};
+     then s = <*>(the carrier of L) by FINSEQ_1:26;
+     hence p.b = 0.L by A2,RLVECT_1:60;
+   end;
+   case A10: dom s <> {};
+     consider k being Element of dom s;
+     A11: k in dom s by A10;
+       for k' being Nat st k' in dom s & k' <> k holds s/.k' = 0.L by A4;
+     then Sum s = s/.k by A11,POLYNOM2:5;
+     hence p.b = 0.L by A2,A4,A11;
+   end;
+   end;
+   hence p.b = 0.L;
+   end;
+ hence thesis by POLYNOM7:def 8;
+ end;
 end;
+
 
 theorem :: TERMORD:3
 for n being Ordinal,
@@ -88,16 +308,38 @@ holds (a * a') _(n,L) = (a _(n,L)) *' (a' _(n,L));
 
 begin
 
-definition
+registration
 let n be Ordinal;
 cluster admissible connected TermOrder of n;
+existence
+ proof
+ set T = LexOrder n;
+ take T;
+   now let x,y be set;
+   assume x in field T & y in field T & x <> y;
+   then reconsider b1 = x, b2 = y as bag of n by Lm1;
+     b1 <=' b2 or b2 <=' b1 by POLYNOM1:49;
+   then [b1,b2] in BagOrder n or [b2,b1] in BagOrder n by POLYNOM1:def 16;
+   hence [x,y] in T or [y,x] in T;
+   end;
+ then T is_connected_in field T by RELAT_2:def 6;
+ hence thesis by RELAT_2:def 14;
+ end;
 end;
 
-definition
+
+registration
 ::: theorem 5.5 (ii), p. 190
 let n be Nat;
 cluster -> well_founded (admissible TermOrder of n);
+coherence
+ proof
+ let T be admissible TermOrder of n;
+   T is well-ordering by BAGORDER:35;
+ hence thesis by WELLORD1:def 4;
+ end;
 end;
+
 
 definition
 let n be Ordinal,
@@ -108,6 +350,7 @@ pred b <= b',T means
   [b,b'] in T;
 end;
 
+
 definition
 let n be Ordinal,
     T be TermOrder of n,
@@ -116,6 +359,7 @@ pred b < b',T means
 :: TERMORD:def 3
   b <= b',T & b <> b';
 end;
+
 
 definition
 let n be Ordinal,
@@ -216,6 +460,7 @@ func HT(p,T) -> Element of Bags n means
    for b being bag of n st b in Support p holds b <= it,T);
 end;
 
+
 definition
 ::: definition 5.15, p. 194
 let n be Ordinal,
@@ -226,6 +471,7 @@ func HC(p,T) -> Element of L equals
 :: TERMORD:def 7
   p.(HT(p,T));
 end;
+
 
 definition
 ::: definition 5.15, p. 194
@@ -238,13 +484,41 @@ func HM(p,T) -> Monomial of n,L equals
   Monom(HC(p,T),HT(p,T));
 end;
 
-definition
+registration
 let n be Ordinal,
     T be connected TermOrder of n,
     L be non trivial ZeroStr,
     p be non-zero Polynomial of n,L;
 cluster HM(p,T) -> non-zero;
+coherence
+ proof
+ set O = T;
+   now per cases;
+ case HC(p,O) <> 0.L;
+   then HT(p,O) in Support(HM(p,O)) by Lm9;
+   then HM(p,O) <> 0_(n,L) by POLYNOM7:1;
+   hence thesis by POLYNOM7:def 2;
+ end;
+ case HC(p,O) = 0.L;
+   then p = 0_(n,L) by Lm7;
+   hence thesis by POLYNOM7:def 2;
+ end;
+ end;
+ hence thesis;
+ end;
 cluster HC(p,T) -> non-zero;
+coherence
+ proof
+ set O = T, a = HC(p,O);
+   now assume a = 0.L;
+   then p.(HT(p,O)) = 0.L by Def7;
+   then not(HT(p,O)) in Support p by POLYNOM1:def 9;
+   then Support p = {} by Def6;
+   then p = 0_(n,L) by POLYNOM7:1;
+   hence contradiction by POLYNOM7:def 2;
+ end;
+ hence thesis by RLVECT_1:def 13;
+ end;
 end;
 
 theorem :: TERMORD:17

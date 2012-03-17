@@ -28,11 +28,6 @@ PBOOLE
 REALSET1
 MSUALG_1
 #
-FraenkelFinIm
-MSSLambda2Part
-LambdaRecCorrD
-LambdaMSFD
-#
 M1 W11 ;V20 ;;M1 ;;
 V20 ËM3 F1 ;;;F2 B1 ;P1 B1 ;;;
 #

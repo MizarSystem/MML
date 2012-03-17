@@ -32,10 +32,19 @@ begin
   {x where x is Subset of T: x is open closed};
  end;
 
- definition
+
+ registration
  let T be non empty TopSpace;
  cluster OpenClosedSet(T) -> non empty;
+ coherence
+ proof
+    set A= {x where x is Subset of T : x is open closed};
+      {} T is open & {} T is closed by TOPS_1:22,52;
+    then {} T in A;
+    hence thesis by Def1;
+  end;
  end;
+
 
 canceled;
 
@@ -56,6 +65,7 @@ definition let T;let C,D be Element of OpenClosedSet(T);
  redefine func C /\ D -> Element of OpenClosedSet(T);
  end;
 
+
 definition
  let T;
  func T_join T -> BinOp of OpenClosedSet(T) means
@@ -67,6 +77,7 @@ definition
  for A,B being Element of OpenClosedSet(T) holds
               it.(A,B) = A /\ B;
 end;
+
 
 theorem :: LOPCLSET:5
 for x,y be Element of
@@ -99,6 +110,7 @@ theorem :: LOPCLSET:10
       LattStr(#OpenClosedSet(T),T_join T,T_meet T#);
     end;
 
+
 theorem :: LOPCLSET:11
  for T being non empty TopSpace, x,y being Element of
     OpenClosedSetLatt(T) holds x"\/"y = x \/ y;
@@ -121,9 +133,18 @@ theorem :: LOPCLSET:16
 
 reserve x,y,X,Y for set;
 
-definition
+registration
  cluster non trivial B_Lattice;
+ existence
+ proof
+  consider T;
+   reconsider E = OpenClosedSetLatt(T) as B_Lattice by Th14;
+   reconsider a = [#] T, b = {} T as Element of E by Th15,Th16;
+  take E,a,b;
+  thus a <> b;
+ end;
 end;
+
 
 reserve BL for non trivial B_Lattice,
         a,b,c,p,q for Element of BL,
@@ -135,9 +156,24 @@ definition let BL;
  {F : F is_ultrafilter};
 end;
 
-definition let BL;
+
+registration let BL;
 cluster ultraset BL -> non empty;
+  coherence
+   proof
+    set US = {F: F is_ultrafilter};
+    consider p1,p2 being Element of BL such that
+     A1:p1<>p2 by REALSET1:def 20;
+      p1 <> Bottom BL or p2 <> Bottom BL by A1;
+    then consider p being Element of BL such that A2:p<>Bottom
+BL;
+   consider H being Filter of BL such that
+    A3: p in H & H is_ultrafilter by A2,FILTER_0:24;
+     H in US by A3;
+   hence thesis by Def5;
+  end;
 end;
+
 
 canceled;
 
@@ -154,6 +190,7 @@ func UFilter BL -> Function means
     for a being Element of BL holds
 it.a = {UF:  UF is_ultrafilter & a in UF };
 end;
+
 
 theorem :: LOPCLSET:20
   x in UFilter BL.a iff (ex F st F=x & F is_ultrafilter & a in F);
@@ -174,15 +211,24 @@ definition let BL;
   redefine func UFilter BL -> Function of the carrier of BL, bool ultraset BL;
 end;
 
+
 definition let BL;
  func StoneR BL -> set equals
 :: LOPCLSET:def 7
      rng UFilter BL;
 end;
 
-definition let BL;
+
+registration let BL;
  cluster StoneR BL -> non empty;
+        coherence
+         proof
+       A1: StoneR BL = rng UFilter BL by Def7;
+            dom UFilter BL = the carrier of BL by Def6;
+          hence thesis by A1,RELAT_1:65;
+        end;
 end;
+
 
 theorem :: LOPCLSET:25
 StoneR BL c= bool ultraset BL;
@@ -198,10 +244,17 @@ the topology of it =
   {union A where A is Subset-Family of ultraset BL : A c= StoneR BL };
 end;
 
-definition
+
+registration
   let BL;
  cluster StoneSpace BL -> non empty;
+ coherence
+  proof
+      the carrier of StoneSpace BL =ultraset BL by Def8;
+   hence the carrier of StoneSpace BL is non empty;
+  end;
 end;
+
 
 theorem :: LOPCLSET:27
   (F is_ultrafilter & not F in UFilter BL.a) implies not a in F;
@@ -229,9 +282,11 @@ theorem :: LOPCLSET:31
 theorem :: LOPCLSET:32
   for X being non empty set ex Y being Finite_Subset of X st Y is non empty;
 
-definition let D be non empty set;
+registration let D be non empty set;
  cluster non empty Finite_Subset of D;
+ existence by Th32;
 end;
+
 
 canceled;
 
@@ -264,6 +319,7 @@ StoneR BL = OpenClosedSet(StoneSpace BL);
 definition let BL;
 redefine func UFilter BL -> Homomorphism of BL,StoneBLattice BL;
 end;
+
 
 theorem :: LOPCLSET:41
 rng UFilter BL = the carrier of StoneBLattice BL;

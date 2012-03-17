@@ -37,9 +37,18 @@ theorem :: HILBERT3:3
  for X being trivial set, x being set st x in X
  for f being Function of X,X holds x is_a_fixpoint_of f;
 
-definition let A,B,C be set;
+registration let A,B,C be set;
  cluster -> Function-yielding Function of A, Funcs(B,C);
+ coherence
+  proof let f be Function of A, Funcs(B,C);
+   let x be set;
+   assume x in dom f;
+    then A1:   f.x in rng f by FUNCT_1:def 5;
+      rng f c= Funcs(B,C) by RELSET_1:12;
+   hence f.x is Function by A1,FUNCT_2:121;
+  end;
 end;
+
 
 theorem :: HILBERT3:4
  for f being Function-yielding Function holds SubFuncs rng f = rng f;
@@ -53,9 +62,11 @@ theorem :: HILBERT3:6
  for f being Function of A, Funcs(B,C)
   holds doms f = A --> B;
 
-definition
+registration
  cluster {} -> Function-yielding;
+ coherence proof let x be set; thus thesis; end;
 end;
+
 
  reserve n for Nat,
          p,q,r,s for Element of HP-WFF;
@@ -63,9 +74,17 @@ end;
 theorem :: HILBERT3:7
  for x being set holds ({}).x = {};
 
-definition let A be set, B be functional set;
+registration let A be set, B be functional set;
  cluster -> Function-yielding Function of A,B;
+ coherence
+  proof let f be Function of A,B, x be set;
+   assume x in dom f;
+    then A1:   f.x in rng f by FUNCT_1:def 5;
+      rng f c= B by RELSET_1:12;
+   hence f.x is Function by A1,FRAENKEL:def 1;
+  end;
 end;
+
 
 
 
@@ -102,9 +121,27 @@ theorem :: HILBERT3:14
 
 begin :: the Cartesian product of functions and the Frege function
 
-definition let f,g be one-to-one Function;
+registration let f,g be one-to-one Function;
  cluster [:f,g:] -> one-to-one;
+ coherence
+  proof let x,y be set such that
+A1: x in dom[:f,g:] & y in dom[:f,g:] and
+A2: [:f,g:].x = [:f,g:].y;
+A3: dom[:f,g:] = [:dom f, dom g:] by FUNCT_3:def 9;
+   then consider x1,x2 being set such that
+A4: x1 in dom f & x2 in dom g and
+A5: x = [x1,x2] by A1,ZFMISC_1:def 2;
+   consider y1,y2 being set such that
+A6: y1 in dom f & y2 in dom g and
+A7: y = [y1,y2] by A1,A3,ZFMISC_1:def 2;
+      [:f,g:].x = [f.x1,g.x2] & [:f,g:].y = [f.y1,g.y2]
+      by A4,A5,A6,A7,FUNCT_3:def 9;
+    then f.x1 = f.y1 & g.x2 = g.y2 by A2,ZFMISC_1:33;
+    then x1 = y1 & x2 = y2 by A4,A6,FUNCT_1:def 8;
+   hence x = y by A5,A7;
+  end;
 end;
+
 
 theorem :: HILBERT3:15
  for A,B being non empty set, C,D being set,
@@ -164,10 +201,52 @@ definition let A,B be non empty set;
  for f being Function of A,B holds it.f = Q*f*P";
 end;
 
-definition let A,B be non empty set;
+
+registration let A,B be non empty set;
  let P be Permutation of A, Q be Permutation of B;
  cluster P => Q -> bijective;
+ coherence
+  proof
+    thus P => Q is one-to-one
+     proof let x1,x2 be set;
+      assume x1 in dom(P => Q) & x2 in dom(P => Q);
+       then reconsider f1 = x1, f2 = x2 as Element of Funcs(A,B)
+           by FUNCT_2:def 1;
+      assume (P => Q).x1 = (P => Q).x2;
+       then A1:      Q*f1*P" = (P => Q).f2 by Def1 .= Q*f2*P" by Def1;
+A2:     Q*f1 = Q*f1*id A by FUNCT_2:23
+            .= Q*f1*(P"*P) by FUNCT_2:88
+            .= Q*f2*P"*P by A1,RELAT_1:55
+            .= Q*f2*(P"*P) by RELAT_1:55
+            .= Q*f2*id A by FUNCT_2:88
+            .= Q*f2 by FUNCT_2:23;
+         f1 = (id B)*f1 by FUNCT_2:23
+         .= Q"*Q*f1 by FUNCT_2:88
+         .= Q"*(Q*f2) by A2,RELAT_1:55
+         .= Q"*Q*f2 by RELAT_1:55
+         .= (id B)*f2 by FUNCT_2:88
+         .= f2 by FUNCT_2:23;
+      hence thesis;
+     end;
+    thus rng(P => Q) c= Funcs(A,B) by RELSET_1:12;
+    let x be set;
+    assume x in Funcs(A,B);
+     then x is Element of Funcs(A,B);
+     then reconsider f = x as Function of A,B;
+    dom(P => Q) = Funcs(A,B) by FUNCT_2:def 1;
+then A3:    Q"*f*P in dom(P => Q) by FUNCT_2:11;
+       (P => Q).(Q"*f*P) = Q*(Q"*f*P)*P" by Def1
+             .= Q*(Q"*f)*P*P" by RELAT_1:55
+             .= Q*Q"*f*P*P" by RELAT_1:55
+             .= (id B)*f*P*P" by FUNCT_2:88
+             .= f*P*P" by FUNCT_2:23
+             .= f*(P*P") by RELAT_1:55
+             .= f*id A by FUNCT_2:88
+             .= f by FUNCT_2:23;
+    hence x in rng(P => Q) by A3,FUNCT_1:def 5;
+  end;
 end;
+
 
 theorem :: HILBERT3:26
  for A,B being non empty set
@@ -195,6 +274,7 @@ definition
  mode SetValuation is non-empty ManySortedSet of NAT;
 end;
 
+
 reserve V for SetValuation;
 
 definition let V;
@@ -206,15 +286,41 @@ definition let V;
     & it.(p => q) = Funcs(it.p,it.q);
 end;
 
+
 definition let V,p;
  func SetVal(V,p) equals
 :: HILBERT3:def 3
   (SetVal V).p;
 end;
 
-definition let V,p;
+
+registration let V,p;
  cluster SetVal(V,p) -> non empty;
+ coherence
+  proof
+defpred P[Element of HP-WFF] means (SetVal V).$1 is non empty;
+A1: P[VERUM] by Def2;
+A2: for n holds P[prop n]
+     proof let n;
+         (SetVal V).prop n = V.n by Def2;
+      hence (SetVal V).prop n is non empty;
+     end;
+A3: for r,s st P[r] & P[s]
+      holds P[r '&' s] & P[r => s]
+     proof let r,s such that
+A4:    (SetVal V).r is non empty and
+A5:    (SetVal V).s is non empty;
+         (SetVal V).(r '&' s) = [:(SetVal V).r,(SetVal V).s:] by Def2;
+      hence (SetVal V).(r '&' s) is non empty by A4,A5,ZFMISC_1:113;
+         (SetVal V).(r => s) = Funcs((SetVal V).r,(SetVal V).s) by Def2;
+      hence (SetVal V).(r => s) is non empty by A5,FUNCT_2:11;
+     end;
+      for r holds P[r] from HILBERT2:sch 2(A1,A2,A3);
+    then (SetVal V).p is non empty;
+   hence SetVal(V,p) is non empty by Def3;
+  end;
 end;
+
 
 theorem :: HILBERT3:29
  SetVal(V,VERUM) = 1;
@@ -228,18 +334,48 @@ theorem :: HILBERT3:31
 theorem :: HILBERT3:32
  SetVal(V,p => q) = Funcs(SetVal(V,p),SetVal(V,q));
 
-definition let V,p,q;
+registration let V,p,q;
  cluster SetVal(V,p => q) -> functional;
+ coherence
+  proof let x be set;
+   assume x in SetVal(V,p => q);
+    then x in Funcs(SetVal(V,p),SetVal(V,q)) by Th32;
+   hence x is Function by FUNCT_2:121;
+  end;
 end;
 
-definition let V,p,q,r;
+
+registration let V,p,q,r;
  cluster -> Function-yielding Element of SetVal(V,p => (q => r));
+ coherence
+  proof let e be Element of SetVal(V,p => (q => r)), x be set such that
+A1: x in dom e;
+      e in SetVal(V,p => (q => r));
+    then e in Funcs(SetVal(V,p),SetVal(V,q => r)) by Th32;
+    then A2:   e is Function of SetVal(V,p),SetVal(V,q => r) by FUNCT_2:121;
+    then x in SetVal(V,p) by A1,FUNCT_2:def 1;
+    then e.x in SetVal(V,q => r) by A2,FUNCT_2:7;
+    then e.x in Funcs(SetVal(V,q),SetVal(V,r)) by Th32;
+   hence e.x is Function by FUNCT_2:121;
+  end;
 end;
 
-definition let V,p,q,r;
+
+registration let V,p,q,r;
  cluster Function-yielding Function of SetVal(V,p => q),SetVal(V,p => r);
+ existence
+  proof consider e being Function of SetVal(V,p => q),SetVal(V,p => r);
+      e is Function-yielding;
+   hence thesis;
+  end;
  cluster Function-yielding Element of SetVal(V,p => (q => r));
+ existence
+  proof consider e being Element of SetVal(V,p => (q => r));
+      e is Function-yielding;
+   hence thesis;
+  end;
 end;
+
 
 
 begin :: permuting set valuations
@@ -250,6 +386,7 @@ definition let V;
   dom it = NAT &
   for n holds it.n is Permutation of V.n;
 end;
+
 
 reserve P for Permutation of V;
 
@@ -266,11 +403,13 @@ definition let V,P;
     it.(p => q) = p' => q';
 end;
 
+
 definition let V,P,p;
  func Perm(P,p) -> Function of SetVal(V,p), SetVal(V,p) equals
 :: HILBERT3:def 6
   (Perm P).p;
 end;
+
 
 theorem :: HILBERT3:33
  Perm(P,VERUM) = id SetVal(V,VERUM);
@@ -286,9 +425,39 @@ theorem :: HILBERT3:36
    st p' = Perm(P,p) & q' = Perm(P,q)
   holds Perm(P,p => q) = p' => q';
 
-definition let V,P,p;
+registration let V,P,p;
  cluster Perm(P,p) -> bijective;
+ coherence
+  proof
+defpred P[Element of HP-WFF] means Perm(P,$1) is bijective;
+      Perm(P,VERUM) = id SetVal(V,VERUM) by Th33;
+then A1:  P[VERUM];
+A2:  for n holds P[prop n]
+    proof let n;
+A3:    SetVal(V,prop n) = V.n by Th30;
+        Perm(P,prop n) = P.n by Th34;
+     hence thesis by A3,Def4;
+    end;
+A4: for r,s st P[r] & P[s]
+        holds
+         P[r '&' s] & P[r => s]
+     proof let r,s;
+A5:    SetVal(V,r '&' s) = [:SetVal(V,r), SetVal(V,s):] by Th31;
+A6:    SetVal(V,r => s) = Funcs(SetVal(V,r),SetVal(V,s)) by Th32;
+      assume Perm(P,r) is bijective;
+       then reconsider r' = Perm(P,r) as Permutation of SetVal(V,r);
+      assume Perm(P,s) is bijective;
+       then reconsider s' = Perm(P,s) as Permutation of SetVal(V,s);
+         Perm(P,r '&' s) = [:r',s':] by Th35;
+      hence Perm(P,r '&' s) is bijective by A5,Th25;
+         Perm(P,r => s) = r' => s' by Th36;
+      hence Perm(P,r => s) is bijective by A6;
+     end;
+      for p holds P[p] from HILBERT2:sch 2(A1,A2,A4);
+   hence thesis;
+    end;
 end;
+
 
 theorem :: HILBERT3:37
  for g being Function of SetVal(V,p), SetVal(V,q)
@@ -318,9 +487,19 @@ definition let p;
    for P being Permutation of V holds x is_a_fixpoint_of Perm(P,p);
 end;
 
-definition
+
+registration
  cluster VERUM -> canonical;
+ coherence
+  proof let V;
+   take 0;
+   let P be Permutation of V;
+A1:  SetVal(V,VERUM) = 1 by Th29;
+      0 in 1 by CARD_5:1,TARSKI:def 1;
+   hence 0 is_a_fixpoint_of Perm(P,VERUM) by A1,Th3,CARD_5:1;
+  end;
 end;
+
 
 theorem :: HILBERT3:41
  p => (q => p) is canonical;
@@ -343,9 +522,14 @@ theorem :: HILBERT3:46
 theorem :: HILBERT3:47
    p in HP_TAUT implies p is canonical;
 
-definition
+registration
  cluster canonical Element of HP-WFF;
+  existence
+   proof take VERUM;
+    thus thesis;
+   end;
 end;
+
 
 
 begin :: pseudo-canonical formulae
@@ -357,9 +541,23 @@ definition let p;
     ex x being set st x is_a_fixpoint_of Perm(P,p);
 end;
 
-definition
+
+registration
  cluster canonical -> pseudo-canonical Element of HP-WFF;
+ coherence
+  proof let p;
+   assume
+A1:  p is canonical;
+   let V;
+    consider x being set such that
+A2:   for P being Permutation of V holds x is_a_fixpoint_of Perm(P,p) by A1,
+Def7;
+   let P be Permutation of V;
+   take x;
+   thus x is_a_fixpoint_of Perm(P,p) by A2;
+  end;
 end;
+
 
 theorem :: HILBERT3:48
    p => (q => p) is pseudo-canonical;

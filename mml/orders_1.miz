@@ -57,7 +57,7 @@ definition let M;
   proof
     deffunc F(set)=[:{$1},$1:];
     consider f such that A2: dom f = M and
-     A3: for X st X in M holds f.X = F(X) from Lambda;
+     A3: for X st X in M holds f.X = F(X) from FUNCT_1:sch 3;
     consider x being Element of M;
 A4:     f.x in rng f by A2,FUNCT_1:def 5;
 A5:  x in M;
@@ -104,11 +104,12 @@ and
      end;
     consider g such that A24: dom g = N and
                          A25: for X st X in N holds P[X,g.X]
-                                                        from FuncEx(A18,A22);
+                                                        from FUNCT_1:sch 2
+(A18,A22);
     deffunc FF(set)=$1`2;
     consider h such that A26: dom h = union N and
                          A27: for x st x in
- union N holds h.x = FF(x) from Lambda;
+ union N holds h.x = FF(x) from FUNCT_1:sch 3;
      A28: union M <> {} by A1,A5,Lm1;
     consider x1 such that A29: x1 in N by A4;
     consider x2 such that A30: x2 in dom f & f.x2 = x1 by A29,FUNCT_1:def 5;
@@ -165,6 +166,7 @@ end;
 
 
 
+
 reserve D,D1 for non empty set;
 
 definition let D be set;
@@ -173,7 +175,8 @@ definition let D be set;
  coherence;
 end;
 
-definition let D;
+
+registration let D;
  cluster BOOL D -> non empty;
  coherence
   proof
@@ -182,6 +185,7 @@ definition let D;
      hence thesis by Def2;
   end;
 end;
+
 
 canceled 3;
 
@@ -246,6 +250,7 @@ definition let X;
  mode Order of X is total reflexive antisymmetric transitive Relation of X;
 end;
 
+
 reserve O for Order of X;
 
 canceled 4;
@@ -291,12 +296,14 @@ definition
   #);
 end;
 
-definition
+
+registration
  let X be non empty set;
  let R be Relation of X;
  cluster RelStr(#X,R#) -> non empty;
  coherence proof thus the carrier of RelStr(#X,R#) is non empty; end;
 end;
+
 
 definition let A be RelStr;
  attr A is reflexive means
@@ -310,7 +317,8 @@ definition let A be RelStr;
   the InternalRel of A is_antisymmetric_in the carrier of A;
 end;
 
-definition
+
+registration
  cluster non empty reflexive transitive antisymmetric strict RelStr;
  existence
   proof consider A being non empty set;
@@ -328,9 +336,11 @@ A1:  field R = the carrier of L by Lm3;
   end;
 end;
 
+
 definition
  mode Poset is reflexive transitive antisymmetric RelStr;
 end;
+
 
 Lm4:
  for A being set, R being Relation of A st R is_reflexive_in A
@@ -348,7 +358,7 @@ A1: R is_reflexive_in A;
              .= A by XBOOLE_1:12;
 end;
 
-definition let A be Poset;
+registration let A be Poset;
  cluster the InternalRel of A -> total reflexive antisymmetric transitive;
  coherence
   proof set R = the InternalRel of A;
@@ -365,7 +375,8 @@ A2:  field R = the carrier of A by A1,Lm4;
   end;
 end;
 
-definition
+
+registration
  let X be set;
  let O be Order of X;
  cluster RelStr(#X,O#) -> reflexive transitive antisymmetric;
@@ -378,6 +389,7 @@ definition
           by RELAT_2:def 9,def 12,def 16;
   end;
 end;
+
 
 reserve A for non empty Poset;
 
@@ -392,15 +404,19 @@ definition let A be RelStr; let a1,a2 be Element of A;
 
  pred a1 <= a2 means
   :Def9: [a1,a2] in the InternalRel of A;
- synonym a2 >= a1;
-end;
+ end;
+notation let A be RelStr; let a1,a2 be Element of A;
+ synonym a2 >= a1 for a1 <= a2 ; end;
+
 
 definition let A be RelStr; let a1,a2 be Element of A;
  pred a1 < a2 means
   :Def10: a1 <= a2 & a1 <> a2;
  irreflexivity;
- synonym a2 > a1;
-end;
+ end;
+notation let A be RelStr; let a1,a2 be Element of A;
+ synonym a2 > a1 for a1 < a2 ; end;
+
 
 canceled 9;
 
@@ -418,6 +434,7 @@ definition let A be reflexive non empty RelStr;
  redefine pred a1 <= a2;
  reflexivity by Th24;
 end;
+
 
 theorem Th25:
  for A being antisymmetric RelStr,
@@ -514,19 +531,23 @@ definition let A be RelStr;
   :Def11: the InternalRel of A is_strongly_connected_in IT;
 end;
 
-definition let A be RelStr;
+
+registration let A be RelStr;
  cluster {}A -> strongly_connected;
  coherence proof let x1,x2; thus thesis; end;
 end;
 
-definition let A be RelStr;
+
+registration let A be RelStr;
  cluster strongly_connected Subset of A;
  existence proof take {}A; thus thesis; end;
 end;
 
+
 definition let A be RelStr;
  mode Chain of A is strongly_connected Subset of A;
 end;
+
 
 
 
@@ -567,12 +588,16 @@ A3:     a1 <= a1 & a2 <= a2;
        now per cases by A4,TARSKI:def 2;
       suppose x = a1 & y = a1;
        hence thesis by A3,Def9;
+      end;
       suppose x = a1 & y = a2;
        hence thesis by A2,Def9;
+      end;
       suppose x = a2 & y = a1;
        hence thesis by A2,Def9;
+      end;
       suppose x = a2 & y = a2;
        hence thesis by A3,Def9;
+     end;
      end;
     hence thesis;
     end;
@@ -671,6 +696,7 @@ definition let A; let S;
   end;
 end;
 
+
 definition let A; let S;
  func LowerCone(S) -> Subset of A equals
   :Def13:  {a1 : for a2 st a2 in S holds a1 < a2};
@@ -686,6 +712,7 @@ definition let A; let S;
    thus thesis;
   end;
 end;
+
 
 canceled 2;
 
@@ -815,6 +842,7 @@ definition let A; let S; let a;
  correctness;
 end;
 
+
 definition let A; let S;
  mode Initial_Segm of S -> Subset of A means
   :Def15: ex a st a in S & it = InitSegm(S,a) if S <> {}
@@ -832,6 +860,7 @@ definition let A; let S;
   end;
  consistency;
 end;
+
 
 reserve I for Initial_Segm of S;
 
@@ -921,10 +950,12 @@ theorem Th67:
       now per cases;
      suppose S = {};
       hence thesis by Def15;
+     end;
      suppose S <> {};
        then consider a such that a in S and A1: I = InitSegm(S,a) by Def15;
           I = LowerCone{a} /\ S by A1,Def14;
       hence thesis by XBOOLE_1:17;
+    end;
     end;
    hence thesis;
   end;
@@ -950,8 +981,10 @@ theorem Th69:
         now per cases;
        suppose S = {};
         hence thesis by A1,A3,Def15;
+       end;
        suppose T = {};
         hence thesis by A1,A2,Def15;
+       end;
        suppose A4: S <> {} & T <> {};
          then consider a1 such that A5: a1 in
  S & T = InitSegm(S,a1) by A3,Def15
@@ -966,6 +999,7 @@ theorem Th69:
             a1 in {a1} & a2 in {a2} by TARSKI:def 1;
           then a1 < a2 & a2 < a1 by A8,A9;
         hence thesis by Th28;
+      end;
       end;
      hence thesis;
     end;
@@ -1096,8 +1130,10 @@ and
           hence thesis by A15,XBOOLE_0:def 4;
          end;
       hence thesis by Def14;
+       end;
        case T = {};
       hence thesis by A1,XBOOLE_1:3;
+     end;
      end;
 
 theorem Th73:
@@ -1155,8 +1191,10 @@ and
           hence thesis by A15,XBOOLE_0:def 4;
          end;
       hence thesis by Def14;
+       end;
        case T = {};
       hence thesis by A1,XBOOLE_1:3;
+     end;
      end;
 
 ::
@@ -1226,6 +1264,7 @@ definition let A; let f;
    hence thesis by A5,Def14;
   end;
 end;
+
 
 reserve fC,fC1,fC2 for Chain of f;
 
@@ -1462,11 +1501,14 @@ A16:      now let a1,a2;
        suppose N is Initial_Segm of fC1 & N = fC2;
          then fC2 is Initial_Segm of fC1 & fC1 <> {} by Def16;
         hence thesis by Th69;
+       end;
        suppose N is Initial_Segm of fC2 & N = fC1;
          then fC1 is Initial_Segm of fC2 & fC2 <> {} by Def16;
         hence thesis by Th69;
+       end;
        suppose N = fC1 & N = fC2;
         hence thesis by A1;
+       end;
        suppose A26: N is Initial_Segm of fC1 & N is Initial_Segm of fC2;
             fC1 <> {} by Def16;
          then consider a such that A27: a in fC1 and A28: N = InitSegm(fC1,a)
@@ -1481,6 +1523,7 @@ A16:      now let a1,a2;
           then a in fC1 /\ fC2 by A27,A29,XBOOLE_0:def 3;
           then a in N by A28,A30,A31;
         hence thesis by A28,Th62;
+      end;
       end;
     hence thesis;
    end;
@@ -1515,7 +1558,8 @@ definition let A; let f;
     defpred P[set] means $1 is Chain of f;
     consider X such that
      A1: for x holds x in X iff x in bool(the carrier of A) & P[x]
-                                                            from Separation;
+                                                            from XBOOLE_0:sch 1
+;
    take X;
    let x;
    thus x in X implies x is Chain of f by A1;
@@ -1539,7 +1583,8 @@ definition let A; let f;
   end;
 end;
 
-definition let A; let f;
+
+registration let A; let f;
  cluster Chains f -> non empty;
  coherence
   proof
@@ -1548,6 +1593,7 @@ definition let A; let f;
     hence thesis;
   end;
 end;
+
 
 Lm10: union(Chains(f)) is Subset of A
  proof
@@ -1576,18 +1622,22 @@ Lm11: union(Chains(f)) is Chain of A
            now per cases;
           suppose X = Y;
            hence thesis by A3,A5,A7,RELAT_2:def 7;
+          end;
           suppose A9: X <> Y;
               now per cases by A9,Th83;
              suppose X is Initial_Segm of Y;
                then X c< Y by Th84;
                then X c= Y by XBOOLE_0:def 8;
                hence thesis by A3,A5,A8,RELAT_2:def 7;
+             end;
              suppose Y is Initial_Segm of X;
                then Y c< X by Th84;
                then Y c= X by XBOOLE_0:def 8;
                hence thesis by A3,A5,A7,RELAT_2:def 7;
             end;
+            end;
            hence thesis;
+         end;
          end;
       hence thesis;
      end;
@@ -1645,19 +1695,23 @@ A6:      not x in fC by A3,XBOOLE_0:def 4;
               suppose X = Y;
                 then x in LowerCone{a} /\ X by A11,A12,A15,XBOOLE_0:def 3;
                hence thesis by Def14;
+              end;
               suppose A17: X <> Y;
                   now per cases by A17,Th83;
                  suppose X is Initial_Segm of Y;
                    then x in X by A7,A12,A14,A15,Th70;
                    then x in LowerCone{a} /\ X by A11,XBOOLE_0:def 3;
                   hence thesis by Def14;
+                 end;
                  suppose Y is Initial_Segm of X;
                    then Y c< X by Th84;
                    then Y c= X by XBOOLE_0:def 8;
                    then x in LowerCone{a} /\ X by A11,A12,A15,XBOOLE_0:def 3;
                   hence thesis by Def14;
                 end;
+                end;
                hence thesis;
+             end;
              end;
           hence thesis;
          end;
@@ -1721,8 +1775,10 @@ def 3,XBOOLE_1:17;
 3
 ;
               hence y in X by Th70;
+             end;
              suppose X = C;
               hence y in X by A3,A9;
+            end;
             end;
             then y in X /\ Y by A9,XBOOLE_0:def 3;
             then [a,y] in the InternalRel of A by A8;
@@ -1739,11 +1795,13 @@ def 3,XBOOLE_1:17;
            now per cases;
           suppose X = C;
            hence f.UpperCone(InitSegm(C,a)) = a by A12,Def16;
+          end;
           suppose X <> C;
            then X is Initial_Segm of C by Th88;
             then InitSegm(C,a) = InitSegm(X,a) &
                  f.UpperCone(InitSegm(X,a)) = a by A13,Def16,Th71;
           hence f.UpperCone(InitSegm(C,a)) = a;
+         end;
          end;
       hence f.UpperCone(InitSegm(C,a)) = a;
      end;

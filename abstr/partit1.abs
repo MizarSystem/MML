@@ -29,11 +29,11 @@ reserve x,y,z,x1,x2,y1,z0,X,V,a,b,d,t,SFX,SFY for set;
 theorem :: PARTIT1:1
 X in PA & V in PA & X c= V implies X=V;
 
-definition let SFX,SFY;
- redefine pred SFX is_finer_than SFY;
- synonym SFX '<' SFY;
- synonym SFY '>' SFX;
-end;
+notation let SFX,SFY;
+ synonym SFX '<' SFY for SFX is_finer_than SFY;
+ synonym SFY '>' SFX for SFX is_finer_than SFY;
+ end;
+
 
 canceled;
 
@@ -60,6 +60,7 @@ definition let Y;let PA be a_partition of Y,b be set;
   ex B being set st B c= PA & B<>{} & b = union B;
 end;
 
+
 definition let Y;let PA,PB be a_partition of Y,b be set;
   pred b is_min_depend PA,PB means
 :: PARTIT1:def 2
@@ -69,6 +70,7 @@ definition let Y;let PA,PB be a_partition of Y,b be set;
     & d is_a_dependent_set_of PA &
       d is_a_dependent_set_of PB holds d=b;
 end;
+
 
 theorem :: PARTIT1:8
 for PA,PB being a_partition of Y
@@ -104,10 +106,18 @@ for P being a_partition of Y
   for y being Element of Y
    ex A being Subset of Y st y in A & A in P;
 
-definition
+registration
  let Y be non empty set;
  cluster -> non empty a_partition of Y;
+ coherence
+ proof
+   let P be a_partition of Y;
+   consider y being Element of Y;
+   consider A being Subset of Y such that A1:y in A & A in P by Th14;
+   thus P is non empty by A1;
+ end;
 end;
+
 
 definition let Y be set;
 func PARTITIONS(Y) means
@@ -115,10 +125,41 @@ func PARTITIONS(Y) means
  for x being set holds x in it iff x is a_partition of Y;
 end;
 
-definition
+
+registration
 let Y be set;
 cluster PARTITIONS(Y) -> non empty;
+coherence
+proof
+  per cases;
+  suppose A1:Y={};
+     {} c= bool {} by XBOOLE_1:2;
+   then {} is Subset-Family of {} by SETFAM_1:def 7;
+   then {} is a_partition of Y by A1,EQREL_1:def 6;
+  hence thesis by Def3;
+  end;
+  suppose Y<>{};
+   then reconsider Y as non empty set;
+     {Y} c= bool Y by ZFMISC_1:80;
+   then A2:{Y} is Subset-Family of Y by SETFAM_1:def 7;
+   A3:union {Y} = Y by ZFMISC_1:31;
+     for A being Subset of Y st A in {Y} holds A<>{} &
+   for B being Subset of Y st B in {Y} holds A = B or A misses B
+   proof
+     let A be Subset of Y;
+     assume A4: A in {Y};
+     then A5:A=Y by TARSKI:def 1;
+     thus A<>{} by A4,TARSKI:def 1;
+     let B be Subset of Y;
+     assume B in {Y};
+     hence thesis by A5,TARSKI:def 1;
+   end;
+   then {Y} is a_partition of Y by A2,A3,EQREL_1:def 6;
+  hence thesis by Def3;
 end;
+end;
+end;
+
 
 begin
 
@@ -130,6 +171,7 @@ definition let Y;let PA,PB be a_partition of Y;
   INTERSECTION(PA,PB) \ {{}};
 commutativity;
 end;
+
 
 theorem :: PARTIT1:15
 for PA being a_partition of Y holds
@@ -149,6 +191,7 @@ definition let Y;let PA,PB be a_partition of Y;
   for d holds d in it iff d is_min_depend PA,PB;
 commutativity;
 end;
+
 
 canceled;
 
@@ -184,12 +227,14 @@ definition let Y; let PA be a_partition of Y;
    [x1,x2] in it iff ex A st A in PA & x1 in A & x2 in A;
 end;
 
+
 definition let Y;
  func Rel(Y) -> Function means
 :: PARTIT1:def 7
      dom it = PARTITIONS(Y) &
    for x st x in PARTITIONS(Y) ex PA st PA = x & it.x = ERl PA;
 end;
+
 
 theorem :: PARTIT1:24
 for PA,PB being a_partition of Y holds
@@ -246,10 +291,10 @@ theorem :: PARTIT1:34
 for PA,PB,PC being a_partition of Y st
   PA '>' PC & PB '>' PC holds PA '/\' PB '>' PC;
 
-definition let Y;
- redefine func SmallestPartition Y;
- synonym %I(Y);
-end;
+notation let Y;
+ synonym %I(Y) for SmallestPartition Y;
+ end;
+
 
 definition let Y;
  canceled;
@@ -258,6 +303,7 @@ func %O(Y) -> a_partition of Y equals
 :: PARTIT1:def 9
   {Y};
 end;
+
 
 theorem :: PARTIT1:35
 %I(Y)={B:ex x being set st B={x} & x in Y};

@@ -292,15 +292,19 @@ proof
       suppose InsCode i = 0;
        then ex k1 st i = goto k1 by SCMPDS_2:35;
        hence Exec(i,s).a = s.a by SCMPDS_2:66;
+      end;
       suppose InsCode i = 4;
        then ex b,k1,k2 st i = (b,k1)<>0_goto k2 by SCMPDS_2:39;
        hence Exec(i,s).a = s.a by SCMPDS_2:67;
+      end;
       suppose InsCode i = 5;
        then ex b,k1,k2 st i = (b,k1)<=0_goto k2 by SCMPDS_2:40;
        hence Exec(i,s).a = s.a by SCMPDS_2:68;
+      end;
       suppose InsCode i = 6;
        then ex b,k1,k2 st i = (b,k1)>=0_goto k2 by SCMPDS_2:41;
        hence Exec(i,s).a = s.a by SCMPDS_2:69;
+     end;
      end;
    hence thesis by SCMPDS_4:23;
 end;
@@ -403,7 +407,7 @@ A13:  C2.(k + 1) = Following C2.k by AMI_1:def 19
       .=CurInstr C2.(k + 1) by A11,A12,A13,AMI_1:def 17;
       thus C1.(k + 1) | D = C2.(k + 1) | D by A10,A12,A13,Th23;
      end;
-     thus for k being Nat holds P[k] from Ind(A5,A9);
+     thus for k being Nat holds P[k] from NAT_1:sch 1(A5,A9);
 end;
 
 theorem Th25: ::S8C:100
@@ -624,7 +628,7 @@ A16: CurInstr (Computation s1).k = halt SCMPDS by A12,AMI_1:def 20;
      hence Result s1,Result s2 equal_outside A by A15,AMI_1:57;
 end;
 
-definition
+registration
  let I be Program-block;
  cluster Initialized I -> initial;
  correctness
@@ -641,6 +645,7 @@ proof
    hence thesis by SCMPDS_3:def 5;
   end;
 end;
+
 
 theorem Th31: ::S8C_:87
  for s being State of SCMPDS,I being Program-block, a being Int_position st
@@ -811,7 +816,7 @@ SCMPDS_4:83;
      hence P[k+1];
    end;
    let i be Nat;
-     for k being Nat holds P[k] from Ind(A12,A16);
+     for k being Nat holds P[k] from NAT_1:sch 1(A12,A16);
    hence thesis;
 end;
 
@@ -974,7 +979,7 @@ then A18:    IC Cs1.m in dom (I ';' J) by A16,FUNCT_4:13;
     hence Cs1.(m+1),Cs2.(m+1) equal_outside IL by A8,A9,A11,A12,NAT_1:38,
 SCMPDS_4:15;
    end;
-     for k being Nat holds X[k] from Ind(A6, A7);
+     for k being Nat holds X[k] from NAT_1:sch 1(A6, A7);
    hence thesis by A1;
 end;
 
@@ -1039,7 +1044,7 @@ A10: now let k be Nat;
       end;
       hence P[k+1];
    end;
-     for k be Nat holds P[k] from Ind(A8,A10);
+     for k be Nat holds P[k] from NAT_1:sch 1(A8,A10);
    hence thesis by A4;
 end;
 
@@ -1107,8 +1112,10 @@ A10: stop I = I ';' SCMPDS-Stop by SCMPDS_4:def 7;
         .= s0.IC s1 by A2,A5,A9,A12,Th10
         .= s1.IC s1 by AMI_1:54
         .=CurInstr s1 by AMI_1:def 17;
+    end;
     case n = card I;
       hence IC s1= inspos card I by A4,A9,SCMFSA6A:29;
+    end;
     end;
     hence thesis;
 end;
@@ -1175,9 +1182,11 @@ A6:  now let x be set;
               dom spJ c= A by AMI_3:def 13;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A8,A9,SCMPDS_4:22
 ;
+         end;
          suppose x = IC SCMPDS;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A7,SCMPDS_3:6,
 XBOOLE_0:def 3;
+      end;
       end;
 A10:   IsJ c= s3 by FUNCT_4:26;
       then dom IsJ c= dom s3 by GRFUNC_1:8;
@@ -1209,6 +1218,7 @@ then A19:   Shift(spJ, card I) c= s4 by AMI_3:38;
           suppose k <= m1;
           then IC (Computation ss).k in dom stop I by A1,A17,Th40;
           hence IC (Computation ss).k in dom sIJ by A18;
+          end;
           suppose A20: k > m1;
           A21: IC s4 in dom spI by A1,A17,Th40;
           hereby
@@ -1230,10 +1240,13 @@ then A19:   Shift(spJ, card I) c= s4 by AMI_3:38;
                IC (Computation ss).k=inspos nn+card I by A23,A24,A25,AMI_1:51
              .=inspos (nn + card I) by SCMPDS_3:def 3;
              hence IC (Computation ss).k in dom sIJ by A26,A27,SCMPDS_4:1;
+           end;
            suppose CurInstr s4 = halt SCMPDS;
              then IC (Computation ss).k=IC s4 by A20,AMI_1:52;
              hence IC (Computation ss).k in dom sIJ by A18,A21;
           end;
+          end;
+      end;
       end;
      hence (I ';'J) is_closed_on s by SCMPDS_6:def 2;
      per cases by A1,A17,Th41;
@@ -1241,6 +1254,7 @@ then A19:   Shift(spJ, card I) c= s4 by AMI_3:38;
        then ss is halting by AMI_1:def 20;
        hence (I ';' J) is_halting_on s by SCMPDS_6:def 3;
 
+     end;
      suppose IC s4 = inspos card I;
        then CurInstr (Computation s3).m3 = CurInstr (Computation s4).m3
        by A10,A13,A15,A19,SCMPDS_6:45;
@@ -1249,6 +1263,7 @@ then A19:   Shift(spJ, card I) c= s4 by AMI_3:38;
         .= halt SCMPDS by A16,SCM_1:def 2;
        then ss is halting by AMI_1:def 20;
        hence (I ';' J) is_halting_on s by SCMPDS_6:def 3;
+end;
 end;
 
 theorem Th44: :: SCMPDS_5:30
@@ -1349,9 +1364,11 @@ A6:  now let x be set;
               dom spJ c= A by AMI_3:def 13;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A8,A9,SCMPDS_4:22
 ;
+         end;
          suppose x = IC SCMPDS;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A7,SCMPDS_3:6,
 XBOOLE_0:def 3;
+     end;
      end;
 A10:   IsJ c= s3 by FUNCT_4:26;
       then dom IsJ c= dom s3 by GRFUNC_1:8;
@@ -1406,10 +1423,12 @@ A24:    k < m;
       per cases;
       suppose k < m1;
        hence CurInstr (Computation s2).k <> halt SCMPDS by A1,Th46;
+      end;
       suppose m1 <= k;
        then consider kk being Nat such that
 A25:         m1 + kk = k by NAT_1:28;
        thus CurInstr (Computation s2).k <> halt SCMPDS by A20,A24,A25;
+     end;
      end;
 then A26:  for k being Nat st CurInstr (Computation s2).k = halt SCMPDS
      holds m <= k;
@@ -1544,6 +1563,7 @@ A26:   dom Start-At l = {IC SCMPDS} by AMI_3:34;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At
          (IC IExec(J,IExec(I,s)) + card I)).x by A29,FUNCT_4:12;
+      end;
       suppose A30: x = IC SCMPDS;
        then x in {IC SCMPDS} by TARSKI:def 1;
     then A31: x in dom Start-At l by AMI_3:34;
@@ -1552,6 +1572,7 @@ A26:   dom Start-At l = {IC SCMPDS} by AMI_3:34;
        .= (Start-At l).IC SCMPDS by AMI_3:50
        .= (IExec(J,IExec(I,s)) +* Start-At
            (IC IExec(J,IExec(I,s)) + card I)).x by A30,A31,FUNCT_4:14;
+      end;
       suppose A32: x is Instruction-Location of SCMPDS;
          IExec(I ';' J,s) | A = ps by A15,SCMPDS_4:25
        .= IExec(J,IExec(I,s)) | A by A16,SCMPDS_4:25;
@@ -1561,6 +1582,7 @@ A26:   dom Start-At l = {IC SCMPDS} by AMI_3:34;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At
          (IC IExec(J,IExec(I,s)) + card I)).x by A33,FUNCT_4:12;
+      end;
       end;
       hence thesis by A25,FUNCT_1:9;
     end;
@@ -1616,6 +1638,7 @@ definition
    (a,i)>=0_goto (card I +3) ';' I ';' AddTo(a,i,n) ';' goto -(card I+2);
  coherence;
 end;
+
 
 begin :: The computation of for-up loop program
 
@@ -1749,9 +1772,11 @@ then A11: CurInstr s4 = halt SCMPDS by A10,AMI_1:def 17;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
          hence IC C3.k in dom pFOR by A9,A10,A11,AMI_1:52;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pFOR by A2,SCMPDS_4:75;
+     end;
      end;
      hence FOR is_closed_on s by SCMPDS_6:def 2;
        s3 is halting by A11,AMI_1:def 20;
@@ -1830,6 +1855,7 @@ then A20:    not x in dom SAl by A18,TARSKI:def 1;
        .= s3.x by A4,A19,SCMPDS_2:69
        .= s.x by A19,SCMPDS_5:19
        .= (s +* SAl).x by A20,FUNCT_4:12;
+      end;
       suppose
 A21:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A7,AMI_1:48,AMI_5:25
@@ -1838,8 +1864,10 @@ A21:    x = IC SCMPDS;
            IExec(FOR,s).x = s4.x by A14,A16,FUNCT_4:12
        .= inspos(card I + 3) by A11,A21,AMI_1:def 15
        .= (s +* SAl).x by A21,Th12;
+       end;
        suppose x is Instruction-Location of SCMPDS;
        hence IExec(FOR,s).x = (s +* SAl).x by SCMPDS_6:27;
+    end;
     end;
     hence IExec(FOR,s) = s +* SAl by A15,FUNCT_1:9;
 end;
@@ -1947,6 +1975,7 @@ A10:  for k be Nat st P[k] holds P[k + 1]
         suppose t.b >= 0;
         hence FOR is_closed_on t & FOR is_halting_on t
          by A14,Th54;
+        end;
         suppose A15: t.b < 0;
         set t2 = t +* IsI,
             t3 = t +* iFOR,
@@ -2081,6 +2110,7 @@ A60:    t8 +* iFOR=t8 by A51,Th37;
                  suppose k=0;
                  hence IC (Computation t3).k in dom pFOR by A21,A22,AMI_1:def
 19;
+                 end;
                  suppose k<>0;
                   then consider kn be Nat such that
               A63: k=kn+1 by NAT_1:22;
@@ -2101,27 +2131,34 @@ A60:    t8 +* iFOR=t8 by A51,Th37;
                   .=inspos (lm+1) by SCMPDS_3:def 3;
                   hence IC (Computation t3).k in dom pFOR by A68,SCMPDS_4:1;
                end;
+               end;
+              end;
               suppose A69:k=m3;
                  l1 in dom pFOR by A35,SCMPDS_6:18;
                hence IC (Computation t3).k in dom pFOR by A4,A17,A19,A20,A28,
 A30,A38,A43,A69,Th36;
+              end;
               suppose k=m3+1;
                hence IC (Computation t3).k in dom pFOR by A46,A48,SCMPDS_6:18;
             end;
+            end;
+          end;
           suppose k >= m5;
           then consider nn be Nat such that
          A70: k=m5+nn by NAT_1:28;
                C3.k=(Computation (t8 +* iFOR)).nn by A60,A70,AMI_1:51;
            hence IC (Computation t3).k in dom pFOR by A59,SCMPDS_6:def 2;
        end;
+       end;
        hence FOR is_closed_on t by SCMPDS_6:def 2;
          t8 is halting by A59,A60,SCMPDS_6:def 3;
        then t3 is halting by SCM_1:27;
        hence FOR is_halting_on t by SCMPDS_6:def 3;
      end;
+     end;
      hence P[k+1];
      end;
-A71:  for k being Nat holds P[k] from Ind(A7,A10);
+A71:  for k being Nat holds P[k] from NAT_1:sch 1(A7,A10);
       -s.b > 0 by A1,REAL_1:66;
      then reconsider n=-s.b as Nat by INT_1:16;
      A72: P[n] by A71;
@@ -2188,6 +2225,7 @@ A12: now
     suppose Es.bj >= 0;
     hence FOR is_halting_on Es by Th54;
 
+    end;
     suppose A13: Es.bj<0;
       now
       let t be State of SCMPDS;
@@ -2208,6 +2246,7 @@ A15:   now
 ;
      end;
      hence FOR is_halting_on Es by A2,A3,A4,A5,A11,A13,Th58;
+   end;
    end;
    set s4 = C1.1;
 A17:     IExec(I,s).a=s.a & IExec(I,s).b=s.b by A6,A8;
@@ -2311,6 +2350,7 @@ then A57:    s2.x=IExec(J,s).x by FUNCT_4:12;
        per cases;
        suppose x=b;
         hence s8.x=s2.x by A52,A55,A56,FUNCT_4:12;
+       end;
        suppose A58: x<>b;
        A59:  not x in dom (s | A) by A33,SCMPDS_2:53;
        A60:  s5.x=(Computation sI).mI.x by A40,SCMPDS_4:23
@@ -2320,6 +2360,7 @@ then A57:    s2.x=IExec(J,s).x by FUNCT_4:12;
               Es.x=Exec(i2, IExec(I, s)).x by A9,Th50
             .=IExec(I, s).x by A54,A58,SCMPDS_2:60;
         hence s8.x=s2.x by A50,A57,A60,A61,SCMPDS_2:66;
+     end;
      end;
      then A62: s8 | D = s2 | D by SCMPDS_4:23;
 A63:  IC s2 =IC C1.m1 by A51,A53,SCMPDS_6:21;
@@ -2357,7 +2398,7 @@ A72: IExec(J,s) | A= (Result sJ +* ps) | A by SCMPDS_4:def 8
     .= IExec(FOR,IExec(J,s)) by SCMPDS_4:def 8;
 end;
 
-definition
+registration
    let I be shiftable Program-block,
    a be Int_position,i be Integer,n be Nat;
    cluster for-up(a,i,n,I) -> shiftable;
@@ -2378,7 +2419,8 @@ then A2:  card PF+ -(card I+2) =0 by XCMPLX_0:def 6;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block,
    a be Int_position,i be Integer,n be Nat;
    cluster for-up(a,i,n,I) -> No-StopCode;
@@ -2393,6 +2435,7 @@ definition
    end;
 end;
 
+
 begin :: The construction of  for-down loop program
 :: while (a,i)>=0 do { I, (a,i)-=n }
 definition
@@ -2403,6 +2446,7 @@ definition
    (a,i)<=0_goto (card I +3) ';' I ';' AddTo(a,i,-n) ';' goto -(card I+2);
  coherence;
 end;
+
 
 begin :: The computation of  for-down loop program
 
@@ -2536,9 +2580,11 @@ then A11: CurInstr s4 = halt SCMPDS by A10,AMI_1:def 17;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
          hence IC C3.k in dom pFOR by A9,A10,A11,AMI_1:52;
+      end;
       suppose k = 0;
           then C3.k = s3 by AMI_1:def 19;
          hence IC C3.k in dom pFOR by A2,SCMPDS_4:75;
+     end;
      end;
      hence FOR is_closed_on s by SCMPDS_6:def 2;
        s3 is halting by A11,AMI_1:def 20;
@@ -2617,6 +2663,7 @@ then A20:    not x in dom SAl by A18,TARSKI:def 1;
        .= s3.x by A4,A19,SCMPDS_2:68
        .= s.x by A19,SCMPDS_5:19
        .= (s +* SAl).x by A20,FUNCT_4:12;
+      end;
       suppose
 A21:    x = IC SCMPDS;
         then x in dom Result s3 & not x in dom (s | A) by A7,AMI_1:48,AMI_5:25
@@ -2625,8 +2672,10 @@ A21:    x = IC SCMPDS;
            IExec(FOR,s).x = s4.x by A14,A16,FUNCT_4:12
        .= inspos(card I + 3) by A11,A21,AMI_1:def 15
        .= (s +* SAl).x by A21,Th12;
+       end;
        suppose x is Instruction-Location of SCMPDS;
        hence IExec(FOR,s).x = (s +* SAl).x by SCMPDS_6:27;
+    end;
     end;
     hence IExec(FOR,s) = s +* SAl by A15,FUNCT_1:9;
 end;
@@ -2727,6 +2776,7 @@ A8:  for k be Nat st P[k] holds P[k + 1]
         suppose t.b <= 0;
         hence FOR is_closed_on t & FOR is_halting_on t
          by A12,Th63;
+        end;
         suppose A13: t.b > 0;
         set t2 = t +* IsI,
             t3 = t +* iFOR,
@@ -2860,6 +2910,7 @@ A57:    t8 +* iFOR=t8 by A49,Th37;
                  suppose k=0;
                  hence IC (Computation t3).k in dom pFOR by A19,A20,AMI_1:def
 19;
+                 end;
                  suppose k<>0;
                   then consider kn be Nat such that
               A60: k=kn+1 by NAT_1:22;
@@ -2880,27 +2931,34 @@ A57:    t8 +* iFOR=t8 by A49,Th37;
                   .=inspos (lm+1) by SCMPDS_3:def 3;
                   hence IC (Computation t3).k in dom pFOR by A65,SCMPDS_4:1;
                end;
+               end;
+              end;
               suppose A66:k=m3;
                  l1 in dom pFOR by A33,SCMPDS_6:18;
                hence IC (Computation t3).k in dom pFOR by A4,A15,A17,A18,A26,
 A28,A36,A41,A66,Th36;
+              end;
               suppose k=m3+1;
                hence IC (Computation t3).k in dom pFOR by A44,A46,SCMPDS_6:18;
             end;
+            end;
+          end;
           suppose k >= m5;
           then consider nn be Nat such that
          A67: k=m5+nn by NAT_1:28;
                C3.k=(Computation (t8 +* iFOR)).nn by A57,A67,AMI_1:51;
            hence IC (Computation t3).k in dom pFOR by A56,SCMPDS_6:def 2;
        end;
+       end;
        hence FOR is_closed_on t by SCMPDS_6:def 2;
          t8 is halting by A56,A57,SCMPDS_6:def 3;
        then t3 is halting by SCM_1:27;
        hence FOR is_halting_on t by SCMPDS_6:def 3;
      end;
+     end;
      hence P[k+1];
      end;
-A68:  for k being Nat holds P[k] from Ind(A7,A8);
+A68:  for k being Nat holds P[k] from NAT_1:sch 1(A7,A8);
      reconsider n=s.b as Nat by A1,INT_1:16;
      A69: P[n] by A68;
     for x be Int_position st x in X holds s.x=s.x;
@@ -2966,6 +3024,7 @@ A12: now
     suppose Es.bj <= 0;
     hence FOR is_halting_on Es by Th63;
 
+    end;
     suppose A13: Es.bj > 0;
       now
       let t be State of SCMPDS;
@@ -2986,6 +3045,7 @@ A15:   now
 ;
      end;
      hence FOR is_halting_on Es by A2,A3,A4,A5,A11,A13,Th67;
+   end;
    end;
    set s4 = C1.1;
 A17:     IExec(I,s).a=s.a & IExec(I,s).b=s.b by A6,A8;
@@ -3089,6 +3149,7 @@ then A57:    s2.x=IExec(J,s).x by FUNCT_4:12;
        per cases;
        suppose x=b;
         hence s8.x=s2.x by A52,A55,A56,FUNCT_4:12;
+       end;
        suppose A58: x<>b;
        A59:  not x in dom (s | A) by A33,SCMPDS_2:53;
        A60:  s5.x=(Computation sI).mI.x by A40,SCMPDS_4:23
@@ -3098,6 +3159,7 @@ then A57:    s2.x=IExec(J,s).x by FUNCT_4:12;
               Es.x=Exec(i2, IExec(I, s)).x by A9,Th50
             .=IExec(I, s).x by A54,A58,SCMPDS_2:60;
         hence s8.x=s2.x by A50,A57,A60,A61,SCMPDS_2:66;
+     end;
      end;
      then A62: s8 | D = s2 | D by SCMPDS_4:23;
 A63:  IC s2 =IC C1.m1 by A51,A53,SCMPDS_6:21;
@@ -3135,7 +3197,7 @@ A72: IExec(J,s) | A= (Result sJ +* ps) | A by SCMPDS_4:def 8
     .= IExec(FOR,IExec(J,s)) by SCMPDS_4:def 8;
 end;
 
-definition
+registration
    let I be shiftable Program-block,
    a be Int_position,i be Integer,n be Nat;
    cluster for-down(a,i,n,I) -> shiftable;
@@ -3156,7 +3218,8 @@ then A2:  card PF+ -(card I+2) =0 by XCMPLX_0:def 6;
   end;
 end;
 
-definition
+
+registration
    let I be No-StopCode Program-block,
    a be Int_position,i be Integer,n be Nat;
    cluster for-down(a,i,n,I) -> No-StopCode;
@@ -3171,6 +3234,7 @@ definition
    end;
 end;
 
+
 begin :: Two Examples for Summing
 :: n=Sum 1+1+...+1
 definition
@@ -3181,6 +3245,7 @@ definition
      for-down(GBP,2,1, Load AddTo(GBP,3,1));
  coherence;
 end;
+
 
 theorem Th69:
  for s being State of SCMPDS st s.GBP=0 holds
@@ -3194,6 +3259,7 @@ proof
     suppose s.DataLoc(s.GBP,2) <= 0;
       hence thesis by Th63;
 
+    end;
     suppose A2: s.DataLoc(s.GBP,2) > 0;
    DataLoc(s.GBP,2)=intpos(0+2) by A1,SCMP_GCD:5;
 then A3: DataLoc(s.GBP,2) <> GBP by SCMP_GCD:4,def 2;
@@ -3228,6 +3294,7 @@ then A10:  DataLoc(t0.GBP,3)<> cv by A7,SCMP_GCD:4;
       end;
    end;
    hence thesis by A2,A3,A4,A5,Th67;
+end;
 end;
 
 theorem Th70:
@@ -3323,7 +3390,7 @@ A28:   s2.GBP=Exec(j, s1).GBP by SCMPDS_5:46
      end;
      hence P[k+1];
    end;
-     for k be Nat holds P[k] from Ind(A2,A4);
+     for k be Nat holds P[k] from NAT_1:sch 1(A2,A4);
    hence IExec(FD,s).a=n+0 by A1
    .=n;
 end;
@@ -3378,6 +3445,7 @@ definition
  coherence;
 end;
 
+
 theorem Th72:
  for s being State of SCMPDS,sp,cv,result,pp,pD be Nat
  st s.intpos sp > sp & cv < result & s.intpos pp=pD &
@@ -3400,6 +3468,7 @@ proof
     suppose s.DataLoc(s.BP,cv) <= 0;
       hence thesis by Th63;
 
+    end;
     suppose A2: s.DataLoc(s.BP,cv) > 0;
      s.BP > 0 by A1,NAT_1:18;
     then reconsider n=s.BP as Nat by INT_1:16;
@@ -3456,11 +3525,14 @@ A20:  DataLoc(t1.PP,0) <> Dv by A1,A6,A14,A18,SCMP_GCD:4;
          per cases by A21,TARSKI:def 2;
          suppose y=BP;
            hence IExec(I,t).y=t.y by A16;
+         end;
          suppose y=PP;
            hence IExec(I,t).y=t.y by A17;
       end;
+      end;
    end;
    hence thesis by A2,A4,A7,A8,Th67;
+end;
 end;
 
 theorem Th73:
@@ -3566,8 +3638,10 @@ A11: now
          per cases by A32,TARSKI:def 2;
          suppose y=BP;
            hence IExec(I,u).y=u.y by A27;
+         end;
          suppose y=PP;
            hence IExec(I,u).y=u.y by A28;
+       end;
        end;
       end;
       set j=AddTo(BP,cv,-1),
@@ -3676,7 +3750,7 @@ A11: now
      end;
      hence P[k+1];
    end;
-     for k be Nat holds P[k] from Ind(A3,A11);
+     for k be Nat holds P[k] from NAT_1:sch 1(A3,A11);
    hence IExec(FD,s).a=Sum f+0 by A1
    .=Sum f;
 end;

@@ -31,6 +31,7 @@ definition let G; let x, y; let e;
   (the Source of G).e = x & (the Target of G).e = y;
 end;
 
+
 theorem :: GRAPH_4:1
 e orientedly_joins v1, v2 implies e joins v1, v2;
 
@@ -40,15 +41,18 @@ definition let G; let x,y be Element of (the Vertices of G);
        ex v being set st v in the Edges of G & v orientedly_joins x, y;
 end;
 
+
 theorem :: GRAPH_4:2
 e orientedly_joins v1,v2 & e orientedly_joins v3,v4 implies v1=v3 & v2=v4;
 
 reserve vs, vs1, vs2 for FinSequence of the Vertices of G,
         c, c1, c2 for oriented Chain of G;
 
-definition let G;
+registration let G;
  cluster empty oriented Chain of G;
+ existence proof {} is oriented Chain of G by GRAPH_1:14; hence thesis; end;
 end;
+
 
 definition let G, X;
  func G-SVSet X -> set equals
@@ -57,12 +61,14 @@ definition let G, X;
                 v = (the Source of G).e };
 end;
 
+
 definition let G, X;
  func G-TVSet X -> set equals
 :: GRAPH_4:def 4
   { v: ex e being Element of the Edges of G st e in X &
                 v = (the Target of G).e };
 end;
+
 
 canceled;
 
@@ -75,6 +81,7 @@ definition let G, vs; let c be FinSequence;
  len vs = len c + 1 &
    for n st 1<=n & n<=len c holds c.n orientedly_joins vs/.n, vs/.(n+1);
 end;
+
 
 theorem :: GRAPH_4:5
 vs is_oriented_vertex_seq_of c implies vs is_vertex_seq_of c;
@@ -107,6 +114,7 @@ assume  c <>{};
 :: GRAPH_4:def 6
    it is_oriented_vertex_seq_of c;
 end;
+
 
 theorem :: GRAPH_4:12
 vs is_oriented_vertex_seq_of c & c1 = c|Seg n & vs1= vs|Seg (n+1)
@@ -141,13 +149,46 @@ definition let G;
      (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs);
 end;
 
-definition let G;
+
+registration let G;
    cluster Simple (oriented Chain of G);
+existence
+     proof consider q being empty oriented Chain of G;
+     consider x being Element of the Vertices of G;
+     reconsider p =<*x*> as FinSequence of the Vertices of G;
+     A1:p is_oriented_vertex_seq_of q by Lm1;
+       for n,m st 1<=n & n<m & m<=len p & p.n=p.m holds n=1 & m=len p
+     proof
+      let n,m; assume 1<=n & n<m & m<=len p & p.n = p.m;
+       then 1<m & m<=1 by AXIOMS:22,FINSEQ_1:56;
+      hence n =1 & m = len p;
+     end;
+     then q is Simple by A1,Def7;
+  hence thesis;
+ end;
 end;
 
-definition let G;
+
+registration let G;
    cluster oriented simple Chain of G;
+existence
+     proof consider q being empty oriented Chain of G;
+     consider x being Element of the Vertices of G;
+     reconsider p =<*x*> as FinSequence of the Vertices of G;
+       p is_oriented_vertex_seq_of q by Lm1;
+     then A1: p is_vertex_seq_of q by Th5;
+     reconsider q'=q as Chain of G;
+       for n,m st 1<=n & n<m & m<=len p & p.n=p.m holds n=1 & m=len p
+     proof
+      let n,m; assume 1<=n & n<m & m<=len p & p.n = p.m;
+       then 1<m & m<=1 by AXIOMS:22,FINSEQ_1:56;
+      hence n =1 & m = len p;
+     end;
+     then q' is simple by A1,GRAPH_2:def 10;
+  hence thesis;
+ end;
 end;
+
 
 canceled;
 
@@ -182,9 +223,11 @@ vs is_oriented_vertex_seq_of c implies
   st Seq fc = sc & Seq fvs = vs1 & vs1 is_oriented_vertex_seq_of sc &
      vs.1 = vs1.1 & vs.len vs = vs1.len vs1;
 
-definition let G;
+registration let G;
  cluster empty -> one-to-one (oriented Chain of G);
+ correctness;
 end;
+
 
 theorem :: GRAPH_4:24
 p is OrientedPath of G implies p|Seg(n) is OrientedPath of G;

@@ -38,6 +38,7 @@ begin
 Def1:   for H st H in F holds M |= H;
  end;
 
+
  definition let M1,M2 be non empty set;
   pred M1 <==> M2 means for H st Free H = {} holds M1 |= H iff M2 |= H;
    reflexivity;
@@ -46,6 +47,7 @@ Def1:   for H st H in F holds M |= H;
     for H for v being Function of VAR,M1 holds M1,v |= H iff M2,M2!v |= H;
    reflexivity by ZF_LANG1:def 2;
  end;
+
 
  defpred ZFAx[set] means $1 = the_axiom_of_extensionality or
    $1 = the_axiom_of_pairs or $1 = the_axiom_of_unions or
@@ -62,16 +64,17 @@ Def4:   e in it iff e in WFF & (e = the_axiom_of_extensionality or
    existence
     proof
      thus ex X being set st for e holds e in X iff e in WFF & ZFAx[e]
-      from Separation;
+      from XBOOLE_0:sch 1;
     end;
    uniqueness
     proof defpred P[set] means $1 in WFF & ZFAx[$1];
      let X1,X2 be set such that
 A1:   e in X1 iff P[e] and
 A2:   e in X2 iff P[e];
-     thus thesis from Extensionality(A1,A2);
+     thus thesis from XBOOLE_0:sch 2(A1,A2);
     end;
  end;
+
 
  definition
   redefine func ZF-axioms -> Subset of WFF;
@@ -80,6 +83,7 @@ A2:   e in X2 iff P[e];
      hence thesis;
     end;
  end;
+
 
  reserve M,M1,M2 for non empty set,
          f for Function,
@@ -186,7 +190,7 @@ A8:    Free S = {} & for M holds M |= S iff M |= All(x,H) by A4;
          M |= H iff M |= All(x,H) by ZF_MODEL:25;
       hence thesis by A8;
      end;
-A9:  P[i] from Ind(A1,A3); card Free H = card Free H;
+A9:  P[i] from NAT_1:sch 1(A1,A3); card Free H = card Free H;
    hence thesis by A9;
   end;
 
@@ -291,11 +295,11 @@ scheme NonUniqFuncEx { X() -> set, P[set,set] }:
  ex f being Function st dom f = X() & for e st e in X() holds P[e,f.e]
   provided
 A1: for e st e in X() ex u st P[e,u]
-  proof defpred p[set,set] means P[$1,$2];
+proof   defpred p[set,set] means P[$1,$2];
 A2: now assume X() = {}; then
 A3:    for e st e in X() ex u st u in {} & p[e,u];
         ex f being Function st dom f = X() & rng f c= {} &
-       for e st e in X() holds p[e,f.e] from NonUniqBoundFuncEx(A3);
+       for e st e in X() holds p[e,f.e] from COMPTS_1:sch 1(A3);
      hence thesis;
     end;
       now assume X() <> {};
@@ -311,7 +315,7 @@ A5:       P[e,u] by A1;
        end;
      consider F be Function such that
 A6:    dom F = D & for d being Element of D ex A st A = F.d & Q[d,A] &
-        for B st Q[d,B] holds A c= B from ALFA(A4);
+        for B st Q[d,B] holds A c= B from ZF_REFLE:sch 1(A4);
 A7:    for e st e in X() ex u st u in Rank sup rng F & p[e,u]
        proof let e; assume
 A8:       e in X();
@@ -328,7 +332,7 @@ A10:       u in Rank A & P[e,u] by A9;
         hence thesis by A10;
        end;
         ex f being Function st dom f = X() & rng f c= Rank sup rng F &
-       for e st e in X() holds p[e, f.e] from NonUniqBoundFuncEx(A7);
+       for e st e in X() holds p[e, f.e] from COMPTS_1:sch 1(A7);
      hence thesis;
     end;
    hence thesis by A2;
@@ -376,7 +380,7 @@ A1: Card D <` Card W;
 A2: dom L = On W & ({} in On W implies L.{} = {}) and
 A3: for A st succ A in On W holds L.succ A = C(A,L.A) and
 A4: for A st A in On W & A <> {} & A is_limit_ordinal holds L.A = D(A,L|A)
-                   from OS_Exist;
+                   from ORDINAL2:sch 11;
 A5: 0-element_of W = {} by ORDINAL4:35;
     defpred P[Ordinal] means L.$1 in On W;
 A6:    {} in W by CLASSES2:62; then
@@ -432,7 +436,7 @@ A18:       u in dom (L|a) & e = (L|a).u by FUNCT_1:def 5;
       then consider u such that
 A19:    u in dom L & e = L.u by FUNCT_1:def 5;
       reconsider u as Ordinal of W by A2,A19,ZF_REFLE:8;
-        P[a] from Universe_Ind(A7,A8,A12); then L.u in On W;
+        P[a] from ZF_REFLE:sch 5(A7,A8,A12); then L.u in On W;
       hence thesis by A19;
      end;
    then reconsider phi = L as Ordinal-Sequence of W by A2,ORDINAL4:def 3;
@@ -469,7 +473,7 @@ A28:       a in b; b in On W & a in On W by ZF_REFLE:8;
            by ORDINAL2:27,35;
          hence phi.a in phi.b;
         end;
-         for b holds Q[b] from Universe_Ind(A22,A23,A26);
+         for b holds Q[b] from ZF_REFLE:sch 5(A22,A23,A26);
        then phi.a in phi.b by A21;
       hence thesis;
      end;
@@ -563,6 +567,7 @@ A2:       B in C & C in dom xi;
     end;
  end;
 
+
  reserve psi for Ordinal-Sequence;
 
 canceled;
@@ -653,7 +658,7 @@ theorem
    succ A is_cofinal_with one
   proof deffunc F(set) = A;
     consider psi such that
-A1:  dom psi = one & for B st B in one holds psi.B = F(B) from OS_Lambda;
+A1:  dom psi = one & for B st B in one holds psi.B = F(B) from ORDINAL2:sch 3;
    take psi; thus dom psi = one by A1;
    thus rng psi c= succ A
      proof let e; assume e in rng psi;
@@ -757,7 +762,7 @@ theorem
 A1:  omega in W & phi is increasing & phi is continuous;
     deffunc F(Ordinal of W) = (succ a)+^phi.$1;
    consider xi such that
-A2:  xi.b = F(b) from UOS_Lambda;
+A2:  xi.b = F(b) from ORDINAL4:sch 2;
 A3:  dom phi = On W & dom xi = On W by ORDINAL4:def 3;
       for A st A in dom phi holds xi.A = (succ a)+^(phi.A)
      proof let A; assume A in dom phi;
@@ -788,7 +793,7 @@ A1: omega in W & phi is increasing & phi is continuous;
 A2: nu.0-element_of W = b and
 A3: for a holds nu.succ a = C(a,nu.a) and
    for a st a <> 0-element_of W & a is_limit_ordinal holds nu.a = D(a,nu|a)
-        from UOS_Exist;
+        from ZF_REFLE:sch 4;
    set xi = nu|omega; set a = sup xi;
 A4:  omega in On W & dom nu = On W by A1,ORDINAL2:def 2,ORDINAL4:def 3;
 then A5:    omega c= dom nu by ORDINAL1:def 2;
@@ -856,7 +861,7 @@ A22:       B <> {} & B is_limit_ordinal;
           then omega c= B & B c= A+^B by A22,ORDINAL2:def 5,ORDINAL3:27;
 hence thesis by A6,ORDINAL1:7;
         end;
-A23:    P[C] from Ordinal_Ind(A13,A14,A21);
+A23:    P[C] from ORDINAL2:sch 1(A13,A14,A21);
          ex C st B = A+^C & C <> {} by A12,ORDINAL3:31;
       hence thesis by A12,A23;
      end;
@@ -935,7 +940,7 @@ A5:    phi is increasing & phi is continuous &
      end;
    consider Phi being Function such that
 A6:  dom Phi = WFF & rng Phi c= Funcs(On W, On W) and
-A7:  for e st e in WFF holds P[e, Phi.e]  from NonUniqBoundFuncEx(A4);
+A7:  for e st e in WFF holds P[e, Phi.e]  from COMPTS_1:sch 1(A4);
    reconsider Phi as Function of WFF, Funcs(On W, On W) by A6,FUNCT_2:def 1,
 RELSET_1:11;
       [:NAT,NAT:],[:omega,omega:] are_equipotent & [:omega,omega:] in W
@@ -1018,7 +1023,7 @@ a) &
        then A in xi.succ e & xi.succ e in phi.a by A25,ORDINAL1:22;
       hence A in phi.a by ORDINAL1:19;
      end;
-      for a holds P[a] from Universe_Ind(A15,A16,A17);
+      for a holds P[a] from ZF_REFLE:sch 5(A15,A16,A17);
     then a c= xi.a & xi.a c= a by A11,A13,A14,ORDINAL4:10;
     then xi.a = a by XBOOLE_0:def 10;
    hence L.a,v_a |= H iff M,M!v_a |= H by A11,A13;
@@ -1050,7 +1055,7 @@ A1:  omega in W;
 A2: dom L = On W & ({} in On W implies L.{} = Rank 1-element_of W) and
 A3: for A st succ A in On W holds L.(succ A) = C(A,L.A) and
 A4: for A st A in On W & A <> {} & A is_limit_ordinal
-      holds L.A = D(A,L|A) from TS_Exist1;
+      holds L.A = D(A,L|A) from ORDINAL2:sch 5;
 A5:    0-element_of W in On W & {} = 0-element_of W by ORDINAL4:35,ZF_REFLE:8;
 A6: L.succ a = Rank succ a
      proof succ a in On W & L.a = L.a by ZF_REFLE:8;

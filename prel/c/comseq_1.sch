@@ -12,8 +12,6 @@ RELSET_1
 FUNCT_2
 COMSEQ_1
 #
-ExComplexSeq
-#
 M3 K53 ;;;
 ªM6 V4 ;V16 K56 ;K53 ;;K56 ;K53 ;;ªM4 K52 ;K56 ;;R1 K76 B1 B2 ;F1 B2 ;;;
 #

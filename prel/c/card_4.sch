@@ -17,10 +17,6 @@ XREAL_0
 NEWTON
 CARD_4
 #
-FraenCoun1
-FraenCoun2
-FraenCoun3
-#
 M1 ;;
 V24 ËM4 K52 ;K56 ;;;F1 B1 ;P1 B1 ;;;
 #

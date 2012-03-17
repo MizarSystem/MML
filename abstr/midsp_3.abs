@@ -49,6 +49,7 @@ definition let n,i,D,d;let p be Element of (n+1)-tuples_on D;
   it.i = d & for l st l in (dom p)\{i} holds it.l = p.l;
 end;
 
+
 ::Section 2: Reper Algebra Structure and its properties
 begin
 
@@ -59,18 +60,35 @@ definition let n;
    reper -> Function of n-tuples_on the carrier, the carrier#);
 end;
 
-definition let n; let A be non empty set, m be BinOp of A,
+
+registration let n; let A be non empty set, m be BinOp of A,
                r be Function of n-tuples_on A,A;
  cluster ReperAlgebraStr(#A,m,r#) -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
 
-definition let n;
+registration let n;
  cluster non empty ReperAlgebraStr over n;
+ existence
+  proof consider A being non empty set, m be BinOp of A,
+               r be Function of n-tuples_on A,A;
+   take ReperAlgebraStr(#A,m,r#);
+   thus thesis;
+  end;
 end;
 
-definition let n;
+
+registration let n;
  cluster MidSp-like (non empty ReperAlgebraStr over n+2);
+ existence
+  proof consider M being MidSp;
+    consider R being
+     Function of (n+2)-tuples_on the carrier of M, the carrier of M;
+   take ReperAlgebraStr (# the carrier of M, the MIDPOINT of M, R #);
+   thus thesis by Lm1;
+  end;
 end;
+
 
 reserve RAS for MidSp-like (non empty ReperAlgebraStr over n+2);
 reserve a,b,d,pii,p'i for Point of RAS;
@@ -79,15 +97,18 @@ definition let i,D;
  mode Tuple of i,D is Element of i-tuples_on D;
 end;
 
+
 definition let n,RAS,i;
  mode Tuple of i,RAS is Tuple of i,the carrier of RAS;
 end;
+
 
 reserve p,q for Tuple of (n+1),RAS;
 
 definition let n,RAS,a;
  redefine func <*a*> -> Tuple of 1,RAS;
 end;
+
 
 definition let n,RAS,i,j; let p be Tuple of i,RAS, q be Tuple of j,RAS;
  redefine func p^q -> Tuple of (i+j),RAS;
@@ -102,6 +123,7 @@ definition let n,RAS,a,p;
    (the reper of RAS).(<*a*>^p);
 end;
 
+
 definition let n,i,RAS,d,p;
  func <:p,i,d:> -> Tuple of (n+1),RAS means
 :: MIDSP_3:def 3
@@ -112,6 +134,7 @@ definition let n,i,RAS,d,p;
          holds it = sub(p',i,d');
 end;
 
+
 theorem :: MIDSP_3:7
  i in Seg(n+1) implies <:p,i,d:>.i = d
                        & for l st l in (dom p)\{i} holds <:p,i,d:>.l = p.l;
@@ -121,6 +144,7 @@ definition let n;
 :: MIDSP_3:def 4
   1<=it & it<=n+1;
 end;
+
 
 reserve m for Nat of n;
 
@@ -143,13 +167,16 @@ definition let n,D; let p be Element of (n+1)-tuples_on D; let m;
  redefine func p.m -> Element of D;
 end;
 
+
 definition let n,RAS;
  attr RAS is being_invariance means
 :: MIDSP_3:def 5
   for a,b,p,q st (for m holds a@(q.m) = b@(p.m))
                    holds a@*'(b,q) = b@*'(a,p);
-  synonym RAS is_invariance;
-end;
+  end;
+notation let n,RAS;
+ synonym RAS is_invariance for RAS is being_invariance ; end;
+
 
 definition let n,i,RAS;
  pred RAS has_property_of_zero_in i means
@@ -157,11 +184,13 @@ definition let n,i,RAS;
   for a,p holds *'(a,<:p,i,a:>) = a;
 end;
 
+
 definition let n,i,RAS;
  pred RAS is_semi_additive_in i means
 :: MIDSP_3:def 7
   for a,pii,p st p.i = pii holds *'(a,<:p,i,a@pii:>) = a@*'(a,p);
 end;
+
 
 theorem :: MIDSP_3:13
  RAS is_semi_additive_in m implies
@@ -175,11 +204,13 @@ definition let n,i,RAS;
                    holds *'(a,<:p,i,pii@p'i:>) = *'(a,p)@*'(a,<:p,i,p'i:>);
 end;
 
+
 definition let n,i,RAS;
  pred RAS is_alternative_in i means
 :: MIDSP_3:def 9
   for a,p,pii st p.i = pii holds *'(a,<:p,i+1,pii:>) = a;
 end;
+
 
 reserve W for ATLAS of RAS;
 reserve v for Vector of W;
@@ -187,6 +218,7 @@ reserve v for Vector of W;
 definition let n,RAS,W,i;
  mode Tuple of i,W is Tuple of i,the carrier of the algebra of W;
 end;
+
 
 reserve x,y for Tuple of (n+1),W;
 
@@ -201,6 +233,7 @@ definition
          holds it = sub(x',i,v');
 end;
 
+
 theorem :: MIDSP_3:14
  i in Seg(n+1) implies <:x,i,v:>.i = v
                   & for l st l in (dom x)\{i} holds <:x,i,v:>.l = x.l;
@@ -212,9 +245,25 @@ theorem :: MIDSP_3:15
 theorem :: MIDSP_3:16
  (for m holds x.m = y.m) implies x = y;
 
-scheme SeqLambdaD'{n()->Nat,D()->non empty set,F(set)->Element of D()}:
+scheme :: MIDSP_3:sch 1
+ SeqLambdaD'{n()->Nat,D()->non empty set,F(set)->Element of D()}:
   ex z being FinSequence of D() st len z = n()+1 &
-   for j being Nat of n() holds z.j = F(j);
+   for j being Nat of n() holds z.j = F(j)
+proof
+   deffunc G(Nat) = F($1);
+   consider z being FinSequence of D() such that
+   A1: len z = n()+1 and
+   A2: for j st j in (Seg(n()+1)) holds z.j = G(j) from FINSEQ_2:sch 1;
+   reconsider S = Seg(n()+1) as non empty set by FINSEQ_1:6;
+   A3: for j being Nat of n() holds z.j = F(j)
+    proof
+      let j be Nat of n();
+        j in S by Th8;
+      hence thesis by A2;
+    end;
+   take z;
+   thus thesis by A1,A3;
+ end;
 
 definition let n,RAS,W,a,x;
  func (a,x).W -> Tuple of (n+1),RAS means
@@ -222,11 +271,13 @@ definition let n,RAS,W,a,x;
   it.m = (a,x.m).W;
 end;
 
+
 definition let n,RAS,W,a,p;
  func W.(a,p) -> Tuple of (n+1),W means
 :: MIDSP_3:def 12
   it.m = W.(a,p.m);
 end;
+
 
 theorem :: MIDSP_3:17
  W.(a,p) = x iff (a,x).W = p;
@@ -242,6 +293,7 @@ definition let n,RAS,W,a,x;
 :: MIDSP_3:def 13
    W.(a,*'(a,(a,x).W));
 end;
+
 
 theorem :: MIDSP_3:20
  W.(a,p) = x & W.(a,b) = v implies (*'(a,p) = b iff Phi(a,x) = v);
@@ -266,6 +318,7 @@ definition let n;
 :: MIDSP_3:def 14
   it is_invariance;
 end;
+
 
 reserve RAS for ReperAlgebra of n;
 reserve a,b,pm,p'm,p''m for Point of RAS;

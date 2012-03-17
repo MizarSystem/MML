@@ -26,14 +26,32 @@ environ
 
 begin :: Semilattice of type widening
 
-definition
+registration
  cluster trivial reflexive -> complete (non empty RelStr);
+ coherence
+  proof
+   let R be non empty RelStr;
+   assume
+A1: for x,y being Element of R holds x = y;
+   assume
+A2: for x being Element of R holds x <= x;
+   let X be set; consider a being Element of R;
+   take a; thus X is_<=_than a
+     proof
+      let b be Element of R; a = b by A1;
+      hence thesis by A2;
+     end;
+   let b be Element of R; a = b by A1;
+   hence thesis by A2;
+  end;
 end;
+
 
 definition
  let T be RelStr;
  mode type of T is Element of T;
 end;
+
 
 definition
  let T be RelStr;
@@ -42,9 +60,31 @@ definition
   the InternalRel of T is co-well_founded;
 end;
 
-definition
+
+registration
  cluster trivial -> Noetherian (non empty RelStr);
+ coherence
+  proof
+   let S be non empty RelStr;
+   assume
+A1: for x,y being Element of S holds x = y;
+   set R = the InternalRel of S;
+   let Y be set; assume
+A2: Y c= field R;
+   assume Y <> {}; then
+   reconsider X = Y as non empty set;
+   consider a being Element of X;
+   take a;
+   thus
+A3: a in Y;
+   let b be set; assume b in Y; then
+    a in field R & b in field R &
+    field R c= (the carrier of S) \/ the carrier of S
+     by A2,A3,RELSET_1:19;
+   hence thesis by A1;
+  end;
 end;
+
 
 definition
  let T be non empty RelStr;
@@ -55,6 +95,7 @@ definition
     for b being Element of T st b in A holds not a < b;
 end;
 
+
 definition
  let T be Poset;
  attr T is Mizar-widening-like means
@@ -63,22 +104,56 @@ definition
   T is Noetherian;
 end;
 
-definition
+
+registration
   cluster Mizar-widening-like -> Noetherian with_suprema upper-bounded Poset;
+  coherence
+  proof let T be Poset; assume
+A1: T is sup-Semilattice & T is Noetherian;
+    hence T is Noetherian with_suprema;
+    reconsider S = T as sup-Semilattice by A1;
+    the carrier of S c= the carrier of S; then
+    the carrier of S is non empty Subset of S; then
+    consider a being Element of T such that a in the carrier of T and
+A2: for b being Element of T st b in the carrier of T holds not a < b
+      by A1,Def2;
+    take a; let b be Element of T;
+    a"\/"b in the carrier of S; then
+    a"\/"b >= a & not a < a"\/"b by A2,YELLOW_0:22; then
+    a"\/"b = a by ORDERS_1:def 10;
+    hence thesis by A1,YELLOW_0:22;
+  end;
 end;
 
-definition
+
+registration
  cluster Noetherian -> Mizar-widening-like sup-Semilattice;
+ coherence
+  proof let T be sup-Semilattice such that
+A1: T is Noetherian;
+    thus T is sup-Semilattice;
+    thus thesis by A1;
+  end;
 end;
 
-definition
+
+registration
  cluster Mizar-widening-like (complete sup-Semilattice);
+ existence
+  proof
+   consider T being trivial LATTICE;
+   take T; thus T is sup-Semilattice;
+   thus thesis;
+  end;
 end;
 
-definition
+
+registration
   let T be Noetherian RelStr;
   cluster the InternalRel of T -> co-well_founded;
+  coherence by Def1;
 end;
+
 
 theorem :: ABCMIZ_0:1
  for T being Noetherian sup-Semilattice
@@ -93,6 +168,7 @@ definition
  #);
 end;
 
+
 definition
  let A be AdjectiveStr;
  attr A is void means
@@ -100,6 +176,7 @@ definition
   the adjectives of A is empty;
  mode adjective of A is Element of the adjectives of A;
 end;
+
 
 theorem :: ABCMIZ_0:2
  for A1,A2 being AdjectiveStr
@@ -113,6 +190,7 @@ definition
 :: ABCMIZ_0:def 5
    (the non-op of A).a;
 end;
+
 
 theorem :: ABCMIZ_0:3
  for A1,A2 being AdjectiveStr
@@ -130,6 +208,7 @@ definition
 :: ABCMIZ_0:def 7
   not ex a being adjective of A st non-a = a;
 end;
+
 
 theorem :: ABCMIZ_0:4
  for a1,a2 being set st a1 <> a2
@@ -149,14 +228,25 @@ theorem :: ABCMIZ_0:6
   st the AdjectiveStr of A1 = the AdjectiveStr of A2
   holds A1 is without_fixpoints implies A2 is without_fixpoints;
 
-definition
+registration
  cluster non void involutive without_fixpoints (strict AdjectiveStr);
+ existence
+  proof
+   reconsider x = 0, y = 1 as Element of {0,1} by TARSKI:def 2;
+   reconsider n = (0,1)-->(y,x) as UnOp of {0,1};
+   take AdjectiveStr(#{0,1}, n#);
+    0 <> 1 & n.x = y & n.y = x by FUNCT_4:66;
+   hence thesis by Th4;
+  end;
 end;
 
-definition
+
+registration
  let A be non void AdjectiveStr;
  cluster the adjectives of A -> non empty;
+ coherence by Def4;
 end;
+
 
 definition
  struct(RelStr,AdjectiveStr) TA-structure(#
@@ -167,28 +257,52 @@ definition
  #);
 end;
 
-definition
+
+registration
  let X be non empty set;
  let A be set;
  let r be Relation of X;
  let n be UnOp of A;
  let a be Function of X, Fin A;
  cluster TA-structure(#X,A,r,n,a#) -> non empty;
+ coherence by STRUCT_0:def 1;
 end;
 
-definition
+
+registration
  let X be set;
  let A be non empty set;
  let r be Relation of X;
  let n be UnOp of A;
  let a be Function of X, Fin A;
  cluster TA-structure(#X,A,r,n,a#) -> non void;
+ coherence by Def4;
 end;
 
-definition
+
+registration
  cluster trivial reflexive non empty non void involutive without_fixpoints
          strict TA-structure;
+ existence
+  proof
+   consider R being trivial reflexive non empty RelStr,
+            A being non void involutive without_fixpoints AdjectiveStr,
+            f being Function of the carrier of R, Fin the adjectives of A;
+   take T = TA-structure(#
+              the carrier of R, the adjectives of A,
+              the InternalRel of R, the non-op of A,
+              f
+            #);
+   thus T is trivial by TEX_2:4;
+    the RelStr of R = the RelStr of T;
+   hence T is reflexive by WAYBEL_8:12;
+   thus T is non empty non void;
+    the AdjectiveStr of A = the AdjectiveStr of T;
+   hence T is involutive without_fixpoints by Th5,Th6;
+   thus thesis;
+  end;
 end;
+
 
 definition
  let T be TA-structure;
@@ -197,6 +311,7 @@ definition
 :: ABCMIZ_0:def 8
   (the adj-map of T).t;
 end;
+
 
 theorem :: ABCMIZ_0:7
  for T1,T2 being TA-structure
@@ -214,6 +329,7 @@ definition
    holds not non-a in adjs t;
 end;
 
+
 theorem :: ABCMIZ_0:8
  for T1,T2 being TA-structure
   st the TA-structure of T1 = the TA-structure of T2
@@ -227,6 +343,7 @@ definition
     join-preserving map of T, (BoolePoset the adjectives of T) opp;
 end;
 
+
 theorem :: ABCMIZ_0:9
  for T1,T2 being non empty TA-structure
   st the TA-structure of T1 = the TA-structure of T2
@@ -238,6 +355,7 @@ definition
 :: ABCMIZ_0:def 11
    for t1,t2 being type of T holds adjs(t1"\/"t2) = (adjs t1) /\ (adjs t2);
 end;
+
 
 theorem :: ABCMIZ_0:10
  for T being reflexive transitive antisymmetric with_suprema
@@ -254,6 +372,7 @@ definition
      x in it iff ex t being type of T st x = t & a in adjs t;
 end;
 
+
 definition
  let T be non empty TA-structure;
  let A be Subset of the adjectives of T;
@@ -262,6 +381,7 @@ definition
    for t being type of T holds
      t in it iff for a being adjective of T st a in A holds t in types a;
 end;
+
 
 theorem :: ABCMIZ_0:11
  for T1,T2 being TA-structure
@@ -301,36 +421,122 @@ definition
    for a being adjective of T holds types a \/ types non-a is non empty;
 end;
 
+
 theorem :: ABCMIZ_0:17
  for T1,T2 being TA-structure
   st the TA-structure of T1 = the TA-structure of T2
   holds T1 is adjs-typed implies T2 is adjs-typed;
 
-definition
+registration
  cluster non void Mizar-widening-like involutive without_fixpoints
    consistent adj-structured adjs-typed
    (complete upper-bounded non empty trivial
     reflexive transitive antisymmetric strict TA-structure);
+ existence
+  proof
+    consider R being trivial reflexive non empty RelStr;
+    reconsider x = 0, y = 1 as Element of {0,1} by TARSKI:def 2;
+    reconsider n = (0,1)-->(y,x) as UnOp of {0,1};
+    {0} c= {0,1} by ZFMISC_1:12; then
+    reconsider A = {0} as Element of Fin {0,1} by FINSUB_1:def 5;
+    set f = (the carrier of R) --> A;
+    set T = TA-structure(#the carrier of R, {0,1},
+                          the InternalRel of R, n, f#);
+    the RelStr of T = the RelStr of R; then
+    reconsider T as strict trivial reflexive non empty TA-structure
+      by TEX_2:4,WAYBEL_8:12;
+    take T;  thus T is non void;
+    thus T is Mizar-widening-like;
+A1: 0 <> 1 & n.x = y & n.y = x by FUNCT_4:66;
+    hence T is involutive without_fixpoints by Th4;
+    hereby
+      let t be type of T;
+      let a be adjective of T;
+A2:  (a = 0 or a = 1) & non-a = n.a by Def6,TARSKI:def 2;
+      adjs t = f.t by Def9 .= A by FUNCOP_1:13;
+      hence a in adjs t implies not non-a in adjs t by A1,A2,TARSKI:def 1;
+    end;
+    hereby
+      let t1,t2 be type of T;
+      adjs(t1"\/"t2) = f.(t1"\/"t2) & adjs t1 = f.t1 & adjs t2 = f.t2
+        by Def9; then
+      adjs(t1"\/"t2) = A & adjs t1 = A & adjs t2 = A by FUNCOP_1:13;
+      hence adjs(t1"\/"t2) = adjs t1 /\ adjs t2;
+    end;
+    let a be adjective of T;
+A3: (a = 0 or a = 1) & non-a = n.a by Def6,TARSKI:def 2;
+    consider t being type of T;
+    adjs t = f.t by Def9 .= A by FUNCOP_1:13; then
+    a in adjs t or non-a in adjs t by A1,A3,TARSKI:def 1; then
+    t in types a or t in types non-a by Th13;
+    hence thesis by XBOOLE_0:def 2;
+  end;
 end;
+
 
 theorem :: ABCMIZ_0:18
  for T being consistent TA-structure
  for a being adjective of T
   holds types a misses types non-a;
 
-definition
+registration
  let T be adj-structured (reflexive transitive antisymmetric with_suprema
           TA-structure);
  let a be adjective of T;
  cluster types a -> lower directed;
+ coherence
+  proof
+   thus types a is lower
+     proof let x,y be Element of T;
+      assume x in types a & y <= x; then
+       a in adjs x & adjs x c= adjs y by Th10,Th13;
+      hence y in types a by Th13;
+     end;
+   let x,y be Element of T;
+   assume x in types a & y in types a; then
+    a in adjs x & a in adjs y by Th13; then
+    a in (adjs x)/\adjs y by XBOOLE_0:def 3; then
+A1: a in adjs(x"\/"y) by Def12;
+   take x"\/"y;
+   thus thesis by A1,Th13,YELLOW_0:22;
+  end;
 end;
 
-definition
+
+registration
  let T be adj-structured (reflexive transitive antisymmetric with_suprema
           TA-structure);
  let A be Subset of the adjectives of T;
  cluster types A -> lower directed;
+ coherence
+  proof
+    thus types A is lower
+    proof let x,y be Element of T;
+      assume
+A1:   x in types A & y <= x;
+      now
+        let a be adjective of T; assume a in A; then
+        x in types a by A1,Def14; then
+        a in adjs x & adjs x c= adjs y by A1,Th10,Th13;
+        hence y in types a by Th13;
+      end;
+      hence thesis by Def14;
+    end;
+    let x,y be Element of T; assume
+A2: x in types A & y in types A;
+A3: now let a be adjective of T;
+      assume a in A; then
+      x in types a & y in types a by A2,Def14; then
+      a in adjs x & a in adjs y by Th13; then
+      a in (adjs x)/\adjs y by XBOOLE_0:def 3; then
+      a in adjs(x"\/"y) by Def12;
+      hence x"\/"y in types a by Th13;
+    end;
+    take x"\/"y;
+    thus thesis by A3,Def14,YELLOW_0:22;
+  end;
 end;
+
 
 theorem :: ABCMIZ_0:19
  for T being adj-structured (with_suprema reflexive antisymmetric transitive
@@ -350,6 +556,7 @@ definition
    ex t' being type of T st t' in types a & t' <= t;
 end;
 
+
 definition
   let T be TA-structure;
   let t be type of T;
@@ -358,6 +565,7 @@ definition
 :: ABCMIZ_0:def 16
    ex t' being type of T st A c= adjs t' & t' <= t;
 end;
+
 
 theorem :: ABCMIZ_0:20
  for T being adj-structured (reflexive transitive antisymmetric with_suprema
@@ -375,6 +583,7 @@ definition
 :: ABCMIZ_0:def 17
    sup(types a /\ downarrow t);
 end;
+
 
 theorem :: ABCMIZ_0:21
  for T being Noetherian adj-structured (reflexive transitive antisymmetric
@@ -442,6 +651,7 @@ definition
    sup(types A /\ downarrow t);
 end;
 
+
 theorem :: ABCMIZ_0:28
   for T being non empty reflexive transitive antisymmetric TA-structure
   for t being type of T
@@ -459,12 +669,19 @@ definition
     holds it.(i+1) = a ast t;
 end;
 
-definition
+
+registration
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
   let p be FinSequence of the adjectives of T;
   cluster apply(p,t) -> non empty;
+  coherence
+  proof
+    len apply(p,t) = len p+1 by Def20;
+    hence thesis by FINSEQ_1:25;
+  end;
 end;
+
 
 theorem :: ABCMIZ_0:29
  for T being non empty non void reflexive transitive TA-structure
@@ -484,6 +701,7 @@ definition
 :: ABCMIZ_0:def 20
    apply(v,t).(len v+1);
 end;
+
 
 theorem :: ABCMIZ_0:31
  for T being non empty non void reflexive transitive TA-structure
@@ -539,6 +757,7 @@ definition
    st i in dom v & a = v.i & s = apply(v,t).i
    holds a is_applicable_to s;
 end;
+
 
 theorem :: ABCMIZ_0:39
  for T being non empty non void reflexive transitive TA-structure
@@ -698,6 +917,7 @@ definition
    for a being adjective of T holds it.a = sup(types a \/ types non-a);
 end;
 
+
 definition
   struct(TA-structure) TAS-structure(#
    carrier, adjectives -> set,
@@ -708,9 +928,20 @@ definition
   #);
 end;
 
-definition
+
+registration
  cluster non void reflexive trivial non empty strict TAS-structure;
+ existence
+  proof
+    consider P being non void reflexive trivial non empty TA-structure;
+    consider s being Function of the adjectives of P, the carrier of P;
+    take T = TAS-structure(#the carrier of P, the adjectives of P,
+        the InternalRel of P, the non-op of P, the adj-map of P, s#);
+    T is non empty & the RelStr of P = the RelStr of T by STRUCT_0:def 1;
+    hence thesis by Def4,TEX_2:4,WAYBEL_8:12;
+  end;
 end;
+
 
 definition
   let T be non empty non void TAS-structure;
@@ -719,6 +950,7 @@ definition
 :: ABCMIZ_0:def 23
    (the sub-map of T).a;
 end;
+
 
 definition
  let T be non empty non void TAS-structure;
@@ -733,12 +965,14 @@ definition
       sub a = sup (types a \/ types non-a));
 end;
 
+
 definition
   let T be non empty non void TAS-structure;
   redefine attr T is non-absorbing means
 :: ABCMIZ_0:def 26
    for a being adjective of T holds sub non-a = sub a;
 end;
+
 
 definition
  let T be non empty non void TAS-structure;
@@ -748,6 +982,7 @@ definition
 :: ABCMIZ_0:def 27
   t <= sub a & a is_applicable_to t;
 end;
+
 
 definition
  let T be non empty non void reflexive transitive TAS-structure;
@@ -759,6 +994,7 @@ definition
    st i in dom v & a = v.i & s = apply(v,t).i
    holds a is_properly_applicable_to s;
 end;
+
 
 theorem :: ABCMIZ_0:58
  for T being non empty non void reflexive transitive TAS-structure
@@ -798,6 +1034,7 @@ definition
    rng s = A & s is_properly_applicable_to t;
 end;
 
+
 theorem :: ABCMIZ_0:63
  for T being non empty non void reflexive transitive TAS-structure
  for t being type of T, A being Subset of the adjectives of T
@@ -809,10 +1046,129 @@ theorem :: ABCMIZ_0:64
  for t being type of T
   holds {} the adjectives of T is_properly_applicable_to t;
 
-scheme MinimalFiniteSet{P[set]}:
+scheme :: ABCMIZ_0:sch 1
+ MinimalFiniteSet{P[set]}:
   ex A being finite set st P[A] & for B being set st B c= A & P[B] holds B = A
   provided
-  ex A being finite set st P[A];
+  ex A being finite set st P[A]
+proof
+    consider A being finite set such that
+A2: P[A] by A1;
+    defpred _P[set] means P[$1];
+    consider Y being set such that
+A3: for x being set holds x in Y iff x in bool A & _P[x] from XBOOLE_0:sch 1;
+    A c= A; then
+    reconsider Y as non empty set by A2,A3;
+A4: bool A is finite by FINSET_1:24;
+    Y c= bool A proof let x be set; thus thesis by A3; end; then
+    reconsider Y as finite non empty set by A4,FINSET_1:13;
+    defpred _R[set,set] means $1 c= $2;
+A5: for x being Element of Y holds _R[x,x];
+A6: for x,y being Element of Y st _R[x,y] & _R[y,x] holds x = y
+     by XBOOLE_0:def 10;
+A7: for x,y,z being Element of Y st _R[x,y] & _R[y,z] holds _R[x,z]
+     by XBOOLE_1:1;
+A8:  for X being set st X c= Y &
+     (for x,y being Element of Y st x in X & y in X
+       holds _R[x,y] or _R[y,x]) holds
+     ex y being Element of Y st
+      for x being Element of Y st x in X holds _R[y,x]
+     proof let X be set such that
+A9:   X c= Y and
+A10:   for x,y being Element of Y st x in X & y in X holds _R[x,y] or _R[y,x];
+      per cases;
+      suppose
+A11:   X = {}; consider y being Element of Y;
+      take y;
+      thus for x being Element of Y st x in X holds y c= x by A11;
+      end;
+      suppose
+A12:   X <> {}; consider x0 being Element of X; x0 in X by A12; then
+      reconsider x0 as Element of Y by A9;
+      deffunc F(set) = Card {y where y is Element of Y: y in X & y c< $1};
+      consider f being Function such that
+A13:   dom f = X & for x being set st x in X holds f.x =  F(x) from
+FUNCT_1:sch 3;
+      set fx0 = {y where y is Element of Y: y in X & y c< x0};
+      fx0 c= Y
+      proof let a be set; assume a in fx0; then
+        ex y being Element of Y st a = y & y in X & y c< x0;
+        hence thesis;
+      end; then
+      reconsider fx0 as finite set by FINSET_1:13;
+      defpred _P[Nat] means
+        ex x being Element of Y st x in X & $1 = f.x;
+      f.x0 = card fx0 by A12,A13; then
+A14:   ex n being Nat st _P[n] by A12;
+A15:   for k being Nat st k<>0 & _P[k] ex n being Nat st n<k & _P[n]
+      proof let k being Nat such that
+A16:     k <> 0;
+        given x being Element of Y such that
+A17:     x in X & k = f.x;
+        set A = {z where z is Element of Y: z in X & z c< x};
+        reconsider A as non empty set by A13,A16,A17,CARD_1:78;
+        consider z being Element of A; z in A; then
+        consider y being Element of Y such that
+A18:     z = y & y in X & y c< x;
+        set fx0 = {a where a is Element of Y: a in X & a c< y};
+        fx0 c= Y
+        proof let a be set; assume a in fx0; then
+          ex z being Element of Y st a = z & z in X & z c< y;
+          hence thesis;
+        end; then
+        reconsider fx0 as finite set by FINSET_1:13;
+        reconsider n = card fx0 as Nat;
+        set fx = {a where a is Element of Y: a in X & a c< x};
+        fx c= Y
+        proof let a be set; assume a in fx; then
+          ex z being Element of Y st a = z & z in X & z c< x;
+          hence thesis;
+        end; then
+        reconsider fx as finite set by FINSET_1:13;
+A19:     k = card fx by A13,A17;
+        take n;
+A20:     fx0 c= fx
+        proof
+          let a be set; assume a in fx0; then
+          consider b being Element of Y such that
+A21:       a = b & b in X & b c< y;
+          b c< x by A18,A21,XBOOLE_1:56;
+          hence thesis by A21;
+        end; then
+        card fx0 c= card fx by CARD_1:27; then
+A22:     n <= k by A19,CARD_1:56;
+        not ex a being Element of Y st y = a & a in X & a c< y; then
+        y in fx & not y in fx0 by A18; then
+        card fx <> card fx0 by A20,TRIANG_1:3;
+        hence n < k by A19,A22,REAL_1:def 5;
+        take y; thus y in X & n = f.y by A13,A18;
+      end;
+      _P[0] from NAT_1:sch 7(A14,A15); then
+      consider y being Element of Y such that
+A23:   y in X & 0 = f.y;
+A24:   f.y = Card {z where z is Element of Y: z in X & z c< y} by A13,A23;
+      take y;
+      let x be Element of Y; assume
+A25:   x in X; then
+      x c= y or y c= x by A10,A23; then
+      x c< y or y c= x by XBOOLE_0:def 8; then
+      x in {z where z is Element of Y: z in X & z c< y} or y c= x by A25;
+      hence _R[y,x] by A23,A24,CARD_2:59;
+    end;
+    end;
+    consider x being Element of Y such that
+A26: for y being Element of Y st x <> y holds not _R[y,x]
+      from ORDERS_2:sch 2(A5,A6,A7,A8);
+    x in bool A by A3; then
+    reconsider x as finite set by FINSET_1:13;
+    take x; thus P[x] by A3;
+    let B be set; assume
+A27: B c= x & P[B];
+    x in bool A by A3; then
+    B c= A by A27,XBOOLE_1:1; then
+    B in Y by A3,A27;
+    hence thesis by A26,A27;
+  end;
 
 theorem :: ABCMIZ_0:65
  for T being non empty non void reflexive transitive TAS-structure
@@ -835,12 +1191,58 @@ definition
        A ast (t1 "\/" t2) = t2;
 end;
 
-definition
+
+registration
  cluster Mizar-widening-like involutive without_fixpoints
    consistent adj-structured adjs-typed non-absorbing subjected commutative
   (complete upper-bounded non empty non void trivial reflexive
   transitive antisymmetric strict TAS-structure);
+ existence
+ proof consider P being non void Mizar-widening-like involutive
+   without_fixpoints consistent adj-structured adjs-typed
+   (trivial non empty reflexive complete strict TA-structure);
+   set T = TAS-structure(#the carrier of P, the adjectives of P,
+          the InternalRel of P, the non-op of P, the adj-map of P, sub P#);
+   T is non empty & the RelStr of P = the RelStr of T by STRUCT_0:def 1; then
+   reconsider T as non void trivial non empty reflexive strict TAS-structure
+     by Def4,TEX_2:4,WAYBEL_8:12;
+   take T; thus T is Mizar-widening-like;
+   the AdjectiveStr of P = the AdjectiveStr of T;
+   hence T is involutive without_fixpoints by Th5,Th6;
+   thus T is consistent adj-structured adjs-typed by Th8,Th9,Th17;
+A1:the AdjectiveStr of P = the AdjectiveStr of T;
+A2:the RelStr of P = the RelStr of T;
+   hereby
+     let a be adjective of T;
+     reconsider b = a as adjective of P;
+     thus sub non-a = (sub P).non-a by Def24
+       .= (sub P).non-b by A1,Th3
+       .= sup (types non-b \/ types non-non-b) by Def23
+       .= sup (types non-b \/ types b) by Def7
+       .= (sub P).a by Def23
+       .= sub a by Def24;
+   end;
+   thus T is subjected
+   proof
+     let a be adjective of T;
+     reconsider b = a as adjective of P;
+     non-a = non-b by A1,Th3; then
+     types a = types b & types non-a = types non-b by Th11; then
+     types a \/ types non-a = types b \/ types non-b &
+     ex_sup_of types a \/ types non-a, T by YELLOW_0:17; then
+     sup (types a \/ types non-a) = sup (types b \/ types non-b)
+       by A2,YELLOW_0:26; then
+     sup (types a \/ types non-a) = (sub P).b by Def23 .= sub a by Def24;
+     hence thesis by YELLOW_0:32;
+   end;
+   let t1,t2 be type of T, a be adjective of T such that
+   a is_properly_applicable_to t1 & a ast t1 <= t2;
+   take A = {} the adjectives of T;
+   thus A is_properly_applicable_to t1 "\/" t2 by Th64;
+   thus A ast (t1 "\/" t2) = t2 by REALSET1:def 20;
+ end;
 end;
+
 
 theorem :: ABCMIZ_0:66
  for T being Noetherian adj-structured (reflexive transitive antisymmetric
@@ -861,19 +1263,46 @@ definition
       a is_properly_applicable_to t2 & a ast t2 = t1;
 end;
 
+
 theorem :: ABCMIZ_0:67
  for T being adj-structured antisymmetric
      (non void reflexive transitive with_suprema Noetherian TAS-structure)
   holds T@--> c= the InternalRel of T;
 
-scheme RedInd{X() -> non empty set, P[set,set], R() -> Relation of X()}:
+scheme :: ABCMIZ_0:sch 2
+ RedInd{X() -> non empty set, P[set,set], R() -> Relation of X()}:
   for x,y being Element of X() st R() reduces x,y holds P[x,y]
   provided
    for x,y being Element of X() st [x,y] in R() holds P[x,y]
   and
    for x being Element of X() holds P[x,x]
   and
-   for x,y,z being Element of X() st P[x,y] & P[y,z] holds P[x,z];
+   for x,y,z being Element of X() st P[x,y] & P[y,z] holds P[x,z]
+proof
+    let x,y be Element of X();
+    given p being RedSequence of R() such that
+A4: p.1 = x & p.len p = y;
+    defpred _P[Nat] means 1+$1 <= len p implies P[x, p.(1+$1)];
+A5: _P[0] by A2,A4;
+A6: now let i be Nat such that
+A7:   _P[i];
+      now assume
+A8:   1+(i+1) <= len p;
+      i+1 < len p & i+1 >= 1 & 1+(i+1) >= 1 by A8,NAT_1:29,38; then
+      P[x, p.(1+i)] & i+1 in dom p & 1+(i+1) in dom p
+        by A7,A8,FINSEQ_3:27; then
+A9:   [p.(i+1), p.(1+(i+1))] in R() by REWRITE1:def 2; then
+A10:   p.(i+1) in X() & p.(1+(i+1)) in X() by ZFMISC_1:106; then
+      P[p.(i+1), p.(1+(i+1))] by A1,A9;
+      hence P[x, p.(1+(i+1))] by A3,A7,A8,A10,NAT_1:38;
+     end; hence _P[i+1];
+    end;
+    len p > 0 by REWRITE1:def 2; then
+    len p >= 0+1 by NAT_1:38; then
+A11: ex n being Nat st len p = 1+n by NAT_1:28;
+    for n being Nat holds _P[n] from NAT_1:sch 1(A5,A6);
+    hence thesis by A4,A11;
+  end;
 
 theorem :: ABCMIZ_0:68
  for T being adj-structured antisymmetric
@@ -963,6 +1392,7 @@ definition
 :: ABCMIZ_0:def 32
    nf(t, T@-->);
 end;
+
 
 theorem :: ABCMIZ_0:79
  for T being adj-structured with_suprema antisymmetric commutative

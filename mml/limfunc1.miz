@@ -56,6 +56,7 @@ definition let n,m;
   coherence by FINSEQ_2:1;
 end;
 
+
 theorem Th1:
 0<=r1 & r1<r2 & 0<g1 & g1<=g2 implies r1*g1<r2*g2
 proof assume A1: 0<=r1 & r1<r2 & 0<g1 & g1<=g2; then A2: r1*g1<=r1*g2 by AXIOMS
@@ -64,10 +65,10 @@ proof assume A1: 0<=r1 & r1<r2 & 0<g1 & g1<=g2; then A2: r1*g1<=r1*g2 by AXIOMS
  hence thesis by A2,AXIOMS:22;
 end;
 
-definition let r be real number;
-  redefine func halfline(r);
-  synonym left_open_halfline(r);
-end;
+notation let r be real number;
+  synonym left_open_halfline(r) for halfline(r);
+  end;
+
 
 reserve r,r1,r2,g,g1,g2 for Real;
 
@@ -91,6 +92,7 @@ hence x in REAL;
   end; hence thesis by TARSKI:def 3;
  end;
 end;
+
 
 canceled 6;
 
@@ -394,7 +396,9 @@ proof assume that
   A7: n<=n1+n by NAT_1:37; then 0<seq.(n1+n) by A1,A4,SEQM_3:12;
   then seq.(n1+n)<seq.n by A6,ABSVALUE:def 1;
   hence contradiction by A1,A7,SEQM_3:12;
+ end;
  suppose seq.n=0; hence contradiction by A1,SEQ_1:7;
+ end;
  end; hence contradiction;
 end;
 
@@ -413,7 +417,9 @@ proof assume that
   then -seq.(n1+n)<-seq.n by A6,ABSVALUE:def 1; then seq.n<seq.(n1+n) by REAL_1
 :50;
   hence contradiction by A1,A7,SEQM_3:14;
+ end;
  suppose seq.n=0; hence contradiction by A1,SEQ_1:7;
+ end;
  end; hence contradiction;
 end;
 
@@ -431,9 +437,11 @@ then -(seq.m-lim seq)<lim seq by A5,ABSVALUE:def 1;
   then lim seq<lim seq+seq.m by REAL_1:84;
   then lim seq - lim seq<seq.m by REAL_1:84;
 hence contradiction by A6,XCMPLX_1:14;
+ end;
  suppose seq.m=0; then abs(-lim seq)<lim seq by A5,XCMPLX_1:150;
   then abs(lim seq)<lim seq by ABSVALUE:17;
   hence contradiction by A1,ABSVALUE:def 1;
+ end;
  end; hence contradiction;
 end;
 
@@ -443,7 +451,7 @@ ex n st for m st n<=m holds (lim seq)/2<seq.m
 proof assume A1: seq is convergent & 0<lim seq;
  deffunc U(set) = (lim seq)/2;
  consider s1 be Real_Sequence such that
- A2: for n holds s1.n= U(n) from ExRealSeq;
+ A2: for n holds s1.n= U(n) from SEQ_1:sch 1;
  A3: s1 is constant by A2,SEQM_3:def 6; s1.0=(lim seq)/2 by A2;
  then lim(seq-s1)=lim seq-(lim seq)/2 by A1,A3,SEQ_4:59
  .=(lim seq)/2+(lim seq)/2-(lim seq)/2 by XCMPLX_1:66
@@ -464,6 +472,7 @@ definition let seq;
   for r ex n st for m st n<=m holds seq.m<r;
 end;
 
+
 canceled 2;
 
 theorem
@@ -476,11 +485,13 @@ proof assume A1: seq is divergent_to+infty or seq is divergent_to-infty;
     now let k; n<=k+m by A3,NAT_1:37;
    then 0<seq.(k+m) by A2; hence 0<>(seq^\m).k by SEQM_3:def 9;
   end; hence seq^\m is_not_0 by SEQ_1:7;
+ end;
  suppose seq is divergent_to-infty; then consider n such that
   A4: for m st n<=m holds seq.m<0 by Def5; take n; let m such that A5: n<=m;
     now let k; n<=k+m by A5,NAT_1:37;
    then seq.(k+m)<0 by A4; hence (seq^\m).k<>0 by SEQM_3:def 9;
   end; hence seq^\m is_not_0 by SEQ_1:7;
+ end;
  end; hence thesis;
 end;
 
@@ -716,7 +727,7 @@ theorem Th48:
 proof assume A1: for n holds seq.n=-n;
  deffunc U(Nat) = $1;
 consider s1 be Real_Sequence such that
- A2: for n holds s1.n=U(n) from ExRealSeq;
+ A2: for n holds s1.n=U(n) from SEQ_1:sch 1;
  s1 is divergent_to+infty by A2,Th47;
  then (-1)(#)s1 is divergent_to-infty by Th40;
  then A3: -s1 is divergent_to-infty by SEQ_1:25;
@@ -777,11 +788,13 @@ proof assume A1: seq is divergent_to+infty or seq is divergent_to-infty; let r;
   then A3: seq.m<=abs(seq).m by SEQ_1:16; A4: r<=abs(r) by ABSVALUE:11;
   assume n<=m; then abs(r)<seq.m by A2; then r<seq.m by A4,AXIOMS:22;
   hence r<abs(seq).m by A3,AXIOMS:22;
+ end;
  suppose seq is divergent_to-infty;
   then consider n such that A5: for m st n<=m holds seq.m<-r by Def5;
   take n; let m; -abs(seq.m)<=seq.m by ABSVALUE:11;
   then A6: -abs(seq).m<=seq.m by SEQ_1:16; assume n<=m; then seq.m<-r by A5;
   then -abs(seq).m<-r by A6,AXIOMS:22; hence r<abs(seq).m by REAL_1:50;
+ end;
  end; hence thesis;
 end;
 
@@ -873,17 +886,23 @@ proof assume A1: seq is monotone;
   suppose seq is bounded_above; then A4: seq is bounded by A3,SEQ_2:def 5;
      seq is monotone by A2,SEQM_3:def 7;
    hence thesis by A4,SEQ_4:53;
+  end;
   suppose not seq is bounded_above;
    hence thesis by A2,Th56;
+  end;
   end; hence thesis;
+ end;
  suppose A5: seq is non-increasing; then A6: seq is bounded_above by Th26;
     now per cases;
   suppose seq is bounded_below; then A7: seq is bounded by A6,SEQ_2:def 5;
      seq is monotone by A5,SEQM_3:def 7;
    hence thesis by A7,SEQ_4:53;
+  end;
   suppose not seq is bounded_below;
    hence thesis by A5,Th57;
+  end;
   end; hence thesis;
+ end;
  end; hence thesis;
 end;
 
@@ -906,6 +925,7 @@ then A9: 1/seq.m<r by XCMPLX_1:218;
 hence abs((seq").m-0)<r by A9,A10,A11,ABSVALUE:def 1;
   end; hence seq" is convergent by SEQ_2:def 6;
   hence thesis by A3,SEQ_2:def 7;
+ end;
  suppose A12: seq is divergent_to-infty;
   A13: now let r be real number such that A14: 0<r;
     -(r") is Real by XREAL_0:def 1;
@@ -927,6 +947,7 @@ then abs(1/seq.m)=-(1/seq.m) by ABSVALUE:def 1;
 ;
   end; hence seq" is convergent by SEQ_2:def 6; hence thesis by A13,SEQ_2:def 7
 ;
+ end;
  end; hence thesis;
 end;
 
@@ -1068,6 +1089,7 @@ attr f is divergent_in-infty_to-infty means :Def11:
   f*seq is divergent_to-infty;
 end;
 
+
 canceled 6;
 
 theorem
@@ -1094,10 +1116,10 @@ proof thus f is convergent_in+infty implies
    reconsider r as real number;
    take r; thus X[n,r] by A5;
   end; consider s be Real_Sequence such that
-A6: for n holds X[n,s.n] from RealSeqChoice(A4);
+A6: for n holds X[n,s.n] from RCOMP_1:sch 1(A4);
  deffunc U(Nat) = $1;
   consider s1 be Real_Sequence such that
-  A7: for n holds s1.n=U(n) from ExRealSeq;
+  A7: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A8: s1 is divergent_to+infty by A7,Th47;
     now let n; n<s.n by A6; hence s1.n<=s.n by A7;end;
   then A9: s is divergent_to+infty by A8,Th69;
@@ -1151,10 +1173,10 @@ proof thus f is convergent_in-infty implies
    reconsider r as real number;
    take r; thus X[n,r] by A5;
   end; consider s be Real_Sequence such that
-  A6: for n holds X[n,s.n] from RealSeqChoice(A4);
+  A6: for n holds X[n,s.n] from RCOMP_1:sch 1(A4);
  deffunc U(Nat) = -$1;
   consider s1 be Real_Sequence such that
-  A7: for n holds s1.n=U(n) from ExRealSeq;
+  A7: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A8: s1 is divergent_to-infty by A7,Th48;
     now let n; s.n<-n by A6; hence s.n<=s1.n by A7;end;
   then A9: s is divergent_to-infty by A8,Th70;
@@ -1204,10 +1226,10 @@ proof thus f is divergent_in+infty_to+infty implies
    reconsider r as real number;
    take r; thus X[n,r] by A4;
   end; consider s be Real_Sequence such that
-  A5: for n holds X[n,s.n] from RealSeqChoice(A3);
+  A5: for n holds X[n,s.n] from RCOMP_1:sch 1(A3);
  deffunc U(Nat) = $1;
   consider s1 be Real_Sequence such that
-  A6: for n holds s1.n=U(n) from ExRealSeq;
+  A6: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A7: s1 is divergent_to+infty by A6,Th47;
     now let n; n<s.n by A5; hence s1.n<=s.n by A6;end;
   then A8: s is divergent_to+infty by A7,Th69;
@@ -1252,10 +1274,10 @@ proof thus f is divergent_in+infty_to-infty implies
    reconsider r as real number;
    take r; thus X[n,r] by A4;
   end; consider s be Real_Sequence such that
-  A5: for n holds X[n,s.n] from RealSeqChoice(A3);
+  A5: for n holds X[n,s.n] from RCOMP_1:sch 1(A3);
  deffunc U(Nat) = $1;
   consider s1 be Real_Sequence such that
-  A6: for n holds s1.n=U(n) from ExRealSeq;
+  A6: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A7: s1 is divergent_to+infty by A6,Th47;
     now let n; n<s.n by A5; hence s1.n<=s.n by A6;end;
   then A8: s is divergent_to+infty by A7,Th69;
@@ -1301,10 +1323,10 @@ proof thus f is divergent_in-infty_to+infty implies
    reconsider r as real number;
    take r; thus X[n,r] by A4;
   end; consider s be Real_Sequence such that
-  A5: for n holds X[n,s.n] from RealSeqChoice(A3);
+  A5: for n holds X[n,s.n] from RCOMP_1:sch 1(A3);
  deffunc U(Nat) = -$1;
   consider s1 be Real_Sequence such that
-  A6: for n holds s1.n=U(n) from ExRealSeq;
+  A6: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A7: s1 is divergent_to-infty by A6,Th48;
     now let n; s.n<-n by A5; hence s.n<=s1.n by A6;end;
   then A8: s is divergent_to-infty by A7,Th70;
@@ -1349,10 +1371,10 @@ proof thus f is divergent_in-infty_to-infty implies
    reconsider r as real number;
    take r; thus X[n,r] by A4;
   end; consider s be Real_Sequence such that
-  A5: for n holds X[n,s.n] from RealSeqChoice(A3);
+  A5: for n holds X[n,s.n] from RCOMP_1:sch 1(A3);
  deffunc U(Nat) = -$1;
   consider s1 be Real_Sequence such that
-  A6: for n holds s1.n=U(n) from ExRealSeq;
+  A6: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A7: s1 is divergent_to-infty by A6,Th48;
     now let n; s.n<-n by A5; hence s.n<=s1.n by A6;end;
   then A8: s is divergent_to-infty by A7,Th70;
@@ -1794,6 +1816,7 @@ proof assume A1: f is divergent_in+infty_to+infty or
    then abs(f*seq) is divergent_to+infty by Th52;
    hence abs(f)*seq is divergent_to+infty by A6,RFUNCT_2:25;
   end; hence thesis by A3,Def7;
+ end;
  suppose A7: f is divergent_in+infty_to-infty;
   A8: now let r; consider g such that A9: r<g & g in dom f by A7,Def8; take g;
    thus r<g & g in dom abs(f) by A9,SEQ_1:def 10;
@@ -1804,6 +1827,7 @@ proof assume A1: f is divergent_in+infty_to+infty or
    then abs(f*seq) is divergent_to+infty by Th52;
    hence abs(f)*seq is divergent_to+infty by A11,RFUNCT_2:25;
   end; hence thesis by A8,Def7;
+ end;
  end; hence thesis;
 end;
 
@@ -1825,6 +1849,7 @@ proof assume A1: f is divergent_in-infty_to+infty or
    then abs(f*seq) is divergent_to+infty by Th52;
    hence abs(f)*seq is divergent_to+infty by A6,RFUNCT_2:25;
   end; hence thesis by A3,Def10;
+ end;
  suppose A7: f is divergent_in-infty_to-infty;
   A8: now let r; consider g such that A9: g<r & g in dom f by A7,Def11; take g;
    thus g<r & g in dom abs(f) by A9,SEQ_1:def 10;
@@ -1835,6 +1860,7 @@ proof assume A1: f is divergent_in-infty_to+infty or
    then abs(f*seq) is divergent_to+infty by Th52;
    hence abs(f)*seq is divergent_to+infty by A11,RFUNCT_2:25;
   end; hence thesis by A8,Def10;
+ end;
  end; hence thesis;
 end;
 
@@ -2294,10 +2320,10 @@ proof let g1,g2 such that
   take g; thus X[n,g] by A5;
  end;
  consider s1 be Real_Sequence such that
- A6: for n holds X[n,s1.n] from RealSeqChoice(A4);
+ A6: for n holds X[n,s1.n] from RCOMP_1:sch 1(A4);
  deffunc U(Nat) = $1;
  consider s2 be Real_Sequence such that
- A7: for n holds s2.n=U(n) from ExRealSeq;
+ A7: for n holds s2.n=U(n) from SEQ_1:sch 1;
  A8: s2 is divergent_to+infty by A7,Th47;
     now let n; n<s1.n by A6; hence s2.n<=s1.n by A7;
   end;
@@ -2308,6 +2334,7 @@ proof let g1,g2 such that
  end; then lim(f*s1)=g1 by A2,A9; hence g1=g2 by A3,A9,A10;
 end;
 end;
+
 
 definition let f;
 assume A1: f is convergent_in-infty;
@@ -2328,10 +2355,10 @@ proof let g1,g2 such that
   take g; thus X[n,g] by A5;
  end;
  consider s1 be Real_Sequence such that
- A6: for n holds X[n,s1.n] from RealSeqChoice(A4);
+ A6: for n holds X[n,s1.n] from RCOMP_1:sch 1(A4);
  deffunc U(Nat) = -$1;
  consider s2 be Real_Sequence such that
- A7: for n holds s2.n=U(n) from ExRealSeq;
+ A7: for n holds s2.n=U(n) from SEQ_1:sch 1;
  A8: s2 is divergent_to-infty by A7,Th48;
     now let n; s1.n<-n by A6; hence s1.n<=s2.n by A7;
   end;
@@ -2342,6 +2369,7 @@ proof let g1,g2 such that
  end; then lim(f*s1)=g1 by A2,A9; hence g1=g2 by A3,A9,A10;
 end;
 end;
+
 
 canceled 2;
 
@@ -2361,10 +2389,10 @@ for g1 st 0<g1 ex r st for r1 st r1<r & r1 in dom f holds abs(f.r1-g)<g1
    reconsider r as real number;
    take r; thus X[n,r] by A5;
   end; consider s be Real_Sequence such that
-  A6: for n holds X[n,s.n] from RealSeqChoice(A4);
+  A6: for n holds X[n,s.n] from RCOMP_1:sch 1(A4);
  deffunc U(Nat) = -$1;
   consider s1 be Real_Sequence such that
-  A7: for n holds s1.n=U(n) from ExRealSeq;
+  A7: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A8: s1 is divergent_to-infty by A7,Th48;
     now let n; s.n<-n by A6; hence s.n<=s1.n by A7;end;
   then A9: s is divergent_to-infty by A8,Th70;
@@ -2411,10 +2439,10 @@ for g1 st 0<g1 ex r st for r1 st r<r1 & r1 in dom f holds abs(f.r1-g)<g1
    reconsider r as real number;
    take r; thus X[n,r] by A5;
   end; consider s be Real_Sequence such that
-  A6: for n holds X[n,s.n] from RealSeqChoice(A4);
+  A6: for n holds X[n,s.n] from RCOMP_1:sch 1(A4);
  deffunc U(Nat) = $1;
   consider s1 be Real_Sequence such that
-  A7: for n holds s1.n=U(n) from ExRealSeq;
+  A7: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A8: s1 is divergent_to+infty by A7,Th47;
     now let n; n<s.n by A6; hence s1.n<=s.n by A7;end;
   then A9: s is divergent_to+infty by A8,Th69;
@@ -2956,6 +2984,7 @@ A3,A12
      lim((f*seq)^\k)=lim_in+infty f1 by A15,A18,A19,A20,SEQ_2:34;
    hence lim(f*seq)=lim_in+infty f1 by A21,SEQ_4:33;
   end; hence f is convergent_in+infty by A1,Def6; hence thesis by A5,Def12;
+ end;
  suppose A22: dom f2/\right_open_halfline(r1)c=dom f1/\
 right_open_halfline(r1) &
   dom f/\right_open_halfline(r1)c=dom f2/\right_open_halfline(r1);
@@ -2996,6 +3025,7 @@ A3,A30
      lim((f*seq)^\k)=lim_in+infty f1 by A33,A36,A37,A38,SEQ_2:34;
    hence lim(f*seq)=lim_in+infty f1 by A39,SEQ_4:33;
   end; hence f is convergent_in+infty by A1,Def6; hence thesis by A23,Def12;
+ end;
  end; hence thesis;
 end;
 
@@ -3099,6 +3129,7 @@ A3,A12
      lim((f*seq)^\k)=lim_in-infty f1 by A15,A18,A19,A20,SEQ_2:34;
    hence lim(f*seq)=lim_in-infty f1 by A21,SEQ_4:33;
   end; hence f is convergent_in-infty by A1,Def9; hence thesis by A5,Def13;
+ end;
  suppose A22: dom f2/\left_open_halfline(r1)c=dom f1/\left_open_halfline(r1) &
   dom f/\left_open_halfline(r1)c=dom f2/\left_open_halfline(r1);
   A23: now let seq; assume A24: seq is divergent_to-infty & rng seq c=dom f;
@@ -3138,6 +3169,7 @@ A3,A30
      lim((f*seq)^\k)=lim_in-infty f1 by A33,A36,A37,A38,SEQ_2:34;
    hence lim(f*seq)=lim_in-infty f1 by A39,SEQ_4:33;
   end; hence f is convergent_in-infty by A1,Def9; hence thesis by A23,Def13;
+ end;
  end; hence thesis;
 end;
 
@@ -3212,10 +3244,10 @@ A6:  n+0<=n+abs(r) by REAL_1:55;
    then g in right_open_halfline(r) by Def3;
    hence X[n,g] by A5,A6,AXIOMS:22,XBOOLE_0:def 3;
   end; consider s1 be Real_Sequence such that
-  A8: for n holds X[n,s1.n] from RealSeqChoice(A4);
+  A8: for n holds X[n,s1.n] from RCOMP_1:sch 1(A4);
  deffunc U(Nat) = $1;
   consider s2 be Real_Sequence such that
-  A9: for n holds s2.n=U(n) from ExRealSeq;
+  A9: for n holds s2.n=U(n) from SEQ_1:sch 1;
   A10: s2 is divergent_to+infty by A9,Th47;
     now let n; n<s1.n by A8; hence s2.n<=s1.n by A9;
   end; then A11: s1 is divergent_to+infty by A10,Th69;
@@ -3237,6 +3269,7 @@ hence x in dom f2 by A3,XBOOLE_0:def 3;
 21;
    hence (f1*s1).n<=(f2*s1).n by A15,RFUNCT_2:21;
   end; hence thesis by A14,A16,SEQ_2:32;
+ end;
  suppose A17: dom f2/\right_open_halfline(r)c=dom f1/\right_open_halfline(r) &
   for g st g in dom f2/\right_open_halfline(r) holds f1.g<=f2.g;
   defpred X[Nat,real number] means
@@ -3253,10 +3286,10 @@ A20:  n+0<=n+abs(r) by REAL_1:55;
    hence X[n,g] by A19,A20,AXIOMS:22,XBOOLE_0:def 3;
   end;
   consider s1 be Real_Sequence such that
-  A22: for n holds X[n,s1.n] from RealSeqChoice(A18);
+  A22: for n holds X[n,s1.n] from RCOMP_1:sch 1(A18);
  deffunc U(Nat) = $1;
   consider s2 be Real_Sequence such that
-  A23: for n holds s2.n=U(n) from ExRealSeq;
+  A23: for n holds s2.n=U(n) from SEQ_1:sch 1;
   A24: s2 is divergent_to+infty by A23,Th47;
     now let n; n<s1.n by A22; hence s2.n<=s1.n by A23;
   end; then A25: s1 is divergent_to+infty by A24,Th69;
@@ -3278,6 +3311,7 @@ hence x in dom f1 by A17,XBOOLE_0:def 3;
 21;
    hence (f1*s1).n<=(f2*s1).n by A27,RFUNCT_2:21;
   end; hence thesis by A28,A30,SEQ_2:32;
+ end;
  end; hence thesis;
 end;
 
@@ -3313,10 +3347,10 @@ A6:  g < -n by A5,AXIOMS:22;
    then g in left_open_halfline(r) by PROB_1:def 15;
    hence X[n,g] by A5,A6,XBOOLE_0:def 3;
   end; consider s1 be Real_Sequence such that
-  A8: for n holds X[n,s1.n] from RealSeqChoice(A4);
+  A8: for n holds X[n,s1.n] from RCOMP_1:sch 1(A4);
  deffunc U(Nat) = -$1;
   consider s2 be Real_Sequence such that
-  A9: for n holds s2.n=U(n) from ExRealSeq;
+  A9: for n holds s2.n=U(n) from SEQ_1:sch 1;
   A10: s2 is divergent_to-infty by A9,Th48;
     now let n; s1.n<-n by A8; hence s1.n<=s2.n by A9;
   end; then A11: s1 is divergent_to-infty by A10,Th70;
@@ -3338,6 +3372,7 @@ hence x in dom f2 by A3,XBOOLE_0:def 3;
 21;
    hence (f1*s1).n<=(f2*s1).n by A15,RFUNCT_2:21;
   end; hence thesis by A14,A16,SEQ_2:32;
+ end;
  suppose A17: dom f2/\left_open_halfline(r)c=dom f1/\left_open_halfline(r) &
   for g st g in dom f2/\left_open_halfline(r) holds f1.g<=f2.g;
   defpred X[Nat,real number] means
@@ -3355,10 +3390,10 @@ A20:    -n-abs(r)<=-n-0 by REAL_1:92;
    then g in left_open_halfline(r) by PROB_1:def 15;
    hence X[n,g] by A19,A20,AXIOMS:22,XBOOLE_0:def 3;
   end; consider s1 be Real_Sequence such that
-  A22: for n holds X[n,s1.n] from RealSeqChoice(A18);
+  A22: for n holds X[n,s1.n] from RCOMP_1:sch 1(A18);
  deffunc U(Nat) = -$1;
   consider s2 be Real_Sequence such that
-  A23: for n holds s2.n=U(n) from ExRealSeq;
+  A23: for n holds s2.n=U(n) from SEQ_1:sch 1;
   A24: s2 is divergent_to-infty by A23,Th48;
     now let n; s1.n<-n by A22; hence s1.n<=s2.n by A23;
   end; then A25: s1 is divergent_to-infty by A24,Th70;
@@ -3380,6 +3415,7 @@ hence x in dom f1 by A17,XBOOLE_0:def 3;
 21;
    hence (f1*s1).n<=(f2*s1).n by A27,RFUNCT_2:21;
   end; hence thesis by A28,A30,SEQ_2:32;
+ end;
  end; hence thesis;
 end;
 
@@ -3405,6 +3441,7 @@ proof assume that A1: f is divergent_in+infty_to+infty or
    then (f*seq)" is convergent & lim((f*seq)")=0 by Th61;
    hence (f^)*seq is convergent & lim((f^)*seq)=0 by A8,RFUNCT_2:27;
   end; hence f^ is convergent_in+infty by A4,Def6; hence thesis by A7,Def12;
+ end;
  suppose A9: f is divergent_in+infty_to-infty;
   A10: now let seq such that A11: seq is divergent_to+infty & rng seq c=dom(f^)
 ;
@@ -3414,6 +3451,7 @@ proof assume that A1: f is divergent_in+infty_to+infty or
    then (f*seq)" is convergent & lim((f*seq)")=0 by Th61;
    hence (f^)*seq is convergent & lim((f^)*seq)=0 by A11,RFUNCT_2:27;
   end; hence f^ is convergent_in+infty by A4,Def6; hence thesis by A10,Def12;
+ end;
  end; hence thesis;
 end;
 
@@ -3439,6 +3477,7 @@ proof assume that
    then (f*seq)" is convergent & lim((f*seq)")=0 by Th61;
    hence (f^)*seq is convergent & lim((f^)*seq)=0 by A8,RFUNCT_2:27;
   end; hence f^ is convergent_in-infty by A4,Def9; hence thesis by A7,Def13;
+ end;
  suppose A9: f is divergent_in-infty_to-infty;
   A10: now let seq such that A11: seq is divergent_to-infty & rng seq c=dom(f^)
 ;
@@ -3448,6 +3487,7 @@ proof assume that
    then (f*seq)" is convergent & lim((f*seq)")=0 by Th61;
    hence (f^)*seq is convergent & lim((f^)*seq)=0 by A11,RFUNCT_2:27;
   end; hence f^ is convergent_in-infty by A4,Def9; hence thesis by A10,Def13;
+ end;
  end; hence thesis;
 end;
 
@@ -3641,6 +3681,7 @@ proof assume A1: f is convergent_in+infty & lim_in+infty f=0;
 ; then not f.g2 in {0} by TARSKI:def 1; then not g2 in f"{0} by FUNCT_1:def 13;
    then g2 in dom f\f"{0} by A5,XBOOLE_0:def 4;
    hence g2 in dom(f^) by RFUNCT_1:def 8;
+  end;
   suppose A6: r<=g1; consider g2 such that A7: g1<g2 & g2 in dom f by A1,Def6
 ; take g2;
    thus r1<g2 by A3,A7,AXIOMS:22; r<g2 by A6,A7,AXIOMS:22;
@@ -3650,6 +3691,7 @@ proof assume A1: f is convergent_in+infty & lim_in+infty f=0;
 ; then not f.g2 in {0} by TARSKI:def 1; then not g2 in f"{0} by FUNCT_1:def 13;
    then g2 in dom f\f"{0} by A7,XBOOLE_0:def 4;
    hence g2 in dom(f^) by RFUNCT_1:def 8;
+  end;
   end; hence thesis;
  end;
  let s be Real_Sequence; assume A8: s is divergent_to+infty & rng s c=dom (f^);
@@ -3695,6 +3737,7 @@ proof assume A1: f is convergent_in+infty & lim_in+infty f=0;
 ; then not f.g2 in {0} by TARSKI:def 1; then not g2 in f"{0} by FUNCT_1:def 13;
    then g2 in dom f\f"{0} by A5,XBOOLE_0:def 4;
    hence g2 in dom(f^) by RFUNCT_1:def 8;
+  end;
   suppose A6: r<=g1; consider g2 such that A7: g1<g2 & g2 in dom f by A1,Def6
 ; take g2;
    thus r1<g2 by A3,A7,AXIOMS:22; r<g2 by A6,A7,AXIOMS:22;
@@ -3704,6 +3747,7 @@ proof assume A1: f is convergent_in+infty & lim_in+infty f=0;
 ; then not f.g2 in {0} by TARSKI:def 1; then not g2 in f"{0} by FUNCT_1:def 13;
    then g2 in dom f\f"{0} by A7,XBOOLE_0:def 4;
    hence g2 in dom(f^) by RFUNCT_1:def 8;
+  end;
   end; hence thesis;
  end;
  let s be Real_Sequence; assume A8: s is divergent_to+infty & rng s c=dom (f^);
@@ -3751,6 +3795,7 @@ proof assume A1: f is convergent_in-infty & lim_in-infty f=0;
 ; then not f.g2 in {0} by TARSKI:def 1; then not g2 in f"{0} by FUNCT_1:def 13;
    then g2 in dom f\f"{0} by A5,XBOOLE_0:def 4;
    hence g2 in dom(f^) by RFUNCT_1:def 8;
+  end;
   suppose A6: r<=g1; consider g2 such that A7: g2<r & g2 in dom f by A1,Def9
 ; take g2;
      g2<g1 by A6,A7,AXIOMS:22; hence g2<r1 by A3,AXIOMS:22;
@@ -3761,6 +3806,7 @@ proof assume A1: f is convergent_in-infty & lim_in-infty f=0;
 ; then not f.g2 in {0} by TARSKI:def 1; then not g2 in f"{0} by FUNCT_1:def 13;
    then g2 in dom f\f"{0} by A7,XBOOLE_0:def 4;
    hence g2 in dom(f^) by RFUNCT_1:def 8;
+  end;
   end; hence thesis;
  end;
  let s be Real_Sequence; assume A8: s is divergent_to-infty & rng s c=dom (f^);
@@ -3806,6 +3852,7 @@ proof assume A1: f is convergent_in-infty & lim_in-infty f=0;
 ; then not f.g2 in {0} by TARSKI:def 1; then not g2 in f"{0} by FUNCT_1:def 13;
    then g2 in dom f\f"{0} by A5,XBOOLE_0:def 4;
    hence g2 in dom(f^) by RFUNCT_1:def 8;
+  end;
   suppose A6: r<=g1; consider g2 such that A7: g2<r & g2 in dom f by A1,Def9
 ; take g2;
      g2<g1 by A6,A7,AXIOMS:22;
@@ -3816,6 +3863,7 @@ proof assume A1: f is convergent_in-infty & lim_in-infty f=0;
 ; then not f.g2 in {0} by TARSKI:def 1; then not g2 in f"{0} by FUNCT_1:def 13;
    then g2 in dom f\f"{0} by A7,XBOOLE_0:def 4;
    hence g2 in dom(f^) by RFUNCT_1:def 8;
+  end;
   end; hence thesis;
  end;
  let s be Real_Sequence; assume A8: s is divergent_to-infty & rng s c=dom (f^);

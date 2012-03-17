@@ -8,9 +8,6 @@ RELSET_1
 FUNCT_2
 BINOP_1
 #
-BinOpEx
-BinOpLambda
-#
 M1 W5 ;;;
 ªM5 V3 ;V6 K19 F1 ;F1 ;;F1 ;;K19 F1 ;F1 ;;F1 ;;ªM2 F1 ;;M2 F1 ;;P1 B2 B3 K50 F1 ;F1 ;F1 ;B1 B2 B3 ;;M2 F1 ;;M2 F1 ;;ªM2 F1 ;;ªP1 B1 B2 B3 ;;
 #

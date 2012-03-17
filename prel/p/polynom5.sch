@@ -20,9 +20,6 @@ VECTSP_1
 SEQM_3
 NORMSP_1
 #
-ExDHGrStrSeq
-ExDdoubleLoopStrSeq
-#
 G5 W26 ;;M3 U1 F1 ;;;;
 ªM13 F1 ;;ªM4 K52 ;K56 ;;R1 K137 F1 ;B1 B2 ;F2 B2 ;;;
 #

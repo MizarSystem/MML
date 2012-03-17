@@ -99,7 +99,7 @@ then A4:   i > 0 by NAT_1:38;
            hence thesis by A1;
     end;
 
-definition
+registration
   cluster -> finite FinSubsequence;
   coherence
    proof let q be FinSubsequence;
@@ -109,6 +109,7 @@ A1:  dom q c= Seg n by FINSEQ_1:def 12;
      hence thesis by AMI_1:21;
    end;
 end;
+
 
 theorem Th4:
   for q being FinSubsequence st Seq q = <*x*>
@@ -125,7 +126,7 @@ then A5:   {1} = dom Sgm(dom q) &
       rng Seq q = rng q by A2,A4,RELAT_1:46,47;
       consider n being Nat such that
 A6:   dom q c= Seg n by FINSEQ_1:def 12;
-        Seg Card dom q = {1} by A5,A6,FINSEQ_3:45;
+        Seg card dom q = {1} by A5,A6,FINSEQ_3:45;
       then Card dom q = Card {1} by FINSEQ_1:78;
       then consider y be set such that
 A7:   dom q = {y} by CARD_1:49;
@@ -182,10 +183,12 @@ A3:    x in {1,2};
 then A5:      <*x1,x2*>.x = x1 by FINSEQ_1:61;
            [x,x1] in f by A4,TARSKI:def 2;
          hence f.x = <*x1,x2*>.x by A5,FUNCT_1:8;
+         end;
          suppose A6: x = 2;
 then A7:      <*x1,x2*>.x = x2 by FINSEQ_1:61;
            [x,x2] in f by A6,TARSKI:def 2;
          hence f.x = <*x1,x2*>.x by A7,FUNCT_1:8;
+     end;
      end;
      hence <*x1,x2*> = {[1,x1], [2,x2]} by A1,A2,FUNCT_1:9;
    end;
@@ -200,10 +203,12 @@ A1: 1 <= j & j <= l or l+1 <= j & j <= l+k;
        0 <= k by NAT_1:18;
      then l+0 <= l+k by REAL_1:55;
      hence thesis by A2,AXIOMS:22;
+    end;
     suppose A3: l+1 <= j & j <= l+k;
        0 <= l by NAT_1:18;
      then 0+1 <= l+1 by REAL_1:55;
      hence thesis by A3,AXIOMS:22;
+  end;
   end;
 
 theorem Th7:
@@ -346,14 +351,29 @@ definition let P be set;
  end;
 end;
 
+
 reserve P,p,x,y,x1,x2,y1,y2 for set,
         m1,m2,m3,m4,m for marking of P,
         i,j,j1,j2,k,k1,k2,l,l1,l2 for Nat;
 
+notation
+ let P be set;
+ let m be marking of P;
+ let p be set;
+ synonym m multitude_of p for m.p ;
+end;
 definition
  let P be set;
  let m be marking of P;
  let p be set;
+ redefine func m multitude_of p -> Nat;
+ coherence
+  proof
+A1:   rng m c= NAT by Def1;
+       p in dom m or not p in dom m;
+     then m.p in rng m or m.p = {} by FUNCT_1:12,def 4;
+    hence m.p is Element of NAT by A1,CARD_1:51;
+  end;
  redefine func m.p -> Nat;
  coherence
   proof
@@ -362,17 +382,17 @@ A1:   rng m c= NAT by Def1;
      then m.p in rng m or m.p = {} by FUNCT_1:12,def 4;
     hence m.p is Element of NAT by A1,CARD_1:51;
   end;
- synonym m multitude_of p;
-end;
+ end;
+
 
 scheme MarkingLambda { P() -> set, F(set) -> Nat }:
  ex m being marking of P() st
   for p st p in P() holds m multitude_of p = F(p)
-  proof
+proof
    deffunc F1(set) = F($1);
    consider m being Function such that
 A1: dom m = P() and
-A2: for p st p in P() holds m.p = F1(p) from Lambda;
+A2: for p st p in P() holds m.p = F1(p) from FUNCT_1:sch 3;
       m is marking of P()
      proof
       thus dom m = P() by A1;
@@ -401,6 +421,7 @@ definition let P,m1,m2;
  end;
 end;
 
+
 definition let P;
  func {$} P -> marking of P equals :Def3:
    P --> 0;
@@ -412,6 +433,7 @@ definition let P;
   end;
 end;
 
+
 definition
  let P be set;
  let m1, m2 be marking of P;
@@ -420,6 +442,7 @@ definition
     m1 multitude_of p <= m2 multitude_of p;
  reflexivity;
 end;
+
 
 Lm6:
   p in P implies {$}P multitude_of p = 0
@@ -478,6 +501,7 @@ A3: p in P;
  commutativity;
 end;
 
+
 theorem
     m + {$}P = m
    proof
@@ -523,6 +547,7 @@ A7: p in P;
              .= M2 multitude_of p by A6,A7;
     end;
 end;
+
 
 theorem Th16:
   m1 c= m1 + m2
@@ -755,25 +780,30 @@ definition let P;
   end;
 end;
 
+
 reserve t,t1,t2 for transition of P;
 
+notation
+  let P,t;
+  synonym Pre t for t`1 ;
+  synonym Post t for t`2 ;
+end;
 definition
   let P,t;
-  redefine func t`1 -> marking of P;
+  redefine func Pre t -> marking of P;
       coherence
        proof
            ex m1,m2 st t = [m1,m2] by Def7;
         hence t`1 is marking of P by MCART_1:7;
        end;
-      synonym Pre t;
-  func t`2 -> marking of P;
+      func Post t -> marking of P;
       coherence
        proof
            ex m1, m2 st t = [m1, m2] by Def7;
         hence t`2 is marking of P by MCART_1:7;
        end;
-      synonym Post t;
-end;
+      end;
+
 
 definition
   let P, m, t;
@@ -783,6 +813,7 @@ definition
   coherence;
   consistency;
 end;
+
 
 theorem
     (Pre t1) + (Pre t2) c= m implies
@@ -819,7 +850,7 @@ A2:  for x st x in Funcs(P, NAT) ex y st P[x,y]
       end;
      consider f being Function such that
 A3:  dom f = Funcs(P, NAT) and
-A4:  for x st x in Funcs(P, NAT) holds P[x,f.x] from FuncEx(A1,A2);
+A4:  for x st x in Funcs(P, NAT) holds P[x,f.x] from FUNCT_1:sch 2(A1,A2);
      take f; thus dom f = Funcs(P, NAT) by A3;
      let m; m in Funcs(P, NAT) by Th31;
      then P[m,f.m] by A4;
@@ -839,6 +870,7 @@ A8:  for m being marking of P holds f2.m = fire(t,m);
      hence f1 = f2 by A5,A7,FUNCT_1:9;
    end;
 end;
+
 
 theorem Th34:
   rng fire t c= Funcs(P, NAT)
@@ -878,12 +910,14 @@ definition
    end;
 end;
 
+
 reserve N for Petri_net of P;
 
 definition let P, N;
   redefine mode Element of N -> transition of P;
   coherence by Def10;
 end;
+
 
 reserve e, e1,e2 for Element of N;
 
@@ -892,6 +926,7 @@ begin :: Firing sequences of transitions
 definition let P, N;
   mode firing-sequence of N is Element of N*;
 end;
+
 
 reserve C,C1,C2,C3,fs,fs1,fs2 for firing-sequence of N;
 
@@ -907,7 +942,7 @@ definition
      deffunc G(set) = fire (C/.$1 qua Element of N);
      consider F being FinSequence such that
 A1:  len F = len C and
-A2:  for k being Nat st k in Seg len C holds F.k = G(k) from SeqLambda;
+A2:  for k being Nat st k in Seg len C holds F.k = G(k) from FINSEQ_1:sch 2;
 A3:  dom F = Seg len F & dom C = Seg len C by FINSEQ_1:def 3;
        F is Function-yielding
       proof
@@ -946,6 +981,7 @@ A12:    i in dom C;
      hence thesis by A5,A6,A8,A9,A11,FINSEQ_1:17;
    end;
 end;
+
 
 :: Firing of empty firing-sequence <*>N
 theorem
@@ -1071,7 +1107,7 @@ A12:         F.i = fire t by A5,A10;
                by A8,A9,RELAT_1:45,46;
         hence thesis by A9,XBOOLE_1:1;
      end;
-A13:  P[k] from Ind(A1,A2);
+A13:  P[k] from NAT_1:sch 1(A1,A2);
      consider F being Function-yielding FinSequence such that
 A14:  fire C = compose(F, Funcs(P, NAT)) and
 A15:  len F = len C and
@@ -1165,18 +1201,21 @@ A1:  dom fire C = Funcs(P, NAT) & rng fire C c= Funcs(P, NAT) by Th40;
     end;
 end;
 
+
 begin :: Sequential composition
 
 definition let P, N;
  mode process of N is Subset of N*;
 end;
 
+
 reserve R, R1, R2, R3, P1, P2 for process of N;
 
-definition
+registration
   cluster FinSequence-like -> FinSubsequence-like Function;
   coherence by FINSEQ_1:68;
 end;
+
 
 definition
   let P, N, R1, R2;
@@ -1195,7 +1234,8 @@ definition
    end;
 end;
 
-definition
+
+registration
  let P, N;
  let R1, R2 be non empty process of N;
  cluster R1 before R2 -> non empty;
@@ -1211,6 +1251,7 @@ A3:  fs2 in R2 by XBOOLE_0:def 1;
      hence thesis;
    end;
 end;
+
 
 theorem Th43:
  (R1 \/ R2) before R = (R1 before R) \/ (R2 before R)
@@ -1241,6 +1282,7 @@ A3: x = fs1^fs & fs1 in R1 & fs in R;
 R}
        by A3;
     hence thesis by Def13;
+   end;
    suppose x in R2 before R;
     then x in {fs2^fs: fs2 in R2 & fs in R} by Def13;
     then consider fs2, fs such that
@@ -1250,6 +1292,7 @@ A4: x = fs2^fs & fs2 in R2 & fs in R;
 R}
        by A4;
     hence thesis by Def13;
+  end;
   end;
 
 theorem Th44:
@@ -1281,6 +1324,7 @@ A3: x = fs^fs1 & fs in R & fs1 in R1;
 R2}
        by A3;
     hence thesis by Def13;
+   end;
    suppose x in R before R2;
     then x in {fs^fs2: fs in R & fs2 in R2} by Def13;
     then consider fs, fs2 such that
@@ -1290,6 +1334,7 @@ A4: x = fs^fs2 & fs in R & fs2 in R2;
 R2}
        by A4;
     hence thesis by Def13;
+  end;
   end;
 
 theorem Th45:
@@ -1378,6 +1423,7 @@ A3: x = C2 & ex q1,q2 being FinSubsequence st C2 = q1 \/ q2 &
    end;
 end;
 
+
 theorem Th48:
  (R1 \/ R2) concur R = (R1 concur R) \/ (R2 concur R)
   proof
@@ -1418,6 +1464,7 @@ A5: C = q1 \/ q2 & q1 misses q2 & Seq q1 in R1 & Seq q2 in R by A4;
 q2 &
           Seq q1 in R1 \/ R2 & Seq q2 in R} by A4,A5;
     hence thesis by Def14;
+   end;
    suppose x in R2 concur R;
     then x in {C: ex q1,q2 being FinSubsequence st C = q1 \/ q2 & q1 misses q2
 &
@@ -1432,6 +1479,7 @@ A7: C = q1 \/ q2 & q1 misses q2 & Seq q1 in R2 & Seq q2 in R by A6;
 q2 &
           Seq q1 in R1 \/ R2 & Seq q2 in R} by A6,A7;
     hence thesis by Def14;
+  end;
   end;
 
 theorem Th49:
@@ -1478,6 +1526,7 @@ then A12:    q1 misses q2 by ZFMISC_1:56;
 A13:    Seq q1 = <*e1*> & Seq q2 = <*e2*> by Th3;
          <*e1*> in R1 & <*e2*> in R2 by TARSKI:def 1;
        hence thesis by A1,A10,A11,A12,A13;
+       end;
        suppose
 A14:    x = <*e2,e1*>;
 then A15:    x = {[1,e2], [2,e1]} by Th6
@@ -1489,6 +1538,7 @@ then A16:    q1 misses q2 by ZFMISC_1:56;
 A17:    Seq q1 = <*e1*> & Seq q2 = <*e2*> by Th3;
          <*e1*> in R1 & <*e2*> in R2 by TARSKI:def 1;
        hence thesis by A1,A14,A15,A16,A17;
+   end;
    end;
 
 theorem
@@ -1575,7 +1625,7 @@ A4:     x = i+k & k in dom p;
       end;
      consider f being Function such that
 A5:  dom f = X and
-A6:  for x st x in X holds P[x,f.x] from FuncEx(A2,A3);
+A6:  for x st x in X holds P[x,f.x] from FUNCT_1:sch 2(A2,A3);
        X c= Seg (i+K)
       proof
         let x; assume x in X;
@@ -1607,6 +1657,7 @@ A12:    x = i+k & k in dom p;
      hence thesis by A8,A10,FUNCT_1:9;
    end;
 end;
+
 
 reserve q,q1,q2,q3,q4 for FinSubsequence;
 
@@ -1779,7 +1830,7 @@ A5:     x = k1 & 1 <= k1 & k1 <= n by A2;
       end;
      consider f being Function such that
 A6:  dom f = dom q and
-A7:  for x st x in dom q holds P[x, f.x] from FuncEx(A3,A4);
+A7:  for x st x in dom q holds P[x, f.x] from FUNCT_1:sch 2(A3,A4);
      reconsider ss = f as FinSubsequence by A1,A6,FINSEQ_1:def 12;
 A8:  dom (i Shift q) = {i+k: k in dom q} by Def15;
 A9:  rng ss = dom (i Shift q)
@@ -1934,17 +1985,20 @@ then A2:  dom (p1 \/ ((len p1) Shift p2)) = dom p1 by Th55;
        len p2 = 0 by A1,FINSEQ_1:25;
      hence thesis by A2,FINSEQ_1:def 3;
 
+    end;
     suppose A3: p1 <> {} & p2 = {};
      then A4: (len p1) Shift p2 = {} by Th55;
        len p2 = 0 by A3,FINSEQ_1:25;
      hence thesis by A4,FINSEQ_1:def 3;
 
+    end;
     suppose A5: p1 = {} & p2 <> {};
      then dom (p1 \/ ((len p1) Shift p2)) = dom (0 Shift p2) by FINSEQ_1:25
                                     .= dom p2 by Th52
                                     .= Seg (0+len p2) by FINSEQ_1:def 3
                                     .= Seg (len p1 + len p2) by A5,FINSEQ_1:25;
      hence thesis;
+    end;
     suppose A6: p1 <> {} & p2 <> {};
 A7:    Seg (len p1 + len p2) = {j: 1 <= j & j <= len p1 + len p2}
          by FINSEQ_1:def 1;
@@ -1973,6 +2027,7 @@ A12:   x = j & 1 <= j & j <= len p1 + len p2 by A7;
          by A12,INT_1:20;
       then x in dom p1 or x in dom ((len p1) Shift p2) by A9,A10,A12;
       hence thesis by A8,XBOOLE_0:def 2;
+  end;
   end;
 
 theorem Th63:
@@ -2512,6 +2567,7 @@ theorem Th71:
     suppose p2 = {};
      then len p1 Shift p2 = {} by Th55;
      hence thesis by XBOOLE_1:2;
+    end;
     suppose A1: p2 <> {};
 A2:   dom (len p1 Shift p2) = {len p1 + k: k in dom p2} by Def15;
 A3:  dom (len p1 Shift p2) = {k: len p1 + 1 <= k & k <= len p1 + len p2}
@@ -2530,6 +2586,7 @@ A8:  x = len p1 + j & j in dom p2 by A2,A5;
        y = p2.j by A5,A8,Def15
       .= (p1^p2).x by A8,FINSEQ_1:def 7;
      hence [x,y] in p1^p2 by A7,FUNCT_1:8;
+   end;
    end;
 
 theorem Th72:
@@ -2833,6 +2890,7 @@ then A4:  dom Seq ss = Seg len Seq q1 by A3,FINSEQ_1:def 3;
        Seq q2 = {} by A2,Th2;
      then len Seq q2 = 0 by FINSEQ_1:25;
      hence thesis by A3,A4;
+    end;
     suppose A5: q2 <> {};
      consider ss being FinSubsequence such that
 A6:  ss = q1 \/ (len p1 Shift q2) by A1,Th79;
@@ -2859,6 +2917,7 @@ Seq q1
         by Th7;
      hence thesis by A6,A10;
    end;
+   end;
 
 theorem Th81:
  for p1,p2 being FinSequence, q1,q2 being FinSubsequence st q1 c= p1 & q2 c= p2
@@ -2876,17 +2935,20 @@ A3:  dom Seq ss = Seg (len Seq q1 + len Seq q2) by Th80;
 then A5:  Seq ss = {} & Seq q1 = {} & Seq q2 = {} by A2,A4,Th2;
      then Seq q1 \/ (len Seq q1 Shift Seq q2) = {} by Th55;
      hence thesis by A2,A3,A5;
+    end;
     suppose A6: q1 = {} & q2 <> {};
 then A7:  Seq ss = Seq q2 by A2,Th77;
 A8:  Seq q1 = {} by A6,Th2;
      then len Seq q1 = 0 by FINSEQ_1:25;
      then Seq q1 \/ (len Seq q1 Shift Seq q2) = Seq q2 by A8,Th52;
      hence thesis by A2,A3,A7;
+    end;
     suppose A9: q1 <> {} & q2 = {};
      then A10: (len p1 Shift q2) = {} by Th55;
        Seq q2 = {} by A9,Th2;
      then (len Seq q1 Shift Seq q2) = {} by Th55;
      hence thesis by A2,A3,A10;
+    end;
     suppose A11: q1 <> {} & q2 <> {};
 A12:  Seg (len Seq q1 + len Seq q2)
         = {k: 1 <= k & k <= len Seq q1 + len Seq q2} by FINSEQ_1:def 1;
@@ -2999,6 +3061,7 @@ then A44:       (Sgm dom (len p1 Shift q2)).j in dom (len p1 Shift q2)
      then Seq ss = ss1 by A3,A15,A23,FUNCT_1:9;
      hence thesis by A2,A3;
    end;
+   end;
 
 theorem Th82:
  for p1,p2 being FinSequence, q1,q2 being FinSubsequence st q1 c= p1 & q2 c= p2
@@ -3106,7 +3169,7 @@ A24:  Seq ss1 in R1 before P1 by A5,A9,A11,A22;
      hence thesis by A2,A7,A17,A18,A24;
    end;
 
-definition
+registration
  let P, N;
  let R1, R2 be non empty process of N;
  cluster R1 concur R2 -> non empty;
@@ -3129,6 +3192,7 @@ A5:  fs1 misses (len fs1 Shift fs2) by Th65;
    end;
 end;
 
+
 begin  :: Neutral process
 
 definition let P;
@@ -3138,6 +3202,7 @@ definition let P;
  coherence;
 end;
 
+
 definition
  let P;
  let N be Petri_net of P;
@@ -3146,6 +3211,7 @@ definition
    {<*t*>};
  coherence;
 end;
+
 
 theorem
    NeutralProcess(N) before R = R

@@ -27,6 +27,7 @@ let V be non empty RLSStruct, M be Subset of V, r be Real;
   {r * v where v is Element of V: v in M};
 end;
 
+
 definition
 let V be non empty RLSStruct, M be Subset of V;
   attr M is convex means
@@ -35,6 +36,7 @@ for u,v being VECTOR of V,
   r be Real st 0 < r & r < 1 & u in M & v in M holds
   r*u + (1-r)*v in M;
 end;
+
 
 theorem :: CONVEX1:1
   for V being RealLinearSpace-like (non empty RLSStruct),
@@ -115,20 +117,41 @@ theorem :: CONVEX1:16
 for V being non empty RLSStruct, M being Subset of V st
  M is Affine holds M is convex;
 
-definition
+registration
 let V be non empty RLSStruct;
   cluster convex Subset of V;
+existence
+proof
+   consider M be non empty Affine Subset of V;
+     M is convex by Th16;
+   hence thesis;
+end;
 end;
 
-definition
+
+registration
 let V be non empty RLSStruct;
   cluster empty convex Subset of V;
+existence
+proof
+  consider M being empty Subset of V;
+    M is convex by Th10;
+  hence thesis;
+end;
 end;
 
-definition
+
+registration
 let V be non empty RLSStruct;
   cluster non empty convex Subset of V;
+existence
+proof
+   consider M be non empty Affine Subset of V;
+     M is convex by Th16;
+   hence thesis;
 end;
+end;
+
 
 theorem :: CONVEX1:17
   for V being RealUnitarySpace-like (non empty UNITSTR),
@@ -165,6 +188,7 @@ let V be RealLinearSpace, L be Linear_Combination of V;
     (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
       (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0)));
 end;
+
 
 theorem :: CONVEX1:21
 for V being RealLinearSpace, L being Linear_Combination of V st
@@ -217,13 +241,45 @@ theorem :: CONVEX1:29
 
 begin  :: Convex Hull
 
-scheme SubFamExRLS {A() -> RLSStruct, P[Subset of A()]}:
+scheme :: CONVEX1:sch 1
+ SubFamExRLS {A() -> RLSStruct, P[Subset of A()]}:
    ex F being Subset-Family of A() st
-   for B being Subset of A() holds B in F iff P[B];
+   for B being Subset of A() holds B in F iff P[B]
+proof
+  defpred R[Subset of A()] means P[$1];
+   consider F being Subset-Family of A() such that
+A1: for B being Subset of A() holds B in F iff R[B]
+     from SETFAM_1:sch 1;
+   thus thesis by A1;
+end;
 
-scheme SubFamExRLS2 {A() -> RLSStruct, P[Subset of A()]}:
+scheme :: CONVEX1:sch 2
+ SubFamExRLS2 {A() -> RLSStruct, P[Subset of A()]}:
    ex F being Subset-Family of A() st
-   for B being Subset of A() holds B in F iff P[B];
+   for B being Subset of A() holds B in F iff P[B]
+proof
+   defpred R[Subset of A()] means
+    ex B be Subset of A() st B = $1 & P[B];
+   consider F being Subset-Family of A() such that
+A1: for B' being Subset of A() holds B' in F iff R[B']
+     from SETFAM_1:sch 1;
+   reconsider F as Subset-Family of A();
+   take F;
+     for B being Subset of A() holds B in F iff P[B]
+   proof
+     let B be Subset of A();
+       B in F implies P[B]
+     proof
+       assume
+A2:    B in F;
+       reconsider B as Subset of A();
+     ex B' be Subset of A() st B' = B & P[B'] by A1,A2;
+       hence thesis;
+     end;
+     hence thesis by A1;
+   end;
+   hence thesis;
+end;
 
 definition let V be non empty RLSStruct, M be Subset of V;
   func Convex-Family M -> Subset-Family of V means
@@ -231,12 +287,14 @@ definition let V be non empty RLSStruct, M be Subset of V;
    for N being Subset of V holds N in it iff (N is convex & M c= N);
 end;
 
+
 definition
 let V be non empty RLSStruct, M being Subset of V;
   func conv(M) -> convex Subset of V equals
 :: CONVEX1:def 5
   meet (Convex-Family M);
 end;
+
 
 theorem :: CONVEX1:30
   for V being non empty RLSStruct, M being Subset of V,

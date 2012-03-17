@@ -21,9 +21,6 @@ FINSEQ_2
 MATRIX_1
 PBOOLE
 #
-MSSEx
-MSSLambda
-#
 M1 ;;
 ªM16 F1 ;;ªM1 ;ª&R2 B2 F1 ;;ªP1 B2 K11 B1 B2 ;;;M1 ;ª&R2 B1 F1 ;;M1 ;ªP1 B1 B2 ;;;
 #

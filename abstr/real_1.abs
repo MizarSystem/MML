@@ -17,18 +17,26 @@ begin
 
  reserve x,y,z,t for real number;
 
-definition
+registration
  cluster -> real Element of REAL;
+coherence
+proof
+  let r be Element of REAL;
+  thus r in REAL;
 end;
+end;
+
 
 definition
   mode Real is Element of REAL;
 end;
 
+
 definition let x be Real;
   redefine func -x -> Real;
   redefine func x" -> Real;
 end;
+
 
 definition let x,y be Real;
   redefine func x+y -> Real;
@@ -36,6 +44,7 @@ definition let x,y be Real;
   redefine func x-y -> Real;
   redefine func x/y -> Real;
 end;
+
 
 canceled 24;
 
@@ -74,6 +83,7 @@ pred x<y means
 :: REAL_1:def 5
 x<=y & x<>y;
 end;
+
 
 canceled 10;
 
@@ -118,9 +128,31 @@ theorem :: REAL_1:77
 
 :: Continuity of REAL
 
-scheme SepReal { P[Real]}:
+scheme :: REAL_1:sch 1
+ SepReal { P[Real]}:
    ex X being Subset of REAL st
-     for x being Real holds x in X iff P[x];
+     for x being Real holds x in X iff P[x]
+proof
+  defpred Z[set] means  ex x being Real st x=$1 & P[x];
+  consider X being set such that
+A1:  for r being set holds r in X iff r in REAL & Z[r] from XBOOLE_0:sch 1;
+       X c= REAL
+     proof
+      let r be set;
+      assume r in X;
+      hence thesis by A1;
+     end;
+     then reconsider X as Subset of REAL;
+     take X;
+     let x be Real;
+       x in X implies P[x]
+       proof
+         assume x in X;
+          then ex y being Real st y = x & P[y] by A1;
+         hence thesis;
+       end;
+   hence thesis by A1;
+end;
 
 canceled 6;
 

@@ -246,7 +246,7 @@ theorem Th12: for n holds {k: k <= n} is finite
        {l: l <= n + 1} = {k: k <= n} \/ {n + 1} by Th11;
     hence P[n+1] by A4,FINSET_1:14;
    end;
-  thus for n being Nat holds P[n] from Ind(A2,A3);
+  thus for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
  end;
 
 reserve X,Y,Z for set;
@@ -260,9 +260,9 @@ theorem X is finite & X c= [:Y,Z:] implies
    deffunc G(set) = $1`2;
    assume A1: X is finite & X c= [:Y,Z:];
    consider f being Function such that
-    A2: dom f = X and A3: for a st a in X holds f.a = F(a) from Lambda;
+    A2: dom f = X and A3: for a st a in X holds f.a = F(a) from FUNCT_1:sch 3;
    consider g being Function such that
-    A4: dom g = X and A5: for a st a in X holds g.a = G(a) from Lambda;
+    A4: dom g = X and A5: for a st a in X holds g.a = G(a) from FUNCT_1:sch 3;
    take A = rng f, B = rng g;
    thus A is finite by A1,A2,FINSET_1:26;
    thus A c= Y
@@ -307,7 +307,7 @@ theorem Th14: X is finite & Z is finite & X c= [:Y,Z:] implies
   proof
    assume A1: X is finite & Z is finite & X c= [:Y,Z:];
    consider f being Function such that
-    A2: dom f = X and A3: for a st a in X holds f.a = F(a) from Lambda;
+    A2: dom f = X and A3: for a st a in X holds f.a = F(a) from FUNCT_1:sch 3;
    take A = rng f;
    thus A is finite by A1,A2,FINSET_1:26;
    thus A c= Y
@@ -358,8 +358,10 @@ definition let T;
     (p => q in T & not x in still_not-bound_in p implies p => All(x,q) in T) &
     (s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s & s.x in T
      implies s.y in T);
-  synonym T is_a_theory;
-end;
+  end;
+notation let T;
+ synonym T is_a_theory for T is being_a_theory ; end;
+
 
 canceled 10;
 
@@ -409,7 +411,7 @@ definition let X;
   proof
     defpred P[set] means for T st T is_a_theory & X c= T holds $1 in T;
    consider Y being set such that
-A1: for a holds a in Y iff a in CQC-WFF & P[a] from Separation;
+A1: for a holds a in Y iff a in CQC-WFF & P[a] from XBOOLE_0:sch 1;
      Y c= CQC-WFF
     proof
      let a; assume a in Y;
@@ -444,6 +446,7 @@ A1: for a holds a in Y iff a in CQC-WFF & P[a] from Separation;
    hence thesis by TARSKI:2;
   end;
 end;
+
 
 canceled;
 
@@ -618,7 +621,8 @@ definition
  coherence;
 end;
 
-definition
+
+registration
  cluster Proof_Step_Kinds -> non empty;
  coherence
   proof
@@ -626,6 +630,7 @@ definition
    hence thesis by Def3;
   end;
 end;
+
 
 canceled;
 
@@ -678,11 +683,13 @@ definition let PR be (FinSequence of [:CQC-WFF,Proof_Step_Kinds:]),n,X;
  consistency;
 end;
 
+
 definition let X,f;
  pred f is_a_proof_wrt X means
   :Def5: f <> {} &
   for n st 1 <= n & n <= len f holds f,n is_a_correct_step_wrt X;
 end;
+
 
 canceled 11;
 
@@ -715,15 +722,18 @@ theorem f is_a_proof_wrt X implies (f.1)`2 = 0 or (f.1)`2 = 1 or
       then ex i,j,p,q st 1 <= i & i < 1 & 1 <= j & j < i &
        p = (f.j)`1 & q = (f.1)`1 & (f.i)`1 = p => q by A3,Def4;
      hence contradiction;
+     end;
      suppose (f.1)`2 = 8;
       then ex i,p,q,x st 1 <= i & i < 1 & (f.i)`1 = p => q &
        not x in still_not-bound_in p & (f.1)`1 = p => All(x,q) by A3,Def4;
      hence contradiction;
+     end;
      suppose (f.1)`2 = 9;
       then ex i,x,y,s st 1 <= i & i < 1 &
        s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
        s.x = (f.i)`1 & (f.1)`1 = s.y by A3,Def4;
      hence contradiction;
+  end;
   end;
 
 theorem Th60:
@@ -743,18 +753,25 @@ theorem Th60:
      per cases by A3,Th45;
       case ((f^g).n)`2 = 0;
       hence ((f^g).n)`1 in X by A2,A4,Def4;
+      end;
       case ((f^g).n)`2 = 1;
       hence ((f^g).n)`1 = VERUM by A2,A4,Def4;
+      end;
       case ((f^g).n)`2 = 2;
       hence thesis by A2,A4,Def4;
+      end;
       case ((f^g).n)`2 = 3;
       hence thesis by A2,A4,Def4;
+      end;
       case ((f^g).n)`2 = 4;
       hence thesis by A2,A4,Def4;
+      end;
       case ((f^g).n)`2 = 5;
       hence thesis by A2,A4,Def4;
+      end;
       case ((f^g).n)`2 = 6;
       hence thesis by A2,A4,Def4;
+      end;
       case ((f^g).n)`2 = 7;
        then consider i,j,r,t such that A5: 1 <= i & i < n & 1 <= j & j < i
         and A6: r = (f.j)`1 and A7: t = (f.n)`1 and A8: (f.i)`1 = r => t
@@ -765,6 +782,7 @@ theorem Th60:
        then i in dom f & j in dom f by FINSEQ_1:def 3;
        then f.i = (f^g).i & f.j = (f^g).j by FINSEQ_1:def 7;
       hence thesis by A2,A5,A6,A7,A8;
+      end;
       case ((f^g).n)`2 = 8;
        then consider i,r,t,x such that A9: 1 <= i & i < n and
         A10: (f.i)`1 = r => t & not x in still_not-bound_in r &
@@ -774,6 +792,7 @@ theorem Th60:
        then i in dom f by FINSEQ_1:def 3;
        then f.i = (f^g).i by FINSEQ_1:def 7;
       hence thesis by A2,A9,A10;
+      end;
       case ((f^g).n)`2 = 9;
        then consider i,x,y,s such that A11: 1 <= i & i < n and
         A12: s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
@@ -784,22 +803,30 @@ theorem Th60:
        then f.i = (f^g).i by FINSEQ_1:def 7;
       hence thesis by A2,A11,A12;
    end;
+   end;
   assume A13: f^g,n is_a_correct_step_wrt X;
     per cases by A1,Th45;
       case (f.n)`2 = 0;
       hence thesis by A2,A13,Def4;
+      end;
       case (f.n)`2 = 1;
       hence thesis by A2,A13,Def4;
+      end;
       case (f.n)`2 = 2;
       hence thesis by A2,A13,Def4;
+      end;
       case (f.n)`2 = 3;
       hence thesis by A2,A13,Def4;
+      end;
       case (f.n)`2 = 4;
       hence thesis by A2,A13,Def4;
+      end;
       case (f.n)`2 = 5;
       hence thesis by A2,A13,Def4;
+      end;
       case (f.n)`2 = 6;
       hence thesis by A2,A13,Def4;
+      end;
       case (f.n)`2 = 7;
        then consider i,j,r,t such that A14: 1 <= i & i < n & 1 <= j & j < i
         and A15: r = ((f^g).j)`1 and A16: t = ((f^g).n)`1 and
@@ -810,6 +837,7 @@ theorem Th60:
        then i in dom f & j in dom f by FINSEQ_1:def 3;
        then f.i = (f^g).i & f.j = (f^g).j by FINSEQ_1:def 7;
       hence thesis by A2,A14,A15,A16,A17;
+      end;
       case (f.n)`2 = 8;
        then consider i,r,t,x such that A18: 1 <= i & i < n and
         A19: ((f^g).i)`1 = r => t & not x in still_not-bound_in r &
@@ -819,6 +847,7 @@ theorem Th60:
        then i in dom f by FINSEQ_1:def 3;
        then f.i = (f^g).i by FINSEQ_1:def 7;
       hence thesis by A2,A18,A19;
+      end;
       case (f.n)`2 = 9;
        then consider i,x,y,s such that A20: 1 <= i & i < n and
         A21: s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
@@ -828,6 +857,7 @@ theorem Th60:
        then i in dom f by FINSEQ_1:def 3;
        then f.i = (f^g).i by FINSEQ_1:def 7;
       hence thesis by A2,A20,A21;
+ end;
  end;
 
 theorem Th61:
@@ -844,18 +874,25 @@ then A3: g.n = (f^g).(n+len f) by FINSEQ_1:def 7;
   per cases by A4,Th45;
      case ((f^g).(n+len f))`2 = 0;
       hence ((f^g).(n+len f))`1 in X by A2,A3,Def4;
+      end;
       case ((f^g).(n+len f))`2 = 1;
       hence ((f^g).(n+len f))`1 = VERUM by A2,A3,Def4;
+      end;
       case ((f^g).(n+len f))`2 = 2;
       hence thesis by A2,A3,Def4;
+      end;
       case ((f^g).(n+len f))`2 = 3;
       hence thesis by A2,A3,Def4;
+      end;
       case ((f^g).(n+len f))`2 = 4;
       hence thesis by A2,A3,Def4;
+      end;
       case ((f^g).(n+len f))`2 = 5;
       hence thesis by A2,A3,Def4;
+      end;
       case ((f^g).(n+len f))`2 = 6;
       hence thesis by A2,A3,Def4;
+      end;
       case ((f^g).(n+len f))`2 = 7;
        then consider i,j,r,t such that A5: 1 <= i & i < n & 1 <= j & j < i
         and A6: r = (g.j)`1 and A7: t = (g.n)`1 and A8: (g.i)`1 = r => t
@@ -868,6 +905,7 @@ A10:    1 <= j+len f & j+len f < i+len f by A5,NAT_1:37,REAL_1:53;
        then i in dom g & j in dom g by FINSEQ_1:def 3;
        then g.i = (f^g).(i+len f) & g.j = (f^g).(j+len f) by FINSEQ_1:def 7;
       hence thesis by A3,A6,A7,A8,A9,A10;
+      end;
       case ((f^g).(n+len f))`2 = 8;
        then consider i,r,t,x such that A11: 1 <= i & i < n and
         A12: (g.i)`1 = r => t & not x in still_not-bound_in r &
@@ -878,6 +916,7 @@ A10:    1 <= j+len f & j+len f < i+len f by A5,NAT_1:37,REAL_1:53;
        then i in dom g by FINSEQ_1:def 3;
        then g.i = (f^g).(len f+i) by FINSEQ_1:def 7;
       hence thesis by A3,A12,A13;
+      end;
       case ((f^g).(n+len f))`2 = 9;
        then consider i,x,y,s such that A14: 1 <= i & i < n and
         A15: s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
@@ -888,6 +927,7 @@ A10:    1 <= j+len f & j+len f < i+len f by A5,NAT_1:37,REAL_1:53;
        then i in dom g by FINSEQ_1:def 3;
        then g.i = (f^g).(len f+i) by FINSEQ_1:def 7;
       hence thesis by A3,A15,A16;
+  end;
   end;
 
 theorem Th62:
@@ -902,6 +942,7 @@ theorem Th62:
      suppose A4: n <= len f;
       then f,n is_a_correct_step_wrt X by A1,A3,Def5;
      hence (f^g),n is_a_correct_step_wrt X by A3,A4,Th60;
+     end;
      suppose A5: len f < n;
       then reconsider k=n - len f as Nat by EQREL_1:1;
 A6:    k + len f = n + (- len f) + len f by XCMPLX_0:def 8
@@ -913,6 +954,7 @@ FINSEQ_1:35,NAT_1:38;
       then A7: 1 <= k & k <= len g by REAL_1:53;
       then g,k is_a_correct_step_wrt X by A2,Def5;
      hence (f^g),n is_a_correct_step_wrt X by A6,A7,Th61;
+    end;
     end;
    hence thesis;
   end;
@@ -929,24 +971,34 @@ theorem
     case (f.n)`2 = 0;
      then (f.n)`1 in X by A4,Def4;
     hence (f.n)`1 in Y by A2;
+    end;
     case (f.n)`2 = 1;
     hence thesis by A4,Def4;
+    end;
     case (f.n)`2 = 2;
     hence thesis by A4,Def4;
+    end;
     case (f.n)`2 = 3;
     hence thesis by A4,Def4;
+    end;
     case (f.n)`2 = 4;
     hence thesis by A4,Def4;
+    end;
     case (f.n)`2 = 5;
     hence thesis by A4,Def4;
+    end;
     case (f.n)`2 = 6;
     hence thesis by A4,Def4;
+    end;
     case (f.n)`2 = 7;
     hence thesis by A4,Def4;
+    end;
     case (f.n)`2 = 8;
     hence thesis by A4,Def4;
+    end;
     case (f.n)`2 = 9;
     hence thesis by A4,Def4;
+  end;
   end;
 
 theorem Th64: f is_a_proof_wrt X & 1 <= l & l <= len f implies (f.l)`1 in Cn(X)
@@ -966,26 +1018,33 @@ then A6: f,n is_a_correct_step_wrt X by A1,Def5;
      suppose (f.n)`2 = 0;
       then (f.n)`1 in X & X c= Cn(X) by A6,Def4,Th38;
      hence (f.n)`1 in Cn(X);
+     end;
      suppose (f.n)`2 = 1;
       then (f.n)`1 = VERUM by A6,Def4;
      hence (f.n)`1 in Cn(X) by Th27;
+     end;
      suppose (f.n)`2 = 2;
       then ex p st (f.n)`1 = ('not' p => p) => p by A6,Def4;
      hence (f.n)`1 in Cn(X) by Th28;
+     end;
      suppose (f.n)`2 = 3;
       then ex p,q st (f.n)`1 = p => ('not' p => q) by A6,Def4;
      hence (f.n)`1 in Cn(X) by Th29;
+     end;
      suppose (f.n)`2 = 4;
       then ex p,q,r st (f.n)`1 = (p => q) => ('not'(q '&' r) => 'not'
 (p '&' r))
        by A6,Def4;
      hence (f.n)`1 in Cn(X) by Th30;
+     end;
      suppose (f.n)`2 = 5;
       then ex p,q st (f.n)`1 = p '&' q => q '&' p by A6,Def4;
      hence (f.n)`1 in Cn(X) by Th31;
+     end;
      suppose (f.n)`2 = 6;
       then ex p,x st (f.n)`1 = All(x,p) => p by A6,Def4;
      hence (f.n)`1 in Cn(X) by Th33;
+     end;
      suppose (f.n)`2 = 7;
       then consider i,j,p,q such that A7: 1 <= i & i < n & 1 <= j & j < i and
       A8: p = (f.j)`1 and A9: q = (f.n)`1 and A10: (f.i)`1 = p => q
@@ -995,6 +1054,7 @@ then A6: f,n is_a_correct_step_wrt X by A1,Def5;
       then 1 <= i & i <= len f & 1 <= j & j <= len f by A7,AXIOMS:22;
       then (f.j)`1 in Cn(X) & (f.i)`1 in Cn(X) by A4,A7,A11;
      hence (f.n)`1 in Cn(X) by A8,A9,A10,Th32;
+     end;
      suppose (f.n)`2 = 8;
       then consider i,p,q,x such that A12: 1 <= i & i < n and
       A13: (f.i)`1 = p => q and A14: not x in still_not-bound_in p and
@@ -1002,6 +1062,7 @@ then A6: f,n is_a_correct_step_wrt X by A1,Def5;
         1 <= i & i <= len f by A5,A12,AXIOMS:22;
       then (f.i)`1 in Cn(X) by A4,A12;
      hence (f.n)`1 in Cn(X) by A13,A14,A15,Th34;
+     end;
      suppose (f.n)`2 = 9;
       then consider i,x,y,s such that
       A16: 1 <= i & i < n and
@@ -1013,9 +1074,10 @@ then A6: f,n is_a_correct_step_wrt X by A1,Def5;
       then (f.i)`1 in Cn(X) by A4,A16;
      hence (f.n)`1 in Cn(X) by A17,A18,A19,A20,Th35;
    end;
+   end;
   hence thesis;
   end;
-  thus for n holds P[n] from Comp_Ind(A3);
+  thus for n holds P[n] from NAT_1:sch 4(A3);
  end;
   hence thesis by A2;
  end;
@@ -1035,6 +1097,7 @@ assume A1: f <> {};
   end;
 end;
 
+
 canceled;
 
 theorem Th66: f is_a_proof_wrt X implies Effect(f) in Cn(X)
@@ -1051,7 +1114,7 @@ Lm3: for X holds {p: ex f st f is_a_proof_wrt X & Effect(f) = p} c= CQC-WFF
  proof
   let X;
   defpred P[set] means ex f st f is_a_proof_wrt X & Effect(f) = $1;
-  thus {p: P[p] } c= CQC-WFF from Fr_Set0;
+  thus {p: P[p] } c= CQC-WFF from FRAENKEL:sch 10;
  end;
 
 theorem Th67: X c= {F: ex f st f is_a_proof_wrt X & Effect(f) = F}
@@ -1227,6 +1290,7 @@ then A9: Effect(h) = q by A6,Def6;
          f^g is_a_proof_wrt X by A3,A4,Th62;
        then f^g,n is_a_correct_step_wrt X by A11,Def5;
       hence h,n is_a_correct_step_wrt X by A11,Th60;
+      end;
       suppose A12: n = len h;
        then h.n = qq by A7,FINSEQ_1:59;
        then A13: (h.n)`2 = 7 & (h.n)`1 = q by MCART_1:7;
@@ -1253,6 +1317,7 @@ then A9: Effect(h) = q by A6,Def6;
        then A17: 1 <= len f & len f < len f + len g by A3,Th58,AXIOMS:22;
        then 1 <= len f + len g & len f + len g < n by A8,A12,NAT_1:37,38;
       hence h,n is_a_correct_step_wrt X by A13,A14,A16,A17,Def4;
+     end;
      end;
     hence thesis;
    end;
@@ -1310,6 +1375,7 @@ A6: len h = len f + len <*qq*> by FINSEQ_1:35
       suppose A8: n <= len f;
        then f,n is_a_correct_step_wrt X by A3,A7,Def5;
       hence h,n is_a_correct_step_wrt X by A7,A8,Th60;
+      end;
       suppose A9: n = len h;
        then h.n = qq by A6,FINSEQ_1:59;
        then A10: (h.n)`2 = 8 & (h.n)`1 = p => All(x,q) by MCART_1:7;
@@ -1320,6 +1386,7 @@ A6: len h = len f + len <*qq*> by FINSEQ_1:35
                           .= p => q by A3,A4,Def6;
          1 <= len f & len f < n by A3,A6,A9,Th58,NAT_1:38;
       hence h,n is_a_correct_step_wrt X by A2,A10,A11,Def4;
+     end;
      end;
     hence thesis;
    end;
@@ -1359,6 +1426,7 @@ A7: len h = len f + len <*qq*> by FINSEQ_1:35
       suppose A9: n <= len f;
        then f,n is_a_correct_step_wrt X by A4,A8,Def5;
        hence h,n is_a_correct_step_wrt X by A8,A9,Th60;
+      end;
       suppose A10: n = len h;
       then h.n = qq by A7,FINSEQ_1:59;
       then A11: (h.n)`2 = 9 & (h.n)`1 = s.y by MCART_1:7;
@@ -1369,6 +1437,7 @@ A7: len h = len f + len <*qq*> by FINSEQ_1:35
                          .= s.x by A4,A5,Def6;
         1 <= len f & len f < n by A4,A7,A10,Th58,NAT_1:38;
       hence h,n is_a_correct_step_wrt X by A1,A2,A11,A12,Def4;
+     end;
      end;
     hence thesis;
    end;
@@ -1462,30 +1531,40 @@ theorem p in Cn(X) implies ex Y st Y c= X & Y is finite & p in Cn(Y)
       then f.n in rng f by FUNCT_1:def 5;
       then (f.n)`1 in A by A4,MCART_1:10;
      hence (f.n)`1 in Y by A7,XBOOLE_0:def 3;
+     end;
      case (f.n)`2 = 1;
      hence (f.n)`1 = VERUM by A6,Def4;
+     end;
      case (f.n)`2 = 2;
      hence ex p st (f.n)`1 = ('not' p => p) => p by A6,Def4;
+     end;
      case (f.n)`2 = 3;
      hence ex p,q st (f.n)`1 = p => ('not' p => q) by A6,Def4;
+     end;
      case (f.n)`2 = 4;
      hence ex p,q,r st (f.n)`1 = (p => q) => ('not'(q '&' r) => 'not'
 (p '&' r))
        by A6,Def4;
+     end;
      case (f.n)`2 = 5;
      hence ex p,q st (f.n)`1 = p '&' q => q '&' p by A6,Def4;
+     end;
      case (f.n)`2 = 6;
      hence ex p,x st (f.n)`1 = All(x,p) => p by A6,Def4;
+     end;
      case (f.n)`2 = 7;
      hence ex i,j,p,q st 1 <= i & i < n & 1 <= j & j < i & p = (f.j)`1 &
        q = (f.n)`1 & (f.i)`1 = p => q by A6,Def4;
+     end;
      case (f.n)`2 = 8;
      hence ex i,p,q,x st 1 <= i & i < n & (f.i)`1 = p => q &
        not x in still_not-bound_in p & (f.n)`1 = p => All(x,q) by A6,Def4;
+     end;
      case (f.n)`2 = 9;
      hence ex i,x,y,s st 1 <= i & i < n & s.x in CQC-WFF & s.y in CQC-WFF &
        not x in still_not-bound_in s & s.x = (f.i)`1 & (f.n)`1 = s.y
        by A6,Def4;
+   end;
    end;
   then f is_a_proof_wrt Y by A3,Def5;
   then p in {q: ex f st f is_a_proof_wrt Y & Effect(f) = q} by A2;
@@ -1501,6 +1580,7 @@ definition
   :Def8:  Cn({}(CQC-WFF));
  correctness;
 end;
+
 
 canceled 2;
 
@@ -1547,6 +1627,7 @@ definition let X,s;
  pred X|-s means
  :Def9: s in Cn(X);
 end;
+
 
 canceled;
 
@@ -1617,8 +1698,10 @@ theorem s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
 definition let s;
  attr s is valid means
  :Def10: {}(CQC-WFF)|-s;
-  synonym |-s;
-end;
+  end;
+notation let s;
+ synonym |-s for s is valid ; end;
+
 
 Lm14: |-s iff s in TAUT
  proof
@@ -1630,6 +1713,7 @@ definition let s;
  redefine attr s is valid means s in TAUT;
   compatibility by Lm14;
 end;
+
 
 canceled 2;
 

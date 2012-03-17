@@ -47,23 +47,112 @@ definition let m,k be Nat;
   1 if m <= k otherwise 0;
 end;
 
-definition let m,k be Nat;
+
+registration let m,k be Nat;
  cluster RHK(m,k) -> real;
+coherence
+ proof
+     m <= k or m > k;
+   hence thesis by Def3;
+ end;
 end;
+
 
 definition let m,k be Nat;
  redefine func RHK(m,k) -> Real;
 end;
 
-scheme ExComplex_CASE{F(Nat,Nat)->Element of COMPLEX}:
+
+scheme :: SIN_COS:sch 1
+ ExComplex_CASE{F(Nat,Nat)->Element of COMPLEX}:
 for k holds
  ex seq st for n holds ((n <= k implies seq.n=F(k,n)) &
-                        (n > k implies seq.n=0c));
+                        (n > k implies seq.n=0c))
+proof
+let k;
+   defpred P[set,set] means ex n st (n=$1 &
+   (n <= k implies $2=F(k,n )) &
+   (n > k implies $2=0c) );
+ A1: now let x be set;
+     assume x in NAT;
+     then consider n such that
+  A2: n=x;
+     A3: now
+     assume n <= k;
+     hence CHK(n,k) * F (k,n) =1r * F(k,n) by Def2
+                       .=F(k,n) by COMPLEX1:29;
+     end;
+     A4: now assume n > k;
+     hence CHK(n,k) * F (k,n) =0c * F(k,n) by Def2
+                       .=0c by COMPLEX1:28;
+     end;
+     reconsider y=CHK(n,k) * F (k,n) as set;
+     take y;
+     thus P[x,y] by A2,A3,A4;
+   end;
+ A5: for x,y,z be set st x in NAT & P[x,y] & P[x,z] holds y=z;
+   consider f be Function such that
+A6: dom f =NAT and
+A7: for x be set st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A5,A1);
+      now let x be set;
+     assume x in NAT;
+      then ex n st (n=x & (n <= k implies f.x=F(k,n)) &
+                       (n > k implies f.x=0c)) by A7;
+     hence f.x is Element of COMPLEX;
+    end;
+   then reconsider f as Complex_Sequence by A6,COMSEQ_1:1;
+   take seq=f;
+   let n;
+      ex l be Nat st l=n &
+    (l <= k implies seq.n=F(k,l)) & (l > k implies seq.n=0c) by A7;
+   hence ((n <= k implies seq.n=F(k,n)) & (n > k implies seq.n=0c));
+  end;
 
-scheme ExReal_CASE{F(Nat,Nat)->real number}:
+scheme :: SIN_COS:sch 2
+ ExReal_CASE{F(Nat,Nat)->real number}:
 for k holds
  ex rseq st for n holds ((n <= k implies rseq.n=F(k,n)) &
-                        (n > k implies rseq.n=0));
+                        (n > k implies rseq.n=0))
+proof
+let k;
+   defpred P[set,set] means ex n st (n=$1 &
+   (n <= k implies $2=F(k,n )) &
+   (n > k implies $2=0) );
+ A1: now let x be set;
+     assume x in NAT;
+     then consider n such that
+  A2: n=x;
+     A3: now
+     assume n <= k;
+     hence RHK(n,k ) * F (k,n) =1 * F(k,n) by Def3
+                       .=F(k,n);
+     end;
+     A4: now assume n > k;
+     hence RHK(n,k) * F (k,n) =0 * F(k,n) by Def3
+                       .=0;
+     end;
+     reconsider y=RHK(n,k) * F (k,n) as set;
+     take y;
+     thus P[x,y] by A2,A3,A4;
+   end;
+
+ A5: for x,y,z be set st x in NAT & P[x,y] & P[x,z] holds y=z;
+   consider f be Function such that
+A6: dom f =NAT and
+A7: for x be set st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A5,A1);
+      now let x be set;
+     assume x in NAT;
+      then ex n st (n=x & (n <= k implies f.x=F(k,n)) &
+                       (n > k implies f.x=0)) by A7;
+     hence f.x is real;
+    end;
+   then reconsider f as Real_Sequence by A6,SEQ_1:3;
+   take rseq=f;
+   let n;
+      ex l be Nat st l=n &
+    (l <= k implies rseq.n=F(k,l)) & (l > k implies rseq.n=0) by A7;
+   hence ((n <= k implies rseq.n=F(k,n)) & (n > k implies rseq.n=0));
+  end;
 
 definition
 func Prod_complex_n -> Complex_Sequence means
@@ -71,11 +160,13 @@ func Prod_complex_n -> Complex_Sequence means
  it.0 = 1r & for n holds it.(n+1) = it.n * [*(n+1),0*];
 end;
 
+
 definition
 func Prod_real_n -> Real_Sequence means
 :: SIN_COS:def 5
  it.0 = 1 & for n holds it.(n+1) = it.n * (n+1);
 end;
+
 
 definition let n be Nat;
  func n !c -> Element of COMPLEX equals
@@ -83,11 +174,13 @@ definition let n be Nat;
      Prod_complex_n.n;
 end;
 
+
 definition let n be Nat;
  redefine func n! -> Real equals
 :: SIN_COS:def 7
   Prod_real_n.n;
 end;
+
 
 definition let z be Element of COMPLEX;
  func z ExpSeq -> Complex_Sequence means
@@ -95,11 +188,13 @@ definition let z be Element of COMPLEX;
    for n holds it.n = z #N n /(n!c);
 end;
 
+
 definition let a be real number;
   func a ExpSeq -> Real_Sequence means
 :: SIN_COS:def 9
    for n holds it.n = a |^ n /(n!);
 end;
+
 
 theorem :: SIN_COS:1
  (0 < n implies [*n,0*] <> 0c) &
@@ -123,6 +218,7 @@ func Coef(n) -> Complex_Sequence means
     &(k > n implies it.k=0c);
 end;
 
+
 definition let n be Nat;
 func Coef_e(n) -> Complex_Sequence means
 :: SIN_COS:def 11
@@ -131,11 +227,13 @@ func Coef_e(n) -> Complex_Sequence means
     & (k > n implies it.k=0c);
 end;
 
+
 definition let seq;
 func Sift seq -> Complex_Sequence means
 :: SIN_COS:def 12
   it.0=0c & for k be Nat holds it.(k+1) = seq.k;
 end;
+
 
 definition let n;
 let z,w be Element of COMPLEX;
@@ -147,6 +245,7 @@ func Expan(n,z,w) -> Complex_Sequence means
    (n < k implies it.k=0c);
 end;
 
+
 definition let n;
 let z,w be Element of COMPLEX;
 func Expan_e(n,z,w) -> Complex_Sequence means
@@ -157,6 +256,7 @@ func Expan_e(n,z,w) -> Complex_Sequence means
    (n < k implies it.k=0c);
 end;
 
+
 definition let n;
 let z,w be Element of COMPLEX;
 func Alfa(n,z,w) -> Complex_Sequence means
@@ -166,6 +266,7 @@ func Alfa(n,z,w) -> Complex_Sequence means
        it.k= (z ExpSeq).k * Partial_Sums(w ExpSeq).(n-'k) ) &
    ( n < k implies it.k=0c);
 end;
+
 
 definition
 let a,b be real number;
@@ -178,6 +279,7 @@ func Conj(n,a,b) -> Real_Sequence means
                           -Partial_Sums(b ExpSeq).(n-'k)))
    & (n < k implies it.k=0);
 end;
+
 
 definition
 let z, w be Element of COMPLEX;
@@ -214,9 +316,69 @@ theorem :: SIN_COS:9
 theorem :: SIN_COS:10
 0c ExpSeq is absolutely_summable & Sum(0c ExpSeq)=1r;
 
-definition let z;
+registration let z;
   cluster z ExpSeq -> absolutely_summable;
+   coherence
+    proof
+      now assume
+      A1:z<>0c;
+      defpred X[set] means (z ExpSeq).$1 <> 0c;
+           0c <> 1r by COMPLEX1:def 7;
+         then A2: X[0] by Th4;
+         A3: for n st X[n] holds X[n+1]
+         proof let n;
+         assume
+            A4:(z ExpSeq).n <> 0c;
+            thus (z ExpSeq).(n+1) <> 0c
+            proof
+              assume
+                A5: (z ExpSeq).(n+1) = 0c;
+                A6: [*(n+1),0*] <>0c by COMSEQ_3:1;
+A7:             ((z ExpSeq).n * z)/[*(n+1),0*]=0c by A5,Th4;
+                    0c = 0c/z by COMPLEX1:87
+                    .=(z ExpSeq).n * z/z by A6,A7,XCMPLX_1:50
+                    .=(z ExpSeq).n * (z/z) by XCMPLX_1:75
+                    .=(z ExpSeq).n * 1r by A1,COMPLEX1:86
+                    .=(z ExpSeq).n by COMPLEX1:29;
+                hence contradiction by A4;
+            end;
+         end;
+     deffunc U(Nat) = |.(z ExpSeq).|.($1+1)/|.(z ExpSeq).|.$1;
+     thus
+     A8:  for n holds X[n] from NAT_1:sch 1(A2,A3);
+       ex rseq st for n holds rseq.n= U(n) from SEQ_1:sch 1;
+      then consider rseq such that
+     A9:for n holds rseq.n=|.z ExpSeq.|.(n+1)/|.z ExpSeq.|.n;
+       rseq is convergent & lim rseq < 1
+      proof
+
+         now let n;
+        A10:(z ExpSeq).n<>0c by A8;
+        A11:[*(n+1),0*] <> 0c by COMSEQ_3:1;
+        A12:Im([*(n+1),0*]) = 0 by COMPLEX1:7;
+        A13:0 <= (n+1) by NAT_1:18;
+        thus rseq.n =|.z ExpSeq.|.(n+1)/|.z ExpSeq.|.n by A9
+              .=|.(z ExpSeq).(n+1).|/|.z ExpSeq.|.n by COMSEQ_1:def 14
+              .=|.(z ExpSeq).(n+1).|/|.(z ExpSeq).n.| by COMSEQ_1:def 14
+              .=|.(z ExpSeq).(n+1)/(z ExpSeq).n.| by A10,COMPLEX1:153
+              .=|.((z ExpSeq).n * z/[*(n+1),0*]) /(z ExpSeq).n.| by Th4
+              .=|.((z ExpSeq).n * (z/[*(n+1),0*])) /(z ExpSeq).n.|
+ by XCMPLX_1:75
+              .=|.(z/[*(n+1),0*]) .| by A10,XCMPLX_1:90
+              .=|.z.|/|.[*(n+1),0*] .| by A11,COMPLEX1:153
+              .=|.z.|/abs(Re([*(n+1),0*])) by A12,COMPLEX1:136
+              .=|.z.|/abs(n+1) by COMPLEX1:7
+              .=|.z.|/(n+1) by A13,ABSVALUE:def 1;
+        end;
+           then rseq is convergent & lim(rseq)=0 by SEQ_4:46;
+       hence thesis;
+     end;
+     hence z ExpSeq is absolutely_summable by A8,A9,COMSEQ_3:76;
+    end;
+   hence thesis by Th10;
+  end;
 end;
+
 
 theorem :: SIN_COS:11
 (z ExpSeq).0 = 1r & Expan(0,z,w).0 = 1r;
@@ -277,6 +439,7 @@ func exp -> PartFunc of COMPLEX, COMPLEX means
  dom it= COMPLEX & for z being Element of COMPLEX holds it.z=Sum(z ExpSeq);
  end;
 
+
 definition let z;
 func exp z -> Element of COMPLEX equals
 :: SIN_COS:def 19
@@ -295,20 +458,29 @@ func sin -> PartFunc of REAL, REAL means
 ExpSeq));
   end;
 
+
 definition let th be real number;
 func sin th equals
 :: SIN_COS:def 21
  sin.th;
 end;
 
-definition
+
+registration
 let th be real number;
  cluster sin th -> real;
+correctness
+  proof
+      sin th = sin.th by Def21;
+    hence thesis;
+  end;
 end;
+
 
 definition let th be Real;
  redefine func sin th -> Real;
 end;
+
 
 theorem :: SIN_COS:25
   sin is Function of REAL,REAL;
@@ -321,20 +493,29 @@ func cos -> PartFunc of REAL, REAL means
  dom it= REAL & for d holds it.d=Re(Sum([*0,d*] ExpSeq));
  end;
 
+
 definition let th be real number;
 func cos th equals
 :: SIN_COS:def 23
  cos.th;
 end;
 
-definition
+
+registration
 let th be real number;
  cluster cos th -> real;
+correctness
+  proof
+      cos th = cos.th by Def23;
+    hence thesis;
+  end;
 end;
+
 
 definition let th be Real;
  redefine func cos th -> Real;
 end;
+
 
 theorem :: SIN_COS:26
   cos is Function of REAL,REAL;
@@ -445,20 +626,29 @@ func exp -> PartFunc of REAL, REAL means
  dom it= REAL & for d being real number holds it.d=Sum(d ExpSeq);
  end;
 
+
 definition let th be real number;
 func exp th equals
 :: SIN_COS:def 27
  exp.th;
 end;
 
-definition
+
+registration
 let th be real number;
  cluster exp th -> real;
+correctness
+  proof
+      exp th = exp.th by Def27;
+    hence thesis;
+  end;
 end;
+
 
 definition let th be Real;
  redefine func exp th -> Real;
 end;
+
 
 theorem :: SIN_COS:51
 dom(exp)=REAL;
@@ -568,9 +758,11 @@ func PI -> real number means
  (sin/cos).(it/4) = 1 & it in ]. 0, 4 .[;
 end;
 
+
 definition
  redefine func PI -> Real;
 end;
+
 
 theorem :: SIN_COS:78
 sin.(PI/4) = cos.(PI/4);

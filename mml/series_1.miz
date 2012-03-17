@@ -10,7 +10,7 @@ environ
       ABSVALUE, INT_1, SEQM_3, SUPINF_2, RLVECT_1, PROB_1, LATTICES, PREPOWER,
       SERIES_1, GROUP_1;
  notation ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, NAT_1, ABSVALUE, SEQ_1,
-      SEQ_2, FUNCT_2, SEQM_3, INT_1, PREPOWER, POWER;
+      SEQ_2, FUNCT_2, SEQM_3, INT_1, NEWTON, PREPOWER, POWER;
  constructors REAL_1, NAT_1, SEQ_2, SEQM_3, PREPOWER, POWER, PARTFUN1,
       MEMBERED, XBOOLE_0;
  clusters INT_1, XREAL_0, SEQ_1, NEWTON, RELSET_1, MEMBERED, ZFMISC_1,
@@ -88,6 +88,7 @@ a <> 0 implies abs(a) to_power n = abs(a to_power n)
   then A4: a to_power n = abs(a) to_power n by ABSVALUE:def 1;
       a to_power n > 0 by A3,POWER:39;
    hence abs(a) to_power n = abs(a to_power n) by A4,ABSVALUE:def 1;
+   end;
    suppose A5: a < 0;
    A6: ex k st n = 2 * k or n = 2 * k + 1 by SCHEME1:1;
    reconsider m=n as Integer;
@@ -97,13 +98,16 @@ a <> 0 implies abs(a) to_power n = abs(a to_power n)
       .= a to_power m by A1,A7,POWER:54;
         abs(a) to_power n > 0 by A2,POWER:39; hence
         abs(a) to_power n = abs(a to_power n ) by A8,ABSVALUE:def 1;
+     end;
      suppose A9: (ex k being Integer st m = 2 * k + 1);
       A10: abs(a) to_power n = (-a) to_power m by A5,ABSVALUE:def 1
       .= - a to_power m by A1,A9,POWER:55;
         abs(a) to_power n > 0 by A2,POWER:39; hence
         abs(a) to_power n = abs( - a to_power n ) by A10,ABSVALUE:def 1
       .= abs( a to_power n ) by ABSVALUE:17;
+     end;
      end; hence abs(a) to_power n = abs(a to_power n);
+   end;
    end; hence thesis;
   end;
 
@@ -121,12 +125,13 @@ s is convergent & lim s = 0
       end; then A5: s is constant by SEQM_3:def 6;
       s.0 = 0 by A4;
   hence s is convergent & lim s = 0 by A5,SEQ_4:39,41;
+  end;
   suppose A6:not abs(a) = 0; then A7: a <> 0 by ABSVALUE:7;
      abs(a) >= 0 by ABSVALUE:5;
   then A8: abs(a) > 0 by A6,REAL_1:def 5;
   deffunc U(Nat) = abs(a) to_power ($1+1);
   consider s1 such that
-  A9: for n holds s1.n = U(n) from ExRealSeq;
+  A9: for n holds s1.n = U(n) from SEQ_1:sch 1;
   A10: s1 is convergent & lim s1 = 0 by A1,A8,A9,Th1;
        now let n;
      thus s1.n = abs(a) to_power (n+1) by A9
@@ -135,6 +140,7 @@ s is convergent & lim s = 0
      end;
     then abs(s) is convergent & lim abs(s) = 0 by A10,SEQ_1:16; hence
      s is convergent & lim s = 0 by SEQ_4:28;
+  end;
   end; hence thesis;
   end;
 
@@ -144,7 +150,7 @@ definition let s;
 existence
 proof deffunc U(Nat,Real) = $2 + s.($1+1);
  consider f being Function of NAT,REAL such that
- A1: f.0 = s.0 & for n being Nat holds f.(n+1) = U(n,f.n) from LambdaRecExD;
+ A1: f.0 = s.0 & for n being Nat holds f.(n+1) = U(n,f.n) from RECDEF_1:sch 4;
  reconsider f as Real_Sequence;
  take f;
  thus thesis by A1;
@@ -162,10 +168,11 @@ proof
       hence s1.(k+1) = s2.k + s.(k+1) by A2
                     .= s2.(k+1) by A3;
      end;
-   for n holds X[n] from Ind(A4,A5);
+   for n holds X[n] from NAT_1:sch 1(A4,A5);
  hence s1 = s2 by FUNCT_2:113;
 end;
 end;
+
 
 definition let s;
  attr s is summable means :Def2:
@@ -175,6 +182,7 @@ definition let s;
   lim Partial_Sums(s);
  correctness;
 end;
+
 
 canceled 3;
 
@@ -367,14 +375,14 @@ proof defpred X[Nat] means s^\$1 is summable;
   then A3: Partial_Sums(s^\n)^\1 is convergent by SEQ_4:33;
   A4: s^\(n+1)=(s^\n)^\1 by SEQM_3:36;
   deffunc U(Nat) = (s^\n).0;
-  consider s1 such that A5: for k holds s1.k = U(k) from ExRealSeq;
+  consider s1 such that A5: for k holds s1.k = U(k) from SEQ_1:sch 1;
     s1 is constant by A5,SEQM_3:def 6;
   then A6: s1 is convergent by SEQ_4:39;
     Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 by A5,Th14;
   then Partial_Sums(s^\n^\1) is convergent by A3,A6,SEQ_2:25;
   hence thesis by A4,Def2;
  end;
- thus for n holds X[n] from Ind(A1,A2);
+ thus for n holds X[n] from NAT_1:sch 1(A1,A2);
 end;
 
 theorem Th16:
@@ -382,7 +390,7 @@ theorem Th16:
 proof given n such that A1: s^\n is summable; s^\n^\1 is summable by A1,Th15;
  then A2: Partial_Sums(s^\n^\1) is convergent by Def2;
  deffunc U(Nat) = Partial_Sums(s).n;
- consider s1 such that A3: for k holds s1.k= U(k) from ExRealSeq;
+ consider s1 such that A3: for k holds s1.k= U(k) from SEQ_1:sch 1;
    s1 is constant by A3,SEQM_3:def 6;
  then A4: s1 is convergent by SEQ_4:39;
    for k holds
@@ -413,7 +421,7 @@ A6:  X[0];
    .= (Partial_Sums(s)^\(n+1)).(k+1) by SEQM_3:def 9; hence
      (Partial_Sums(s)^\(n+1)).(k+1) = Partial_Sums(s^\(n+1)).(k+1) + s1.(k+1);
   end;
-  thus for k holds X[k] from Ind(A6,A7);
+  thus for k holds X[k] from NAT_1:sch 1(A6,A7);
  end;
  then Partial_Sums(s)^\(n+1) = Partial_Sums(s^\(n+1)) + s1 by SEQ_1:11
                       .= Partial_Sums((s^\n)^\1) + s1 by SEQM_3:36;
@@ -437,7 +445,7 @@ proof assume A1: for n holds s1.n<=s2.n;
     s1.(n+1)<=s2.(n+1) by A1; hence
     Partial_Sums(s1).(n+1) <= Partial_Sums(s2).(n+1) by A5,A6,A7,REAL_1:55;
  end;
- thus for n holds X[n] from Ind(A3,A4);
+ thus for n holds X[n] from NAT_1:sch 1(A3,A4);
 end;
 
 theorem
@@ -447,7 +455,7 @@ proof assume A1: s is summable;
  A2: X[0]
  proof
   deffunc U(Nat) = s.0;
-  consider s1 such that A3: for k holds s1.k=U(k) from ExRealSeq;
+  consider s1 such that A3: for k holds s1.k=U(k) from SEQ_1:sch 1;
   A4: Partial_Sums(s) is convergent by A1,Def2;
   then A5: Partial_Sums(s)^\1 is convergent by SEQ_4:33;
   A6: s1 is constant by A3,SEQM_3:def 6;
@@ -469,7 +477,7 @@ SEQ_2:26
  proof let n;
   assume A9: Sum(s) = Partial_Sums(s).n + Sum(s^\(n+1));
   deffunc U(Nat) = (s^\(n+1)).0;
-  consider s1 such that A10: for k holds s1.k=U(k) from ExRealSeq;
+  consider s1 such that A10: for k holds s1.k=U(k) from SEQ_1:sch 1;
   A11: s1 is constant by A10,SEQM_3:def 6;
   then A12: s1 is convergent by SEQ_4:39;
      s^\(n+1) is summable by A1,Th15;
@@ -495,7 +503,7 @@ hence
       .= Partial_Sums(s).(n+1) + Sum(s^\(n+1+1));
 
  end;
- thus for n holds X[n] from Ind(A2,A8);
+ thus for n holds X[n] from NAT_1:sch 1(A2,A8);
 end;
 
 theorem Th19:
@@ -644,7 +652,7 @@ A2:  X[0];
      by XCMPLX_1:29
   .= (1 - a to_power (n+1+1))/(1-a) by XCMPLX_1:27;
  end;
-   for n holds X[n] from Ind(A2,A3);
+   for n holds X[n] from NAT_1:sch 1(A2,A3);
  hence thesis;
 end;
 
@@ -663,7 +671,7 @@ for n holds Partial_Sums(s).n = s.0 * (1 - a to_power (n+1))/(1-a)
       .= s.0 * a GeoSeq.(n+1) by PREPOWER:4;
     hence thesis;
     end;
-     for n holds X[n] from Ind(A2,A3);
+     for n holds X[n] from NAT_1:sch 1(A2,A3);
    then s = s.0 (#) a GeoSeq by SEQ_1:13;
 then A4:   Partial_Sums(s) = s.0 (#) Partial_Sums(a GeoSeq) by Th12;
       now let n; thus
@@ -678,7 +686,7 @@ theorem Th28:
 abs(a)<1 implies a GeoSeq is summable & Sum(a GeoSeq) = 1/(1-a)
 proof assume A1: abs(a)<1;
  deffunc U(Nat) = a to_power ($1+1);
- consider s such that A2: for n holds s.n = U(n) from ExRealSeq;
+ consider s such that A2: for n holds s.n = U(n) from SEQ_1:sch 1;
  A3: s is convergent & lim s = 0 by A1,A2,Th3;
  A4: now let r be real number such that A5: r>0; A6: a<1 by A1,SEQ_2:9;
   then A7: 1-a>0 by SQUARE_1:11; then r*(1-a)>0*r by A5,REAL_1:70;
@@ -721,7 +729,7 @@ proof assume A1: abs(a) < 1 & (for n holds s.(n+1) = a * s.n);
   .= s.0 * a GeoSeq.(n+1) by PREPOWER:4;
   hence thesis;
  end;
-   for n holds X[n] from Ind(A2,A3);
+   for n holds X[n] from NAT_1:sch 1(A2,A3);
  then s = s.0 (#) a GeoSeq by SEQ_1:13;
  then A4: Partial_Sums(s) = s.0 (#) Partial_Sums(a GeoSeq) by Th12;
  A5: a GeoSeq is summable & Sum(a GeoSeq) = 1/(1-a) by A1,Th28;
@@ -822,7 +830,7 @@ A21:     s1.(m+k) * s2.(m+k) <= (1-r) * s2.(m+k) by A17,A19,AXIOMS:25;
     .= s2.(m+(k+1)) by XCMPLX_1:1;
    hence thesis by A20,A21,AXIOMS:22;
    end;
- A22: for k holds X[k] from Ind(A13,A14);
+ A22: for k holds X[k] from NAT_1:sch 1(A13,A14);
 A23:  now let n; assume m <= n;
        then ex k st n = m + k by NAT_1:28;
       hence s.n <= s2.n by A22;
@@ -850,7 +858,7 @@ implies s is not summable
      then s.(m+k+1)>=s.m by A6,AXIOMS:22;
      hence thesis by XCMPLX_1:1;
     end;
-  A8: for k holds X[k] from Ind(A4,A5);
+  A8: for k holds X[k] from NAT_1:sch 1(A4,A5);
   A9: s.m>0 by A1;
      for k ex n st (n>=k & not abs(s.n - 0)<s.m)
     proof let k;
@@ -908,12 +916,14 @@ implies s is summable
          now per cases;
        suppose s.n = 0;
        hence s.n < (1 - r) to_power n by A10,POWER:39;
+       end;
        suppose s.n <> 0; then s.n > 0 by A17,REAL_1:def 5;
        then n -Root (s.n) > 0 by A15,PREPOWER:def 3;
        then n-root (s.n) > 0 by A15,A17,POWER:def 1;
        then (n-root (s.n)) to_power n < (1-r) to_power n by A16,A18,POWER:42;
        then (n-root (s.n)) |^ n < (1-r) to_power n by A15,POWER:47; hence
          s.n < (1-r) to_power n by A15,A17,POWER:5;
+       end;
        end; hence thesis;
      end;
   set s2 = (1-r) GeoSeq;
@@ -963,10 +973,12 @@ implies s is not summable
      suppose n-root (s.n) = 1;
      then s.n = 1 |^ n by A7,A10,POWER:5;
      hence s.n>=1 by NEWTON:15;
+     end;
      suppose n-root (s.n) > 1;
      then (n-root (s.n)) to_power n > 1 by A8,POWER:40;
      then (n-root (s.n)) |^ n > 1 by A7,POWER:47;
      hence s.n >= 1 by A7,A10,POWER:5;
+     end;
      end; hence thesis;
    end;
     for k ex n st k<=n & not abs(s.n - 0) < 1
@@ -1016,15 +1028,18 @@ proof
     m >= 0 by NAT_1:18;
   then m+1 > 0 by NAT_1:38;
   hence thesis by A3,POWER:def 2;
+  end;
   suppose k > 0;
   then k to_power (m+1) = k to_power m * k to_power 1 by POWER:32
   .= k1 * k by POWER:30;
   hence thesis;
  end;
-   for m holds X[m] from Ind(A1,A2);
+ end;
+   for m holds X[m] from NAT_1:sch 1(A1,A2);
  hence k to_power n is Nat;
 end;
 end;
+
 
 theorem Th35:
 s is non-increasing & (for n holds s.n>=0 &
@@ -1069,7 +1084,7 @@ proof assume that A1: s is non-increasing and
    deffunc U(Nat) = Partial_Sums(s).(2 to_power n + $1) -
    Partial_Sums(s).(2 to_power n);
    consider a being Real_Sequence such that A13:
-   for m holds a.m = U(m) from ExRealSeq;
+   for m holds a.m = U(m) from SEQ_1:sch 1;
   defpred X[Nat] means
      $1 > 2 to_power n or $1 * s.(2 to_power (n+1)) <= a.$1;
    A14: X[0]
@@ -1084,6 +1099,7 @@ proof assume that A1: s is non-increasing and
     assume A16: m > 2 to_power n or m * s.(2 to_power (n+1)) <= a.m;
       now per cases by A16;
     suppose m > 2 to_power n; hence thesis by NAT_1:38;
+    end;
     suppose A17: m * s.(2 to_power (n+1)) <= a.m;
        now per cases;
      suppose m<2 to_power n; then m+1<=2 to_power n by NAT_1:38;
@@ -1110,11 +1126,14 @@ proof assume that A1: s is non-increasing and
       Partial_Sums(s).(2 to_power n + (m + 1)) -
       Partial_Sums(s).(2 to_power n) by XCMPLX_1:1;
       hence thesis by A13;
+     end;
      suppose m>=2 to_power n; hence thesis by NAT_1:38;
+     end;
      end; hence thesis;
+    end;
     end; hence thesis;
    end;
-      for m holds X[m] from Ind(A14,A15);
+      for m holds X[m] from NAT_1:sch 1(A14,A15);
    then 2 to_power n * s.(2 to_power (n+1)) <= a.(2 to_power n);
    then 2*(2 to_power n * s.(2 to_power (n+1))) <= 2*a.(2 to_power n)
    by AXIOMS:25;
@@ -1143,7 +1162,7 @@ n)
      Partial_Sums(s1).(n+1) <= 2 * Partial_Sums(s).(2 to_power (n+1))
    by A12,AXIOMS:22;
   end;
-  A19: for n holds Y[n] from Ind(A6,A11);
+  A19: for n holds Y[n] from NAT_1:sch 1(A6,A11);
     Partial_Sums(s) is bounded_above by A2,A5,Th20;
   then consider r be real number such that
   A20: for n holds Partial_Sums(s).n<r by SEQ_2:def 3;
@@ -1208,7 +1227,7 @@ n)
    Partial_Sums(s).(2 to_power (n+1)) <=
    (m + 1) * s.(2 to_power (n+1)) by XCMPLX_1:8;
   end;
-    for m holds X[m] from Ind(A28,A29);
+    for m holds X[m] from NAT_1:sch 1(A28,A29);
   then Partial_Sums(s).(2 to_power (n+1) + 2 to_power (n+1)) -
   Partial_Sums(s).(2 to_power (n+1))<=
   2 to_power (n+1) * s.(2 to_power (n+1));
@@ -1225,7 +1244,7 @@ n)
     Partial_Sums(s).(2 to_power (n+1+1)) <=
   Partial_Sums(s1).(n+1) + s.0+s.2 by A27,AXIOMS:22;
  end;
- A32: for n holds Y[n] from Ind(A23,A26);
+ A32: for n holds Y[n] from NAT_1:sch 1(A23,A26);
  A33: Partial_Sums(s) is non-decreasing by A2,Th19;
    Partial_Sums(s1) is bounded_above by A3,A22,Th20;
  then consider r be real number such that
@@ -1268,7 +1287,7 @@ proof assume that A1: p>1 and
   end;
   hence thesis;
  end;
- consider s1 such that A6: for n holds X[n,s1.n] from RealSeqChoice(A4);
+ consider s1 such that A6: for n holds X[n,s1.n] from RCOMP_1:sch 1(A4);
  A7: s1.0 = 1 by A6;
  A8: now let n; assume n>=0+1; then n<>0;
   hence s1.n=1/n to_power p by A6;
@@ -1279,6 +1298,7 @@ proof assume that A1: p>1 and
      (n+1) #R p >= 1 by A3,A9,PREPOWER:99;
    then (n+1) to_power p >= 1 by A9,POWER:def 2;
    hence s1.(n+1)<=s1.n by A7,A9,A10,REAL_2:164;
+  end;
   suppose ex m st n=m+1; then consider m such that A11: n = m+1;
 A12:   m>=0 by NAT_1:18;
    then A13: n>=0+1 by A11,REAL_1:55; A14: n+1>=0+1 by NAT_1:37;
@@ -1299,23 +1319,26 @@ A12:   m>=0 by NAT_1:18;
    then s1.(n+1)/s1.n <= (n/(n+1)) #R 0 by A3,A18,A19,PREPOWER:98;
    then s1.(n+1)/s1.n <= 1 by A18,PREPOWER:85; hence
      s1.(n+1)<=s1.n by A20,REAL_2:118;
+  end;
   end; hence
     s1.(n+1)<=s1.n;
  end; then A21: s1 is non-increasing by SEQM_3:def 14;
  deffunc V(Nat) = 2 to_power $1 * s1.(2 to_power $1);
- consider s2 such that A22: for n holds s2.n = V(n) from ExRealSeq;
+ consider s2 such that A22: for n holds s2.n = V(n) from SEQ_1:sch 1;
  A23: now let n;
     now per cases by NAT_1:22;
   suppose n=0; hence s1.n >= 0 by A7;
+  end;
   suppose ex m st n=m+1; then consider m such that A24: n = m+1;
 A25:   m>=0 by NAT_1:18; then A26: n>=0+1 by A24,REAL_1:55;
      n>0 by A24,A25,NAT_1:38; then n to_power p > 0 by POWER:39;
    then 1/n to_power p >= 0 by REAL_2:127;
    hence s1.n>=0 by A8,A26;
+  end;
   end; hence s1.n>=0 & s2.n = 2 to_power n * s1.(2 to_power n) by A22;
  end;
  deffunc U(Nat) = $1-root (s2.$1);
- consider s3 such that A27: for n holds s3.n = U(n) from ExRealSeq;
+ consider s3 such that A27: for n holds s3.n = U(n) from SEQ_1:sch 1;
  A28: now let n; 2 to_power n > 0 by POWER:39; then A29: 2 to_power n >= 0+1
 by NAT_1:38; thus
   A30: s2.n = 2 to_power n * s1.(2 to_power n) by A22
@@ -1385,6 +1408,7 @@ m holds abs(s.n-0)<1 by SEQ_2:def 7;
     hence contradiction by A7,A11,POWER:def 2;
    end; hence contradiction;
   end; hence s is not summable by Th7;
+ end;
  suppose A12: p>=0;
    defpred
     X[Nat,real number] means ($1=0 & $2=1) or ($1>=1 & $2=1/$1 to_power p);
@@ -1396,7 +1420,7 @@ m holds abs(s.n-0)<1 by SEQ_2:def 7;
    end;
    hence thesis;
   end;
-  consider s1 such that A15: for n holds X[n,s1.n] from RealSeqChoice(A13);
+  consider s1 such that A15: for n holds X[n,s1.n] from RCOMP_1:sch 1(A13);
   A16: s1.0 = 1 by A15;
   A17: now let n; assume n>=0+1; then n<>0;
    hence s1.n=1/n to_power p by A15;
@@ -1407,6 +1431,7 @@ m holds abs(s.n-0)<1 by SEQ_2:def 7;
       (n+1) #R p >= 1 by A12,A18,PREPOWER:99;
     then (n+1) to_power p >= 1 by A18,POWER:def 2;
     hence s1.(n+1)<=s1.n by A16,A18,A19,REAL_2:164;
+   end;
    suppose ex m st n=m+1; then consider m such that A20: n = m+1;
 A21:    m>=0 by NAT_1:18;
     then A22: n>=0+1 by A20,REAL_1:55; A23: n+1>=0+1 by NAT_1:37;
@@ -1427,19 +1452,22 @@ A21:    m>=0 by NAT_1:18;
     then s1.(n+1)/s1.n <= (n/(n+1)) #R 0 by A12,A27,A28,PREPOWER:98;
     then s1.(n+1)/s1.n <= 1 by A27,PREPOWER:85; hence
       s1.(n+1)<=s1.n by A29,REAL_2:118;
+   end;
    end; hence
      s1.(n+1)<=s1.n;
   end; then A30: s1 is non-increasing by SEQM_3:def 14;
   deffunc U(Nat) = 2 to_power $1 * s1.(2 to_power $1);
-  consider s2 such that A31: for n holds s2.n = U(n) from ExRealSeq;
+  consider s2 such that A31: for n holds s2.n = U(n) from SEQ_1:sch 1;
   A32: now let n;
      now per cases by NAT_1:22;
    suppose n=0; hence s1.n >= 0 by A16;
+   end;
    suppose ex m st n=m+1; then consider m such that A33: n = m+1;
 A34:    m>=0 by NAT_1:18; then A35: n>=0+1 by A33,REAL_1:55;
       n>0 by A33,A34,NAT_1:38; then n to_power p > 0 by POWER:39;
     then 1/n to_power p >= 0 by REAL_2:127;
     hence s1.n>=0 by A17,A35;
+   end;
    end; hence s1.n>=0 & s2.n = 2 to_power n * s1.(2 to_power n) by A31;
   end;
     now assume s2 is convergent & lim s2=0;
@@ -1474,6 +1502,7 @@ def 7;
    .= s1.n by A17,A42; hence s.n>=s1.n;
   end;
   hence s is not summable by A32,A41,Th22;
+ end;
  end; hence thesis;
 end;
 
@@ -1483,6 +1512,7 @@ definition let s;
  attr s is absolutely_summable means :Def5:
  abs(s) is summable;
 end;
+
 
 canceled;
 
@@ -1526,7 +1556,7 @@ ABSVALUE:def 1;
   hence abs(s1.(n+(k+1))-s1.n) <= abs(s2.(n+(k+1))-s2.n)
   by A9,A10,ABSVALUE:def 1;
  end;
-A11: for k holds X[k] from Ind(A2,A4);
+A11: for k holds X[k] from NAT_1:sch 1(A2,A4);
  reconsider u=n, v=m as Integer;
  reconsider k = v-u as Nat by A1,INT_1:18;
    n+k = m by XCMPLX_1:27;
@@ -1584,6 +1614,7 @@ proof assume A1: r>0;
  given m such that A2: for n st n>=m holds abs(s.n)>=r;
    now per cases;
  suppose s is not convergent; hence thesis;
+ end;
  suppose A3: s is convergent;
     now assume lim s=0;
    then consider k such that
@@ -1595,6 +1626,7 @@ proof assume A1: r>0;
     hence contradiction by A2,A6;
    end; hence contradiction;
   end; hence thesis;
+ end;
  end; hence thesis;
 end;
 
@@ -1622,7 +1654,7 @@ proof assume A1: for n holds s.n<>0;
    then abs(s.(m+k+1))>=abs(s.m) by A7,AXIOMS:22;
    hence thesis by XCMPLX_1:1;
   end;
-  A9: for k holds X[k] from Ind(A5,A6);
+  A9: for k holds X[k] from NAT_1:sch 1(A5,A6);
      ex k st n=m+k by A4,NAT_1:28;
   hence abs(s.n)>=abs(s.m) by A9;
  end; then s is not convergent or lim s <> 0 by A3,Th43;

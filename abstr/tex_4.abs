@@ -20,24 +20,51 @@ environ
 begin
 :: 1. Properties of the Closure and the Interior Operations.
 
-definition
+registration
  let X be non empty TopSpace, A be non empty Subset of X;
  cluster Cl A -> non empty;
+ coherence by PCOMPS_1:2;
 end;
 
-definition let X be non empty TopSpace, A be empty Subset of X;
+
+registration let X be non empty TopSpace, A be empty Subset of X;
  cluster Cl A -> empty;
+ coherence
+  proof
+       A = {}X;
+   hence thesis by PRE_TOPC:52;
+  end;
 end;
 
-definition
+
+registration
  let X be non empty TopSpace, A be non proper Subset of X;
  cluster Cl A -> non proper;
+ coherence
+  proof
+       A = the carrier of X by TEX_2:5;
+    then A = [#]X by PRE_TOPC:12;
+    then Cl A = [#]X by TOPS_1:27;
+    then Cl A = the carrier of X by PRE_TOPC:12;
+   hence thesis by TEX_2:5;
+  end;
 end;
 
-definition let X be non trivial non empty TopSpace,
+
+registration let X be non trivial non empty TopSpace,
                 A be non trivial (non empty Subset of X);
  cluster Cl A -> non trivial;
+ coherence
+  proof
+      now
+     assume A1: Cl A is trivial;
+          A c= Cl A by PRE_TOPC:48;
+     hence contradiction by A1,TEX_2:1;
+    end;
+   hence thesis;
+  end;
 end;
+
 
 reserve X for non empty TopSpace;
 
@@ -52,18 +79,46 @@ theorem :: TEX_4:2
 theorem :: TEX_4:3
  for A, B being Subset of X holds B c= Cl A implies Cl B c= Cl A;
 
-definition
+registration
  let X be non empty TopSpace, A be non proper Subset of X;
  cluster Int A -> non proper;
+ coherence
+  proof
+       A = the carrier of X by TEX_2:5;
+    then A = [#]X by PRE_TOPC:12;
+    then Int A = [#]X by TOPS_1:43;
+    then Int A = the carrier of X by PRE_TOPC:12;
+   hence thesis by TEX_2:5;
+  end;
 end;
 
-definition let X be non empty TopSpace, A be proper Subset of X;
+
+registration let X be non empty TopSpace, A be proper Subset of X;
  cluster Int A -> proper;
+ coherence
+  proof
+      now
+     assume Int A is non proper;
+      then Int A = the carrier of X by TEX_2:5;
+      then Int A = [#]X & Int A c= A & A c= [#]X by PRE_TOPC:12,14,TOPS_1:44;
+      then A = [#]X by XBOOLE_0:def 10;
+      then A = the carrier of X by PRE_TOPC:12;
+     hence contradiction by TEX_2:5;
+    end;
+   hence thesis;
+  end;
 end;
 
-definition let X be non empty TopSpace, A be empty Subset of X;
+
+registration let X be non empty TopSpace, A be empty Subset of X;
  cluster Int A -> empty;
+ coherence
+  proof
+       A = {}X;
+   hence thesis by TOPS_1:47;
+  end;
 end;
+
 
 theorem :: TEX_4:4
    for A being Subset of X holds
@@ -84,6 +139,7 @@ definition let Y be TopStruct;
     G is open & x in G holds x in IT implies IT c= G;
 end;
 
+
 definition let Y be non empty TopStruct;
   let A be Subset of Y;
  redefine attr A is anti-discrete means
@@ -92,6 +148,7 @@ definition let Y be non empty TopStruct;
     F is closed & x in F holds x in A implies A c= F;
 end;
 
+
 definition let Y be TopStruct;
   let A be Subset of Y;
  redefine attr A is anti-discrete means
@@ -99,12 +156,14 @@ definition let Y be TopStruct;
  for G being Subset of Y st G is open holds A misses G or A c= G;
 end;
 
+
 definition let Y be TopStruct;
   let A be Subset of Y;
  redefine attr A is anti-discrete means
 :: TEX_4:def 4
  for F being Subset of Y st F is closed holds A misses F or A c= F;
 end;
+
 
 theorem :: TEX_4:6
  for Y0, Y1 being TopStruct, D0 being Subset of Y0,
@@ -131,6 +190,7 @@ definition let Y be TopStruct;
  for A being Subset of Y st A in IT holds A is anti-discrete;
 end;
 
+
 theorem :: TEX_4:10
  for F being Subset-Family of Y st F is anti-discrete-set-family holds
   meet F <> {} implies union F is anti-discrete;
@@ -145,9 +205,18 @@ definition let Y be TopStruct, x be Point of Y;
  {A where A is Subset of Y : A is anti-discrete & x in A};
 end;
 
-definition let Y be non empty TopStruct, x be Point of Y;
+
+registration let Y be non empty TopStruct, x be Point of Y;
  cluster MaxADSF(x) -> non empty;
+ coherence
+ proof
+   set F = {A where A is Subset of Y : A is anti-discrete & x in A};
+     {x} is anti-discrete & x in {x} by Th8,TARSKI:def 1;
+    then {x} in F;
+   hence thesis by Def6;
+ end;
 end;
+
 
 reserve x for Point of Y;
 
@@ -175,6 +244,7 @@ definition let Y be TopStruct;
    for D being Subset of Y st D is anti-discrete & IT c= D holds IT = D;
 end;
 
+
 theorem :: TEX_4:16
    for Y0, Y1 being TopStruct, D0 being Subset of Y0,
    D1 being Subset of Y1 st
@@ -200,9 +270,17 @@ definition let Y be TopStruct, x be Point of Y;
  union MaxADSF(x);
 end;
 
-definition let Y be non empty TopStruct, x be Point of Y;
+
+registration let Y be non empty TopStruct, x be Point of Y;
  cluster MaxADSet(x) -> non empty;
+ coherence
+  proof
+A1: MaxADSet(x) = union MaxADSF(x) by Def8;
+        {x} <> {} & {x} c= union MaxADSF(x) by Th14;
+   hence thesis by A1,XBOOLE_1:3;
+  end;
 end;
+
 
 theorem :: TEX_4:20
  for x being Point of Y holds {x} c= MaxADSet(x);
@@ -248,6 +326,7 @@ definition let Y be non empty TopStruct;
  ex x being Point of Y st x in A & A = MaxADSet(x);
 end;
 
+
 theorem :: TEX_4:29
  for A being Subset of Y, x being Point of Y st x in A holds
    A is maximal_anti-discrete implies A = MaxADSet(x);
@@ -259,11 +338,13 @@ definition let Y be non empty TopStruct;
    for x being Point of Y st x in A holds A = MaxADSet(x);
 end;
 
+
 definition let Y be non empty TopStruct, A be Subset of Y;
  func MaxADSet(A) -> Subset of Y equals
 :: TEX_4:def 11
  union {MaxADSet(a) where a is Point of Y : a in A};
 end;
+
 
 theorem :: TEX_4:30
  for x being Point of Y holds MaxADSet(x) = MaxADSet({x});
@@ -303,24 +384,69 @@ theorem :: TEX_4:39
  for A, B being Subset of Y
   holds MaxADSet(A /\ B) c= MaxADSet(A) /\ MaxADSet(B);
 
-definition let Y be non empty TopStruct,
+registration let Y be non empty TopStruct,
   A be non empty Subset of Y;
  cluster MaxADSet(A) -> non empty;
+ coherence
+  proof
+       A <> {} & A c= MaxADSet(A) by Th34;
+   hence thesis by XBOOLE_1:3;
+  end;
 end;
 
-definition let Y be non empty TopStruct, A be empty Subset of Y;
+
+registration let Y be non empty TopStruct, A be empty Subset of Y;
  cluster MaxADSet(A) -> empty;
+ coherence
+  proof
+     now
+    assume MaxADSet(A) is non empty;
+     then consider x being set such that
+            A1: x in MaxADSet(A) by XBOOLE_0:def 1;
+      reconsider a = x as Point of Y by A1;
+            a in union {MaxADSet(b) where b is Point of Y : b in A} by A1,Def11
+;
+         then consider D being set such that
+                     a in D and
+               A2: D in {MaxADSet(b) where b is Point of Y : b in A}
+                                                             by TARSKI:def 4;
+         consider b being Point of Y such that
+                     D = MaxADSet(b) and A3: b in A by A2;
+    thus contradiction by A3;
+   end;
+   hence thesis;
+  end;
 end;
 
-definition let Y be non empty TopStruct,
+
+registration let Y be non empty TopStruct,
    A be non proper Subset of Y;
  cluster MaxADSet(A) -> non proper;
+ coherence
+  proof
+       A = the carrier of Y by TEX_2:5;
+    then the carrier of Y c= MaxADSet(A) &
+           MaxADSet(A) c= the carrier of Y by Th34;
+    then MaxADSet(A) = the carrier of Y by XBOOLE_0:def 10;
+   hence thesis by TEX_2:5;
+  end;
 end;
 
-definition let Y be non trivial non empty TopStruct,
+
+registration let Y be non trivial non empty TopStruct,
                 A be non trivial (non empty Subset of Y);
  cluster MaxADSet(A) -> non trivial;
+ coherence
+  proof
+      now
+     assume A1: MaxADSet(A) is trivial;
+          A c= MaxADSet(A) by Th34;
+     hence contradiction by A1,TEX_2:1;
+    end;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: TEX_4:40
  for G being Subset of Y, A being Subset of Y
@@ -353,6 +479,7 @@ definition let X be non empty TopSpace;
  for x being Point of X st x in A holds A c= Cl {x};
 end;
 
+
 definition let X be non empty TopSpace;
   let A be Subset of X;
  redefine attr A is anti-discrete means
@@ -360,12 +487,14 @@ definition let X be non empty TopSpace;
    for x being Point of X st x in A holds Cl A = Cl {x};
 end;
 
+
 definition let X be non empty TopSpace;
   let A be Subset of X;
  redefine attr A is anti-discrete means
 :: TEX_4:def 14
  for x, y being Point of X st x in A & y in A holds Cl {x} = Cl {y};
 end;
+
 
 reserve X for non empty TopSpace;
 
@@ -408,6 +537,7 @@ definition let X be non empty TopSpace, x be Point of X;
 :: TEX_4:def 15
  (Cl {x}) /\ meet {G where G is Subset of X : G is open & x in G};
 end;
+
 
 theorem :: TEX_4:53
  for x, y being Point of X holds
@@ -518,29 +648,104 @@ definition let Y be non empty TopStruct;
                            the carrier of IT = the carrier of Y0;
 end;
 
-definition let Y be non empty TopStruct;
+
+registration let Y be non empty TopStruct;
  cluster maximal_anti-discrete -> anti-discrete SubSpace of Y;
+ coherence by Def16;
  cluster non anti-discrete -> non maximal_anti-discrete SubSpace of Y;
+ coherence by Def16;
 end;
+
 
 theorem :: TEX_4:74
  for Y0 being non empty SubSpace of X, A being Subset of X
     st A = the carrier of Y0 holds
   Y0 is maximal_anti-discrete iff A is maximal_anti-discrete;
 
-definition let X be non empty TopSpace;
+registration let X be non empty TopSpace;
  cluster open anti-discrete -> maximal_anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is open;
+    then A1: A is open by TSEP_1:16;
+   assume X0 is anti-discrete;
+    then A is anti-discrete by Th68;
+    then A is maximal_anti-discrete by A1,Th18;
+   hence thesis by Th74;
+  end;
  cluster open non maximal_anti-discrete ->
     non anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is open;
+    then A2: A is open by TSEP_1:16;
+   assume A3: X0 is non maximal_anti-discrete;
+   assume X0 is anti-discrete;
+    then A is anti-discrete by Th68;
+    then A is maximal_anti-discrete by A2,Th18;
+   hence contradiction by A3,Th74;
+  end;
  cluster anti-discrete non maximal_anti-discrete ->
     non open (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is anti-discrete;
+    then A4: A is anti-discrete by Th68;
+   assume A5: X0 is non maximal_anti-discrete;
+   assume X0 is open;
+    then A is open by TSEP_1:16;
+    then A is maximal_anti-discrete by A4,Th18;
+   hence contradiction by A5,Th74;
+  end;
  cluster closed anti-discrete ->
        maximal_anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is closed;
+    then A6: A is closed by TSEP_1:11;
+   assume X0 is anti-discrete;
+    then A is anti-discrete by Th68;
+    then A is maximal_anti-discrete by A6,Th19;
+   hence thesis by Th74;
+  end;
  cluster closed non maximal_anti-discrete ->
       non anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is closed;
+    then A7: A is closed by TSEP_1:11;
+   assume A8: X0 is non maximal_anti-discrete;
+   assume X0 is anti-discrete;
+    then A is anti-discrete by Th68;
+    then A is maximal_anti-discrete by A7,Th19;
+   hence contradiction by A8,Th74;
+  end;
  cluster anti-discrete non maximal_anti-discrete ->
       non closed (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is anti-discrete;
+    then A9: A is anti-discrete by Th68;
+   assume A10: X0 is non maximal_anti-discrete;
+   assume X0 is closed;
+    then A is closed by TSEP_1:11;
+    then A is maximal_anti-discrete by A9,Th19;
+   hence contradiction by A10,Th74;
+  end;
 end;
+
 
 definition let Y be TopStruct, x be Point of Y;
  func MaxADSspace(x) -> strict SubSpace of Y means
@@ -548,8 +753,14 @@ definition let Y be TopStruct, x be Point of Y;
  the carrier of it = MaxADSet(x);
 end;
 
-definition let Y be non empty TopStruct, x be Point of Y;
+
+registration let Y be non empty TopStruct, x be Point of Y;
  cluster MaxADSspace(x) -> non empty;
+ coherence
+  proof
+     the carrier of MaxADSspace(x) = MaxADSet(x) by Def17;
+   hence the carrier of MaxADSspace(x) is non empty;
+  end;
 end;
 
 theorem :: TEX_4:75
@@ -565,13 +776,32 @@ theorem :: TEX_4:77
    the carrier of MaxADSspace(x) misses the carrier of MaxADSspace(y) or
      the TopStruct of MaxADSspace(x) = the TopStruct of MaxADSspace(y);
 
-definition let X be non empty TopSpace;
+registration let X be non empty TopSpace;
  cluster maximal_anti-discrete strict SubSpace of X;
+ existence
+  proof
+    consider a being set such that
+          A1: a in the carrier of X by XBOOLE_0:def 1;
+     reconsider a as Point of X by A1;
+    consider X0 being strict non empty SubSpace of X such that
+            A2: MaxADSet(a) = the carrier of X0 by TSEP_1:10;
+   take X0;
+       MaxADSet(a) is maximal_anti-discrete by Th22;
+   hence thesis by A2,Th74;
+  end;
 end;
 
-definition let X be non empty TopSpace, x be Point of X;
+
+registration let X be non empty TopSpace, x be Point of X;
  cluster MaxADSspace(x) -> maximal_anti-discrete;
+ coherence
+  proof
+   A1: MaxADSet(x) = the carrier of MaxADSspace(x) by Def17;
+     MaxADSet(x) is maximal_anti-discrete by Th22;
+   hence thesis by A1,Th74;
+  end;
 end;
+
 
 theorem :: TEX_4:78
    for X0 being closed non empty SubSpace of X, x being Point of X holds
@@ -592,10 +822,16 @@ definition let Y be TopStruct,
  the carrier of it = A;
 end;
 
-definition let Y be non empty TopStruct,
+
+registration let Y be non empty TopStruct,
   A be non empty Subset of Y;
  cluster Sspace(A) -> non empty;
+ coherence
+ proof
+   thus the carrier of Sspace A is non empty by Def18;
+ end;
 end;
+
 
 theorem :: TEX_4:81
    for A being non empty Subset of Y
@@ -607,19 +843,51 @@ holds
               A is Subset of Y0
               implies Sspace(A) is SubSpace of Y0;
 
-definition let Y be non trivial non empty TopStruct;
+registration let Y be non trivial non empty TopStruct;
  cluster non proper strict SubSpace of Y;
+ existence
+  proof
+       [#]Y = the carrier of Y by PRE_TOPC:12;
+    then reconsider A0 = the carrier of Y
+       as non empty Subset of Y;
+   set Y0 = Y|A0;
+   take Y0;
+      A0 = [#]Y0 by PRE_TOPC:def 10;
+    then A0 = the carrier of Y0 by PRE_TOPC:12;
+   hence thesis by TEX_2:15;
+  end;
 end;
 
-definition let Y be non trivial non empty TopStruct,
+
+registration let Y be non trivial non empty TopStruct,
                 A be non trivial (non empty Subset of Y);
  cluster Sspace(A) -> non trivial;
+ coherence
+  proof
+      now
+     assume Sspace(A) is trivial;
+        then the carrier of Sspace(A) is trivial by REALSET1:def 13;
+     hence contradiction by Def18;
+    end;
+   hence thesis;
+  end;
 end;
 
-definition let Y be non empty TopStruct,
+
+registration let Y be non empty TopStruct,
   A be non proper non empty Subset of Y;
  cluster Sspace(A) -> non proper;
+ coherence
+  proof
+      now
+       A1: the carrier of Sspace(A) = A by Def18;
+     assume Sspace(A) is proper;
+     hence contradiction by A1,TEX_2:13;
+    end;
+   hence thesis;
+  end;
 end;
+
 
 definition let Y be non empty TopStruct,
    A be Subset of Y;
@@ -628,10 +896,17 @@ definition let Y be non empty TopStruct,
  the carrier of it = MaxADSet(A);
 end;
 
-definition let Y be non empty TopStruct,
+
+registration let Y be non empty TopStruct,
    A be non empty Subset of Y;
  cluster MaxADSspace(A) -> non empty;
+ coherence
+ proof
+     the carrier of MaxADSspace(A) = MaxADSet(A) by Def19;
+   hence the carrier of MaxADSspace(A) is non empty;
+ end;
 end;
+
 
 theorem :: TEX_4:83
    for A being non empty Subset of Y
@@ -664,15 +939,36 @@ theorem :: TEX_4:89
    A is Subset of MaxADSspace(B) iff
     the TopStruct of MaxADSspace(A) = the TopStruct of MaxADSspace(B);
 
-definition let Y be non trivial non empty TopStruct,
+registration let Y be non trivial non empty TopStruct,
                 A be non trivial (non empty Subset of Y);
  cluster MaxADSspace(A) -> non trivial;
+ coherence
+  proof
+      now
+     assume MaxADSspace(A) is trivial;
+        then the carrier of MaxADSspace(A) is trivial by REALSET1:def 13;
+       then MaxADSet(A) is trivial by Def19;
+     hence contradiction;
+    end;
+   hence thesis;
+  end;
 end;
 
-definition let Y be non empty TopStruct,
+
+registration let Y be non empty TopStruct,
    A be non proper non empty Subset of Y;
  cluster MaxADSspace(A) -> non proper;
+ coherence
+  proof
+      now
+       A1: the carrier of MaxADSspace(A) = MaxADSet(A) by Def19;
+     assume MaxADSspace(A) is proper;
+     hence contradiction by A1,TEX_2:13;
+    end;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: TEX_4:90
    for X0 being open SubSpace of X, A being non empty Subset of

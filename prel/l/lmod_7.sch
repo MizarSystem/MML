@@ -8,17 +8,6 @@ RELSET_1
 FUNCT_2
 MULTOP_1
 #
-ElementEq
-UnOpEq
-TriOpEq
-QuaOpEq
-Fraenkel1_Ex
-Fr_0
-Fr_1
-Fr_2
-Fr_3
-Fr_4
-#
 M1 ;;
 M2 F1 ;;M2 F1 ;;ª&M1 ;&ª&R2 B3 B1 ;ªP1 B3 ;;ª&P1 B3 ;ªR2 B3 B1 ;;;M1 ;&ª&R2 B3 B2 ;ªP1 B3 ;;ª&P1 B3 ;ªR2 B3 B2 ;;;ªR1 B1 B2 ;;;
 #

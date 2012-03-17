@@ -296,13 +296,51 @@ theorem :: ZF_LANG1:74
 theorem :: ZF_LANG1:75
    Free Ex(x,y,z,p) = Free p \ {x,y,z};
 
-scheme ZF_Induction { P[ZF-formula] } :
+scheme :: ZF_LANG1:sch 1
+ ZF_Induction { P[ZF-formula] } :
   for H holds P[H]
     provided
  for x1,x2 holds P[x1 '=' x2] & P[x1 'in' x2] and
  for H st P[H] holds P['not' H] and
  for H1,H2 st P[H1] & P[H2] holds P[H1 '&' H2] and
- for H,x st P[H] holds P[All(x,H)];
+ for H,x st P[H] holds P[All(x,H)]
+proof
+    defpred p[ZF-formula] means P[$1];
+A5: for H st H is atomic holds p[H]
+     proof let H such that
+A6:    H is_equality or H is_membership;
+A7:    H is_equality implies thesis
+        proof given x1,x2 such that
+A8:       H = x1 '=' x2;
+         thus thesis by A1,A8;
+        end;
+         H is_membership implies thesis
+        proof given x1,x2 such that
+A9:       H = x1 'in' x2;
+         thus thesis by A1,A9;
+        end;
+      hence thesis by A6,A7;
+     end;
+A10: for H st H is negative & p[the_argument_of H] holds p[H]
+     proof let H; assume
+         H is negative;
+       then H = 'not' the_argument_of H by ZF_LANG:def 30;
+      hence thesis by A2;
+     end;
+A11: for H st H is conjunctive &
+      p[the_left_argument_of H] & p[the_right_argument_of H] holds p[H]
+     proof let H; assume H is conjunctive;
+       then H = (the_left_argument_of H) '&' (the_right_argument_of H)
+        by ZF_LANG:58;
+      hence thesis by A3;
+     end;
+A12: for H st H is universal & p[the_scope_of H] holds p[H]
+     proof let H; assume H is universal;
+       then H = All(bound_in H, the_scope_of H) by ZF_LANG:62;
+      hence thesis by A4;
+     end;
+   thus for H holds p[H] from ZF_LANG:sch 1(A5,A10,A11,A12);
+  end;
 
  reserve M,E for non empty set,
          e for Element of E,
@@ -316,12 +354,14 @@ scheme ZF_Induction { P[ZF-formula] } :
    it.x = e & for y st it.y <> f.y holds x = y;
  end;
 
+
  definition let D,D1,D2 be non empty set, f be Function of D,D1;
   assume  D1 c= D2;
   func D2!f -> Function of D,D2 equals
 :: ZF_LANG1:def 2
 f;
  end;
+
 
 canceled 2;
 
@@ -350,9 +390,11 @@ theorem :: ZF_LANG1:84
 theorem :: ZF_LANG1:85
  Free H is finite;
 
-definition let H;
+registration let H;
   cluster Free H -> finite;
+ coherence by Th85;
 end;
+
 
  reserve i,j for Nat;
 
@@ -570,6 +612,7 @@ theorem :: ZF_LANG1:146
     rng H \ { 0,1,2,3,4 };
  end;
 
+
 canceled;
 
 theorem :: ZF_LANG1:148
@@ -627,12 +670,14 @@ theorem :: ZF_LANG1:164
   redefine func variables_in H -> non empty Subset of VAR;
  end;
 
+
  definition let H,x,y;
   func H/(x,y) -> Function means
 :: ZF_LANG1:def 4
    dom it = dom H & for a st a in dom H holds
      (H.a = x implies it.a = y) & (H.a <> x implies it.a = H.a);
  end;
+
 
 canceled;
 
@@ -665,6 +710,7 @@ theorem :: ZF_LANG1:171
  definition let H,x,y;
   redefine func H/(x,y) -> ZF-formula;
  end;
+
 
 theorem :: ZF_LANG1:172
  G1 '&' G2 = (H1 '&' H2)/(x,y) iff G1 = H1/(x,y) & G2 = H2/(x,y);

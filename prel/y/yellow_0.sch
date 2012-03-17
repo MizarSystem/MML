@@ -11,9 +11,7 @@ SETFAM_1
 STRUCT_0
 ORDERS_1
 #
-RelStrEx
-#
 M1 W1 ;;;
-ªG3 W11 ;V12 ;;ª&R1 U1 B1 ;F1 ;;M2 U1 B1 ;;M2 U1 B1 ;;&ª&R11 B1 B2 B3 ;ªP1 B2 B3 ;;ª&P1 B2 B3 ;ªR11 B1 B2 B3 ;;;;;
+ªG3 W11 ;V12 ;;ª&R1 U1 B1 ;F1 ;;M2 U1 B1 ;;M2 U1 B1 ;;&ª&R12 B1 B2 B3 ;ªP1 B2 B3 ;;ª&P1 B2 B3 ;ªR12 B1 B2 B3 ;;;;;
 #
 !

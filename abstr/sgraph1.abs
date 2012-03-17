@@ -34,9 +34,30 @@ definition let m,n be Nat;
      {i where i is Nat : m<=i & i<=n};
 end;
 
-definition let m,n be Nat;
+
+registration let m,n be Nat;
   cluster nat_interval(m,n) -> finite;
+  coherence proof
+    set IT = {i where i is Nat : m<=i & i<=n};
+A1:  IT = nat_interval(m,n) by Def1;
+      now let e be set; assume e in IT;
+      then consider i being Nat such that A2: i=e & m<=i & i<=n;
+          now per cases;
+          suppose i=0; then i in {0} by TARSKI:def 1;
+            hence e in ({0}\/(Seg n)) by A2,XBOOLE_0:def 2;
+          end;
+          suppose i<>0; then 0<i by NAT_1:19; then (0+1)<=i by NAT_1:38;
+            then e in (Seg n) by A2,FINSEQ_1:3;
+            hence e in ({0} \/ (Seg n)) by XBOOLE_0:def 2;
+        end;
+        end;
+        hence e in ({0} \/ (Seg n));
+    end;
+    then IT c= ({0} \/ (Seg n)) by TARSKI:def 3;
+    hence thesis by A1,FINSET_1:13;
+  end;
 end;
+
 
 canceled;
 
@@ -67,6 +88,7 @@ definition let A be set;
 :: SGRAPH1:def 4
     {z where z is finite Element of bool A : card z = 2};
 end;
+
 
 canceled;
 
@@ -104,9 +126,11 @@ for A being non trivial set holds
 theorem :: SGRAPH1:17
   for a being set holds TWOELEMENTSETS {a} = {};
 
-definition let X be empty set;
+registration let X be empty set;
   cluster -> empty Subset of X;
+  coherence by XBOOLE_1:3;
 end;
+
 
  reserve X for set;
 
@@ -129,6 +153,7 @@ definition
        SEdges -> Subset of TWOELEMENTSETS(the carrier) #);
 end;
 
+
 ::   SIMPLEGRAPHS is the set of all (simple) graphs,
 :: which is the smallest set satisfying following three conditions:
 :: (1) it contains <Empty,Empty>,
@@ -150,20 +175,24 @@ definition let X be set;
                not contradiction};
 end;
 
+
 canceled;
 
 theorem :: SGRAPH1:19
   SimpleGraphStruct (#{},{}TWOELEMENTSETS{}#) in SIMPLEGRAPHS(X);
 
-definition let X be set;
+registration let X be set;
   cluster SIMPLEGRAPHS(X) -> non empty;
+  coherence by Th19;
 end;
+
 
 definition let X be set;
 mode SimpleGraph of X -> strict SimpleGraphStruct means
 :: SGRAPH1:def 7
   it is Element of SIMPLEGRAPHS(X);
 end;
+
 
 canceled;
 
@@ -217,11 +246,13 @@ definition let X; let G,G' be SimpleGraph of X;
         ({v1,v2} in (the SEdges of G) iff {Fv.v1, Fv.v2} in the SEdges of G);
 end;
 
+
 begin :: SECTION 4: properties of SIMPLEGRAPHS.
 
 :: here is the induction principle on SIMPLEGRAPHS(X).
 
-scheme IndSimpleGraphs0 { X()-> set, P[set] } :
+scheme :: SGRAPH1:sch 1
+ IndSimpleGraphs0 { X()-> set, P[set] } :
   for G being set st G in SIMPLEGRAPHS(X()) holds P[G]
   provided
      P[SimpleGraphStruct (#{},{}TWOELEMENTSETS{}#)]
@@ -239,7 +270,84 @@ scheme IndSimpleGraphs0 { X()-> set, P[set] } :
               not e in (the SEdges of g)) holds
       ex sege being Subset of TWOELEMENTSETS(the carrier of g) st
         sege=((the SEdges of g)\/{e}) &
-        P[SimpleGraphStruct (#(the carrier of g),sege#)];
+        P[SimpleGraphStruct (#(the carrier of g),sege#)]
+proof let g be set; assume A4: g in SIMPLEGRAPHS(X());
+  then consider
+    v being finite Element of bool X(),
+    e being finite Subset of TWOELEMENTSETS(v) such that
+     A5: g = SimpleGraphStruct (#v,e#) by Th21;
+  reconsider G = g as SimpleGraph of X() by A4,A5,Def7;
+  A6: (the carrier of G) c= X() &
+      (the SEdges of G) c= TWOELEMENTSETS(the carrier of G) by Th23;
+  per cases;
+  suppose A7: X() is empty;
+    then (the SEdges of G) is Subset of {} by A6,Th13,XBOOLE_1:3;
+    hence P[g] by A1,A6,A7,XBOOLE_1:3;
+  end;
+  suppose X() is not empty;
+  :: now we treat only finite graphs and X() is non empty, so
+  :: we can use FinSubInd1 on (the carrier of G).
+  then reconsider X = X() as non empty set;
+  defpred X[set] means P[SimpleGraphStruct (#$1,{}TWOELEMENTSETS($1)#)];
+  A8: X[{}.X] by A1;
+  A9: now
+    let B' be (Element of Fin X), b be Element of X;
+    assume A10: X[B'] & not b in B';
+    set g= SimpleGraphStruct (#B',{}TWOELEMENTSETS(B')#);
+      B' is finite Subset of X by FINSUB_1:32;
+    then A11:  g in SIMPLEGRAPHS(X()) by Th21;
+    then reconsider g as SimpleGraph of X() by Def7;
+      P[SimpleGraphStruct (#(the carrier of g)\/{b},
+         {}TWOELEMENTSETS((the carrier of g)\/{b})#)] by A2,A10,A11;
+    hence X[B' \/ {b}];
+   end;
+
+   A12: for VV being Element of Fin X holds X[VV] from SETWISEO:sch 3(A8,A9);
+   A13: now let VV be Element of (Fin X);
+     per cases;
+     suppose A14: TWOELEMENTSETS(VV) = {};
+        let EEa be Finite_Subset of TWOELEMENTSETS(VV),
+            EE be Subset of TWOELEMENTSETS(VV);
+        assume EEa = EE; EE = {}TWOELEMENTSETS(VV) by A14,XBOOLE_1:3;
+        hence P[SimpleGraphStruct (#VV,EE#)] by A12;
+     end;
+     suppose TWOELEMENTSETS(VV) <> {};
+       then reconsider TT = TWOELEMENTSETS(VV) as non empty set;
+       defpred Q[Finite_Subset of TT] means
+         for EE being Subset of TWOELEMENTSETS(VV) st EE = $1 holds
+           P[SimpleGraphStruct (#VV,EE#)];
+       A15: Q[{}.TT] proof let EE be Subset of TWOELEMENTSETS(VV);
+          assume EE = {}.TT; then EE = {}TWOELEMENTSETS(VV);
+          hence P[SimpleGraphStruct (#VV,EE#)] by A12;
+         end;
+       A16: now let ee be Finite_Subset of TT,
+                 vv be Element of TT such that A17: Q[ee] & not vv in ee;
+                 reconsider ee' = ee as Subset of TWOELEMENTSETS(VV)
+                   by FINSUB_1:32;
+                   A18: VV is finite Subset of X() by FINSUB_1:32;
+                   set g = SimpleGraphStruct (#VV,ee'#);
+                     g is Element of SIMPLEGRAPHS(X()) by A18,Th21;
+              then reconsider g as SimpleGraph of X() by Def7;
+             P[g] by A17;
+           then consider sege being Subset of TWOELEMENTSETS(the carrier of g)
+          such that A19: sege=((the SEdges of g)\/{vv}) and
+                    A20: P[SimpleGraphStruct (#(the carrier of g),sege#)]
+           by A3,A17;
+           thus Q[ee \/ {vv}] by A19,A20;
+          end;
+         for EE being Finite_Subset of TT holds
+             Q[EE] from SETWISEO:sch 3(A15,A16);
+       hence for EE being Finite_Subset of TWOELEMENTSETS(VV),
+                 EE' being Subset of TWOELEMENTSETS(VV) st EE' = EE holds
+               P[SimpleGraphStruct (#VV,EE'#)];
+   end;
+   end;
+    A21: (the carrier of G) is Finite_Subset of X by A5,FINSUB_1:def 5;
+      (the SEdges of G) is
+     Finite_Subset of TWOELEMENTSETS(the carrier of G) by A5,FINSUB_1:def 5;
+   hence P[g] by A13,A21;
+end;
+end;
 
 :: now we give a theorem characterising SIMPLEGRAPHS as
 :: an inductively defined set.  we need some lemmas.
@@ -294,6 +402,7 @@ definition let X be set, GG be set;
        v1v2 = (E \/ {{v1,v2}}) & SimpleGraphStruct (#V,v1v2#) in GG);
 end;
 
+
 canceled 3;
 
 theorem :: SGRAPH1:35
@@ -324,6 +433,7 @@ definition let X be set, G be SimpleGraph of X;
     the SEdges of it c= the SEdges of G;
 end;
 
+
 begin :: SECTION 6: degree of vertices.
 
 :: the degree of a vertex means the number of edges connected to that vertex.
@@ -346,6 +456,7 @@ definition let X be set, G be SimpleGraph of X;
       (for z being set holds (z in X iff z in (the SEdges of G) & v in z)) &
       it = card X;
 end;
+
 
 canceled;
 
@@ -393,6 +504,7 @@ definition let X be set, g be SimpleGraph of X,
            p.i <> p.j & {p.i,p.(i+1)}<>{p.j,p.(j+1)});
 end;
 
+
 definition
   let X be set,
       g be SimpleGraph of X, v1,v2 be Element of (the carrier of g);
@@ -401,6 +513,7 @@ definition
     {ss where ss is Element of (the carrier of g)* :
         ss is_path_of v1,v2};
 end;
+
 
 canceled;
 
@@ -434,6 +547,7 @@ definition
     ex v being Element of (the carrier of g) st p in PATHS(v,v);
 end;
 
+
 :: cycle(v) = {v1,...,vn : {vi,v(i+1)} in EdgesOf g, 3 <= n}
 
 begin :: SECTION 8: some famous graphs.
@@ -456,6 +570,7 @@ definition let n,m be Nat;
          it = SimpleGraphStruct (# (Seg (m+n)), ee#);
 end;
 
+
 definition let n be Nat;
   func K_(n) -> SimpleGraph of NAT means
 :: SGRAPH1:def 17
@@ -465,12 +580,14 @@ definition let n be Nat;
        it = SimpleGraphStruct (# (Seg n), ee #);
 end;
 
+
 :: TriangleGraph will be used in the definition of planegraphs.
 definition
   func TriangleGraph -> SimpleGraph of NAT equals
 :: SGRAPH1:def 18
     K_(3);
 end;
+
 
 theorem :: SGRAPH1:46
 ex ee being Subset of TWOELEMENTSETS(Seg 3) st

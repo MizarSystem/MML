@@ -25,10 +25,12 @@ definition let D1,D2,D be non empty set;
  redefine func x`12 -> Element of D2;
 end;
 
+
 definition let D1,D2 be non empty set;
  let x be Element of [:D1,D2:];
  redefine func x`2 -> Element of D2;
 end;
+
 
 theorem :: CAT_5:1
  for C,D being CatStr st the CatStr of C = the CatStr of D holds
@@ -40,9 +42,17 @@ definition let IT be CatStr;
   for f being Morphism of IT ex x being set st f = [[dom f, cod f], x];
 end;
 
-definition
+
+registration
  cluster with_triple-like_morphisms (strict Category);
+  existence
+   proof take C = 1Cat(0, [[0,0], 1]);
+    let f be Morphism of C; take 1;
+       dom f = 0 & cod f = 0 by CAT_1:34;
+    hence thesis by CAT_1:35;
+   end;
 end;
+
 
 theorem :: CAT_5:2
  for C being with_triple-like_morphisms CatStr, f being Morphism of C holds
@@ -55,7 +65,9 @@ definition
  redefine func f`12 -> Object of C;
 end;
 
-scheme CatEx
+
+scheme :: CAT_5:sch 1
+ CatEx
  { A, B() -> non empty set, P[set, set, set], F(set,set) -> set }:
  ex C being with_triple-like_morphisms strict Category st
   the Objects of C = A() &
@@ -74,9 +86,181 @@ scheme CatEx
      for b being Element of A(), g being Element of B() holds
       (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g) and
   for a,b,c,d being Element of A(), f,g,h being Element of B() st
-      P[a,b,f] & P[b,c,g] & P[c,d,h] holds F(h, F(g,f)) = F(F(h,g), f);
+      P[a,b,f] & P[b,c,g] & P[c,d,h] holds F(h, F(g,f)) = F(F(h,g), f)
+proof
+   set M = {[[a,b],f] where a is Element of A(), b is Element of A(),
+              f is Element of B(): P[a,b,f]};
+   consider a0 being Element of A();
+   consider f0 being Element of B() such that
+A4: P[a0,a0,f0] &
+    for b being Element of A(), g being Element of B() holds
+     (P[a0,b,g] implies F(g,f0) = g) & (P[b,a0,g] implies F(f0,g) = g) by A2;
+A5: [[a0,a0],f0] in M by A4;
+      M c= [:[:A(),A():],B():]
+     proof let x be set; assume x in M;
+       then ex a, b being Element of A(), f being Element of B() st
+        x = [[a,b],f] & P[a,b,f];
+      hence thesis;
+     end;
+   then reconsider M as non empty Subset of [:[:A(),A():],B():] by A5;
+A6:  now let m be Element of M; m in M;
+     then consider a,b being Element of A(), f being Element of B() such that
+A7:   m = [[a,b],f] & P[a,b,f];
+        m`11 = a & m`12 = b & m`2 = f by A7,COMMACAT:1,MCART_1:7;
+     hence m = [[m`11,m`12],m`2] & P[m`11,m`12,m`2] by A7;
+    end;
+   deffunc f(Element of M) = $1`11;
+   consider DM being Function of M, A() such that
+A8:  for m being Element of M holds DM.m = f(m) from FUNCT_2:sch 4;
+   deffunc g(Element of M) = $1`12;
+   consider CM being Function of M, A() such that
+A9:  for m being Element of M holds CM.m = g(m) from FUNCT_2:sch 4;
+    deffunc f(set,set) = [[$2`11,$1`12],F($1`2,$2`2)];
+    defpred P[set,set] means $1`11 = $2`12 & $1 in M & $2 in M;
+A10: now let x,y be set; assume
+A11:   P[x,y];
+     then consider ax, bx being Element of A(), fx being Element of B() such
+that
+A12:   x = [[ax,bx],fx] & P[ax,bx,fx];
+     consider ay, b2 being Element of A(), fy being Element of B() such that
+A13:   y = [[ay,b2],fy] & P[ay,b2,fy] by A11;
+A14:   x`11 = ax & x`12 = bx & y`11 = ay & y`12 = b2 & x`2 = fx & y`2 = fy
+       by A12,A13,COMMACAT:1,MCART_1:7;
+      then F(fx,fy) in B() & P[ay,bx,F(fx,fy)] by A1,A11,A12,A13;
+     hence f(x,y) in M by A14;
+    end;
+   consider CC being PartFunc of [:M,M:], M such that
+A15:  for x,y being set holds [x,y] in dom CC iff
+     x in M & y in M & P[x,y] and
+A16:  for x,y being set st [x,y] in dom CC holds
+     CC.[x,y] = f(x,y) from PARTFUN1:sch 5(A10);
+   defpred II[Element of A(), Element of M] means
+    ex f being Element of B() st
+     $2 = [[$1,$1], f] & P[$1,$1,f] &
+     for b being Element of A(), g being Element of B() holds
+      (P[$1,b,g] implies F(g,f) = g) & (P[b,$1,g] implies F(f,g) = g);
+A17: now let a be Element of A();
+     consider f being Element of B() such that
+A18:   P[a,a,f] &
+      for b being Element of A(), g being Element of B() holds
+      (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g) by A2;
+        [[a,a],f] in M by A18;
+     then reconsider y = [[a,a],f] as Element of M;
+     take y; thus II[a,y] by A18;
+    end;
+   consider I being Function of A(), M such that
+A19:  for o being Element of A() holds II[o,I.o] from FUNCT_2:sch 3(A17);
+   set C = CatStr (# A(),M,DM,CM,CC,I #);
+      C is Category-like
+     proof
+      hereby let f,g be Morphism of C;
+          ([g,f] in dom CC iff g in M & f in M & g`11 = f`12 & g in M & f in M)
+&
+        DM.g = g`11 & CM.f = f`12 by A8,A9,A15;
+       hence [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f;
+      end;
+      hereby let f,g be Morphism of C;
+A20:     (the Dom of C).f = f`11 & (the Dom of C).g = g`11 &
+        (the Cod of C).f = f`12 & (the Cod of C).g = g`12 by A8,A9;
+       assume (the Dom of C).g=(the Cod of C).f;
+        then [g,f] in dom CC by A15,A20;
+        then CC.[g,f] = [[f`11,g`12],F(g`2,f`2)] & CC.[g,f] in rng CC & rng CC
+c= M
+         by A16,FUNCT_1:def 5,RELSET_1:12;
+        then (CC.[g,f])`11 = f`11 & (CC.[g,f])`12 = g`12 & CC.[g,f] in M
+         by COMMACAT:1;
+       hence (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
+        (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g by A8,A9,A20;
+      end;
+      hereby let f,g,h be Morphism of C;
+A21:     (the Dom of C).f = f`11 & (the Dom of C).g = g`11 &
+        (the Dom of C).h = h`11 & (the Cod of C).h = h`12 &
+        (the Cod of C).f = f`12 & (the Cod of C).g = g`12 by A8,A9;
+       assume
+A22:     (the Dom of C).h = (the Cod of C).g &
+        (the Dom of C).g = (the Cod of C).f;
+then A23:     [g,f] in dom CC & [h,g] in dom CC by A15,A21;
+        then CC.[g,f] in rng CC & CC.[h,g] in rng CC & rng CC c= M
+         by FUNCT_1:def 5,RELSET_1:12;
+       then reconsider gf = CC.[g,f], hg = CC.[h,g] as Element of M;
+A24:     gf = [[f`11,g`12],F(g`2,f`2)] & hg = [[g`11,h`12],F(h`2,g`2)]
+         by A16,A23;
+A25:     DM.gf = gf`11 & DM.hg = hg`11 & CM.gf = gf`12 & CM.hg = hg`12
+         by A8,A9;
+then A26:     DM.gf = f`11 & DM.hg = g`11 & CM.gf = g`12 & CM.hg = h`12
+         by A24,COMMACAT:1;
+then A27:     [h,gf] in dom CC & [hg,f] in dom CC by A15,A21,A22,A25;
+       reconsider f' = f, g' = g, h' = h as Element of M;
+A28:     P[f'`11,f'`12,f'`2] & P[g'`11,g'`12,g'`2] & P[h'`11,h'`12,h'`2] by A6;
+       thus (the Comp of C).[h,(the Comp of C).[g,f]]
+            = [[f`11,h`12], F(h`2,gf`2)] by A16,A25,A26,A27
+           .= [[f`11,h`12], F(h'`2,F(g'`2,f'`2))] by A24,MCART_1:7
+           .= [[f`11,h`12], F(F(h'`2,g'`2),f'`2)] by A3,A21,A22,A28
+           .= [[f`11,h`12], F(hg`2,f`2)] by A24,MCART_1:7
+           .= (the Comp of C).[(the Comp of C).[h,g],f]
+             by A16,A25,A26,A27;
+      end;
+      let b be Object of C;
+      consider f being Element of B() such that
+A29:     I.b = [[b,b], f] & P[b,b,f] &
+       for c being Element of A(), g being Element of B() holds
+        (P[b,c,g] implies F(g,f) = g) & (P[c,b,g] implies F(f,g) = g) by A19;
+      reconsider b' = b as Element of A();
+      reconsider Ib = I.b' as Element of M;
+      thus (the Dom of C).((the Id of C).b) = (I.b)`11 by A8
+          .= b by A29,COMMACAT:1;
+      thus (the Cod of C).((the Id of C).b) = (I.b)`12 by A9
+          .= b by A29,COMMACAT:1;
+      hereby let f' be Morphism of C; reconsider g = f' as Element of M;
+       assume (the Cod of C).f' = b;
+then A30:      g`12 = b & (Ib)`11 = b by A9,A29,COMMACAT:1;
+        then P[g`11,b, g`2] & [Ib,g] in dom CC & Ib`12 = b & Ib`2 = f
+         by A6,A15,A29,COMMACAT:1,MCART_1:7;
+        then F(f,g`2) = g`2 & CC.[Ib,g] = [[g`11,b], F(f,g`2)] by A16,A29;
+       hence (the Comp of C).[(the Id of C).b,f'] = f' by A6,A30;
+      end;
+      let f' be Morphism of C; reconsider g = f' as Element of M;
+      assume (the Dom of C).f' = b;
+then A31:     g`11 = b & (Ib)`12 = b by A8,A29,COMMACAT:1;
+       then P[b, g`12, g`2] & [g,Ib] in dom CC & Ib`11 = b & Ib`2 = f
+        by A6,A15,A29,COMMACAT:1,MCART_1:7;
+       then F(g`2,f) = g`2 & CC.[g,Ib] = [[b, g`12], F(g`2,f)] by A16,A29;
+      hence (the Comp of C).[f',(the Id of C).b] = f' by A6,A31;
+     end;
+   then reconsider C as strict Category;
+      C is with_triple-like_morphisms
+     proof let f be Morphism of C; f in M;
+      then consider a, b being Element of A(), g being Element of B() such that
+A32:     f = [[a,b],g] & P[a,b,g];
+      take g;
+A33:    dom f = DM.f by CAT_1:def 2 .= f`11 by A8 .= a by A32,COMMACAT:1;
+         cod f = CM.f by CAT_1:def 3 .= f`12 by A9 .= b by A32,COMMACAT:1;
+      hence thesis by A32,A33;
+     end;
+   then reconsider C as with_triple-like_morphisms strict Category;
+   take C; thus the Objects of C = A();
+   hereby let a,b be Element of A(), f be Element of B();
+    assume P[a,b,f]; then [[a,b],f] in M;
+    hence [[a,b],f] is Morphism of C;
+   end;
+   hereby let m be Morphism of C; m in M;
+    hence
+       ex a,b being Element of A(), f being Element of B() st
+      m = [[a,b],f] & P[a,b,f];
+   end;
+   let m1,m2 be (Morphism of C), a1,a2,a3 be Element of A(),
+    f1,f2 be Element of B(); assume
+A34: m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2];
+then A35: m1`11 = a1 & m1`12 = a2 & m2`11 = a2 & m2`12 = a3 by COMMACAT:1;
+then A36: [m2,m1] in dom CC by A15;
+   hence m2*m1 = CC.[m2,m1] by CAT_1:def 4
+    .= [[a1,a3],F(m2`2,m1`2)] by A16,A35,A36
+    .= [[a1,a3],F(f2,m1`2)] by A34,MCART_1:7
+    .= [[a1,a3], F(f2,f1)] by A34,MCART_1:7;
+  end;
 
-scheme CatUniq
+scheme :: CAT_5:sch 2
+ CatUniq
  { A, B() -> non empty set, P[set, set, set], F(set,set) -> set }:
 for C1, C2 being strict with_triple-like_morphisms Category st
   the Objects of C1 = A() &
@@ -101,9 +285,134 @@ for C1, C2 being strict with_triple-like_morphisms Category st
  provided
   for a being Element of A() ex f being Element of B() st P[a,a,f] &
      for b being Element of A(), g being Element of B() holds
-      (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g);
+      (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g)
+proof   let C1, C2 be strict with_triple-like_morphisms Category such that
+A2: the Objects of C1 = A() and
+A3: for a,b being Element of A(), f being Element of B() st
+     P[a,b,f] holds [[a,b],f] is Morphism of C1 and
+A4: for m being Morphism of C1
+     ex a,b being Element of A(), f being Element of B() st
+      m = [[a,b],f] & P[a,b,f] and
+A5: for m1,m2 being (Morphism of C1), a1,a2,a3 being Element of A(),
+     f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+     holds m2*m1 = [[a1,a3], F(f2,f1)] and
+A6: the Objects of C2 = A() and
+A7: for a,b being Element of A(), f being Element of B() st
+     P[a,b,f] holds [[a,b],f] is Morphism of C2 and
+A8: for m being Morphism of C2
+     ex a,b being Element of A(), f being Element of B() st
+      m = [[a,b],f] & P[a,b,f] and
+A9: for m1,m2 being (Morphism of C2), a1,a2,a3 being Element of A(),
+     f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+     holds m2*m1 = [[a1,a3], F(f2,f1)];
+A10:  the Morphisms of C1 = the Morphisms of C2
+     proof
+      hereby let x be set; assume x in the Morphisms of C1;
+        then ex a,b being Element of A(), f being Element of B() st
+         x = [[a,b],f] & P[a,b,f] by A4;
+        then x is Morphism of C2 by A7;
+       hence x in the Morphisms of C2;
+      end;
+      let x be set; assume x in the Morphisms of C2;
+       then ex a,b being Element of A(), f being Element of B() st
+        x = [[a,b],f] & P[a,b,f] by A8;
+        then x is Morphism of C1 by A3;
+      hence x in the Morphisms of C1;
+     end;
+A11:  dom the Dom of C1 = the Morphisms of C1 &
+    dom the Dom of C2 = the Morphisms of C2 &
+    dom the Cod of C1 = the Morphisms of C1 &
+    dom the Cod of C2 = the Morphisms of C2 &
+    dom the Id of C1 = the Objects of C1 &
+    dom the Id of C2 = the Objects of C2 by FUNCT_2:def 1;
+      now let x be set; assume x in the Morphisms of C1;
+     then reconsider m1 = x as Morphism of C1;
+     reconsider m2 = m1 as Morphism of C2 by A10;
+     thus (the Dom of C1).x = dom m1 by CAT_1:def 2 .= m1`11 by Th2
+                .= dom m2 by Th2 .= (the Dom of C2).x by CAT_1:def 2;
+    end;
+then A12:  the Dom of C1 = the Dom of C2 by A10,A11,FUNCT_1:9;
+      now let x be set; assume x in the Morphisms of C1;
+     then reconsider m1 = x as Morphism of C1;
+     reconsider m2 = m1 as Morphism of C2 by A10;
+     thus (the Cod of C1).x = cod m1 by CAT_1:def 3 .= m1`12 by Th2
+                .= cod m2 by Th2 .= (the Cod of C2).x by CAT_1:def 3;
+    end;
+then A13:  the Cod of C1 = the Cod of C2 by A10,A11,FUNCT_1:9;
+      now let x be set; assume x in A();
+     then reconsider a = x as Element of A();
+     consider f being Element of B() such that
+A14:   P[a,a,f] and
+A15:   for b being Element of A(), g being Element of B() holds
+       (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g) by A1;
+     reconsider o1 = a as Object of C1 by A2;
+     consider a1,b1 being Element of A(), f1 being Element of B() such that
+A16:   id o1 = [[a1,b1],f1] & P[a1,b1,f1] by A4;
+     reconsider o2 = a as Object of C2 by A6;
+     consider a2,b2 being Element of A(), f2 being Element of B() such that
+A17:   id o2 = [[a2,b2],f2] & P[a2,b2,f2] by A8;
+        dom id o1 = o1 & cod id o1 = o1 & dom id o2 = o2 & cod id o2 = o2
+       by CAT_1:44;
+      then o1 = (id o1)`11 & o1 = (id o1)`12 & o2 = (id o2)`11 & o2 = (id o2)
+`12
+       by Th2;
+then A18:   o1 = a1 & o1 = b1 & o2 = a2 & o2 = b2 by A16,A17,COMMACAT:1;
+     reconsider m1 = [[a,a],f] as Morphism of C1 by A3,A14;
+     reconsider m2 = [[a,a],f] as Morphism of C2 by A7,A14;
+        cod m1 = m1`12 by Th2 .= a by COMMACAT:1;
+      then A19: m1 = (id o1)*m1 by CAT_1:46 .= [[a,a],F(f1,f)] by A5,A16,A18
+        .= [[a,a],f1] by A15,A16,A18;
+        cod m2 = m2`12 by Th2 .= a by COMMACAT:1;
+      then A20: m2 = (id o2)*m2 by CAT_1:46 .= [[a,a],F(f2,f)] by A9,A17,A18
+        .= [[a,a],f2] by A15,A17,A18;
+     thus (the Id of C1).x = id o1 by CAT_1:def 5
+       .= (the Id of C2).x by A16,A17,A18,A19,A20,CAT_1:def 5;
+    end;
+then A21:  the Id of C1 = the Id of C2 by A2,A6,A11,FUNCT_1:9;
+A22:  dom the Comp of C1 c= [:the Morphisms of C1, the Morphisms of C1:] &
+    dom the Comp of C2 c= [:the Morphisms of C1, the Morphisms of C1:]
+     by A10,RELSET_1:12;
+A23:  dom the Comp of C1 = dom the Comp of C2
+     proof
+      hereby let x be set; assume
+A24:     x in dom the Comp of C1;
+       then reconsider xx = x as
+        Element of [:the Morphisms of C1, the Morphisms of C1:] by A22;
+       reconsider y = xx as
+        Element of [:the Morphisms of C2, the Morphisms of C2:] by A10;
+A25:     y = [xx`1,xx`2] by MCART_1:23;
+        then (the Dom of C1).xx`1 = (the Cod of C1).xx`2 by A24,CAT_1:def 8;
+       hence x in dom the Comp of C2 by A10,A12,A13,A25,CAT_1:def 8;
+      end;
+      let x be set; assume
+A26:    x in dom the Comp of C2;
+      then reconsider xx = x as
+       Element of [:the Morphisms of C1, the Morphisms of C1:] by A22;
+      reconsider y = xx as
+       Element of [:the Morphisms of C2, the Morphisms of C2:] by A10;
+A27:    xx = [y`1,y`2] by MCART_1:23;
+       then (the Dom of C2).y`1 = (the Cod of C2).y`2 by A26,CAT_1:def 8;
+      hence x in dom the Comp of C1 by A10,A12,A13,A27,CAT_1:def 8;
+     end;
+      now let x,y be set; assume
+A28:   [x,y] in dom the Comp of C1;
+     then reconsider g1 = x, h1 = y as Morphism of C1 by A22,ZFMISC_1:106;
+     reconsider g2 = g1, h2 = h1 as Morphism of C2 by A10;
+     consider a1,b1 being Element of A(), f1 being Element of B() such that
+A29:   g1 = [[a1,b1],f1] & P[a1,b1,f1] by A4;
+     consider c1,d1 being Element of A(), i1 being Element of B() such that
+A30:   h1 = [[c1,d1],i1] & P[c1,d1,i1] by A4;
+A31:   a1 = g1`11 by A29,COMMACAT:1 .= dom g1 by Th2 .= cod h1 by A28,CAT_1:40
+        .= h1`12 by Th2 .= d1 by A30,COMMACAT:1;
+     thus (the Comp of C1).[x,y] = g1*h1 by A28,CAT_1:def 4
+           .= [[c1,b1],F(f1,i1)] by A5,A29,A30,A31
+           .= g2*h2 by A9,A29,A30,A31
+           .= (the Comp of C2).[x,y] by A23,A28,CAT_1:def 4;
+    end; hence thesis by A2,A6,A10,A12,A13,A21,A23,PARTFUN1:35;
+  end;
 
-scheme FunctorEx
+scheme :: CAT_5:sch 3
+ FunctorEx
  { A,B() -> Category,
    O(set) -> Object of B(),
    F(set) -> set }:
@@ -115,7 +424,40 @@ scheme FunctorEx
         dom g = O(dom f) & cod g = O(cod f) and
   for a being Object of A() holds F(id a) = id O(a) and
   for f1,f2 being Morphism of A() for g1,g2 being Morphism of B() st
-      g1 = F(f1) & g2 = F(f2) & dom f2 = cod f1 holds F(f2*f1) = g2*g1;
+      g1 = F(f1) & g2 = F(f2) & dom f2 = cod f1 holds F(f2*f1) = g2*g1
+proof
+    deffunc f(set) = F($1);
+     consider F being Function such that
+A4:  dom F = the Morphisms of A() and
+A5:  for x being set st x in the Morphisms of A() holds F.x = f(x) from
+FUNCT_1:sch 3;
+      rng F c= the Morphisms of B()
+     proof let x be set; assume x in rng F;
+      then consider y being set such that
+A6:     y in dom F & x = F.y by FUNCT_1:def 5;
+         x = F(y) by A4,A5,A6;
+       then x is Morphism of B() by A1,A4,A6;
+      hence thesis;
+     end;
+   then reconsider F as Function of the Morphisms of A(), the Morphisms of B()
+     by A4,FUNCT_2:def 1,RELSET_1:11;
+A7:  now let c be Object of A(); take d = O(c);
+     thus F.(id c) = F(id c) by A5 .= id d by A2;
+    end;
+A8:  now let f be Morphism of A();
+     reconsider g = F(f) as Morphism of B() by A1;
+     thus F.(id dom f) = F(id dom f) by A5 .= id O(dom f) by A2
+        .= id dom g by A1 .= id dom (F.f) by A5;
+     thus F.(id cod f) = F(id cod f) by A5 .= id O(cod f) by A2
+        .= id cod g by A1 .= id cod (F.f) by A5;
+    end;
+      now let f,g be Morphism of A(); assume
+A9:    dom g = cod f; F.g = F(g) & F.f = F(f) & F.(g*f) = F(g*f) by A5;
+     hence F.(g*f) = (F.g)*(F.f) by A3,A9;
+    end;
+   then reconsider F as Functor of A(), B() by A7,A8,CAT_1:96;
+   take F; thus thesis by A5;
+  end;
 
 theorem :: CAT_5:3
  for C1 being Category, C2 being Subcategory of C1 st C1 is Subcategory of C2
@@ -143,6 +485,7 @@ definition
   the Id of it = (the Id of C1)|the Objects of C2;
 end;
 
+
 reserve C for Category, C1,C2 for Subcategory of C;
 
 theorem :: CAT_5:5
@@ -161,6 +504,7 @@ definition let C,D be Category;
     the Objects of E = rng Obj F & rng F c= the Morphisms of E
    holds it is Subcategory of E;
 end;
+
 
 theorem :: CAT_5:7
  for C,D being Category, E be Subcategory of D, F being Functor of C,D st
@@ -182,18 +526,27 @@ definition let IT be set;
   for x being set st x in IT holds x is Category;
 end;
 
+
 definition
- cluster categorial (non empty set);
  let X be non empty set;
  redefine attr X is categorial means
 :: CAT_5:def 5
 
   for x being Element of X holds x is Category;
 end;
+registration
+ cluster categorial (non empty set);
+ existence
+  proof take X = {1Cat(0,1)};
+   let x be Element of X; thus thesis by TARSKI:def 1;
+  end;
+ end;
+
 
 definition let X be non empty categorial set;
  redefine mode Element of X -> Category;
 end;
+
 
 definition let C be Category;
  attr C is Categorial means
@@ -211,9 +564,22 @@ definition let C be Category;
       holds m2*m1 = [[A,C],G*F];
 end;
 
-definition
+
+registration
  cluster Categorial -> with_triple-like_morphisms Category;
+  coherence
+   proof let C be Category; assume A1: C is Categorial;
+then A2:   the Objects of C is categorial &
+     for m being Morphism of C
+      for A,B being Category st A = dom m & B = cod m
+       ex F being Functor of A,B st m = [[A,B], F] by Def6;
+    let f be Morphism of C;
+    reconsider A = dom f, B = cod f as Category by A2,Def5;
+       ex F being Functor of A,B st f = [[A,B], F] by A1,Def6;
+    hence thesis;
+   end;
 end;
+
 
 theorem :: CAT_5:10
  for C,D being Category st the CatStr of C = the CatStr of D holds
@@ -222,9 +588,14 @@ theorem :: CAT_5:10
 theorem :: CAT_5:11
  for C being Category holds 1Cat(C, [[C,C], id C]) is Categorial;
 
-definition
+registration
  cluster Categorial (strict Category);
+  existence
+   proof set A = 1Cat(0,1);
+    take 1Cat(A, [[A,A], id A]); thus thesis by Th11;
+   end;
 end;
+
 
 theorem :: CAT_5:12
  for C being Categorial Category, a being Object of C holds a is Category;
@@ -239,15 +610,52 @@ definition let C be Categorial Category;
  redefine func m`12 -> Category;
 end;
 
+
 theorem :: CAT_5:14
  for C1, C2 being Categorial Category st
    the Objects of C1 = the Objects of C2 &
    the Morphisms of C1 = the Morphisms of C2
   holds the CatStr of C1 = the CatStr of C2;
 
-definition let C be Categorial Category;
+registration let C be Categorial Category;
  cluster -> Categorial Subcategory of C;
+  coherence
+   proof let D be Subcategory of C;
+A1:   the Objects of C is categorial &
+     (for m being Morphism of C
+       for a,b being Category st a = dom m & b = cod m
+        ex F being Functor of a,b st m = [[a,b], F]) &
+      for m1,m2 being Morphism of C
+       for a,b,c being Category
+        for f being Functor of a,b
+         for g being Functor of b,c st m1 = [[a,b],f] & m2 = [[b,c],g]
+         holds m2*m1 = [[a,c],g*f] by Def6;
+    thus the Objects of D is categorial
+      proof let x be Object of D; x is Object of C by CAT_2:12;
+       hence thesis by A1,Def4;
+      end;
+    hereby let a be Object of D, A be Category;
+     reconsider b = a as Object of C by CAT_2:12; assume a = A;
+      then [[A,A], id A] = id b by Def6;
+     hence id a = [[A,A], id A] by CAT_2:def 4;
+    end;
+    hereby let m be Morphism of D;
+     reconsider m' = m as Morphism of C by CAT_2:14;
+     let a,b be Category; assume a = dom m & b = cod m;
+      then dom m' = a & cod m' = b by CAT_2:15;
+     hence ex F being Functor of a,b st m = [[a,b], F] by Def6;
+    end;
+    let m1,m2 be Morphism of D; let a,b,c be Category;
+    reconsider m1' = m1, m2' = m2 as Morphism of C by CAT_2:14;
+    let f be Functor of a,b; let g be Functor of b,c; assume
+A2:   m1 = [[a,b],f] & m2 = [[b,c],g];
+       dom m2 = dom m2' & cod m1 = cod m1' & dom m2' = m2`11 & cod m1' = m1`12
+      by Th13,CAT_2:15;
+     then dom m2 = b & cod m1 = b by A2,COMMACAT:1;
+    hence m2*m1 = m2'*m1' by CAT_2:17 .= [[a,c],g*f] by A2,Def6;
+   end;
 end;
+
 
 theorem :: CAT_5:15
  for C,D being Categorial Category st the Morphisms of C c= the Morphisms of D
@@ -262,6 +670,7 @@ definition
    a;
 end;
 
+
 theorem :: CAT_5:16
  for C being Categorial Category, c being Object of C holds cat c = c;
 
@@ -269,6 +678,7 @@ definition let C be Categorial Category;
  let m be Morphism of C;
  redefine func m`2 -> Functor of cat dom m, cat cod m;
 end;
+
 
 theorem :: CAT_5:17
  for X being categorial non empty set, Y being non empty set st
@@ -300,9 +710,24 @@ definition let IT be Categorial Category;
    for F being Functor of a, b holds [[a,b],F] is Morphism of IT;
 end;
 
-definition
+
+registration
  cluster full (Categorial strict Category);
+  existence
+   proof set A = 1Cat(0,1);
+    reconsider C = 1Cat(A, [[A,A], id A]) as Categorial strict Category
+      by Th11;
+    take C;
+    let a,b be Category; assume
+A1:   a is Object of C & b is Object of C;
+    let F be Functor of a, b;
+A2:   a = A & b = A by A1,CAT_1:34;
+       the Morphisms of A = {1} by COMMACAT:4;
+     then id A = F by A2,FUNCT_2:66;
+    hence [[a,b],F] is Morphism of C by A2,CAT_1:33;
+   end;
 end;
+
 
 theorem :: CAT_5:19
    for C1,C2 being full (Categorial Category) st
@@ -337,12 +762,28 @@ definition
    (the Dom of C)"{o};
 end;
 
-definition
+
+registration
  let C be Category;
  let o be Object of C;
  cluster Hom o -> non empty;
+  coherence
+   proof
+A1:  (the Cod of C)"{o} = Hom o by Def9;
+A2:   (the Cod of C).id o = cod id o by CAT_1:def 3 .= o by CAT_1:44;
+       o in {o} & dom the Cod of C = the Morphisms of C
+      by FUNCT_2:def 1,TARSKI:def 1; hence thesis by A1,A2,FUNCT_1:def 13;
+   end;
  cluster o Hom -> non empty;
+  coherence
+   proof
+A3:   (the Dom of C)"{o} = o Hom by Def10;
+A4:   (the Dom of C).id o = dom id o by CAT_1:def 2 .= o by CAT_1:44;
+       o in {o} & dom the Dom of C = the Morphisms of C
+      by FUNCT_2:def 1,TARSKI:def 1; hence thesis by A3,A4,FUNCT_1:def 13;
+   end;
 end;
+
 
 theorem :: CAT_5:23
  for C being Category, a being Object of C, f being Morphism of C holds
@@ -400,6 +841,7 @@ definition
     holds m2*m1 = [[a1,a3], f2*f1];
 end;
 
+
 definition
  let C be Category;
  let o be Object of C;
@@ -408,6 +850,7 @@ definition
  redefine func m`11 -> Element of Hom o;
  redefine func m`12 -> Element of Hom o;
 end;
+
 
 theorem :: CAT_5:29
  for C being Category, a being Object of C, m being Morphism of C-SliceCat a
@@ -427,6 +870,7 @@ definition
  redefine func m`11 -> Element of o Hom;
  redefine func m`12 -> Element of o Hom;
 end;
+
 
 theorem :: CAT_5:31
  for C being Category, a being Object of C, m being Morphism of a-SliceCat C
@@ -454,6 +898,7 @@ definition
   for m being Morphism of (cod f)-SliceCat C holds
    it.m = [[m`11*f, m`12*f], m`2];
 end;
+
 
 theorem :: CAT_5:33
    for C being Category, f,g being Morphism of C st dom g = cod f holds

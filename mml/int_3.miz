@@ -45,7 +45,7 @@ existence
     hence thesis by VECTSP_1:def 14;
     end;
  thus ex B being BinOp of INT st
- for a,b being Element of INT holds P[a,b,B.(a,b)] from BinOpEx(A1);
+ for a,b being Element of INT holds P[a,b,B.(a,b)] from BINOP_1:sch 1(A1);
  end;
 uniqueness
  proof
@@ -53,9 +53,10 @@ uniqueness
     thus for o1,o2 being BinOp of INT st
     (for a,b being Element of INT holds o1.(a,b) = F(a,b)) &
     (for a,b being Element of INT holds o2.(a,b) = F(a,b))
-  holds o1 = o2 from BinOpDefuniq;
+  holds o1 = o2 from COMPLSP1:sch 2;
  end;
 end;
+
 
 definition
 func compint -> UnOp of INT means
@@ -94,15 +95,17 @@ uniqueness
    thus for f1,f2 being UnOp of INT st
      (for a being Element of INT holds f1.(a) = F(a))
    & (for a being Element of INT holds f2.(a) = F(a))
-  holds f1 = f2 from UnOpEq;
+  holds f1 = f2 from LMOD_7:sch 2;
  end;
 end;
+
 
 definition
 func INT.Ring -> doubleLoopStr equals :Def3:
  doubleLoopStr(#INT,addint,multint,In (1,INT),In (0,INT)#);
 coherence;
 end;
+
 
 Lm1: for x being Element of INT.Ring holds x in REAL
     proof
@@ -111,7 +114,7 @@ Lm1: for x being Element of INT.Ring holds x in REAL
      hence thesis by INT_1:15;
      end;
 
-definition
+registration
  cluster INT.Ring -> strict non empty;
 coherence
   proof
@@ -119,6 +122,7 @@ coherence
     thus the carrier of INT.Ring is non empty by Def3;
   end;
 end;
+
 
 set M = INT.Ring;
 
@@ -129,7 +133,7 @@ thus 0.M = the Zero of INT.Ring by RLVECT_1:def 2
     .= 0 by A1,Def3,FUNCT_7:def 1;
 end;
 
-definition
+registration
  cluster INT.Ring -> Abelian add-associative right_zeroed right_complementable
                      well-unital distributive commutative associative
                      domRing-like non degenerated;
@@ -305,6 +309,7 @@ Def3,GR_CY_1:def 2;
   end;
 end;
 
+
 Lm3:for a being Element of INT.Ring
 for a' being Integer st a' = a holds -(a') = -a
 proof
@@ -338,10 +343,12 @@ connectedness
    not a' <= b' by A1,A2;
  hence ex b',a' being Integer st b' = b & a' = a & b' <= a' by A2;
  end;
-synonym b >= a;
-antonym b < a;
-antonym a > b;
 end;
+notation
+let a,b be Element of INT.Ring;
+synonym b >= a for a <= b ; antonym b < a for a <= b ; antonym a > b for
+ a <= b ; end;
+
 
 Lm4:for a,b being Element of INT.Ring holds
 a < b iff (a <= b & a <> b)
@@ -364,6 +371,7 @@ func abs(a) -> Element of INT.Ring equals :Def5:
  otherwise - a;
 correctness;
 end;
+
 
 definition
 func absint -> Function of the carrier of INT.Ring,NAT means :Def6:
@@ -389,11 +397,13 @@ existence
           ((absreal)|INT).x = abs(x) by A5,EUCLID:def 2
                          .= x by A6,ABSVALUE:def 1;
         hence ((absreal)|INT).x is Nat by A6,INT_1:16;
+   end;
    case A7: not(0 <= x);
         A8: ((absreal)|INT).x = abs(x) by A5,EUCLID:def 2
                              .= -x by A7,ABSVALUE:def 1;
           -0 <= -x by A7,REAL_1:50;
         hence ((absreal)|INT).x is Nat by A8,INT_1:16;
+   end;
    end;
    hence thesis by A3;
    end;
@@ -409,9 +419,10 @@ uniqueness
    thus for f1,f2 being Function of the carrier of INT.Ring,NAT st
    (for x being Element of INT.Ring holds f1.x = F(x)) &
    (for x being Element of INT.Ring holds f2.x = F(x))
-  holds f1 = f2 from FuncDefUniq;
+  holds f1 = f2 from COMPLSP1:sch 1;
  end;
 end;
+
 
 theorem
 Th1:for a being Element of INT.Ring holds
@@ -430,6 +441,7 @@ case A3: a >= 0.INT.Ring;
     0 = In (0,INT) by A2,FUNCT_7:def 1
    .= c by A5,Def3,RLVECT_1:def 2;
   hence absint.(a) = abs(a) by A1,A4,A5,ABSVALUE:def 1;
+end;
 case A6: not a >= 0.INT.Ring;
     ex c',d' being Integer st c' = 0.INT.Ring & d' = a
     proof
@@ -446,6 +458,7 @@ case A6: not a >= 0.INT.Ring;
             .= abs(a) by A6,Def5;
   hence thesis;
 end;
+end;
 hence thesis;
 end;
 
@@ -460,12 +473,14 @@ assume A1: a <> 0;
                .= a by A2,ABSVALUE:def 1;
    0 + 1 < a + 1 by A1,A2,REAL_1:53;
   hence thesis by A3,NAT_1:38;
+  end;
   case A4: a < 0;
   A5: absreal.(a) = abs((a)) by EUCLID:def 2
                .= -a by A4,ABSVALUE:def 1;
     a <= -1 by A4,INT_1:21;
   then -(-1) <= -a by REAL_1:50;
   hence thesis by A5;
+  end;
   end;
 hence thesis;
 end;
@@ -521,6 +536,7 @@ Lm8:for a,b being Element of INT.Ring
        then reconsider a' as Nat by INT_1:16;
          a' - 0 * b' = a';
        hence thesis;
+     end;
      case A5: a' < 0;
        A6: a' - a' * b' = a' + (-(a'*b')) by XCMPLX_0:def 8
                         .= -(-1 * a') + ((-a')*b') by XCMPLX_1:175
@@ -535,10 +551,11 @@ Lm8:for a,b being Element of INT.Ring
          n * m is Nat;
        hence thesis by A6;
      end;
+     end;
      hence thesis;
      end;
     ex k being Nat st P[k] &
-  for n being Nat st P[n] holds k <= n from Min(A4);
+  for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A4);
   then consider k' being Nat such that
   A7: ex s being Integer st k' = a' - s * b' &
        for n being Nat st ex s' being Integer st n = a' - s' * b'
@@ -621,6 +638,7 @@ Lm9:for a,b being Element of INT.Ring
        then reconsider a' as Nat by INT_1:16;
          a' - 0 * b' = a';
        hence thesis;
+     end;
      case A5: a' < 0;
        A6: a' - a' * b' = a' + (-(a'*b')) by XCMPLX_0:def 8
                         .= -(-1 * a') + ((-a')*b') by XCMPLX_1:175
@@ -635,10 +653,11 @@ Lm9:for a,b being Element of INT.Ring
          n * m is Nat;
        hence thesis by A6;
      end;
+     end;
      hence thesis;
      end;
     ex k being Nat st P[k] &
-  for n being Nat st P[n] holds k <= n from Min(A4);
+  for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A4);
   then consider k' being Nat such that
   A7: ex s being Integer st k' = a' - s * b' &
        for n being Nat st ex s' being Integer st n = a' - s' * b'
@@ -702,10 +721,12 @@ Lm9:for a,b being Element of INT.Ring
          then k' <= b' by NAT_1:18;
          then k <= abs(b) by A19,Def4;
          hence thesis by A20,A21,Lm2,Lm4;
+       end;
        case A22: k' < b';
          then A23: k <= abs(b) by A19,Def4;
            0 <= k' by NAT_1:18;
          hence thesis by A19,A22,A23,Def4,Lm2,Lm4;
+       end;
        end;
        hence thesis;
        end;
@@ -762,6 +783,7 @@ holds q1 = q2 & r1 = r2
         .= (q2' - q1') + q1' by XCMPLX_0:def 8
         .= q1' by A1,A11,Lm2;
      hence q1 = q2;
+   end;
    case 0 <> r1' - r2';
      then 0 <> q2' - q1' by A10;
      then A12: absreal.(q2' - q1') >= 1 by Lm5;
@@ -794,7 +816,9 @@ holds q1 = q2 & r1 = r2
               .= absreal.(q2' - q1') * absreal.b' by EUCLID:def 2;
      hence q1 = q2 by A13,A16,A19,AXIOMS:22;
    end;
+   end;
    hence q1 = q2;
+ end;
  case A20: r1' - r2' < 0;
    then A21: -(r1' - r2') > 0 by REAL_1:66;
    A22: -(r1' - r2') = -(r1' - r2') * 1
@@ -845,6 +869,7 @@ holds q1 = q2 & r1 = r2
             .= absreal.(q1' - q2') * absreal.b' by EUCLID:def 2;
    hence q1 = q2 by A25,A28,A31,AXIOMS:22;
    end;
+   end;
    r1 = r1 + 0.INT.Ring by RLVECT_1:10
    .= r1 + (q1 * b + -(q1 * b)) by RLVECT_1:16
    .= (q2 * b + r2) + -(q2 * b) by A1,A8,RLVECT_1:def 6
@@ -867,6 +892,7 @@ existence
     now per cases;
   case 0 <= b';
   hence thesis by A1,Lm9;
+  end;
   case A2: b' < 0;
   then A3: 0 < -b' by REAL_1:66;
   reconsider c = -b' as Element of I by Def3,INT_1:12;
@@ -898,10 +924,12 @@ existence
     end;
   hence thesis by A11;
   end;
+  end;
   hence thesis;
   end;
 uniqueness by A1,Th2;
 end;
+
 
 definition
 let a,b be Element of INT.Ring;
@@ -918,6 +946,7 @@ existence
   then ex q,r being Element of INT.Ring st
    a = q * b + r & 0.INT.Ring <= r & r < abs(b) by A1,Lm9;
   hence thesis;
+  end;
   case A2: b' < 0;
   then A3: 0 < -b' by REAL_1:66;
   reconsider c = -b' as Element of I by Def3,INT_1:12;
@@ -951,10 +980,12 @@ existence
     end;
   hence thesis by A11;
   end;
+  end;
   hence thesis;
   end;
 uniqueness by A1,Th2;
 end;
+
 
 theorem
   for a,b being Element of INT.Ring
@@ -988,7 +1019,8 @@ attr I is Euclidian means :Def9:
   (a = q * b + r & (r = 0.I or f.r < f.b))));
 end;
 
-definition
+
+registration
  cluster INT.Ring -> Euclidian;
 coherence
  proof
@@ -999,6 +1031,7 @@ coherence
     now per cases;
   case 0 <= b';
   hence thesis by A1,Lm8;
+  end;
   case A2: b' < 0;
   then A3: 0 < -b' by REAL_1:66;
   reconsider c = -b' as Element of M by Def3,INT_1:12;
@@ -1031,9 +1064,11 @@ coherence
   hence ex q,r being Element of M st
         (a = q * b + r & (r = 0.M or absint.r < absint.b)) by A11;
   end;
+  end;
   hence thesis;
   end;
 end;
+
 
 Lm10:for F being commutative associative left_unital Field-like right_zeroed
   (non empty doubleLoopStr)
@@ -1065,7 +1100,7 @@ Lm10:for F being commutative associative left_unital Field-like right_zeroed
   hence thesis;
   end;
 
-definition
+registration
 cluster strict Euclidian domRing-like non degenerated well-unital
         distributive commutative Ring;
 existence
@@ -1075,12 +1110,14 @@ proof
 end;
 end;
 
+
 definition
 mode EuclidianRing is Euclidian domRing-like non degenerated well-unital
      distributive commutative Ring;
 end;
 
-definition
+
+registration
 cluster strict EuclidianRing;
 existence
  proof
@@ -1088,6 +1125,7 @@ existence
    thus thesis;
  end;
 end;
+
 
 definition
 let E be Euclidian (non empty doubleLoopStr);
@@ -1099,6 +1137,7 @@ mode DegreeFunction of E ->
   (a = q * b + r & (r = 0.E or it.r < it.b))));
 existence by Def9;
 end;
+
 
 theorem
 Th4:for E being EuclidianRing holds E is gcdDomain
@@ -1119,6 +1158,7 @@ proof
            z divides x & z divides y &
            for zz being Element of E st
            (zz divides x & zz divides y) holds zz divides z by A1,A2;
+     end;
      case A3: x <> 0.E;
      set M = { z where z is Element of E:
                ex s,t being Element of E
@@ -1144,7 +1184,7 @@ proof
          hence thesis by A3,A4;
          end;
         ex k being Nat st P[k] &
-         for n being Nat st P[n] holds k <= n from Min(A6);
+         for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A6);
      then consider k being Nat such that
      A7: P[k] & for n being Nat st P[n] holds k <= n;
 
@@ -1273,6 +1313,7 @@ proof
           for zz being Element of E st
           (zz divides x & zz divides y) holds zz divides z by A21;
      end;
+     end;
      hence ex z being Element of E st
           z divides x & z divides y &
           for zz being Element of E st
@@ -1283,13 +1324,14 @@ proof
 hence thesis;
 end;
 
-definition
+registration
 cluster Euclidian -> gcd-like (domRing-like non degenerated
     Abelian add-associative right_zeroed right_complementable
     associative commutative right_unital right-distributive
      (non empty doubleLoopStr));
 coherence by Th4;
 end;
+
 
 definition
 redefine func absint -> DegreeFunction of INT.Ring;
@@ -1305,6 +1347,7 @@ proof
     now per cases;
   case 0 <= b';
   hence thesis by A1,Lm8;
+  end;
   case A2: b' < 0;
   then A3: 0 < -b' by REAL_1:66;
   reconsider c = -b' as Element of M by Def3,INT_1:12;
@@ -1337,11 +1380,13 @@ proof
   hence ex q,r being Element of M st
         (a = q * b + r & (r = 0.M or absint.r < absint.b)) by A11;
   end;
+  end;
   hence thesis;
   end;
 hence thesis by Def10;
 end;
 end;
+
 
 theorem
 Th5:for F being commutative associative left_unital Field-like right_zeroed
@@ -1356,11 +1401,12 @@ consider f being Function of the carrier of F,NAT;
 hence thesis by Def9;
 end;
 
-definition
+registration
 cluster commutative associative left_unital Field-like right_zeroed Field-like
   -> Euclidian (non empty doubleLoopStr);
 coherence by Th5;
 end;
+
 
 theorem
   for F being commutative associative left_unital Field-like right_zeroed
@@ -1715,7 +1761,7 @@ A1: for a,b being Integer st a > 0 & b > 0 holds
      then A3: a in M & b in M;
      then A4: ex k being Nat st P[k] by A2;
      consider g being Nat such that
-     A5: P[g] & for n being Nat st P[n] holds g <= n from Min(A4);
+     A5: P[g] & for n being Nat st P[n] holds g <= n from NAT_1:sch 5(A4);
      consider z being Nat such that
      A6: z = g & ex s,t being Integer st z = s * a + t * b by A5;
      consider s,t being Integer such that A7: g = s * a + t * b by A6;
@@ -1830,26 +1876,34 @@ case a = 0;
     now per cases;
     case b >= 0;
     hence a gcd b = 0 * a + 1 * b by A32,ABSVALUE:def 1;
+    end;
     case b < 0;
     hence a gcd b = -(b * 1) by A32,ABSVALUE:def 1
                  .= 0 * a + (-1) * b by XCMPLX_1:175;
   end;
+  end;
   hence thesis;
+end;
 case b = 0;
   then A33: a gcd b = abs(a) by A28;
     now per cases;
     case a >= 0;
     hence a gcd b = 1 * a + 0 * b by A33,ABSVALUE:def 1;
+    end;
     case a < 0;
     hence a gcd b = -(a * 1) by A33,ABSVALUE:def 1
                  .= 0 * b + (-1) * a by XCMPLX_1:175;
   end;
+  end;
   hence thesis;
 end;
+end;
 hence thesis;
+end;
 case A34: a <> 0 & b <> 0;
   now per cases;
 case a >= 0 & b >= 0; hence thesis by A1,A34;
+end;
 case a < 0 & b >= 0;
   then -a > 0 & b > 0 by A34,REAL_1:66;
   then consider s,t being Integer such that A35: -a gcd b = s * -a + t * b by
@@ -1859,6 +1913,7 @@ A1;
          .= abs((-a)) hcf abs(b) by ABSVALUE:17
          .= -a gcd b by INT_2:def 3;
   hence thesis by A35,A36;
+end;
 case a >= 0 & b < 0;
   then -b > 0 & a > 0 by A34,REAL_1:66;
   then consider s,t being Integer such that A37: a gcd -b = s * a + t * -b by
@@ -1868,6 +1923,7 @@ A1;
          .= abs(a) hcf abs((-b)) by ABSVALUE:17
          .= a gcd -b by INT_2:def 3;
   hence thesis by A37,A38;
+end;
 case a < 0 & b < 0;
   then -a > 0 & -b > 0 by REAL_1:66;
   then consider s,t being Integer such that A39: -a gcd -b = s * -a + t * -b
@@ -1880,7 +1936,9 @@ by A1;
          .= -a gcd -b by INT_2:def 3;
   hence thesis by A39,A40;
 end;
+end;
 hence thesis;
+end;
 end;
 hence thesis;
 end;
@@ -1912,7 +1970,7 @@ existence
       end;
   thus ex c being BinOp of Segm(n) st
  for k,l being Element of Segm(n) holds P[k,l,c.(k,l)]
- from BinOpEx(A2);
+ from BINOP_1:sch 1(A2);
   end;
 uniqueness
  proof
@@ -1920,9 +1978,10 @@ uniqueness
    thus for o1,o2 being BinOp of Segm(n) st
     (for a,b being Element of Segm(n) holds o1.(a,b) = O(a,b)) &
     (for a,b being Element of Segm(n) holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BinOpDefuniq;
+  holds o1 = o2 from COMPLSP1:sch 2;
  end;
 end;
+
 
 definition
 let n be Nat such that A1:n > 0;
@@ -2028,9 +2087,11 @@ existence
                  then t <= 0 by NAT_1:38;
                  then t = 0 by NAT_1:18;
                  hence thesis by A1,A18,A21;
+               end;
                case t > 1;
                  then n * t > 1 * n by A1,REAL_1:70;
                  hence thesis by A18,A21,NAT_1:29;
+               end;
                end;
                hence thesis;
                end;
@@ -2038,6 +2099,7 @@ existence
                    .= (n * t + -(n * t)) + a by XCMPLX_1:1
                    .= 0 + a by XCMPLX_0:def 6;
           hence thesis by A18,A19,A20,A22,XCMPLX_1:14;
+          end;
           case A24: k <> 0;
           reconsider n as Integer;
           A25: n - k < n
@@ -2108,6 +2170,7 @@ existence
             end;
           hence thesis by A1,A29,A35,A36,A37;
           end;
+          end;
           hence thesis;
           end;
         z mod n < n by A1,NAT_1:46;
@@ -2132,9 +2195,10 @@ uniqueness
   thus for f1,f2 being UnOp of Segm(n) st
      (for a being Element of Segm(n) holds f1.(a) = F(a))
    & (for a being Element of Segm(n) holds f2.(a) = F(a))
-  holds f1 = f2 from UnOpEq;
+  holds f1 = f2 from LMOD_7:sch 2;
  end;
 end;
+
 
 Lm11:for n being Nat st n > 0
 for a being Nat st a < n
@@ -2166,9 +2230,11 @@ A8: t = 1
         then t <= 0 by NAT_1:38;
         then t = 0 by NAT_1:18;
         hence thesis by A1,A3,A4,A7;
+     end;
      case t > 1;
         then n * t > 1 * n by A1,REAL_1:70;
         hence thesis by A3,A4,A7,NAT_1:29;
+     end;
      end;
      hence thesis;
      end;
@@ -2176,6 +2242,7 @@ A8: t = 1
               .= (n * t + -(n * t)) + a' by XCMPLX_1:1
               .= 0 + a' by XCMPLX_0:def 6;
 hence thesis by A3,A4,A5,A6,A8,XCMPLX_1:14;
+end;
 case A10: a <> 0;
 reconsider n as Integer;
 A11: n - a < n
@@ -2247,6 +2314,7 @@ A23: (b = n * t + a' & a' < n) or (a' = 0 & n = 0)
    end;
 hence thesis by A1,A3,A15,A21,A22,A23;
 end;
+end;
 hence thesis;
 end;
 
@@ -2315,6 +2383,7 @@ A9: (addint(n)).(a,b) = (a + b) - n implies a + b >= n
         now per cases;
         case t = 0;
           hence thesis by A1,A3,A16;
+        end;
         case A17: t <> 0;
             t < 2
             proof
@@ -2332,6 +2401,7 @@ A9: (addint(n)).(a,b) = (a + b) - n implies a + b >= n
             0 <= t by NAT_1:18;
           then 1 + 0 <= t by A17,INT_1:20;
           hence thesis by A20,AXIOMS:21;
+        end;
         end;
       hence thesis;
       end;
@@ -2413,6 +2483,7 @@ A10: (a * b = n * t + c & c < n) or c = 0 & n = 0 by A9,NAT_1:def 2;
             now per cases;
           case t = k;
             hence thesis;
+          end;
           case A14: t <> k;
               r >= 1
               proof
@@ -2431,12 +2502,15 @@ A10: (a * b = n * t + c & c < n) or c = 0 & n = 0 by A9,NAT_1:def 2;
               1 * n + q >= n by NAT_1:29;
             hence thesis by A1,A10,A13,A16,AXIOMS:22;
           end;
+          end;
           hence thesis;
+        end;
         case t > k;
           then t >= k + 1 by INT_1:20;
           then A17: n * t >= n * (k + 1) by NAT_1:20;
             n * t + c >= n * t by NAT_1:29;
           hence thesis by A8,A10,A17,AXIOMS:22;
+        end;
         end;
         hence thesis;
         end;
@@ -2485,6 +2559,7 @@ A7: now assume A8: a = 0;
       now per cases;
     case t = 0;
        hence thesis by A1,A4,A8;
+    end;
     case A10: t <> 0;
          t < 2
           proof
@@ -2502,6 +2577,7 @@ A7: now assume A8: a = 0;
          0 <= t by NAT_1:18;
        then 1 + 0 <= t by A10,INT_1:20;
        hence thesis by A13,AXIOMS:21;
+    end;
     end;
     hence thesis;
     end;
@@ -2606,7 +2682,8 @@ func INT.Ring(n) -> doubleLoopStr equals :Def13:
 coherence;
 end;
 
-definition let n be Nat;
+
+registration let n be Nat;
  cluster INT.Ring(n) -> strict non empty;
 coherence
   proof
@@ -2616,6 +2693,7 @@ coherence
          the carrier of INT.Ring n is non empty;
   end;
 end;
+
 
 theorem Th20:
 INT.Ring 1 is degenerated & INT.Ring 1 is Ring &
@@ -2720,11 +2798,12 @@ hence thesis by A2,A3,A4,A5,A6,A7,A8,A10,A12,A13,A14,A15,RLVECT_1:def 5,def 6,
 def 7,VECTSP_1:def 16,def 17,def 18,def 20,def 21,VECTSP_2:def 2;
 end;
 
-definition
+registration
  cluster strict degenerated well-unital distributive Field-like commutative
   Ring;
 existence by Th20;
 end;
+
 
 Lm13:
 now
@@ -2773,9 +2852,11 @@ for n being Nat st n > 1 holds
      case A12: a' + b' < n;
        hence (addint(n)).(a,b) = a' + b' by A2,Th17
                              .= (addint(n)).(b,a) by A2,A12,Th17;
+     end;
      case A13: a' + b' >= n;
        hence (addint(n)).(a,b) = (a' + b') - n by A2,Th17
                              .= (addint(n)).(b,a) by A2,A13,Th17;
+     end;
      end;
      hence thesis by A10,A11;
      end;
@@ -2952,6 +3033,7 @@ for n being Nat st n > 1 holds
         suppose A51: a' = 0;
         take 0.F;
         thus a + 0.F = 0.F by A7,A32,A51;
+        end;
         suppose a' <> 0;
         then a' > 0 by NAT_1:19;
         then reconsider b = n-a' as Element of Segm n by A2,Lm13;
@@ -2966,6 +3048,7 @@ for n being Nat st n > 1 holds
           .= (the add of F).(a,v) by BINOP_1:def 1
           .= (a'+b) mod n by A2,A4,GR_CY_1:def 5
           .= 0.F by A7,A52,GR_CY_1:5;
+      end;
       end;
  A53: F is right_unital
       proof
@@ -3026,12 +3109,14 @@ A4: now assume A5: p is Prime;
         assume A11: m > a';
           now per cases;
         case k = 0; hence thesis by A2,A6,A10,Lm14;
+        end;
         case A12: k <> 0;
            A13: k >= 0 by NAT_1:18;
           then A14: k >= 1 + 0 by A12,INT_1:20;
             a' >= 0 by NAT_1:18;
           then k * a' >= 1 * a' by A14,AXIOMS:25;
           hence thesis by A10,A11,A12,A13,REAL_1:70;
+        end;
         end;
         hence thesis;
         end;
@@ -3080,11 +3165,13 @@ right_complementable
          assume A21: k > p;
            now per cases;
          case n = 0; hence thesis by A1,A19;
+         end;
          case A22: n <> 0;
             A23: n >= 0 by NAT_1:18;
            then n >= 1 + 0 by A22,INT_1:20;
            then n * p >= 1 * p by A2,AXIOMS:25;
            hence thesis by A19,A21,A22,A23,REAL_1:70;
+         end;
          end;
          hence thesis;
          end;
@@ -3093,11 +3180,13 @@ right_complementable
          assume A25: n > p;
            now per cases;
          case k = 0; hence thesis by A1,A19;
+         end;
          case A26: k <> 0;
             A27: k >= 0 by NAT_1:18;
            then k >= 1 + 0 by A26,INT_1:20;
            then k * p >= 1 * p by A2,AXIOMS:25;
            hence thesis by A19,A25,A26,A27,REAL_1:70;
+         end;
          end;
          hence thesis;
          end;
@@ -3105,6 +3194,7 @@ right_complementable
      case k = p;
        then 1 * p = p * n by A19;
        hence thesis by A2,XCMPLX_1:5;
+     end;
      case k <> p;
        then A28: k < p by A20,REAL_1:def 5;
          now per cases;
@@ -3112,6 +3202,7 @@ right_complementable
          then 1 * p = k * p by A19;
          then k = 1 by A2,XCMPLX_1:5;
          hence thesis by A19;
+       end;
        case n <> p;
          then n < p by A24,REAL_1:def 5;
          then reconsider n2 = n as Element of Segm(p) by A2,GR_CY_1:10;
@@ -3128,7 +3219,9 @@ right_complementable
                 .= 0.(INT.Ring(p)) by A2,Lm14;
          hence contradiction by A18,A29,VECTSP_1:44;
        end;
+       end;
        hence thesis;
+     end;
      end;
      hence thesis;
      end;
@@ -3137,7 +3230,7 @@ right_complementable
 hence thesis by A4;
 end;
 
-definition
+registration
 let p be Prime;
  cluster INT.Ring(p) -> add-associative right_zeroed right_complementable
    Abelian commutative associative left_unital distributive Field-like
@@ -3147,3 +3240,4 @@ coherence
    p > 1 by INT_2:def 5; hence thesis by Th22;
  end;
 end;
+

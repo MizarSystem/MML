@@ -3,10 +3,6 @@ TARSKI
 RELAT_1
 FUNCT_1
 #
-GraphFunc
-FuncEx
-Lambda
-#
 M1 ;;
 ªM1 V1 ;V3 ;;ªM1 ;M1 ;&ª&R2 K4 B2 B3 ;B1 ;ª&R2 B2 F1 ;;P1 B2 B3 ;;;ª&R2 B2 F1 ;;P1 B2 B3 ;ªR2 K4 B2 B3 ;B1 ;;;M1 ;M1 ;M1 ;ª&P1 B1 B2 ;P1 B1 B3 ;ªR1 B2 B3 ;;;
 #

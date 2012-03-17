@@ -31,13 +31,23 @@ definition
               #);
 end;
 
-definition
+
+registration
  cluster non empty strict typealg;
+ existence
+  proof consider D;
+   consider l,r,i being BinOp of D;
+   take typealg(#D,l,r,i#);
+   thus the carrier of typealg(#D,l,r,i#) is non empty;
+   thus thesis;
+  end;
 end;
+
 
  definition let s be non empty typealg;
   mode type of s is Element of s;
  end;
+
 
  reserve s for non empty typealg,
          T,X,Y,T',X',Y' for FinSequence of the carrier of s,
@@ -55,10 +65,13 @@ end;
       (the inner_product of s).(x,y);
  end;
 
-definition
+
+registration
  let Tr be finite Tree, v be Element of Tr;
  cluster succ v -> finite;
+ coherence;
 end;
+
 
 definition
  let Tr be finite Tree, v be Element of Tr;
@@ -67,13 +80,29 @@ definition
   card succ v;
 end;
 
-definition
+registration
  cluster finite DecoratedTree;
+  existence
+   proof consider d being set;
+     reconsider T = { {} } as Tree by TREES_1:48;
+    take T --> d;
+       dom(T --> d) is finite by FUNCOP_1:19;
+    hence thesis by Lm2;
+   end;
 end;
 
-definition let D be non empty set;
+
+registration let D be non empty set;
  cluster finite DecoratedTree of D;
+  existence
+   proof consider d being Element of D;
+     reconsider T = { {} } as Tree by TREES_1:48;
+    take T --> d;
+       dom(T --> d) is finite by FUNCOP_1:19;
+    hence thesis by Lm2;
+   end;
 end;
+
 
 definition let s;
  mode PreProof of s is
@@ -81,11 +110,45 @@ definition let s;
 , the carrier of s :], NAT :];
 end;
 
+
 reserve Tr for PreProof of s;
 
-definition let R be finite Relation;
+registration let R be finite Relation;
  cluster dom R -> finite;
+ coherence
+  proof per cases;
+   suppose R = {};
+    hence thesis by RELAT_1:60;
+   end;
+   suppose R <> {};
+    then reconsider R as finite non empty Relation;
+    set X = { x`1 where x is Element of R: x in R };
+A:  dom R = X
+     proof
+      thus dom R c= X
+       proof let z be set;
+        assume z in dom R;
+         then consider y being set such that
+W1:       [z,y] in R by RELAT_1:def 4;
+         [z,y]`1 = z by MCART_1:7;
+        hence z in X by W1;
+       end;
+      let e be set;
+      assume e in X;
+       then consider x being Element of R such that
+W1:     e = x`1 and x in R;
+       consider z,y being set such that
+W3:     x = [z,y] by RELAT_1:def 1;
+       z = e by W1,W3,MCART_1:7;
+      hence e in dom R by W3,RELAT_1:def 4;
+     end;
+B:  R is finite;
+    X is finite from FRAENKEL:sch 21(B);
+   hence thesis by A;
+  end;
+  end;
 end;
+
 
 definition
 let s , Tr;
@@ -113,6 +176,7 @@ attr v is correct means
     otherwise contradiction;
 end;
 
+
 definition
 let s; let IT be type of s;
 attr IT is left means
@@ -126,6 +190,7 @@ attr IT is middle means
 ex x,y st IT = x*y;
 end;
 
+
 definition
 let s; let IT be type of s;
 attr IT is primitive means
@@ -133,10 +198,12 @@ attr IT is primitive means
     not (IT is left or IT is right or IT is middle);
 end;
 
+
 definition let s; let Tr be finite DecoratedTree of the carrier of s;
  let v be Element of dom Tr;
  redefine func Tr.v -> type of s;
 end;
+
 
 definition
 let s; let Tr be finite DecoratedTree of the carrier of s, x;
@@ -147,8 +214,11 @@ for v being Element of dom Tr holds (branchdeg v = 0 or branchdeg v = 2)
 & (branchdeg v = 0 implies Tr.v is primitive) & (branchdeg v = 2 implies
 ex y,z st (Tr.v = y/"z or Tr.v = y\z or Tr.v = y*z) &
  Tr.(v^<*0*>) = y & Tr.(v^<*1*>)= z);
-antonym Tr does_not_represent x;
 end;
+notation
+let s; let Tr be finite DecoratedTree of the carrier of s, x;
+antonym Tr does_not_represent x for Tr represents x ; end;
+
 
 definition let IT be non empty typealg;
 attr IT is free means
@@ -159,6 +229,7 @@ being finite DecoratedTree of the carrier of IT st
 for Tr1 being finite DecoratedTree of
 the carrier of IT holds Tr1 represents x iff Tr = Tr1;
 end;
+
 
 definition
 let s,x such that s is free;
@@ -173,12 +244,14 @@ definition let s; let f be FinSequence of the carrier of s;
  redefine func [f,t] -> Element of [:(the carrier of s)*, the carrier of s:];
 end;
 
+
 definition
 let s;
 mode Proof of s -> PreProof of s means
 :: PRELAMB:def 13
  dom it is finite & for v being Element of dom it holds v is correct;
 end;
+
 
 reserve p for Proof of s,
         v for Element of dom p,
@@ -238,6 +311,7 @@ for v being Element of dom IT
 holds (IT.v)`2 <> 7;
 end;
 
+
 definition
 let s;
 func size_w.r.t. s -> Function of the carrier of s, NAT means
@@ -262,6 +336,7 @@ func cutdeg p -> Nat means
    otherwise it = 0;
 end;
 
+
 ::MODELS FOR THE LAMBEK CALCULUS
 
 reserve A for non empty set,
@@ -276,12 +351,19 @@ definition let s,A;
     it.(y\x) = {a2: for b st b in it.y holds b ^ a2 in it.x };
 end;
 
+
 ::AXIOMS, RULES, AND SOME OF THEIR CONSEQUENCES
 
- definition
+ registration
  let a,b be non empty set;
  cluster non empty Relation of a,b;
+ existence
+ proof
+    [:a,b:] is Relation of a,b by RELSET_1:def 1;
+  hence thesis;
  end;
+ end;
+
 
 definition
  struct(typealg) typestr (# carrier->set,
@@ -289,9 +371,18 @@ definition
            derivability -> Relation of (the carrier)*,the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty strict typestr;
+ existence
+  proof consider D;
+   consider l,r,i being BinOp of D, d being Relation of D*,D;
+   take typestr(#D,l,r,i,d#);
+   thus the carrier of typestr(#D,l,r,i,d#) is non empty;
+   thus thesis;
+  end;
 end;
+
 
  reserve s for non empty typestr,
          x for type of s;
@@ -301,6 +392,7 @@ end;
 :: PRELAMB:def 18
  [f,x] in the derivability of s;
  end;
+
 
 definition let IT be non empty typestr;
  attr IT is SynTypes_Calculus-like means
@@ -321,13 +413,32 @@ definition let IT be non empty typestr;
      st X ==>. x & Y ==>. y holds X^Y ==>. x*y);
 end;
 
-definition
+
+registration
  cluster SynTypes_Calculus-like (non empty typestr);
+ existence
+ proof
+ reconsider DER = [:{{}}*,{{}}:] as non empty Relation of {{}}*,{{}}
+          by RELSET_1:def 1;
+ reconsider EM = typestr (#{{}},op2,op2,op2,DER#) as non empty typestr
+  by STRUCT_0:def 1;
+ take EM;
+A1: for x being type of EM, X being FinSequence of the carrier of EM
+     holds X ==>. x
+  proof let x be type of EM, X be FinSequence of the carrier of EM;
+      [X,x] in [:{{}}*,{{}}:];
+   hence X ==>. x by Def18;
+  end;
+ hence for x being type of EM holds <*x*> ==>. x;
+ thus thesis by A1;
+ end;
 end;
+
 
 definition
  mode SynTypes_Calculus is SynTypes_Calculus-like (non empty typestr);
 end;
+
 
   reserve s for SynTypes_Calculus,
           T,X,Y for FinSequence of the carrier of s,
@@ -382,6 +493,7 @@ definition
 :: PRELAMB:def 20
 <*x*> ==>. y & <*y*> ==>. x;
 end;
+
 
 theorem :: PRELAMB:25
   x <==>. x;

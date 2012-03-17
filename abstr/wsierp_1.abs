@@ -10,7 +10,7 @@ environ
       ABSVALUE, NAT_1, INT_2, FINSEQ_1, FUNCT_1, RELAT_1, BOOLE, RLVECT_1,
       MATRIX_2, CARD_3;
  notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      INT_1, NAT_1, RAT_1, INT_2, PREPOWER, SQUARE_1, RELAT_1, FUNCT_1,
+      INT_1, NAT_1, RAT_1, INT_2, NEWTON, PREPOWER, SQUARE_1, RELAT_1, FUNCT_1,
       FINSEQ_1, RVSUM_1, FINSEQ_4, MATRIX_2, GROUP_1, TREES_4, GOBOARD1;
  constructors REAL_1, NAT_1, INT_2, PREPOWER, SQUARE_1, FINSEQ_4, GROUP_1,
       GOBOARD1, TREES_4, MATRIX_2, CARD_4, MEMBERED;
@@ -48,9 +48,24 @@ theorem :: WSIERP_1:7
 theorem :: WSIERP_1:8
    (x<=0 & y>z or x<0 & y>=z) implies (y>z+x & y-x>z);
 
-definition let k, a;
+registration let k, a;
   cluster k |^ a -> integer;
+  coherence
+ proof
+  defpred Q[Nat] means k|^$1 is Integer;
+  A1: Q[0] by NEWTON:9;
+  A2: for a st Q[a] holds Q[a+1]
+   proof
+    let a; assume k|^a is Integer;
+    then reconsider b=k|^a as Integer;
+      k|^(a+1)=k*b by NEWTON:11;
+    hence thesis;
+   end;
+    for a holds Q[a] from NAT_1:sch 1(A1,A2);
+  hence thesis;
+ end;
 end;
+
 
 definition let a,b;
   redefine func a|^b -> Nat;
@@ -103,14 +118,29 @@ theorem :: WSIERP_1:23
 
 reserve fs,fs1,fs2,fs3 for FinSequence;
 
-definition let f be FinSequence of INT; let a be set;
+registration let f be FinSequence of INT; let a be set;
  cluster f.a -> integer;
+ coherence
+  proof
+A1:rng f c= INT by FINSEQ_1:def 4;
+   per cases;
+   suppose a in dom f; then
+   f.a in rng f by FUNCT_1:def 5;
+   hence thesis by A1,INT_1:12;
+   end;
+   suppose not a in dom f; then
+   f.a = 0 by FUNCT_1:def 4;
+   hence thesis;
+  end;
+  end;
 end;
+
 
 definition let fp be FinSequence of NAT;
  let a;
  redefine func fp.a -> Nat;
 end;
+
 
 definition
  let D be non empty set;
@@ -119,15 +149,18 @@ definition
 redefine func f1^f2 -> FinSequence of D1;
 end;
 
+
 definition
  let D be non empty set;
  let D1 be non empty Subset of D;
  redefine func <*>D1 -> empty FinSequence of D1;
 end;
 
+
 definition
  redefine func INT -> non empty Subset of REAL;
 end;
+
 
  reserve D for non empty set,
          v,v1,v2,v3 for set,
@@ -139,6 +172,7 @@ definition let fr;
  redefine func Sum(fr) -> Element of INT;
  redefine func Product(fr) -> Element of INT;
 end;
+
 
 definition let fp;
   redefine func Sum(fp) -> Nat;
@@ -158,6 +192,7 @@ definition
  let fs be FinSequence of D;
 redefine func Del(fs,a) -> FinSequence of D;
 end;
+
 
 definition
  let D; let D1 be non empty Subset of D;

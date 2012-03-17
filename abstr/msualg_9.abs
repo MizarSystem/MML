@@ -32,48 +32,139 @@ begin :: Preliminaries
 reserve a, I for set,
         S for non empty non void ManySortedSign;
 
-scheme MSSExD { I() -> non empty set, P[set,set] }:
+scheme :: MSUALG_9:sch 1
+ MSSExD { I() -> non empty set, P[set,set] }:
  ex f being ManySortedSet of I() st for i being Element of I() holds P[i,f.i]
   provided
- for i being Element of I() ex j being set st P[i,j];
+ for i being Element of I() ex j being set st P[i,j]
+proof
+    defpred Z[set,set] means P[ $1,$2];
+A2: for i being set st i in I() ex j being set st Z[i,j] by A1;
+    consider f being ManySortedSet of I() such that
+A3:   for i being set st i in I() holds Z[i,f.i] from MSUALG_1:sch 1(A2);
+    take f;
+    let i be Element of I();
+    thus thesis by A3;
+  end;
 
-definition let I be set,
+registration let I be set,
                M be ManySortedSet of I;
  cluster locally-finite Element of Bool M;
+existence
+  proof
+      [0]I c= M by PBOOLE:49;
+    then [0]I is ManySortedSubset of M by MSUALG_2:def 1;
+    then reconsider A = [0]I as Element of Bool M by CLOSURE2:def 1;
+    take A;
+    thus thesis;
+  end;
 end;
 
-definition let I be set,
+
+registration let I be set,
                M be non-empty ManySortedSet of I;
  cluster non-empty locally-finite ManySortedSubset of M;
+existence
+  proof
+defpred P[set,set] means
+ ex a being Element of M.$1 st $2 = {a};
+A1: now
+      let i be set such that i in I;
+      consider a being Element of M.i;
+      take j = {a};
+      thus P[i,j];
+    end;
+    consider C being ManySortedSet of I such that
+A2:   for i be set st i in I holds P[i,C.i] from MSUALG_1:sch 1(A1);
+      C is ManySortedSubset of M
+    proof
+      let i be set; assume
+A3:     i in I;
+      then consider a being Element of M.i such that
+A4:     C.i = {a} by A2;
+A5:   M.i is non empty by A3,PBOOLE:def 16;
+      let q be set;
+      assume q in C.i;
+      then q = a by A4,TARSKI:def 1;
+      hence q in M.i by A5;
+    end;
+    then reconsider C as ManySortedSubset of M;
+    take C;
+    thus C is non-empty
+    proof
+      let i be set;
+      assume i in I;
+      then consider a being Element of M.i such that
+A6:     C.i = {a} by A2;
+      thus C.i is non empty by A6;
+    end;
+    let i be set;
+    assume i in I;
+    then consider a being Element of M.i such that
+A7:   C.i = {a} by A2;
+    thus C.i is finite by A7;
+  end;
 end;
 
-definition let S be non empty non void ManySortedSign,
+
+registration let S be non empty non void ManySortedSign,
                A be non-empty MSAlgebra over S,
                o be OperSymbol of S;
  cluster -> FinSequence-like Element of Args(o,A);
+coherence
+  proof
+    let x be Element of Args(o,A);
+      dom x = dom the_arity_of o by MSUALG_6:2;
+    then consider n being Nat such that
+A1:   dom x = Seg n by FINSEQ_1:def 2;
+    take n;
+    thus dom x = Seg n by A1;
+  end;
 end;
 
-definition let S be non void non empty ManySortedSign,
+
+registration let S be non void non empty ManySortedSign,
                I be set,
                s be SortSymbol of S,
                F be MSAlgebra-Family of I, S;
  cluster -> Function-like Relation-like Element of (SORTS F).s;
+coherence
+  proof
+    let x be Element of (SORTS F).s;
+      x is Element of product Carrier(F,s) by PRALG_2:def 17;
+    hence x is Function-like Relation-like;
+  end;
 end;
 
-definition let S be non void non empty ManySortedSign,
+
+registration let S be non void non empty ManySortedSign,
                X be non-empty ManySortedSet of the carrier of S;
  cluster FreeGen X -> free non-empty;
+coherence by MSAFREE:15,17;
 end;
 
-definition let S be non void non empty ManySortedSign,
+
+registration let S be non void non empty ManySortedSign,
                X be non-empty ManySortedSet of the carrier of S;
  cluster FreeMSA X -> free;
+coherence by MSAFREE:18;
 end;
 
-definition let S be non empty non void ManySortedSign,
+
+registration let S be non empty non void ManySortedSign,
                A, B be non-empty MSAlgebra over S;
  cluster [:A,B:] -> non-empty;
+coherence
+  proof
+    thus the Sorts of [:A,B:] is non-empty
+    proof
+        [:A,B:] = MSAlgebra (# [|the Sorts of A,the Sorts of B|],
+             [[:the Charact of A,the Charact of B:]] #) by PRALG_2:def 15;
+      hence thesis;
+    end;
+  end;
 end;
+
 
 theorem :: MSUALG_9:1
   for X, Y being set, f being Function st a in dom f & f.a in [:X,Y:]
@@ -188,6 +279,7 @@ definition let I be set;
   for i being set st i in I holds it.i = pr2 (F.i);
 end;
 
+
 theorem :: MSUALG_9:21
   for F being ManySortedFunction of A, [| I-->{a} , I-->{a} |]
  holds Mpr1 F = Mpr2 F;
@@ -207,13 +299,30 @@ theorem :: MSUALG_9:24
 
 begin :: On the Trivial Many Sorted Algebras
 
-definition let S be non empty ManySortedSign;
+registration let S be non empty ManySortedSign;
  cluster the Sorts of Trivial_Algebra S -> locally-finite non-empty;
+coherence
+  proof
+    consider A being ManySortedSet of the carrier of S such that
+A1:   {A} = (the carrier of S) --> {0} by Th6;
+    thus thesis by A1,MSAFREE2:def 12;
+  end;
 end;
 
-definition let S be non empty ManySortedSign;
+
+registration let S be non empty ManySortedSign;
  cluster Trivial_Algebra S -> locally-finite non-empty;
+coherence
+  proof
+    thus the Sorts of Trivial_Algebra S is locally-finite;
+    let i be set such that
+A1:   i in the carrier of S;
+      the Sorts of Trivial_Algebra S = (the carrier of S) --> {0}
+      by MSAFREE2:def 12;
+    hence (the Sorts of Trivial_Algebra S).i is non empty by A1,FUNCOP_1:13;
+  end;
 end;
+
 
 theorem :: MSUALG_9:25
 for A being non-empty MSAlgebra over S

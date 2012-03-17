@@ -52,7 +52,7 @@ A4:   P[k];
          .= (Partial_Sums abs(rseq)).k + abs(rseq).(k+1) by A4,SEQ_1:16
          .= (Partial_Sums abs(rseq)).(k+1) by SERIES_1:def 1;
     end;
-    for n holds P[n] from Ind(A2,A3);
+    for n holds P[n] from NAT_1:sch 1(A2,A3);
     hence (Partial_Sums abs(rseq)).m = abs(rseq).m
                                    .= abs(rseq.m) by SEQ_1:16
                                    .= abs(0) by A1
@@ -76,28 +76,31 @@ A2:   0<p;
 
   deffunc f(set) = 0;
 
-definition
+registration
  cluster absolutely_summable Real_Sequence;
 existence
   proof
     consider C being Real_Sequence such that
-A1:   for n being Nat holds C.n = f(n) from ExRealSeq;
+A1:   for n being Nat holds C.n = f(n) from SEQ_1:sch 1;
     take C;
     thus thesis by A1,Th3;
   end;
 end;
 
-definition
+
+registration
  cluster summable -> convergent Real_Sequence;
 coherence by SERIES_1:7;
 end;
 
-definition
+
+registration
  cluster absolutely_summable -> summable Real_Sequence;
 coherence by SERIES_1:40;
 end;
 
-definition
+
+registration
  cluster absolutely_summable Real_Sequence;
 existence
   proof
@@ -106,6 +109,7 @@ existence
     thus thesis;
   end;
 end;
+
 
 theorem
   rseq is convergent implies
@@ -171,7 +175,7 @@ defpred P[Nat] means Partial_Sums(rseq).(n+$1)-Partial_Sums(rseq).n <= p * $1;
                .=p * (l+1) by XCMPLX_1:8;
      hence P[l+1] by A7,A8,AXIOMS:22;
    end;
-   thus for l be Nat holds P[l] from Ind(A2,A3);
+   thus for l be Nat holds P[l] from NAT_1:sch 1(A2,A3);
   end;
  hence thesis;
 end;
@@ -199,7 +203,7 @@ A1:for n holds rseq.n <= p;
                .=p * ((n+1)+1) by XCMPLX_1:8;
      hence P[n+1] by A7,A8,AXIOMS:22;
    end;
-   thus for n be Nat holds P[n] from Ind(A2,A3);
+   thus for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
 end;
 
 theorem
@@ -239,7 +243,7 @@ A2: P[0] proof assume
         end;
       hence P[n+1];
       end;
-     for n be Nat holds P[n] from Ind(A2,A5);
+     for n be Nat holds P[n] from NAT_1:sch 1(A2,A5);
   hence Partial_Sums(rseq1).(m) <= p * Partial_Sums(rseq2).(m);
 end;
 
@@ -304,7 +308,7 @@ def 8
                -Partial_Sums(rseq2).n) by XCMPLX_1:1;
          hence thesis by A9,A10,A11,AXIOMS:22;
         end;
-thus for l be Nat holds P[l] from Ind(A2,A4);
+thus for l be Nat holds P[l] from NAT_1:sch 1(A2,A4);
 end;
 
 theorem
@@ -366,7 +370,7 @@ existence
 proof
   deffunc f(set,Element of COMPLEX) = $2*z;
  consider f being Function of NAT,COMPLEX such that
- A1: f.0 = 1r & for n being Nat holds f.(n+1) = f(n,f.n) from LambdaRecExD;
+ A1: f.0 = 1r & for n being Nat holds f.(n+1) = f(n,f.n) from RECDEF_1:sch 4;
  take f;
  thus thesis by A1;
 end;
@@ -385,10 +389,11 @@ defpred P[Nat] means seq1.$1 = seq2.$1;
       hence seq1.(k+1) = seq2.k * z by A2
                     .= seq2.(k+1) by A3;
       end;
-   for n holds P[n] from Ind(A4,A5);
+   for n holds P[n] from NAT_1:sch 1(A4,A5);
  hence seq1 = seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 definition let z be Element of COMPLEX,
                n be Nat;
@@ -396,6 +401,7 @@ definition let z be Element of COMPLEX,
   z GeoSeq.n;
 correctness;
 end;
+
 
 theorem
   z #N 0 = 1r
@@ -410,7 +416,7 @@ definition let c be Complex_Sequence;
  existence
    proof
      deffunc f(Nat) = Re(c.$1);
-     thus ex f being Real_Sequence st for n holds f.n = f(n) from ExRealSeq;
+     thus ex f being Real_Sequence st for n holds f.n = f(n) from SEQ_1:sch 1;
    end;
 uniqueness
   proof
@@ -425,13 +431,14 @@ A2: for n holds seq'.n=Re(c.n);
 end;
 end;
 
+
 definition let c be Complex_Sequence;
  func Im c -> Real_Sequence means :Def4:
   for n holds it.n = Im(c.n);
  existence
    proof
      deffunc f(Nat) = Im(c.$1);
-     thus ex f being Real_Sequence st for n holds f.n = f(n) from ExRealSeq;
+     thus ex f being Real_Sequence st for n holds f.n = f(n) from SEQ_1:sch 1;
    end;
 uniqueness
   proof
@@ -445,6 +452,7 @@ A2: for n holds seq'.n=Im(c.n);
    hence seq=seq' by FUNCT_2:113;
 end;
 end;
+
 
 theorem Th12:
 |.z.| <= abs Re z + abs Im z
@@ -732,7 +740,8 @@ definition let seq be Complex_Sequence,
  existence
  proof
   deffunc f(Nat) = seq.(Nseq.$1);
-  thus ex f being Complex_Sequence st for n holds f.n = f(n) from ExComplexSeq;
+  thus ex f being Complex_Sequence st for n holds f.n = f(n) from
+COMSEQ_1:sch 1;
  end;
 
 uniqueness
@@ -748,6 +757,7 @@ A2: for n holds seq2.n=seq.(Nseq.n);
    hence seq1=seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 theorem Th22:
 Re (seq(#)Nseq)=(Re seq)*Nseq & Im (seq(#)Nseq)=(Im seq)*Nseq
@@ -778,7 +788,8 @@ definition let seq be Complex_Sequence,
 existence
  proof
   deffunc f(Nat) = seq.($1+k);
-  thus ex f being Complex_Sequence st for n holds f.n = f(n) from ExComplexSeq;
+  thus ex f being Complex_Sequence st for n holds f.n = f(n) from
+COMSEQ_1:sch 1;
  end;
 uniqueness
  proof
@@ -792,6 +803,7 @@ uniqueness
   hence seq1=seq2 by COMSEQ_1:6;
  end;
 end;
+
 
 theorem Th23:
 (Re seq)^\k =Re (seq^\k) & (Im seq)^\k =Im (seq^\k)
@@ -820,7 +832,8 @@ existence
 proof
   deffunc f(Nat,Element of COMPLEX) = $2 + seq.($1+1);
  consider f being Function of NAT,COMPLEX such that
- A1: f.0 = seq.0 & for n being Nat holds f.(n+1) = f(n,f.n) from LambdaRecExD;
+ A1: f.0 = seq.0 & for n being Nat holds f.(n+1) = f(n,f.n) from RECDEF_1:sch 4
+;
  take f;
  thus thesis by A1;
 end;
@@ -839,16 +852,18 @@ proof
       hence seq1.(k+1) = seq2.k + seq.(k+1) by A2
                       .= seq2.(k+1) by A3;
       end;
-   for n holds P[n] from Ind(A4,A5);
+   for n holds P[n] from NAT_1:sch 1(A4,A5);
  hence seq1 = seq2 by COMSEQ_1:6;
 end;
 end;
+
 
 definition let seq be Complex_Sequence;
  func Sum seq -> Element of COMPLEX equals :Def8:
   lim Partial_Sums seq;
 correctness;
 end;
+
 
 theorem Th24:
 (for n holds seq.n = 0c) implies for m holds (Partial_Sums seq).m = 0c
@@ -865,7 +880,7 @@ A4:   P[k];
                     .= (Partial_Sums seq).k + seq.(k+1) by A1,A4
                     .= (Partial_Sums seq).(k+1) by Def7;
     end;
-      for n holds P[n] from Ind(A2,A3);
+      for n holds P[n] from NAT_1:sch 1(A2,A3);
     then seq = Partial_Sums seq by COMSEQ_1:6;
     hence (Partial_Sums seq).m = 0c by A1;
   end;
@@ -887,7 +902,7 @@ A4:   P[k];
 COMSEQ_1:def 14
                         .= (Partial_Sums |.seq.|).(k+1) by SERIES_1:def 1;
     end;
-      for n holds P[n] from Ind(A2,A3);
+      for n holds P[n] from NAT_1:sch 1(A2,A3);
     hence (Partial_Sums |.seq.|).m = |.seq.|.m
                                   .= |.seq.m.| by COMSEQ_1:def 14
                                   .= 0 by A1,COMPLEX1:130;
@@ -915,7 +930,7 @@ proof
             .=Re Partial_Sums(seq).(k+1) by Def3;
           hence thesis;
          end;
-   A3:for n holds P[n] from Ind(A1,A2);
+   A3:for n holds P[n] from NAT_1:sch 1(A1,A2);
 defpred R[Nat] means Partial_Sums(Im seq).$1 = Im Partial_Sums(seq).$1;
 A4:R[0] proof thus Partial_Sums(Im seq).0 = Im seq.0 by SERIES_1:def 1
                          .= Im(seq.0) by Def4
@@ -934,7 +949,7 @@ A4:R[0] proof thus Partial_Sums(Im seq).0 = Im seq.0 by SERIES_1:def 1
             .=Im Partial_Sums(seq).(k+1) by Def4;
           hence thesis;
          end;
-      for n holds R[n] from Ind(A4,A5);
+      for n holds R[n] from NAT_1:sch 1(A4,A5);
    hence thesis by A3,FUNCT_2:113;
 end;
 
@@ -1004,7 +1019,7 @@ thus Partial_Sums(z (#) seq).(n+1)
 .= (z (#) Partial_Sums(seq)).(n+1) by COMSEQ_1:def 7;
 end;
 end;
-    for n holds P[n] from Ind(A1,A2);
+    for n holds P[n] from NAT_1:sch 1(A1,A2);
 hence thesis by COMSEQ_1:6;
 end;
 
@@ -1033,7 +1048,7 @@ then A1: P[0] by Def7;
         <= Partial_Sums(|.seq.|).k+|.seq.|.(k+1) by COMSEQ_1:def 14;
     hence P[k+1] by SERIES_1:def 1;
     end;
-    for k holds P[k] from Ind(A1,A2);
+    for k holds P[k] from NAT_1:sch 1(A1,A2);
   hence thesis;
 end;
 
@@ -1071,7 +1086,7 @@ defpred P[Nat] means
                       +|.seq.(n+k+1).| by A4,REAL_1:55;
        hence P[k+1] by A5;
        end;
-   thus for k be Nat holds P[k] from Ind(A2,A3);
+   thus for k be Nat holds P[k] from NAT_1:sch 1(A2,A3);
  end;
 A6:
    for n,k be Nat holds
@@ -1134,7 +1149,7 @@ defpred P[Nat] means |.Partial_Sums(seq).(n+$1)- Partial_Sums(seq).n.|
          by A6;
          hence P[k+1] by A12,A13,A14,AXIOMS:22;
          end;
-      thus for k be Nat holds P[k] from Ind(A9,A10);
+      thus for k be Nat holds P[k] from NAT_1:sch 1(A9,A10);
       end;
      let m;
      assume n <= m;
@@ -1233,10 +1248,11 @@ proof
 hence thesis by SERIES_1:19;
 end;
 
-definition let seq be Complex_Sequence;
+registration let seq be Complex_Sequence;
  cluster Partial_Sums |.seq.| -> non-decreasing;
 coherence by Th34;
 end;
+
 
 theorem
   (for n st n <= m holds seq1.n = seq2.n) implies
@@ -1264,7 +1280,7 @@ A2:  P[0] proof assume
              .=Partial_Sums(seq2).k+seq2.(k+1) by A1,A6
              .=Partial_Sums(seq2).(k+1) by Def7;
    end;
-    for k holds P[k] from Ind(A2,A4);
+    for k holds P[k] from NAT_1:sch 1(A2,A4);
 hence Partial_Sums(seq1).m=Partial_Sums(seq2).m;
 end;
 
@@ -1319,7 +1335,7 @@ A3:for n st P[n] holds P[n+1]
    .= (1r - z #N ((n+1) +1) )/(1r-z) by Def2;
  end;
  thus
-   for n holds P[n] from Ind(A2,A3);
+   for n holds P[n] from NAT_1:sch 1(A2,A3);
  end;
  hence thesis;
 end;
@@ -1347,7 +1363,7 @@ proof thus seq.(n+1)=z * (seq.0 * (z GeoSeq).n) by A1,A4
 end;
 end;
 A5: dom seq = NAT by FUNCT_2:def 1;
-     for n holds P[n] from Ind(A2,A3);
+     for n holds P[n] from NAT_1:sch 1(A2,A3);
 then A6:Partial_Sums(seq)=Partial_Sums(seq.0 (#) (z GeoSeq)) by A5,COMSEQ_1:def
 7
                      .=seq.0 (#) Partial_Sums(z GeoSeq) by Th29;
@@ -1558,12 +1574,13 @@ for c being convergent Complex_Sequence holds
  hence thesis by A1,Th40;
 end;
 
-definition let c be convergent Complex_Sequence;
+registration let c be convergent Complex_Sequence;
  cluster Re c -> convergent;
 coherence by Th41;
  cluster Im c -> convergent;
 coherence by Th41;
 end;
+
 
 theorem Th42:
 for c being Complex_Sequence st Re c is convergent & Im c is convergent
@@ -1604,18 +1621,18 @@ defpred P[Nat] means |. seq.$1 .|= |.z.| to_power ($1+1);
                      .= |.z.| to_power ((k+1)+1) by A1,POWER:32;
      hence |.seq.(k+1).| = |.z.| to_power ((k+1)+1);
     end;
-   for n holds P[n] from Ind(A4,A5);
+   for n holds P[n] from NAT_1:sch 1(A4,A5);
  hence thesis;
  end;
     consider rseq be Real_Sequence such that
-      A7:for n holds rseq.n=f(n) from ExRealSeq;
+      A7:for n holds rseq.n=f(n) from SEQ_1:sch 1;
    A8:rseq is constant by A7,SEQM_3:def 6;
     rseq.0=0 by A7;
   then A9: rseq is convergent & lim(rseq)=0 by A8,SEQ_4:39,40;
 
 deffunc g(Nat) = |.z.| to_power ($1+1);
    consider rseq1 such that A10:
-      for n holds rseq1.n=g(n) from ExRealSeq;
+      for n holds rseq1.n=g(n) from SEQ_1:sch 1;
 
    A11: rseq1 is convergent & lim(rseq1)=0 by A1,A10,SERIES_1:1;
 
@@ -1853,7 +1870,7 @@ theorem
 proof
 assume
 A1: (for n holds |. seq.n .| <= rseq.n) & rseq is convergent & lim(rseq)=0;
-  ex rseq1  be Real_Sequence st for n holds rseq1.n = f(n) from ExRealSeq;
+  ex rseq1  be Real_Sequence st for n holds rseq1.n = f(n) from SEQ_1:sch 1;
    then consider rseq1 be Real_Sequence such that
       A2:for n holds rseq1.n=0;
    A3:rseq1 is constant by A2,SEQM_3:def 6;
@@ -1917,6 +1934,7 @@ definition let seq, seq1 be Complex_Sequence;
  pred seq is_subsequence_of seq1 means :Def9:
   ex Nseq st seq = seq1(#)Nseq;
 end;
+
 
 theorem
   seq is_subsequence_of seq1 implies
@@ -2008,14 +2026,15 @@ definition let seq be Complex_Sequence;
   Partial_Sums seq is convergent;
 end;
 
+
 deffunc z(set) = 0c;
 
-definition
+registration
  cluster summable Complex_Sequence;
 existence
   proof
     consider C being Complex_Sequence such that
-A1:   for n holds C.n = z(n) from ExComplexSeq;
+A1:   for n holds C.n = z(n) from COMSEQ_1:sch 1;
     take C;
     take 0c;
     let p be Real such that
@@ -2026,15 +2045,18 @@ A2:   0<p;
   end;
 end;
 
-definition let seq be summable Complex_Sequence;
+
+registration let seq be summable Complex_Sequence;
  cluster Partial_Sums seq -> convergent;
 coherence by Def10;
 end;
+
 
 definition let seq;
 attr seq is absolutely_summable means :Def11:
  |.seq.| is summable;
 end;
+
 
 theorem Th52:
 (for n holds seq.n = 0c) implies seq is absolutely_summable
@@ -2051,21 +2073,23 @@ A2:   0<p;
     hence abs((Partial_Sums |.seq.|).m-0)<p by A2;
   end;
 
-definition
+registration
  cluster absolutely_summable Complex_Sequence;
 existence
   proof
     consider C being Complex_Sequence such that
-A1:   for n holds C.n = z(n) from ExComplexSeq;
+A1:   for n holds C.n = z(n) from COMSEQ_1:sch 1;
     take C;
     thus thesis by A1,Th52;
   end;
 end;
 
-definition let seq be absolutely_summable Complex_Sequence;
+
+registration let seq be absolutely_summable Complex_Sequence;
  cluster |.seq.| -> summable;
 coherence by Def11;
 end;
+
 
 theorem Th53:
 seq is summable implies seq is convergent & lim seq = 0c
@@ -2083,10 +2107,11 @@ then Partial_Sums(seq) is convergent by Def10;
 hence thesis by COMPLEX1:8,L0;
 end;
 
-definition
+registration
  cluster summable -> convergent Complex_Sequence;
 coherence by Th53;
 end;
+
 
 theorem Th54:
 seq is summable implies
@@ -2110,12 +2135,13 @@ A4:lim(Partial_Sums(Re seq))=Sum(Re seq) &
   hence thesis by A2,A3,A4,COMPLEX1:8,SERIES_1:def 2;
 end;
 
-definition let seq be summable Complex_Sequence;
+registration let seq be summable Complex_Sequence;
  cluster Re seq -> summable;
 coherence by Th54;
  cluster Im seq -> summable;
 coherence by Th54;
 end;
+
 
 theorem Th55:
 seq1 is summable & seq2 is summable
@@ -2159,12 +2185,13 @@ A3:Partial_Sums(seq1)-Partial_Sums(seq2)
 hence thesis by A2,A3,Def10;
 end;
 
-definition let seq1, seq2 be summable Complex_Sequence;
+registration let seq1, seq2 be summable Complex_Sequence;
  cluster seq1 + seq2 -> summable;
 coherence by Th55;
  cluster seq1 - seq2 -> summable;
 coherence by Th56;
 end;
+
 
 theorem Th57:
 seq is summable implies z (#) seq is summable & Sum(z (#) seq)= z * Sum(seq)
@@ -2181,11 +2208,12 @@ hence z (#) seq is summable
 & Sum(z (#) seq)= z * Sum(seq) by A2,A3,Def10;
 end;
 
-definition let z be Element of COMPLEX,
+registration let z be Element of COMPLEX,
                seq be summable Complex_Sequence;
  cluster z (#) seq -> summable;
 coherence by Th57;
 end;
+
 
 theorem Th58:
 Re seq is summable & Im seq is summable implies
@@ -2224,11 +2252,12 @@ proof
  hence thesis;
 end;
 
-definition let seq be summable Complex_Sequence,
+registration let seq be summable Complex_Sequence,
                n be Nat;
  cluster seq^\n -> summable;
 coherence by Th59;
 end;
+
 
 theorem
   (ex n st seq^\n is summable) implies seq is summable
@@ -2283,10 +2312,11 @@ proof
  hence thesis by Def11;
 end;
 
-definition let seq be absolutely_summable Complex_Sequence;
+registration let seq be absolutely_summable Complex_Sequence;
  cluster Partial_Sums |.seq.| -> bounded_above;
 coherence by Th62;
 end;
+
 
 theorem Th63:
 seq is summable iff (for p st 0<p holds ex n st
@@ -2329,12 +2359,13 @@ let m; assume n <= m;
 hence seq is summable by Th63;
 end;
 
-definition
+registration
  cluster absolutely_summable -> summable Complex_Sequence;
 coherence by Th64;
 end;
 
-definition
+
+registration
  cluster absolutely_summable Complex_Sequence;
 existence
   proof
@@ -2343,6 +2374,7 @@ existence
     thus thesis;
   end;
 end;
+
 
 theorem Th65:
 |.z.| < 1 implies z GeoSeq is summable & Sum(z GeoSeq) = 1r/(1r-z)
@@ -2361,11 +2393,11 @@ end;
 then A3: 1r <> z by XCMPLX_1:14;
 deffunc f(Nat) = z #N ($1+1);
  consider seq1 such that
-   A4:for n holds seq1.n=f(n) from ExComplexSeq;
+   A4:for n holds seq1.n=f(n) from COMSEQ_1:sch 1;
    A5:seq1 is convergent & lim(seq1)=0c by A1,A4,Th44;
   deffunc j(set) = 1r;
   consider seq2 such that
-   A6:for n holds seq2.n=j(n) from ExComplexSeq;
+   A6:for n holds seq2.n=j(n) from COMSEQ_1:sch 1;
    A7:
     seq2 is convergent by A6,COMSEQ_2:9;
 then A8: seq2-seq1 is convergent by A5,COMSEQ_2:25;

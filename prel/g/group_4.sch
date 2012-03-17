@@ -25,13 +25,10 @@ GROUP_1
 GROUP_2
 GROUP_3
 #
-MeetSbgEx
-SubgrSep
-#
 G5 W30 ;V46 ;V60 ;;;
 ªM12 V39 ;F1 ;;ªR1 U1 B1 ;K100 èM2 K18 U1 F1 ;;;;;B2 ªM12 V39 ;F1 ;;ª&R1 B2 U1 B3 ;;P1 B3 ;;;;ªM12 V39 ;F1 ;;ªP1 B1 ;;
 #
 G5 W30 ;V46 ;V60 ;;;
-ªM1 ;ª&R7 B1 K174 F1 ;;;M12 V39 ;F1 ;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;;
+ªM1 ;ª&R8 B1 K174 F1 ;;;M12 V39 ;F1 ;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;;
 #
 !

@@ -10,8 +10,6 @@ SUBSET_1
 NUMBERS
 SUPINF_1
 #
-SepR_eal
-#
 ;
 ªM3 K40 K6 K52 ;K2 K61 ;K60 ;;;;;ªM3 K59 ;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;
 #

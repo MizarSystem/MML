@@ -50,7 +50,8 @@ theorem :: FIN_TOPO:5
     for i, j being Nat st
       i <= j holds f.i c= f.j;
 
-scheme MaxFinSeqEx {X() -> non empty set,
+scheme :: FIN_TOPO:sch 1
+ MaxFinSeqEx {X() -> non empty set,
                     A() -> Subset of X(),
                     B() -> Subset of X(),
                     F(Subset of X()) -> Subset of X()}:
@@ -64,7 +65,184 @@ scheme MaxFinSeqEx {X() -> non empty set,
   provided
      A() is finite and
      B() c= A() and
-     for A being Subset of X() st A c= A() holds A c= F(A) & F(A) c= A();
+     for A being Subset of X() st A c= A() holds A c= F(A) & F(A) c= A()
+proof
+  deffunc _F(Nat,Subset of X()) = F($2);
+  consider f being Function of NAT,bool X() such that
+    A4:f.0 = B() and
+    A5:for n being Element of NAT holds f.(n+1) = _F(n,f.n) from RECDEF_1:sch 4
+;
+    defpred P[Nat] means f.$1 c= A();
+  A6:P[0] by A2,A4;
+  A7:now
+    let n be Nat such that A8:P[n];
+      f.(n+1) = F(f.n) by A5;
+    hence P[n+1] by A3,A8;
+  end;
+  A9:for n being Nat holds P[n] from NAT_1:sch 1(A6,A7);
+  A10:rng f c= bool A()
+    proof
+      let x be set; assume x in rng f;
+      then x in f.:NAT by FUNCT_2:45;
+      then ex k being Nat st k in NAT & f.k=x by FUNCT_2:116;
+      then x c= A() by A9;
+      hence x in bool A();
+    end;
+    bool A() is finite by A1,FINSET_1:24;
+  then A11:rng f is finite by A10,FINSET_1:13;
+  A12:dom f = NAT by FUNCT_2:def 1;
+  then A13:rng f <> {} by A4,FUNCT_1:def 5;
+  A14:for i being Nat holds f.i c= f.(i+1)
+    proof
+      let i be Nat;
+      A15:f.(i+1) = F(f.i) by A5;
+        f.i c= A() by A9;
+      hence f.i c= f.(i+1) by A3,A15;
+    end;
+    rng f is c=-linear
+    proof
+      let B,C be set; assume
+        A16:B in rng f & C in rng f;
+      then consider i being set such that
+        A17:i in NAT & B = f.i by A12,FUNCT_1:def 5;
+      consider j being set such that
+        A18:j in NAT & C = f.j by A12,A16,FUNCT_1:def 5;
+      reconsider i as Nat by A17;
+      reconsider j as Nat by A18;
+        now per cases;
+        case i <= j;
+          hence B c= C by A14,A17,A18,Th5;
+        end;
+        case j <= i;
+          hence C c= B by A14,A17,A18,Th5;
+      end;
+      end;
+      hence B c= C or C c= B;
+    end;
+  then consider m being set such that
+    A19:m in rng f and
+    A20:for C being set st C in rng f holds C c= m
+      by A11,A13,Th3;
+    defpred P[Nat] means $1 in NAT & f.$1=m;
+    m in f.:NAT by A19,FUNCT_2:45;
+  then A21:ex k being Nat st P[k] by FUNCT_2:116;
+  consider k being Nat such that
+    A22:P[k] and
+    A23:for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A21);
+A24:  k+1 in Seg(k+1) by FINSEQ_1:6;
+  A25:k >= 0 by NAT_1:18;
+  deffunc G(Nat) = f.(abs($1-1));
+  consider z being FinSequence of bool X() such that
+A26:  len z = k+1 and
+A27:  for j being Nat st j in Seg(k+1) holds
+        z.j = G(j) from FINSEQ_2:sch 1;
+  take z;
+  thus 0 < len z by A26,NAT_1:19;
+  then A28: 0+1 <= len z by NAT_1:38;
+  then A29:1 in Seg(k+1) by A26,FINSEQ_1:3;
+  thus z/.1 = z.1 by A28,FINSEQ_4:24
+               .= f.(abs(1-1)) by A27,A29
+               .= B() by A4,ABSVALUE:7;
+  thus A30:for i being Nat st i > 0 & i < len z holds z/.(i+1)=F(z/.i)
+    proof
+      let i be Nat; assume
+      A31:i > 0 & i < len z;
+      then A32: 0+1 <= i & i <= k+1 by A26,NAT_1:38;
+      then A33:i in Seg(k+1) by FINSEQ_1:3;
+      then A34:z.i = f.(abs(i-1)) by A27;
+        0+1 < i+1 by A31,REAL_1:53;
+      then A35:1 <= i+1 & i+1 <= k+1 by A26,A31,NAT_1:38;
+      then A36:i+1 in Seg(k+1) by FINSEQ_1:3;
+        1-1 <= i-1 by A32,REAL_1:49;
+      then A37:0 <= (i-1)*1;
+A38:   i in dom z by A26,A33,FINSEQ_1:def 3;
+      thus z/.(i+1) = z.(i+1) by A26,A35,FINSEQ_4:24
+                   .= f.(abs(i+1-1)) by A27,A36
+                   .= f.(abs(i-1+1)) by XCMPLX_1:29
+                   .= f.(abs(i-1)+abs(1)) by A37,ABSVALUE:24
+                   .= f.(abs(i-1)+1) by ABSVALUE:def 1
+                   .= F(f.(abs(i-1))) by A5
+                   .= F(z/.i) by A34,A38,FINSEQ_4:def 4;
+    end;
+  thus F(z/.len z)=z/.len z
+    proof
+      A39:f.k c= f.(k+1) by A14;
+        k+1 in NAT;
+      then k+1 in dom f by FUNCT_2:def 1;
+      then f.(k+1) in rng f by FUNCT_1:def 5;
+      then A40: f.(k+1) c= f.k by A20,A22;
+A41:   len z = 0 or len z in Seg(len z) by FINSEQ_1:5;
+then A42:   len z in dom z by A26,FINSEQ_1:def 3;
+      A43:z.len z = f.(abs(k+1-1)) by A26,A27,A41
+                        .= f.(abs(k+(1-1))) by XCMPLX_1:29
+                        .= f.k by A25,ABSVALUE:def 1;
+      hence F(z/.len z) = F(f.k) by A42,FINSEQ_4:def 4
+                         .= f.(k+1) by A5
+                         .= z.len z by A39,A40,A43,XBOOLE_0:def 10
+                         .= z/.len z by A42,FINSEQ_4:def 4;
+    end;
+  let i, j be Nat; assume A44:0 < i & i < j & j <= len z;
+  then A45: 0+1 <= i by NAT_1:38;
+  A46:i <= len z by A44,AXIOMS:22;
+  A47:i < len z by A44,AXIOMS:22;
+  reconsider l = i-1 as Nat by A45,INT_1:18;
+  A48:i in Seg(k+1) by A26,A45,A46,FINSEQ_1:3;
+A49:1-1 <= i-1 by A45,REAL_1:49;
+  A50:z/.i = z.i by A45,A46,FINSEQ_4:24
+            .= f.(abs(i-1)) by A27,A48
+            .= f.l by A49,ABSVALUE:def 1;
+  hence z/.i c= A() by A9;
+  A51:for i being Nat st 1 <= i & i < len z holds z/.i c= z/.(i+1)
+    proof
+      let i be Nat; assume
+      A52:1 <= i & i < len z;
+      then A53:i in Seg(k+1) by A26,FINSEQ_1:3;
+A54:  1-1 <= i-1 by A52,REAL_1:49;
+      A55:z/.i = z.i by A52,FINSEQ_4:24
+                  .= f.(abs(i-1)) by A27,A53
+                  .= f.(i-1) by A54,ABSVALUE:def 1;
+      A56:1 <= i+1 & i+1 <= len z by A52,NAT_1:38;
+      then A57:i+1 in Seg(k+1) by A26,FINSEQ_1:3;
+A58:  1-1 <= i+1-1 by A56,REAL_1:49;
+      A59:z/.(i+1) = z.(i+1) by A56,FINSEQ_4:24
+                    .= f.(abs(i+1-1)) by A27,A57
+                    .= f.(i+1-1) by A58,ABSVALUE:def 1
+                    .= f.(i-1+1) by XCMPLX_1:29;
+        i-1 is Nat by A54,INT_1:16;
+      hence z/.i c= z/.(i+1) by A14,A55,A59;
+    end;
+  hence z/.i c= z/.j by A44,A45,Th1;
+  assume A60: z/.i = z/.j;
+    i <= i+1 & i+1 <= j by A44,NAT_1:38;
+  then A61:z/.i = z/.(i+1) by A44,A45,A51,A60,Th2
+             .= F(z/.i) by A30,A44,A47;
+  defpred P[Nat] means i+$1 <= len z implies z/.i = z/.(i+$1);
+  A62:P[0];
+  A63:now
+      let n be Nat such that A64:P[n];
+      thus P[n+1]
+      proof
+      A65:i+n > 0 by A44,NAT_1:29;
+      assume i+(n+1) <= len z;
+      then i+n+1 <= len z by XCMPLX_1:1;
+      then i+n < len z by NAT_1:38;
+      hence z/.i = z/.(i+n+1) by A30,A61,A64,A65
+                   .= z/.(i+(n+1)) by XCMPLX_1:1;
+      end;
+  end;
+  A66:for n being Nat holds P[n] from NAT_1:sch 1(A62,A63);
+  consider n0 being Nat such that A67:i+n0 = len z by A46,NAT_1:28;
+A68:  k+1 in dom z by A24,A26,FINSEQ_1:def 3;
+    f.l = z/.(k+1) by A26,A50,A66,A67
+           .= z.(k+1) by A68,FINSEQ_4:def 4
+           .= f.(abs(k+1-1)) by A24,A27
+           .= f.(abs(k)) by XCMPLX_1:26
+           .= m by A22,A25,ABSVALUE:def 1;
+  then k <= l by A23;
+  then len z <= l + 1 by A26,AXIOMS:24;
+  then len z <= i by XCMPLX_1:27;
+  hence contradiction by A44,AXIOMS:22;
+end;
 
 definition
   struct ( 1-sorted ) FT_Space_Str
@@ -72,9 +250,17 @@ definition
             Nbd -> Function of the carrier, bool the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty strict FT_Space_Str;
+ existence
+  proof consider D being non empty set,f being Function of D, bool D;
+    take FT_Space_Str(#D,f#);
+    thus the carrier of FT_Space_Str(#D,f#) is non empty;
+    thus thesis;
+  end;
 end;
+
 
 reserve FT for non empty FT_Space_Str;
 reserve x, y, z for Element of FT;
@@ -89,12 +275,14 @@ definition
    ( the Nbd of FT ).x;
 end;
 
+
 definition
   let x be set,
       y be Subset of {x};
 
   redefine func x.-->y -> Function of {x}, bool {x};
 end;
+
 
 definition
   func FT{0} -> strict FT_Space_Str equals
@@ -103,9 +291,15 @@ definition
    FT_Space_Str (#{0},0.-->[#]{0}#);
 end;
 
-definition
+
+registration
   cluster FT{0} -> non empty;
+  coherence
+  proof
+   thus the carrier of FT{0} is non empty by Def2;
+  end;
 end;
+
 
 definition let IT be non empty FT_Space_Str;
   attr IT is filled means
@@ -113,6 +307,7 @@ definition let IT be non empty FT_Space_Str;
 
   for x being Element of IT holds x in U_FT x;
 end;
+
 
 canceled;
 
@@ -122,9 +317,11 @@ theorem :: FIN_TOPO:7
 theorem :: FIN_TOPO:8
   FT{0} is finite;
 
-definition
+registration
   cluster finite filled strict (non empty FT_Space_Str);
+  existence by Th7,Th8;
 end;
+
 
 definition
   let T be 1-sorted,
@@ -135,6 +332,7 @@ definition
 :: FIN_TOPO:def 5
     the carrier of T c= union F;
 end;
+
 
 theorem :: FIN_TOPO:9
     for FT being filled (non empty FT_Space_Str) holds
@@ -153,6 +351,7 @@ definition
    {x:U_FT x meets A & U_FT x meets A` };
 end;
 
+
 theorem :: FIN_TOPO:10
   x in A^delta iff U_FT x meets A & U_FT x meets A`;
 
@@ -168,6 +367,7 @@ definition let FT;
 
    A` /\ (A^delta);
 end;
+
 
 theorem :: FIN_TOPO:11
     A^delta = A^deltai \/ A^deltao;
@@ -189,6 +389,7 @@ definition let FT;
    {x:x in A & U_FT x \ {x} misses A };
 end;
 
+
 definition
   let FT;
   let A be Subset of FT;
@@ -204,6 +405,7 @@ definition
    {x:ex y st y in A & x in U_FT y};
 end;
 
+
 definition let IT be non empty FT_Space_Str;
   attr IT is symmetric means
 :: FIN_TOPO:def 14
@@ -211,6 +413,7 @@ definition let IT be non empty FT_Space_Str;
   for x, y being Element of IT holds
     y in U_FT x implies x in U_FT y;
 end;
+
 
 theorem :: FIN_TOPO:12
   x in A^i iff U_FT x c= A;
@@ -248,6 +451,7 @@ definition let FT;
     IT = B \/ C & B <> {} & C <> {} & B misses C holds B^b meets C;
 end;
 
+
 definition let FT; let A be Subset of FT;
   func A^fb -> Subset of FT equals
 :: FIN_TOPO:def 18
@@ -257,6 +461,7 @@ definition let FT; let A be Subset of FT;
 :: FIN_TOPO:def 19
      union{F:A c= F & F is open};
 end;
+
 
 theorem :: FIN_TOPO:18
   for FT being filled (non empty FT_Space_Str),

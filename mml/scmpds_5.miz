@@ -50,7 +50,7 @@ A1: s = Following s;
   defpred X[Nat] means (Computation s).$1 = s;
 A2: X[0] by AMI_1:def 19;
 A3: for n st X[n] holds X[n+1] by A1,AMI_1:def 19;
-   thus for n holds X[n] from Ind(A2, A3);
+   thus for n holds X[n] from NAT_1:sch 1(A2, A3);
 end;
 
 theorem Th2:
@@ -158,8 +158,10 @@ A3:    x=inspos n by A2,SCMPDS_3:32;
      per cases by A4;
      suppose x=inspos 0;
        hence x in dom pi by A1,SCMPDS_4:1;
+     end;
      suppose x=inspos 1;
        hence x in dom pi by A1,SCMPDS_4:1;
+end;
 end;
 
 theorem
@@ -418,7 +420,7 @@ then A16:   IC Cs.m in dom I by A12,Th3;
     hence (Computation s).(m+1),(Computation(s+*(I ';' J))).(m+1)
           equal_outside IL by A6,A7,A9,A10,NAT_1:38,SCMPDS_4:15;
    end;
- thus for m holds X[m] from Ind(A4,A5);
+ thus for m holds X[m] from NAT_1:sch 1(A4,A5);
 end;
 
 theorem Th24:
@@ -481,13 +483,15 @@ definition let i be Instruction of SCMPDS;
 :Def1:   i <> halt SCMPDS;
 end;
 
+
 definition
  let i be Instruction of SCMPDS;
  attr i is parahalting means
 :Def2:   Load i is parahalting;
 end;
 
-definition
+
+registration
  cluster No-StopCode shiftable parahalting Instruction of SCMPDS;
  existence proof
   take i=DataLoc(0,0):=0;
@@ -496,6 +500,7 @@ A1:InsCode i=2 by SCMPDS_2:23;
    hence thesis by A1,Def1,Def2,Lm1;
  end;
 end;
+
 
 theorem
      k1 <>0 implies goto k1 is No-StopCode
@@ -507,7 +512,7 @@ proof
   hence contradiction by A1,SCMPDS_2:85;
 end;
 
-definition
+registration
  let a;
  cluster return a -> No-StopCode;
  coherence
@@ -519,7 +524,8 @@ A1: InsCode i=1 by SCMPDS_2:22;
  end;
 end;
 
-definition
+
+registration
  let a,k1;
  cluster a := k1 -> No-StopCode;
  coherence
@@ -540,7 +546,8 @@ A2: InsCode i=3 by SCMPDS_2:24;
  end;
 end;
 
-definition
+
+registration
  let a,k1,k2;
  cluster (a,k1)<>0_goto k2 -> No-StopCode;
  coherence
@@ -579,7 +586,8 @@ A4: InsCode i=7 by SCMPDS_2:28;
  end;
 end;
 
-definition
+
+registration
  let a,k1,k2;
  cluster AddTo(a,k1,k2) -> No-StopCode;
  coherence
@@ -591,7 +599,8 @@ A1: InsCode i=8 by SCMPDS_2:29;
  end;
 end;
 
-definition
+
+registration
  let a,b,k1,k2;
 cluster AddTo(a,k1,b,k2) -> No-StopCode;
  coherence
@@ -639,7 +648,8 @@ A5: InsCode i=13 by SCMPDS_2:34;
  end;
 end;
 
-definition
+
+registration
  cluster halt SCMPDS -> parahalting;
  coherence proof
       SCMPDS-Stop=Load halt SCMPDS by SCMPDS_3:def 6,SCMPDS_4:def 1;
@@ -647,11 +657,13 @@ definition
  end;
 end;
 
-definition
+
+registration
  let i be parahalting Instruction of SCMPDS;
  cluster Load i -> parahalting;
  coherence by Def2;
 end;
+
 
 Lm2:
   (for s holds Exec(i,s).IC SCMPDS = Next IC s)
@@ -689,7 +701,7 @@ A9: IC Exec(i, t) = Exec(i,t).IC SCMPDS by AMI_1:def 15
      .= halt SCMPDS by A8,A9,AMI_1:def 13;
 end;
 
-definition
+registration
  let a,k1;
  cluster a := k1 -> parahalting;
  coherence
@@ -701,7 +713,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let a,k1,k2;
  cluster (a,k1) := k2 -> parahalting;
  coherence
@@ -722,7 +735,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let a,b,k1,k2;
  cluster AddTo(a,k1,b,k2) -> parahalting;
  coherence
@@ -770,6 +784,7 @@ definition
  end;
 end;
 
+
 theorem Th26:
   InsCode i =1 implies i is not parahalting
 proof
@@ -813,7 +828,8 @@ definition let IT be FinPartState of SCMPDS;
       st x in dom IT holds IT.x <> halt SCMPDS;
 end;
 
-definition
+
+registration
  cluster parahalting shiftable No-StopCode Program-block;
  existence
  proof
@@ -831,7 +847,8 @@ definition
   end;
 end;
 
-definition
+
+registration
  let I,J be No-StopCode Program-block;
  cluster I ';' J -> No-StopCode;
  coherence
@@ -847,6 +864,7 @@ then A3:    dom IJ = dom I \/ D by A1,FUNCT_4:def 1;
        suppose A4:x in dom I;
            then I.x=IJ.x by SCMPDS_4:37;
          hence IJ.x<>halt SCMPDS by A4,Def3;
+       end;
        suppose x in D;
         then consider n such that
 A5:      x = inspos(n+card I) and
@@ -855,11 +873,13 @@ A6:      inspos n in dom J;
          .=IJ.x by A5,SCMPDS_3:def 3;
          hence IJ.x<>halt SCMPDS by A6,Def3;
    end;
+   end;
    hence thesis by Def3;
  end;
 end;
 
-definition
+
+registration
  let i be No-StopCode Instruction of SCMPDS;
  cluster Load i -> No-StopCode;
  coherence
@@ -875,7 +895,8 @@ definition
   end;
 end;
 
-definition
+
+registration
   let i be No-StopCode Instruction of SCMPDS,
       J be No-StopCode Program-block;
  cluster i ';' J -> No-StopCode;
@@ -886,7 +907,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let I be No-StopCode Program-block,
      j be No-StopCode Instruction of SCMPDS;
  cluster I ';' j -> No-StopCode;
@@ -897,7 +919,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let i,j be No-StopCode Instruction of SCMPDS;
  cluster i ';' j -> No-StopCode;
  coherence
@@ -906,6 +929,7 @@ definition
      hence thesis;
  end;
 end;
+
 
 theorem Th27:   ::Th37
  for I being parahalting No-StopCode Program-block
@@ -1041,7 +1065,7 @@ AXIOMS:22,SCMPDS_4:15;
       end;
       hence P[k+1];
    end;
-     for k be Nat holds P[k] from Ind(A7,A9);
+     for k be Nat holds P[k] from NAT_1:sch 1(A7,A9);
    hence thesis by A2;
 end;
 
@@ -1109,8 +1133,10 @@ A9: stop I = I ';' SCMPDS-Stop by SCMPDS_4:def 7;
         .=s.IC s1 by A3,A4,A8,A11,GRFUNC_1:8
         .=s1.IC s1 by AMI_1:54
         .=CurInstr s1 by AMI_1:def 17;
+    end;
     case n = card I;
       hence IC s1= inspos card I by A4,A8;
+    end;
     end;
     hence thesis;
 end;
@@ -1194,7 +1220,7 @@ then A19:    IC Cs1.m in dom (I ';' J) by A17,FUNCT_4:13;
     hence Cs1.(m+1),Cs2.(m+1) equal_outside IL by A9,A10,A12,A13,NAT_1:38,
 SCMPDS_4:15;
    end;
-     for k being Nat holds X[k] from Ind(A7, A8);
+     for k being Nat holds X[k] from NAT_1:sch 1(A7, A8);
   hence thesis by A1;
 end;
 
@@ -1212,7 +1238,7 @@ proof
     hence thesis by A1,Th33;
 end;
 
-definition
+registration
  let I be parahalting Program-block,
      J be parahalting shiftable Program-block;
  cluster I ';' J -> parahalting;
@@ -1243,9 +1269,11 @@ A5:  now let x be set;
               dom spJ c= A by AMI_3:def 13;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A7,A8,SCMPDS_4:22
 ;
+         end;
          suppose x = IC SCMPDS;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A6,SCMPDS_3:6,
 XBOOLE_0:def 3;
+      end;
       end;
 A9:   IsJ c= s3 by FUNCT_4:26;
       then dom IsJ c= dom s3 by GRFUNC_1:8;
@@ -1266,6 +1294,7 @@ A13:   s3 is halting by A9,AMI_1:def 26;
      suppose A15: CurInstr s4 = halt SCMPDS;
        take m1;
        thus CurInstr s4 = halt SCMPDS by A15;
+     end;
      suppose A16:IC s4 = inspos card I;
         reconsider m = m1 + m3 as Nat;
           sIJ = I ';' J ';' SCMPDS-Stop by SCMPDS_4:def 7
@@ -1282,9 +1311,11 @@ A16,A17,SCMPDS_4:84;
         by AMI_1:51;
        hence CurInstr (Computation s).m = halt SCMPDS by A13,SCM_1:def 2;
   end;
+  end;
 end;
 
-definition
+
+registration
  let i be parahalting Instruction of SCMPDS,
      J be parahalting shiftable Program-block;
  cluster i ';' J -> parahalting;
@@ -1294,7 +1325,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let I be parahalting Program-block,
      j be parahalting shiftable Instruction of SCMPDS;
  cluster I ';' j -> parahalting;
@@ -1304,7 +1336,8 @@ definition
  end;
 end;
 
-definition
+
+registration
  let i be parahalting Instruction of SCMPDS,
      j be parahalting shiftable Instruction of SCMPDS;
  cluster i ';' j -> parahalting;
@@ -1313,6 +1346,7 @@ definition
   hence thesis;
  end;
 end;
+
 
 theorem Th35:    :: SF4_28
  for s,s1 being State of SCMPDS, J being parahalting shiftable Program-block
@@ -1378,6 +1412,7 @@ A16:   IC Exec(i, ss)
      end;
      hence thesis by A2,A7,A16,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 2;
     then consider a,k1 such that
 A17:   i = a := k1 by SCMPDS_2:37;
@@ -1393,6 +1428,7 @@ A20:     a = b;
           = k1 by A17,SCMPDS_2:57
          .= Exec(i,s).b by A17,A20,SCMPDS_2:57
          .= (Exec(i, s) +* Start-At IEn).b by SCMPDS_3:14;
+     end;
      suppose
 A21:       a <> b;
           hence Exec(i, ss).b
@@ -1401,8 +1437,10 @@ A21:       a <> b;
          .= Exec(i, s).b by A17,A21,SCMPDS_2:57
          .= (Exec(i, s) +* Start-At IEn).b by SCMPDS_3:14;
      end;
+     end;
      hence thesis by A2,A7,A19,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 4;
     then consider a,k1,k2 such that
 A22:   i = (a,k1)<>0_goto k2 & n1+k2 >= 0 by A12,SCMPDS_4:def 11;
@@ -1417,6 +1455,7 @@ A23:  now
              .=ICplusConst(ss,k2) by A22,A25,SCMPDS_2:67
              .=IEn by A6,A8,A22,A26,SCMPDS_4:82
              .= IC (Exec(i, s) +* Start-At IEn) by AMI_5:79;
+        end;
         suppose A27: s.DataLoc(s.a,k1) = 0;
              then ss.DataLoc(s.a,k1) = 0 by SCMPDS_3:14;
          then A28: ss.DataLoc(ss.a,k1) = 0 by SCMPDS_3:14;
@@ -1424,6 +1463,7 @@ A23:  now
              .= Nl by A22,A27,SCMPDS_2:67;
          thus IC Exec(i,ss) = Exec(i, ss).IC SCMPDS by AMI_1:def 15
             .= IC (Exec(i, s) +* Start-At IEn) by A5,A22,A28,A29,SCMPDS_2:67;
+     end;
      end;
     now let b;
      thus Exec(i, ss).b= ss.b by A22,SCMPDS_2:67
@@ -1433,6 +1473,7 @@ A23:  now
      end;
      hence thesis by A2,A7,A23,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 5;
     then consider a,k1,k2 such that
 A30:   i = (a,k1)<=0_goto k2 & n1+k2 >= 0 by A12,SCMPDS_4:def 11;
@@ -1447,6 +1488,7 @@ A31:  now
              .=ICplusConst(ss,k2) by A30,A33,SCMPDS_2:68
              .=IEn by A6,A8,A30,A34,SCMPDS_4:82
              .= IC (Exec(i, s) +* Start-At IEn) by AMI_5:79;
+        end;
         suppose A35: s.DataLoc(s.a,k1) > 0;
              then ss.DataLoc(s.a,k1) > 0 by SCMPDS_3:14;
          then A36: ss.DataLoc(ss.a,k1) > 0 by SCMPDS_3:14;
@@ -1454,6 +1496,7 @@ A31:  now
              .= Nl by A30,A35,SCMPDS_2:68;
          thus IC Exec(i,ss) = Exec(i, ss).IC SCMPDS by AMI_1:def 15
             .= IC (Exec(i, s) +* Start-At IEn) by A5,A30,A36,A37,SCMPDS_2:68;
+     end;
      end;
     now let b;
      thus Exec(i, ss).b= ss.b by A30,SCMPDS_2:68
@@ -1463,6 +1506,7 @@ A31:  now
      end;
      hence thesis by A2,A7,A31,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 6;
     then consider a,k1,k2 such that
 A38:   i = (a,k1)>=0_goto k2 & n1+k2 >= 0 by A12,SCMPDS_4:def 11;
@@ -1477,6 +1521,7 @@ A39:  now
              .=ICplusConst(ss,k2) by A38,A41,SCMPDS_2:69
              .=IEn by A6,A8,A38,A42,SCMPDS_4:82
              .= IC (Exec(i, s) +* Start-At IEn) by AMI_5:79;
+        end;
         suppose A43: s.DataLoc(s.a,k1) < 0;
              then ss.DataLoc(s.a,k1) < 0 by SCMPDS_3:14;
          then A44: ss.DataLoc(ss.a,k1) < 0 by SCMPDS_3:14;
@@ -1484,6 +1529,7 @@ A39:  now
              .= Nl by A38,A43,SCMPDS_2:69;
          thus IC Exec(i,ss) = Exec(i, ss).IC SCMPDS by AMI_1:def 15
             .= IC (Exec(i, s) +* Start-At IEn) by A5,A38,A44,A45,SCMPDS_2:69;
+     end;
      end;
     now let b;
      thus Exec(i, ss).b= ss.b by A38,SCMPDS_2:69
@@ -1493,6 +1539,7 @@ A39:  now
      end;
      hence thesis by A2,A7,A39,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 7;
     then consider a,k1,k2 such that
 A46:  i = (a,k1) := k2 by SCMPDS_2:42;
@@ -1509,6 +1556,7 @@ then A50:       DataLoc(s.a,k1) = b by SCMPDS_3:14;
           = k2 by A46,A49,SCMPDS_2:58
          .= Exec(i,s).b by A46,A50,SCMPDS_2:58
          .= (Exec(i, s) +* Start-At IEn).b by SCMPDS_3:14;
+     end;
      suppose
 A51:       DataLoc(ss.a,k1) <> b;
 then A52:       DataLoc(s.a,k1) <> b by SCMPDS_3:14;
@@ -1518,9 +1566,11 @@ then A52:       DataLoc(s.a,k1) <> b by SCMPDS_3:14;
          .= Exec(i, s).b by A46,A52,SCMPDS_2:58
          .= (Exec(i, s) +* Start-At IEn).b by SCMPDS_3:14;
      end;
+     end;
      hence thesis by A2,A7,A48,SCMPDS_2:54;
 
      thus thesis;
+    end;
     suppose InsCode i = 8;
       then consider a,k1,k2 such that
 A53:   i = AddTo(a,k1,k2) by SCMPDS_2:43;
@@ -1538,6 +1588,7 @@ then A57:       DataLoc(s.a,k1) = b by SCMPDS_3:14;
          .= s.b + k2 by SCMPDS_3:14
          .= Exec(i, s).b by A53,A57,SCMPDS_2:60
          .= (Exec(i, s) +* Start-At IEn).b by SCMPDS_3:14;
+     end;
      suppose
 A58:       DataLoc(ss.a,k1) <> b;
 then A59:       DataLoc(s.a,k1) <> b by SCMPDS_3:14;
@@ -1547,8 +1598,10 @@ then A59:       DataLoc(s.a,k1) <> b by SCMPDS_3:14;
          .= Exec(i, s).b by A53,A59,SCMPDS_2:60
          .= (Exec(i, s) +* Start-At IEn).b by SCMPDS_3:14;
      end;
+     end;
      hence thesis by A2,A7,A55,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 9;
     then consider a,b,k1,k2 such that
 A60:  i = AddTo(a,k1,b,k2) by SCMPDS_2:44;
@@ -1569,6 +1622,7 @@ A65:       ss.DataLoc(ss.a,k1) =s.DataLoc(ss.a,k1) by SCMPDS_3:14
           = s.DataLoc(s.a,k1) + s.DataLoc(s.b,k2) by A60,A63,A65,SCMPDS_2:61
          .= Exec(i, s).c by A60,A64,SCMPDS_2:61
          .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
+       end;
        suppose
 A66:       DataLoc(ss.a,k1) <> c;
 then A67:       DataLoc(s.a,k1) <> c by SCMPDS_3:14;
@@ -1578,8 +1632,10 @@ then A67:       DataLoc(s.a,k1) <> c by SCMPDS_3:14;
          .= Exec(i, s).c by A60,A67,SCMPDS_2:61
          .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
      end;
+     end;
      hence thesis by A2,A7,A62,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 10;
     then consider a,b,k1,k2 such that
 A68:  i = SubFrom(a,k1,b,k2) by SCMPDS_2:45;
@@ -1600,6 +1656,7 @@ A73:       ss.DataLoc(ss.a,k1) =s.DataLoc(ss.a,k1) by SCMPDS_3:14
           = s.DataLoc(s.a,k1) - s.DataLoc(s.b,k2) by A68,A71,A73,SCMPDS_2:62
          .= Exec(i, s).c by A68,A72,SCMPDS_2:62
          .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
+       end;
        suppose
 A74:       DataLoc(ss.a,k1) <> c;
 then A75:       DataLoc(s.a,k1) <> c by SCMPDS_3:14;
@@ -1609,8 +1666,10 @@ then A75:       DataLoc(s.a,k1) <> c by SCMPDS_3:14;
          .= Exec(i, s).c by A68,A75,SCMPDS_2:62
          .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
      end;
+     end;
      hence thesis by A2,A7,A70,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 11;
     then consider a,b,k1,k2 such that
 A76:   i = MultBy(a,k1,b,k2) by SCMPDS_2:46;
@@ -1631,6 +1690,7 @@ A81:       ss.DataLoc(ss.a,k1) =s.DataLoc(ss.a,k1) by SCMPDS_3:14
           = s.DataLoc(s.a,k1) * s.DataLoc(s.b,k2) by A76,A79,A81,SCMPDS_2:63
          .= Exec(i, s).c by A76,A80,SCMPDS_2:63
          .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
+       end;
        suppose
 A82:       DataLoc(ss.a,k1) <> c;
 then A83:       DataLoc(s.a,k1) <> c by SCMPDS_3:14;
@@ -1640,8 +1700,10 @@ then A83:       DataLoc(s.a,k1) <> c by SCMPDS_3:14;
          .= Exec(i, s).c by A76,A83,SCMPDS_2:63
          .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
      end;
+     end;
      hence thesis by A2,A7,A78,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 12;
      then consider a,b,k1,k2 such that
 A84:  i = Divide(a,k1,b,k2) by SCMPDS_2:47;
@@ -1662,6 +1724,7 @@ then A90:       DataLoc(s.b,k2) = c by SCMPDS_3:14;
 A87,A88,A89,SCMPDS_2:64
          .= Exec(i, s).c by A84,A90,SCMPDS_2:64
          .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
+         end;
          suppose
 A91:       DataLoc(ss.b,k2) <> c;
 then A92:       DataLoc(s.b,k2) <> c by SCMPDS_3:14;
@@ -1674,6 +1737,7 @@ then A92:       DataLoc(s.b,k2) <> c by SCMPDS_3:14;
                 .=s.c by SCMPDS_3:14
                 .=Exec(i,s).c by A84,A92,A94,SCMPDS_2:64
                 .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
+             end;
              suppose
              A95: DataLoc(ss.a,k1) = c;
              then A96: DataLoc(s.a,k1) = c by SCMPDS_3:14;
@@ -1682,9 +1746,12 @@ A84,A87,A88,A91,A95,SCMPDS_2:64
              .= Exec(i,s).c by A84,A92,A96,SCMPDS_2:64
              .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
            end;
+           end;
+     end;
      end;
      hence thesis by A2,A7,A86,SCMPDS_2:54;
 
+    end;
     suppose InsCode i = 13;
     then consider a,b,k1,k2 such that
 A97:  i = (a,k1):=(b,k2) by SCMPDS_2:48;
@@ -1702,6 +1769,7 @@ then A101:       DataLoc(s.a,k1) = c by SCMPDS_3:14;
           .=s.DataLoc(s.b,k2) by SCMPDS_3:14
           .=Exec(i,s).c by A97,A101,SCMPDS_2:59
           .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
+         end;
          suppose
 A102:       DataLoc(ss.a,k1) <> c;
 then A103:       DataLoc(s.a,k1) <> c by SCMPDS_3:14;
@@ -1710,7 +1778,9 @@ then A103:       DataLoc(s.a,k1) <> c by SCMPDS_3:14;
           .=Exec(i,s).c by A97,A103,SCMPDS_2:59
           .= (Exec(i, s) +* Start-At IEn).c by SCMPDS_3:14;
      end;
+     end;
      hence thesis by A2,A7,A99,SCMPDS_2:54;
+end;
 end;
 
 begin :: Computation of two consecutive program blocks
@@ -1842,7 +1912,7 @@ then A22: IC CRSk1=IC (Following(CRk) +* Start-At (IC Following(CRk) + card I))
       (Computation sIsIJ).(LifeSpan sIsI+k1)
     equal_outside IL by A22,SCMPDS_4:11;
    end;
-   for k being Nat holds X[k] from Ind(A10,A11);
+   for k being Nat holds X[k] from NAT_1:sch 1(A10,A11);
   hence thesis;
 end;
 
@@ -1883,9 +1953,11 @@ A5:  now let x be set;
               dom spJ c= A by AMI_3:def 13;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A7,A8,SCMPDS_4:22
 ;
+         end;
          suppose x = IC SCMPDS;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A6,SCMPDS_3:6,
 XBOOLE_0:def 3;
+     end;
      end;
 A9:   IsJ c= s3 by FUNCT_4:26;
       then dom IsJ c= dom s3 by GRFUNC_1:8;
@@ -1936,10 +2008,12 @@ A22:    k < m;
       per cases;
       suppose k < m1;
        hence CurInstr (Computation s).k <> halt SCMPDS by A1,A14,Th32;
+      end;
       suppose m1 <= k;
        then consider kk being Nat such that
 A23:         m1 + kk = k by NAT_1:28;
        thus CurInstr (Computation s).k <> halt SCMPDS by A18,A22,A23;
+     end;
      end;
 then A24:  for k being Nat st CurInstr (Computation s).k = halt SCMPDS
      holds m <= k;
@@ -2134,6 +2208,7 @@ A33:   dom Start-At l = {IC SCMPDS} by AMI_3:34;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At
          (IC IExec(J,IExec(I,s)) + card I)).x by A36,FUNCT_4:12;
+      end;
       suppose A37: x = IC SCMPDS;
        then x in {IC SCMPDS} by TARSKI:def 1;
     then A38: x in dom Start-At l by AMI_3:34;
@@ -2142,6 +2217,7 @@ A33:   dom Start-At l = {IC SCMPDS} by AMI_3:34;
        .= (Start-At l).IC SCMPDS by AMI_3:50
        .= (IExec(J,IExec(I,s)) +* Start-At
            (IC IExec(J,IExec(I,s)) + card I)).x by A37,A38,FUNCT_4:14;
+      end;
       suppose A39: x is Instruction-Location of SCMPDS;
          IExec(I ';' J,s) | A = ps by A13,SCMPDS_4:25
        .= IExec(J,IExec(I,s)) | A by A14,SCMPDS_4:25;
@@ -2151,6 +2227,7 @@ A33:   dom Start-At l = {IC SCMPDS} by AMI_3:34;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At
          (IC IExec(J,IExec(I,s)) + card I)).x by A40,FUNCT_4:12;
+      end;
       end;
       hence thesis by A32,FUNCT_1:9;
     end;
@@ -2178,6 +2255,7 @@ definition
 :Def4:   s +* Start-At(inspos 0);
  coherence;
 end;
+
 
 theorem Th40:   ::Th3c
   IC Initialized s = inspos 0 & (Initialized s).a = s.a &
@@ -2216,8 +2294,10 @@ A6:   x in X & x in Y by XBOOLE_0:3;
       per cases by A7,TARSKI:def 1;
       suppose x in SCM-Data-Loc;
         hence contradiction by A6,SCMPDS_2:10,XBOOLE_0:3;
+      end;
       suppose x = IC SCMPDS;
         hence contradiction by A6,AMI_1:48;
+     end;
      end;
 then A8: dom s1 \ Y = X by A1,A3,A4,SCMPDS_3:5,XBOOLE_1:72;
   dom s2 \ Y = X by A2,A3,A4,A5,SCMPDS_3:5,XBOOLE_1:72;
@@ -2246,6 +2326,7 @@ A3:  i = goto k1 by SCMPDS_2:35;
      hence Exec (i, s1) | SCM-Data-Loc = Exec (i, s2) | SCM-Data-Loc
      by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 1;
     then consider a such that
 A4:  i = return a by SCMPDS_2:36;
@@ -2255,13 +2336,16 @@ A4:  i = return a by SCMPDS_2:36;
           hence Exec(i, s1).b= s1.DataLoc(s1.a,RetSP) by A4,SCMPDS_2:70
           .=s2.DataLoc(s2.a,RetSP) by A1,SCMPDS_3:3
           .=Exec(i,s2).b by A4,A5,SCMPDS_2:70;
+         end;
          suppose A6:a<>b;
           hence Exec(i, s1).b = s1.b by A4,SCMPDS_2:70
           .=s2.b by A1,SCMPDS_4:23
           .=Exec(i,s2).b by A4,A6,SCMPDS_2:70;
       end;
+      end;
       hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 2;
     then consider a,k1 such that
 A7:   i = a := k1 by SCMPDS_2:37;
@@ -2270,13 +2354,16 @@ A7:   i = a := k1 by SCMPDS_2:37;
          suppose A8:a=b;
           hence Exec(i, s1).b= k1 by A7,SCMPDS_2:57
           .=Exec(i,s2).b by A7,A8,SCMPDS_2:57;
+         end;
          suppose A9:a<>b;
           hence Exec(i,s1).b = s1.b by A7,SCMPDS_2:57
           .=s2.b by A1,SCMPDS_4:23
           .=Exec(i,s2).b by A7,A9,SCMPDS_2:57;
      end;
+     end;
       hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 4;
     then consider a,k1,k2 such that
 A10:   i = (a,k1)<>0_goto k2 by SCMPDS_2:39;
@@ -2287,6 +2374,7 @@ A10:   i = (a,k1)<>0_goto k2 by SCMPDS_2:39;
      end;
      hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 5;
     then consider a,k1,k2 such that
 A11:   i = (a,k1)<=0_goto k2 by SCMPDS_2:40;
@@ -2297,6 +2385,7 @@ A11:   i = (a,k1)<=0_goto k2 by SCMPDS_2:40;
      end;
      hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 6;
     then consider a,k1,k2 such that
 A12:   i = (a,k1)>=0_goto k2 by SCMPDS_2:41;
@@ -2307,6 +2396,7 @@ A12:   i = (a,k1)>=0_goto k2 by SCMPDS_2:41;
      end;
      hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 7;
     then consider a,k1,k2 such that
 A13:   i = (a,k1) := k2 by SCMPDS_2:42;
@@ -2316,14 +2406,17 @@ A13:   i = (a,k1) := k2 by SCMPDS_2:42;
          then A15: DataLoc(s2.a,k1)=b by A1,SCMPDS_4:23;
           thus Exec(i, s1).b= k2 by A13,A14,SCMPDS_2:58
           .=Exec(i,s2).b by A13,A15,SCMPDS_2:58;
+         end;
          suppose A16:DataLoc(s1.a,k1)<>b;
          then A17: DataLoc(s2.a,k1)<>b by A1,SCMPDS_4:23;
           thus Exec(i,s1).b = s1.b by A13,A16,SCMPDS_2:58
           .=s2.b by A1,SCMPDS_4:23
           .=Exec(i,s2).b by A13,A17,SCMPDS_2:58;
      end;
+     end;
       hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 8;
     then consider a,k1,k2 such that
 A18:   i = AddTo(a,k1,k2) by SCMPDS_2:43;
@@ -2334,14 +2427,17 @@ A18:   i = AddTo(a,k1,k2) by SCMPDS_2:43;
           thus Exec(i, s1).b= s1.DataLoc(s1.a,k1)+k2 by A18,A19,SCMPDS_2:60
           .= s2.DataLoc(s2.a,k1)+k2 by A1,SCMPDS_3:3
           .=Exec(i,s2).b by A18,A20,SCMPDS_2:60;
+         end;
          suppose A21:DataLoc(s1.a,k1)<>b;
          then A22: DataLoc(s2.a,k1)<>b by A1,SCMPDS_4:23;
           thus Exec(i,s1).b = s1.b by A18,A21,SCMPDS_2:60
           .=s2.b by A1,SCMPDS_4:23
           .=Exec(i,s2).b by A18,A22,SCMPDS_2:60;
      end;
+     end;
       hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 9;
     then consider a,b,k1,k2 such that
 A23:   i = AddTo(a,k1,b,k2) by SCMPDS_2:44;
@@ -2354,14 +2450,17 @@ A23:   i = AddTo(a,k1,b,k2) by SCMPDS_2:44;
           .= s2.DataLoc(s2.a,k1)+s1.DataLoc(s1.b,k2) by A1,SCMPDS_3:3
           .= s2.DataLoc(s2.a,k1)+s2.DataLoc(s2.b,k2) by A1,SCMPDS_3:3
           .=Exec(i,s2).c by A23,A25,SCMPDS_2:61;
+         end;
          suppose A26:DataLoc(s1.a,k1)<>c;
          then A27: DataLoc(s2.a,k1)<>c by A1,SCMPDS_4:23;
           thus Exec(i,s1).c = s1.c by A23,A26,SCMPDS_2:61
           .=s2.c by A1,SCMPDS_4:23
           .=Exec(i,s2).c by A23,A27,SCMPDS_2:61;
      end;
+     end;
       hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 10;
     then consider a,b,k1,k2 such that
 A28:  i = SubFrom(a,k1,b,k2) by SCMPDS_2:45;
@@ -2374,14 +2473,17 @@ A28:  i = SubFrom(a,k1,b,k2) by SCMPDS_2:45;
           .= s2.DataLoc(s2.a,k1)-s1.DataLoc(s1.b,k2) by A1,SCMPDS_3:3
           .= s2.DataLoc(s2.a,k1)-s2.DataLoc(s2.b,k2) by A1,SCMPDS_3:3
           .=Exec(i,s2).c by A28,A30,SCMPDS_2:62;
+         end;
          suppose A31:DataLoc(s1.a,k1)<>c;
          then A32: DataLoc(s2.a,k1)<>c by A1,SCMPDS_4:23;
           thus Exec(i,s1).c = s1.c by A28,A31,SCMPDS_2:62
           .=s2.c by A1,SCMPDS_4:23
           .=Exec(i,s2).c by A28,A32,SCMPDS_2:62;
      end;
+     end;
       hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 11;
     then consider a,b,k1,k2 such that
 A33: i = MultBy(a,k1,b,k2) by SCMPDS_2:46;
@@ -2394,14 +2496,17 @@ A33: i = MultBy(a,k1,b,k2) by SCMPDS_2:46;
           .= s2.DataLoc(s2.a,k1)*s1.DataLoc(s1.b,k2) by A1,SCMPDS_3:3
           .= s2.DataLoc(s2.a,k1)*s2.DataLoc(s2.b,k2) by A1,SCMPDS_3:3
           .=Exec(i,s2).c by A33,A35,SCMPDS_2:63;
+         end;
          suppose A36:DataLoc(s1.a,k1)<>c;
          then A37: DataLoc(s2.a,k1)<>c by A1,SCMPDS_4:23;
           thus Exec(i,s1).c = s1.c by A33,A36,SCMPDS_2:63
           .=s2.c by A1,SCMPDS_4:23
           .=Exec(i,s2).c by A33,A37,SCMPDS_2:63;
      end;
+     end;
       hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 12;
     then consider a,b,k1,k2 such that
 A38: i = Divide(a,k1,b,k2) by SCMPDS_2:47;
@@ -2414,6 +2519,7 @@ A38: i = Divide(a,k1,b,k2) by SCMPDS_2:47;
           .= s2.DataLoc(s2.a,k1) mod s1.DataLoc(s1.b,k2) by A1,SCMPDS_3:3
           .= s2.DataLoc(s2.a,k1) mod s2.DataLoc(s2.b,k2) by A1,SCMPDS_3:3
           .= Exec(i,s2).c by A38,A40,SCMPDS_2:64;
+         end;
          suppose A41:DataLoc(s1.b,k2)<>c;
          then A42: DataLoc(s2.b,k2)<>c by A1,SCMPDS_4:23;
            hereby
@@ -2423,6 +2529,7 @@ A38: i = Divide(a,k1,b,k2) by SCMPDS_2:47;
             thus Exec(i, s1).c = s1.c by A38,A41,A43,SCMPDS_2:64
                 .=s2.c by A1,SCMPDS_4:23
                 .=Exec(i,s2).c by A38,A42,A44,SCMPDS_2:64;
+             end;
              suppose A45:DataLoc(s1.a,k1)=c;
               then A46: DataLoc(s2.a,k1)=c by A1,SCMPDS_4:23;
              thus Exec(i, s1).c = s1.DataLoc(s1.a,k1) div s1.DataLoc(s1.b,k2)
@@ -2431,9 +2538,12 @@ A38: i = Divide(a,k1,b,k2) by SCMPDS_2:47;
              .= s2.DataLoc(s2.a,k1) div s2.DataLoc(s2.b,k2) by A1,SCMPDS_3:3
              .= Exec(i,s2).c by A38,A42,A46,SCMPDS_2:64;
            end;
+           end;
+     end;
      end;
       hence thesis by SCMPDS_4:23;
 
+    end;
     suppose InsCode i = 13;
     then consider a,b,k1,k2 such that
 A47:   i = (a,k1):=(b,k2) by SCMPDS_2:48;
@@ -2444,13 +2554,16 @@ A47:   i = (a,k1):=(b,k2) by SCMPDS_2:48;
           thus Exec(i, s1).c = s1.DataLoc(s1.b,k2) by A47,A48,SCMPDS_2:59
           .= s2.DataLoc(s2.b,k2) by A1,SCMPDS_3:3
           .=Exec(i,s2).c by A47,A49,SCMPDS_2:59;
+         end;
          suppose A50:DataLoc(s1.a,k1)<>c;
          then A51: DataLoc(s2.a,k1)<>c by A1,SCMPDS_4:23;
           thus Exec(i,s1).c = s1.c by A47,A50,SCMPDS_2:59
           .=s2.c by A1,SCMPDS_4:23
           .=Exec(i,s2).c by A47,A51,SCMPDS_2:59;
      end;
+     end;
       hence thesis by SCMPDS_4:23;
+end;
 end;
 
 theorem Th44:   ::Th5c
@@ -2503,8 +2616,10 @@ A15:    x in X & x in Y by XBOOLE_0:3;
        per cases by A16,TARSKI:def 1;
        suppose x in SCM-Data-Loc;
         hence contradiction by A15,SCMPDS_2:10,XBOOLE_0:3;
+       end;
        suppose x = IC SCMPDS;
         hence contradiction by A15,AMI_1:48;
+     end;
      end;
        dom (s|Y) c= Y by RELAT_1:87;
 then A17: X misses dom (s|Y) by A14,XBOOLE_1:63;
@@ -2556,6 +2671,7 @@ A33:    Ni <> 1 by Th26;
          per cases;
          suppose i = halt SCMPDS;
            hence thesis by A7,A8,A26,A29,AMI_1:def 22;
+         end;
          suppose A34: i <> halt SCMPDS;
 A35:       IC sI = IC Exec(i, sI) by A6,A26,A28,Th18;
 A36:       now let b;
@@ -2564,18 +2680,22 @@ A36:       now let b;
                then consider k1 such that
            A37: i = goto k1 by SCMPDS_2:35;
                thus sI.b=Exec(i, sI).b by A37,SCMPDS_2:66;
+             end;
              suppose InsCode i = 4;
                then consider a,k1,k2 such that
            A38: i = (a,k1)<>0_goto k2 by SCMPDS_2:39;
                thus sI.b=Exec(i, sI).b by A38,SCMPDS_2:67;
+             end;
              suppose InsCode i = 5;
                then consider a,k1,k2 such that
            A39: i = (a,k1)<=0_goto k2 by SCMPDS_2:40;
               thus sI.b=Exec(i, sI).b by A39,SCMPDS_2:68;
+             end;
              suppose InsCode i = 6;
               then consider a,k1,k2 such that
             A40: i = (a,k1)>=0_goto k2 by SCMPDS_2:41;
               thus sI.b=Exec(i, sI).b by A40,SCMPDS_2:69;
+           end;
            end;
              for loc holds sI.loc = Exec(i, sI).loc by AMI_1:def 13;
 then A41:       sI = Exec(i, sI) by A35,A36,SCMPDS_2:54;
@@ -2590,6 +2710,8 @@ then A41:       sI = Exec(i, sI) by A35,A36,SCMPDS_2:54;
            then sI is non halting by AMI_1:def 20;
            hence thesis by A6,SCMPDS_4:63;
         end;
+        end;
+     end;
      suppose
     IC1 = inspos 1;
        then CurInstr((Computation sI).1)
@@ -2597,6 +2719,7 @@ then A41:       sI = Exec(i, sI) by A35,A36,SCMPDS_2:54;
        .= sI.inspos 1 by AMI_1:def 13
        .= halt SCMPDS by A5,A6,GRFUNC_1:8;
        hence thesis by A7,A8,A26,AMI_1:def 22;
+end;
 end;
 
 theorem Th46:   ::Th7c

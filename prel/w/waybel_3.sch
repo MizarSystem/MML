@@ -11,8 +11,6 @@ SETFAM_1
 STRUCT_0
 ORDERS_1
 #
-SSubsetEx
-#
 G3 W11 ;;;
 ªM2 K22 U1 F1 ;;;;ªM2 U1 F1 ;;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;
 #

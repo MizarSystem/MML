@@ -116,7 +116,7 @@ scheme TreeStruct_Ind { T()->Tree, P[set] }:
   provided
 A1: P[{}] and
 A2: for t being Element of T(), n st P[t] & t^<*n*> in T() holds P[t^<*n*>]
-  proof
+proof
      defpred X[set] means
        for t being Element of T() st len t = $1 holds P[t];
 A3:  X[0] by A1,FINSEQ_1:25;
@@ -134,7 +134,7 @@ A6:     t = v^<*x*> & len v = k by Th4;
          P[v] & x = x by A5,A6;
       hence P[t] by A2,A6;
      end;
-A7:  X[k] from Ind(A3,A4);
+A7:  X[k] from NAT_1:sch 1(A3,A4);
    let t be Element of T(); len t = len t;
    hence thesis by A7;
   end;
@@ -162,6 +162,7 @@ definition let W1,W2;
     for p holds p in W1 iff p in W2;
    compatibility by Th7;
 end;
+
 
 theorem
    p in W implies W = W with-replacement (p,W|p)
@@ -243,7 +244,8 @@ definition let IT be Tree;
      ex n st for t being Element of IT holds not t^<*n*> in IT;
 end;
 
-definition
+
+registration
  cluster finite-order Tree;
   existence
    proof reconsider T = {{}} as Tree by TREES_1:48;
@@ -253,6 +255,7 @@ definition
     hence thesis by TARSKI:def 1;
    end;
 end;
+
 
 definition let W;
  mode Chain of W -> Subset of W means:
@@ -296,6 +299,7 @@ Def5:
     hence thesis;
    end;
 end;
+
 
 theorem
    for L being Level of W holds L is AntiChain_of_Prefixes of W
@@ -351,6 +355,7 @@ then A2:    p in A & p in C & q in A & q in C by XBOOLE_0:def 3;
    consider w;
       now per cases;
      suppose A /\ C = {}; then A /\ C c= {w} by XBOOLE_1:2; hence thesis;
+     end;
      suppose A3: A /\ C <> {};
       consider x being Element of A /\ C;
          x in C & C c= W by A3,XBOOLE_0:def 3;
@@ -365,6 +370,7 @@ A4:        y in A /\ C;
          hence thesis by TARSKI:def 1;
         end;
     end;
+    end;
    hence thesis;
   end;
 
@@ -374,10 +380,11 @@ Def6:
     { w: len w = n };
   coherence
    proof defpred X[Element of W] means len $1 = n;
-     { w: X[w] } is Subset of W from SubsetD;
+     { w: X[w] } is Subset of W from DOMAIN_1:sch 7;
     hence thesis by Def4;
    end;
 end;
+
 
 theorem
  Th14: w^<*n*> in succ w iff w^<*n*> in W
@@ -457,10 +464,10 @@ A1:  L = { w: len w = n} by Def4;
 
 scheme FraenkelCard { A() ->non empty set, X() -> set, F(set) -> set }:
  Card { F(w) where w is Element of A(): w in X() } <=` Card X()
-  proof
+proof
    deffunc U(set) = F($1);
    consider f such that
-A1:  dom f = X() & for x st x in X() holds f.x = U(x) from Lambda;
+A1:  dom f = X() & for x st x in X() holds f.x = U(x) from FUNCT_1:sch 3;
       { F(w) where w is Element of A(): w in X() } c= rng f
      proof let x; assume x in { F(w) where w is Element of A(): w in
  X() };
@@ -477,7 +484,7 @@ scheme FraenkelFinCard { A() ->non empty set,
  card Y() <= card X()
   provided
 A1: Y() = { F(w) where w is Element of A(): w in X() }
-  proof
+proof
     deffunc U(set) = F($1);
       Card { U(w) where w is Element of A(): w in X() } <=` Card X()
         from FraenkelCard;
@@ -492,7 +499,7 @@ A1:  for w holds not w^<*n*> in W;
 A2: Seg n is finite;
    take n; let w;
     deffunc U(Real) = w^<*$1-1*>;
-A3:  { U(r) where r is Real: r in Seg n } is finite from FraenkelFin(A2);
+A3:  { U(r) where r is Real: r in Seg n } is finite from FRAENKEL:sch 21(A2);
 A4:  succ w c= { w^<*r-1*> where r is Real: r in Seg n }
      proof let x; assume x in succ w;
        then x in { w^<*k*>: w^<*k*> in W } by Def5;
@@ -508,7 +515,7 @@ A5:     x = w^<*k*> & w^<*k*> in W;
    take B;
    thus B = succ w;
     set C = { U(r) where r is Real: r in Seg n };
-      C is finite from FraenkelFin(A2);
+      C is finite from FRAENKEL:sch 21(A2);
     then reconsider C as finite set;
 A6:  C = { U(r) where r is Real: r in Seg n };
       card C <= card Seg n from FraenkelFinCard(A6);
@@ -527,11 +534,12 @@ A1: for w holds
    hence thesis;
   end;
 
-definition let W be finite-order Tree;
+registration let W be finite-order Tree;
  let w be Element of W;
   cluster succ w -> finite;
   coherence by Th20;
 end;
+
 
 theorem
  Th21: {} is Chain of W
@@ -552,7 +560,7 @@ theorem
    hence thesis;
   end;
 
-definition let W;
+registration let W;
  cluster non empty Chain of W;
   existence
    proof
@@ -560,6 +568,7 @@ definition let W;
     hence thesis;
    end;
 end;
+
 
 definition let W;
   let IT be Chain of W;
@@ -569,14 +578,15 @@ Def7:
    not ex p st p in W & for q st q in IT holds q is_a_proper_prefix_of p;
 end;
 
-definition let W;
+
+registration let W;
  cluster Branch-like Chain of W;
   existence
    proof
     defpred X[set] means $1 is Chain of W &
       for p st p in $1 holds ProperPrefixes p c= $1;
     consider X such that
-A1:   Y in X iff Y in bool W & X[Y] from Separation;
+A1:   Y in X iff Y in bool W & X[Y] from XBOOLE_0:sch 1;
        {} is Chain of W &
       for p st p in {} holds ProperPrefixes p c= {}
        by Th21;
@@ -658,11 +668,13 @@ A17:     x in Y;
    end;
 end;
 
+
 definition let W;
  mode Branch of W is Branch-like Chain of W;
 end;
 
-definition let W;
+
+registration let W;
  cluster Branch-like -> non empty Chain of W;
   coherence
    proof let B be Chain of W such that
@@ -672,6 +684,7 @@ A1:  B is Branch-like empty;
     hence contradiction by A1,Def7;
    end;
 end;
+
 
  reserve C for Chain of W, B for Branch of W;
 
@@ -704,7 +717,7 @@ A1:  v1 in C & v2 in C & v is_a_prefix_of v2;
    hence thesis by TREES_1:36,XBOOLE_0:def 8;
   end;
 
-definition let W;
+registration let W;
  cluster finite Chain of W;
   existence
    proof reconsider C = {} as Chain of W by Th21;
@@ -712,6 +725,7 @@ definition let W;
     thus thesis;
    end;
 end;
+
 
 theorem
  Th25: for C being finite Chain of W st card C > n
@@ -761,7 +775,7 @@ A15:   y in C & not y in ProperPrefixes q \/ {x} by A14,XBOOLE_0:def 4;
        then k+1 <= len x or k+1 <= len y by NAT_1:38;
       hence thesis by A13,A15;
      end;
-      X[k] from Ind(A1,A4);
+      X[k] from NAT_1:sch 1(A1,A4);
    hence thesis;
   end;
 
@@ -826,7 +840,7 @@ theorem
    defpred X[set] means $1 is Chain of W & C c= $1 &
      for p st p in $1 holds ProperPrefixes p c= $1;
    consider X such that
-A1:  Y in X iff Y in bool W & X[Y] from Separation;
+A1:  Y in X iff Y in bool W & X[Y] from XBOOLE_0:sch 1;
    set Z = { w: ex p st p in C & w is_a_prefix_of p };
 A2: Z is Chain of W by Th26;
 A3: C c= Z
@@ -941,7 +955,7 @@ scheme FuncExOfMinNat { P[set,Nat], X()->set }:
    for m st P[x,m] holds n <= m
   provided
 A1: for x st x in X() ex n st P[x,n]
-  proof
+proof
    defpred Q[set,set] means
     ex n st $2 = n & P[$1,n] & for m st P[$1,m] holds n <= m;
 A2:  for x,y,z st x in X() & Q[x,y] & Q[x,z] holds y = z
@@ -957,11 +971,11 @@ A5:  for x st x in X() ex y st Q[x,y]
        defpred X[Nat] means P[x,$1];
       assume x in X();
 then A6:    ex n st X[n] by A1;
-         ex n st X[n] & for m st X[m] holds n <= m from Min(A6);
+         ex n st X[n] & for m st X[m] holds n <= m from NAT_1:sch 5(A6);
       hence thesis;
      end;
    thus  ex f st dom f = X() & for x st x in X() holds Q[x,f.x]
-    from FuncEx(A2,A5);
+    from FUNCT_1:sch 2(A2,A5);
   end;
 
 Lm2: X is finite implies ex n st for k st k in X holds k <= n
@@ -977,6 +991,7 @@ A2:    X /\ NAT = {};
         k in X;
         hence thesis by A2,XBOOLE_0:def 3;
        end;
+    end;
     suppose
 A3:  X /\ NAT <> {};
      reconsider XN = X /\ NAT as finite set by A1,FINSET_1:15;
@@ -992,11 +1007,12 @@ A8:     y = k3 & z = k4 & k3 >= k4;
       end;
     consider x such that
 A9:   x in XN & for y st y in XN & y <> x holds not P[y,x]
-        from FinRegularity(A4,A5,A6);
+        from CARD_3:sch 2(A4,A5,A6);
     reconsider n = x as Nat by A9,XBOOLE_0:def 3;
     take n; let k; assume
      k in X; then k in X /\ NAT by XBOOLE_0:def 3;
     hence k <= n by A9;
+   end;
    end;
   hence thesis;
  end;
@@ -1007,10 +1023,10 @@ scheme InfiniteChain { X()->set, a()->set, Q[set], P[set,set] }:
   provided
 A1:  a() in X() & Q[a()] and
 A2:  for x st x in X() & Q[x] ex y st y in X() & P[x,y] & Q[y]
-   proof
+proof
     defpred X[set] means Q[$1];
     consider Y such that
-A3:   x in Y iff x in X() & X[x] from Separation;
+A3:   x in Y iff x in X() & X[x] from XBOOLE_0:sch 1;
       defpred X[set,set] means $2 in Y & P[$1,$2];
 A4:   for x st x in Y ex y st X[x,y]
       proof let x; assume x in Y; then x in X() & Q[x] by A3;
@@ -1019,11 +1035,11 @@ A5:      y in X() & P[x,y] & Q[y] by A2;
        take y; thus thesis by A3,A5;
       end;
     consider g be Function such that
-A6:   dom g = Y & for x st x in Y holds X[x,g.x] from NonUniqFuncEx(A4);
+A6:   dom g = Y & for x st x in Y holds X[x,g.x] from ZFREFLE1:sch 1(A4);
     deffunc U(set,set) = g.$2;
     consider f such that
 A7:   dom f = NAT & f.0 = a() & for n holds f.(n+1) = U(n,f.n)
-       from LambdaRecEx;
+       from RECDEF_1:sch 3;
     take f;
     thus dom f = NAT by A7;
     defpred X[Nat] means f.$1 in Y;
@@ -1033,7 +1049,7 @@ A9:  X[k] implies X[k+1]
         then g.(f.k) in Y & f.(k+1) = g.(f.k) by A6,A7;
        hence thesis;
       end;
-A10: X[k] from Ind(A8,A9);
+A10: X[k] from NAT_1:sch 1(A8,A9);
     thus rng f c= X()
       proof let x; assume x in rng f;
        then consider y such that
@@ -1173,7 +1189,7 @@ A40:      f.(k+n) = r & r^<*l*> in T & f.((k+n)+1) = r^<*l*> by A34;
           by A38,A39,A40,TREES_1:8,XCMPLX_1:1;
         hence thesis by A39,A40,XBOOLE_1:1;
        end;
-     thus X[n] from Ind(A36,A37);
+     thus X[n] from NAT_1:sch 1(A36,A37);
     end;
 A41:  now let k,l; assume k <= l;
        then ex n st l = k+n by NAT_1:28;
@@ -1205,7 +1221,7 @@ A49:    f.k = q & q^<*n*> in T & f.(k+1) = q^<*n*> by A34;
                 .= len q + 1 by FINSEQ_1:56
                 .= k+1 by A47,A49;
      end;
-A50:  X[k] from Ind(A45,A46);
+A50:  X[k] from NAT_1:sch 1(A45,A46);
       f is one-to-one
      proof let x,y; assume x in dom f & y in dom f;
       then reconsider x' = x, y' = y as Nat by A33;
@@ -1234,27 +1250,31 @@ definition let IT be Relation;
 :Def8:  dom IT is Tree;
 end;
 
-definition
+
+registration
  cluster DecoratedTree-like Function;
   existence
    proof
     deffunc U(set) = 0;
     consider W; consider f such that
-A1:   dom f = W & for x st x in W holds f.x = U(x) from Lambda;
+A1:   dom f = W & for x st x in W holds f.x = U(x) from FUNCT_1:sch 3;
     take f; thus dom f is Tree by A1;
    end;
 end;
+
 
 definition
  mode DecoratedTree is DecoratedTree-like Function;
 end;
 
+
  reserve T,T1,T2 for DecoratedTree;
 
-definition let T;
+registration let T;
  cluster dom T -> non empty Tree-like;
   coherence by Def8;
 end;
+
 
 definition let X be set;
  mode ParametrizedSubset of X -> Relation means
@@ -1265,13 +1285,14 @@ definition let X be set;
   end;
 end;
 
-definition let D;
+
+registration let D;
  cluster DecoratedTree-like Function-like ParametrizedSubset of D;
   existence
    proof consider W; consider d being Element of D;
     deffunc U(set) = d;
     consider f such that
-A1:   dom f = W & for x st x in W holds f.x = U(x) from Lambda;
+A1:   dom f = W & for x st x in W holds f.x = U(x) from FUNCT_1:sch 3;
     reconsider f as DecoratedTree by A1,Def8;
       f is ParametrizedSubset of D
     proof
@@ -1285,10 +1306,12 @@ A2:   y in dom f & x = f.y by FUNCT_1:def 5;
    end;
 end;
 
+
 definition let D;
  mode DecoratedTree of D is
     DecoratedTree-like Function-like ParametrizedSubset of D;
 end;
+
 
 definition let D be non empty set, T be DecoratedTree of D,
      t be Element of dom T;
@@ -1299,6 +1322,7 @@ definition let D be non empty set, T be DecoratedTree of D,
     hence thesis;
    end;
 end;
+
 
 theorem Th33:
  dom T1 = dom T2 & (for p st p in dom T1 holds T1.p = T2.p) implies T1 = T2
@@ -1317,7 +1341,7 @@ scheme DTreeEx { T() -> Tree, P[set,set] }:
  ex T st dom T = T() & for p st p in T() holds P[p,T.p]
   provided
 A1: for p st p in T() ex x st P[p,x]
-  proof
+proof
     defpred X[set,set] means P[$1,$2];
 A2:  for x st x in T() ex y st X[x,y]
      proof let x; assume
@@ -1327,17 +1351,17 @@ A2:  for x st x in T() ex y st X[x,y]
       hence thesis;
      end;
    consider f such that
-A3:  dom f = T() & for x st x in T() holds X[x,f.x] from NonUniqFuncEx(A2);
+A3:  dom f = T() & for x st x in T() holds X[x,f.x] from ZFREFLE1:sch 1(A2);
    reconsider T = f as DecoratedTree by A3,Def8;
    take T; thus thesis by A3;
   end;
 
 scheme DTreeLambda { T() -> Tree, f(set) -> set }:
  ex T st dom T = T() & for p st p in T() holds T.p = f(p)
-  proof
+proof
    deffunc U(set) = f($1);
    consider f such that
-A1:  dom f = T() & for x st x in T() holds f.x = U(x) from Lambda;
+A1:  dom f = T() & for x st x in T() holds f.x = U(x) from FUNCT_1:sch 3;
    reconsider T = f as DecoratedTree by A1,Def8;
    take T; thus thesis by A1;
   end;
@@ -1369,6 +1393,7 @@ A2:   dom T2 = (dom T)|p & for q st q in (dom T)|p holds T2.q = T.(p^q);
      hence thesis by A1,A2,Th33;
     end;
 end;
+
 
 theorem
  Th34: p in dom T implies rng (T|p) c= rng T
@@ -1404,6 +1429,7 @@ definition let D; let T be DecoratedTree of D;
    end;
 end;
 
+
 definition let T,p,T1;
  assume
 A1:   p in dom T;
@@ -1428,6 +1454,7 @@ A4:         r in dom T1 & q = p^r by A1,A3,TREES_1:def 12;
              proof take T1.r;
               thus X[q,T1.r] by A4;
              end;
+          end;
           suppose
 A5:         p = q;
            thus thesis
@@ -1436,7 +1463,9 @@ A5:         p = q;
                 by A5,FINSEQ_1:47,TREES_1:47;
               hence thesis;
              end;
+          end;
           suppose not p is_a_prefix_of q; hence thesis;
+         end;
          end;
         hence thesis;
        end;
@@ -1469,13 +1498,15 @@ then A11:      not p is_a_prefix_of q & D1.q = T.q or
     end;
 end;
 
-definition let W,x;
+
+registration let W,x;
  cluster W --> x -> DecoratedTree-like;
   coherence
    proof dom (W --> x) = W by FUNCOP_1:19;
     hence thesis by Def8;
    end;
 end;
+
 
 definition let D be non empty set; let W; let d be Element of D;
  redefine func W --> d -> DecoratedTree of D;
@@ -1487,6 +1518,7 @@ definition let D be non empty set; let W; let d be Element of D;
     hence thesis by Def9;
    end;
 end;
+
 
 theorem
  Th35: (for x st x in D holds x is Tree) implies union D is Tree
@@ -1570,7 +1602,7 @@ A4: for x st x in D ex y st X[x,y]
      end;
    consider f such that
 A5:  dom f = D & for x st x in D holds X[x,f.x]
-      from FuncEx(A3,A4);
+      from FUNCT_1:sch 2(A3,A4);
     reconsider E = rng f as non empty set by A5,RELAT_1:65;
       now let x; assume x in E;
      then consider y such that
@@ -1640,7 +1672,8 @@ scheme DTreeStructEx
    for n,x st x = T.t & n in F(x) holds T.(t^<*n*>) = S().[x,n]
   provided
 A1: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in F(d) holds k1 in F(d)
-  proof defpred P[Nat] means
+
+proof   defpred P[Nat] means
     ex T being DecoratedTree of D() st T.{} = d() &
      for t being Element of dom T holds len t <= $1 &
       (len t < $1 implies succ t = { t^<*k*>: k in F(T.t)} &
@@ -1816,6 +1849,7 @@ A33:          t^<*n*> in dom T;
              then succ t' = { t'^<*m*>: m in F(T.t') } & t^<*n*> in succ t'
               by A4,A33,Th14;
             hence thesis by A31,A32;
+           end;
            suppose not t^<*n*> in dom T;
              then t^<*n*> in { s^<*l*> where s is Element of dom T: l in F(T.s
 ) }
@@ -1824,6 +1858,7 @@ A33:          t^<*n*> in dom T;
 A34:          t^<*n*> = s^<*l*> & l in F(T.s);
                n = l & t = s by A34,FINSEQ_2:20;
             hence thesis by A31,A32,A34;
+          end;
           end;
          hence thesis;
         end;
@@ -1850,15 +1885,17 @@ A39:       t^<*n*> in dom T;
           then len t' < k by NAT_1:38;
           then T.(t'^<*n*>) = S().[x,n] by A4,A31,A37;
          hence thesis by A18,A38,A39;
+        end;
         suppose not t^<*n*> in dom T;
          then consider l,q such that
 A40:       t^<*n*> = q^<*l*> & T'.(t^<*n*>) = S().[T.q,l] by A18,A38;
             t = q & n = l by A40,FINSEQ_2:20;
          hence thesis by A18,A28,A37,A40;
        end;
+       end;
       hence T'.(t^<*n*>) = S().[x,n];
      end;
-A41:  X[k] from Ind(A2,A3);
+A41:  X[k] from NAT_1:sch 1(A2,A3);
       defpred X[set,set] means ex T being DecoratedTree of D(), k st
         $1 = k & $2 = T & T.{} = d() &
       for t being Element of dom T holds len t <= k &
@@ -1875,7 +1912,7 @@ A43:    T.{} = d() & for t being Element of dom T holds len t <= n &
       take y,T,n; thus thesis by A43;
      end;
    consider f such that
-A44:  dom f = NAT & for x st x in NAT holds X[x,f.x] from NonUniqFuncEx(A42);
+A44:  dom f = NAT & for x st x in NAT holds X[x,f.x] from ZFREFLE1:sch 1(A42);
      reconsider E = rng f as non empty set by A44,RELAT_1:65;
 A45:  for x st x in E holds x is DecoratedTree of D()
      proof let x; assume x in E;
@@ -1955,7 +1992,7 @@ A62:         k < k2 by A48,A49,A50,A57,AXIOMS:22;
           end;
          hence thesis by A54,A55;
         end;
-A63:    I[k] from Ind(A51,A53);
+A63:    I[k] from NAT_1:sch 1(A51,A53);
       let x; assume
 A64:    x in T1;
       then consider y,z such that
@@ -2071,7 +2108,7 @@ scheme DTreeStructFinEx
  ex T being DecoratedTree of D() st T.{} = d() &
   for t being Element of dom T holds succ t = { t^<*k*>: k < F(T.t)} &
    for n,x st x = T.t & n < F(x) holds T.(t^<*n*>) = S().[x,n]
-  proof deffunc FF(Nat) = { i: i < $1};
+proof   deffunc FF(Nat) = { i: i < $1};
     deffunc U(set) = FF(F($1));
 A1: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in U(d) holds
       k1 in U(d)

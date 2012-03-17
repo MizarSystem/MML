@@ -11,9 +11,9 @@ environ
       UNIALG_1, URYSOHN1, COMPTS_1, SETFAM_1, PCOMPS_1, TARSKI, TOPGRP_1,
       RLVECT_3, SEQ_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, TOPS_2, FUNCT_1,
-      PARTFUN1, BINOP_1, SETFAM_1, GRCAT_1, REALSET1, GROUP_1, GROUP_2,
-      STRUCT_0, VECTSP_1, PRE_TOPC, TOPS_1, COMPTS_1, PCOMPS_1, URYSOHN1,
-      BORSUK_1, T_0TOPSP, CANTOR_1, FUNCT_2, YELLOW_8;
+      PARTFUN1, FUNCT_2, BINOP_1, SETFAM_1, GRCAT_1, REALSET1, GROUP_1,
+      GROUP_2, STRUCT_0, VECTSP_1, PRE_TOPC, CONNSP_2, TOPS_1, COMPTS_1,
+      PCOMPS_1, URYSOHN1, BORSUK_1, T_0TOPSP, CANTOR_1, YELLOW_8;
  constructors REALSET1, TOPS_1, TOPS_2, GRCAT_1, T_0TOPSP, GROUP_7, URYSOHN1,
       COMPTS_1, CANTOR_1, YELLOW_8, MEMBERED;
  clusters BORSUK_1, BORSUK_2, STRUCT_0, GROUP_1, PRE_TOPC, WAYBEL10, TEX_1,
@@ -29,16 +29,29 @@ reserve S for 1-sorted,
         T for non empty TopStruct,
         x for set;
 
-definition let X be set;
+registration let X be set;
  cluster one-to-one onto Function of X, X;
+existence
+  proof
+    take id X;
+    thus id X is one-to-one;
+    thus rng id X = X by RELAT_1:71;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:1
  rng id S = [#]S;
 
-definition let R be non empty 1-sorted;
+registration let R be non empty 1-sorted;
  cluster (id R)/" -> one-to-one;
+coherence
+  proof
+      dom (id R) = [#]R & rng (id R) = [#]R by Th1,TOPS_2:51;
+    hence thesis by TOPS_2:63;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:2
  (id R)/" = id R;
@@ -46,9 +59,17 @@ theorem :: TOPGRP_1:2
 theorem :: TOPGRP_1:3
    (id R)"X = X;
 
-definition let S be 1-sorted;
+registration let S be 1-sorted;
  cluster one-to-one onto map of S, S;
+existence
+  proof
+    take id S;
+    thus id S is one-to-one;
+    thus rng id S = rng id the carrier of S by GRCAT_1:def 11
+        .= the carrier of S by RELAT_1:71;
+  end;
 end;
+
 
 begin  :: On the groups
 
@@ -90,9 +111,15 @@ theorem :: TOPGRP_1:12
 theorem :: TOPGRP_1:13
  rng inverse_op G = the carrier of G;
 
-definition let G be Group;
+registration let G be Group;
   cluster inverse_op G -> one-to-one onto;
+coherence
+  proof
+    thus inverse_op G is one-to-one by Th12;
+    thus rng inverse_op G = the carrier of G by Th13;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:14
  (inverse_op G)" = inverse_op G;
@@ -109,10 +136,66 @@ definition let G be non empty HGrStr, a be Element of G;
   for x being Element of G holds it.x = x * a;
 end;
 
-definition let G be Group, a be Element of G;
+
+registration let G be Group, a be Element of G;
  cluster a* -> one-to-one onto;
+coherence
+  proof
+    set f = a*;
+A1: dom f = the carrier of G by FUNCT_2:def 1;
+    hereby
+      let x1, x2 be set; assume
+A2:     x1 in dom f & x2 in dom f & f.x1 = f.x2;
+      then reconsider y1 = x1, y2 = x2 as Element of G
+        by FUNCT_2:def 1;
+A3:   f.y1 = a * y1 & f.y2 = a * y2 by Def1;
+      thus x1 = 1.G * y1 by GROUP_1:def 4
+             .= a" * a * y1 by GROUP_1:def 5
+             .= a" * (a * y1) by VECTSP_1:def 16
+             .= a" * a * y2 by A2,A3,VECTSP_1:def 16
+             .= 1.G * y2 by GROUP_1:def 5
+             .= x2 by GROUP_1:def 4;
+    end;
+    thus rng f c= the carrier of G by RELSET_1:12;
+    let y be set;
+    assume y in the carrier of G;
+    then reconsider y1 = y as Element of G;
+      f.(a"*y1) = a * (a" * y1) by Def1
+             .= a * (a") * y1 by VECTSP_1:def 16
+             .= 1.G * y1 by GROUP_1:def 5
+             .= y by GROUP_1:def 4;
+    hence y in rng f by A1,FUNCT_1:def 5;
+  end;
  cluster *a -> one-to-one onto;
+coherence
+  proof
+    set f = *a;
+A4: dom f = the carrier of G by FUNCT_2:def 1;
+    hereby
+      let x1, x2 be set; assume
+A5:     x1 in dom f & x2 in dom f & f.x1 = f.x2;
+      then reconsider y1 = x1, y2 = x2 as Element of G
+        by FUNCT_2:def 1;
+A6:   f.y1 = y1 * a & f.y2 = y2 * a by Def2;
+      thus x1 = y1 * 1.G by GROUP_1:def 4
+             .= y1 * (a * a") by GROUP_1:def 5
+             .= y1 * a * a" by VECTSP_1:def 16
+             .= y2 * (a * a") by A5,A6,VECTSP_1:def 16
+             .= y2 * 1.G by GROUP_1:def 5
+             .= x2 by GROUP_1:def 4;
+    end;
+    thus rng f c= the carrier of G by RELSET_1:12;
+    let y be set;
+    assume y in the carrier of G;
+    then reconsider y1 = y as Element of G;
+      f.(y1*a") = y1 * a" * a by Def2
+             .= y1 * (a" * a) by VECTSP_1:def 16
+             .= y1 * 1.G by GROUP_1:def 5
+             .= y by GROUP_1:def 4;
+    hence y in rng f by A4,FUNCT_1:def 5;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:16
  h*.:P = h * P;
@@ -128,24 +211,41 @@ theorem :: TOPGRP_1:19
 
 begin  :: On the topological spaces
 
-definition let T be non empty TopStruct;
+registration let T be non empty TopStruct;
  cluster (id T)/" -> continuous;
+coherence by Th2;
 end;
+
 
 theorem :: TOPGRP_1:20
  id T is_homeomorphism;
 
-definition let T be non empty TopSpace, p be Point of T;
+registration let T be non empty TopSpace, p be Point of T;
  cluster -> non empty a_neighborhood of p;
+coherence
+  proof
+    let N be a_neighborhood of p;
+A1: p in Int N by CONNSP_2:def 1;
+      Int N c= N by TOPS_1:44;
+    hence thesis by A1;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:21
  for T being non empty TopSpace, p being Point of T holds
   [#]T is a_neighborhood of p;
 
-definition let T be non empty TopSpace, p be Point of T;
+registration let T be non empty TopSpace, p be Point of T;
  cluster non empty open a_neighborhood of p;
+existence
+  proof
+    reconsider B = [#]T as a_neighborhood of p by Th21;
+    take B;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:22
    for S, T being non empty TopSpace, f being map of S, T st f is open holds
@@ -178,9 +278,15 @@ theorem :: TOPGRP_1:27
   f is continuous iff
   for P being Subset of T holds f"(Int P) c= Int(f"P);
 
-definition let T be non empty TopSpace;
+registration let T be non empty TopSpace;
  cluster non empty dense Subset of T;
+existence
+  proof
+    take [#]T;
+    thus thesis by TOPS_3:16;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:28
  for S, T being non empty TopSpace, f being map of S, T,
@@ -192,18 +298,37 @@ theorem :: TOPGRP_1:29
      A being dense Subset of T st f is_homeomorphism
   holds f"A is dense;
 
-definition let S, T be non empty TopStruct;
+registration let S, T be non empty TopStruct;
  cluster being_homeomorphism -> onto one-to-one continuous open map of S, T;
+coherence
+  proof
+    let f be map of S, T; assume
+A1:   f is_homeomorphism;
+    then rng f = [#]T & dom f = [#]S by TOPS_2:def 5;
+    hence rng f = the carrier of T by PRE_TOPC:12;
+    thus f is one-to-one continuous by A1,TOPS_2:def 5;
+    let A be Subset of S;
+    thus thesis by A1,Th25;
+  end;
 end;
 
-definition let T be non empty TopStruct;
+
+registration let T be non empty TopStruct;
  cluster being_homeomorphism map of T, T;
+existence
+  proof
+    take id T;
+    thus thesis by Th20;
+  end;
 end;
 
-definition let T be non empty TopStruct,
+
+registration let T be non empty TopStruct,
                f be being_homeomorphism map of T, T;
  cluster f/" -> being_homeomorphism;
+coherence by TOPS_2:70;
 end;
+
 
 begin  :: The group of homoemorphisms
 
@@ -213,13 +338,17 @@ definition let T be non empty TopStruct;
   it is_homeomorphism;
 end;
 
+
 definition let T be non empty TopStruct;
  redefine func id T -> Homeomorphism of T;
 end;
 
-definition let T be non empty TopStruct;
+
+registration let T be non empty TopStruct;
  cluster -> being_homeomorphism Homeomorphism of T;
+coherence by Def3;
 end;
+
 
 theorem :: TOPGRP_1:30
  for f being Homeomorphism of T holds f/" is Homeomorphism of T;
@@ -234,18 +363,73 @@ definition let T be non empty TopStruct;
   for f, g being Homeomorphism of T holds (the mult of it).(f,g) = g * f;
 end;
 
-definition let T be non empty TopStruct;
+
+registration let T be non empty TopStruct;
  cluster HomeoGroup T -> non empty;
+coherence
+  proof
+      id T is Homeomorphism of T;
+    hence the carrier of HomeoGroup T is non empty by Def4;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:32
    for f, g being Homeomorphism of T
   for a, b being Element of HomeoGroup T st f = a & g = b holds
    a * b = g * f;
 
-definition let T be non empty TopStruct;
+registration let T be non empty TopStruct;
  cluster HomeoGroup T -> Group-like associative;
+coherence
+  proof
+    set G = HomeoGroup T,
+        o = the mult of G;
+    thus G is Group-like
+    proof
+      reconsider e = id T as Element of G by Def4;
+      take e;
+      let h be Element of G;
+      reconsider h1 = h, e1 = e as Homeomorphism of T by Def4;
+      thus h * e = o.(h,e) by VECTSP_1:def 10
+                .= e1 * h1 by Def4
+                .= h by TMAP_1:93;
+      thus e * h = o.(e,h) by VECTSP_1:def 10
+                .= h1 * e1 by Def4
+                .= h by TMAP_1:93;
+      reconsider h1 = h as Homeomorphism of T by Def4;
+        h1/" is Homeomorphism of T by Th30;
+      then reconsider g = h1/" as Element of G by Def4;
+      take g;
+      reconsider g1 = g as Homeomorphism of T by Def4;
+A1:   dom h1 = [#]T & rng h1 = [#]T by TOPS_2:def 5;
+      thus h * g = o.(h,g) by VECTSP_1:def 10
+                .= g1 * h1 by Def4
+                .= id [#]T by A1,TOPS_2:65
+                .= id the carrier of T by PRE_TOPC:12
+                .= e by GRCAT_1:def 11;
+      thus g * h = o.(g,h) by VECTSP_1:def 10
+                .= h1 * g1 by Def4
+                .= id [#]T by A1,TOPS_2:65
+                .= id the carrier of T by PRE_TOPC:12
+                .= e by GRCAT_1:def 11;
+    end;
+    let x, y, z be Element of G;
+    reconsider f = x, g = y as Homeomorphism of T by Def4;
+    reconsider p = g*f, r = z as Homeomorphism of T by Def4,Th31;
+    reconsider a = r*g as Homeomorphism of T by Th31;
+    thus (x*y)*z = o.(x*y,z) by VECTSP_1:def 10
+                .= o.(o.(x,y),z) by VECTSP_1:def 10
+                .= o.(g*f,z) by Def4
+                .= r * p by Def4
+                .= (r * g) * f by RELAT_1:55
+                .= o.(f,a) by Def4
+                .= o.(x,o.(y,z)) by Def4
+                .= o.(x,y*z) by VECTSP_1:def 10
+                .= x*(y*z) by VECTSP_1:def 10;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:33
  id T = 1.HomeoGroup T;
@@ -260,13 +444,30 @@ definition let T be non empty TopStruct;
   for p, q being Point of T ex f being Homeomorphism of T st f.p = q;
 end;
 
-definition
+
+registration
  cluster trivial -> homogeneous (non empty TopStruct);
+coherence
+  proof
+    let T be non empty TopStruct such that
+A1:   T is trivial;
+    let p, q be Point of T;
+    take id T;
+    thus (id T).p = q by A1,REALSET1:def 20;
+  end;
 end;
 
-definition
+
+registration
  cluster strict trivial non empty TopSpace;
+existence
+  proof
+    consider T being strict trivial non empty TopSpace;
+    take T;
+    thus thesis;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:35
    for T being homogeneous (non empty TopSpace) st
@@ -287,37 +488,92 @@ definition
        topology -> Subset-Family of the carrier #);
 end;
 
-definition let A be non empty set,
+
+registration let A be non empty set,
                R be BinOp of A,
                T be Subset-Family of A;
  cluster TopGrStr (#A, R, T#) -> non empty;
+coherence
+  proof
+    thus the carrier of TopGrStr (#A,R,T#) is non empty;
+  end;
 end;
 
-definition let x be set,
+
+registration let x be set,
                R be BinOp of {x},
                T be Subset-Family of {x};
  cluster TopGrStr (#{x}, R, T#) -> trivial;
+coherence
+  proof
+    let a, b be Element of TopGrStr (#{x},R,T#);
+      a = x & b = x by TARSKI:def 1;
+    hence thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster trivial -> Group-like associative commutative (non empty HGrStr);
+coherence
+  proof
+    let H be non empty HGrStr such that
+A1:   H is trivial;
+    hereby
+      consider e being Element of H;
+      take e;
+      let h be Element of H;
+      thus h * e = h & e * h = h by A1,REALSET1:def 20;
+      take g = e;
+      thus h * g = e & g * h = e by A1,REALSET1:def 20;
+    end;
+    thus for x, y, z being Element of H holds
+      x*y*z = x*(y*z) by A1,REALSET1:def 20;
+    let x, y be Element of H;
+    thus thesis by A1,REALSET1:def 20;
+  end;
 end;
 
-definition let a be set;
+
+registration let a be set;
  cluster 1TopSp {a} -> trivial;
+coherence
+  proof
+    let x, y be Element of 1TopSp {a};
+      1TopSp {a} = TopStruct (#{a},bool {a}#) by PCOMPS_1:def 1;
+    then a = x & a = y by TARSKI:def 1;
+    hence thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster strict non empty TopGrStr;
+existence
+  proof
+    consider R being BinOp of {0}, T being Subset-Family of {0};
+    take TopGrStr (#{0},R,T#);
+    thus thesis;
+  end;
 end;
 
-definition
+
+registration
  cluster strict TopSpace-like trivial (non empty TopGrStr);
+existence
+  proof
+    consider R being BinOp of {0};
+    take TopGrStr (#{0}, R, bool {0}#);
+      1TopSp {0} = TopStruct (#{0},bool {0}#) by PCOMPS_1:def 1;
+    hence thesis by TEX_2:12;
+  end;
 end;
+
 
 definition let G be Group-like associative (non empty TopGrStr);
  redefine func inverse_op G -> map of G, G;
 end;
+
 
 definition let G be Group-like associative (non empty TopGrStr);
  attr G is UnContinuous means
@@ -325,24 +581,69 @@ definition let G be Group-like associative (non empty TopGrStr);
   inverse_op G is continuous;
 end;
 
+
 definition let G be TopSpace-like TopGrStr;
  attr G is BinContinuous means
 :: TOPGRP_1:def 7
   for f being map of [:G,G:], G st f = the mult of G holds f is continuous;
 end;
 
-definition
+
+registration
  cluster strict commutative trivial UnContinuous BinContinuous
          (TopSpace-like Group-like associative (non empty TopGrStr));
+existence
+  proof
+    consider R being BinOp of {0};
+      1TopSp {0} = TopStruct (#{0},bool {0}#) by PCOMPS_1:def 1;
+    then reconsider T = TopGrStr (#{0}, R, bool {0}#)
+     as strict TopSpace-like Group-like associative
+     (non empty TopGrStr) by TEX_2:12;
+    take T;
+    thus T is strict commutative trivial;
+    hereby
+      set f = inverse_op T;
+      thus f is continuous
+      proof
+        let P1 be Subset of T such that P1 is closed;
+        per cases by ZFMISC_1:39;
+        suppose f"P1 = {};
+        then f"P1 = {}T;
+        hence f"P1 is closed;
+        end;
+        suppose f"P1 = {0};
+        then f"P1 = [#]T by PRE_TOPC:12;
+        hence f"P1 is closed;
+      end;
+      end;
+    end;
+    let f be map of [:T,T:], T such that
+        f = the mult of T;
+A1: the carrier of [:T,T:] = [:{0},{0}:] by BORSUK_1:def 5
+      .= {[0,0]} by ZFMISC_1:35;
+    let P1 be Subset of T such that P1 is closed;
+    per cases by A1,ZFMISC_1:39;
+    suppose f"P1 = {};
+    then f"P1 = {}[:T,T:];
+    hence f"P1 is closed;
+    end;
+    suppose f"P1 = {[0,0]};
+    then f"P1 = [#][:T,T:] by A1,PRE_TOPC:12;
+    hence f"P1 is closed;
+  end;
+  end;
 end;
+
 
 definition
  mode TopGroup is TopSpace-like Group-like associative (non empty TopGrStr);
 end;
 
+
 definition
  mode TopologicalGroup is UnContinuous BinContinuous TopGroup;
 end;
+
 
 theorem :: TOPGRP_1:37
  for T being BinContinuous non empty (TopSpace-like TopGrStr),
@@ -385,11 +686,60 @@ theorem :: TOPGRP_1:42
      A*(B") c= W holds
   T is TopologicalGroup;
 
-definition let G be BinContinuous non empty (TopSpace-like TopGrStr),
+registration let G be BinContinuous non empty (TopSpace-like TopGrStr),
                a be Element of G;
  cluster a* -> continuous;
+coherence
+  proof
+    set f = a*;
+      for w being Point of G, A being a_neighborhood of f.w
+     ex W being a_neighborhood of w st f.:W c= A
+    proof
+      let w be Point of G,
+          A be a_neighborhood of f.w;
+        f.w = a * w by Def1;
+      then consider B being open a_neighborhood of a,
+               W being open a_neighborhood of w such that
+A1:     B*W c= A by Th37;
+      take W;
+      let k be set;
+      assume k in f.:W;
+      then k in a * W by Th16;
+      then consider h being Element of G such that
+A2:     k = a * h & h in W by GROUP_2:33;
+        a in B by CONNSP_2:6;
+      then k in B * W by A2,GROUP_2:12;
+      hence k in A by A1;
+    end;
+    hence f is continuous by BORSUK_1:def 2;
+  end;
  cluster *a -> continuous;
+coherence
+  proof
+    set f = *a;
+      for w being Point of G, A being a_neighborhood of f.w
+     ex W being a_neighborhood of w st f.:W c= A
+    proof
+      let w be Point of G,
+          A be a_neighborhood of f.w;
+        f.w = w * a by Def2;
+      then consider W being open a_neighborhood of w,
+               B being open a_neighborhood of a such that
+A3:     W*B c= A by Th37;
+      take W;
+      let k be set;
+      assume k in f.:W;
+      then k in W * a by Th17;
+      then consider h being Element of G such that
+A4:     k = h * a & h in W by GROUP_2:34;
+        a in B by CONNSP_2:6;
+      then k in W * B by A4,GROUP_2:12;
+      hence k in A by A3;
+    end;
+    hence f is continuous by BORSUK_1:def 2;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:43
  for G being BinContinuous TopGroup,
@@ -407,6 +757,7 @@ definition let G be BinContinuous TopGroup,
  redefine func *a -> Homeomorphism of G;
 end;
 
+
 theorem :: TOPGRP_1:45
  for G being UnContinuous TopGroup holds inverse_op G is Homeomorphism of G;
 
@@ -414,9 +765,27 @@ definition let G be UnContinuous TopGroup;
  redefine func inverse_op G -> Homeomorphism of G;
 end;
 
-definition
+
+registration
  cluster BinContinuous -> homogeneous TopGroup;
+coherence
+  proof
+    let T be TopGroup;
+    assume T is BinContinuous;
+    then reconsider G = T as BinContinuous TopGroup;
+      G is homogeneous
+    proof
+      let p, q be Point of G;
+      take *(p"*q);
+      thus (*(p"*q)).p = p*(p"*q) by Def2
+                      .= p*p"*q by VECTSP_1:def 16
+                      .= 1.G*q by GROUP_1:def 5
+                      .= q by GROUP_1:def 4;
+    end;
+    hence thesis;
+  end;
 end;
+
 
 theorem :: TOPGRP_1:46
  for G being BinContinuous TopGroup, F being closed Subset of G,
@@ -426,21 +795,26 @@ theorem :: TOPGRP_1:47
  for G being BinContinuous TopGroup, F being closed Subset of G,
      a being Element of G holds a * F is closed;
 
-definition let G be BinContinuous TopGroup,
+registration let G be BinContinuous TopGroup,
                F be closed Subset of G,
                a be Element of G;
  cluster F * a -> closed;
+coherence by Th46;
  cluster a * F -> closed;
+coherence by Th47;
 end;
+
 
 theorem :: TOPGRP_1:48
  for G being UnContinuous TopGroup, F being closed Subset of G
   holds F" is closed;
 
-definition let G be UnContinuous TopGroup,
+registration let G be UnContinuous TopGroup,
                F be closed Subset of G;
  cluster F" -> closed;
+coherence by Th48;
 end;
+
 
 theorem :: TOPGRP_1:49
  for G being BinContinuous TopGroup, O being open Subset of G,
@@ -450,20 +824,25 @@ theorem :: TOPGRP_1:50
  for G being BinContinuous TopGroup, O being open Subset of G,
      a being Element of G holds a * O is open;
 
-definition let G be BinContinuous TopGroup,
+registration let G be BinContinuous TopGroup,
                A be open Subset of G,
                a be Element of G;
  cluster A * a -> open;
+coherence by Th49;
  cluster a * A -> open;
+coherence by Th50;
 end;
+
 
 theorem :: TOPGRP_1:51
  for G being UnContinuous TopGroup, O being open Subset of G holds O" is open;
 
-definition let G be UnContinuous TopGroup,
+registration let G be UnContinuous TopGroup,
                A be open Subset of G;
  cluster A" -> open;
+coherence by Th51;
 end;
+
 
 theorem :: TOPGRP_1:52
  for G being BinContinuous TopGroup, A, O being Subset of G st O is open
@@ -473,12 +852,15 @@ theorem :: TOPGRP_1:53
  for G being BinContinuous TopGroup, A, O being Subset of G st O is open
   holds A * O is open;
 
-definition let G be BinContinuous TopGroup,
+registration let G be BinContinuous TopGroup,
                A be open Subset of G,
                B be Subset of G;
  cluster A * B -> open;
+coherence by Th52;
  cluster B * A -> open;
+coherence by Th53;
 end;
+
 
 theorem :: TOPGRP_1:54
  for G being UnContinuous TopGroup,
@@ -494,10 +876,12 @@ theorem :: TOPGRP_1:56
  for G being UnContinuous TopGroup, A being dense Subset of G holds
   A" is dense;
 
-definition let G be UnContinuous TopGroup,
+registration let G be UnContinuous TopGroup,
                A be dense Subset of G;
  cluster A" -> dense;
+coherence by Th56;
 end;
+
 
 theorem :: TOPGRP_1:57
  for G being BinContinuous TopGroup, A being dense Subset of G,
@@ -507,12 +891,15 @@ theorem :: TOPGRP_1:58
  for G being BinContinuous TopGroup, A being dense Subset of G,
      a being Point of G holds A*a is dense;
 
-definition let G be BinContinuous TopGroup,
+registration let G be BinContinuous TopGroup,
                A be dense Subset of G,
                a be Point of G;
  cluster A * a -> dense;
+coherence by Th58;
  cluster a * A -> dense;
+coherence by Th57;
 end;
+
 
 theorem :: TOPGRP_1:59
    for G being TopologicalGroup, B being Basis of 1.G, M being dense Subset of
@@ -525,7 +912,9 @@ G
 theorem :: TOPGRP_1:60
  for G being TopologicalGroup holds G is_T3;
 
-definition
+registration
  cluster -> being_T3 TopologicalGroup;
+coherence by Th60;
 end;
+
 

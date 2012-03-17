@@ -43,11 +43,6 @@ MOD_4
 REALSET1
 CHAIN_1
 #
-FrSet_1_2
-NonEmptyFinite
-NonTrivialFinite
-ChainInd
-#
 M1 W1 ;;M1 W1 ;;M3 F1 ;;;
 R3 ËM3 F2 ;;M3 F2 ;;;F3 B1 B2 ;P1 B1 B2 ;F1 ;;;
 #

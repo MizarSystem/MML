@@ -32,7 +32,7 @@ begin :: Preliminaries
 
 :: General preliminaries :::::::::::::::::::::::::::::::::::::::::::::
 
-definition let A, B be set;
+registration let A, B be set;
   cluster PFuncs(A,B) -> functional;
   coherence
    proof
@@ -44,6 +44,7 @@ definition let A, B be set;
    end;
 end;
 
+
 definition
  let R be 1-sorted, X be set,
      p be PartFunc of the carrier of R, X;
@@ -51,6 +52,7 @@ definition
  coherence
   proof dom p c= the carrier of R; hence thesis; end;
 end;
+
 
 theorem Th1:
  for X being set, f, g being Function
@@ -97,7 +99,7 @@ scheme PFSeparation {X, Y() -> set, P[set]}:
 proof defpred p[set] means P[$1];
      consider fs being Subset of PFuncs (X(), Y()) such that
 A1: for f being set holds f in fs iff f in PFuncs(X(), Y()) & p[f]
-                                            from Subset_Ex;
+                                            from SUBSET_1:sch 1;
  take fs;
  let pfs be PartFunc of X(), Y();
        pfs in PFuncs(X(), Y()) by PARTFUN1:119;
@@ -106,16 +108,18 @@ end;
 
 :: Cardinals ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition
+registration
  let X be set;
  cluster nextcard X -> non empty;
  coherence by CARD_1:def 6;
 end;
 
-definition
+
+registration
  cluster regular Aleph;
  existence by CARD_5:42;
 end;
+
 
 theorem Th3:
  for M being regular Aleph, X being set
@@ -164,6 +168,7 @@ A5: x in X;
  end;
 end;
 
+
 theorem Th5:
  for R being RelStr, X being Subset of R, x being set
   st X is lower & x in X holds (the InternalRel of R)-Seg x c= X
@@ -189,12 +194,15 @@ A2: z in Y & [y, z] in r;
  per cases by A1,A2,XBOOLE_0:def 2;
  suppose z in X; then y in X by A2,Def1;
   hence y in Y by A1,XBOOLE_0:def 2;
+ end;
  suppose z in {x} & y = z;
   hence thesis by A2;
+ end;
  suppose
  A3: z in {x} & y <> z; then z = x by TARSKI:def 1;
       then y in r-Seg x by A2,A3,WELLORD1:def 1;
   hence thesis by A1,XBOOLE_0:def 2;
+end;
 end;
 
 begin :: Well-founded relational structures
@@ -205,7 +213,8 @@ definition
  the InternalRel of R is_well_founded_in the carrier of R;
 end;
 
-definition
+
+registration
  cluster non empty well_founded RelStr;
  existence proof
      reconsider er = {} as Relation of {{}} by RELSET_1:25;
@@ -224,13 +233,15 @@ A2: x in (the InternalRel of R)-Seg e /\ Y by XBOOLE_0:def 1;
  end;
 end;
 
+
 definition
  let R be RelStr, X be Subset of R;
  attr X is well_founded means :Def3:
  the InternalRel of R is_well_founded_in X;
 end;
 
-definition
+
+registration
  let R be RelStr;
  cluster well_founded Subset of R;
  existence proof {} c= the carrier of R by XBOOLE_1:2;
@@ -239,6 +250,7 @@ definition
   hence thesis by XBOOLE_1:3;
  end;
 end;
+
 
 definition
  let R be RelStr;
@@ -258,7 +270,8 @@ definition
  uniqueness;
 end;
 
-definition
+
+registration
  let R be RelStr;
  cluster well_founded-Part R -> lower well_founded;
  coherence proof
@@ -297,6 +310,7 @@ then A12:   r-Seg a /\ Y = r-Seg a /\ S /\ Y by XBOOLE_1:28
   hence thesis by A11;
  end;
 end;
+
 
 theorem Th7:
  for R being non empty RelStr, x be Element of R
@@ -339,6 +353,7 @@ A3: r is_well_founded_in Y by Def3;
     suppose XZ = {}; then X misses Z by XBOOLE_0:def 7;
     then Z c= Y by A4,XBOOLE_1:73;
      hence thesis by A3,A4,WELLORD1:def 3;
+    end;
     suppose XZ <> {}; then consider a being set such that
     A6: a in XZ & r-Seg a misses XZ by A2,A5,WELLORD1:def 3;
      take a;
@@ -351,6 +366,7 @@ A3: r is_well_founded_in Y by Def3;
          then b in X by A1,A9,Def1;
          then b in XZ by A8,XBOOLE_0:def 3;
      hence contradiction by A6,A8,XBOOLE_0:3;
+  end;
   end;
  hence thesis;
 end;
@@ -433,7 +449,7 @@ proof defpred p[set] means P[$1];
    set c = the carrier of R(),
        r = the InternalRel of R(),
        Z = {x where x is Element of c: p[x]};
-A3: Z is Subset of c from SubsetD;
+A3: Z is Subset of c from DOMAIN_1:sch 7;
        x() in Z by A1;
      then reconsider Z as non empty Subset of c by A3;
        r is_well_founded_in c by A2,Def2;
@@ -550,6 +566,7 @@ definition
   for x being Element of R
    holds F.x = H.[x, F|(the InternalRel of R)-Seg x];
 end;
+
 
 theorem :: Well foundedness and existence
   for R being non empty RelStr holds
@@ -751,6 +768,7 @@ A33: dom ufs = c
              thus nf.x = ufs.x by A55,FUNCT_4:12
                       .= H.[x, ufs | r-Seg x] by A23,A54
                       .= H.[x, nf | r-Seg x] by A39,A56,AMI_5:7;
+            end;
             suppose
              A58: x in dom nv;
              then A59: x = x0 by A39,TARSKI:def 1;
@@ -765,6 +783,7 @@ A33: dom ufs = c
               thus nf.x = nv.x0 by A58,A59,FUNCT_4:14
                        .= H.[x0, ufs | r-Seg x0] by CQC_LANG:6
                        .= H.[x, nf | r-Seg x] by A39,A59,A60,AMI_5:7;
+          end;
           end; then nf in fs by A2,A48;
           then [x0, nf.x0] in ufs by A40,TARSKI:def 4;
       hence contradiction by A36,FUNCT_1:8;
@@ -798,7 +817,7 @@ A63: for x being Element of c, p being Element of PFuncs(c, V)
      consider H being Function of [:c, PFuncs(c, V):], V such that
 A67: for x being Element of c,
          p being Element of PFuncs(c, V)
-       holds H.[x,p] = F(x,p) from Kappa2D(A63);
+       holds H.[x,p] = F(x,p) from FUNCT_7:sch 1(A63);
 
      consider rk being Function of c, V such that
 A68: rk is_recursively_expressed_by H by A62;
@@ -878,13 +897,15 @@ A6: now let x be Element of c, y be Element of PF;
         suppose
         A7: ex x being set st x in dom y & y.x = a1;
          take u; thus P[x,y,u] by A7;
+        end;
         suppose
         A8: not ex x being set st x in dom y & y.x = a1;
          take v; thus P[x,y,v] by A1,A8;
        end;
+       end;
      consider H being Function of [:c, PF:], a01 such that
 A9: for x being Element of c,
-         y being Element of PF holds P[x,y,H.[x,y]] from FuncEx2D(A6);
+         y being Element of PF holds P[x,y,H.[x,y]] from FUNCT_2:sch 7(A6);
 A10: rng H c= a01;
 A11: dom H = [:c, PF:] & rng H c= V by A2,FUNCT_2:def 1,XBOOLE_1:1;
      then reconsider H as Function of [:c, PF:], V
@@ -925,6 +946,7 @@ A16: F2 is_recursively_expressed_by H
 FUNCOP_1:13;
        hence F2.x = a0 by A4,A17,FUNCT_4:14
                  .= H.[x, F2 | r-Seg x] by A10,A20,A21,TARSKI:def 2;
+      end;
       suppose
       A22: not x in wfp;
            then not r-Seg x c= wfp by Th10;
@@ -938,6 +960,7 @@ FUNCOP_1:13;
        thus F2.x = F3.x by A4,A22,FUNCT_4:12
                 .= a1 by FUNCOP_1:13
                 .= H.[x, F2 | r-Seg x] by A9,A25,A26;
+     end;
      end;
  assume
 A27: for H being Function of [:c, PF:], V,
@@ -1011,6 +1034,7 @@ definition
   holds f.(n+1) <> f.n & [f.(n+1), f.n] in the InternalRel of R;
 end;
 
+
 theorem :: omega chains
    for R being non empty RelStr holds
   R is well_founded iff not ex f being sequence of R st f is descending
@@ -1045,7 +1069,7 @@ A9: for a being set holds
      consider f being Function such that
 A10: dom f = NAT and
 A11: f.0 = choose Y and
-A12: for n being Element of NAT holds f.(n+1) = G(n,f.n) from LambdaRecEx;
+A12: for n being Element of NAT holds f.(n+1) = G(n,f.n) from RECDEF_1:sch 3;
      defpred P[Nat] means f.$1 in Y;
 A13: P[0] by A8,A11;
 A14: now let n be Nat; assume P[n];
@@ -1054,7 +1078,7 @@ then A15:        r-Seg(f.n) /\ Y <> {} by XBOOLE_0:def 7;
               f.(n+1) = choose (r-Seg(f.n) /\ Y) by A12;
         hence P[n+1] by A15,XBOOLE_0:def 3;
        end;
-A16: for n being Nat holds P[n] from Ind(A13, A14);
+A16: for n being Nat holds P[n] from NAT_1:sch 1(A13, A14);
        rng f c= c proof let y be set; assume y in rng f;
           then consider x being set such that
      A17: x in dom f & y = f.x by FUNCT_1:def 5;

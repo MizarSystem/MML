@@ -29,12 +29,14 @@ definition let V be RealLinearSpace;
   L in it iff L is Convex_Combination of V;
 end;
 
+
 definition let V be RealLinearSpace, M be non empty Subset of V;
  func ConvexComb(M) -> set means
 :: CONVEX3:def 2
   for L being set holds
   L in it iff L is Convex_Combination of M;
 end;
+
 
 theorem :: CONVEX3:1
 for V being RealLinearSpace, v being VECTOR of V holds
@@ -74,21 +76,58 @@ attr M is cone means
   r*v in M;
 end;
 
+
 theorem :: CONVEX3:6
 for V being non empty RLSStruct, M being Subset of V st
  M = {} holds M is cone;
 
-definition let V be non empty RLSStruct;
+registration let V be non empty RLSStruct;
 cluster cone Subset of V;
+existence
+proof
+  consider M being empty Subset of V;
+   M is cone by Th6;
+  hence thesis;
+end;
 end;
 
-definition let V be non empty RLSStruct;
+
+registration let V be non empty RLSStruct;
 cluster empty cone Subset of V;
+existence
+proof
+   set M = {};
+    M c= the carrier of V by XBOOLE_1:2;
+   then reconsider M as Subset of V;
+   reconsider M as cone Subset of V by Th6;
+   take M;
+   thus thesis;
+end;
 end;
 
-definition let V be RealLinearSpace;
+
+registration let V be RealLinearSpace;
 cluster non empty cone Subset of V;
+existence
+proof
+   set M = {0.V};
+   reconsider M as Subset of V;
+    for r being Real, v being VECTOR of V st r > 0 & v in M holds
+    r*v in M
+   proof
+     let r be Real;
+     let v be VECTOR of V;
+     assume r > 0 & v in M;
+     then v = 0.V by TARSKI:def 1;
+     then r*v = 0.V by RLVECT_1:23;
+     hence thesis by TARSKI:def 1;
+   end;
+   then reconsider M as cone Subset of V by Def3;
+   take M;
+   thus thesis by TARSKI:def 1;
 end;
+end;
+
 
 theorem :: CONVEX3:7
 for V being non empty RLSStruct, M being cone Subset of V st

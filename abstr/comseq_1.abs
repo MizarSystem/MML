@@ -27,6 +27,7 @@ definition
  mode Complex_Sequence is Function of NAT,COMPLEX;
 end;
 
+
 reserve seq,seq1,seq2,seq3,seq',seq1' for Complex_Sequence;
 
 theorem :: COMSEQ_1:1
@@ -42,8 +43,36 @@ definition
 redefine func seq.n ->Element of COMPLEX;
 end;
 
-scheme ExComplexSeq{F(Nat)->Element of COMPLEX}:
- ex seq st for n holds seq.n=F(n);
+
+scheme :: COMSEQ_1:sch 1
+ ExComplexSeq{F(Nat)->Element of COMPLEX}:
+ ex seq st for n holds seq.n=F(n)
+proof
+   defpred P[set,set] means ex n st (n=$1 & $2=F(n));
+ A1: now let x;
+     assume x in NAT;
+     then consider n such that
+  A2: n=x;
+     reconsider r2=F(n) as set;
+     take y=r2;
+     thus P[x,y] by A2;
+    end;
+ A3: for x,y,z st x in NAT & P[x,y] & P[x,z] holds y=z;
+   consider f such that
+A4: dom f=NAT and
+A5: for x st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A3,A1);
+      now let x;
+     assume x in NAT;
+      then ex n st
+   n=x & f.x=F(n) by A5;
+     hence f.x is Element of COMPLEX;
+    end;
+   then reconsider f as Complex_Sequence by A4,Th1;
+   take seq=f;
+   let n;
+      ex k st k=n & seq.n=F(k) by A5;
+   hence seq.n=F(n);
+  end;
 
 definition let IT be Complex_Sequence;
   attr IT is non-zero means
@@ -51,12 +80,28 @@ definition let IT be Complex_Sequence;
  rng IT c= COMPLEX \ {0c};
 end;
 
+
 theorem :: COMSEQ_1:3
   seq is non-zero iff for x st x in NAT holds seq.x<>0c;
 
-definition
+registration
   cluster non-zero Complex_Sequence;
+  existence
+   proof
+     deffunc f(set) = 1r;
+     consider s being Complex_Sequence such that
+A1:    for n holds s.n = f(n) from ExComplexSeq;
+    take s;
+       now let x;
+      assume x in NAT;
+      then reconsider n=x as Nat;
+         s.n = 1r by A1;
+       hence s.x<>0c by COMPLEX1:12,15;
+     end;
+     hence thesis by Th3;
+   end;
 end;
+
 
 theorem :: COMSEQ_1:4
   seq is non-zero iff for n holds seq.n<>0c;
@@ -82,6 +127,7 @@ dom it = dom f1 /\ dom f2 &
   commutativity;
 end;
 
+
 definition let C be non empty set; let f1,f2 be Function of C,COMPLEX;
  redefine
 func f1+f2 means
@@ -93,10 +139,22 @@ func f1(#)f2 means
    for c being Element of C holds it.c = f1.c * f2.c;
 end;
 
-definition let C be non empty set; let seq1,seq2 be Function of C,COMPLEX;
+
+registration let C be non empty set; let seq1,seq2 be Function of C,COMPLEX;
   cluster seq1+seq2 -> total;
+  coherence
+   proof
+     dom seq1 = C & dom seq2 = C by FUNCT_2:def 1;
+    hence dom(seq1 + seq2) = C /\ C by Def2 .= C;
+   end;
   cluster seq1(#)seq2 -> total;
+  coherence
+   proof
+     dom seq1 = C & dom seq2 = C by FUNCT_2:def 1;
+    hence dom(seq1 (#) seq2) = C /\ C by Def3 .= C;
+   end;
 end;
+
 
 definition let C be non empty set; let f be PartFunc of C,COMPLEX, r;
 func r(#)f -> PartFunc of C,COMPLEX means
@@ -104,15 +162,22 @@ func r(#)f -> PartFunc of C,COMPLEX means
  dom it = dom f & for c being Element of C st c in dom it holds it.c = r*f/.c;
 end;
 
+
 definition let C be non empty set; let f be Function of C,COMPLEX, r;
  redefine func r(#)f means
 :: COMSEQ_1:def 7
   dom it = C & for n being Element of C holds it.n=r*f.n;
 end;
 
-definition let C be non empty set; let seq be Function of C,COMPLEX, r;
+
+registration let C be non empty set; let seq be Function of C,COMPLEX, r;
  cluster r(#)seq -> total;
+ coherence
+  proof
+   thus dom(r(#)seq) = dom seq by Def6 .= C by FUNCT_2:def 1;
+  end;
 end;
+
 
 definition let C be non empty set; let f be PartFunc of C,COMPLEX;
 func -f ->PartFunc of C,COMPLEX means
@@ -120,15 +185,22 @@ func -f ->PartFunc of C,COMPLEX means
  dom it = dom f & for c being Element of C st c in dom it holds it.c = -(f/.c);
 end;
 
+
 definition let C be non empty set; let f be Function of C,COMPLEX;
  redefine func - f means
 :: COMSEQ_1:def 9
  dom it = C & for n being Element of C holds it.n=-f.n;
 end;
 
-definition let C be non empty set; let seq be Function of C,COMPLEX;
+
+registration let C be non empty set; let seq be Function of C,COMPLEX;
  cluster - seq -> total;
+ coherence
+  proof
+   thus dom -seq = dom seq by Def8 .= C by FUNCT_2:def 1;
+  end;
 end;
+
 
 definition let C be non empty set; let f1,f2 be PartFunc of C,COMPLEX;
 func f1-f2 -> PartFunc of C,COMPLEX equals
@@ -136,9 +208,16 @@ func f1-f2 -> PartFunc of C,COMPLEX equals
 f1 +- f2;
 end;
 
-definition let C be non empty set; let f1,f2 be Function of C,COMPLEX;
+
+registration let C be non empty set; let f1,f2 be Function of C,COMPLEX;
  cluster f1-f2 -> total;
+ correctness
+  proof
+      f1 - f2 = f1 + -f2 by Def10;
+   hence thesis;
+  end;
 end;
+
 
 definition
  let seq;
@@ -147,12 +226,14 @@ func seq" -> Complex_Sequence means
 for n holds it.n=(seq.n)";
 end;
 
+
 definition
  let seq1,seq;
 func seq1 /" seq ->Complex_Sequence equals
 :: COMSEQ_1:def 12
 seq1(#)(seq");
 end;
+
 
 definition let C be non empty set; let f be PartFunc of C,COMPLEX;
 func |.f.| -> PartFunc of C,REAL means
@@ -161,15 +242,22 @@ func |.f.| -> PartFunc of C,REAL means
  for c being Element of C st c in dom it holds it.c = |.f/.c.|;
 end;
 
+
 definition let C be non empty set; let seq be Function of C,COMPLEX;
  redefine func |.seq.| means
 :: COMSEQ_1:def 14
   dom it = C & for n being Element of C holds it.n=|.seq.n.|;
 end;
 
-definition let C be non empty set; let seq be Function of C,COMPLEX;
+
+registration let C be non empty set; let seq be Function of C,COMPLEX;
   cluster |.seq.|-> total;
+ coherence
+  proof
+   thus dom|.seq.| = dom seq by Def13 .= C by FUNCT_2:def 1;
+  end;
 end;
+
 
 canceled;
 

@@ -35,18 +35,27 @@ begin
    { k : 5 <= k };
  end;
 
- definition
+
+ registration
   cluster VAR -> non empty;
+  coherence
+  proof
+ 5 in { k : 5 <= k };
+   hence thesis by Def1;
+  end;
  end;
+
 
  definition mode Variable is Element of VAR;
  end;
+
 
  definition let n;
   func x.n -> Variable equals
 :: ZF_LANG:def 2
      5 + n;
  end;
+
 
  reserve x,y,z,t for Variable;
 
@@ -56,6 +65,7 @@ begin
  redefine func <*x*> -> FinSequence of NAT;
  end;
 
+
  definition let x,y;
   func x '=' y -> FinSequence of NAT equals
 :: ZF_LANG:def 3
@@ -64,6 +74,7 @@ begin
 :: ZF_LANG:def 4
    <*1*>^<*x*>^<*y*>;
  end;
+
 
 canceled 5;
 
@@ -83,6 +94,7 @@ theorem :: ZF_LANG:7
    <*3*>^p^q;
  end;
 
+
 canceled 2;
 
 theorem :: ZF_LANG:10
@@ -93,6 +105,7 @@ theorem :: ZF_LANG:10
 :: ZF_LANG:def 7
    <*4*>^<*x*>^p;
  end;
+
 
 canceled;
 
@@ -118,19 +131,30 @@ theorem :: ZF_LANG:12
        holds it c= D;
  end;
 
+
  definition let IT be FinSequence of NAT;
   attr IT is ZF-formula-like means
 :: ZF_LANG:def 9
   IT is Element of WFF;
  end;
 
- definition
+
+ registration
   cluster ZF-formula-like FinSequence of NAT;
+   existence
+    proof
+     consider x being Element of WFF;
+     reconsider x as FinSequence of NAT by Def8;
+     take x;
+     thus x is Element of WFF;
+    end;
  end;
+
 
 definition
   mode ZF-formula is ZF-formula-like FinSequence of NAT;
 end;
+
 
 canceled;
 
@@ -139,20 +163,59 @@ theorem :: ZF_LANG:14
 
  reserve F,F1,G,G1,H,H1 for ZF-formula;
 
- definition let x,y;
+ registration let x,y;
   cluster x '=' y -> ZF-formula-like;
+   coherence
+    proof
+         x '=' y is ZF-formula-like
+       proof thus x '=' y is Element of WFF by Def8; end;
+     hence thesis;
+    end;
   cluster x 'in' y -> ZF-formula-like;
+   coherence
+    proof
+         x 'in' y is ZF-formula-like
+       proof thus x 'in' y is Element of WFF by Def8; end;
+     hence thesis;
+    end;
  end;
 
- definition let H;
+
+ registration let H;
   cluster 'not' H -> ZF-formula-like;
+   coherence
+    proof
+         'not' H is ZF-formula-like
+       proof H is Element of WFF by Def9;
+        hence 'not' H is Element of WFF by Def8;
+       end;
+     hence thesis;
+    end;
   let G;
   cluster H '&' G -> ZF-formula-like;
+   coherence
+    proof
+         H '&' G is ZF-formula-like
+       proof H is Element of WFF & G is Element of WFF by Def9;
+        hence H '&' G is Element of WFF by Def8;
+       end;
+     hence thesis;
+    end;
  end;
 
- definition let x,H;
+
+ registration let x,H;
   cluster All(x,H) -> ZF-formula-like;
+   coherence
+    proof
+         All(x,H) is ZF-formula-like
+       proof H is Element of WFF by Def9;
+        hence All(x,H) is Element of WFF by Def8;
+       end;
+     hence thesis;
+    end;
  end;
+
 
 ::
 ::                   The Properties of ZF-formulae
@@ -162,11 +225,9 @@ theorem :: ZF_LANG:14
   attr H is being_equality means
 :: ZF_LANG:def 10
   ex x,y st H = x '=' y;
-  synonym H is_equality;
   attr H is being_membership means
 :: ZF_LANG:def 11
   ex x,y st H = x 'in' y;
-  synonym H is_membership;
   attr H is negative means
 :: ZF_LANG:def 12
   ex H1 st H = 'not' H1;
@@ -177,6 +238,10 @@ theorem :: ZF_LANG:14
 :: ZF_LANG:def 14
   ex x,H1 st H = All(x,H1);
  end;
+notation let H;
+  synonym H is_equality for H is being_equality ; synonym H is_membership for
+ H is being_membership ; end;
+
 
 canceled;
 
@@ -193,6 +258,7 @@ theorem :: ZF_LANG:16
   H is_equality or H is_membership;
  end;
 
+
  definition let F,G;
   func F 'or' G -> ZF-formula equals
 :: ZF_LANG:def 16
@@ -204,6 +270,7 @@ theorem :: ZF_LANG:16
 
  end;
 
+
  definition let F,G;
   func F <=> G -> ZF-formula equals
 :: ZF_LANG:def 18
@@ -211,12 +278,14 @@ theorem :: ZF_LANG:16
 
  end;
 
+
  definition let x,H;
   func Ex(x,H) -> ZF-formula equals
 :: ZF_LANG:def 19
    'not' All(x,'not' H);
 
  end;
+
 
  definition let H;
   attr H is disjunctive means
@@ -232,6 +301,7 @@ theorem :: ZF_LANG:16
 :: ZF_LANG:def 23
   ex x,H1 st H = Ex(x,H1);
  end;
+
 
 canceled 5;
 
@@ -252,6 +322,7 @@ theorem :: ZF_LANG:22
 
  end;
 
+
 theorem :: ZF_LANG:23
    All(x,y,H) = All(x,All(y,H)) & Ex(x,y,H) = Ex(x,Ex(y,H));
 
@@ -265,6 +336,7 @@ theorem :: ZF_LANG:23
    Ex(x,Ex(y,z,H));
 
  end;
+
 
 theorem :: ZF_LANG:24
    All(x,y,z,H) = All(x,All(y,z,H)) & Ex(x,y,z,H) = Ex(x,Ex(y,z,H));
@@ -372,6 +444,7 @@ theorem :: ZF_LANG:51
    H.3;
  end;
 
+
 theorem :: ZF_LANG:52
     H is atomic implies Var1 H = H.2 & Var2 H = H.3;
 
@@ -389,6 +462,7 @@ theorem :: ZF_LANG:54
   'not' it = H;
  end;
 
+
  definition let H;
   assume
  H is conjunctive or H is disjunctive;
@@ -401,6 +475,7 @@ theorem :: ZF_LANG:54
   ex H1 st H1 '&' it = H if H is conjunctive
      otherwise ex H1 st H1 'or' it = H;
  end;
+
 
 canceled;
 
@@ -435,6 +510,7 @@ theorem :: ZF_LANG:59
      otherwise ex x st Ex(x,it) = H;
  end;
 
+
 theorem :: ZF_LANG:60
     H is universal implies
    (x = bound_in H iff ex H1 st All(x,H1) = H) &
@@ -462,6 +538,7 @@ theorem :: ZF_LANG:63
   ex H1 st H = H1 => it;
  end;
 
+
 theorem :: ZF_LANG:64
     H is conditional implies
    (F = the_antecedent_of H iff ex G st H = F => G) &
@@ -482,6 +559,7 @@ theorem :: ZF_LANG:65
   ex H1 st H = H1 <=> it;
  end;
 
+
 theorem :: ZF_LANG:66
     H is biconditional implies
    (F = the_left_side_of H iff ex G st H = F <=> G) &
@@ -501,6 +579,7 @@ theorem :: ZF_LANG:67
   F = 'not' H or ( ex H1 st F = H '&' H1 or F = H1 '&' H ) or
       ex x st F = All(x,H);
  end;
+
 
 canceled;
 
@@ -550,6 +629,7 @@ theorem :: ZF_LANG:77
           H1 is_immediate_constituent_of F1;
  end;
 
+
 canceled;
 
 theorem :: ZF_LANG:79
@@ -560,6 +640,7 @@ theorem :: ZF_LANG:79
 :: ZF_LANG:def 41
   H is_subformula_of F & H <> F;
  end;
+
 
 canceled;
 
@@ -635,6 +716,7 @@ theorem :: ZF_LANG:98
   a in it iff ex F st F = a & F is_subformula_of H;
  end;
 
+
 canceled;
 
 theorem :: ZF_LANG:100
@@ -682,16 +764,81 @@ theorem :: ZF_LANG:111
 ::               The Structural Induction Schemes
 ::
 
-scheme ZF_Ind { P[ZF-formula] } :
+scheme :: ZF_LANG:sch 1
+ ZF_Ind { P[ZF-formula] } :
   for H holds P[H]
     provided
  for H st H is atomic holds P[H] and
  for H st H is negative & P[the_argument_of H] holds P[H] and
  for H st H is conjunctive &
     P[the_left_argument_of H] & P[the_right_argument_of H] holds P[H] and
- for H st H is universal & P[the_scope_of H] holds P[H];
+ for H st H is universal & P[the_scope_of H] holds P[H]
+proof
+     defpred Q[Nat] means for H st len H = $1 holds P[H];
+A5:  for n st for k st k < n holds Q[k] holds Q[n]
+     proof let n such that
+A6:     for k st k < n for H st len H = k holds P[H];
+      let H such that
+A7:     len H = n;
+A8:     H is atomic or H is negative or H is conjunctive or H is universal
+        by Th26;
+A9:    now assume
+A10:       H is negative;
+         then H = 'not' the_argument_of H by Def30;
+         then the_argument_of H is_immediate_constituent_of H by Th71;
+         then len the_argument_of H < len H by Th81;
+         then P[the_argument_of H] by A6,A7;
+        hence P[H] by A2,A10;
+       end;
+A11:    now assume
+A12:       H is conjunctive;
+         then H = (the_left_argument_of H) '&' the_right_argument_of H by Th58
+;
+         then the_left_argument_of H is_immediate_constituent_of H &
+          the_right_argument_of H is_immediate_constituent_of H
+           by Th72;
+         then len the_left_argument_of H < len H &
+          len the_right_argument_of H < len H by Th81;
+         then P[the_left_argument_of H] & P[the_right_argument_of H] by A6,A7;
+        hence P[H] by A3,A12;
+       end;
+      now assume
+A13:       H is universal;
+         then H = All(bound_in H,the_scope_of H) by Th62;
+         then the_scope_of H is_immediate_constituent_of H by Th73;
+         then len the_scope_of H < len H by Th81;
+         then P[the_scope_of H] by A6,A7;
+        hence P[H] by A4,A13;
+       end;
+      hence thesis by A1,A8,A9,A11;
+     end;
+   let H;
+A14:  len H = len H;
+      for n holds Q[n] from NAT_1:sch 4(A5);
+   hence thesis by A14;
+  end;
 
-scheme ZF_CompInd { P[ZF-formula] } :
+scheme :: ZF_LANG:sch 2
+ ZF_CompInd { P[ZF-formula] } :
   for H holds P[H]
     provided
- for H st for F st F is_proper_subformula_of H holds P[F] holds P[H];
+ for H st for F st F is_proper_subformula_of H holds P[F] holds P[H]
+proof
+     defpred Q[Nat] means for H st len H = $1 holds P[H];
+A2:  for n st for k st k < n holds Q[k] holds Q[n]
+     proof let n such that
+A3:     for k st k < n for H st len H = k holds P[H];
+      let H such that
+A4:     len H = n;
+         now let F; assume
+           F is_proper_subformula_of H;
+         then len F < len H by Th83;
+        hence P[F] by A3,A4;
+       end;
+      hence P[H] by A1;
+     end;
+A5:  for n holds Q[n] from NAT_1:sch 4 (A2);
+   let H;
+      len H = len H;
+   hence thesis by A5;
+  end;

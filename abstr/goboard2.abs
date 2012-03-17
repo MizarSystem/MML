@@ -32,9 +32,22 @@ begin
          G for Go-board,
          x for set;
 
-scheme PiLambdaD{D()-> non empty set, l()->Nat, F(set)-> Element of D()}:
+scheme :: GOBOARD2:sch 1
+ PiLambdaD{D()-> non empty set, l()->Nat, F(set)-> Element of D()}:
  ex g being FinSequence of D() st
-  len g=l() & for n st n in dom g holds g/.n=F(n);
+  len g=l() & for n st n in dom g holds g/.n=F(n)
+proof
+  deffunc G(Nat) = F($1);
+  consider g being FinSequence of D() such that
+A1: len g=l() & for n st n in Seg l() holds g.n=G(n) from FINSEQ_2:sch 1;
+ take g;
+ thus len g=l() by A1;
+ let n; assume
+A2: n in dom g;
+  then n in Seg l() by A1,FINSEQ_1:def 3;
+  then g.n = F(n) by A1;
+ hence thesis by A2,FINSEQ_4:def 4;
+end;
 
 :::::::::::::::::::::::::::::
 :: Real numbers prelimineries
@@ -98,10 +111,13 @@ f <> {} implies X_axis(f) <> {};
 theorem :: GOBOARD2:15
 f <> {} implies Y_axis(f) <> {};
 
-definition let f be non empty FinSequence of TOP-REAL 2;
+registration let f be non empty FinSequence of TOP-REAL 2;
  cluster X_axis f -> non empty;
+ coherence by Th14;
  cluster Y_axis f -> non empty;
+ coherence by Th15;
 end;
+
 
 theorem :: GOBOARD2:16
  f is special implies
@@ -149,10 +165,110 @@ func GoB(v1,v2) -> Matrix of TOP-REAL 2 means
  for n,m st [n,m] in Indices it holds it*(n,m) = |[v1.n,v2.m]|;
 end;
 
-definition let v1,v2 be non empty increasing FinSequence of REAL;
+
+registration let v1,v2 be non empty increasing FinSequence of REAL;
  cluster GoB(v1,v2) -> non empty-yielding X_equal-in-line Y_equal-in-column
    Y_increasing-in-line X_increasing-in-column;
+ coherence
+  proof set M = GoB(v1,v2);
+   A1: rng v1 c= REAL & rng v2 c= REAL & dom v1=Seg len v1 & dom v2=Seg len v2
+      by FINSEQ_1:def 3,def 4;
+   A2: len v1 <>0 & len v2 <> 0 by FINSEQ_1:25;
+   A3: len M=len v1 & width M=len v2 by Def1;
+then A4: dom M = dom v1 & width M=len v2 by FINSEQ_3:31;
+then A5: Indices M=[:dom v1,Seg len v2:] by MATRIX_1:def 5;
+   thus M is non empty-yielding by A2,A3,GOBOARD1:def 5;
+   thus M is X_equal-in-line
+    proof let n;
+     reconsider l = Line(M,n) as FinSequence of TOP-REAL 2;
+     set x = X_axis(l); assume
+     A6: n in dom M;
+     A7: len x = len l & len l = width M & dom x = Seg len x
+       by FINSEQ_1:def 3,GOBOARD1:def 3,MATRIX_1:def 8;
+then A8: dom x = dom l by FINSEQ_3:31;
+        now let i,j; assume
+       A9: i in dom x & j in dom x;
+then A10:   [n,i] in Indices M & [n,j] in Indices M by A4,A5,A6,A7,ZFMISC_1:106
+;
+       reconsider r=v1.n, s1=v2.i, s2=v2.j as Real;
+         M*(n,i)=|[r,s1]| & M*(n,j)=|[r,s2]| by A10,Def1;
+       then A11: M*(n,i)`1 = r & M*(n,j)`1 = r by EUCLID:56;
+         l/.i = l.i & l/.j = l.j by A8,A9,FINSEQ_4:def 4;
+       then l/.i=M*(n,i) & l/.j=M*(n,j) by A7,A9,MATRIX_1:def 8;
+       then x.i=r & x.j=r by A9,A11,GOBOARD1:def 3;
+       hence x.i=x.j;
+      end;
+     hence X_axis(Line(M,n)) is constant by GOBOARD1:def 2;
+    end;
+   thus M is Y_equal-in-column
+    proof let n;
+     reconsider c = Col(M,n) as FinSequence of TOP-REAL 2;
+     set y = Y_axis(c); assume
+     A12: n in Seg width M;
+        len y = len c & len c = len M & dom y = Seg len y
+       by FINSEQ_1:def 3,GOBOARD1:def 4,MATRIX_1:def 9;
+then A13:  dom y = dom c & dom c = dom M by FINSEQ_3:31;
+        now let i,j; assume
+       A14: i in dom y & j in dom y;
+then A15: [i,n] in Indices M & [j,n] in Indices M by A4,A5,A12,A13,ZFMISC_1:106
+;
+       reconsider r=v2.n, s1=v1.i, s2=v1.j as Real;
+         M*(i,n)=|[s1,r]| & M*(j,n)=|[s2,r]| by A15,Def1;
+       then A16: M*(i,n)`2 = r & M*(j,n)`2 = r by EUCLID:56;
+         c/.i = c.i & c/.j = c.j by A13,A14,FINSEQ_4:def 4;
+       then c/.i=M*(i,n) & c/.j=M*(j,n) by A13,A14,MATRIX_1:def 9;
+       then y.i=r & y.j=r by A14,A16,GOBOARD1:def 4;
+       hence y.i=y.j;
+      end;
+     hence Y_axis(Col(M,n)) is constant by GOBOARD1:def 2;
+    end;
+   thus M is Y_increasing-in-line
+    proof let n;
+     reconsider l = Line(M,n) as FinSequence of TOP-REAL 2;
+     set y = Y_axis(l); assume
+     A17: n in dom M;
+     A18: len y = len l & len l = width M & dom y = Seg len y
+       by FINSEQ_1:def 3,GOBOARD1:def 4,MATRIX_1:def 8;
+then A19:  dom y = dom l by FINSEQ_3:31;
+        now let i,j; assume
+       A20: i in dom y & j in dom y & i<j;
+then A21: [n,i] in Indices M & [n,j] in Indices M
+        by A4,A5,A17,A18,ZFMISC_1:106;
+       reconsider r=v1.n, s1=v2.i, s2=v2.j as Real;
+         M*(n,i)=|[r,s1]| & M*(n,j)=|[r,s2]| by A21,Def1;
+       then A22: M*(n,i)`2 = s1 & M*(n,j)`2 = s2 by EUCLID:56;
+         l/.i = l.i & l/.j = l.j by A19,A20,FINSEQ_4:def 4;
+       then l/.i=M*(n,i) & l/.j=M*(n,j) by A18,A20,MATRIX_1:def 8;
+       then y.i=s1 & y.j=s2 & s1<s2 by A1,A3,A18,A20,A22,GOBOARD1:def 1,def 4;
+       hence y.i<y.j;
+      end;
+     hence Y_axis(Line(M,n)) is increasing by GOBOARD1:def 1;
+    end;
+   thus M is X_increasing-in-column
+    proof let n;
+     reconsider c = Col(M,n) as FinSequence of TOP-REAL 2;
+     set x = X_axis(c); assume
+     A23: n in Seg width M;
+     A24: len x = len c & len c = len M & dom x = Seg len x
+       by FINSEQ_1:def 3,GOBOARD1:def 3,MATRIX_1:def 9;
+then A25:  dom x = dom c & dom c = dom M by FINSEQ_3:31;
+        now let i,j; assume
+       A26: i in dom x & j in dom x & i<j;
+then A27: [i,n] in Indices M & [j,n] in Indices M by A4,A5,A23,A25,ZFMISC_1:106
+;
+       reconsider r=v2.n, s1=v1.i, s2=v1.j as Real;
+         M*(i,n)=|[s1,r]| & M*(j,n)=|[s2,r]| by A27,Def1;
+       then A28: M*(i,n)`1 = s1 & M*(j,n)`1 = s2 by EUCLID:56;
+         c/.i = c.i & c/.j = c.j by A25,A26,FINSEQ_4:def 4;
+       then c/.i=M*(i,n) & c/.j=M*(j,n) by A25,A26,MATRIX_1:def 9;
+       then x.i=s1 & x.j=s2 & s1<s2 by A1,A3,A24,A26,A28,GOBOARD1:def 1,def 3;
+       hence x.i<x.j;
+      end;
+     hence X_axis(Col(M,n)) is increasing by GOBOARD1:def 1;
+    end;
+  end;
 end;
+
 
 definition let v;
 func Incr(v) ->increasing FinSequence of REAL means
@@ -160,23 +276,37 @@ func Incr(v) ->increasing FinSequence of REAL means
 rng it = rng v & len it = card rng v;
 end;
 
+
 definition let f be non empty FinSequence of TOP-REAL 2;
 func GoB(f) -> Matrix of TOP-REAL 2 equals
 :: GOBOARD2:def 3
  GoB(Incr(X_axis(f)),Incr(Y_axis(f)));
 end;
 
+
 theorem :: GOBOARD2:23
 v <> {} implies Incr(v) <> {};
 
-definition let v be non empty FinSequence of REAL;
+registration let v be non empty FinSequence of REAL;
  cluster Incr v -> non empty;
+ coherence by Th23;
 end;
 
-definition let f be non empty FinSequence of TOP-REAL 2;
+
+registration let f be non empty FinSequence of TOP-REAL 2;
  cluster GoB(f) -> non empty-yielding X_equal-in-line Y_equal-in-column
    Y_increasing-in-line X_increasing-in-column;
+ coherence
+  proof
+    reconsider w1 = X_axis f, w2 = Y_axis f as
+         non empty FinSequence of REAL;
+    reconsider v1 = Incr w1, v2 = Incr w2 as
+         non empty increasing FinSequence of REAL;
+      GoB(f) = GoB(v1,v2) by Def3;
+   hence thesis;
+  end;
 end;
+
 
 reserve f for non empty FinSequence of TOP-REAL 2;
 

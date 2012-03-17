@@ -7,14 +7,6 @@ SUBSET_1
 MCART_1
 DOMAIN_1
 #
-Fraenkel1
-Fraenkel2
-Fraenkel3
-Fraenkel4
-Fraenkel5
-Fraenkel6
-SubsetD
-#
 ;
 ùM1 W1 ;;êËM2 B1 ;;B2 P1 B2 ;M2 K16 B1 ;;;
 #

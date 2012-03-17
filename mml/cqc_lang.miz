@@ -32,6 +32,7 @@ definition let x,y,a,b be set;
   correctness;
 end;
 
+
 definition let D be non empty set; let x,y be set, a,b be Element of D;
  redefine func IFEQ(x,y,a,b) -> Element of D;
  coherence
@@ -40,13 +41,15 @@ definition let D be non empty set; let x,y be set, a,b be Element of D;
   end;
 end;
 
+
 definition let x,y be set;
  func x .--> y -> set equals
 :Def2:  {x} --> y;
   coherence;
 end;
 
-definition let x,y be set;
+
+registration let x,y be set;
  cluster x .--> y -> Function-like Relation-like;
  coherence
  proof
@@ -54,6 +57,7 @@ definition let x,y be set;
   hence thesis;
  end;
 end;
+
 
 canceled 4;
 
@@ -113,6 +117,7 @@ A2:  x2 in NAT & x = [x1,x2] by QC_LANG1:def 1,ZFMISC_1:def 2;
   mode Substitution is PartFunc of free_QC-variables,QC-variables;
  end;
 
+
  reserve f for Substitution;
 
 definition let l,f;
@@ -136,7 +141,7 @@ A2: for k st k in Seg len l ex y being set st P[k,y]
      end;
   consider s being FinSequence such that
 A3:  dom s = Seg len l and
-A4:  for k st k in Seg len l holds P[k,s.k] from SeqEx(A1,A2);
+A4:  for k st k in Seg len l holds P[k,s.k] from FINSEQ_1:sch 1(A1,A2);
     rng s c= QC-variables
    proof let y be set;
     assume y in rng s;
@@ -147,7 +152,9 @@ A6:    s.x = y by FUNCT_1:def 5;
 A7: now per cases;
      case l.x in dom f;
       hence s.x = f.(l.x) & f.(l.x) in QC-variables by A3,A4,A5,PARTFUN1:27;
+     end;
      case not l.x in dom f; hence s.x = l.x by A3,A4,A5;
+    end;
     end;
       dom l = Seg len l by FINSEQ_1:def 3;
     hence thesis by A3,A5,A6,A7,FINSEQ_2:13;
@@ -183,6 +190,7 @@ A11:  for k st 1 <= k & k <= len l holds
  end;
 end;
 
+
 definition let k; let l be QC-variable_list of k; let f;
  redefine func Subst(l,f) -> QC-variable_list of k;
   coherence
@@ -190,6 +198,7 @@ definition let k; let l be QC-variable_list of k; let f;
    hence thesis by QC_LANG1:def 8;
  end;
 end;
+
 
 canceled 2;
 
@@ -206,6 +215,7 @@ definition let a,x;
  redefine func a .--> x -> Substitution;
   coherence by Th10;
 end;
+
 
 theorem Th11:
    f = a .--> x & ll = Subst(l,f) & 1 <= k & k <= len l implies
@@ -242,7 +252,8 @@ definition
  end;
 end;
 
-definition
+
+registration
   cluster CQC-WFF -> non empty;
 coherence
  proof
@@ -251,6 +262,7 @@ coherence
    hence thesis by Def4;
  end;
 end;
+
 
 canceled;
 
@@ -274,14 +286,15 @@ definition let k;
 :Def5: rng IT c= bound_QC-variables;
 end;
 
-definition let k;
+
+registration let k;
  cluster CQC-variable_list-like QC-variable_list of k;
   existence
  proof
    deffunc f(set) = x.0;
    consider l being FinSequence such that
 A1: len l = k and
-A2: for i st i in Seg k holds l.i = f(i) from SeqLambda;
+A2: for i st i in Seg k holds l.i = f(i) from FINSEQ_1:sch 2;
     rng l c= QC-variables
    proof let y be set;
     assume y in rng l;
@@ -306,9 +319,11 @@ A6: x = l.i by FUNCT_1:def 5;
  end;
 end;
 
+
 definition let k;
  mode CQC-variable_list of k is CQC-variable_list-like QC-variable_list of k;
 end;
+
 
 canceled;
 
@@ -402,6 +417,7 @@ definition let k;
  end;
 end;
 
+
 theorem Th18:
    'not' p is Element of CQC-WFF iff p is Element of CQC-WFF
  proof
@@ -451,6 +467,7 @@ definition redefine
   coherence by Th19;
 end;
 
+
 theorem Th20:
    r => s is Element of CQC-WFF
  proof r => s = 'not' (r '&' 'not' s) by QC_LANG2:def 2; hence thesis; end;
@@ -479,6 +496,7 @@ definition let r,s; redefine
   coherence by Th22;
 end;
 
+
 theorem Th23:
    All(x,p) is Element of CQC-WFF iff p is Element of CQC-WFF
  proof
@@ -499,6 +517,7 @@ definition let x,r;
   coherence by Th23;
 end;
 
+
 theorem Th24:
    Ex(x,r) is Element of CQC-WFF
  proof Ex(x,r) = 'not' All(x,'not' r) by QC_LANG2:def 5; hence thesis; end;
@@ -507,6 +526,7 @@ definition let x,r;
  redefine func Ex(x,r) -> Element of CQC-WFF;
   coherence by Th24;
 end;
+
 
 scheme CQC_Ind { P[set] }:
     for r holds P[r]
@@ -518,7 +538,7 @@ A1: for r,s,x,k for l being CQC-variable_list of k
       (P[r] implies P['not' r]) &
       (P[r] & P[s] implies P[r '&' s]) &
       (P[r] implies P[All(x, r)])
- proof
+proof
   defpred Prop[Element of QC-WFF] means $1 is Element of CQC-WFF implies P[$1];
 A2:  for k being Nat, P being (QC-pred_symbol of k),
          l being QC-variable_list of k holds Prop[P!l]
@@ -552,7 +572,8 @@ A9:   Prop[p];
     then p is Element of CQC-WFF by Th23;
     hence thesis by A1,A9;
    end;
-    for p being Element of QC-WFF holds Prop[p] from QC_Ind(A2,A3,A4,A6,A8);
+    for p being Element of QC-WFF holds Prop[p] from QC_LANG1:sch 1
+(A2,A3,A4,A6,A8);
   hence thesis;
  end;
 
@@ -570,7 +591,7 @@ scheme CQC_Func_Ex { D() -> non empty set,
       F.('not' r) = N(F.r) &
       F.(r '&' s) = C(F.r,F.s) &
       F.All(x,r) = Q(x,F.r)
- proof
+proof
    deffunc a(Element of QC-WFF) = A(the_arity_of the_pred_symbol_of $1,
                   the_pred_symbol_of $1,the_arguments_of $1);
    deffunc n(Element of D()) = N($1);
@@ -583,7 +604,8 @@ A1:  F.VERUM = V() &
        (p is negative implies F.p = n(F.the_argument_of p)) &
        (p is conjunctive implies
           F.p = c(F.the_left_argument_of p, F.the_right_argument_of p)) &
-       (p is universal implies F.p = q(p, F.the_scope_of p)) from QC_Func_Ex;
+       (p is universal implies F.p = q(p, F.the_scope_of p)) from
+QC_LANG1:sch 3;
    reconsider G = F|CQC-WFF as Function of CQC-WFF,D() by FUNCT_2:38;
    take G;
    thus G.VERUM = V() by A1,FUNCT_1:72;
@@ -633,7 +655,7 @@ A2: F2().VERUM = V() &
        F2().('not' r) = N(F2().r) &
        F2().(r '&' s) = C(F2().r,F2().s) &
        F2().All(x,r) = Q(x,F2().r)
- proof
+proof
    defpred P[set] means F1().$1 = F2().$1;
 A3: for r,s,x,k for l being CQC-variable_list of k
      for P being QC-pred_symbol of k holds
@@ -694,7 +716,7 @@ scheme CQC_Def_correctness { D() -> non empty set,
            F.(r '&' s) = C(F.r,F.s) &
            F.All(x,r) = Q(x,F.r) )
     holds d1 = d2)
- proof
+proof
    deffunc a(set,set,set) = A($1,$2,$3);
    deffunc n(set) = N($1);
    deffunc c(set,set) = C($1,$2);
@@ -761,7 +783,7 @@ A1: for p being (Element of CQC-WFF), d being Element of D() holds
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r)
- proof
+proof
    deffunc a(set,set,set) = A($1,$2,$3);
    deffunc n(set) = N($1);
    deffunc c(set,set) = C($1,$2);
@@ -798,7 +820,7 @@ A1: for p being (Element of CQC-WFF), d being Element of D() holds
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r)
- proof
+proof
    deffunc a(set,set,set) = A($1,$2,$3);
    deffunc n(set) = N($1);
    deffunc c(set,set) = C($1,$2);
@@ -834,7 +856,7 @@ A1: for p being (Element of CQC-WFF), d being Element of D() holds
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r)
- proof
+proof
    deffunc a(set,set,set) = A($1,$2,$3);
    deffunc n(set) = N($1);
    deffunc c(set,set) = C($1,$2);
@@ -881,7 +903,7 @@ A1: for p being (Element of CQC-WFF), d being Element of D() holds
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r)
- proof
+proof
    deffunc a(set,set,set) = A($1,$2,$3);
    deffunc n(set) = N($1);
    deffunc c(set,set) = C($1,$2);
@@ -938,7 +960,7 @@ A1: for p being (Element of CQC-WFF), d being Element of D() holds
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
        F.All(x,r) = Q(x,F.r)
- proof
+proof
    deffunc a(set,set,set) = A($1,$2,$3);
    deffunc n(set) = N($1);
    deffunc c(set,set) = C($1,$2);
@@ -1024,7 +1046,7 @@ Lm2:
              d1 = F2.the_left_argument_of p & d2 = F2.the_right_argument_of p
            implies F2.p = c(d1,d2)) &
         (p is universal & d1 = F2.the_scope_of p implies F2.p = q(p,d1));
-   thus F1 = F2 from QC_Func_Uniq(A1,A2);
+   thus F1 = F2 from QC_LANG3:sch 1(A1,A2);
  end;
 
  definition let p,x;
@@ -1056,13 +1078,14 @@ A1:  F.VERUM = VERUM &
         (p is conjunctive implies
             F.p = c(F.the_left_argument_of p,F.the_right_argument_of p)) &
         (p is universal implies F.p = q(p,F.the_scope_of p))
-      from QC_Func_Ex;
+      from QC_LANG1:sch 3;
     take F.p,F;
     thus F.p = F.p;
     thus thesis by A1;
    end;
   uniqueness by Lm2;
  end;
+
 
 canceled 3;
 
@@ -1315,7 +1338,7 @@ A10:    Free p = {} implies p.x = p;
          (x <> y implies All(y, p).x = All(y, p)) by A10,Th37,Th38,QC_LANG3:70;
     hence thesis;
    end;
-    for p holds P[p] from QC_Ind(A1,A5,A6,A7,A9);
+    for p holds P[p] from QC_LANG1:sch 1(A1,A5,A6,A7,A9);
   hence thesis;
  end;
 
@@ -1385,6 +1408,6 @@ A16:   Fixed(p.x) = Fixed p;
       end;
     hence thesis by Th37;
    end;
-    for p holds P[p] from QC_Ind(A1,A10,A11,A13,A15);
+    for p holds P[p] from QC_LANG1:sch 1(A1,A10,A11,A13,A15);
   hence thesis;
  end;

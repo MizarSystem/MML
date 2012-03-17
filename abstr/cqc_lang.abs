@@ -28,9 +28,11 @@ definition let x,y,a,b be set;
  a if x = y otherwise b;
 end;
 
+
 definition let D be non empty set; let x,y be set, a,b be Element of D;
  redefine func IFEQ(x,y,a,b) -> Element of D;
 end;
+
 
 definition let x,y be set;
  func x .--> y -> set equals
@@ -38,9 +40,16 @@ definition let x,y be set;
   {x} --> y;
 end;
 
-definition let x,y be set;
+
+registration let x,y be set;
  cluster x .--> y -> Function-like Relation-like;
+ coherence
+ proof
+    x .--> y = {x} --> y by Def2;
+  hence thesis;
+ end;
 end;
+
 
 canceled 4;
 
@@ -65,6 +74,7 @@ theorem :: CQC_LANG:7
   mode Substitution is PartFunc of free_QC-variables,QC-variables;
  end;
 
+
  reserve f for Substitution;
 
 definition let l,f;
@@ -76,9 +86,11 @@ definition let l,f;
  dom f implies it.k = l.k);
 end;
 
+
 definition let k; let l be QC-variable_list of k; let f;
  redefine func Subst(l,f) -> QC-variable_list of k;
 end;
+
 
 canceled 2;
 
@@ -88,6 +100,7 @@ theorem :: CQC_LANG:10
 definition let a,x;
  redefine func a .--> x -> Substitution;
 end;
+
 
 theorem :: CQC_LANG:11
    f = a .--> x & ll = Subst(l,f) & 1 <= k & k <= len l implies
@@ -99,9 +112,17 @@ definition
   {s where s is QC-formula: Fixed s = {} & Free s = {} };
 end;
 
-definition
+
+registration
   cluster CQC-WFF -> non empty;
+coherence
+ proof
+     VERUM in {s where s is QC-formula: Fixed s = {} & Free s = {} }
+     by QC_LANG3:65,76;
+   hence thesis by Def4;
+ end;
 end;
+
 
 canceled;
 
@@ -115,13 +136,44 @@ definition let k;
  rng IT c= bound_QC-variables;
 end;
 
-definition let k;
+
+registration let k;
  cluster CQC-variable_list-like QC-variable_list of k;
+  existence
+ proof
+   deffunc f(set) = x.0;
+   consider l being FinSequence such that
+A1: len l = k and
+A2: for i st i in Seg k holds l.i = f(i) from FINSEQ_1:sch 2;
+    rng l c= QC-variables
+   proof let y be set;
+    assume y in rng l;
+    then consider x being set such that
+A3:   x in dom l and
+A4:   l.x = y by FUNCT_1:def 5;
+     x in Seg k by A1,A3,FINSEQ_1:def 3;
+    then y = x.0 by A2,A4;
+    hence y in QC-variables;
+   end;
+  then l is FinSequence of QC-variables by FINSEQ_1:def 4;
+  then reconsider l as QC-variable_list of k by A1,QC_LANG1:def 8;
+  take l;
+  let x be set;
+  assume x in rng l;
+  then consider i being set such that
+A5: i in dom l and
+A6: x = l.i by FUNCT_1:def 5;
+    i in Seg k by A1,A5,FINSEQ_1:def 3;
+  then l.i = x.0 by A2;
+  hence x in bound_QC-variables by A6;
+ end;
 end;
+
 
 definition let k;
  mode CQC-variable_list of k is CQC-variable_list-like QC-variable_list of k;
 end;
+
 
 canceled;
 
@@ -147,6 +199,7 @@ definition let k;
   redefine func P!l -> Element of CQC-WFF;
 end;
 
+
 theorem :: CQC_LANG:18
    'not' p is Element of CQC-WFF iff p is Element of CQC-WFF;
 
@@ -161,6 +214,7 @@ definition redefine
  let s;
  func r '&' s -> Element of CQC-WFF;
 end;
+
 
 theorem :: CQC_LANG:20
    r => s is Element of CQC-WFF;
@@ -177,12 +231,14 @@ definition let r,s; redefine
  func r <=> s -> Element of CQC-WFF;
 end;
 
+
 theorem :: CQC_LANG:23
    All(x,p) is Element of CQC-WFF iff p is Element of CQC-WFF;
 
 definition let x,r;
  redefine func All(x,r) -> Element of CQC-WFF;
 end;
+
 
 theorem :: CQC_LANG:24
    Ex(x,r) is Element of CQC-WFF;
@@ -191,7 +247,9 @@ definition let x,r;
  redefine func Ex(x,r) -> Element of CQC-WFF;
 end;
 
-scheme CQC_Ind { P[set] }:
+
+scheme :: CQC_LANG:sch 1
+ CQC_Ind { P[set] }:
     for r holds P[r]
   provided
  for r,s,x,k for l being CQC-variable_list of k
@@ -200,9 +258,48 @@ scheme CQC_Ind { P[set] }:
       P[P!l] &
       (P[r] implies P['not' r]) &
       (P[r] & P[s] implies P[r '&' s]) &
-      (P[r] implies P[All(x, r)]);
+      (P[r] implies P[All(x, r)])
+proof
+  defpred Prop[Element of QC-WFF] means $1 is Element of CQC-WFF implies P[$1];
+A2:  for k being Nat, P being (QC-pred_symbol of k),
+         l being QC-variable_list of k holds Prop[P!l]
+   proof let k be Nat, P be (QC-pred_symbol of k),l be QC-variable_list of k;
+    assume P!l is Element of CQC-WFF;
+    then { l.i : 1 <= i & i <= len l & l.i in free_QC-variables } = {} &
+      { l.j : 1 <= j & j <= len l & l.j in fixed_QC-variables } = {} by Th17;
+    then l is CQC-variable_list of k by Th15;
+    hence thesis by A1;
+   end;
+A3: Prop[VERUM] by A1;
+A4: for p being Element of QC-WFF st Prop[p] holds Prop['not' p]
+   proof let p be Element of QC-WFF; assume
+A5:   Prop[p];
+    assume 'not' p is Element of CQC-WFF;
+    then p is Element of CQC-WFF by Th18;
+    hence thesis by A1,A5;
+   end;
+A6: for p,q being Element of QC-WFF st Prop[p] & Prop[q] holds Prop[p '&' q]
+   proof let p,q be Element of QC-WFF; assume
+A7:   Prop[p] & Prop[q];
+    assume p '&' q is Element of CQC-WFF;
+    then p is Element of CQC-WFF & q is Element of CQC-WFF by Th19;
+    hence thesis by A1,A7;
+   end;
+A8: for x being bound_QC-variable, p being Element of QC-WFF st Prop[p]
+       holds Prop[All(x, p)]
+   proof let x be bound_QC-variable, p be Element of QC-WFF; assume
+A9:   Prop[p];
+    assume All(x,p) is Element of CQC-WFF;
+    then p is Element of CQC-WFF by Th23;
+    hence thesis by A1,A9;
+   end;
+    for p being Element of QC-WFF holds Prop[p] from QC_LANG1:sch 1
+(A2,A3,A4,A6,A8);
+  hence thesis;
+ end;
 
-scheme CQC_Func_Ex { D() -> non empty set,
+scheme :: CQC_LANG:sch 2
+ CQC_Func_Ex { D() -> non empty set,
                 V() -> (Element of D()),
                 A(set,set,set) -> (Element of D()),
                 N(set) -> (Element of D()),
@@ -215,9 +312,50 @@ scheme CQC_Func_Ex { D() -> non empty set,
       F.(P!l) = A(k,P,l) &
       F.('not' r) = N(F.r) &
       F.(r '&' s) = C(F.r,F.s) &
-      F.All(x,r) = Q(x,F.r);
+      F.All(x,r) = Q(x,F.r)
+proof
+   deffunc a(Element of QC-WFF) = A(the_arity_of the_pred_symbol_of $1,
+                  the_pred_symbol_of $1,the_arguments_of $1);
+   deffunc n(Element of D()) = N($1);
+   deffunc c((Element of D()), Element of D()) = C($1,$2);
+   deffunc q((Element of QC-WFF), Element of D()) = Q(bound_in $1,$2);
+   consider F being Function of QC-WFF, D() such that
+A1:  F.VERUM = V() &
+     for p being Element of QC-WFF holds
+       (p is atomic implies F.p = a(p)) &
+       (p is negative implies F.p = n(F.the_argument_of p)) &
+       (p is conjunctive implies
+          F.p = c(F.the_left_argument_of p, F.the_right_argument_of p)) &
+       (p is universal implies F.p = q(p, F.the_scope_of p)) from
+QC_LANG1:sch 3;
+   reconsider G = F|CQC-WFF as Function of CQC-WFF,D() by FUNCT_2:38;
+   take G;
+   thus G.VERUM = V() by A1,FUNCT_1:72;
+   let r,s,x,k;
+   let l be CQC-variable_list of k; let P be QC-pred_symbol of k;
+    set r' = G.r, s' = G.s;
+A3:  P!l is atomic by QC_LANG1:def 17;
 
-scheme CQC_Func_Uniq { D() -> non empty set,
+then A4:  the_arguments_of (P!l) = l & the_pred_symbol_of (P!l) = P &
+     the_arity_of P = k by QC_LANG1:35,def 21,def 22;
+   thus G.(P!l) = F.(P!l) by FUNCT_1:72 .= A(k,P,l) by A1,A3,A4;
+A5:   r' = F.r & s' = F.s by FUNCT_1:72;
+A6:   'not' r is negative by QC_LANG1:def 18;
+then A7:   the_argument_of 'not' r = r by QC_LANG1:def 23;
+   thus G.('not' r) = F.('not' r) by FUNCT_1:72 .= N(r') by A1,A5,A6,A7;
+A8:  r '&' s is conjunctive by QC_LANG1:def 19;
+then A9:  the_left_argument_of(r '&' s) = r & the_right_argument_of(r '&' s) =
+s
+       by QC_LANG1:def 24,def 25;
+   thus G.(r '&' s) = F.(r '&' s) by FUNCT_1:72 .= C(r',s') by A1,A5,A8,A9;
+A10:   All(x,r) is universal by QC_LANG1:def 20;
+then A11:   bound_in All(x,r) = x & the_scope_of All(x,r) = r
+    by QC_LANG1:def 26,def 27;
+   thus G.All(x,r) = F.All(x,r) by FUNCT_1:72 .= Q(x,r') by A1,A5,A10,A11;
+ end;
+
+scheme :: CQC_LANG:sch 3
+ CQC_Func_Uniq { D() -> non empty set,
                 F1() -> (Function of CQC-WFF, D()),
                 F2() -> (Function of CQC-WFF, D()),
                 V() -> (Element of D()),
@@ -239,9 +377,36 @@ scheme CQC_Func_Uniq { D() -> non empty set,
        F2().(P!l) = A(k,P,l) &
        F2().('not' r) = N(F2().r) &
        F2().(r '&' s) = C(F2().r,F2().s) &
-       F2().All(x,r) = Q(x,F2().r);
+       F2().All(x,r) = Q(x,F2().r)
+proof
+   defpred P[set] means F1().$1 = F2().$1;
+A3: for r,s,x,k for l being CQC-variable_list of k
+     for P being QC-pred_symbol of k holds
+       P[VERUM] &
+       P[P!l] &
+       (P[r] implies P['not' r]) &
+       (P[r] & P[s] implies P[r '&' s]) &
+       (P[r] implies P[All(x, r)])
+   proof let r,s,x,k;
+    let l be CQC-variable_list of k; let P be QC-pred_symbol of k;
+    thus F1().VERUM = F2().VERUM by A1,A2;
+      F1().(P!l) = A(k,P,l) & F2().(P!l) = A(k,P,l) by A1,A2;
+    hence F1().(P!l) = F2().(P!l);
+      F1().('not' r) = N(F1().r) & F2().('not' r) = N(F2().r) by A1,A2;
+    hence (F1().r = F2().r implies F1().('not' r) = F2().('not' r));
+      F1().(r '&' s) = C(F1().r,F1().s) & F2().(r '&' s) = C(F2().r,F2().s)
+      by A1,A2;
+    hence (F1().r = F2().r & F1().s = F2().s
+        implies F1().(r '&' s) = F2().(r '&' s));
+      F1().All(x,r) = Q(x,F1().r) & F2().All(x,r) = Q(x,F2().r) by A1,A2;
+    hence thesis;
+   end;
+   P[r] from CQC_Ind(A3);
+  hence thesis by FUNCT_2:113;
+ end;
 
-scheme CQC_Def_correctness { D() -> non empty set,
+scheme :: CQC_LANG:sch 4
+ CQC_Def_correctness { D() -> non empty set,
                 p() -> (Element of CQC-WFF),
                 V() -> (Element of D()),
                 A(set,set,set) -> (Element of D()),
@@ -274,9 +439,58 @@ scheme CQC_Def_correctness { D() -> non empty set,
            F.('not' r) = N(F.r) &
            F.(r '&' s) = C(F.r,F.s) &
            F.All(x,r) = Q(x,F.r) )
-    holds d1 = d2);
+    holds d1 = d2)
+proof
+   deffunc a(set,set,set) = A($1,$2,$3);
+   deffunc n(set) = N($1);
+   deffunc c(set,set) = C($1,$2);
+   deffunc q(set,set) = Q($1,$2);
+  thus ex d being Element of D() st
+   ex F being Function of CQC-WFF, D() st d = F.p() &
+     F.VERUM = V() &
+     for r,s,x,k for l being CQC-variable_list of k
+       for P being QC-pred_symbol of k holds
+         F.(P!l) = A(k,P,l) &
+         F.('not' r) = N(F.r) &
+         F.(r '&' s) = C(F.r,F.s) &
+         F.All(x,r) = Q(x,F.r)
+   proof
+     consider F being Function of CQC-WFF, D() such that
+A1:  F.VERUM = V() &
+     for r,s,x,k for l being CQC-variable_list of k
+      for P being QC-pred_symbol of k holds
+        F.(P!l) = a(k,P,l) &
+        F.('not' r) = n(F.r) &
+        F.(r '&' s) = c(F.r,F.s) &
+        F.All(x,r) = q(x,F.r) from CQC_Func_Ex;
+    take F.p(),F;
+    thus thesis by A1;
+   end;
+  let d1,d2 be Element of D();
+  given F1 being Function of CQC-WFF, D() such that
+A2:  d1 = F1.p() and
+A3: F1.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+       for P being QC-pred_symbol of k holds
+         F1.(P!l) = a(k,P,l) &
+         F1.('not' r) = n(F1.r) &
+         F1.(r '&' s) = c(F1.r,F1.s) &
+         F1.All(x,r) = q(x,F1.r);
+  given F2 being Function of CQC-WFF, D() such that
+A4:  d2 = F2.p() and
+A5: F2.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+      for P being QC-pred_symbol of k holds
+         F2.(P!l) = a(k,P,l) &
+         F2.('not' r) = n(F2.r) &
+         F2.(r '&' s) = c(F2.r,F2.s) &
+         F2.All(x,r) = q(x,F2.r);
+    F1 = F2 from CQC_Func_Uniq(A3,A5);
+  hence thesis by A2,A4;
+ end;
 
-scheme CQC_Def_VERUM { D() -> non empty set,
+scheme :: CQC_LANG:sch 5
+ CQC_Def_VERUM { D() -> non empty set,
                 F(set) -> (Element of D()),
                 V() -> (Element of D()),
                 A(set,set,set) -> (Element of D()),
@@ -293,9 +507,25 @@ scheme CQC_Def_VERUM { D() -> non empty set,
        F.(P!l) = A(k,P,l) &
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
-       F.All(x,r) = Q(x,F.r);
+       F.All(x,r) = Q(x,F.r)
+proof
+   deffunc a(set,set,set) = A($1,$2,$3);
+   deffunc n(set) = N($1);
+   deffunc c(set,set) = C($1,$2);
+   deffunc q(set,set) = Q($1,$2);
+   ex F being Function of CQC-WFF, D() st
+    F.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+      for P being QC-pred_symbol of k holds
+        F.(P!l) = a(k,P,l) &
+        F.('not' r) = n(F.r) &
+        F.(r '&' s) = c(F.r,F.s) &
+        F.All(x,r) = q(x,F.r) from CQC_Func_Ex;
+   hence thesis by A1;
+ end;
 
-scheme CQC_Def_atomic { D() -> non empty set,
+scheme :: CQC_LANG:sch 6
+ CQC_Def_atomic { D() -> non empty set,
                 V() -> (Element of D()),
                 F(set) -> (Element of D()),
                 A(set,set,set) -> (Element of D()),
@@ -315,9 +545,26 @@ scheme CQC_Def_atomic { D() -> non empty set,
        F.(P!l) = A(k,P,l) &
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
-       F.All(x,r) = Q(x,F.r);
+       F.All(x,r) = Q(x,F.r)
+proof
+   deffunc a(set,set,set) = A($1,$2,$3);
+   deffunc n(set) = N($1);
+   deffunc c(set,set) = C($1,$2);
+   deffunc q(set,set) = Q($1,$2);
+  consider F being Function of CQC-WFF, D() such that
+A2: F.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+      for P being QC-pred_symbol of k holds
+        F.(P!l) = a(k,P,l) &
+        F.('not' r) = n(F.r) &
+        F.(r '&' s) = c(F.r,F.s) &
+        F.All(x,r) = q(x,F.r) from CQC_Func_Ex;
+    A(k(),P(),l()) = F.(P()!l()) by A2;
+  hence thesis by A1,A2;
+ end;
 
-scheme CQC_Def_negative { D() -> non empty set,
+scheme :: CQC_LANG:sch 7
+ CQC_Def_negative { D() -> non empty set,
                 F(set) -> (Element of D()),
                 V() -> (Element of D()),
                 A(set,set,set) -> (Element of D()),
@@ -335,9 +582,36 @@ scheme CQC_Def_negative { D() -> non empty set,
        F.(P!l) = A(k,P,l) &
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
-       F.All(x,r) = Q(x,F.r);
+       F.All(x,r) = Q(x,F.r)
+proof
+   deffunc a(set,set,set) = A($1,$2,$3);
+   deffunc n(set) = N($1);
+   deffunc c(set,set) = C($1,$2);
+   deffunc q(set,set) = Q($1,$2);
+  consider F being Function of CQC-WFF, D() such that
+A2: F.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+      for P being QC-pred_symbol of k holds
+        F.(P!l) = a(k,P,l) &
+        F.('not' r) = n(F.r) &
+        F.(r '&' s) = c(F.r,F.s) &
+        F.All(x,r) = q(x,F.r) from CQC_Func_Ex;
+A3:    F.('not' r()) = N(F.r()) by A2;
+   consider G being Function of CQC-WFF, D() such that
+A4:  F(r()) = G.r() and
+A5: G.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+     for P being QC-pred_symbol of k holds
+       G.(P!l) = a(k,P,l) &
+       G.('not' r) = n(G.r) &
+       G.(r '&' s) = c(G.r,G.s) &
+       G.All(x,r) = q(x,G.r) by A1;
+     F = G from CQC_Func_Uniq(A2,A5);
+   hence thesis by A1,A2,A3,A4;
+ end;
 
-scheme QC_Def_conjunctive { D() -> non empty set,
+scheme :: CQC_LANG:sch 8
+ QC_Def_conjunctive { D() -> non empty set,
                 F(set) -> (Element of D()),
                 V() -> (Element of D()),
                 A(set,set,set) -> (Element of D()),
@@ -356,9 +630,46 @@ scheme QC_Def_conjunctive { D() -> non empty set,
        F.(P!l) = A(k,P,l) &
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
-       F.All(x,r) = Q(x,F.r);
+       F.All(x,r) = Q(x,F.r)
+proof
+   deffunc a(set,set,set) = A($1,$2,$3);
+   deffunc n(set) = N($1);
+   deffunc c(set,set) = C($1,$2);
+   deffunc q(set,set) = Q($1,$2);
+  consider F being Function of CQC-WFF, D() such that
+A2: F.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+      for P being QC-pred_symbol of k holds
+        F.(P!l) = a(k,P,l) &
+        F.('not' r) = n(F.r) &
+        F.(r '&' s) = c(F.r,F.s) &
+        F.All(x,r) = q(x,F.r) from CQC_Func_Ex;
+A3:  F.(r() '&' s()) = C(F.r(),F.s()) by A2;
+   consider F1 being Function of CQC-WFF, D() such that
+A4:  F(r()) = F1.r() and
+A5: F1.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+     for P being QC-pred_symbol of k holds
+       F1.(P!l) = a(k,P,l) &
+       F1.('not' r) = n(F1.r) &
+       F1.(r '&' s) = c(F1.r,F1.s) &
+       F1.All(x,r) = q(x,F1.r) by A1;
+   consider F2 being Function of CQC-WFF, D() such that
+A6:  F(s()) = F2.s() and
+A7: F2.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+     for P being QC-pred_symbol of k holds
+       F2.(P!l) = a(k,P,l) &
+       F2.('not' r) = n(F2.r) &
+       F2.(r '&' s) = c(F2.r,F2.s) &
+       F2.All(x,r) = q(x,F2.r) by A1;
+A8:  F = F1 from CQC_Func_Uniq(A2,A5);
+     F = F2 from CQC_Func_Uniq(A2,A7);
+  hence thesis by A1,A2,A3,A4,A6,A8;
+ end;
 
-scheme QC_Def_universal { D() -> non empty set,
+scheme :: CQC_LANG:sch 9
+ QC_Def_universal { D() -> non empty set,
                 F(set) -> (Element of D()),
                 V() -> (Element of D()),
                 A(set,set,set) -> (Element of D()),
@@ -377,7 +688,33 @@ scheme QC_Def_universal { D() -> non empty set,
        F.(P!l) = A(k,P,l) &
        F.('not' r) = N(F.r) &
        F.(r '&' s) = C(F.r,F.s) &
-       F.All(x,r) = Q(x,F.r);
+       F.All(x,r) = Q(x,F.r)
+proof
+   deffunc a(set,set,set) = A($1,$2,$3);
+   deffunc n(set) = N($1);
+   deffunc c(set,set) = C($1,$2);
+   deffunc q(set,set) = Q($1,$2);
+  consider F being Function of CQC-WFF, D() such that
+A2: F.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+      for P being QC-pred_symbol of k holds
+        F.(P!l) = a(k,P,l) &
+        F.('not' r) = n(F.r) &
+        F.(r '&' s) = c(F.r,F.s) &
+        F.All(x,r) = q(x,F.r) from CQC_Func_Ex;
+A3:  F.All(x(),r()) = Q(x(),F.r()) by A2;
+   consider G being Function of CQC-WFF, D() such that
+A4:  F(r()) = G.r() and
+A5: G.VERUM = V() &
+    for r,s,x,k for l being CQC-variable_list of k
+     for P being QC-pred_symbol of k holds
+       G.(P!l) = a(k,P,l) &
+       G.('not' r) = n(G.r) &
+       G.(r '&' s) = c(G.r,G.s) &
+       G.All(x,r) = q(x,G.r) by A1;
+     F = G from CQC_Func_Uniq(A2,A5);
+   hence thesis by A1,A2,A3,A4;
+ end;
 
  definition let p,x;
    func p.x -> Element of QC-WFF means
@@ -393,6 +730,7 @@ scheme QC_Def_universal { D() -> non empty set,
        (q is universal implies
          F.q = IFEQ(bound_in q,x,q,All(bound_in q,F.the_scope_of q)));
  end;
+
 
 canceled 3;
 

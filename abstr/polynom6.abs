@@ -13,11 +13,11 @@ environ
       CARD_1, ARYTM_1, TRIANG_1, VECTSP_2, PRE_TOPC, GRCAT_1, COHSP_1, PRALG_1,
       ENDALG, POLYNOM6;
  notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, VECTSP_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, STRUCT_0, NAT_1, TRIANG_1, ORDERS_2,
-      PBOOLE, PRE_TOPC, PRALG_1, RLVECT_1, VECTSP_2, FINSET_1, FINSEQ_1,
-      FINSEQ_2, FINSEQ_4, SEQM_3, BINARITH, DTCONSTR, ORDINAL1, ORDINAL2,
-      ORDINAL3, GROUP_1, REALSET1, QUOFIELD, GRCAT_1, ENDALG, WSIERP_1,
-      MATRLIN, TOPREAL1, FVSUM_1, POLYNOM1, POLYNOM3;
+      CARD_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, STRUCT_0, NAT_1, TRIANG_1,
+      ORDERS_2, PBOOLE, PRE_TOPC, PRALG_1, RLVECT_1, VECTSP_2, FINSET_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQM_3, BINARITH, DTCONSTR, ORDINAL1,
+      ORDINAL2, ORDINAL3, GROUP_1, REALSET1, QUOFIELD, GRCAT_1, ENDALG,
+      WSIERP_1, MATRLIN, TOPREAL1, FVSUM_1, POLYNOM1, POLYNOM3;
  constructors POLYNOM1, ALGSTR_2, QUOFIELD, MONOID_0, GRCAT_1, ORDINAL3,
       REAL_1, FVSUM_1, SETWOP_2, ENDALG, BINARITH, WSIERP_1, ORDERS_2,
       TOPREAL1, TRIANG_1, FINSOP_1, POLYNOM3, MEMBERED;
@@ -31,11 +31,14 @@ begin :: Preliminaries
 
 reserve o1,o2 for Ordinal;
 
+notation let L1,L2 be non empty doubleLoopStr;
+ synonym L1,L2 are_isomorphic for L1 is_ringisomorph_to L2;
+ end;
 definition let L1,L2 be non empty doubleLoopStr;
  redefine pred L1 is_ringisomorph_to L2;
  reflexivity;
- synonym L1,L2 are_isomorphic;
-end;
+ end;
+
 
 theorem :: POLYNOM6:1
 for B be set st
@@ -43,10 +46,13 @@ for B be set st
   ex o be Ordinal st x=o1+^o & o in o2
   holds o1+^o2 = o1 \/ B;
 
-definition let o1 be Ordinal, o2 be non empty Ordinal;
+registration let o1 be Ordinal, o2 be non empty Ordinal;
  cluster o1 +^ o2 -> non empty;
+ coherence by ORDINAL3:29;
  cluster o2 +^ o1 -> non empty;
+ coherence by ORDINAL3:29;
 end;
+
 
 theorem :: POLYNOM6:2
 for n being Ordinal, a,b being bag of n st a < b
@@ -65,6 +71,7 @@ definition
   (o in o1 implies it.o = a.o) &
   (o in (o1+^o2) \ o1 implies it.o=b.(o-^o1));
 end;
+
 
 theorem :: POLYNOM6:3
 for a be Element of Bags o1,b be Element of Bags o2 st
@@ -99,13 +106,45 @@ theorem :: POLYNOM6:8
 
 begin :: Main results
 
-definition
+registration
  let n be Ordinal,
      L be right_zeroed Abelian add-associative right_complementable
           unital distributive associative
           non trivial (non empty doubleLoopStr);
  cluster Polynom-Ring (n, L) -> non trivial distributive;
+ coherence
+  proof
+   thus Polynom-Ring (n, L) is non trivial
+   proof
+      take u=1_ Polynom-Ring (n,L);
+A1:      0.L <> 1.L by POLYNOM1:27;
+A2:       0.Polynom-Ring (n,L) = 0_(n,L) by POLYNOM1:def 27;
+A3:       1_ (Polynom-Ring (n,L)) = 1_(n,L) by POLYNOM1:def 27;
+        0_(n,L).EmptyBag n = 0.L by POLYNOM1:81;
+      hence u <> 0.Polynom-Ring (n,L) by A1,A2,A3,POLYNOM1:84;
+   end;
+   thus Polynom-Ring (n, L) is distributive
+   proof
+   let x,y,z be Element of Polynom-Ring (n,L);
+   reconsider u=x,v=y,w=z as Polynomial of n,L by POLYNOM1:def 27;
+   reconsider x'=x,y'=y,z'=z as Element of Polynom-Ring (n,L)
+  ;
+A4:   y'+z' = v+w by POLYNOM1:def 27;
+A5:   u*'v=x'*y' by POLYNOM1:def 27;
+A6:   u*'w=x'*z' by POLYNOM1:def 27;
+        thus x*(y+z) = u*'(v+w) by A4,POLYNOM1:def 27
+           .=u*'v+u*'w by POLYNOM1:85
+           .= x*y+x*z by A5,A6,POLYNOM1:def 27;
+A7:   y'+z' = v+w by POLYNOM1:def 27;
+A8:   v*'u=y'*x' by POLYNOM1:def 27;
+A9:   w*'u=z'*x' by POLYNOM1:def 27;
+        thus (y+z)*x = (v+w)*'u by A7,POLYNOM1:def 27
+           .= v*'u+w*'u by Th8
+           .= y*x+z*x by A8,A9,POLYNOM1:def 27;
+   end;
+  end;
 end;
+
 
 definition
  let o1,o2 be non empty Ordinal, L be right_zeroed add-associative
@@ -120,6 +159,7 @@ definition
        Q1 be Polynomial of o2,L st
           Q1 = P.b1 & b = b1+^b2 & it.b = Q1.b2;
 end;
+
 
 theorem :: POLYNOM6:9
  for b1,c1 being Element of Bags o1, b2,c2 being Element of Bags o2

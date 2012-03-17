@@ -10,9 +10,7 @@ SUBSET_1
 NUMBERS
 XREAL_0
 #
-Regr_without_0
-#
 ;
-P1 N1 ;ªM4 W1 ;K52 ;K56 ;;ªP1 B1 ;M4 W1 ;K52 ;K56 ;;ª&ªR1 B1 N1 ;P1 B1 ;M4 W1 ;K52 ;K56 ;;ª&ªR11 B1 B2 ;P1 B2 ;;;;
+P1 N1 ;ªM4 W1 ;K52 ;K56 ;;ªP1 B1 ;M4 W1 ;K52 ;K56 ;;ª&ªR1 B1 N1 ;P1 B1 ;M4 W1 ;K52 ;K56 ;;ª&ªR12 B1 B2 ;P1 B2 ;;;;
 #
 !

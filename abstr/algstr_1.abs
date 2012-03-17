@@ -46,15 +46,22 @@ definition let x be set;
 x;
  end;
 
+
 definition
  func L_Trivial -> strict LoopStr equals
 :: ALGSTR_1:def 4
   LoopStr (# {{}}, op2, Extract {} #);
 end;
 
-definition
+
+registration
  cluster L_Trivial -> non empty;
+ coherence
+  proof
+     thus the carrier of L_Trivial is non empty by Def4;
+  end;
 end;
+
 
 canceled;
 
@@ -69,6 +76,7 @@ definition let IT be non empty LoopStr;
 :: ALGSTR_1:def 5
  for a being Element of IT holds 0.IT + a = a;
 end;
+
 
 definition let L be non empty LoopStr;
   attr L is add-left-cancelable means
@@ -92,6 +100,7 @@ definition let L be non empty LoopStr;
       ex x being Element of L st a + x = b;
 end;
 
+
 definition let IT be non empty LoopStr;
   attr IT is Loop-like means
 :: ALGSTR_1:def 10
@@ -99,13 +108,17 @@ definition let IT be non empty LoopStr;
           add-left-invertible add-right-invertible;
 end;
 
-definition
+
+registration
   cluster Loop-like -> add-left-cancelable add-right-cancelable
              add-left-invertible add-right-invertible (non empty LoopStr);
+  coherence by Def10;
   cluster add-left-cancelable add-right-cancelable
           add-left-invertible add-right-invertible ->
               Loop-like (non empty LoopStr);
+  coherence by Def10;
 end;
+
 
 theorem :: ALGSTR_1:7
   for L being non empty LoopStr holds
@@ -117,31 +130,80 @@ theorem :: ALGSTR_1:7
      & (for a,x,y be Element of L holds a+x=a+y implies x=y)
      & (for a,x,y be Element of L holds x+a=y+a implies x=y);
 
-definition
+registration
   cluster L_Trivial -> add-associative Loop-like right_zeroed left_zeroed;
+  coherence by Def5,Lm1,Lm2,Lm3,Lm4,Lm5,Lm6,Lm7,Th7,RLVECT_1:def 6,def 7;
 end;
 
-definition
+
+registration
  cluster strict left_zeroed right_zeroed Loop-like (non empty LoopStr);
+  existence
+   proof
+     take L_Trivial;
+     thus thesis;
+   end;
 end;
+
 
 definition
   mode Loop is left_zeroed right_zeroed Loop-like (non empty LoopStr);
 end;
 
-definition
+
+registration
  cluster strict add-associative Loop;
+  existence
+   proof
+    take L_Trivial;
+    thus thesis;
+   end;
 end;
+
 
 definition
   mode Group is add-associative Loop;
 end;
 
-definition
+
+registration
  cluster Loop-like -> right_complementable (non empty LoopStr);
+ coherence
+  proof let L be (non empty LoopStr);
+  assume L is Loop-like;
+   hence for a being Element of L
+   ex x being Element of L st a+x = 0.L by Th7;
+  end;
  cluster add-associative right_zeroed right_complementable
               -> left_zeroed Loop-like (non empty LoopStr);
+ coherence
+  proof let L;
+    assume
+A1:  L is add-associative right_zeroed right_complementable;
+     then reconsider G = L
+       as add-associative right_zeroed right_complementable
+             (non empty LoopStr);
+    thus for a holds 0.L + a = a by A1,RLVECT_1:10;
+        now thus for a,b ex x st a+x=b by A1,RLVECT_1:20;
+      thus for a,b ex x st x+a=b
+        proof let a,b;
+          reconsider a' = a, b' = b as Element of G;
+          reconsider x = b' + -a' as Element of L;
+         take x;
+            (b'+-a')+a' = b'+(-a'+a') by RLVECT_1:def 6
+                 .= b'+0.G by RLVECT_1:16
+                 .= b by RLVECT_1:10;
+          hence thesis;
+         end;
+       thus (for a,x,y be Element of L
+              holds a+x=a+y implies x=y) &
+             for a,x,y be Element of L holds x+a=y+a implies x=y
+ by A1,RLVECT_1:21;
+     end;
+     hence L is Loop-like by Th7;
+  end;
 end;
+
 
 canceled;
 
@@ -151,13 +213,20 @@ theorem :: ALGSTR_1:9
    & (for a ex x st a+x = 0.L)
    & (for a,b,c holds (a+b)+c = a+(b+c));
 
-definition
+registration
   cluster L_Trivial -> Abelian;
+  coherence by Lm8,RLVECT_1:def 5;
 end;
 
-definition
+
+registration
  cluster strict Abelian Group;
+  existence
+   proof take L_Trivial;
+    thus thesis;
+   end;
 end;
+
 
 canceled;
 
@@ -174,9 +243,15 @@ definition
   multLoopStr (# {{}}, op2, Extract {} #);
 end;
 
-definition
+
+registration
  cluster multL_Trivial -> non empty;
+ coherence
+  proof
+    thus the carrier of multL_Trivial is non empty by Def11;
+  end;
 end;
+
 
 canceled 6;
 
@@ -200,25 +275,41 @@ theorem :: ALGSTR_1:19
        & (for a,x,y be Element of IT holds x*a=y*a implies x=y);
   end;
 
-definition
+
+registration
  cluster strict well-unital invertible cancelable (non empty multLoopStr);
+  existence
+   proof
+      multL_Trivial is well-unital invertible cancelable
+ by Def12,Def13,Lm9,Lm10,Lm11,Lm12,Lm13,Lm14,VECTSP_2:def 2;
+    hence thesis;
+   end;
 end;
+
 
 definition
     mode multLoop is well-unital invertible cancelable (non empty multLoopStr);
 end;
 
-  definition
+
+  registration
     cluster multL_Trivial -> well-unital invertible cancelable;
+    coherence by Def12,Def13,Lm9,Lm10,Lm11,Lm12,Lm13,Lm14,VECTSP_2:def 2;
   end;
 
-definition
+registration
  cluster strict associative multLoop;
+  existence
+   proof multL_Trivial is associative by Lm15,VECTSP_1:def 16;
+    hence thesis;
+   end;
 end;
+
 
 definition
     mode multGroup is associative multLoop;
 end;
+
 
  reserve L for non empty multLoopStr;
  reserve a,b,c,x,y,z for Element of L;
@@ -231,13 +322,19 @@ theorem :: ALGSTR_1:22
    & (for a ex x st a*x = 1_ L)
    & (for a,b,c holds (a*b)*c = a*(b*c));
 
-definition
+registration
   cluster multL_Trivial -> associative;
+  coherence by Lm15,VECTSP_1:def 16;
 end;
 
-definition
+registration
  cluster strict commutative multGroup;
+  existence
+   proof multL_Trivial is commutative by Lm19,VECTSP_1:def 17;
+    hence thesis;
+   end;
 end;
+
 
 canceled;
 
@@ -258,6 +355,7 @@ definition
     a*it = 1_ L;
 end;
 
+
  reserve G for multGroup;
  reserve a,b,c,x for Element of G;
 
@@ -274,6 +372,7 @@ definition
       a*(b");
 end;
 
+
 definition
  canceled 3;
 
@@ -282,8 +381,13 @@ definition
   multLoopStr_0 (# REAL, multreal, 1, 0 #);
 end;
 
-definition
+
+registration
  cluster multEX_0 -> non empty;
+ coherence
+  proof
+    thus the carrier of multEX_0 is non empty by Def21;
+  end;
 end;
 
 canceled 5;
@@ -310,6 +414,7 @@ definition let IT be non empty multLoopStr_0;
            holds x*a=y*a implies x=y);
 end;
 
+
 definition let IT be non empty multLoopStr_0;
   attr IT is multLoop_0-like means
 :: ALGSTR_1:def 24
@@ -317,6 +422,7 @@ definition let IT be non empty multLoopStr_0;
      & (for a be Element of IT holds a*0.IT = 0.IT)
      & (for a be Element of IT holds 0.IT*a = 0.IT);
 end;
+
 
 theorem :: ALGSTR_1:34
   for L being non empty multLoopStr_0 holds
@@ -332,32 +438,51 @@ theorem :: ALGSTR_1:34
      (for a be Element of L holds a*0.L = 0.L) &
      (for a be Element of L holds 0.L*a = 0.L);
 
-definition
+registration
   cluster multLoop_0-like -> almost_invertible almost_cancelable
     (non empty multLoopStr_0);
+  coherence by Def24;
 end;
 
-definition
+
+registration
  cluster strict well-unital multLoop_0-like non degenerated
                (non empty multLoopStr_0);
+  existence
+   proof
+       multEX_0 is well-unital multLoop_0-like non degenerated
+ by Lm21,Lm22,Lm23,Lm24,Lm25,Lm26,Lm27,Lm28,Lm29,Lm30,Th34,VECTSP_1:def 21,
+VECTSP_2:def 2;
+    hence thesis;
+   end;
 end;
+
 
 definition
   mode multLoop_0 is well-unital non degenerated multLoop_0-like
      (non empty multLoopStr_0);
 end;
 
-definition
+
+registration
   cluster multEX_0 -> well-unital multLoop_0-like;
+  coherence by Lm23,Lm24,Lm25,Lm26,Lm27,Lm28,Lm29,Lm30,Th34,VECTSP_2:def 2;
 end;
 
-definition
+registration
  cluster strict associative non degenerated multLoop_0;
+  existence
+   proof multEX_0 is associative non degenerated by Lm21,Lm22,Lm31,VECTSP_1:def
+16,def 21;
+    hence thesis;
+   end;
 end;
+
 
 definition
     mode multGroup_0 is associative non degenerated multLoop_0;
 end;
+
 
  reserve L for non empty multLoopStr_0;
  reserve a,b,c,x,y,z for Element of L;
@@ -373,13 +498,20 @@ theorem :: ALGSTR_1:36
      & (for a holds a*0.L = 0.L)
      & (for a holds 0.L*a = 0.L);
 
-definition
+registration
   cluster multEX_0 -> associative;
+  coherence by Lm31,VECTSP_1:def 16;
 end;
 
-definition
+registration
  cluster strict commutative multGroup_0;
+  existence
+   proof multEX_0 is commutative non degenerated
+     by Lm21,Lm22,Lm35,VECTSP_1:def 17,def 21;
+    hence thesis;
+   end;
 end;
+
 
 canceled;
 
@@ -402,6 +534,7 @@ definition
     a*it = 1_ L;
 end;
 
+
 reserve G for associative almost_invertible almost_cancelable well-unital
   (non empty multLoopStr_0);
 reserve a,x for Element of G;
@@ -418,5 +551,6 @@ definition
 :: ALGSTR_1:def 26
       a*(b");
 end;
+
 
 

@@ -11,12 +11,6 @@ RELSET_1
 FUNCT_2
 SETWISEO
 #
-SubsetEx
-FinSubFuncEx
-FinSubInd1
-FinSubInd2
-FinSubInd3
-#
 M1 W1 ;;;
 ªM2 K16 F1 ;;;ªM2 F1 ;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;
 #

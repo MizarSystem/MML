@@ -50,6 +50,7 @@ definition
  redefine func s+*(o,a) -> State of A;
 end;
 
+
 theorem :: AMI_7:4
  for A being steady-programmed IC-Ins-separated definite
        (non empty non void AMI-Struct over N),
@@ -110,6 +111,7 @@ definition
   the Instructions of A is non trivial;
 end;
 
+
 definition
    let N be set,
        A be non empty AMI-Struct over N;
@@ -119,12 +121,40 @@ definition
   for o being Object of A holds ObjectKind o is non trivial;
 end;
 
-definition
+
+registration
    let N be with_non-empty_elements set;
  cluster STC N -> with_non_trivial_ObjectKinds;
+coherence
+  proof
+    let o be Object of STC N;
+A1: the carrier of STC N = NAT \/ {NAT} by AMISTD_1:def 11;
+A2: the Object-Kind of STC N =
+       (NAT --> {[1,0],[0,0]}) +* ({NAT} --> NAT) by AMISTD_1:def 11;
+A3: ObjectKind o = (the Object-Kind of STC N).o by AMI_1:def 6;
+A4: dom ({NAT} --> NAT) = {NAT} by FUNCOP_1:19;
+    per cases by A1,XBOOLE_0:def 2;
+    suppose
+A5:   o in NAT;
+    then o <> NAT;
+    then not o in dom ({NAT} --> NAT) by A4,TARSKI:def 1;
+then A6: ObjectKind o = (NAT --> {[1,0],[0,0]}).o by A2,A3,FUNCT_4:12
+      .= {[1,0],[0,0]} by A5,FUNCOP_1:13;
+A7: [1,0] <> [0,0] by ZFMISC_1:33;
+      [1,0] in {[1,0],[0,0]} & [0,0] in {[1,0],[0,0]} by TARSKI:def 2;
+    hence ObjectKind o is non trivial by A6,A7,YELLOW_8:def 1;
+    end;
+    suppose
+A8:   o in {NAT};
+    then ObjectKind o = ({NAT} --> NAT).o by A2,A3,A4,FUNCT_4:14
+      .= NAT by A8,FUNCOP_1:13;
+    hence ObjectKind o is non trivial;
+  end;
+  end;
 end;
 
-definition
+
+registration
    let N be with_non-empty_elements set;
  cluster halting realistic steady-programmed programmable
          with_explicit_jumps without_implicit_jumps
@@ -132,40 +162,78 @@ definition
          with_non_trivial_ObjectKinds with_non_trivial_Instructions
          (regular standard (IC-Ins-separated definite
          (non empty non void AMI-Struct over N)));
+existence
+  proof
+    take STC N;
+      STC N is with_non_trivial_Instructions
+    proof
+A1:   the Instructions of STC N = {[0,0],[1,0]} by AMISTD_1:def 11;
+A2:   [1,0] <> [0,0] by ZFMISC_1:33;
+        [1,0] in {[1,0],[0,0]} & [0,0] in {[1,0],[0,0]} by TARSKI:def 2;
+      hence the Instructions of STC N is non trivial by A1,A2,YELLOW_8:def 1;
+    end;
+    hence thesis;
+  end;
 end;
 
-definition
+
+registration
    let N be with_non-empty_elements set;
  cluster with_non_trivial_ObjectKinds -> with_non_trivial_Instructions
          (definite (non empty non void AMI-Struct over N));
+coherence
+  proof
+    let A be definite (non empty non void AMI-Struct over N);
+    assume
+A1:   for o being Object of A holds ObjectKind o is non trivial;
+    consider l being Instruction-Location of A;
+      ObjectKind l = the Instructions of A by AMI_1:def 14;
+    hence the Instructions of A is non trivial by A1;
+  end;
 end;
 
-definition
+
+registration
    let N be with_non-empty_elements set;
  cluster with_non_trivial_ObjectKinds ->
          with-non-trivial-Instruction-Locations
          (IC-Ins-separated (non empty AMI-Struct over N));
+coherence
+  proof
+    let A be IC-Ins-separated (non empty AMI-Struct over N);
+    assume
+A1:   for o being Object of A holds ObjectKind o is non trivial;
+      ObjectKind IC A = the Instruction-Locations of A by AMI_1:def 11;
+    hence the Instruction-Locations of A is non trivial by A1;
+  end;
 end;
 
-definition
+
+registration
    let N be with_non-empty_elements set,
        A be with_non_trivial_ObjectKinds (non empty AMI-Struct over N),
        o be Object of A;
  cluster ObjectKind o -> non trivial;
+coherence by Def2;
 end;
 
-definition
+
+registration
    let N be with_non-empty_elements set,
        A be with_non_trivial_Instructions AMI-Struct over N;
  cluster the Instructions of A -> non trivial;
+coherence by Def1;
 end;
 
-definition
+
+registration
    let N be with_non-empty_elements set,
        A be with-non-trivial-Instruction-Locations
             IC-Ins-separated (non empty AMI-Struct over N);
  cluster ObjectKind IC A -> non trivial;
+coherence by AMI_1:def 11;
 end;
+
 
 definition
   let N be with_non-empty_elements set,
@@ -177,6 +245,7 @@ definition
   for o being Object of A holds o in it iff
    ex s being State of A st s.o <> Exec(I,s).o;
 end;
+
 
 definition
   let N be with_non-empty_elements set,
@@ -197,6 +266,7 @@ definition
     st Exec(I,s+*(o,a)) <> Exec(I,s) +* (o,a);
 end;
 
+
 definition
   let N be with_non-empty_elements set,
       A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
@@ -206,6 +276,7 @@ definition
 
   Out_U_Inp I \ Out_\_Inp I;
 end;
+
 
 theorem :: AMI_7:9
  for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
@@ -281,23 +352,29 @@ theorem :: AMI_7:21
      I being Instruction of A st I is halting
   holds Input I is empty;
 
-definition
+registration
    let N be with_non-empty_elements set,
        A be halting IC-Ins-separated definite
          (non empty non void AMI-Struct over N),
        I be halting Instruction of A;
  cluster Input I -> empty;
+coherence by Th21;
  cluster Output I -> empty;
+coherence by Th18;
  cluster Out_U_Inp I -> empty;
+coherence by Th20;
 end;
 
-definition
+
+registration
    let N be with_non-empty_elements set,
        A be halting with_non_trivial_ObjectKinds IC-Ins-separated definite
             (non empty non void AMI-Struct over N),
        I be halting Instruction of A;
  cluster Out_\_Inp I -> empty;
+coherence by Th19;
 end;
+
 
 theorem :: AMI_7:22
  for A being with_non_trivial_Instructions steady-programmed IC-Ins-separated
@@ -369,9 +446,29 @@ definition
  redefine func s+*(dl,k) -> State of SCM;
 end;
 
-definition
+registration
  cluster SCM -> with_non_trivial_ObjectKinds;
+coherence
+  proof
+    let o be Object of SCM;
+    per cases by AMI_6:3;
+    suppose o = IC SCM;
+    hence thesis by AMI_1:def 11;
+    end;
+    suppose o is Instruction-Location of SCM;
+then A1: ObjectKind o = the Instructions of SCM by AMI_1:def 14;
+    consider a, b being Data-Location;
+      AddTo(a,b) = [2, <*a,b*>] & SubFrom(a,b) = [3, <*a,b*>]
+      by AMI_3:def 4,def 5;
+    then AddTo(a,b) <> SubFrom(a,b) by ZFMISC_1:33;
+    hence thesis by A1,YELLOW_8:def 1;
+    end;
+    suppose o is Data-Location;
+    hence thesis by AMI_3:55;
+  end;
+  end;
 end;
+
 
 theorem :: AMI_7:32
  Out_\_Inp (a:=a) = {};

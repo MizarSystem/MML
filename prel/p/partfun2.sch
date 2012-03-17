@@ -14,10 +14,6 @@ CARD_1
 FINSEQ_1
 FINSEQ_4
 #
-PartFuncExD
-LambdaPFD
-UnPartFuncD
-#
 M1 W1 ;;M1 W1 ;;;
 ªM5 V4 ;F1 ;F2 ;;ª&M2 F1 ;;&ª&R2 B2 K33 F1 ;F2 ;B1 ;;M2 F2 ;;ªP1 B2 B3 ;;ª&ªM2 F2 ;;ªP1 B2 B3 ;ªR2 B2 K33 F1 ;F2 ;B1 ;;;;M2 F1 ;;ª&R2 B2 K33 F1 ;F2 ;B1 ;;ªP1 B2 K90 F1 ;F2 ;B1 B2 ;;;;;
 #

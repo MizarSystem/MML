@@ -20,14 +20,49 @@ environ
 
 begin :: Preliminaries
 
-scheme ValOnPair
+scheme :: FUNCTOR0:sch 1
+ ValOnPair
   {X()-> non empty set,f()-> Function,
    x1,x2()-> Element of X(), F(set,set)-> set, P[set,set]}:
  f().(x1(),x2()) = F(x1(),x2())
 provided
  f() = { [[o,o'],F(o,o')]
          where o is Element of X(), o' is Element of X(): P[o,o'] } and
- P[x1(),x2()];
+ P[x1(),x2()]
+proof
+   defpred R[set] means P[ $1`1,$1`2];
+   deffunc G(set) = F($1`1,$1`2);
+A3: f() = { [o,G(o)] where o is Element of [:X(),X():]: R[o] }
+   proof
+    thus f() c= {[o,F(o`1,o`2)] where o is Element of [:X(),X():]: P[o`1,o`2]}
+     proof let y be set;
+      assume y in f();
+       then consider o1,o2 being Element of X() such that
+A4:     y = [[o1,o2],F(o1,o2)] and
+A5:     P[o1,o2] by A1;
+       reconsider p =[o1,o2] as Element of [:X(),X():] by ZFMISC_1:106;
+         p`1 = o1 & p`2 = o2 by MCART_1:7;
+      hence y in {[o,F(o`1,o`2)] where o is Element of [:X(),X():]: P[o`1,o`2]
+}
+                    by A4,A5;
+     end;
+    let y be set;
+    assume y in {[o,F(o`1,o`2)] where o is Element of [:X(),X():]: P[o`1,o`2]}
+;
+     then consider o being Element of [:X(),X():] such that
+A6:   y = [o,F(o`1,o`2)] and
+A7:   P[o`1,o`2];
+     reconsider o1 = o`1, o2 = o`2 as Element of X() by MCART_1:10;
+       o = [o1,o2] by MCART_1:23;
+    hence y in f() by A1,A6,A7;
+   end;
+   reconsider x = [x1(),x2()] as Element of [:X(),X():] by ZFMISC_1:106;
+A8: x`1 = x1() & x`2 = x2() by MCART_1:7;
+then A9: R[ x] by A2;
+ thus f().(x1(),x2()) = f().x by BINOP_1:def 1
+       .= G(x) from ALTCAT_2:sch 3(A3,A9)
+       .= F(x1(),x2()) by A8;
+end;
 
 theorem :: FUNCTOR0:1
  for A being set holds {} is Function of A,{};
@@ -37,12 +72,31 @@ canceled;
 theorem :: FUNCTOR0:3
  for I being set for M being ManySortedSet of I holds M*id I = M;
 
-definition let f be empty Function;
+registration let f be empty Function;
   cluster ~f -> empty;
+ coherence
+  proof rng f = {};
+    then rng~f c= {} by FUNCT_4:42;
+    then rng~f = {} by XBOOLE_1:3;
+   hence thesis by RELAT_1:64;
+  end;
  let g be Function;
   cluster [:f,g:] -> empty;
+ coherence
+  proof dom f = {};
+    then dom[:f,g:] = [:{},dom g:] by FUNCT_3:def 9;
+    then dom[:f,g:] = {} by ZFMISC_1:113;
+   hence thesis by RELAT_1:64;
+  end;
   cluster [:g,f:] -> empty;
+ coherence
+  proof dom f = {};
+    then dom[:g,f:] = [:dom g,{}:] by FUNCT_3:def 9;
+    then dom[:g,f:] = {} by ZFMISC_1:113;
+   hence thesis by RELAT_1:64;
+  end;
 end;
+
 
 theorem :: FUNCTOR0:4
  for A being set, f being Function holds f.:id A = (~f).:id A;
@@ -51,9 +105,11 @@ theorem :: FUNCTOR0:5
  for X,Y being set, f being Function of X,Y holds
   f is onto iff [:f,f:] is onto;
 
-definition let f be Function-yielding Function;
+registration let f be Function-yielding Function;
  cluster ~f -> Function-yielding;
+ coherence;
 end;
+
 
 theorem :: FUNCTOR0:6
  for A,B being set, a being set
@@ -90,6 +146,7 @@ definition let A,B,C be set, f be Function of [:A,B:],C;
  redefine func ~f -> Function of [:B,A:],C;
 end;
 
+
 theorem :: FUNCTOR0:14
  for A,B,C being set,
     f being Function of [:A,B:],C st ~f is onto
@@ -106,6 +163,7 @@ definition let A,B be set;
  canceled;
 end;
 
+
 definition let A,B be set, f be bifunction of A,B;
  attr f is Covariant means
 :: FUNCTOR0:def 2
@@ -115,15 +173,41 @@ definition let A,B be set, f be bifunction of A,B;
  ex g being Function of A,B st f = ~[:g,g:];
 end;
 
+
 theorem :: FUNCTOR0:16
  for A be set, B be non empty set,
      b being Element of B, f being bifunction of A,B
       st f = [:A,A:] --> [b,b]
   holds f is Covariant Contravariant;
 
-definition let A,B be set;
+registration let A,B be set;
  cluster Covariant Contravariant bifunction of A,B;
+ existence
+  proof
+   per cases;
+   suppose
+A1:  B = {};
+     then [:B,B:] = {} by ZFMISC_1:113;
+     then reconsider f = {} as bifunction of A,B by Th1;
+    take f;
+     reconsider g = {} as Function of A,B by A1,Th1;
+     reconsider h = g as empty Function;
+    thus f is Covariant
+     proof take g; thus f = [:h,h:] .= [:g,g:]; end;
+    take g; thus f = ~[:h,h:] .= ~[:g,g:];
+   end;
+   suppose
+A2:   B <> {};
+    consider b being Element of B;
+    set f = [:A,A:] --> [b,b];
+      [b,b] in [:B,B:] by A2,ZFMISC_1:106;
+    then reconsider f as bifunction of A,B by FUNCOP_1:57;
+   take f;
+   thus f is Covariant Contravariant by A2,Th16;
+  end;
+  end;
 end;
+
 
 theorem :: FUNCTOR0:17
    for A,B being non empty set
@@ -143,6 +227,7 @@ definition let I1,I2 be set, f be Function of I1,I2;
        otherwise it = [0]I1;
 end;
 
+
 definition let I1 be set, I2 be non empty set, f be Function of I1,I2;
  let A be ManySortedSet of I1, B be ManySortedSet of I2;
  redefine mode MSUnTrans of f,A,B means
@@ -150,10 +235,26 @@ definition let I1 be set, I2 be non empty set, f be Function of I1,I2;
  it is ManySortedFunction of A,B*f;
 end;
 
-definition let I1,I2 be set; let f be Function of I1,I2;
+
+registration let I1,I2 be set; let f be Function of I1,I2;
  let A be ManySortedSet of I1, B be ManySortedSet of I2;
  cluster -> Function-yielding MSUnTrans of f,A,B;
+ coherence
+ proof let M be MSUnTrans of f,A,B;
+  per cases;
+  suppose I2 <> {};
+   then ex I2' being non empty set, B' being ManySortedSet of I2',
+      f' being Function of I1,I2' st f = f' & B = B' &
+         M is ManySortedFunction of A,B'*f' by Def4;
+  hence thesis;
+  end;
+  suppose I2 = {};
+   then M = [0]I1 by Def4;
+  hence thesis;
+ end;
+ end;
 end;
+
 
 theorem :: FUNCTOR0:18
  for I1 being set, I2,I3 being non empty set,
@@ -168,6 +269,7 @@ definition let I1 be set, I2 be non empty set,
      F be MSUnTrans of [:f,f:],A,B;
  redefine func ~F -> MSUnTrans of [:f,f:],~A,~B;
 end;
+
 
 theorem :: FUNCTOR0:19
  for I1,I2 being non empty set,
@@ -195,12 +297,14 @@ definition let C1,C2 be 1-sorted;
     (#ObjectMap -> bifunction of the carrier of C1, the carrier of C2 #);
 end;
 
+
 definition let C1,C2 be non empty AltGraph;
  let F be BimapStr over C1,C2; let o be object of C1;
  func F.o -> object of C2 equals
 :: FUNCTOR0:def 6
   ((the ObjectMap of F).(o,o))`1;
 end;
+
 
 definition let A,B be 1-sorted, F be BimapStr over A,B;
  attr F is one-to-one means
@@ -219,11 +323,13 @@ definition let A,B be 1-sorted, F be BimapStr over A,B;
  id the carrier of B c= (the ObjectMap of F).:id the carrier of A;
 end;
 
+
 definition let A,B be non empty AltGraph, F be BimapStr over A,B;
  redefine attr F is reflexive means
 :: FUNCTOR0:def 11
  for o being object of A holds (the ObjectMap of F).(o,o) = [F.o,F.o];
 end;
+
 
 theorem :: FUNCTOR0:21
  for A,B being reflexive non empty AltGraph,
@@ -239,12 +345,14 @@ definition let C1, C2 be non empty AltGraph;
        (the Arrows of C2).((the ObjectMap of F).(o1,o2)) <> {};
 end;
 
+
 definition let C1,C2 be AltGraph;
  struct(BimapStr over C1,C2) FunctorStr over C1,C2
     (#ObjectMap -> bifunction of the carrier of C1,the carrier of C2,
      MorphMap ->
        MSUnTrans of the ObjectMap, the Arrows of C1, the Arrows of C2 #);
 end;
+
 
 definition let C1,C2 be 1-sorted;
  let IT be BimapStr over C1,C2;
@@ -256,10 +364,28 @@ definition let C1,C2 be 1-sorted;
  the ObjectMap of IT is Contravariant;
 end;
 
-definition let C1,C2 be AltGraph;
+
+registration let C1,C2 be AltGraph;
  cluster Covariant FunctorStr over C1,C2;
+  existence
+   proof
+     consider f being
+      Covariant bifunction of the carrier of C1, the carrier of C2;
+     consider M being MSUnTrans of f, the Arrows of C1, the Arrows of C2;
+    take F = FunctorStr(#f,M#);
+    thus the ObjectMap of F is Covariant;
+   end;
  cluster Contravariant FunctorStr over C1,C2;
+ existence
+   proof
+     consider f being
+      Contravariant bifunction of the carrier of C1, the carrier of C2;
+     consider M being MSUnTrans of f, the Arrows of C1, the Arrows of C2;
+    take F = FunctorStr(#f,M#);
+    thus the ObjectMap of F is Contravariant;
+   end;
 end;
+
 
 definition let C1,C2 be AltGraph;
  let F be FunctorStr over C1,C2; let o1,o2 be object of C1;
@@ -269,15 +395,24 @@ definition let C1,C2 be AltGraph;
   (the MorphMap of F).(o1,o2);
 end;
 
-definition let C1,C2 be AltGraph;
+
+registration let C1,C2 be AltGraph;
  let F be FunctorStr over C1,C2; let o1,o2 be object of C1;
  cluster Morph-Map(F,o1,o2) -> Relation-like Function-like;
+ coherence
+  proof
+      Morph-Map(F,o1,o2) = (the MorphMap of F).(o1,o2) by Def15
+      .= (the MorphMap of F).[o1,o2] by BINOP_1:def 1;
+   hence Morph-Map(F,o1,o2) is Relation-like Function-like;
+  end;
 end;
+
 
 definition let C1,C2 be non empty AltGraph;
  let F be Covariant FunctorStr over C1,C2; let o1,o2 be object of C1;
  redefine func Morph-Map(F,o1,o2) -> Function of <^o1,o2^>, <^F.o1,F.o2^>;
 end;
+
 
 definition let C1,C2 be non empty AltGraph;
  let F be Covariant FunctorStr over C1,C2; let o1,o2 be object of C1 such that
@@ -288,10 +423,12 @@ definition let C1,C2 be non empty AltGraph;
   Morph-Map(F,o1,o2).m;
 end;
 
+
 definition let C1,C2 be non empty AltGraph;
  let F be Contravariant FunctorStr over C1,C2; let o1,o2 be object of C1;
  redefine func Morph-Map(F,o1,o2) -> Function of <^o1,o2^>, <^F.o2,F.o1^>;
 end;
+
 
 definition let C1,C2 be non empty AltGraph;
  let F be Contravariant FunctorStr over C1,C2;
@@ -302,6 +439,7 @@ definition let C1,C2 be non empty AltGraph;
 :: FUNCTOR0:def 17
   Morph-Map(F,o1,o2).m;
 end;
+
 
 definition
  let C1,C2 be non empty AltGraph;
@@ -317,21 +455,48 @@ definition
       not contradiction };
 end;
 
+
 theorem :: FUNCTOR0:22
  for C1,C2 being non empty AltGraph, o2 being object of C2 st <^o2,o2^> <> {}
  for m be Morphism of o2,o2, o1 being object of C1
   holds (C1 --> m).o1 = o2;
 
-definition
+registration
  let C1 be non empty AltGraph, C2 be non empty reflexive AltGraph;
  let o be object of C2, m be Morphism of o,o;
  cluster C1 --> m -> Covariant Contravariant feasible;
+ coherence
+  proof
+      <^o,o^> <> {} by ALTCAT_2:def 7;
+    then A1:   the ObjectMap of C1 --> m
+     = [:the carrier of C1,the carrier of C1:] --> [o,o] by Def18;
+   hence the ObjectMap of C1 --> m is Covariant Contravariant by Th16;
+
+   let o1,o2 be object of C1 such that <^o1,o2^> <> {};
+A2:   [o1,o2] in [:the carrier of C1,the carrier of C1:] by ZFMISC_1:106;
+      (the ObjectMap of C1 --> m).(o1,o2)
+      = ([:the carrier of C1,the carrier of C1:] --> [o,o]).[o1,o2]
+                                                    by A1,BINOP_1:def 1
+     .= [o,o] by A2,FUNCOP_1:13;
+    then (the Arrows of C2).((the ObjectMap of C1 --> m).(o1,o2))
+      = (the Arrows of C2).(o,o) by BINOP_1:def 1;
+   hence (the Arrows of C2).((the ObjectMap of C1 --> m).(o1,o2)) <> {}
+                                  by ALTCAT_2:def 6;
+  end;
 end;
 
-definition
+
+registration
  let C1 be non empty AltGraph, C2 be non empty reflexive AltGraph;
  cluster feasible Covariant Contravariant FunctorStr over C1,C2;
+ existence
+  proof consider o being object of C2;
+    consider m being Morphism of o,o;
+   take C1 --> m;
+   thus thesis;
+  end;
 end;
+
 
 theorem :: FUNCTOR0:23
  for C1, C2 being non empty AltGraph,
@@ -347,6 +512,7 @@ definition let C1, C2 be non empty AltGraph;
  for o1,o2 being object of C1 st <^o1,o2^> <> {} holds <^F.o1,F.o2^> <> {};
 end;
 
+
 theorem :: FUNCTOR0:24
  for C1, C2 being non empty AltGraph,
      F being Contravariant FunctorStr over C1,C2,
@@ -361,14 +527,23 @@ definition let C1, C2 be non empty AltGraph;
  for o1,o2 being object of C1 st <^o1,o2^> <> {} holds <^F.o2,F.o1^> <> {};
 end;
 
-definition let C1,C2 be AltGraph;
+
+registration let C1,C2 be AltGraph;
  let F be FunctorStr over C1,C2;
  cluster the MorphMap of F -> Function-yielding;
+ coherence;
 end;
 
-definition
+
+registration
  cluster non empty reflexive AltCatStr;
+ existence
+  proof consider C being category;
+   take C;
+   thus thesis;
+  end;
 end;
+
 
 :: Wlasnosci funktorow, Semadeni-Wiweger str. 32
 
@@ -380,35 +555,87 @@ definition let C1,C2 be with_units (non empty AltCatStr);
    holds Morph-Map(F,o,o).idm o = idm F.o;
 end;
 
+
 theorem :: FUNCTOR0:25
  for C1,C2 being non empty AltGraph, o2 being object of C2 st <^o2,o2^> <> {}
  for m be Morphism of o2,o2, o,o' being object of C1, f being Morphism of o,o'
    st <^o,o'^> <> {}
   holds Morph-Map(C1 --> m,o,o').f = m;
 
-definition
+registration
  cluster with_units -> reflexive (non empty AltCatStr);
+ coherence
+  proof let C be non empty AltCatStr;
+   assume
+A1:  C is with_units;
+   let o be object of C;
+      the Comp of C is with_left_units by A1,ALTCAT_1:def 18;
+    then consider e being set such that
+A2:    e in (the Arrows of C).(o,o) and
+      for i being Element of C, f be set
+      st f in (the Arrows of C).(i,o)
+     holds (the Comp of C).(i,o,o).(e,f) = f by ALTCAT_1:def 9;
+   thus <^o,o^> <> {} by A2,ALTCAT_1:def 2;
+  end;
 end;
 
-definition let C1,C2 be with_units (non empty AltCatStr);
+
+registration let C1,C2 be with_units (non empty AltCatStr);
  let o2 be object of C2;
  cluster C1 --> idm o2 -> id-preserving;
+ coherence
+  proof
+   let o1 be object of C1;
+A1:  <^o2,o2^> <> {} by ALTCAT_2:def 7;
+      <^o1,o1^> <> {} by ALTCAT_2:def 7;
+   hence Morph-Map(C1 --> idm o2,o1,o1).idm o1 = idm o2 by A1,Th25
+        .= idm(C1 --> idm o2).o1 by A1,Th22;
+  end;
 end;
 
-definition let C1 be non empty AltGraph;
+
+registration let C1 be non empty AltGraph;
  let C2 be non empty reflexive AltGraph;
  let o2 be object of C2; let m be Morphism of o2,o2;
  cluster C1 --> m -> reflexive;
+ coherence
+  proof let o be object of C1;
+A1:  [o,o] in [:the carrier of C1,the carrier of C1:] by ZFMISC_1:106;
+      <^o2,o2^> <> {} by ALTCAT_2:def 7;
+then A2:  (the ObjectMap of C1 --> m).(o,o)
+          = ([:the carrier of C1,the carrier of C1:] --> [o2,o2]).(o,o) by
+Def18
+         .= ([:the carrier of C1,the carrier of C1:] --> [o2,o2]).[o,o]
+                          by BINOP_1:def 1
+         .= [o2,o2] by A1,FUNCOP_1:13;
+      (C1 --> m).o = ((the ObjectMap of C1 --> m).(o,o))`1 by Def6
+       .= o2 by A2,MCART_1:7;
+   hence (the ObjectMap of C1 --> m).(o,o) = [(C1 --> m).o,(C1 --> m).o] by A2
+;
+  end;
 end;
 
-definition let C1 be non empty AltGraph;
+
+registration let C1 be non empty AltGraph;
  let C2 be non empty reflexive AltGraph;
  cluster feasible reflexive FunctorStr over C1,C2;
+ existence
+  proof consider o2 being object of C2, m being Morphism of o2,o2;
+   take C1 --> m;
+   thus thesis;
+  end;
 end;
 
-definition let C1,C2 be with_units (non empty AltCatStr);
+
+registration let C1,C2 be with_units (non empty AltCatStr);
  cluster id-preserving feasible reflexive strict FunctorStr over C1,C2;
+ existence
+  proof consider o2 being object of C2;
+   take C1 --> idm o2;
+   thus thesis;
+  end;
 end;
+
 
 definition let C1,C2 be non empty AltCatStr;
  let F be FunctorStr over C1,C2;
@@ -421,6 +648,7 @@ definition let C1,C2 be non empty AltCatStr;
       Morph-Map(F,o1,o3).(g*f) = g'*f';
 end;
 
+
 definition let C1,C2 be non empty AltCatStr;
  let F be FunctorStr over C1,C2;
  attr F is comp-reversing means
@@ -432,6 +660,7 @@ definition let C1,C2 be non empty AltCatStr;
       Morph-Map(F,o1,o3).(g*f) = f'*g';
 end;
 
+
 definition let C1 be non empty transitive AltCatStr;
  let C2 be non empty reflexive AltCatStr;
  let F be Covariant feasible FunctorStr over C1,C2;
@@ -442,6 +671,7 @@ definition let C1 be non empty transitive AltCatStr;
      holds F.(g*f) = (F.g)*(F.f);
 end;
 
+
 definition let C1 be non empty transitive AltCatStr;
  let C2 be non empty reflexive AltCatStr;
  let F be Contravariant feasible FunctorStr over C1,C2;
@@ -451,6 +681,7 @@ definition let C1 be non empty transitive AltCatStr;
   for f being Morphism of o1,o2, g being Morphism of o2,o3
      holds F.(g*f) = (F.f)*(F.g);
 end;
+
 
 theorem :: FUNCTOR0:26
  for C1 being non empty AltGraph, C2 being non empty reflexive AltGraph,
@@ -467,12 +698,37 @@ theorem :: FUNCTOR0:27
    st <^o,o'^> <> {}
   holds (C1 --> m).f = m;
 
-definition
+registration
  let C1 be non empty transitive AltCatStr,
      C2 be with_units (non empty AltCatStr);
  let o be object of C2;
  cluster C1 --> idm o -> comp-preserving comp-reversing;
+ coherence
+  proof set F = C1 --> idm o;
+    reconsider G = F as Covariant feasible FunctorStr over C1,C2;
+A1:  <^o,o^> <> {} by ALTCAT_2:def 7;
+     G is comp-preserving
+    proof let o1,o2,o3 be object of C1; assume
+A2:    <^o1,o2^> <> {} & <^o2,o3^> <> {};
+then A3:    <^o1,o3^> <> {} by ALTCAT_1:def 4;
+     let f be Morphism of o1,o2, g be Morphism of o2,o3;
+A4:    G.g = idm o & G.f = idm o by A2,Th26;
+A5:    G.o1 = o & G.o2 = o & G.o3 = o by A1,Th22;
+     thus G.(g*f) = idm o by A3,Th26
+         .= (G.g)*(G.f) by A1,A4,A5,ALTCAT_1:24;
+    end;
+   hence F is comp-preserving;
+   let o1,o2,o3 be object of C1; assume
+A6:  <^o1,o2^> <> {} & <^o2,o3^> <> {};
+then A7:    <^o1,o3^> <> {} by ALTCAT_1:def 4;
+   let f be Morphism of o1,o2, g be Morphism of o2,o3;
+A8:  F.g = idm o & F.f = idm o by A6,Th27;
+A9:  F.o1 = o & F.o2 = o & F.o3 = o by A1,Th22;
+   thus F.(g*f) = idm o by A7,Th27
+         .= (F.f)*(F.g) by A1,A8,A9,ALTCAT_1:24;
+  end;
 end;
+
 
 definition
  let C1 be transitive with_units (non empty AltCatStr),
@@ -482,6 +738,7 @@ definition
   it is feasible id-preserving &
   (it is Covariant comp-preserving or it is Contravariant comp-reversing);
 end;
+
 
 definition
  let C1 be transitive with_units (non empty AltCatStr),
@@ -495,12 +752,14 @@ definition
    F is Contravariant comp-reversing;
 end;
 
+
 definition let A be AltCatStr, B be SubCatStr of A;
  func incl B -> strict FunctorStr over B,A means
 :: FUNCTOR0:def 29
  the ObjectMap of it = id [:the carrier of B, the carrier of B:] &
   the MorphMap of it = id the Arrows of B;
 end;
+
 
 definition let A be AltGraph;
  func id A -> strict FunctorStr over A,A means
@@ -509,9 +768,23 @@ definition let A be AltGraph;
   the MorphMap of it = id the Arrows of A;
 end;
 
-definition let A be AltCatStr, B be SubCatStr of A;
+
+registration let A be AltCatStr, B be SubCatStr of A;
  cluster incl B -> Covariant;
+ coherence
+  proof
+    reconsider b = the carrier of B as Subset of A
+          by ALTCAT_2:def 11;
+      incl b = id b by FUNCT_3:def 4;
+    then reconsider f = id the carrier of B as
+       Function of the carrier of B, the carrier of A;
+   take f;
+   thus the ObjectMap of incl B = id[:the carrier of B,the carrier of B:]
+                                       by Def29
+        .= [:f,f:] by FUNCT_3:90;
+  end;
 end;
+
 
 theorem :: FUNCTOR0:28
  for A being non empty AltCatStr, B being non empty SubCatStr of A,
@@ -523,15 +796,23 @@ theorem :: FUNCTOR0:29
      o1,o2 being object of B
    holds <^o1,o2^> c= <^(incl B).o1,(incl B).o2^>;
 
-definition let A be non empty AltCatStr, B be non empty SubCatStr of A;
+registration let A be non empty AltCatStr, B be non empty SubCatStr of A;
  cluster incl B -> feasible;
+ coherence
+  proof let o1,o2 be object of B;
+      <^o1,o2^> c= <^(incl B).o1,(incl B).o2^> by Th29;
+   hence <^o1,o2^> <> {} implies <^(incl B).o1,(incl B).o2^> <> {} by XBOOLE_1:
+3;
+  end;
 end;
+
 
 definition let A,B be AltGraph, F be FunctorStr over A,B;
  attr F is faithful means
 :: FUNCTOR0:def 31
  the MorphMap of F is "1-1";
 end;
+
 
 definition let A,B be AltGraph, F be FunctorStr over A,B;
  attr F is full means
@@ -542,6 +823,7 @@ definition let A,B be AltGraph, F be FunctorStr over A,B;
           & f is "onto";
 end;
 
+
 definition
  let A be AltGraph, B be non empty AltGraph, F be FunctorStr over A,B;
  redefine attr F is full means
@@ -550,6 +832,7 @@ definition
                                       (the Arrows of B)*the ObjectMap of F st
        f = the MorphMap of F & f is "onto";
 end;
+
 
 definition let A,B be AltGraph, F be FunctorStr over A,B;
  attr F is injective means
@@ -560,15 +843,24 @@ definition let A,B be AltGraph, F be FunctorStr over A,B;
  F is full onto;
 end;
 
+
 definition let A,B be AltGraph, F be FunctorStr over A,B;
  attr F is bijective means
 :: FUNCTOR0:def 36
  F is injective surjective;
 end;
 
-definition let A,B be transitive with_units (non empty AltCatStr);
+
+registration let A,B be transitive with_units (non empty AltCatStr);
  cluster strict covariant contravariant feasible Functor of A,B;
+ existence
+  proof consider o being object of B;
+    reconsider F = A --> idm o as Functor of A,B by Def26;
+   take F;
+   thus thesis by Def27,Def28;
+  end;
 end;
+
 
 theorem :: FUNCTOR0:30
  for A being non empty AltGraph, o being object of A
@@ -579,13 +871,39 @@ theorem :: FUNCTOR0:31
  for m being Morphism of o1,o2
   holds Morph-Map(id A,o1,o2).m = m;
 
-definition let A be non empty AltGraph;
+registration let A be non empty AltGraph;
  cluster id A -> feasible Covariant;
+ coherence
+  proof
+   thus id A is feasible
+    proof let o1,o2 be object of A;
+A1:    [o1,o2] in [:the carrier of A, the carrier of A:] by ZFMISC_1:106;
+        (the ObjectMap of id A).(o1,o2)
+         = (the ObjectMap of id A).[o1,o2] by BINOP_1:def 1
+        .= (id[:the carrier of A, the carrier of A:]).[o1,o2] by Def30
+        .= [o1,o2] by A1,FUNCT_1:35;
+      then (the Arrows of A).((the ObjectMap of id A).(o1,o2))
+         = (the Arrows of A).(o1,o2) by BINOP_1:def 1
+        .= <^o1,o2^> by ALTCAT_1:def 2;
+     hence thesis;
+    end;
+   thus id A is Covariant
+    proof
+     take I = id the carrier of A;
+     thus the ObjectMap of id A = id[:the carrier of A,the carrier of A:] by
+Def30
+        .= [:I,I:] by FUNCT_3:90;
+    end;
+ end;
 end;
 
-definition let A be non empty AltGraph;
+
+registration let A be non empty AltGraph;
  cluster Covariant feasible FunctorStr over A,A;
+ existence
+  proof take id A; thus thesis; end;
 end;
+
 
 theorem :: FUNCTOR0:32
  for A being non empty AltGraph, o1,o2 being object of A st <^o1,o2^> <> {}
@@ -593,17 +911,132 @@ theorem :: FUNCTOR0:32
  for m being Morphism of o1,o2
   holds F.m = m;
 
-definition let A be transitive with_units (non empty AltCatStr);
+registration let A be transitive with_units (non empty AltCatStr);
  cluster id A -> id-preserving comp-preserving;
+ coherence
+  proof
+   thus id A is id-preserving
+    proof let o be object of A;
+        <^o,o^> <> {} by ALTCAT_2:def 7;
+     hence Morph-Map(id A,o,o).idm o = idm o by Th31
+         .= idm (id A).o by Th30;
+    end;
+    set F = id A;
+      F is comp-preserving
+     proof let o1,o2,o3 be object of A such that
+A1:   <^o1,o2^> <> {} and
+A2:   <^o2,o3^> <> {};
+      let f be Morphism of o1,o2, g be Morphism of o2,o3;
+A3:     <^o1,o3^> <> {} by A1,A2,ALTCAT_1:def 4;
+A4:     F.o1 = o1 & F.o2 = o2 & F.o3 = o3 by Th30;
+         F.g = g & F.f = f by A1,A2,Th32;
+      hence F.(g*f) = (F.g)*(F.f) by A3,A4,Th32;
+     end;
+   hence thesis;
+  end;
 end;
+
 
 definition let A be transitive with_units (non empty AltCatStr);
  redefine func id A -> strict covariant Functor of A,A;
 end;
 
-definition let A be AltGraph;
+
+registration let A be AltGraph;
  cluster id A -> bijective;
+ coherence
+  proof set CC=[:the carrier of A,the carrier of A:];
+A1:  the ObjectMap of id A = id CC by Def30;
+   thus id A is one-to-one
+    proof
+     thus the ObjectMap of id A is one-to-one by A1,FUNCT_1:52;
+    end;
+   thus id A is faithful
+    proof
+     per cases;
+     suppose
+A2:    the carrier of A <> {};
+     let i be set, f be Function such that
+A3:   i in dom(the MorphMap of id A) and
+A4:   (the MorphMap of id A).i = f;
+        dom(the MorphMap of id A) = [:the carrier of A,the carrier of A:]
+            by PBOOLE:def 3;
+      then consider o1,o2 being Element of A such that
+A5:     i = [o1,o2] by A2,A3,DOMAIN_1:9;
+      reconsider o1,o2 as object of A;
+A6:    [o1,o2] in [:the carrier of A, the carrier of A:] by A2,ZFMISC_1:106;
+        f = (the MorphMap of id A).(o1,o2) by A4,A5,BINOP_1:def 1
+       .= (id the Arrows of A).(o1,o2) by Def30
+       .= (id the Arrows of A).[o1,o2] by BINOP_1:def 1
+       .= id((the Arrows of A).[o1,o2]) by A6,MSUALG_3:def 1;
+     hence f is one-to-one by FUNCT_1:52;
+     end;
+     suppose
+A7:    the carrier of A = {};
+     let i be set, f be Function such that
+A8:   i in dom(the MorphMap of id A) and (the MorphMap of id A).i = f;
+        dom(the MorphMap of id A)
+           = [:the carrier of A, the carrier of A:] by PBOOLE:def 3
+          .= {} by A7,ZFMISC_1:113;
+     hence thesis by A8;
+    end;
+    end;
+   thus id A is full
+    proof per cases;
+     suppose A is non empty;
+      then reconsider A as non empty AltGraph;
+        id A is full
+      proof
+      reconsider f = the MorphMap of id A as
+        ManySortedFunction of (the Arrows of A),
+                              (the Arrows of A)*the ObjectMap of id A by Def5;
+     take f;
+     thus f = the MorphMap of id A;
+     let i be set;
+     assume
+A9:    i in [:the carrier of A,the carrier of A:];
+     then consider o1,o2 being Element of A such that
+A10:     i = [o1,o2] by DOMAIN_1:9;
+     reconsider o1,o2 as object of A;
+A11:    [o1,o2] in [:the carrier of A, the carrier of A:] by ZFMISC_1:106;
+A12:   dom(the ObjectMap of id A) = CC by A1,RELAT_1:71;
+       f.i = (the MorphMap of id A).(o1,o2) by A10,BINOP_1:def 1
+      .= (id the Arrows of A).(o1,o2) by Def30
+      .= (id the Arrows of A).[o1,o2] by BINOP_1:def 1
+      .= id((the Arrows of A).[o1,o2]) by A11,MSUALG_3:def 1;
+     hence rng(f.i) = (the Arrows of A).[o1,o2] by RELAT_1:71
+       .= (the Arrows of A).((the ObjectMap of id A).i) by A1,A9,A10,FUNCT_1:35
+       .= ((the Arrows of A)*the ObjectMap of id A).i by A9,A12,FUNCT_1:23;
+     end;
+     hence thesis;
+     end;
+     suppose A is empty;
+    then A13: the carrier of A = {} by STRUCT_0:def 1;
+       the ObjectMap of id A = id [:the carrier of A, the carrier of A:] by
+Def30
+;
+     then reconsider B = (the Arrows of A)*the ObjectMap of id A as
+      ManySortedSet of [:the carrier of A, the carrier of A:] by Th3;
+     reconsider f = the MorphMap of id A as
+       ManySortedSet of [:the carrier of A, the carrier of A:];
+       f is ManySortedFunction of (the Arrows of A),B
+      proof let i be set; thus thesis by A13,ZFMISC_1:113; end;
+     then reconsider f as ManySortedFunction of (the Arrows of A),B;
+     take B,f;
+     thus
+        B = (the Arrows of A)*the ObjectMap of id A & f = the MorphMap of id A;
+     let i be set;
+     thus thesis by A13,ZFMISC_1:113;
+    end;
+    end;
+   thus id A is onto
+    proof
+        rng id CC = CC by RELAT_1:71;
+     hence the ObjectMap of id A is onto by A1,FUNCT_2:def 3;
+    end;
+  end;
 end;
+
 
 begin :: The composition of functors
 
@@ -617,35 +1050,129 @@ definition
    ((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F;
 end;
 
-definition let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
+
+registration
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
  let F be Covariant feasible FunctorStr over C1,C2,
      G be Covariant FunctorStr over C2,C3;
  cluster G*F -> Covariant;
+ correctness
+  proof
+      the ObjectMap of F is Covariant by Def13;
+    then consider f being Function of the carrier of C1, the carrier of C2
+     such that
+A1:   the ObjectMap of F = [:f,f:] by Def2;
+      the ObjectMap of G is Covariant by Def13;
+    then consider g being Function of the carrier of C2, the carrier of C3
+     such that
+A2:   the ObjectMap of G = [:g,g:] by Def2;
+   take g*f;
+   thus the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def37
+         .= [:g*f,g*f:] by A1,A2,FUNCT_3:92;
+  end;
 end;
 
-definition let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
+
+registration
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
  let F be Contravariant feasible FunctorStr over C1,C2,
      G be Covariant FunctorStr over C2,C3;
  cluster G*F -> Contravariant;
+ correctness
+  proof
+      the ObjectMap of F is Contravariant by Def14;
+    then consider f being Function of the carrier of C1, the carrier of C2
+     such that
+A1:   the ObjectMap of F = ~[:f,f:] by Def3;
+      the ObjectMap of G is Covariant by Def13;
+    then consider g being Function of the carrier of C2, the carrier of C3
+     such that
+A2:   the ObjectMap of G = [:g,g:] by Def2;
+   take g*f;
+   thus the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def37
+         .= ~([:g,g:]*[:f,f:]) by A1,A2,ALTCAT_2:2
+         .= ~[:g*f,g*f:] by FUNCT_3:92;
+  end;
 end;
 
-definition let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
+
+registration
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
  let F be Covariant feasible FunctorStr over C1,C2,
      G be Contravariant FunctorStr over C2,C3;
  cluster G*F -> Contravariant;
+ correctness
+  proof
+      the ObjectMap of F is Covariant by Def13;
+    then consider f being Function of the carrier of C1, the carrier of C2
+     such that
+A1:   the ObjectMap of F = [:f,f:] by Def2;
+      the ObjectMap of G is Contravariant by Def14;
+    then consider g being Function of the carrier of C2, the carrier of C3
+     such that
+A2:   the ObjectMap of G = ~[:g,g:] by Def3;
+   take g*f;
+   thus the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def37
+         .= ~([:g,g:]*[:f,f:]) by A1,A2,ALTCAT_2:3
+         .= ~[:g*f,g*f:] by FUNCT_3:92;
+  end;
 end;
 
-definition let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
+
+registration
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
  let F be Contravariant feasible FunctorStr over C1,C2,
      G be Contravariant FunctorStr over C2,C3;
  cluster G*F -> Covariant;
+ correctness
+  proof
+      the ObjectMap of F is Contravariant by Def14;
+    then consider f being Function of the carrier of C1, the carrier of C2
+     such that
+A1:   the ObjectMap of F = ~[:f,f:] by Def3;
+      the ObjectMap of G is Contravariant by Def14;
+    then consider g being Function of the carrier of C2, the carrier of C3
+     such that
+A2:   the ObjectMap of G = ~[:g,g:] by Def3;
+   take g*f;
+   thus the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def37
+         .= ~(~[:g,g:]*[:f,f:]) by A1,A2,ALTCAT_2:2
+         .= ~~([:g,g:]*[:f,f:]) by ALTCAT_2:3
+         .= [:g,g:]*[:f,f:] by FUNCT_4:55
+         .= [:g*f,g*f:] by FUNCT_3:92;
+  end;
 end;
 
-definition let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
+
+registration
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
  let F be feasible FunctorStr over C1,C2,
      G be feasible FunctorStr over C2,C3;
  cluster G*F -> feasible;
+ coherence
+  proof let o1,o2 be object of C1 such that
+A1: <^o1,o2^> <> {};
+    reconsider p1 = ((the ObjectMap of F).(o1,o2))`1,
+               p2 = ((the ObjectMap of F).(o1,o2))`2 as
+               Element of C2 by MCART_1:10;
+    reconsider p1,p2 as object of C2;
+      [o1,o2] in [:the carrier of C1,the carrier of C1:] by ZFMISC_1:106;
+then A2:  [o1,o2] in dom the ObjectMap of F by FUNCT_2:def 1;
+A3:  ((the ObjectMap of F).(o1,o2)) = [p1,p2] by MCART_1:23;
+A4:  ((the ObjectMap of(G*F)).(o1,o2))
+       = ((the ObjectMap of G)*the ObjectMap of F).(o1,o2) by Def37
+      .= ((the ObjectMap of G)*the ObjectMap of F).[o1,o2] by BINOP_1:def 1
+      .= (the ObjectMap of G).((the ObjectMap of F).[o1,o2]) by A2,FUNCT_1:23
+      .= (the ObjectMap of G).((the ObjectMap of F).(o1,o2)) by BINOP_1:def 1
+      .= (the ObjectMap of G).(p1,p2) by A3,BINOP_1:def 1;
+      <^p1,p2^> = (the Arrows of C2).(p1,p2) by ALTCAT_1:def 2
+      .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by A3,BINOP_1:def 1;
+     then <^p1,p2^> <> {} by A1,Def12;
+   hence (the Arrows of C3).((the ObjectMap of(G*F)).(o1,o2)) <> {}
+ by A4,Def12;
+  end;
 end;
+
 
 theorem :: FUNCTOR0:33
    for C1 being non empty AltGraph,
@@ -669,11 +1196,42 @@ theorem :: FUNCTOR0:35
      o be object of C1
  holds Morph-Map(G*F,o,o) = Morph-Map(G,F.o,F.o)*Morph-Map(F,o,o);
 
-definition let C1,C2,C3 be with_units (non empty AltCatStr);
+registration let C1,C2,C3 be with_units (non empty AltCatStr);
  let F be id-preserving feasible reflexive FunctorStr over C1,C2;
  let G be id-preserving FunctorStr over C2,C3;
   cluster G*F -> id-preserving;
+ coherence
+  proof let o be object of C1;
+A1:  [o,o] in [:the carrier of C1,the carrier of C1:] by ZFMISC_1:106;
+    then [o,o] in dom the ObjectMap of F by FUNCT_2:def 1;
+    then ((the Arrows of C2)*the ObjectMap of F).[o,o]
+      = (the Arrows of C2).((the ObjectMap of F).[o,o]) by FUNCT_1:23
+     .= (the Arrows of C2).((the ObjectMap of F).(o,o)) by BINOP_1:def 1
+     .= (the Arrows of C2).[F.o,F.o] by Def11
+     .= (the Arrows of C2).(F.o,F.o) by BINOP_1:def 1
+     .= <^F.o,F.o^> by ALTCAT_1:def 2;
+then A2:  ((the Arrows of C2)*the ObjectMap of F).[o,o] <> {} by ALTCAT_2:def 7
+;
+A3:  Morph-Map(F,o,o) = (the MorphMap of F).(o,o) by Def15
+          .= (the MorphMap of F).[o,o] by BINOP_1:def 1;
+      the MorphMap of F is ManySortedFunction of the Arrows of C1,
+         (the Arrows of C2)*the ObjectMap of F by Def5;
+    then Morph-Map(F,o,o) is Function of (the Arrows of C1).[o,o],
+              ((the Arrows of C2)*the ObjectMap of F).[o,o]
+                             by A1,A3,MSUALG_1:def 2;
+    then dom Morph-Map(F,o,o) = (the Arrows of C1).[o,o] by A2,FUNCT_2:def 1
+          .= (the Arrows of C1).(o,o) by BINOP_1:def 1
+          .= <^o,o^> by ALTCAT_1:def 2;
+then A4:  idm o in dom Morph-Map(F,o,o) by ALTCAT_1:23;
+   thus Morph-Map(G*F,o,o).idm o
+         = (Morph-Map(G,F.o,F.o)*Morph-Map(F,o,o)).idm o by Th35
+        .= Morph-Map(G,F.o,F.o).(Morph-Map(F,o,o).idm o) by A4,FUNCT_1:23
+        .= Morph-Map(G,F.o,F.o).idm F.o by Def21
+        .= idm G.(F.o) by Def21
+        .= idm (G*F).o by Th34;
+  end;
 end;
+
 
 definition let A,C be non empty reflexive AltCatStr;
  let B be non empty SubCatStr of A;
@@ -682,6 +1240,7 @@ definition let A,C be non empty reflexive AltCatStr;
 :: FUNCTOR0:def 38
     F*incl B;
 end;
+
 
 begin :: The inverse functor
 
@@ -695,6 +1254,7 @@ definition let A,B be non empty AltGraph, F be FunctorStr over A,B;
                                     (the Arrows of B)*the ObjectMap of F st
        f = the MorphMap of F & the MorphMap of it = f""*(the ObjectMap of F)";
 end;
+
 
 theorem :: FUNCTOR0:36
  for A,B being transitive with_units (non empty AltCatStr),
@@ -749,13 +1309,37 @@ theorem :: FUNCTOR0:44
         F is bijective comp-reversing Contravariant coreflexive
  holds F" is comp-reversing;
 
-definition let C1 be 1-sorted, C2 be non empty 1-sorted;
+registration let C1 be 1-sorted, C2 be non empty 1-sorted;
  cluster Covariant -> reflexive BimapStr over C1,C2;
+ coherence
+  proof let M be BimapStr over C1,C2;
+   assume M is Covariant;
+    then the ObjectMap of M is Covariant by Def13;
+    then ex f being Function of the carrier of C1, the carrier of C2
+     st the ObjectMap of M = [:f,f:] by Def2;
+   hence (the ObjectMap of M).:id the carrier of C1 c= id the carrier of C2
+      by Th15;
+
+  end;
 end;
 
-definition let C1 be 1-sorted, C2 be non empty 1-sorted;
+
+registration let C1 be 1-sorted, C2 be non empty 1-sorted;
  cluster Contravariant -> reflexive BimapStr over C1,C2;
+ coherence
+  proof let M be BimapStr over C1,C2;
+   assume M is Contravariant;
+    then the ObjectMap of M is Contravariant by Def14;
+    then consider f being Function of the carrier of C1, the carrier of C2
+     such that
+A1:  the ObjectMap of M = ~[:f,f:] by Def3;
+      (~[:f,f:]).:id the carrier of C1 = [:f,f:].:id the carrier of C1 by Th4;
+   hence (the ObjectMap of M).:id the carrier of C1 c= id the carrier of C2
+      by A1,Th15;
+
+  end;
 end;
+
 
 theorem :: FUNCTOR0:45
  for C1,C2 being 1-sorted, M being BimapStr over C1,C2
@@ -765,17 +1349,33 @@ theorem :: FUNCTOR0:46
  for C1,C2 being 1-sorted, M being BimapStr over C1,C2
   st M is Contravariant onto holds M is coreflexive;
 
-definition
+registration
  let C1 be transitive with_units (non empty AltCatStr),
      C2 be with_units (non empty AltCatStr);
  cluster covariant -> reflexive Functor of C1,C2;
+ coherence
+  proof let F be Functor of C1,C2;
+   assume F is covariant;
+    then reconsider F as Covariant FunctorStr over C1,C2 by Def27;
+      F is reflexive;
+   hence thesis;
+  end;
 end;
 
-definition
+
+registration
  let C1 be transitive with_units (non empty AltCatStr),
      C2 be with_units (non empty AltCatStr);
  cluster contravariant -> reflexive Functor of C1,C2;
+ coherence
+  proof let F be Functor of C1,C2;
+   assume F is contravariant;
+    then reconsider F as Contravariant FunctorStr over C1,C2 by Def28;
+      F is reflexive;
+   hence thesis;
+  end;
 end;
+
 
 theorem :: FUNCTOR0:47
  for C1 being transitive with_units (non empty AltCatStr),
@@ -810,4 +1410,5 @@ definition let A,B be transitive with_units (non empty AltCatStr);
    ex F being Functor of A,B st F is bijective contravariant;
  symmetry;
 end;
+
 

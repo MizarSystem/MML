@@ -39,7 +39,8 @@ definition let IT be set;
    for f,g be Function st f in IT & g in IT holds dom f = dom g;
 end;
 
-definition
+
+registration
   cluster with_common_domain functional non empty set;
 existence
  proof
@@ -57,6 +58,7 @@ existence
   thus A is non empty;
  end;
 end;
+
 
 theorem
     {{}} is functional with_common_domain set
@@ -111,6 +113,7 @@ uniqueness
 consistency;
 end;
 
+
 definition let X be with_common_domain functional non empty set;
   redefine mode Element of X -> ManySortedSet of (DOM X);
 coherence
@@ -121,6 +124,7 @@ coherence
  end;
 end;
 
+
 theorem
     for X be with_common_domain functional set st X = {{}} holds DOM X = {}
  proof
@@ -129,7 +133,7 @@ theorem
   hence thesis by A1,Def2,RELAT_1:60;
  end;
 
-definition
+registration
  let I be set,
      M be non-empty ManySortedSet of I;
  cluster product M -> with_common_domain functional non empty;
@@ -150,6 +154,7 @@ coherence
  end;
 end;
 
+
 begin
 ::
 :: Operations on Functions
@@ -158,10 +163,11 @@ begin
 scheme LambdaDMS {D()->non empty set, F(set)->set}:
 ex X be ManySortedSet of D() st for d be Element of D()
 holds X.d = F(d)
- proof
+proof
   deffunc G(set) = F($1);
   consider f be Function such that
-  A1: dom f = D() & for d be Element of D() holds f.d = G(d) from LambdaB;
+  A1: dom f = D() & for d be Element of D() holds f.d = G(d) from
+MSUALG_2:sch 1;
   reconsider f as ManySortedSet of D() by A1,PBOOLE:def 3;
   take f;
   thus thesis by A1;
@@ -180,6 +186,7 @@ func commute f -> Function-yielding Function equals :Def5:
    hence g is Function-yielding Function by PRALG_1:def 15;
   end;
 end;
+
 
 theorem
   for f be Function, x be set st x in dom (commute f) holds
@@ -306,7 +313,7 @@ func Commute F -> Function means :Def6:
 A1: for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2;
    consider X being set such that
 A2:  for x holds x in X iff ex y being set st y in dom F & P[y,x]
-      from Fraenkel(A1);
+      from TARSKI:sch 1(A1);
  defpred P[set,set] means for f be Function st $1 = f holds $2 = F.commute f;
 A3:  now let x;
      assume x in X;
@@ -318,7 +325,7 @@ A3:  now let x;
     end;
    consider G being Function such that
    A4: dom G = X and
-   A5: for x st x in X holds P[x,G.x] from NonUniqFuncEx(A3);
+   A5: for x st x in X holds P[x,G.x] from ZFREFLE1:sch 1(A3);
    take G;
    hereby let x;
     hereby assume x in dom G;
@@ -361,6 +368,7 @@ A13:    x = commute g by A9,A11;
    hence m = n by A11,FUNCT_1:9;
   end;
 end;
+
 
 theorem
   for F be Function st dom F = {{}} holds Commute F = F
@@ -481,6 +489,7 @@ then A18:    g.x in dom(f.x) by A15,A17,FUNCT_6:31;
   end;
 end;
 
+
 definition
  let I, A,B;
 func [|A,B|] -> ManySortedSet of I means :Def9:
@@ -489,7 +498,7 @@ func [|A,B|] -> ManySortedSet of I means :Def9:
   proof
    deffunc F(set) = [:A.$1,B.$1:];
    consider f be Function such that A1: dom f = I &
-   for i st i in I holds f.i = F(i) from Lambda;
+   for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
    reconsider f as ManySortedSet of I by A1,PBOOLE:def 3;
    take f;
    thus thesis by A1;
@@ -509,7 +518,8 @@ func [|A,B|] -> ManySortedSet of I means :Def9:
   end;
 end;
 
-definition
+
+registration
  let I; let A,B be non-empty ManySortedSet of I;
  cluster [|A,B|] -> non-empty;
 coherence
@@ -522,6 +532,7 @@ coherence
  hence thesis by PBOOLE:def 16;
  end;
 end;
+
 
 theorem Th9:
 for I be non empty set, J be set, A,B be ManySortedSet of I,
@@ -637,7 +648,7 @@ A9: dom f = (A#*p).j & rng f c= (A*r).j &
     hence thesis by A6;
    end;
   consider F being Function of X,Y such that
-  A25: for x be set st x in X holds P[x,F.x] from FuncEx1(A5);
+  A25: for x be set st x in X holds P[x,F.x] from FUNCT_2:sch 1(A5);
   take F;
   thus thesis by A25;
  end;
@@ -673,6 +684,7 @@ uniqueness
  end;
 end;
 
+
 definition
  let I be non empty set,J;
  let A,B be non-empty ManySortedSet of I,
@@ -703,7 +715,7 @@ existence
    end;
   consider h being Function such that
   A3: dom h = J & for j st j in J holds P[j,h.j]
-                                          from NonUniqFuncEx(A1);
+                                          from ZFREFLE1:sch 1(A1);
   reconsider h as ManySortedSet of J by A3,PBOOLE:def 3;
     for j st j in dom h holds h.j is Function
    proof
@@ -758,6 +770,7 @@ uniqueness
  end;
 end;
 
+
 begin
 
 ::
@@ -773,13 +786,14 @@ existence
   consider A be non-empty MSAlgebra over S;
   deffunc F(set) = A;
   consider f be Function such that A1: dom f = I &
-  for i st i in I holds f.i = F(i) from Lambda;
+  for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
   reconsider f as ManySortedSet of I by A1,PBOOLE:def 3;
   take f;
   let i; assume i in I;
   hence thesis by A1;
  end;
 end;
+
 
 definition
  let I be non empty set,
@@ -790,6 +804,7 @@ redefine func A.i -> non-empty MSAlgebra over S;
 coherence by Def12;
 end;
 
+
 definition
  let S be non empty ManySortedSign,
      U1 be MSAlgebra over S;
@@ -798,7 +813,8 @@ func |.U1.| -> set equals :Def13:
  coherence;
 end;
 
-definition
+
+registration
  let S be non empty ManySortedSign,
      U1 be non-empty MSAlgebra over S;
  cluster |.U1.| -> non empty;
@@ -815,6 +831,7 @@ A1: |.U1.| = union (rng the Sorts of U1) by Def13;
   end;
 end;
 
+
 definition
  let I be non empty set,
      S be non empty ManySortedSign,
@@ -824,7 +841,8 @@ func |.A.| -> set equals :Def14:
  coherence;
 end;
 
-definition
+
+registration
  let I be non empty set,
      S be non empty ManySortedSign,
      A be MSAlgebra-Family of I,S;
@@ -839,6 +857,7 @@ A1: union X =|.A.| by Def14;
    thus thesis by A1,A2,A3,TARSKI:def 4;
   end;
 end;
+
 
 begin
 
@@ -900,7 +919,8 @@ func [:U1,U2:] -> MSAlgebra over S equals :Def15:
  coherence;
 end;
 
-definition
+
+registration
  let S; let U1,U2 be non-empty MSAlgebra over S;
  cluster [:U1,U2:] -> strict;
  coherence
@@ -910,6 +930,7 @@ definition
   hence thesis;
  end;
 end;
+
 
 definition
  let I,S;
@@ -927,7 +948,7 @@ existence
    reconsider A' = A as MSAlgebra-Family of I',S;
   deffunc F(Element of I') = (the Sorts of (A'.$1)).s;
   consider f be Function such that A1: dom f = I' &
-   for i be Element of I' holds f.i = F(i) from LambdaB;
+   for i be Element of I' holds f.i = F(i) from MSUALG_2:sch 1;
   reconsider f as ManySortedSet of I by A1,PBOOLE:def 3;
   take f;
   let i be set;
@@ -970,7 +991,8 @@ A5:    x in I;
  correctness;
 end;
 
-definition
+
+registration
  let I,S;
  let s be SortSymbol of S,
      A be MSAlgebra-Family of I,S;
@@ -987,6 +1009,7 @@ A2:   U0 = A.x & Carrier (A,s).x = (the Sorts of U0).s by Def16;
  end;
 end;
 
+
 definition
  let I,S;
 let A be MSAlgebra-Family of I,S;
@@ -996,7 +1019,7 @@ for s be SortSymbol of S holds it.s = product Carrier(A,s);
   proof
    deffunc F(SortSymbol of S) = product Carrier(A,$1);
    consider f be Function such that A1:dom f = the carrier of S &
-   for s be SortSymbol of S holds f.s = F(s) from LambdaB;
+   for s be SortSymbol of S holds f.s = F(s) from MSUALG_2:sch 1;
    reconsider f as ManySortedSet of (the carrier of S)
                                               by A1,PBOOLE:def 3;
    take f;
@@ -1021,7 +1044,8 @@ for s be SortSymbol of S holds it.s = product Carrier(A,s);
   end;
 end;
 
-definition
+
+registration
  let I, S; let A be MSAlgebra-Family of I,S;
 cluster SORTS(A) -> non-empty;
  coherence
@@ -1033,6 +1057,7 @@ cluster SORTS(A) -> non-empty;
     hence thesis;
   end;
 end;
+
 
 definition
  let I;
@@ -1106,6 +1131,7 @@ A5:    x in I;
  correctness;
 end;
 
+
 theorem Th12:
 for S be non empty ManySortedSign, A be MSAlgebra-Family of I,S holds
 dom uncurry (OPER A) = [:I,the OperSymbols of S:]
@@ -1137,10 +1163,12 @@ A7:   U0 = A.y & (OPER A).y = the Charact of U0 by A1,Def18;
                                                 by PBOOLE:def 3;
     dom (OPER A) = I by PBOOLE:def 3;
   hence thesis by A1,A5,A6,A7,A8,FUNCT_5:def 4;
+  end;
   suppose
 A9:   I = {};
    then OPER A = {} by PBOOLE:134;
   hence thesis by A9,FUNCT_5:50,RELAT_1:60,ZFMISC_1:113;
+ end;
  end;
 
 theorem Th13:
@@ -1200,6 +1228,7 @@ A9:   U0 = A.i & (OPER A).i = the Charact of U0 by A3,Def18;
      hence thesis;
     end;
    hence thesis by A5,PRALG_1:def 15;
+   end;
    suppose
 A10:  I = {};
       [0]I is Function-yielding
@@ -1214,7 +1243,9 @@ A11: not o in dom {};
      .= (commute (OPER A)).o by A10,PBOOLE:134;
    hence thesis;
   end;
+  end;
 end;
+
 
 theorem Th14:
 for I be non empty set, i be Element of I,
@@ -1436,7 +1467,7 @@ means
     end;
    consider f being Function such that
    A2: dom f = X & for x st x in X holds P[x,f.x]
-                                         from NonUniqFuncEx(A1);
+                                         from ZFREFLE1:sch 1(A1);
    reconsider f as ManySortedSet of X by A2,PBOOLE:def 3;
      for x st x in dom f holds f.x is Function
     proof
@@ -1449,12 +1480,14 @@ means
                  Commute Frege(A?.o)) by A2,A3
          .= commute(A?.o) by A4,CQC_LANG:def 1;
      hence thesis;
+     end;
      suppose
      A5: the_arity_of o <> {};
        f.x = IFEQ(the_arity_of o,{},commute(A?.o),
                  Commute Frege (A?.o)) by A2,A3
         .= Commute Frege (A?.o) by A5,CQC_LANG:def 1;
      hence thesis;
+    end;
     end;
    then reconsider f as ManySortedFunction of X by PRALG_1:def 15;
    hereby assume I <> {};
@@ -1553,6 +1586,7 @@ A28:     ex U0 being MSAlgebra over S st U0 = A.i &
        hence thesis by A12,A27,CARD_3:18;
       end;
      hence thesis by A14,A15,A24,FUNCT_2:4;
+     end;
      suppose
 A30:    the_arity_of o <> {};
      A31: f.x = IFEQ(the_arity_of o,{},commute(A?.o),
@@ -1756,6 +1790,7 @@ A81:    ex U0 being MSAlgebra over S st U0 = A'.i &
      end;
      hence thesis by A31,A33,FUNCT_2:4;
     end;
+    end;
    then reconsider f as ManySortedFunction of AS,RS by MSUALG_1:def 2;
    take f;
    let o be OperSymbol of S;
@@ -1819,6 +1854,7 @@ A89:    f.o is Function of
  correctness;
 end;
 
+
 definition
  let I be set,
      S be non void non empty ManySortedSign,
@@ -1828,7 +1864,8 @@ func product A -> MSAlgebra over S equals :Def21:
 coherence;
 end;
 
-definition
+
+registration
  let I be set,
      S be non void non empty ManySortedSign,
      A be MSAlgebra-Family of I,S;
@@ -1839,6 +1876,7 @@ coherence
   hence thesis;
  end;
 end;
+
 
 canceled;
 

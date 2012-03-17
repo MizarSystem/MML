@@ -11,9 +11,6 @@ NUMBERS
 FINSET_1
 CARD_1
 #
-Cardinal_Ind
-Cardinal_CompInd
-#
 ;
 M1 V17 ;;P1 B1 ;P1 K5 ;;M1 V17 ;;ª&P1 B1 ;ªP1 K58 B1 ;;;M1 V17 ;;ª&ªR1 B1 K5 ;;V18 B1 ;M1 V17 ;;ª&R2 B2 B1 ;ªP1 B2 ;;ªP1 B1 ;;;
 #

@@ -31,11 +31,13 @@ definition let D1,D2,D be non empty set;
   coherence proof thus x`12 is Element of D2; end;
 end;
 
+
 definition let D1,D2 be non empty set;
  let x be Element of [:D1,D2:];
  redefine func x`2 -> Element of D2;
   coherence proof thus x`2 is Element of D2; end;
 end;
+
 
 theorem Th1:
  for C,D being CatStr st the CatStr of C = the CatStr of D holds
@@ -85,7 +87,8 @@ definition let IT be CatStr;
   for f being Morphism of IT ex x being set st f = [[dom f, cod f], x];
 end;
 
-definition
+
+registration
  cluster with_triple-like_morphisms (strict Category);
   existence
    proof take C = 1Cat(0, [[0,0], 1]);
@@ -94,6 +97,7 @@ definition
     hence thesis by CAT_1:35;
    end;
 end;
+
 
 theorem Th2:
  for C being with_triple-like_morphisms CatStr, f being Morphism of C holds
@@ -113,6 +117,7 @@ definition
  redefine func f`12 -> Object of C;
    coherence proof f`12 = cod f by Th2; hence thesis; end;
 end;
+
 
 scheme CatEx
  { A, B() -> non empty set, P[set, set, set], F(set,set) -> set }:
@@ -134,7 +139,7 @@ A2:  for a being Element of A() ex f being Element of B() st P[a,a,f] &
       (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g) and
 A3:  for a,b,c,d being Element of A(), f,g,h being Element of B() st
       P[a,b,f] & P[b,c,g] & P[c,d,h] holds F(h, F(g,f)) = F(F(h,g), f)
-  proof
+proof
    set M = {[[a,b],f] where a is Element of A(), b is Element of A(),
               f is Element of B(): P[a,b,f]};
    consider a0 being Element of A();
@@ -158,10 +163,10 @@ A7:   m = [[a,b],f] & P[a,b,f];
     end;
    deffunc f(Element of M) = $1`11;
    consider DM being Function of M, A() such that
-A8:  for m being Element of M holds DM.m = f(m) from LambdaD;
+A8:  for m being Element of M holds DM.m = f(m) from FUNCT_2:sch 4;
    deffunc g(Element of M) = $1`12;
    consider CM being Function of M, A() such that
-A9:  for m being Element of M holds CM.m = g(m) from LambdaD;
+A9:  for m being Element of M holds CM.m = g(m) from FUNCT_2:sch 4;
     deffunc f(set,set) = [[$2`11,$1`12],F($1`2,$2`2)];
     defpred P[set,set] means $1`11 = $2`12 & $1 in M & $2 in M;
 A10: now let x,y be set; assume
@@ -180,7 +185,7 @@ A14:   x`11 = ax & x`12 = bx & y`11 = ay & y`12 = b2 & x`2 = fx & y`2 = fy
 A15:  for x,y being set holds [x,y] in dom CC iff
      x in M & y in M & P[x,y] and
 A16:  for x,y being set st [x,y] in dom CC holds
-     CC.[x,y] = f(x,y) from LambdaR2(A10);
+     CC.[x,y] = f(x,y) from PARTFUN1:sch 5(A10);
    defpred II[Element of A(), Element of M] means
     ex f being Element of B() st
      $2 = [[$1,$1], f] & P[$1,$1,f] &
@@ -196,7 +201,7 @@ A18:   P[a,a,f] &
      take y; thus II[a,y] by A18;
     end;
    consider I being Function of A(), M such that
-A19:  for o being Element of A() holds II[o,I.o] from FuncExD(A17);
+A19:  for o being Element of A() holds II[o,I.o] from FUNCT_2:sch 3(A17);
    set C = CatStr (# A(),M,DM,CM,CC,I #);
       C is Category-like
      proof
@@ -332,7 +337,7 @@ for C1, C2 being strict with_triple-like_morphisms Category st
 A1:  for a being Element of A() ex f being Element of B() st P[a,a,f] &
      for b being Element of A(), g being Element of B() holds
       (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g)
-  proof let C1, C2 be strict with_triple-like_morphisms Category such that
+proof   let C1, C2 be strict with_triple-like_morphisms Category such that
 A2: the Objects of C1 = A() and
 A3: for a,b being Element of A(), f being Element of B() st
      P[a,b,f] holds [[a,b],f] is Morphism of C1 and
@@ -470,11 +475,12 @@ A1:  for f being Morphism of A() holds F(f) is Morphism of B() &
 A2:  for a being Object of A() holds F(id a) = id O(a) and
 A3:  for f1,f2 being Morphism of A() for g1,g2 being Morphism of B() st
       g1 = F(f1) & g2 = F(f2) & dom f2 = cod f1 holds F(f2*f1) = g2*g1
-  proof
+proof
     deffunc f(set) = F($1);
      consider F being Function such that
 A4:  dom F = the Morphisms of A() and
-A5:  for x being set st x in the Morphisms of A() holds F.x = f(x) from Lambda;
+A5:  for x being set st x in the Morphisms of A() holds F.x = f(x) from
+FUNCT_1:sch 3;
       rng F c= the Morphisms of B()
      proof let x be set; assume x in rng F;
       then consider y being set such that
@@ -788,6 +794,7 @@ b' &
   uniqueness;
 end;
 
+
 reserve C for Category, C1,C2 for Subcategory of C;
 
 theorem Th5:
@@ -906,7 +913,7 @@ A3:   dom F = the Morphisms of C & dom the Dom of D = the Morphisms of D &
        the Morphisms of E = $1;
     consider MM being set such that
 A4:   for x being set holds x in MM iff x in bool the Morphisms of D & P[x]
-     from Separation;
+     from XBOOLE_0:sch 1;
     set HH = {Hom(a0,b) where a0 is Object of D, b is Object of D:
               a0 in O & b in O};
     reconsider M0 = union HH as non empty Subset of the Morphisms of D
@@ -1088,6 +1095,7 @@ A39:  for E being Subcategory of D st
    end;
 end;
 
+
 theorem Th7:
  for C,D being Category, E be Subcategory of D, F being Functor of C,D st
   rng F c= the Morphisms of E holds F is Functor of C, E
@@ -1191,12 +1199,8 @@ definition let IT be set;
   for x being set st x in IT holds x is Category;
 end;
 
+
 definition
- cluster categorial (non empty set);
- existence
-  proof take X = {1Cat(0,1)};
-   let x be set; assume x in X; hence thesis by TARSKI:def 1;
-  end;
  let X be non empty set;
  redefine attr X is categorial means:
 Def5:
@@ -1210,11 +1214,20 @@ A1:   for x being Element of X holds x is Category;
     let x be set; thus thesis by A1;
    end;
 end;
+registration
+ cluster categorial (non empty set);
+ existence
+  proof take X = {1Cat(0,1)};
+   let x be Element of X; thus thesis by TARSKI:def 1;
+  end;
+ end;
+
 
 definition let X be non empty categorial set;
  redefine mode Element of X -> Category;
   coherence by Def4;
 end;
+
 
 definition let C be Category;
  attr C is Categorial means :Def6:
@@ -1231,7 +1244,8 @@ definition let C be Category;
       holds m2*m1 = [[A,C],G*F];
 end;
 
-definition
+
+registration
  cluster Categorial -> with_triple-like_morphisms Category;
   coherence
    proof let C be Category; assume A1: C is Categorial;
@@ -1245,6 +1259,7 @@ then A2:   the Objects of C is categorial &
     hence thesis;
    end;
 end;
+
 
 theorem Th10:
  for C,D being Category st the CatStr of C = the CatStr of D holds
@@ -1320,13 +1335,14 @@ then A1:   C1 = A & C2 = A by CAT_1:34;
    hence m2*m1 = [[A1,C],F2*F1] by CAT_1:35;
   end;
 
-definition
+registration
  cluster Categorial (strict Category);
   existence
    proof set A = 1Cat(0,1);
     take 1Cat(A, [[A,A], id A]); thus thesis by Th11;
    end;
 end;
+
 
 theorem Th12:
  for C being Categorial Category, a being Object of C holds a is Category
@@ -1351,6 +1367,7 @@ definition let C be Categorial Category;
  redefine func m`12 -> Category;
   coherence proof cod m = m`12 by Th13; hence thesis by Th12; end;
 end;
+
 
 theorem Th14:
  for C1, C2 being Categorial Category st
@@ -1432,7 +1449,7 @@ then A15:  the Comp of C1 = the Comp of C2 by A1,A6,PARTFUN1:35;
     end; hence thesis by A1,A2,A3,A4,A15,FUNCT_1:9;
   end;
 
-definition let C be Categorial Category;
+registration let C be Categorial Category;
  cluster -> Categorial Subcategory of C;
   coherence
    proof let D be Subcategory of C;
@@ -1470,6 +1487,7 @@ A2:   m1 = [[a,b],f] & m2 = [[b,c],g];
     hence m2*m1 = m2'*m1' by CAT_2:17 .= [[a,c],g*f] by A2,Def6;
    end;
 end;
+
 
 theorem Th15:
  for C,D being Categorial Category st the Morphisms of C c= the Morphisms of D
@@ -1544,6 +1562,7 @@ Def7:
   correctness by A1;
 end;
 
+
 theorem Th16:
  for C being Categorial Category, c being Object of C holds cat c = c
   proof let C be Categorial Category, c be Object of C;
@@ -1564,6 +1583,7 @@ A1:   m = [[A,B], F] by Def6;
     hence thesis;
    end;
 end;
+
 
 theorem Th17:
  for X being categorial non empty set, Y being non empty set st
@@ -1736,7 +1756,8 @@ Def8:
    for F being Functor of a, b holds [[a,b],F] is Morphism of IT;
 end;
 
-definition
+
+registration
  cluster full (Categorial strict Category);
   existence
    proof set A = 1Cat(0,1);
@@ -1752,6 +1773,7 @@ A2:   a = A & b = A by A1,CAT_1:34;
     hence [[a,b],F] is Morphism of C by A2,CAT_1:33;
    end;
 end;
+
 
 theorem
    for C1,C2 being full (Categorial Category) st
@@ -1881,7 +1903,8 @@ Def10:
   coherence;
 end;
 
-definition
+
+registration
  let C be Category;
  let o be Object of C;
  cluster Hom o -> non empty;
@@ -1901,6 +1924,7 @@ A4:   (the Dom of C).id o = dom id o by CAT_1:def 2 .= o by CAT_1:44;
       by FUNCT_2:def 1,TARSKI:def 1; hence thesis by A3,A4,FUNCT_1:def 13;
    end;
 end;
+
 
 theorem Th23:
  for C being Category, a being Object of C, f being Morphism of C holds
@@ -2123,6 +2147,7 @@ thus for C1, C2 being strict with_triple-like_morphisms Category st
   end;
 end;
 
+
 definition
  let C be Category;
  let o be Object of C;
@@ -2146,6 +2171,7 @@ A3:   m = [[a,b],f] & dom b = cod f & a = b*f by Def11;
      thus thesis by A3,COMMACAT:1;
    end;
 end;
+
 
 theorem Th29:
  for C being Category, a being Object of C, m being Morphism of C-SliceCat a
@@ -2203,6 +2229,7 @@ A3:   m = [[a,b],f] & dom f = cod a & f*a = b by Def12;
    end;
 end;
 
+
 theorem Th31:
  for C being Category, a being Object of C, m being Morphism of a-SliceCat C
  holds m = [[m`11,m`12],m`2] & dom m`2 = cod m`11 & m`2*m`11 = m`12 &
@@ -2249,7 +2276,7 @@ Def13:
     consider F being Function of
        the Morphisms of C1, the Morphisms of [:[:C,C:],C:]
     such that
-A1:   for m being Morphism of C1 holds F.m = f(m) from LambdaD;
+A1:   for m being Morphism of C1 holds F.m = f(m) from FUNCT_2:sch 4;
 A2:  dom F = the Morphisms of C1 by FUNCT_2:def 1;
        rng F c= the Morphisms of C2
       proof let x be set; assume x in rng F;
@@ -2347,7 +2374,7 @@ Def14:
     consider F being Function of
        the Morphisms of C1, the Morphisms of [:[:C,C:],C:]
     such that
-A20:   for m being Morphism of C1 holds F.m = f(m) from LambdaD;
+A20:   for m being Morphism of C1 holds F.m = f(m) from FUNCT_2:sch 4;
 A21:  dom F = the Morphisms of C1 by FUNCT_2:def 1;
        rng F c= the Morphisms of C2
       proof let x be set; assume x in rng F;
@@ -2437,6 +2464,7 @@ A38:  for m being Morphism of (cod f)-SliceCat C holds
     hence thesis by FUNCT_2:113;
    end;
 end;
+
 
 theorem
    for C being Category, f,g being Morphism of C st dom g = cod f holds

@@ -35,11 +35,13 @@ definition let G,x;
    x + x;
 end;
 
+
 definition let M,G,w;
  pred M,G are_associated_wrp w means
 :: MIDSP_2:def 2
   p@q = r iff w.(p,r) = w.(r,q);
 end;
+
 
 theorem :: MIDSP_2:1
  M,G are_associated_wrp w implies p@p = p;
@@ -56,12 +58,14 @@ definition let S,G,w;
        & for a,b,c holds w.(a,b) + w.(b,c) = w.(a,c);
 end;
 
+
 definition let S,G,w,a,x;
  assume  w is_atlas_of S,G;
  func (a,x).w -> Element of S means
 :: MIDSP_2:def 4
   w.(a,it) = x;
 end;
+
 
 reserve G for add-associative right_zeroed right_complementable
     (non empty LoopStr);
@@ -138,10 +142,12 @@ theorem :: MIDSP_2:17
 reserve M for MidSp;
 reserve p,q,r,s for Point of M;
 
-definition let M;
+registration let M;
  cluster vectgroup(M) -> Abelian add-associative right_zeroed
    right_complementable;
+ coherence by MIDSP_1:86;
 end;
+
 
 theorem :: MIDSP_2:18
  (for a being set holds a is Element of vectgroup(M)
@@ -160,14 +166,36 @@ definition let IT be non empty LoopStr;
          holds Double a = 0.IT implies a = 0.IT;
 end;
 
-definition
+
+registration
   cluster midpoint_operator -> Fanoian (non empty LoopStr);
+  coherence
+  proof
+   let L be non empty LoopStr;
+   assume A1: L is midpoint_operator;
+   let a be Element of L; assume a + a = 0.L;
+   then Double a = 0.L by Def1;
+   hence thesis by A1,Def5;
+  end;
 end;
 
-definition
+
+registration
  cluster strict midpoint_operator add-associative right_zeroed
   right_complementable Abelian (non empty LoopStr);
+ existence
+  proof
+   consider M;
+   set G = vectgroup(M);
+     (for a being Element of G
+       ex x being Element of G st Double x = a) &
+   for a being Element of G
+       holds Double a = 0.G implies a = 0.G by Lm1;
+   then G is midpoint_operator by Def5;
+   hence thesis;
+  end;
 end;
+
 
 reserve G for midpoint_operator add-associative right_zeroed
   right_complementable Abelian (non empty LoopStr);
@@ -193,6 +221,7 @@ definition let G be midpoint_operator add-associative right_zeroed
   Double it = x;
 end;
 
+
 theorem :: MIDSP_2:21
     Half 0.G = 0.G &
   Half (x+y) = Half x + Half y &
@@ -214,9 +243,17 @@ theorem :: MIDSP_2:23
 
 reserve x,y for Element of vectgroup(M);
 
-definition let M;
+registration let M;
  cluster vectgroup(M) -> midpoint_operator;
+ coherence
+  proof
+   set G = vectgroup(M);
+     (for x ex y st Double y = x) & for x holds Double
+x = 0.G implies x = 0.G by Lm1;
+   hence thesis by Def5;
+  end;
 end;
+
 
 definition let M,p,q;
  func vector(p,q) -> Element of vectgroup(M) equals
@@ -224,12 +261,14 @@ definition let M,p,q;
    vect(p,q);
 end;
 
+
 definition let M;
  func vect(M) -> Function of [:the carrier of M,the carrier of M:],
                              the carrier of vectgroup(M) means
 :: MIDSP_2:def 8
   it.(p,q) = vect(p,q);
 end;
+
 
 theorem :: MIDSP_2:24
  vect(M) is_atlas_of the carrier of M, vectgroup(M);
@@ -256,13 +295,19 @@ definition let S,G,w;
   w.(a,it.(a,b)) = w.(it.(a,b),b);
 end;
 
+
 theorem :: MIDSP_2:28
  w is_atlas_of S,G implies for a,b,c holds
                                    @(w).(a,b) = c iff w.(a,c) = w.(c,b);
 
-definition let D be non empty set, M be BinOp of D;
+registration let D be non empty set, M be BinOp of D;
  cluster MidStr(#D,M#) -> non empty;
+ coherence
+  proof
+   thus the carrier of MidStr(#D,M#) is non empty;
+  end;
 end;
+
 
 reserve a,b,c for Point of MidStr(#S,@(w)#);
 
@@ -286,6 +331,7 @@ definition let S,G,w;
     MidStr (# S, @(w) #);
 end;
 
+
 reserve M for non empty MidStr;
 reserve w for Function of [:the carrier of M,the carrier of M:],
                             the carrier of G;
@@ -302,6 +348,7 @@ definition let M be non empty MidStr;
                             the carrier of the algebra #);
 end;
 
+
 definition let M be non empty MidStr;
  let IT be AtlasStr over M;
  attr IT is ATLAS-like means
@@ -312,17 +359,33 @@ definition let M be non empty MidStr;
      & the function of IT is_atlas_of the carrier of M,the algebra of IT;
 end;
 
-definition let M be MidSp;
+
+registration let M be MidSp;
  cluster ATLAS-like AtlasStr over M;
+ existence
+  proof
+    consider G being midpoint_operator
+    add-associative right_zeroed right_complementable Abelian
+     (non empty LoopStr),
+             w being Function of [:the carrier of M,the carrier of M:],
+                                 the carrier of G such that
+    A1: w is_atlas_of the carrier of M,G and
+    A2: M,G are_associated_wrp w by Th33;
+    take AtlasStr(# G, w #);
+    thus thesis by A1,A2,Def12;
+  end;
 end;
+
 
 definition let M be non empty MidSp;
  mode ATLAS of M is ATLAS-like AtlasStr over M;
 end;
 
+
 definition let M be non empty MidStr, W be AtlasStr over M;
  mode Vector of W is Element of the algebra of W;
 end;
+
 
 definition
  let M be MidSp;
@@ -332,6 +395,7 @@ definition
 :: MIDSP_2:def 13
    (the function of W).(a,b);
 end;
+
 
 definition
  let M be MidSp;
@@ -343,11 +407,13 @@ definition
    (a,x).(the function of W);
 end;
 
+
 definition let M be MidSp, W be ATLAS of M;
  func 0.W -> Vector of W equals
 :: MIDSP_2:def 15
    0.(the algebra of W);
 end;
+
 
 :: SOME USEFUL PROPOSITIONS
 

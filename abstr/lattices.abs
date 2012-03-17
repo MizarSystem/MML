@@ -20,20 +20,25 @@ definition
     (# carrier -> set, L_meet -> BinOp of the carrier #);
 end;
 
+
 definition
   struct(1-sorted) \/-SemiLattStr
     (# carrier -> set, L_join -> BinOp of the carrier #);
 end;
+
 
 definition
   struct(/\-SemiLattStr,\/-SemiLattStr) LattStr
     (# carrier -> set, L_join, L_meet -> BinOp of the carrier #);
 end;
 
-definition
+registration
   cluster strict non empty \/-SemiLattStr;
+existence by Lm2;
   cluster strict non empty /\-SemiLattStr;
+existence by Lm3;
   cluster strict non empty LattStr;
+existence by Lm1;
 end;
 
 definition let G be non empty \/-SemiLattStr,
@@ -43,12 +48,14 @@ definition let G be non empty \/-SemiLattStr,
     (the L_join of G).(p,q);
 end;
 
+
 definition let G be non empty /\-SemiLattStr,
                p, q be Element of G;
  func p"/\"q -> Element of G equals
 :: LATTICES:def 2
     (the L_meet of G).(p,q);
 end;
+
 
 definition let G be non empty \/-SemiLattStr,
                p, q be Element of G;
@@ -67,6 +74,7 @@ definition let IT be non empty \/-SemiLattStr;
 "\/"c;
 end;
 
+
 definition let IT be non empty /\-SemiLattStr;
   attr IT is meet-commutative means
 :: LATTICES:def 6
@@ -77,6 +85,7 @@ definition let IT be non empty /\-SemiLattStr;
 "/\"c;
 end;
 
+
 definition let IT be non empty LattStr;
   attr IT is meet-absorbing means
 :: LATTICES:def 8
@@ -86,6 +95,7 @@ definition let IT be non empty LattStr;
    for a,b being Element of IT holds a"/\"(a"\/"b)=a;
  end;
 
+
 definition let IT be non empty LattStr;
   attr IT is Lattice-like means
 :: LATTICES:def 10
@@ -93,21 +103,41 @@ definition let IT be non empty LattStr;
          meet-commutative meet-associative join-absorbing;
 end;
 
-definition
+
+registration
   cluster Lattice-like ->
           join-commutative join-associative meet-absorbing
           meet-commutative meet-associative join-absorbing
           (non empty LattStr);
+ coherence by Def10;
   cluster join-commutative join-associative meet-absorbing
           meet-commutative meet-associative join-absorbing
           -> Lattice-like (non empty LattStr);
+ coherence by Def10;
 end;
 
-definition
+
+registration
   cluster strict join-commutative join-associative (non empty \/-SemiLattStr);
+  existence
+   proof GGj is join-commutative join-associative by Def4,Def5,Lm8,Lm11;
+    hence thesis;
+   end;
   cluster strict meet-commutative meet-associative (non empty /\-SemiLattStr);
+  existence
+   proof GGm is meet-commutative meet-associative by Def6,Def7,Lm9,Lm12;
+    hence thesis;
+   end;
   cluster strict Lattice-like (non empty LattStr);
+  existence
+   proof GG is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+    by Def4,Def5,Def6,Def7,Def8,Def9,Lm7,Lm10,Lm13,Lm14,Lm15,Lm16;
+    then GG is Lattice-like by Def10;
+    hence thesis;
+   end;
 end;
+
 
 definition
   mode Lattice is Lattice-like (non empty LattStr);
@@ -119,11 +149,13 @@ definition let L be join-commutative (non empty \/-SemiLattStr),
 commutativity;
 end;
 
+
 definition let L be meet-commutative (non empty /\-SemiLattStr),
                a, b be Element of L;
   redefine func a"/\"b;
 commutativity;
 end;
+
 
 definition let IT be non empty LattStr;
   attr IT is distributive means
@@ -139,12 +171,14 @@ definition let IT be non empty LattStr;
     holds a"\/"(b"/\"c) = (a"\/"b)"/\"c;
 end;
 
+
 definition let IT be non empty /\-SemiLattStr;
   attr IT is lower-bounded means
 :: LATTICES:def 13
    ex c being Element of IT st
     for a being Element of IT holds c"/\"a = c & a"/\"c = c;
 end;
+
 
 definition let IT be non empty \/-SemiLattStr;
   attr IT is upper-bounded means
@@ -153,9 +187,17 @@ definition let IT be non empty \/-SemiLattStr;
     for a being Element of IT holds c"\/"a = c & a"\/"c = c;
 end;
 
-definition
+
+registration
   cluster strict distributive lower-bounded upper-bounded modular Lattice;
+  existence
+   proof A1: GG is modular by Def12,Lm18;
+    A2: GG is lower-bounded by Def13,Lm19;
+      GG is upper-bounded by Def14,Lm20;
+    hence thesis by A1,A2,Lm21;
+   end;
 end;
+
 
 definition
   mode D_Lattice is distributive Lattice;
@@ -170,18 +212,30 @@ definition let IT be non empty LattStr;
    IT is lower-bounded upper-bounded;
 end;
 
-definition
+
+registration
   cluster lower-bounded upper-bounded -> bounded (non empty LattStr);
+coherence by Def15;
   cluster bounded -> lower-bounded upper-bounded (non empty LattStr);
+coherence by Def15;
 end;
 
-definition
+
+registration
   cluster bounded strict Lattice;
+  existence
+   proof
+      GG is 0_Lattice & GG is 1_Lattice by Def13,Def14,Lm19,Lm20;
+    then GG is bounded by Def15;
+    hence thesis;
+   end;
 end;
+
 
 definition
   mode 01_Lattice is bounded Lattice;
 end;
+
 
 definition let L be non empty /\-SemiLattStr;
  assume  L is lower-bounded;
@@ -191,6 +245,7 @@ definition let L be non empty /\-SemiLattStr;
  it = it;
 end;
 
+
 definition let L be non empty \/-SemiLattStr;
  assume  L is upper-bounded;
   func Top L -> Element of L means
@@ -199,12 +254,14 @@ definition let L be non empty \/-SemiLattStr;
  it = it;
 end;
 
+
 definition let L be non empty LattStr,
                a, b be Element of L;
   pred a is_a_complement_of b means
 :: LATTICES:def 18
    a"\/"b = Top L & b"\/"a = Top L & a"/\"b = Bottom L & b"/\"a = Bottom L;
 end;
+
 
 definition let IT be non empty LattStr;
   attr IT is complemented means
@@ -213,9 +270,24 @@ definition let IT be non empty LattStr;
     ex a being Element of IT st a is_a_complement_of b;
 end;
 
-definition
+
+registration
   cluster bounded complemented strict Lattice;
+  existence
+   proof
+    take GG;
+    thus GG is bounded by Def15,Lm22,Lm23;
+    thus GG is complemented
+     proof let b be Element of GG;
+       consider a being Element of GG;
+      take a;
+      thus a"\/"b = Top GG & b"\/"a = Top GG by Lm4;
+      thus a"/\"b = Bottom GG & b"/\"a = Bottom GG by Lm4;
+     end;
+    thus thesis;
+   end;
 end;
+
 
 definition
   mode C_Lattice is complemented 01_Lattice;
@@ -227,18 +299,29 @@ definition let IT be non empty LattStr;
    IT is bounded complemented distributive;
 end;
 
-definition
+
+registration
   cluster Boolean -> bounded complemented distributive (non empty LattStr);
+coherence by Def20;
   cluster bounded complemented distributive -> Boolean (non empty LattStr);
+coherence by Def20;
 end;
 
-definition
+
+registration
   cluster Boolean strict Lattice;
+  existence
+   proof reconsider GG as C_Lattice by Lm24;
+      GG is Boolean by Def20,Lm21;
+    hence thesis;
+   end;
 end;
+
 
 definition
   mode B_Lattice is Boolean Lattice;
 end;
+
 
 reserve L for meet-absorbing join-absorbing meet-commutative
         (non empty LattStr);
@@ -285,6 +368,7 @@ definition
   reflexivity;
 end;
 
+
 canceled;
 
 theorem :: LATTICES:25
@@ -326,9 +410,17 @@ canceled;
 theorem :: LATTICES:34
     (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a) = (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a);
 
-definition
+registration
   cluster distributive -> modular Lattice;
+ coherence
+  proof let L be Lattice;
+   assume A1: L is distributive;
+    let a,b,c be Element of L;
+   assume a"\/"c = c;
+   hence a"\/"(b"/\"c) = (a"\/"b)"/\"c by A1,Th31;
+  end;
 end;
+
 
 reserve L for 0_Lattice;
 reserve a for Element of L;
@@ -365,6 +457,7 @@ definition let L be non empty LattStr,
 :: LATTICES:def 21
    it is_a_complement_of x;
 end;
+
 
 reserve L for B_Lattice;
 reserve a, b for Element of L;

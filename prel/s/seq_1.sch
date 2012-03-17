@@ -13,11 +13,6 @@ RELSET_1
 FUNCT_2
 SEQ_1
 #
-ExRealSeq
-PartFuncExD'
-LambdaPFD'
-UnPartFuncD'
-#
 M1 V16 ;;;
 ªM6 V4 ;V19 K56 ;K52 ;;K56 ;K52 ;;ªM4 K52 ;K56 ;;R1 K77 K56 ;B1 B2 ;F1 B2 ;;;
 #

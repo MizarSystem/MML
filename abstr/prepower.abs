@@ -42,15 +42,14 @@ func a GeoSeq -> Real_Sequence means
  for m holds it.m = a|^m;
 end;
 
+
 theorem :: PREPOWER:4
  s1 = a GeoSeq iff s1.0 = 1 & for m holds s1.(m+1) = s1.m * a;
 
 theorem :: PREPOWER:5
   for a st a <> 0 holds for m holds a GeoSeq.m <> 0;
 
-definition let a be real number; let n;
- redefine func a|^n;
-end;
+
 
 definition let a be Real; let n;
  redefine func a |^ n -> Real;
@@ -113,6 +112,7 @@ func n -Root a -> real number means
        it = 0 if a=0;
 end;
 
+
 definition let n; let a be Real;
  redefine func n -Root a -> Real;
 end;
@@ -172,13 +172,22 @@ func a #Z k equals
           (a |^ abs(k))" if k < 0;
 end;
 
-definition let a be real number; let k;
+
+registration let a be real number; let k;
  cluster a #Z k -> real;
+coherence
+  proof
+      k >=0 or k < 0;
+    then a #Z k = a |^ abs(k) or a #Z k = (a |^ abs(k))" by Def4;
+    hence thesis;
+  end;
 end;
+
 
 definition let a be Real; let k;
  redefine func a #Z k -> Real;
 end;
+
 
 canceled;
 
@@ -226,13 +235,21 @@ definition let a be real number; let p;
    (denominator(p)) -Root (a #Z numerator(p));
 end;
 
-definition let a be real number; let p;
+
+registration let a be real number; let p;
  cluster a #Q p -> real;
+coherence
+  proof
+      a #Q p = (denominator(p)) -Root (a #Z numerator(p)) by Def5;
+    hence thesis;
+  end;
 end;
+
 
 definition let a be Real; let p;
   redefine func a #Q p -> Real;
 end;
+
 
 canceled;
 
@@ -302,17 +319,30 @@ definition let IT be Real_Sequence;
    for n holds IT.n is Rational;
 end;
 
-definition
+
+registration
   cluster Rational_Sequence-like Real_Sequence;
+  existence
+    proof
+    deffunc O(Nat) = 0;
+    consider s being Real_Sequence such that
+    A1: for n holds s.n = O(n) from SEQ_1:sch 1;
+    take s;
+    let n;
+    thus s.n is Rational by A1;
+    end;
 end;
+
 
 definition
   mode Rational_Sequence is Rational_Sequence-like Real_Sequence;
 end;
 
+
 definition let s be Rational_Sequence,n;
 redefine func s.n -> Rational;
 end;
+
 
 canceled;
 
@@ -350,9 +380,11 @@ assume  a > 0;
      lim s = b & a #Q s is convergent & lim a #Q s = it;
 end;
 
+
 definition let a,b be Real;
  redefine func a #R b -> Real;
 end;
+
 
 canceled;
 

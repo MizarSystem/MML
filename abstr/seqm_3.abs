@@ -49,17 +49,20 @@ definition let f be Function;
  for n1,n2 being set st n1 in dom f & n2 in dom f holds f.n1=f.n2;
 end;
 
+
 definition let seq;
   redefine attr seq is constant means
 :: SEQM_3:def 6
 ex r st for n holds seq.n=r;
 end;
 
+
 definition let seq;
   attr seq is monotone means
 :: SEQM_3:def 7
    seq is non-decreasing or seq is non-increasing;
 end;
+
 
 canceled 6;
 
@@ -139,13 +142,33 @@ definition let IT be Relation;
   rng IT c= NAT;
 end;
 
-definition
+
+registration
   cluster increasing natural-yielding Real_Sequence;
+existence
+ proof deffunc U(Nat) = $1;
+  consider seq such that A1:for n holds seq.n=U(n) from SEQ_1:sch 1;
+  take seq;
+     now let y; assume y in rng seq;
+    then consider x such that A2:x in dom seq and
+                         A3:seq.x=y by FUNCT_1:def 5;
+      x in NAT by A2,FUNCT_2:def 1;
+    hence y in NAT by A1,A3;
+   end;
+  then A4: rng seq c=NAT by TARSKI:def 3;
+    now let n;
+     seq.n=n & seq.(n+1)=n+1 by A1;
+   hence seq.n<seq.(n+1) by NAT_1:38;
+  end;
+  hence thesis by A4,Def8,Lm6;
+ end;
 end;
+
 
 definition
   mode Seq_of_Nat is natural-yielding Real_Sequence;
 end;
+
 
 definition
  let seq,k;
@@ -153,6 +176,7 @@ func seq ^\k ->Real_Sequence means
 :: SEQM_3:def 9
   for n holds it.n=seq.(n+k);
 end;
+
 
 reserve Nseq,Nseq1,Nseq2 for increasing Seq_of_Nat;
 
@@ -171,17 +195,36 @@ definition let Nseq,n;
   redefine func Nseq.n -> Nat;
 end;
 
+
 definition let Nseq,seq;
   redefine func seq*Nseq -> Real_Sequence;
 end;
+
 
 definition let Nseq,Nseq1;
   redefine func Nseq1*Nseq -> increasing Seq_of_Nat;
 end;
 
-definition let Nseq,k;
+
+registration let Nseq,k;
   cluster Nseq ^\k -> increasing natural-yielding;
+ coherence
+  proof
+   A1:now let n;
+      (Nseq ^\k).n=Nseq.(n+k) by Def9;
+    hence (Nseq ^\k).n is Nat;
+   end;
+     now let n;
+      Nseq.(n+k)<Nseq.(n+k+1) by Lm6;
+    then (Nseq ^\k).n<Nseq.(n+k+1) by Def9;
+    then (Nseq ^\k).n<Nseq.(n+1+k) by XCMPLX_1:1;
+    hence (Nseq ^\k).n<(Nseq ^\k).(n+1) by Def9;
+   end;
+  then Nseq ^\k is increasing by Lm6;
+  hence thesis by A1,Th29;
+ end;
 end;
+
 
 ::
 :: DEFINITION OF SUBSEQUENCE
@@ -192,6 +235,7 @@ definition let seq,seq1;
 :: SEQM_3:def 10
    ex Nseq st seq=seq1*Nseq;
 end;
+
 
 definition let f be Real_Sequence;
   redefine attr f is increasing means
@@ -207,6 +251,7 @@ definition let f be Real_Sequence;
 :: SEQM_3:def 14
      for n being Nat holds f.n >= f.(n+1);
 end;
+
 
 canceled;
 
@@ -422,7 +467,9 @@ theorem :: SEQM_3:78
 theorem :: SEQM_3:79  :: YELLOW_6:1
  for X,x being set holds X --> x is constant;
 
-definition let X,x be set;
+registration let X,x be set;
  cluster X --> x -> constant;
+ coherence by Th79;
 end;
+
 

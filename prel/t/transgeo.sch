@@ -7,8 +7,6 @@ FUNCT_1
 RELSET_1
 FUNCT_2
 #
-EXPermutation
-#
 M1 W1 ;;;
 ªM5 V4 ;V6 F1 ;F1 ;;V8 F1 ;F1 ;;F1 ;F1 ;;ªM2 F1 ;;M2 F1 ;;&ª&R1 K48 F1 ;F1 ;B1 B2 ;B3 ;ªP1 B2 B3 ;;ª&P1 B2 B3 ;ªR1 K48 F1 ;F1 ;B1 B2 ;B3 ;;;M2 F1 ;;ªM2 F1 ;;ªP1 B1 B2 ;M2 F1 ;;ªM2 F1 ;;ªP1 B2 B1 ;M2 F1 ;;M2 F1 ;;M2 F1 ;;ª&P1 B1 B2 ;P1 B3 B2 ;ªR1 B1 B3 ;;M2 F1 ;;M2 F1 ;;M2 F1 ;;ª&P1 B1 B2 ;P1 B1 B3 ;ªR1 B2 B3 ;;;
 #

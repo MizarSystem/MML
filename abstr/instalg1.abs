@@ -35,12 +35,14 @@ theorem :: INSTALG1:2
  for x being set holds
    x is ArgumentSeq of Sym(o,V) iff x is Element of Args(o, FreeMSA V);
 
-definition
+registration
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
  let o be OperSymbol of S;
  cluster -> DTree-yielding Element of Args(o, FreeMSA V);
+ coherence by Th2;
 end;
+
 
 theorem :: INSTALG1:3
  for S being non empty non void ManySortedSign
@@ -55,11 +57,16 @@ theorem :: INSTALG1:4
  for x being Element of Args(o, FreeMSA V) holds
    Den(o,FreeMSA V).x = [o, the carrier of S]-tree x;
 
-definition
+registration
  let S be non empty non void ManySortedSign;
  let A be non-empty MSAlgebra over S;
  cluster the MSAlgebra of A -> non-empty;
+ coherence
+  proof
+   thus the Sorts of the MSAlgebra of A is non-empty;
+  end;
 end;
+
 
 theorem :: INSTALG1:5
  for S being non empty non void ManySortedSign
@@ -96,20 +103,49 @@ definition
   the carrier of S = {} implies the OperSymbols of S = {};
 end;
 
+
 theorem :: INSTALG1:8
  for S being ManySortedSign holds S is feasible iff
   dom the ResultSort of S = the OperSymbols of S;
 
-definition
+registration
  cluster non empty -> feasible ManySortedSign;
+ coherence
+  proof let S be ManySortedSign; assume
+      the carrier of S is non empty & the carrier of S = {};
+   hence thesis;
+  end;
  cluster void -> feasible ManySortedSign;
+ coherence
+  proof let S be ManySortedSign; assume
+      S is void & the carrier of S = {};
+   hence thesis by MSUALG_1:def 5;
+  end;
  cluster empty feasible -> void ManySortedSign;
+ coherence
+  proof let S be ManySortedSign; assume
+A1:  the carrier of S is empty;
+   assume the carrier of S = {} implies the OperSymbols of S = {};
+   hence thesis by A1,MSUALG_1:def 5;
+  end;
  cluster non void feasible -> non empty ManySortedSign;
+ coherence
+  proof let S be ManySortedSign; assume
+      S is non void & (the carrier of S = {} implies the OperSymbols of S = {})
+;
+   hence the carrier of S is non empty by MSUALG_1:def 5;
+  end;
 end;
 
-definition
+
+registration
  cluster non void non empty ManySortedSign;
+ existence
+  proof consider S being non void non empty ManySortedSign;
+   take S; thus thesis;
+  end;
 end;
+
 
 theorem :: INSTALG1:9
  for S being feasible ManySortedSign holds
@@ -131,15 +167,29 @@ definition
   id the carrier of it, id the OperSymbols of it form_morphism_between it,S;
 end;
 
+
 theorem :: INSTALG1:11
  for S being feasible ManySortedSign, T being Subsignature of S holds
    the carrier of T c= the carrier of S &
    the OperSymbols of T c= the OperSymbols of S;
 
-definition
+registration
  let S be feasible ManySortedSign;
  cluster -> feasible Subsignature of S;
+ coherence
+  proof let T be Subsignature of S;
+   set f = id the carrier of T, g = id the OperSymbols of T;
+   assume A1: the carrier of T = {};
+A2:  the OperSymbols of T c= the OperSymbols of S by Th11;
+A3:  the OperSymbols of S = dom the ResultSort of S by Th8;
+      f, g form_morphism_between T,S by Def2;
+    then f*the ResultSort of T = (the ResultSort of S)*g by PUA2MSS1:def 13;
+    then {} = (the ResultSort of S)*g & rng g = the OperSymbols of T &
+    dom g = the OperSymbols of T by A1,RELAT_1:62,71,81;
+   hence thesis by A2,A3,RELAT_1:46,60;
+  end;
 end;
+
 
 theorem :: INSTALG1:12
  for S being feasible ManySortedSign, T being Subsignature of S holds
@@ -178,15 +228,25 @@ theorem :: INSTALG1:18
  for S2 being Subsignature of S1 st S1 is Subsignature of S2
   holds the ManySortedSign of S1 = the ManySortedSign of S2;
 
-definition
+registration
  let S be non empty ManySortedSign;
  cluster non empty Subsignature of S;
+ existence
+  proof reconsider T = S as Subsignature of S by Th16;
+   take T; thus thesis;
+  end;
 end;
 
-definition
+
+registration
  let S be non void feasible ManySortedSign;
  cluster non void Subsignature of S;
+ existence
+  proof reconsider T = S as Subsignature of S by Th16;
+   take T; thus thesis;
+  end;
 end;
+
 
 theorem :: INSTALG1:19
    for S being feasible ManySortedSign, S' being Subsignature of S
@@ -222,6 +282,7 @@ definition
   the Charact of it = (the Charact of A)*g;
 end;
 
+
 definition
  let S2,S1 be non empty ManySortedSign;
  let A be MSAlgebra over S2;
@@ -230,6 +291,7 @@ definition
 
    A|(S1, id the carrier of S1, id the OperSymbols of S1);
 end;
+
 
 theorem :: INSTALG1:22
    for S1,S2 being non empty ManySortedSign
@@ -243,12 +305,20 @@ theorem :: INSTALG1:23
  for f,g being Function st f,g form_morphism_between S1,S2
   holds A|(S1,f,g) is non-empty;
 
-definition
+registration
  let S2 be non empty ManySortedSign;
  let S1 be non empty Subsignature of S2;
  let A be non-empty MSAlgebra over S2;
  cluster A|S1 -> non-empty;
+ coherence
+  proof
+      A|S1 = A|(S1, id the carrier of S1, id the OperSymbols of S1) &
+    id the carrier of S1, id the OperSymbols of S1 form_morphism_between S1,S2
+     by Def2,Def4;
+   hence thesis by Th23;
+  end;
 end;
+
 
 theorem :: INSTALG1:24
  for S1,S2 being non void non empty ManySortedSign
@@ -378,7 +448,8 @@ theorem :: INSTALG1:39
 
 begin :: Translating homomorphism
 
-scheme GenFuncEx{S() -> non empty non void ManySortedSign,
+scheme :: INSTALG1:sch 1
+ GenFuncEx{S() -> non empty non void ManySortedSign,
   A() -> non-empty MSAlgebra over S(),
   X() -> non-empty ManySortedSet of the carrier of S(),
   F(set,set) -> set}:
@@ -388,7 +459,68 @@ scheme GenFuncEx{S() -> non empty non void ManySortedSign,
     h.s.root-tree [x,s] = F(x,s)
  provided
   for s being SortSymbol of S() for x being Element of X().s holds
-   F(x,s) in (the Sorts of A()).s;
+   F(x,s) in (the Sorts of A()).s
+proof
+    defpred P[set,set] means
+ ex f being Function of (FreeGen X()).$1, (the Sorts of A()).$1 st $2 = f &
+     for x being Element of X().$1 holds f.root-tree [x,$1] = F(x,$1);
+
+A2:  for a being set st a in the carrier of S()
+     ex y being set st P[a,y]
+     proof let a be set; assume a in the carrier of S();
+      then reconsider s = a as SortSymbol of S();
+A3:     (FreeGen X()).s = FreeGen(s, X()) by MSAFREE:def 18;
+defpred P[set,set] means
+        ex x being Element of X().s st $1 = root-tree [x,s] & $2 = F(x,s);
+A4:     for y being set st y in (FreeGen X()).s
+       ex z being set st z in (the Sorts of A()).s & P[y,z]
+        proof let y be set; assume y in (FreeGen X()).s;
+         then consider a be set such that
+A5:       a in X().s & y = root-tree [a,s] by A3,MSAFREE:def 17;
+         reconsider a as Element of X().s by A5;
+         take z = F(a,s); thus z in (the Sorts of A()).s by A1;
+         take a; thus y = root-tree [a,s] & z = F(a,s) by A5;
+        end;
+      consider f being Function such that
+A6:     dom f = (FreeGen X()).s & rng f c= (the Sorts of A()).s and
+A7:     for y being set st y in (FreeGen X()).s holds P[y,f.y]
+         from COMPTS_1:sch 1(A4);
+      reconsider f as Function of (FreeGen X()).a, (the Sorts of A()).a
+        by A6,FUNCT_2:4;
+      take y = f, f; thus y = f;
+      let x be Element of X().a; x in X().s;
+       then root-tree [x,s] in (FreeGen X()).s by A3,MSAFREE:def 17;
+      then consider z being Element of X().s such that
+A8:     root-tree [x,s] = root-tree [z,s] & f.root-tree [x,s] = F(z,s) by A7;
+         [x,s] = [z,s] by A8,TREES_4:4;
+      hence thesis by A8,ZFMISC_1:33;
+     end;
+   consider h being Function such that
+A9:  dom h = the carrier of S() and
+A10:  for a being set st a in the carrier of S() holds P[a,h.a]
+      from ZFREFLE1:sch 1(A2);
+   reconsider h as ManySortedSet of the carrier of S() by A9,PBOOLE:def 3;
+      h is ManySortedFunction of FreeGen X(), the Sorts of A()
+     proof let a be set; assume a in the carrier of S();
+       then ex f being Function of (FreeGen X()).a, (the Sorts of A()).a st
+        h.a = f &
+        for x being Element of X().a holds f.root-tree [x,a] = F(x,a) by A10;
+      hence thesis;
+     end;
+   then reconsider h as ManySortedFunction of FreeGen X(), the Sorts of A();
+   consider H being ManySortedFunction of FreeMSA X(), A() such that
+A11:  H is_homomorphism FreeMSA X(), A() & H||FreeGen X() = h by MSAFREE:def 5;
+   take H; thus H is_homomorphism FreeMSA X(), A() by A11;
+   let s be SortSymbol of S(), x be Element of X().s;
+   reconsider t = root-tree [x,s] as Term of S(), X() by MSATERM:4;
+      (FreeGen X()).s = FreeGen(s,X()) by MSAFREE:def 18;
+    then t in (FreeGen X()).s & h.s = (H.s)|((FreeGen X()).s)
+     by A11,MSAFREE:def 1,def 17;
+then A12:  H.s.root-tree [x,s] = h.s.root-tree [x,s] by FUNCT_1:72;
+      ex f being Function of (FreeGen X()).s, (the Sorts of A()).s st h.s = f &
+     for x being Element of X().s holds f.root-tree [x,s] = F(x,s) by A10;
+   hence thesis by A12;
+  end;
 
 theorem :: INSTALG1:40
  for I being set, A,B being ManySortedSet of I
@@ -398,11 +530,13 @@ theorem :: INSTALG1:40
  for f,g being Function st f = F.i & g = (F||C).i
  for x being set st x in C.i holds g.x = f.x;
 
-definition
+registration
  let S be non void non empty ManySortedSign;
  let X be non-empty ManySortedSet of the carrier of S;
  cluster FreeGen X -> non-empty;
+ coherence;
 end;
+
 
 definition
  let S1,S2 be non empty non void ManySortedSign;
@@ -418,6 +552,7 @@ definition
   for s being SortSymbol of S1, x being Element of (X*f).s holds
    it.s.root-tree [x,s] = root-tree [x,f.s];
 end;
+
 
 theorem :: INSTALG1:41
  for S1,S2 being non void non empty ManySortedSign

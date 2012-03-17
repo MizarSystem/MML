@@ -30,17 +30,41 @@ definition let IT be set;
   ex B st IT = B & for A st A,B are_equipotent holds B c= A;
 end;
 
-definition
+
+registration
  cluster cardinal set;
+  existence
+   proof
+    consider A;
+    defpred P[Ordinal] means $1,A are_equipotent;
+A1: ex A st P[A];
+    consider B such that
+A2:   P[B] & for C st P[C] holds B c= C from ORDINAL1:sch 1(A1);
+    reconsider IT = B as set;
+    take IT,B;
+    thus IT = B;
+    let C; assume C,B are_equipotent;
+    then C,A are_equipotent by A2,WELLORD2:22;
+    hence B c= C by A2;
+   end;
 end;
+
 
 definition
  mode Cardinal is cardinal set;
 end;
 
-definition
+
+registration
  cluster cardinal -> ordinal set;
+  coherence
+   proof let M be set;
+    assume M is cardinal;
+     then ex B st M = B & for A st A,B are_equipotent holds B c= A by Def1;
+    hence thesis;
+   end;
 end;
+
 
 reserve M,N for Cardinal;
 
@@ -49,12 +73,11 @@ canceled 3;
 theorem :: CARD_1:4
   for X ex A st X,A are_equipotent;
 
-definition let M,N;
- redefine pred M c= N;
- synonym M <=` N;
- pred M in N;
- synonym M <` N;
-end;
+notation let M,N;
+ synonym M <=` N for M c= N;
+ synonym M <` N for M in N;
+ end;
+
 
 canceled 3;
 
@@ -76,6 +99,7 @@ definition let X;
 :: CARD_1:def 5
   X,it are_equipotent;
 end;
+
 
 canceled 6;
 
@@ -115,6 +139,7 @@ definition let X;
   Card X <` it & for M st Card X <` M holds it <=` M;
 end;
 
+
 canceled;
 
 theorem :: CARD_1:32
@@ -138,8 +163,10 @@ definition let M;
  attr M is limit means
 :: CARD_1:def 7
   not ex N st M = nextcard N;
-  synonym M is_limit_cardinal;
-end;
+  end;
+notation let M;
+ synonym M is_limit_cardinal for M is limit ; end;
+
 
 definition let A;
  func alef A -> set means
@@ -150,9 +177,27 @@ definition let A;
                 holds L.B = Card sup(L|B);
 end;
 
-definition let A;
+registration let A;
  cluster alef A -> cardinal;
+  coherence
+   proof
+A1:   now given B such that
+A2:    A = succ B;
+         alef A = nextcard union {alef B} by A2,Lm2;
+      hence thesis;
+     end;
+       now assume
+A3:    A <> {} & for B holds A <> succ B;
+then A4:    A is_limit_ordinal by ORDINAL1:42;
+      consider L such that
+A5:    dom L = A & for B st B in A holds L.B = f(B) from ORDINAL2:sch 2;
+       alef A = Card sup L by A3,A4,A5,Lm2;
+      hence alef A is Cardinal;
+     end;
+    hence thesis by A1,Lm2;
+   end;
 end;
+
 
 canceled;
 
@@ -238,8 +283,10 @@ theorem :: CARD_1:64
 theorem :: CARD_1:65
   x in omega implies x is cardinal;
 
-definition cluster -> cardinal Nat;
+registration cluster -> cardinal Nat;
+  correctness by Th65;
 end;
+
 
 theorem :: CARD_1:66
   for n being Nat holds n = Card n;
@@ -271,14 +318,17 @@ canceled;
 theorem :: CARD_1:76
   nextcard Card n = Card(n+1);
 
+notation let X be finite set;
+ synonym card X for Card X ;
+end;
 definition let X be finite set;
  redefine canceled 2;
 
-func Card X -> Nat means
+func card X -> Nat means
 :: CARD_1:def 11
            Card it = Card X;
-  synonym card X;
-end;
+  end;
+
 
 canceled;
 
@@ -299,18 +349,59 @@ theorem :: CARD_1:81
 theorem :: CARD_1:82
     X is finite implies nextcard X is finite;
 
- scheme Cardinal_Ind { Sigma[set] }:
+ scheme :: CARD_1:sch 1
+ Cardinal_Ind { Sigma[set] }:
   for M holds Sigma[M]
    provided
   Sigma[{}] and
   for M st Sigma[M] holds Sigma[nextcard M] and
   for M st M <> {} & M is_limit_cardinal & for N st N <` M holds Sigma[N]
-       holds Sigma[M];
+       holds Sigma[M]
+proof
+    defpred P[Ordinal] means $1 is Cardinal implies Sigma[$1];
+A4:  for A st for B st B in A holds P[B] holds P[A]
+     proof let A such that
+A5:    for B st B in A holds P[B] and
+A6:    A is Cardinal;
+      reconsider M = A as Cardinal by A6;
+A7:    now assume not M is_limit_cardinal;
+        then consider N such that
+A8:      M = nextcard N by Def7;
+           N in M & N = N by A8,Th32;
+         then Sigma[ N] by A5;
+        hence Sigma[M] by A2,A8;
+       end;
+         now assume
+A9:      M <> {} & M is_limit_cardinal;
+           for N st N <` M holds Sigma[N] by A5;
+        hence Sigma[M] by A3,A9;
+       end;
+      hence Sigma[A] by A1,A7;
+     end;
+A10:  for A holds P[A] from ORDINAL1:sch 2(A4);
+   let M;
+   thus thesis by A10;
+  end;
 
- scheme Cardinal_CompInd { Sigma[set] }:
+ scheme :: CARD_1:sch 2
+ Cardinal_CompInd { Sigma[set] }:
   for M holds Sigma[M]
    provided
-  for M st for N st N <` M holds Sigma[N] holds Sigma[M];
+  for M st for N st N <` M holds Sigma[N] holds Sigma[M]
+proof
+    defpred P[Ordinal] means $1 is Cardinal implies Sigma[$1];
+A2:  for A st for B st B in A holds P[B] holds P[A]
+     proof let A such that
+A3:    for B st B in A holds B is Cardinal implies Sigma[B];
+    assume A is Cardinal;
+     then reconsider M = A as Cardinal;
+     for N st N <` M holds Sigma[N] by A3;
+      hence Sigma[A] by A1;
+     end;
+A4:  for A holds P[A] from ORDINAL1:sch 2(A2);
+   let M;
+   thus thesis by A4;
+  end;
 
 theorem :: CARD_1:83
   alef 0 = omega;
@@ -321,18 +412,28 @@ theorem :: CARD_1:84
 theorem :: CARD_1:85
     Card omega is_limit_cardinal;
 
-definition
+registration
  cluster -> finite Nat;
+ coherence by Th69;
 end;
 
-definition
+
+registration
  cluster finite Cardinal;
+ existence
+  proof consider n being Nat;
+   take n;
+   thus thesis;
+  end;
 end;
+
 
 theorem :: CARD_1:86
    for M being finite Cardinal ex n st M = Card n;
 
-definition let X be finite set;
- cluster Card X -> finite;
+registration let X be finite set;
+ cluster card X -> finite;
+ coherence;
 end;
+
 

@@ -18,13 +18,40 @@ environ
 
 begin :: Preliminaries
 
-  scheme NonUniqPiFinRecExD{D() -> non empty set, A() -> Element of D(),
+  scheme :: NAT_2:sch 1
+ NonUniqPiFinRecExD{D() -> non empty set, A() -> Element of D(),
                           N() -> Nat, P[set,set,set]}:
    ex p be FinSequence of D() st len p = N() & (p/.1 = A() or N() = 0) &
     for n be Nat st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
    provided
      for n be Nat st 1 <= n & n < N() holds for x be Element of D()
-         ex y be Element of D() st P[n,x,y];
+         ex y be Element of D() st P[n,x,y]
+proof
+      defpred _P[set,set,set] means P[$1,$2,$3];
+  A2: for n be Nat st 1 <= n & n < N() holds for x be Element of D()
+         ex y be Element of D() st _P[n,x,y] by A1;
+    consider p be FinSequence of D() such that
+     A3: len p = N() and
+     A4: (p.1 = A() or N() = 0) and
+     A5: for n be Nat st 1 <= n & n < N() holds _P[n,p.n,p.(n+1)]
+                                                   from RECDEF_1:sch 6(A2);
+    take p;
+    thus len p = N() by A3;
+      now assume N() <> 0;
+     then N() > 0 by NAT_1:19;
+     then N() >= 0 + 1 by NAT_1:38;
+     hence p/.1 = A() by A3,A4,FINSEQ_4:24;
+    end;
+    hence p/.1 = A() or N() = 0;
+    let n be Nat;
+    assume that
+     A6: 1 <= n and
+     A7: n < N();
+    A8: 1 <= n + 1 by NAT_1:29;
+          n + 1 <= N() by A7,NAT_1:38;
+    then p.n = p/.n & p.(n+1) = p/.(n+1) by A3,A6,A7,A8,FINSEQ_4:24;
+    hence P[n,p/.n,p/.(n+1)] by A5,A6,A7;
+   end;
 
  theorem :: NAT_2:1
   for x be real number holds
@@ -144,10 +171,22 @@ canceled;
     n = 0 or n = 1;
   end;
 
-  definition
+
+  registration
    cluster non trivial Nat;
+   existence
+   proof
+    take 2;
+    thus thesis by Def1;
+   end;
    cluster non trivial natural number;
+   existence
+   proof
+    take 2;
+    thus thesis by Def1;
+   end;
   end;
+
 
   theorem :: NAT_2:30
    for k be natural number holds
@@ -157,8 +196,29 @@ canceled;
      for k be non trivial natural number holds
     k >= 2;
 
-  scheme Ind_from_2 { P[Nat] } :
+  scheme :: NAT_2:sch 2
+ Ind_from_2 { P[Nat] } :
    for k be non trivial Nat holds P[k]
    provided
      P[2] and
-     for k be non trivial Nat st P[k] holds P[k + 1];
+     for k be non trivial Nat st P[k] holds P[k + 1]
+proof
+    defpred _P[non empty Nat] means $1 is non trivial implies P[$1];
+    A3: _P[1] by Def1;
+    A4: now let k be non empty Nat;
+     assume A5: _P[k];
+     now
+     assume k + 1 is non trivial;
+     per cases;
+      suppose k = 1;
+       hence P[k + 1] by A1;
+      end;
+      suppose k <> 1;
+       then k is non trivial by Def1;
+       hence P[k + 1] by A2,A5;
+     end;
+     end; hence _P[k+1];
+    end;
+      for k be non empty Nat holds _P[k] from BINARITH:sch 1(A3,A4);
+    hence thesis;
+   end;

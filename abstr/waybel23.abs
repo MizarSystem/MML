@@ -126,6 +126,7 @@ begin  :: Relational Subsets
     subrelstr S is meet-inheriting;
   end;
 
+
   definition
    let L be non empty RelStr;
    let S be Subset of L;
@@ -133,6 +134,7 @@ begin  :: Relational Subsets
 :: WAYBEL23:def 2
     subrelstr S is join-inheriting;
   end;
+
 
   definition
    let L be non empty RelStr;
@@ -142,6 +144,7 @@ begin  :: Relational Subsets
     subrelstr S is infs-inheriting;
   end;
 
+
   definition
    let L be non empty RelStr;
    let S be Subset of L;
@@ -150,16 +153,58 @@ begin  :: Relational Subsets
     subrelstr S is sups-inheriting;
   end;
 
-  definition
+
+  registration
    let L be non empty RelStr;
    cluster infs-closed -> meet-closed Subset of L;
+   coherence
+   proof
+    let S be Subset of L;
+    assume S is infs-closed;
+    then reconsider S1 = subrelstr S as infs-inheriting SubRelStr of L
+                                                                by Def3;
+      S1 is meet-inheriting;
+    hence S is meet-closed by Def1;
+   end;
    cluster sups-closed -> join-closed Subset of L;
+   coherence
+   proof
+    let S be Subset of L;
+    assume S is sups-closed;
+    then reconsider S1 = subrelstr S as sups-inheriting SubRelStr of L
+                                                                by Def4;
+      S1 is join-inheriting;
+    hence S is join-closed by Def2;
+   end;
   end;
 
-  definition
+
+  registration
    let L be non empty RelStr;
    cluster infs-closed sups-closed non empty Subset of L;
+   existence
+   proof
+      the carrier of L c= the carrier of L;
+    then reconsider S = the carrier of L as Subset of L;
+    take S;
+    thus subrelstr S is infs-inheriting
+    proof
+       the carrier of subrelstr S = S by YELLOW_0:def 15;
+     then for X be Subset of subrelstr S st
+      ex_inf_of X,L holds "/\"(X,L) in the carrier of subrelstr S;
+     hence thesis by YELLOW_0:def 18;
+    end;
+    thus subrelstr S is sups-inheriting
+    proof
+       the carrier of subrelstr S = S by YELLOW_0:def 15;
+     then for X be Subset of subrelstr S st
+      ex_sup_of X,L holds "\/"(X,L) in the carrier of subrelstr S;
+     hence thesis by YELLOW_0:def 19;
+    end;
+    thus thesis;
+   end;
   end;
+
 
   theorem :: WAYBEL23:15
    for L be non empty RelStr
@@ -233,17 +278,21 @@ begin  :: Relational Subsets
    for S be non empty join-closed Subset of L holds
     subrelstr S is with_suprema;
 
-  definition
+  registration
    let L be with_infima antisymmetric transitive RelStr;
    let S be non empty meet-closed Subset of L;
    cluster subrelstr S -> with_infima;
+   coherence by Th25;
   end;
 
-  definition
+
+  registration
    let L be with_suprema antisymmetric transitive RelStr;
    let S be non empty join-closed Subset of L;
    cluster subrelstr S -> with_suprema;
+   coherence by Th26;
   end;
+
 
   theorem :: WAYBEL23:27
      for L be complete transitive antisymmetric (non empty RelStr)
@@ -267,15 +316,19 @@ begin  :: Relational Subsets
    for S be join-closed Subset of L holds
     S is directed;
 
-  definition
+  registration
    let L be Semilattice;
    cluster meet-closed -> filtered Subset of L;
+   coherence by Th29;
   end;
 
-  definition
+
+  registration
    let L be sup-Semilattice;
    cluster join-closed -> directed Subset of L;
+   coherence by Th30;
   end;
+
 
   theorem :: WAYBEL23:31
      for L be Semilattice
@@ -317,19 +370,25 @@ begin  :: Relational Subsets
    for x be Element of L holds
     uparrow x is meet-closed;
 
-  definition
+  registration
    let L be sup-Semilattice;
    let x be Element of L;
    cluster downarrow x -> join-closed;
+   coherence by Th35;
    cluster uparrow x -> join-closed;
+   coherence by Th37;
   end;
 
-  definition
+
+  registration
    let L be Semilattice;
    let x be Element of L;
    cluster downarrow x -> meet-closed;
+   coherence by Th36;
    cluster uparrow x -> meet-closed;
+   coherence by Th38;
   end;
+
 
   theorem :: WAYBEL23:39
    for L be sup-Semilattice
@@ -346,18 +405,23 @@ begin  :: Relational Subsets
    for x be Element of L holds
     wayabove x is join-closed;
 
-  definition
+  registration
    let L be sup-Semilattice;
    let x be Element of L;
    cluster waybelow x -> join-closed;
+   coherence by Th39;
    cluster wayabove x -> join-closed;
+   coherence by Th41;
   end;
 
-  definition
+
+  registration
    let L be Semilattice;
    let x be Element of L;
    cluster waybelow x -> meet-closed;
+   coherence by Th40;
   end;
+
 
 begin  :: About Bases of Continuous Lattices
 
@@ -368,12 +432,14 @@ begin  :: About Bases of Continuous Lattices
       meet {Card B where B is Basis of T : not contradiction};
   end;
 
+
   definition
    let T be TopStruct;
    attr T is second-countable means
 :: WAYBEL23:def 6
       weight T c= omega;
   end;
+
 
   definition  :: DEFINITION 4.1
    let L be continuous sup-Semilattice;
@@ -383,6 +449,7 @@ begin  :: About Bases of Continuous Lattices
     for x be Element of L holds x = sup (waybelow x /\ it);
   end;
 
+
   definition
    let L be non empty RelStr;
    let S be Subset of L;
@@ -390,6 +457,7 @@ begin  :: About Bases of Continuous Lattices
 :: WAYBEL23:def 8
     Bottom L in S;
   end;
+
 
   definition
    let L be non empty RelStr;
@@ -399,52 +467,135 @@ begin  :: About Bases of Continuous Lattices
     Top L in S;
   end;
 
-  definition
+
+  registration
    let L be non empty RelStr;
    cluster with_bottom -> non empty Subset of L;
+   coherence by Def8;
   end;
 
-  definition
+
+  registration
    let L be non empty RelStr;
    cluster with_top -> non empty Subset of L;
+   coherence by Def9;
   end;
 
-  definition
+
+  registration
    let L be non empty RelStr;
    cluster with_bottom Subset of L;
+   existence
+   proof
+    take [#]L;
+      Bottom L in the carrier of L;
+    hence Bottom L in [#]L by PRE_TOPC:12;
+   end;
    cluster with_top Subset of L;
+   existence
+   proof
+    take [#]L;
+      Top L in the carrier of L;
+    hence Top L in [#]L by PRE_TOPC:12;
+   end;
   end;
 
-  definition
+
+  registration
    let L be continuous sup-Semilattice;
    cluster with_bottom CLbasis of L;
+   existence
+   proof
+      for x,y be Element of L st x in [#]L & y in [#]L holds sup {x,y} in [#]L
+    proof
+     let x,y be Element of L;
+     assume that x in [#]L and y in [#]L;
+       sup {x,y} in the carrier of L;
+     hence sup {x,y} in [#]L by PRE_TOPC:12;
+    end;
+    then A1: [#]L is join-closed by Th18;
+      now let x be Element of L;
+       waybelow x c= the carrier of L;
+     then waybelow x c= [#]L by PRE_TOPC:12;
+     then waybelow x /\ [#]L = waybelow x by XBOOLE_1:28;
+     hence x = sup (waybelow x /\ [#]L) by WAYBEL_3:def 5;
+    end;
+    then reconsider S = [#]L as CLbasis of L by A1,Def7;
+    take S;
+      Bottom L in the carrier of L;
+    then Bottom L in [#]L by PRE_TOPC:12;
+    hence thesis by Def8;
+   end;
    cluster with_top CLbasis of L;
+   existence
+   proof
+      for x,y be Element of L st x in [#]L & y in [#]L holds sup {x,y} in [#]L
+    proof
+     let x,y be Element of L;
+     assume that x in [#]L and y in [#]L;
+       sup {x,y} in the carrier of L;
+     hence sup {x,y} in [#]L by PRE_TOPC:12;
+    end;
+    then A2: [#]L is join-closed by Th18;
+      now let x be Element of L;
+       waybelow x c= the carrier of L;
+     then waybelow x c= [#]L by PRE_TOPC:12;
+     then waybelow x /\ [#]L = waybelow x by XBOOLE_1:28;
+     hence x = sup (waybelow x /\ [#]L) by WAYBEL_3:def 5;
+    end;
+    then reconsider S = [#]L as CLbasis of L by A2,Def7;
+    take S;
+      Top L in the carrier of L;
+    then Top L in [#]L by PRE_TOPC:12;
+    hence thesis by Def9;
+   end;
   end;
+
 
   theorem :: WAYBEL23:42
    for L be lower-bounded antisymmetric non empty RelStr
    for S be with_bottom Subset of L holds
     subrelstr S is lower-bounded;
 
-  definition
+  registration
    let L be lower-bounded antisymmetric non empty RelStr;
    let S be with_bottom Subset of L;
    cluster subrelstr S -> lower-bounded;
+   coherence by Th42;
   end;
 
-  definition
+
+  registration
    let L be continuous sup-Semilattice;
    cluster -> join-closed CLbasis of L;
+   coherence by Def7;
   end;
 
-  definition
+
+  registration
    cluster bounded non trivial (continuous LATTICE);
+   existence
+   proof
+    consider X be non empty set;
+    take BoolePoset X;
+    thus thesis;
+   end;
   end;
 
-  definition
+
+  registration
    let L be lower-bounded non trivial (continuous sup-Semilattice);
    cluster -> non empty CLbasis of L;
+   coherence
+   proof
+    let B be CLbasis of L;
+    assume A1: B is empty;
+      Top L = "\/"(waybelow Top L /\ B,L) by Def7
+      .= Bottom L by A1,YELLOW_0:def 11;
+    hence contradiction by WAYBEL_7:5;
+   end;
   end;
+
 
   theorem :: WAYBEL23:43
    for L be sup-Semilattice holds
@@ -504,6 +655,7 @@ L in the carrier of S & the carrier of S is join-closed Subset of L
     for I be Ideal of S holds it.I = "\/"(I,L);
   end;
 
+
   definition
    let L be non empty reflexive transitive RelStr;
    let S be non empty full SubRelStr of L;
@@ -514,23 +666,30 @@ L in the carrier of S & the carrier of S is join-closed Subset of L
      I = J & it.I = downarrow J;
   end;
 
-  definition
+
+  registration
    let L be reflexive RelStr;
    let B be Subset of L;
    cluster subrelstr B -> reflexive;
+   coherence;
   end;
 
-  definition
+
+  registration
    let L be transitive RelStr;
    let B be Subset of L;
    cluster subrelstr B -> transitive;
+   coherence;
   end;
 
-  definition
+
+  registration
    let L be antisymmetric RelStr;
    let B be Subset of L;
    cluster subrelstr B -> antisymmetric;
+   coherence;
   end;
+
 
   definition
    let L be lower-bounded continuous sup-Semilattice;
@@ -539,6 +698,7 @@ L in the carrier of S & the carrier of S is join-closed Subset of L
 :: WAYBEL23:def 12
     for x be Element of L holds it.x = waybelow x /\ B;
   end;
+
 
   theorem :: WAYBEL23:51
    for L be non empty reflexive transitive RelStr
@@ -595,23 +755,29 @@ L in the carrier of S & the carrier of S is join-closed Subset of L
    for B be with_bottom CLbasis of L holds
     baseMap B is monotone;
 
-  definition
+  registration
    let L be up-complete (non empty Poset);
    let S be non empty full SubRelStr of L;
    cluster supMap S -> monotone;
+   coherence by Th58;
   end;
 
-  definition
+
+  registration
    let L be non empty reflexive transitive RelStr;
    let S be non empty full SubRelStr of L;
    cluster idsMap S -> monotone;
+   coherence by Th59;
   end;
 
-  definition
+
+  registration
    let L be lower-bounded continuous sup-Semilattice;
    let B be with_bottom CLbasis of L;
    cluster baseMap B -> monotone;
+   coherence by Th60;
   end;
+
 
   theorem :: WAYBEL23:61
    for L be lower-bounded (continuous sup-Semilattice)
@@ -648,12 +814,15 @@ L in the carrier of S & the carrier of S is join-closed Subset of L
    for B be with_bottom CLbasis of L holds
     baseMap B is sups-preserving;
 
-   definition
+   registration
     let L be lower-bounded continuous sup-Semilattice;
     let B be with_bottom CLbasis of L;
     cluster supMap subrelstr B -> infs-preserving sups-preserving;
+    coherence by Th66;
     cluster baseMap B -> sups-preserving;
+    coherence by Th67;
    end;
+
 
 canceled;
 

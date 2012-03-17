@@ -28,8 +28,30 @@ canceled;
 theorem :: WELLSET1:3
  X <> {} & Y <> {} & W = [: X,Y :] implies field W = X \/ Y;
 
-scheme R_Separation { A()-> set, P[Relation] } :
-     ex B st for R being Relation holds R in B iff R in A() & P[R];
+scheme :: WELLSET1:sch 1
+ R_Separation { A()-> set, P[Relation] } :
+     ex B st for R being Relation holds R in B iff R in A() & P[R]
+proof       defpred p[set,set] means $1 = $2 & ex S st S = $2 & P[S];
+  A1:  for y,t,v being set st p[y,t] & p[y,v] holds t = v;
+       consider B such that
+  A2:   for t being set holds
+          t in B iff ex y being set st
+              y in A() & p[y,t] from TARSKI:sch 1(A1);
+       take B; let R;
+  A3:    R in B iff ex T st T in A() & (T = R & P[R])
+        proof
+         thus R in B implies ex T st T in A() & (T = R & P[R])
+          proof assume R in B;
+           then consider y being set such that
+  A4:       y in A() & (y = R & ex S st S = R & P[S]) by A2;
+           reconsider y as Relation by A4;
+           take y; thus thesis by A4;
+          end;
+         thus thesis by A2;
+        end;
+       hence R in B implies R in A() & P[R];
+       thus thesis by A3;
+      end;
 
 canceled 2;
 

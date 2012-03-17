@@ -26,15 +26,25 @@ definition let CPS;
   redefine mode LINE of CPS -> Element of bool the carrier of CPS;
 end;
 
+
 definition let CPS;
   func ProjectiveLines(CPS) -> set equals
 :: INCPROJ:def 1
    {B : B is LINE of CPS};
 end;
 
-definition let CPS;
+
+registration let CPS;
  cluster ProjectiveLines(CPS) -> non empty;
+  coherence
+  proof
+A1: ProjectiveLines(CPS) = {B : B is LINE of CPS} by Def1;
+    consider x being LINE of CPS;
+      x in ProjectiveLines(CPS) by A1;
+    hence thesis;
+  end;
 end;
+
 
 canceled;
 
@@ -49,15 +59,24 @@ definition let CPS;
    y in ProjectiveLines(CPS) & ex Y st y=Y & x in Y;
 end;
 
+
 definition let CPS;
   func IncProjSp_of(CPS) -> IncProjStr equals
 :: INCPROJ:def 3
    IncProjStr (# the carrier of CPS, ProjectiveLines(CPS), Proj_Inc(CPS) #);
 end;
 
-definition let CPS;
+
+registration let CPS;
   cluster IncProjSp_of(CPS) -> strict;
+  coherence
+  proof
+     IncProjSp_of(CPS) =
+   IncProjStr (# the carrier of CPS, ProjectiveLines(CPS), Proj_Inc(CPS) #)
+   by Def3; hence thesis;
+  end;
 end;
+
 
 canceled;
 
@@ -154,6 +173,7 @@ definition let x, y, z be set;
   x <> y & y <> z & z <> x & u <> x & u <> y & u <> z;
 end;
 
+
 definition
   let CS be IncProjStr, a,b be POINT of CS,
    M be LINE of CS;
@@ -168,6 +188,7 @@ definition
 
   a on M & b on M & c on M;
 end;
+
 
 theorem :: INCPROJ:21
   (for p1, r2, q, r1, q1, p, r being Point of CPS holds
@@ -261,35 +282,74 @@ definition let IT be IncProjStr;
     ex q being POINT of IT st q on P & q on Q;
 end;
 
-definition
+
+registration
   let CPS be CollProjectiveSpace;
   cluster IncProjSp_of(CPS) -> partial linear up-2-dimensional
    up-3-rank Vebleian;
+  coherence
+  proof
+    set PS = IncProjSp_of(CPS);
+    A1: for p, q being POINT of PS
+    for P, Q being LINE of PS st p on P & q on P & p on Q & q on Q
+     holds p = q or P = Q by Th12;
+
+    A2: for p, q being POINT of PS
+     ex P being LINE of PS st p on P & q on P by Th13;
+
+    A3: ex p being POINT of PS, P being LINE of PS
+     st not p on P by Th15;
+
+    A4: for P being LINE of PS
+     ex a,b,c being POINT of PS
+      st a <> b & b <> c & c <> a & a on P & b on P & c on P by Th16;
+
+      for a, b, c, d, p, q being POINT of PS
+    for M, N, P, Q being LINE of PS st a on M & b on M & c on N & d on N &
+     p on M & p on N & a on P & c on P & b on Q & d on Q & not p on P &
+     not p on Q & M<>N
+      holds ex q being POINT of PS st q on P & q on Q by Th17;
+hence thesis by A1,A2,A3,A4,Def9,Def10,Def11,Def12,Def13;
+  end;
 end;
 
-definition
+
+registration
   cluster strict partial linear up-2-dimensional up-3-rank
    Vebleian IncProjStr;
+  existence
+  proof
+    consider CPS;
+      IncProjSp_of(CPS) is strict partial linear up-2-dimensional
+     up-3-rank Vebleian;
+    hence thesis;
+  end;
 end;
+
 
 definition
  mode IncProjSp is partial linear up-2-dimensional up-3-rank Vebleian
    IncProjStr;
 end;
 
-definition
+
+registration
   let CPS be CollProjectiveSpace;
   cluster IncProjSp_of(CPS) -> partial linear up-2-dimensional up-3-rank
     Vebleian;
+  coherence;
 end;
+
 
 definition let IT be IncProjSp;
   attr IT is 2-dimensional means
 :: INCPROJ:def 14
 
   for M,N being LINE of IT ex q being POINT of IT st q on M & q on N;
-  antonym IT is up-3-dimensional;
-end;
+  end;
+notation let IT be IncProjSp;
+  antonym IT is up-3-dimensional for IT is 2-dimensional ; end;
+
 
 definition
   let IT be IncProjSp;
@@ -303,11 +363,13 @@ definition
     a on S & b on S & c on S & b on M & c on N;
 end;
 
+
 definition let IT be IncProjSp;
   attr IT is 3-dimensional means
 :: INCPROJ:def 17
     IT is at_most-3-dimensional up-3-dimensional;
 end;
+
 
 definition let IT be IncProjSp;
   attr IT is Fanoian means
@@ -322,6 +384,7 @@ definition let IT be IncProjSp;
      holds
     not c on C;
 end;
+
 
 definition let IT be IncProjSp;
   attr IT is Desarguesian means
@@ -338,6 +401,7 @@ definition let IT be IncProjSp;
    ex O being LINE of IT st r,s,t on O;
 end;
 
+
 definition let IT be IncProjSp;
   attr IT is Pappian means
 :: INCPROJ:def 20
@@ -353,20 +417,213 @@ definition let IT be IncProjSp;
    c3 on C3;
 end;
 
-definition
+
+registration
   cluster Desarguesian Fanoian at_most-3-dimensional up-3-dimensional
     IncProjSp;
+  existence
+  proof
+    consider CPS being Fanoian Desarguesian
+     at_most-3-dimensional up-3-dimensional CollProjectiveSpace;
+    reconsider CPS' = CPS as CollProjectiveSpace;
+    take X = IncProjSp_of(CPS');
+      for p1,r2,q,r1,q1,p,r being Point of CPS' holds
+     (p1,r2,q is_collinear & r1,q1,q is_collinear & p1,r1,p is_collinear &
+     r2,q1,p is_collinear & p1,q1,r is_collinear & r2,r1,r is_collinear &
+     p,q,r is_collinear
+      implies
+    (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or p1,r1,q1 is_collinear or
+     r2,r1,q1 is_collinear)) by ANPROJ_2:def 11;
+  then A1: for p,q,r,s,a,b,c being POINT of X
+      for L,Q,R,S,A,B,C being LINE of X st
+       not q on L & not r on L & not p on Q & not s on Q & not p on R &
+       not r on R & not q on S &
+       not s on S & a,p,s on L & a,q,r on Q & b,q,s on R & b,p,r on S &
+       c,p,q on A &
+       c,r,s on B & a,b on C holds not c on C by Th21;
+      for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS' st
+     o<>q1 & p1<>q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 &
+     not o,p1,p2 is_collinear & not o,p1,p3 is_collinear &
+     not o,p2,p3 is_collinear &
+     p1,p2,r3 is_collinear & q1,q2,r3 is_collinear &
+     p2,p3,r1 is_collinear & q2,q3,r1 is_collinear &
+     p1,p3,r2 is_collinear & q1,q3,r2 is_collinear &
+     o,p1,q1 is_collinear & o,p2,q2 is_collinear & o,p3,q3 is_collinear
+      holds r1,r2,r3 is_collinear by ANPROJ_2:def 12;
+  then A2: for o,b1,a1,b2,a2,b3,a3,r,s,t being POINT of X
+      for C1,C2,C3,A1,A2,A3,B1,B2,B3 being LINE of X st
+       o,b1,a1 on C1 & o,a2,b2 on C2 & o,a3,b3 on C3 &
+       a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 &
+       t,b2,b3 on B1 & b1,r,b3 on B2 & b1,s,b2 on B3 &
+       C1,C2,C3 are_mutually_different &
+       o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a1<>b1 & a2<>b2 & a3<>b3
+         holds
+        ex O being LINE of X st r,s,t on O by Th22;
+      ex p,p1,r,r1 being Point of CPS' st
+     not ex s being Point of CPS' st
+      (p,p1,s is_collinear & r,r1,s is_collinear) by ANPROJ_2:def 14;
+  then A3: ex M,N being LINE of X st not ex q being POINT of X st q on M &
+  q on N by Th19;
+      for p,p1,q,q1,r2 being Point of CPS'
+     ex r,r1 being Point of CPS' st p,q,r is_collinear &
+      p1,q1,r1 is_collinear & r2,r,r1 is_collinear by ANPROJ_2:def 15;
+    then for a being POINT of X, M,N being LINE of X
+     ex b,c being POINT of X, S being LINE of X st
+      a on S & b on S & c on S & b on M & c on N by Th20;
+    hence thesis by A1,A2,A3,Def14,Def16,Def18,Def19;
+  end;
 end;
 
-definition
+
+registration
   cluster Pappian Fanoian at_most-3-dimensional up-3-dimensional
     IncProjSp;
+  existence
+  proof
+    consider CPS being Fanoian Pappian at_most-3-dimensional up-3-dimensional
+     CollProjectiveSpace;
+    reconsider CPS' = CPS as CollProjectiveSpace;
+    take X = IncProjSp_of(CPS');
+      for p1,r2,q,r1,q1,p,r being Point of CPS' holds
+     (p1,r2,q is_collinear & r1,q1,q is_collinear &
+     p1,r1,p is_collinear & r2,q1,p is_collinear &
+     p1,q1,r is_collinear & r2,r1,r is_collinear & p,q,r is_collinear
+       implies
+     (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or
+     p1,r1,q1 is_collinear or r2,r1,q1 is_collinear)) by ANPROJ_2:def 11;
+      then A1: for p,q,r,s,a,b,c being POINT of X
+      for L,Q,R,S,A,B,C being LINE of X st
+       not q on L & not r on L & not p on Q & not s on Q & not p on R &
+       not r on R &
+       not q on S & not s on S & a,p,s on L & a,q,r on Q & b,q,s on R &
+       b,p,r on S &
+       c,p,q on A & c,r,s on B & a,b on C holds not c on C by Th21;
+       for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS' st
+      o<>p2 & o<>p3 & p2<>p3 & p1<>p2 & p1<>p3 & o<>q2 & o<>q3 &
+      q2<>q3 & q1<>q2 & q1<>q3 & not o,p1,q1 is_collinear &
+      o,p1,p2 is_collinear & o,p1,p3 is_collinear &
+      o,q1,q2 is_collinear & o,q1,q3 is_collinear &
+      p1,q2,r3 is_collinear & q1,p2,r3 is_collinear &
+      p1,q3,r2 is_collinear & p3,q1,r2 is_collinear &
+      p2,q3,r1 is_collinear & p3,q2,r1 is_collinear
+        holds
+       r1,r2,r3 is_collinear by ANPROJ_2:def 13;
+  then A2: for o,a1,a2,a3,b1,b2,b3,c1,c2,c3 being POINT of X
+      for A1,A2,A3,B1,B2,B3,C1,C2,C3 being LINE of X st
+       o,a1,a2,a3 are_mutually_different & o,b1,b2,b3 are_mutually_different &
+       A3<>B3 & o on A3 & o on B3 & a2,b3,c1 on A1 & a3,b1,c2 on B1 &
+       a1,b2,c3 on C1 &
+       a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 & b1,b2,b3 on A3 &
+       a1,a2,a3 on B3 & c1,c2 on C3 holds c3 on C3 by Th23;
+      ex p,p1,r,r1 being Point of CPS' st
+     not ex s being Point of CPS' st
+      (p,p1,s is_collinear & r,r1,s is_collinear) by ANPROJ_2:def 14;
+  then A3: ex M,N being LINE of X st not ex q being POINT of X st q on M &
+  q on N by Th19;
+
+      for p,p1,q,q1,r2 being Point of CPS' ex r,r1 being Point of CPS' st
+     p,q,r is_collinear & p1,q1,r1 is_collinear &
+     r2,r,r1 is_collinear by ANPROJ_2:def 15;
+    then for a being POINT of X, M,N being LINE of X
+     ex b,c being POINT of X, S being LINE of X st
+      a on S & b on S & c on S & b on M & c on N by Th20;
+    hence thesis by A1,A2,A3,Def14,Def16,Def18,Def20;
+  end;
 end;
 
-definition
+
+registration
   cluster Desarguesian Fanoian 2-dimensional IncProjSp;
+  existence
+  proof
+    consider CPS being Fanoian Desarguesian CollProjectivePlane;
+    reconsider CPS' = CPS as CollProjectiveSpace;
+    take X = IncProjSp_of(CPS');
+      for p1,r2,q,r1,q1,p,r being Point of CPS' holds
+     (p1,r2,q is_collinear & r1,q1,q is_collinear &
+     p1,r1,p is_collinear & r2,q1,p is_collinear &
+     p1,q1,r is_collinear & r2,r1,r is_collinear & p,q,r is_collinear
+       implies
+     (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or
+     p1,r1,q1 is_collinear or r2,r1,q1 is_collinear)) by ANPROJ_2:def 11;
+  then A1: for p,q,r,s,a,b,c being POINT of X
+      for L,Q,R,S,A,B,C being LINE of X st
+       not q on L & not r on L & not p on Q & not s on Q & not p on R & not
+       r on R & not q on S &
+       not s on S & a,p,s on L & a,q,r on Q & b,q,s on R & b,p,r on S &
+       c,p,q on A &
+       c,r,s on B & a,b on C holds not c on C by Th21;
+      for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS' st
+     o<>q1 & p1<>q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 &
+     not o,p1,p2 is_collinear & not o,p1,p3 is_collinear &
+     not o,p2,p3 is_collinear &
+     p1,p2,r3 is_collinear & q1,q2,r3 is_collinear &
+     p2,p3,r1 is_collinear & q2,q3,r1 is_collinear &
+     p1,p3,r2 is_collinear & q1,q3,r2 is_collinear &
+     o,p1,q1 is_collinear & o,p2,q2 is_collinear & o,p3,q3 is_collinear
+       holds
+     r1,r2,r3 is_collinear by ANPROJ_2:def 12;
+  then A2: for o,b1,a1,b2,a2,b3,a3,r,s,t being POINT of X
+      for C1,C2,C3,A1,A2,A3,B1,B2,B3 being LINE of X st
+       o,b1,a1 on C1 & o,a2,b2 on C2 & o,a3,b3 on C3 &
+       a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 &
+       t,b2,b3 on B1 & b1,r,b3 on B2 & b1,s,b2 on B3 &
+       C1,C2,C3 are_mutually_different &
+       o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a1<>b1 & a2<>b2 & a3<>b3
+         holds
+        ex O being LINE of X st r,s,t on O by Th22;
+      for a,b,c,d being Point of CPS' ex p being Point of CPS' st
+     a,b,p is_collinear & c,d,p is_collinear by ANPROJ_2:def 14;
+    then for M,N being LINE of X ex q being POINT of X st q on M & q on N
+    by Th18;
+    hence thesis by A1,A2,Def14,Def18,Def19;
+  end;
 end;
 
-definition
+
+registration
   cluster Pappian Fanoian 2-dimensional IncProjSp;
+  existence
+  proof
+    consider CPS being Fanoian Pappian CollProjectivePlane;
+    reconsider CPS' = CPS as CollProjectiveSpace;
+    take X = IncProjSp_of(CPS');
+      for p1,r2,q,r1,q1,p,r being Point of CPS' holds
+     (p1,r2,q is_collinear & r1,q1,q is_collinear & p1,r1,p is_collinear &
+     r2,q1,p is_collinear & p1,q1,r is_collinear & r2,r1,r is_collinear &
+     p,q,r is_collinear
+       implies
+     (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or
+     p1,r1,q1 is_collinear or r2,r1,q1 is_collinear)) by ANPROJ_2:def 11;
+  then A1: for p,q,r,s,a,b,c being POINT of X
+      for L,Q,R,S,A,B,C being LINE of X st
+       not q on L & not r on L & not p on Q & not s on Q & not p on R &
+       not r on R &
+       not q on S & not s on S & a,p,s on L & a,q,r on Q & b,q,s on R &
+       b,p,r on S &
+       c,p,q on A & c,r,s on B & a,b on C holds not c on C by Th21;
+      for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS' st
+     o<>p2 & o<>p3 & p2<>p3 & p1<>p2 & p1<>p3 & o<>q2 & o<>q3 & q2<>q3 &
+     q1<>q2 & q1<>q3 & not o,p1,q1 is_collinear & o,p1,p2 is_collinear &
+     o,p1,p3 is_collinear & o,q1,q2 is_collinear & o,q1,q3 is_collinear &
+     p1,q2,r3 is_collinear & q1,p2,r3 is_collinear & p1,q3,r2 is_collinear &
+     p3,q1,r2 is_collinear & p2,q3,r1 is_collinear & p3,q2,r1 is_collinear
+       holds
+      r1,r2,r3 is_collinear by ANPROJ_2:def 13;
+  then A2: for o,a1,a2,a3,b1,b2,b3,c1,c2,c3 being POINT of X
+      for A1,A2,A3,B1,B2,B3,C1,C2,C3 being LINE of X st
+       o,a1,a2,a3 are_mutually_different & o,b1,b2,b3 are_mutually_different &
+       A3<>B3 & o on A3 & o on B3 & a2,b3,c1 on A1 & a3,b1,c2 on B1 &
+       a1,b2,c3 on C1 &
+       a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 &
+       b1,b2,b3 on A3 & a1,a2,a3 on B3 & c1,c2 on C3
+         holds
+        c3 on C3 by Th23;
+      for a,b,c,d being Point of CPS' ex p being Point of CPS' st
+     a,b,p is_collinear & c,d,p is_collinear by ANPROJ_2:def 14;
+    then for M,N being LINE of X ex q being POINT of X st q on M & q on N by
+Th18;
+    hence thesis by A1,A2,Def14,Def18,Def20;
+  end;
 end;
+

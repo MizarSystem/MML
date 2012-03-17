@@ -14,8 +14,6 @@ CARD_1
 FINSEQ_1
 TREES_1
 #
-Tree_Ind
-#
 ;
 M1 W1 ;V16 ;V21 ;;P1 B1 ;M1 W1 ;V16 ;V21 ;;ª&M4 K52 ;K56 ;;ª&R2 K83 K56 ;B2 ;B1 ;ªP1 K90 B1 K83 K56 ;B2 ;;;;ªP1 B1 ;;;
 #

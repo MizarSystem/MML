@@ -82,7 +82,7 @@ begin :: Trees and Binary Trees
      then (rng p) \/ (rng <*x*>) c= BOOLEAN by A3,A4,A7,TREES_1:46,XBOOLE_1:8;
      hence rng (p^<*x*>) c= BOOLEAN by FINSEQ_1:44;
     end;
-      for p be FinSequence of NAT holds _P[p] from IndSeqD(A1,A2);
+      for p be FinSequence of NAT holds _P[p] from FINSEQ_2:sch 2(A1,A2);
     then rng t c= BOOLEAN;
     hence t is FinSequence of BOOLEAN by FINSEQ_1:def 4;
    end;
@@ -92,6 +92,7 @@ begin :: Trees and Binary Trees
    redefine mode Element of T -> FinSequence of BOOLEAN;
    coherence by Th2;
   end;
+
 
   theorem Th3:
    for T be Tree st T = {0,1}* holds
@@ -266,7 +267,7 @@ begin :: Trees and Binary Trees
       then p^<*n*> in succ p1 by A8,TARSKI:def 2;
       hence p^<*n*> in T;
      end;
-       for p be FinSequence of {0,1} holds _P[p] from IndSeqD(A6,A7);
+       for p be FinSequence of {0,1} holds _P[p] from FINSEQ_2:sch 2(A6,A7);
      hence x in T by A5;
     end;
    end;
@@ -277,7 +278,7 @@ begin :: Trees and Binary Trees
     for x be Node of D holds P[D.x,D.(x ^ <* 0 *>),D.(x ^ <*1*>)]
    provided
     A1: for a be Element of A() ex b,c be Element of A() st P[a,b,c]
-   proof
+proof
     defpred Q[set,set] means
      ex b,c be Element of A() st P[$1,b,c] & $2 = [b,c];
     A2: for e be set st e in A() ex u be set st u in [:A(),A():] & Q[e,u]
@@ -293,7 +294,7 @@ begin :: Trees and Binary Trees
     consider f be Function such that
      A4: dom f = A() and
      A5: rng f c= [:A(),A():] and
-     A6: for e be set st e in A() holds Q[e,f.e] from NonUniqBoundFuncEx(A2);
+     A6: for e be set st e in A() holds Q[e,f.e] from COMPTS_1:sch 1(A2);
     deffunc _F(set) = IFEQ($1`2,0,(f.($1`1))`1,(f.($1`1))`2);
     A7: for x be set st x in [:A(),NAT:] holds _F(x) in A() proof
      let x be set;
@@ -304,13 +305,16 @@ begin :: Trees and Binary Trees
        now per cases;
       suppose x`2 = 0;
        hence IFEQ(x`2,0,(f.(x`1))`1,(f.(x`1))`2) in A() by A8,CQC_LANG:def 1;
+      end;
       suppose x`2 <> 0;
        hence IFEQ(x`2,0,(f.(x`1))`1,(f.(x`1))`2) in A() by A8,CQC_LANG:def 1;
+     end;
      end;
      hence IFEQ(x`2,0,(f.(x`1))`1,(f.(x`1))`2) in A();
     end;
     consider F be Function of [:A(),NAT:],A() such that
-     A9: for x be set st x in [:A(),NAT:] holds F.x = _F(x) from Lambda1(A7);
+     A9: for x be set st x in [:A(),NAT:] holds F.x = _F(x) from FUNCT_2:sch 2
+(A7);
     A10: for e be set st e in A() holds P[e,F.[e,0],F.[e,1]]
     proof
      let e be set;
@@ -338,7 +342,7 @@ begin :: Trees and Binary Trees
      A18: for d be Element of dom D holds
       succ d = { d^<*k*> where k is Nat : k < _F(D.d) } &
       for n be Nat, x be set st x = D.d & n < _F(x)
-        holds D.(d^<*n*>) = F.[x,n] from DTreeStructFinEx;
+        holds D.(d^<*n*>) = F.[x,n] from TREES_2:sch 9;
       now let t be Element of dom D;
      assume not t in Leaves dom D;
        { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
@@ -398,7 +402,7 @@ begin :: Trees and Binary Trees
    provided
     A1: for a be Element of A() ex b be Element of A() st P[a,b] and
     A2: for a be Element of A() ex b be Element of A() st Q[a,b]
-   proof
+proof
     defpred _P[set,set] means
     ( $1`2 = 0 implies P[$1`1,$2] ) & ( $1`2 = 1 implies Q[$1`1,$2] );
     A3: for e be set st e in [:A(),NAT:] ex u be set st u in A() & _P[e,u]
@@ -419,7 +423,7 @@ begin :: Trees and Binary Trees
      A6: dom F = [:A(),NAT:] and
      A7: rng F c= A() and
      A8: for e be set st e in [:A(),NAT:] holds _P[e,F.e]
-                                                 from NonUniqBoundFuncEx(A3);
+                                                 from COMPTS_1:sch 1(A3);
     reconsider F as Function of [:A(),NAT:],A() by A6,A7,FUNCT_2:4;
     deffunc _F(set) = 2;
     consider D be DecoratedTree of A() such that
@@ -427,7 +431,7 @@ begin :: Trees and Binary Trees
      A10: for d be Element of dom D holds
       succ d = { d^<*k*> where k is Nat : k < _F(D.d) } &
       for n be Nat, x be set st x = D.d & n < _F(x) holds D.(d^<*n*>) = F.[x,n]
-                                                       from DTreeStructFinEx;
+                                                       from TREES_2:sch 9;
       now let t be Element of dom D;
      assume not t in Leaves dom D;
        { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
@@ -522,7 +526,7 @@ begin :: Trees and Binary Trees
      A4: dom f = T-level n and
      A5: rng f c= NAT and
      A6: for e be set st e in T-level n holds _P[e,f.e]
-         from NonUniqBoundFuncEx(A1);
+         from COMPTS_1:sch 1(A1);
     reconsider f as Function of T-level n,NAT by A4,A5,FUNCT_2:4;
     take f;
     let t be Element of T;
@@ -559,7 +563,8 @@ begin :: Trees and Binary Trees
    end;
   end;
 
-  definition
+
+  registration
    let T be binary Tree;
    let n be non empty Nat;
    cluster NumberOnLevel(n,T) -> one-to-one;
@@ -594,6 +599,7 @@ begin :: Trees and Binary Trees
    end;
   end;
 
+
 begin :: Full Trees
 
   definition
@@ -601,6 +607,7 @@ begin :: Full Trees
    attr T is full means :Def2:
     T = {0,1}*;
   end;
+
 
   theorem Th9:
    {0,1}* is Tree
@@ -638,6 +645,7 @@ begin :: Full Trees
        now per cases by A11,TARSKI:def 2;
       suppose k = 0;
        hence n = 0 or n = 1 by A8,NAT_1:18;
+      end;
       suppose A12: k = 1;
          n = 1 or n = 0
        proof
@@ -647,6 +655,7 @@ begin :: Full Trees
         hence n = 0 by NAT_1:18;
        end;
        hence n = 0 or n = 1;
+     end;
      end;
      then n in {0,1} by TARSKI:def 2;
      then <*n*> is FinSequence of {0,1} by SCMFSA_7:22;
@@ -686,14 +695,15 @@ begin :: Full Trees
     hence y in T-level n by TREES_2:def 6;
    end;
 
-  definition
+  registration
    let T be binary Tree;
    let n be Nat;
    cluster T-level n -> finite;
    coherence by QC_LANG4:19;
   end;
 
-  definition
+
+  registration
    cluster full -> binary Tree;
    coherence
    proof
@@ -704,7 +714,8 @@ begin :: Full Trees
    end;
   end;
 
-  definition
+
+  registration
    cluster full Tree;
    existence
    proof
@@ -713,6 +724,7 @@ begin :: Full Trees
     thus T is full by Def2;
    end;
   end;
+
 
   theorem Th12:
    for T be full Tree
@@ -799,7 +811,8 @@ begin :: Full Trees
    end;
   end;
 
-  definition
+
+  registration
    let T be full Tree;
    let n be non empty Nat;
    cluster FinSeqLevel(n,T) -> one-to-one;
@@ -809,6 +822,7 @@ begin :: Full Trees
     hence FinSeqLevel(n,T) is one-to-one by Def3;
    end;
   end;
+
 
   theorem Th13:
    for T be full Tree
@@ -1066,9 +1080,9 @@ begin :: Full Trees
       thus thesis by A38;
      end;
      consider f0 be Function of Tn,Tn1_0 such that
-      A42: for x be Element of Tn holds _P[x,f0.x] from FuncExD(A32);
+      A42: for x be Element of Tn holds _P[x,f0.x] from FUNCT_2:sch 3(A32);
      consider f1 be Function of Tn,Tn1_1 such that
-      A43: for x be Element of Tn holds _P1[x,f1.x] from FuncExD(A37);
+      A43: for x be Element of Tn holds _P1[x,f1.x] from FUNCT_2:sch 3(A37);
      A44: Tn c= dom f0 by FUNCT_2:def 1;
        now let x1,x2 be set;
       assume that
@@ -1160,7 +1174,7 @@ begin :: Full Trees
         .= card (Tn1_0 \/ Tn1_1) by A25,CARD_2:53
         .= Card (T-level (n+1)) by A20,A21,XBOOLE_0:def 10;
     end;
-    thus for n be Nat holds _R[n] from Ind(A2,A3);
+    thus for n be Nat holds _R[n] from NAT_1:sch 1(A2,A3);
    end;
 
   theorem Th19:
@@ -1258,11 +1272,13 @@ begin :: Full Trees
       then i-'1 + (1+1)*1 mod 2 = 1 by GR_CY_1:1;
       then i-'1 + 1 + 1 mod 2 = 1 by XCMPLX_1:1;
       hence (i+1) mod 2 = (i-'1) mod 2 by A3,A7,AMI_5:4;
+     end;
      suppose i-'1 is even;
       then A8: i-'1 mod 2 = 0 by NAT_2:23;
       then i-'1 + (1 + 1)*1 mod 2 = 0 by GR_CY_1:1;
       then i-'1 + 1 + 1 mod 2 = 0 by XCMPLX_1:1;
       hence (i+1) mod 2 = (i-'1) mod 2 by A3,A8,AMI_5:4;
+    end;
     end;
       i + 1 >= 1 + 1 by A3,AXIOMS:24;
     then A9: 1 <= (i + 1) div 2 by NAT_2:15;

@@ -10,9 +10,7 @@ SUBSET_1
 NUMBERS
 XREAL_0
 #
-Comp_Ind_NE
-#
 ;
-M4 W1 ;K52 ;K56 ;;P1 B1 ;M4 W1 ;K52 ;K56 ;;ª&M4 W1 ;K52 ;K56 ;;ª&ªR11 B1 B2 ;ªP1 B2 ;;ªP1 B1 ;;;
+M4 W1 ;K52 ;K56 ;;P1 B1 ;M4 W1 ;K52 ;K56 ;;ª&M4 W1 ;K52 ;K56 ;;ª&ªR12 B1 B2 ;ªP1 B2 ;;ªP1 B1 ;;;
 #
 !

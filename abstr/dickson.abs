@@ -36,8 +36,22 @@ for g being Function, x being set st dom g = {x} holds g = x .--> g.x;
 theorem :: DICKSON:2
 for n being Nat holds n c= n+1;
 
-scheme FinSegRng2{m, n() -> Nat, F(set)->set, P[Nat]}:
-  {F(i) where i is Nat : m()<i & i<=n() & P[i]} is finite;
+scheme :: DICKSON:sch 1
+ FinSegRng2{m, n() -> Nat, F(set)->set, P[Nat]}:
+  {F(i) where i is Nat : m()<i & i<=n() & P[i]} is finite
+proof
+    defpred p[Nat] means P[$1];
+    deffunc f(set) = F($1);
+    set F1 = {f(i) where i is Nat: m()<=i & i<=n() & p[i]};
+    set F2 = {f(i) where i is Nat: m()< i & i<=n() & p[i]};
+A1: F1 is finite from GRAPH_2:sch 1;
+      F2 c= F1 proof let x be set; assume x in F2;
+        then consider i being Nat such that
+    A2: F(i) = x & m()< i & i<=n() & P[i];
+      thus thesis by A2;
+    end;
+  hence F2 is finite by A1,FINSET_1:13;
+end;
 
 theorem :: DICKSON:3
 for X being infinite set ex f being Function of NAT, X st f is one-to-one;
@@ -50,12 +64,14 @@ definition
    holds f.(n+1) <> f.n & [f.n, f.(n+1)] in the InternalRel of R;
 end;
 
+
 definition
   let R be RelStr, f be sequence of R;
   attr f is weakly-ascending means
 :: DICKSON:def 2
   for n being Nat holds [f.n, f.(n+1)] in the InternalRel of R;
 end;
+
 
 theorem :: DICKSON:4
 for R being non empty transitive RelStr, f being sequence of R
@@ -88,6 +104,7 @@ definition let R be RelStr; :: Def 4.19 (ix)
        R is reflexive transitive;
 end;
 
+
 definition :: Lemma 4.24.i
    let R be RelStr such that
  R is quasi_ordered;
@@ -95,6 +112,7 @@ definition :: Lemma 4.24.i
 :: DICKSON:def 4
         (the InternalRel of R) /\ (the InternalRel of R)~;
 end;
+
 
 theorem :: DICKSON:9
   for R being RelStr, x,y being Element of R
@@ -108,6 +126,7 @@ definition :: Lemma 4.24, (the InternalRel of R) / EqRel R
     ex a, b being Element of R
       st A = Class(EqRel R, a) & B = Class(EqRel R, b) & a <= b;
 end;
+
 
 theorem :: DICKSON:10  :: Lemma 4.24.ii
 for R being RelStr
@@ -124,15 +143,30 @@ definition :: "strict part" of a relation, p. 155
     R \ R~;
 end;
 
-definition
+
+registration
   let R be Relation;
   cluster R \~ -> asymmetric;
+coherence proof
+    now let x,y be set such that x in field (R\~) and y in field (R\~) and
+  A1: [x,y] in R\~;
+        [x,y] in R \ R~ by A1,Def6; then not [x,y] in R~ by XBOOLE_0:def 4
+;
+      then not [y,x] in R by RELAT_1:def 7; then not [y,x] in R\R~ by XBOOLE_0:
+def 4
+;
+      hence not [y,x] in R\~ by Def6;
+  end; then R \~ is_asymmetric_in field (R\~) by RELAT_2:def 5;
+  hence R \~ is asymmetric by RELAT_2:def 13;
 end;
+end;
+
 
 definition
   let X be set, R be Relation of X;
   redefine func R\~ -> Relation of X;
 end;
+
 
 definition
    let R be RelStr;
@@ -141,20 +175,64 @@ definition
      RelStr(# the carrier of R, (the InternalRel of R)\~ #);
 end;
 
-definition
+
+registration
   let R be non empty RelStr;
   cluster R\~ -> non empty;
+coherence proof set IR = the InternalRel of R, CR = the carrier of R;
+    R\~ = RelStr(# CR, IR\~ #) by Def7;
+ hence R\~ is non empty;
+end;
 end;
 
-definition
+
+registration
   let R be transitive RelStr;
   cluster R\~ -> transitive;
+coherence proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR'= the InternalRel of R\~, CR' = the carrier of R\~;
+A1: IR is_transitive_in CR by ORDERS_1:def 5;
+ A2: R\~ = RelStr(# CR, IR\~ #) by Def7;
+      now let x,y,z be set such that
+    A3: x in CR' & y in CR' & z in CR' and
+    A4: [x,y] in IR' & [y,z] in IR';
+          [x,y] in IR \ IR~ & [y,z] in IR \ IR~ by A2,A4,Def6;
+    then A5: [x,y] in IR & not [x,y] in IR~ & [y,z] in IR by XBOOLE_0:def 4;
+    then A6: [x,z] in IR by A1,A2,A3,RELAT_2:def 8;
+          now assume [x,z] in IR~;
+            then [z, x] in IR by RELAT_1:def 7;
+            then [y, x] in IR by A1,A2,A3,A5,RELAT_2:def 8;
+            hence contradiction by A5,RELAT_1:def 7;
+        end;
+        then [x,z] in IR \ IR~ by A6,XBOOLE_0:def 4;
+        hence [x,z] in IR' by A2,Def6;
+    end;
+    then IR' is_transitive_in CR' by RELAT_2:def 8;
+    hence R\~ is transitive by ORDERS_1:def 5;
+end;
 end;
 
-definition
+
+registration
    let R be RelStr;
    cluster R\~ -> antisymmetric;
+coherence proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR'= the InternalRel of R\~, CR' = the carrier of R\~;
+A1:  R\~ = RelStr(# CR, IR\~ #) by Def7;
+      now let x, y be set such that
+          x in CR' & y in CR' and
+    A2: [x,y] in IR' & [y,x] in IR';
+          [x,y] in IR\ IR~ & [y,x] in IR\IR~ by A1,A2,Def6;
+        then not [x,y] in IR~ & [y,x] in IR by XBOOLE_0:def 4;
+        hence x = y by RELAT_1:def 7;
+    end;
+    then IR' is_antisymmetric_in CR' by RELAT_2:def 4;
+    hence R\~ is antisymmetric by ORDERS_1:def 6;
 end;
+end;
+
 
 theorem :: DICKSON:12 ::Exercise 4.27:
   for R being non empty Poset, x being Element of R
@@ -206,6 +284,7 @@ definition :: p. 158, restricted eq classes
           x = Class(EqRel R,y) /\ N;
 end;
 
+
 theorem :: DICKSON:20  :: Lemma 4.36
 for R being non empty RelStr, N being Subset of R, x being set
  st R is quasi_ordered & x in min-classes N
@@ -248,6 +327,7 @@ definition :: Def 4.39
                  ex b being Element of R st b in B & b <= a;
 end;
 
+
 theorem :: DICKSON:26
 for R being RelStr holds {} is_Dickson-basis_of {} the carrier of R, R;
 
@@ -263,6 +343,7 @@ definition :: Def 4.39
   for N being Subset of R
    ex B being set st B is_Dickson-basis_of N,R & B is finite;
 end;
+
 
 theorem :: DICKSON:28  :: Lemma 4:40
 for R being non empty RelStr
@@ -282,6 +363,7 @@ definition
         f.it = b & for i being Nat st f.i = b holds it <= i;
 end;
 
+
 definition
    let R be non empty 1-sorted, f be sequence of R, b be set, m be Nat; assume
  ex j being Nat st m < j & f.j = b;
@@ -289,6 +371,7 @@ definition
 :: DICKSON:def 12
         f.it = b & m < it & for i being Nat st m < i & f.i = b holds it <= i;
 end;
+
 
 theorem :: DICKSON:30  :: Prop 4.42 (i) -> (ii)
 for R being non empty RelStr st R is quasi_ordered & R is Dickson
@@ -333,6 +416,7 @@ definition
     for B being set holds B in it iff B is_Dickson-basis_of N,R;
 end;
 
+
 theorem :: DICKSON:36  :: Proposition 4.45
 for R being non empty RelStr, s being sequence of R st R is Dickson
   ex t being sequence of R st t is_subsequence_of s & t is weakly-ascending;
@@ -353,10 +437,25 @@ theorem :: DICKSON:40
 for p being RelStr-yielding ManySortedSet of 1, z being Element of 1
  holds p.z, product p are_isomorphic;
 
-definition
+registration
   let X be set, p be RelStr-yielding ManySortedSet of X, Y be Subset of X;
   cluster p|Y -> RelStr-yielding;
+coherence proof
+     now let v be set such that
+   A1: v in rng (p|Y);
+       consider x being set such that
+   A2: x in dom (p|Y) and
+   A3: v = (p|Y).x by A1,FUNCT_1:def 5;
+   A4: x in Y by A2,PBOOLE:def 3;
+   then A5: (p|Y).x = p.x by FUNCT_1:72;
+         x in X by A4; then x in dom p by PBOOLE:def 3;
+       then p.x in rng p by FUNCT_1:12;
+       hence v is RelStr by A3,A5,YELLOW_1:def 3;
+   end;
+   hence p|Y is RelStr-yielding by YELLOW_1:def 3;
 end;
+end;
+
 
 theorem :: DICKSON:41
 for n being non empty Nat, p being RelStr-yielding ManySortedSet of n
@@ -372,19 +471,25 @@ for n being non empty Nat, p being RelStr-yielding ManySortedSet of n
   st for i being Element of n holds p.i is Dickson & p.i is quasi_ordered
     holds product p is quasi_ordered & product p is Dickson;
 
-definition
+registration
  let p be RelStr-yielding ManySortedSet of {};
  cluster product p -> non empty;
+ coherence by Lm1;
  cluster product p -> antisymmetric;
+ coherence by Lm1;
  cluster product p -> quasi_ordered;
+ coherence by Lm1;
  cluster product p -> Dickson;
+ coherence by Lm1;
 end;
+
 
 definition
   func NATOrd -> Relation of NAT equals
 :: DICKSON:def 14
     {[x,y] where x, y is Element of NAT : x <= y};
 end;
+
 
 theorem :: DICKSON:44
 NATOrd is_reflexive_in NAT;
@@ -404,22 +509,97 @@ definition
     RelStr(# NAT, NATOrd #);
 end;
 
-definition
+registration
   cluster OrderedNAT -> connected;
+coherence by Lm2;
   cluster OrderedNAT -> Dickson;
+coherence proof
+    set IR' = the InternalRel of OrderedNAT\~,CR' =the carrier of OrderedNAT\~;
+A1:  OrderedNAT\~ = RelStr(# NAT, NATOrd\~ #) by Def7,Def15;
+      now let N be set such that
+    A2: N c= CR' and
+    A3: N <> {};
+         consider k being set such that
+    A4: k in N by A3,XBOOLE_0:def 1;
+        defpred P[Nat] means $1 in N;
+    A5: ex k being Nat st P[k] by A1,A2,A4;
+        consider m being Nat such that
+    A6: P[m] and
+    A7: for n being Nat st P[n] holds m <= n from NAT_1:sch 5(A5);
+        reconsider m as Element of OrderedNAT by Def15;
+        thus ex m being set st m in N & IR'-Seg(m) misses N proof
+            take m;
+            thus m in N by A6;
+              now assume IR'-Seg(m) /\ N <> {};
+                then consider z being set such that
+            A8: z in IR'-Seg(m) /\ N by XBOOLE_0:def 1;
+            A9: z in IR'-Seg(m) & z in N by A8,XBOOLE_0:def 3;
+            then A10: z <> m & [z,m] in IR' by WELLORD1:def 1;
+                then [z,m] in NATOrd \ NATOrd~ by A1,Def6;
+                then [z,m] in NATOrd by XBOOLE_0:def 4;
+                then consider x,y being Element of NAT such that
+            A11: [z,m] = [x,y] and
+            A12: x <= y by Def14;
+            A13: [x,y] in NATOrd by A12,Def14;
+            A14: z = x & m = y by A11,ZFMISC_1:33;
+                then y <= x by A7,A9;
+                then [y,x] in NATOrd by Def14;
+                hence contradiction by A10,A13,A14,Th45,RELAT_2:def 4;
+            end;
+            hence IR'-Seg(m) misses N by XBOOLE_0:def 7;
+        end;
+    end;
+    then IR' is_well_founded_in CR' by WELLORD1:def 3;
+    then OrderedNAT\~ is well_founded by WELLFND1:def 2;
+    hence OrderedNAT is Dickson by Lm2,Th28;
+  end;
   cluster OrderedNAT -> quasi_ordered;
+coherence proof
+A15: OrderedNAT is reflexive by Def15,Th44,ORDERS_1:def 4;
+      OrderedNAT is transitive by Def15,Th47,ORDERS_1:def 5;
+    hence OrderedNAT is quasi_ordered by A15,Def3;
+end;
   cluster OrderedNAT -> antisymmetric;
+coherence by Def15,Th45,ORDERS_1:def 6;
   cluster OrderedNAT -> transitive;
+coherence by Def15,Th47,ORDERS_1:def 5;
   cluster OrderedNAT -> well_founded;
+coherence proof
+   set ir = the InternalRel of OrderedNAT;
+     now given f being sequence of OrderedNAT such that
+   A16: f is descending;
+   A17: dom f = NAT by FUNCT_2:def 1;
+       reconsider rf = rng f as non empty Subset of NAT by Def15;
+       set m = min rf;
+         m in rng f by CQC_SIM1:def 8; then consider d being set such that
+   A18: d in dom f & m = f.d by FUNCT_1:def 5;
+       reconsider d as Nat by A18;
+   A19: f.(d+1) <> f.d & [f.(d+1),f.d] in ir by A16,WELLFND1:def 7;
+        then consider x, y being Element of NAT such that
+   A20:  [f.(d+1),f.d] = [x,y] and
+   A21:  x <= y by Def14,Def15;
+        reconsider fd1 = f.(d+1), fd = f.d as Nat by Def15;
+          f.(d+1) = x & f.d = y by A20,ZFMISC_1:33;
+   then A22:  fd1 < fd by A19,A21,REAL_1:def 5;
+          f.(d+1) in rf by A17,FUNCT_1:12;
+    hence contradiction by A18,A22,CQC_SIM1:def 8;
+   end;
+ hence thesis by WELLFND1:15;
+end;
 end;
 
-definition :: 4.48 Dickson's Lemma
+registration :: 4.48 Dickson's Lemma
  let n be Nat;
  cluster product (n --> OrderedNAT) -> non empty;
+ coherence by Lm3;
  cluster product (n --> OrderedNAT) -> Dickson;
+ coherence by Lm3;
  cluster product (n --> OrderedNAT) -> quasi_ordered;
+ coherence by Lm3;
  cluster product (n --> OrderedNAT) -> antisymmetric;
+ coherence by Lm3;
 end;
+
 
 theorem :: DICKSON:48
  :: Proposition 4.49, in B&W proven without axiom of choice (4.46)

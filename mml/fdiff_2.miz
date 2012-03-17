@@ -11,6 +11,7 @@ environ
       FCONT_1, BOOLE, FINSEQ_1, PARTFUN2, LIMFUNC1, SUBSET_1, RFUNCT_2, PROB_1;
  notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, NAT_1, FUNCT_1, FUNCT_2, SEQ_1, RELSET_1, SEQ_2, ABSVALUE,
+      PROB_1,
       PARTFUN1, SQUARE_1, PARTFUN2, RFUNCT_1, RCOMP_1, RFUNCT_2, FCONT_1,
       FDIFF_1, LIMFUNC1, SEQM_3;
  constructors REAL_1, NAT_1, SEQ_2, SEQM_3, ABSVALUE, PROB_1, PARTFUN1,
@@ -40,7 +41,7 @@ begin
  reserve L for LINEAR;
  reserve R for REST;
 
-definition let h;
+registration let h;
  cluster -h -> convergent_to_0;
  coherence
   proof
@@ -51,6 +52,7 @@ definition let h;
    hence thesis by A2,A3,FDIFF_1:def 1;
   end;
 end;
+
 
 theorem Th1:
 a is convergent & b is convergent & lim a = lim b &
@@ -72,6 +74,7 @@ d is convergent & lim d = lim a
          then A9: abs(d.m - lim a) = abs(a.n - lim a) by A1;
             n >= k1 by A6,A8,REAL_1:70;
          hence abs(d.m - lim a) < r by A4,A9;
+        end;
         suppose A10: m = 2*n + 1;
          then A11: abs(d.m - lim a) = abs(b.n - lim a) by A1;
             now
@@ -79,6 +82,7 @@ d is convergent & lim d = lim a
            hence contradiction by A6,A10,REAL_1:53;
           end;
          hence abs(d.m - lim a) < r by A1,A5,A11;
+        end;
         end;
        hence abs(d.m - lim a) < r;
       end;
@@ -176,7 +180,7 @@ h"(#)(f*(h + c) - f*c) is convergent) implies
   deffunc F(Nat) = h1.$1;
   deffunc G(Nat) = h2.$1;
   consider a such that
-  A3: for n holds a.(2*n) = F(n) & a.(2*n + 1) = G(n) from ExRealSeq2;
+  A3: for n holds a.(2*n) = F(n) & a.(2*n + 1) = G(n) from SCHEME1:sch 2;
   A4: h1 is convergent & lim h1 = 0 & h1 is_not_0 by FDIFF_1:def 1;
   A5: h2 is convergent & lim h2 = 0 & h2 is_not_0 by FDIFF_1:def 1;
   then A6: a is convergent & lim a = 0 by A3,A4,Th1;
@@ -187,9 +191,11 @@ h"(#)(f*(h + c) - f*c) is convergent) implies
      suppose n = 2*m;
        then a.n = h1.m by A3;
       hence a.n <> 0 by A4,SEQ_1:7;
+     end;
      suppose n = 2*m + 1;
        then a.n = h2.m by A3;
       hence a.n <> 0 by A5,SEQ_1:7;
+     end;
      end;
     hence a.n <> 0;
    end;
@@ -208,6 +214,7 @@ h"(#)(f*(h + c) - f*c) is convergent) implies
       .= (h1 + c).m by SEQ_1:11;
         (h1 + c).m in rng (h1 + c) by RFUNCT_2:10;
       hence (a + c).n in dom f by A2,A12;
+     end;
      suppose A13: n = 2*m + 1;
       A14: (a + c).n = a.n + c.n by SEQ_1:11
       .= h2.m + c.n by A3,A13
@@ -216,15 +223,16 @@ h"(#)(f*(h + c) - f*c) is convergent) implies
         (h2 + c).m in rng (h2 + c) by RFUNCT_2:10;
       hence (a + c).n in dom f by A2,A14;
      end;
+     end;
     hence thesis by A9;
    end;
   then A15: a"(#)(f*(a+c) - f*c) is convergent by A1,A2;
   deffunc F(Nat) = 2*$1;
   deffunc G(Nat) = 2*$1+1;
   consider b such that
-  A16: for n holds b.n = F(n) from ExRealSeq;
+  A16: for n holds b.n = F(n) from SEQ_1:sch 1;
   consider d such that
-  A17: for n holds d.n = G(n) from ExRealSeq;
+  A17: for n holds d.n = G(n) from SEQ_1:sch 1;
   reconsider I1 = b as increasing Seq_of_Nat by A16,Th2;
   reconsider I2 = d as increasing Seq_of_Nat by A17,Th3;
 A18:  (a"(#)(f*(a+c) - f*c))*I1 qua Real_Sequence
@@ -299,11 +307,11 @@ ex h,c st rng c = {r} & rng (h+c) c= dom f & {r} c= dom f
   deffunc F(Nat) = r;
   deffunc G(Nat) = g/($1+2);
   consider a such that
-  A3: for n holds a.n = F(n) from ExRealSeq;
+  A3: for n holds a.n = F(n) from SEQ_1:sch 1;
      now let n; a.(n+1) = r & a.n = r by A3; hence a.(n+1) = a.n; end;
   then reconsider a as constant Real_Sequence by SEQM_3:16;
   consider b such that
-  A4: for n holds b.n = G(n) from ExRealSeq;
+  A4: for n holds b.n = G(n) from SEQ_1:sch 1;
   A5: b is convergent & lim b = 0 by A4,SEQ_4:46;
      now let n; 0<=n by NAT_1:18; then 0+0 < n + 2 by REAL_1:67;
     then 0 < g/(n+2) by A2,SEQ_2:6;
@@ -368,13 +376,13 @@ ex q being increasing Seq_of_Nat st
 for n st (for r st r = s().n holds P[r]) ex m st n = q.m
 provided
 A1: for n ex m st n <= m & P[s().m]
- proof
+proof
   consider m1 be Nat such that
   A2: 0 <= m1 & P[s().m1] by A1;
   defpred R[Nat] means P[s().$1];
   A3: ex m st R[m] by A2;
   consider M be Nat such that
-  A4: R[M] & for n st R[n] holds M <= n from Min(A3);
+  A4: R[M] & for n st R[n] holds M <= n from NAT_1:sch 5(A3);
   A5: now let n; consider m such that
        A6: n + 1 <= m & P[s().m] by A1;
        take m;
@@ -387,14 +395,14 @@ A1: for n ex m st n <= m & P[s().m]
         defpred R[Nat] means x < $1 & P[s().$1];
         A8: ex m st R[m] by A5;
         consider l be Nat such that
-        A9: R[l] & for k st R[k] holds l <= k from Min(A8);
+        A9: R[l] & for k st R[k] holds l <= k from NAT_1:sch 5(A8);
         take l;
         thus thesis by A9;
        end;
   reconsider M' = M as Element of NAT;
   consider F be Function of NAT,NAT such that
   A10: F.0 = M' &
-      for n be Element of NAT holds P[n,F.n,F.(n+1)] from RecExD(A7);
+      for n be Element of NAT holds P[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A7);
   A11: dom F = NAT & rng F c= NAT by FUNCT_2:def 1;
    rng F c= REAL by XBOOLE_1:1;
   then reconsider F as Real_Sequence by A11,FUNCT_2:def 1,RELSET_1:11;
@@ -415,13 +423,13 @@ A1: for n ex m st n <= m & P[s().m]
        assume P[q.k]; P[k,F.k,F.(k+1)] by A10; then P[s().(F.(k+1))];
        hence P[q.(k+1)] by SEQM_3:31;
       end;
-  thus for n holds S[n] from Ind(A13,A14);
+  thus for n holds S[n] from NAT_1:sch 1(A13,A14);
   A15: for n st P[s().n] ex m st F.m = n
        proof
         defpred R[Nat] means P[s().$1] & for m holds F.m <> $1;
         assume A16: ex n st R[n];
         consider M1 be Nat such that
-        A17: R[M1] & for n st R[n] holds M1 <= n from Min(A16);
+        A17: R[M1] & for n st R[n] holds M1 <= n from NAT_1:sch 5(A16);
         defpred H[Nat] means $1 < M1 & P[s().$1] & ex m st F.m = $1;
         A18: ex n st H[n]
              proof
@@ -435,15 +443,17 @@ A1: for n ex m st n <= m & P[s().m]
              end;
         A20: for n st H[n] holds n <= M1;
         consider X be Nat such that
-        A21: H[X] & for n st H[n] holds n <= X from Max(A20,A18);
+        A21: H[X] & for n st H[n] holds n <= X from NAT_1:sch 6(A20,A18);
         A22: for k st X < k & k < M1 holds not P[s().k]
              proof given k such that
               A23: X < k & k < M1 & P[s().k];
                  now per cases;
                suppose ex m st F.m = k;
                 hence contradiction by A21,A23;
+               end;
                suppose for m holds F.m <> k;
                 hence contradiction by A17,A23;
+               end;
                end;
               hence contradiction;
              end;
@@ -498,15 +508,15 @@ implies
   deffunc F(Real) = l * $1;
   consider L be PartFunc of REAL,REAL such that
   A5: for g holds g in dom L iff P[g] and
-  A6: for g st g in dom L holds L.g = F(g) from LambdaPFD';
+  A6: for g st g in dom L holds L.g = F(g) from SEQ_1:sch 3;
   deffunc F(Real) = $1 + x0;
   consider T be PartFunc of REAL,REAL such that
   A7: for g holds g in dom T iff P[g] and
-  A8: for g st g in dom T holds T.g = F(g) from LambdaPFD';
+  A8: for g st g in dom T holds T.g = F(g) from SEQ_1:sch 3;
   deffunc F(real number) = (f*T).$1 - f.x0;
   consider T1 be PartFunc of REAL,REAL such that
   A9: for g holds g in dom T1 iff P[g] and
-  A10: for g st g in dom T1 holds T1.g = F(g) from LambdaPFD';
+  A10: for g st g in dom T1 holds T1.g = F(g) from SEQ_1:sch 3;
   consider r be real number such that
   A11: 0 < r & N = ].x0 - r,x0 + r.[ by RCOMP_1:def 7;
   defpred P[set] means $1 in ].-r,r.[;
@@ -515,7 +525,7 @@ implies
   consider R be PartFunc of REAL,REAL such that
   A12: R is total and
   A13: for g st g in dom R holds (P[g] implies R.g = F(g)) &
-       (not P[g] implies R.g = G(g)) from PartFuncExD2'';
+       (not P[g] implies R.g = G(g)) from SCHEME1:sch 8;
   A14: dom L = REAL by A5,FDIFF_1:1;
   then A15: L is total by PARTFUN1:def 4;
      for g holds L.g = l * g by A6,A14;
@@ -897,6 +907,7 @@ diff(f2*f1,x0) = diff(f2,f1.x0)*diff(f1,x0)
       hence lim (h"(#)(f2*f1*(h + c) - f2*f1*c)) = diff(f2,f1.x0) * diff(f1,x0
 )
        by A40,SEQ_4:36;
+     end;
      suppose A41: for k ex n st k <= n & (f1*(h+c)).n = f1.x0;
       defpred P[set] means $1 = f1.x0;
 A42:  for k ex n st k <= n & P[(f1*(h+c)).n] by A41;
@@ -964,6 +975,7 @@ A44:      c1 is_subsequence_of c by SEQM_3:def 10;
          hence h"(#)(f2*f1*(h + c) - f2*f1*c) is convergent by SEQ_2:def 6;
          hence lim (h"(#)(f2*f1*(h + c) - f2*f1*c)) =
          diff(f2,f1.x0)*diff(f1,x0) by A51,SEQ_2:def 7;
+       end;
        suppose A54: for k ex n st k <= n & (f1*(h+c)).n <> f1.x0;
       defpred P[set] means $1 <> f1.x0;
 A55:  for k ex n st k <= n & P[(f1*(h+c)).n] by A54;
@@ -1071,6 +1083,7 @@ SEQ_2:def 7;
                .= 0 by ABSVALUE:7;
                hence abs((h"(#)(f2*f1*(h+c) - f2*f1*c)).m -
                diff(f2,f1.x0)*diff(f1,x0))<g by A74;
+              end;
               suppose (f1*(h+c)).m <> f1.x0;
                 then for r1 holds (f1*(h+c)).m=r1 implies r1<>f1.x0;
                then consider l such that
@@ -1079,6 +1092,7 @@ SEQ_2:def 7;
                then abs(((h"(#)(f2*f1*(h+c)-f2*f1*c))*I2).l - DF) < g by A75;
                hence
                  abs((h"(#)(f2*f1*(h+c)-f2*f1*c)).m - DF) < g by A78,SEQM_3:31;
+              end;
               end;
              hence
                 abs((h"(#)(f2*f1*(h+c) - f2*f1*c)).m -
@@ -1089,8 +1103,10 @@ SEQ_2:def 7;
 (f2*f1*(h+c) - f2*f1*c)) = diff(f2,f1.x0)*diff(f1,x0)
             by A73,SEQ_2:def 7;
        end;
+       end;
       hence h"(#)(f2*f1*(h + c) - f2*f1*c) is convergent &
       lim (h"(#)(f2*f1*(h + c) - f2*f1*c)) = diff(f2,f1.x0)*diff(f1,x0);
+     end;
      end;
     hence thesis;
    end;
@@ -1289,7 +1305,7 @@ f^ is_differentiable_in x0 & diff(f^,x0) = - diff(f,x0)/(f.x0)^2
   deffunc F(real number) = 1;
   consider f1 such that
   A2: for r holds r in dom f1 iff P[r] and
-  A3: for r st r in dom f1 holds f1.r = F(r) from LambdaPFD';
+  A3: for r st r in dom f1 holds f1.r = F(r) from SEQ_1:sch 3;
   A4: dom f1 = dom f by A2,SUBSET_1:8;
   consider N be Neighbourhood of x0 such that
   A5: N c= dom f by A1,Th11;
@@ -1759,7 +1775,7 @@ A8:      for m st n <= m holds abs((h + c).m - x0) < r by A6,A7,SEQ_2:def 7;
           end;
           deffunc F(Nat) = 0;
          consider a such that
-         A15: for n holds a.n = F(n) from ExRealSeq;
+         A15: for n holds a.n = F(n) from SEQ_1:sch 1;
             now let n; a.n = 0 & a.(n+1) = 0 by A15;
            hence a.n = a.(n+1);
           end;
@@ -2293,8 +2309,10 @@ A3:    r1 in [#](REAL) /\ dom f & r2 in [#](REAL) /\ dom f & r1 < r2;
        now per cases by A15,REAL_1:def 5;
      suppose r1 < r2;
       hence contradiction by A2,A14,A16;
+     end;
      suppose r2 < r1;
       hence contradiction by A2,A14,A16;
+     end;
      end;
     hence contradiction;
    end;
@@ -2341,8 +2359,10 @@ A3:    r1 in [#](REAL) /\ dom f & r2 in [#](REAL) /\ dom f & r1 < r2;
        now per cases by A15,REAL_1:def 5;
      suppose r1 < r2;
       hence contradiction by A2,A14,A16;
+     end;
      suppose r2 < r1;
       hence contradiction by A2,A14,A16;
+     end;
      end;
     hence contradiction;
    end;
@@ -2428,22 +2448,28 @@ rng (f|].p,g.[) is open
        now per cases;
      suppose ].p,g.[ <> {}; then p < g by RCOMP_1:12;
       hence f is_increasing_on ].p,g.[ by A1,A4,ROLLE:9;
+     end;
      suppose ].p,g.[ = {};
       then for r1,r2 holds r1 in ].p,g.[ /\ dom f & r2 in ].p,g.[ /\ dom f &
        r1 < r2 implies f.r1 < f.r2;
       hence f is_increasing_on ].p,g.[ by RFUNCT_2:def 2;
      end;
+     end;
     hence thesis by A3,FCONT_3:31;
+   end;
    suppose A5: for x0 st x0 in ].p,g.[ holds diff(f,x0) < 0;
        now per cases;
      suppose ].p,g.[ <> {}; then p < g by RCOMP_1:12;
       hence f is_decreasing_on ].p,g.[ by A1,A5,ROLLE:10;
+     end;
      suppose ].p,g.[ = {};
       then for r1,r2 holds r1 in ].p,g.[ /\ dom f & r2 in ].p,g.[ /\ dom f &
        r1 < r2 implies f.r2 < f.r1;
       hence f is_decreasing_on ].p,g.[ by RFUNCT_2:def 3;
      end;
+     end;
     hence thesis by A3,FCONT_3:31;
+   end;
    end;
   hence thesis;
  end;
@@ -2462,9 +2488,11 @@ rng (f|left_open_halfline(p)) is open
    suppose for x0 st x0 in left_open_halfline(p) holds 0 < diff(f,x0);
     then f is_increasing_on left_open_halfline(p) by A1,Th29;
     hence thesis by A3,FCONT_3:32;
+   end;
    suppose for x0 st x0 in left_open_halfline(p) holds diff(f,x0) < 0;
     then f is_decreasing_on left_open_halfline(p) by A1,Th30;
     hence thesis by A3,FCONT_3:32;
+   end;
    end;
   hence thesis;
  end;
@@ -2483,9 +2511,11 @@ rng (f|right_open_halfline(p)) is open
    suppose for x0 st x0 in right_open_halfline(p) holds 0 < diff(f,x0);
     then f is_increasing_on right_open_halfline(p) by A1,Th33;
     hence thesis by A3,FCONT_3:33;
+   end;
    suppose for x0 st x0 in right_open_halfline(p) holds diff(f,x0) < 0;
     then f is_decreasing_on right_open_halfline(p) by A1,Th34;
     hence thesis by A3,FCONT_3:33;
+   end;
    end;
   hence thesis;
  end;
@@ -2502,9 +2532,11 @@ rng f is open
    suppose for x0 holds 0 < diff(f,x0);
     then f is_increasing_on [#](REAL) by A1,Th37;
     hence thesis by A3,FCONT_3:34;
+   end;
    suppose for x0 holds diff(f,x0) < 0;
     then f is_decreasing_on [#](REAL) by A1,Th38;
     hence thesis by A3,FCONT_3:34;
+   end;
    end;
   hence thesis;
  end;
@@ -2536,7 +2568,7 @@ for x0 st x0 in dom (f") holds diff(f",x0) = 1/diff(f,(f").x0)
       A9: rng c = {y0} & rng (h + c) c= dom (f");
       deffunc F(Nat) = (f").y0;
       consider a such that
-      A10: for n holds a.n = F(n) from ExRealSeq;
+      A10: for n holds a.n = F(n) from SEQ_1:sch 1;
          now let n; a.n = (f").y0 & a.(n+1) = (f").y0 by A10;
         hence a.n = a.(n+1);
        end;
@@ -2571,7 +2603,7 @@ for x0 st x0 in dom (f") holds diff(f",x0) = 1/diff(f,(f").x0)
         hence r1 = f.(r2 + r) by A14,A15,XCMPLX_1:27;
        end;
       consider b such that
-      A16: for n holds P[n,b.n] from RealSeqChoice(A13);
+      A16: for n holds P[n,b.n] from RCOMP_1:sch 1(A13);
       A17: h is_not_0 & h is convergent & lim h = 0 by FDIFF_1:def 1;
          now given n such that
         A18: b.n = 0;
@@ -2723,7 +2755,7 @@ diff((f|left_open_halfline(p))",x0) = 1/diff(f,((f|left_open_halfline(p))").x0)
       A9: rng c = {y0} & rng (h + c) c= dom (f1");
       deffunc F(Nat) = (f1").y0;
       consider a such that
-      A10: for n holds a.n = F(n) from ExRealSeq;
+      A10: for n holds a.n = F(n) from SEQ_1:sch 1;
          now let n; a.n = (f1").y0 & a.(n+1) = (f1").y0 by A10;
         hence a.n = a.(n+1);
        end;
@@ -2762,7 +2794,7 @@ diff((f|left_open_halfline(p))",x0) = 1/diff(f,((f|left_open_halfline(p))").x0)
         hence thesis by A14,A17,XBOOLE_0:def 3;
        end;
       consider b such that
-      A18: for n holds P[n,b.n] from RealSeqChoice(A13);
+      A18: for n holds P[n,b.n] from RCOMP_1:sch 1(A13);
       A19: h is_not_0 & h is convergent & lim h = 0 by FDIFF_1:def 1;
          now given n such that
         A20: b.n = 0;
@@ -2925,7 +2957,7 @@ diff((f|right_open_halfline(p))",x0) =
       A9: rng c = {y0} & rng (h + c) c= dom (f1");
       deffunc F(Nat) = (f1").y0;
       consider a such that
-      A10: for n holds a.n = F(n) from ExRealSeq;
+      A10: for n holds a.n = F(n) from SEQ_1:sch 1;
          now let n; a.n = (f1").y0 & a.(n+1) = (f1").y0 by A10;
         hence a.n = a.(n+1);
        end;
@@ -2963,7 +2995,7 @@ diff((f|right_open_halfline(p))",x0) =
           g in dom f /\ l by A14,RELAT_1:90;
         hence thesis by A14,A17,XBOOLE_0:def 3;
        end;
-      consider b such that A18: for n holds P[n,b.n] from RealSeqChoice(A13);
+      consider b such that A18: for n holds P[n,b.n] from RCOMP_1:sch 1(A13);
       A19: h is_not_0 & h is convergent & lim h = 0 by FDIFF_1:def 1;
          now given n such that
         A20: b.n = 0;
@@ -3123,7 +3155,7 @@ diff((f|].p,g.[)",x0) = 1/diff(f,((f|].p,g.[)").x0)
       A9: rng c = {y0} & rng (h + c) c= dom (f1");
       deffunc F(Nat) = (f1").y0;
       consider a such that
-      A10: for n holds a.n = F(n) from ExRealSeq;
+      A10: for n holds a.n = F(n) from SEQ_1:sch 1;
          now let n; a.n = (f1").y0 & a.(n+1) = (f1").y0 by A10;
         hence a.n = a.(n+1);
        end;
@@ -3162,7 +3194,7 @@ diff((f|].p,g.[)",x0) = 1/diff(f,((f|].p,g.[)").x0)
         hence thesis by A14,A17,XBOOLE_0:def 3;
        end;
       consider b such that
-      A18: for n holds P[n,b.n] from RealSeqChoice(A13);
+      A18: for n holds P[n,b.n] from RCOMP_1:sch 1(A13);
       A19: h is_not_0 & h is convergent & lim h = 0 by FDIFF_1:def 1;
          now given n such that
         A20: b.n = 0;
@@ -3185,19 +3217,25 @@ diff((f|].p,g.[)",x0) = 1/diff(f,((f|].p,g.[)").x0)
               suppose ].p,g.[ = {}; then ].p,g.[ /\ dom f = {};
                then ].p,g.[ misses dom f by XBOOLE_0:def 7;
                hence thesis by RFUNCT_2:54;
+              end;
               suppose ].p,g.[ <> {}; then p < g by RCOMP_1:12;
                hence thesis by A1,A25,ROLLE:9;
               end;
+              end;
               hence thesis;
+            end;
             suppose A26: for x0 st x0 in l holds diff(f,x0) < 0;
                now per cases;
               suppose ].p,g.[ = {}; then ].p,g.[ /\ dom f = {};
                then ].p,g.[ misses dom f by XBOOLE_0:def 7;
                hence thesis by RFUNCT_2:54;
+              end;
               suppose ].p,g.[ <> {}; then p < g by RCOMP_1:12;
                hence thesis by A1,A26,ROLLE:10;
               end;
+              end;
               hence thesis;
+            end;
             end;
             hence thesis;
            end;

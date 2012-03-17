@@ -20,9 +20,6 @@ RLVECT_1
 VECTSP_1
 MATRIX_1
 #
-MatrixLambda
-MatrixEx
-#
 M1 W5 ;;M3 K71 ;K75 ;;M3 K71 ;K75 ;;M2 F1 ;;;
 ªM14 F1 ;F2 ;F3 ;;ªM3 K71 ;K75 ;;M3 K71 ;K75 ;;ª&R2 K52 B2 B3 ;K137 B1 ;;ªR1 K138 F1 ;B1 B2 B3 ;F4 B2 B3 ;;;;
 #

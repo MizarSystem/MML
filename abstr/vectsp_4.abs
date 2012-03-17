@@ -33,6 +33,7 @@ begin
      st v in V1 holds a * v in V1);
  end;
 
+
 canceled 3;
 
 theorem :: VECTSP_4:4
@@ -117,6 +118,7 @@ theorem :: VECTSP_4:10
      (the lmult of V) | [:the carrier of GF, the carrier of it:];
  end;
 
+
  reserve GF for add-associative right_zeroed right_complementable
     Abelian associative left_unital distributive (non empty doubleLoopStr),
          V,X,Y for Abelian add-associative right_zeroed
@@ -195,13 +197,90 @@ theorem :: VECTSP_4:35
 theorem :: VECTSP_4:36
    (for v st v in W1 holds v in W2) implies W1 is Subspace of W2;
 
-definition let GF be add-associative right_zeroed right_complementable
+registration let GF be add-associative right_zeroed right_complementable
              Abelian associative left_unital distributive
              (non empty doubleLoopStr),
                V be Abelian add-associative right_zeroed
                 right_complementable VectSp-like (non empty VectSpStr over GF);
  cluster strict Subspace of V;
+  existence
+   proof
+    set M = the lmult of V;
+    set W = VectSpStr (# the carrier of V,the add of V,0.V,M #);
+     A1: now let a,b be Element of W;
+      let x,y be Element of V;
+       assume A2: x = a & b = y;
+      thus a + b = (the add of W).(a,b) by RLVECT_1:5
+                .= x + y by A2,RLVECT_1:5;
+     end;
+A3:  W is Abelian add-associative right_zeroed right_complementable
+      proof
+       thus W is Abelian
+        proof
+       let a,b be Element of W;
+        reconsider x = a, y = b as Element of V;
+       thus a + b = y + x by A1
+                 .= b + a by A1;
+        end;
+       hereby let a,b,c be Element of W;
+        reconsider x = a, y = b, z = c as Element of V;
+        A4: a + b = x + y & b + c = y + z by A1;
+       hence a + b + c = x + y + z by A1
+                     .= x + (y + z) by RLVECT_1:def 6
+                     .= a + (b + c) by A1,A4;
+       end;
+        A5: 0.W = 0.V by RLVECT_1:def 2;
+       hereby let a be Element of W;
+        reconsider x = a as Element of V;
+       thus a + 0.W = x + 0.V by A1,A5
+                    .= a by RLVECT_1:10;
+       end;
+       let a be Element of W;
+       reconsider x = a as Element of V;
+       reconsider b = (comp V).x as Element of W;
+       take b;
+       thus a + b = x + (comp V).x by A1
+                 .= x + - x by VECTSP_1:def 25
+                 .= 0.W by A5,RLVECT_1:16;
+      end;
+        W is VectSp-like
+      proof let a,b be Element of GF;
+            let v,w be Element of W;
+         reconsider x = v, y = w as Element of V;
+        A6: now let a be Element of GF;
+                  let x be Element of W;
+                  let y be Element of V;
+          assume y = x;
+         hence a * x = M.(a,y) by VECTSP_1:def 24
+                   .= a * y by VECTSP_1:def 24;
+        end;
+        then A7: b * v = b * x & a * v = a * x & a * w = a * y;
+        then a * v + a * w = a * x + a * y & v + w = x + y by A1;
+       hence a * (v + w) = a * (x + y) by A6
+                        .= a * x + a * y by VECTSP_1:def 26
+                        .= a * v + a * w by A1,A7;
+       thus (a + b) * v = (a + b) * x by A6
+                       .= a * x + b * x by VECTSP_1:def 26
+                       .= a * v + b * v by A1,A7;
+       thus a * b * v = a * b * x by A6
+                     .= a * (b * x) by VECTSP_1:def 26
+                     .= a * (b * v) by A6,A7;
+       thus 1_ GF * v = 1_ GF * x by A6
+                    .= v by VECTSP_1:def 26;
+      end;
+    then reconsider W as Abelian add-associative right_zeroed
+      right_complementable VectSp-like (non empty VectSpStr over GF) by A3;
+     A8: the Zero of W = the Zero of V by RLVECT_1:def 2;
+       the add of W = (the add of V) |
+      [:the carrier of W, the carrier of W:] &
+     the lmult of W = (the lmult of V) |
+      [:the carrier of GF, the carrier of W:] by FUNCT_2:40;
+     then reconsider W as Subspace of V by A8,Def2;
+    take W;
+    thus thesis;
+   end;
 end;
+
 
 theorem :: VECTSP_4:37
  for W1,W2 being strict Subspace of V st
@@ -240,11 +319,13 @@ theorem :: VECTSP_4:42
     the carrier of it = {0.V};
  end;
 
+
  definition let GF; let V;
   func (Omega).V -> strict Subspace of V equals
 :: VECTSP_4:def 4
     the VectSpStr of V;
  end;
+
 
 canceled 3;
 
@@ -284,6 +365,7 @@ theorem :: VECTSP_4:53
 :: VECTSP_4:def 6
     ex v st it = v + W;
  end;
+
 
 reserve B,C for Coset of W;
 

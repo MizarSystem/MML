@@ -29,10 +29,6 @@ VECTSP_1
 VECTSP_2
 QUANTAL1
 #
-DenestFraenkel
-EmptyFraenkel
-LUBFraenkelDistr
-#
 M1 W5 ;;M1 W5 ;;M1 ;M2 F2 ;;;
 R1 ËM2 F2 ;;;F3 B1 ;R2 B1 ËM2 F1 ;;;F4 B2 ;P1 B2 ;;ËM2 F1 ;;;F3 F4 B1 ;;P1 B1 ;;;
 #

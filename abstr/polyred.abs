@@ -29,29 +29,172 @@ environ
 
 begin :: Preliminaries
 
-definition
+registration
 let n be Ordinal,
     R be non trivial ZeroStr;
 cluster non-zero Monomial of n,R;
+existence
+ proof
+ consider a being Element of (the carrier of R)\{0.R};
+   the carrier of R is non trivial by REALSET1:def 13;
+ then (the carrier of R)\{0.R} is non empty by REALSET1:32;
+ then A1: a in the carrier of R & not(a in {0.R}) by XBOOLE_0:def 4;
+ then reconsider a as Element of R;
+ set q = a _(n,R);
+ A2: a <> 0.R by A1,TARSKI:def 1;
+ take q;
+   now assume A3: q = 0_(n,R);
+     0_(n,R) = 0.R _(n,R) by POLYNOM7:19;
+   hence contradiction by A2,A3,POLYNOM7:21;
+   end;
+ hence thesis by POLYNOM7:def 2;
+ end;
 end;
 
-definition
+
+registration
 cluster non trivial Field;
+existence
+ proof
+ consider F being Field;
+ take F;
+ thus thesis;
+ end;
 end;
 
-definition
+
+registration
 cluster Field-like -> domRing-like
            (left_zeroed add-right-cancelable right-distributive
             left_unital commutative associative (non empty doubleLoopStr));
+coherence
+ proof
+ let L be left_zeroed add-right-cancelable right-distributiveleft_unital
+          commutative associative (non empty doubleLoopStr);
+ assume A1: L is Field-like;
+   now let x,y be Element of L;
+   assume A2: x * y = 0.L;
+   thus x = 0.L or y = 0.L
+     proof
+     assume x <> 0.L;
+     then consider z being Element of L such that
+     A3: x * z = 1_ L by A1,VECTSP_1:def 20;
+       z * 0.L = 1_ L * y by A2,A3,VECTSP_1:def 16
+            .= y by VECTSP_1:def 19;
+     hence y = 0.L by BINOM:2;
+     end;
+   end;
+ hence thesis by VECTSP_2:def 5;
+ end;
 end;
 
-definition
+registration
 let n be Ordinal,
     L be add-associative right_complementable left_zeroed right_zeroed
             unital distributive domRing-like (non trivial doubleLoopStr),
     p,q be non-zero finite-Support Series of n,L;
 cluster p *' q -> non-zero;
+coherence
+proof
+consider b11 being bag of n such that
+A1: p.b11 <> 0.L &
+    for b' being bag of n st b11 < b' holds p.b' = 0.L by Lm5;
+consider b22 being bag of n such that
+A2: q.b22 <> 0.L &
+    for b' being bag of n st b22 < b' holds q.b' = 0.L by Lm5;
+set b = b11 + b22;
+consider s being FinSequence of the carrier of L such that
+A3: (p*'q).b = Sum s &
+   len s = len decomp b &
+   for k being Nat st k in dom s
+   ex b1, b2 being bag of n st (decomp b)/.k = <*b1, b2*> &
+                               s/.k = p.b1*q.b2 by POLYNOM1:def 26;
+consider S being non empty finite Subset of Bags n such that
+A4: divisors b = SgmX(BagOrder n, S) &
+   for p being bag of n holds p in S iff p divides b by POLYNOM1:def 18;
+  b11 divides b by POLYNOM1:54;
+then A5: b11 in S by A4;
+set sgm = SgmX(BagOrder n, S);
+  BagOrder n linearly_orders S by Lm1;
+then b11 in rng(sgm) by A5,TRIANG_1:def 2;
+then consider i being set such that
+A6: i in dom sgm & sgm.i = b11 by FUNCT_1:def 5;
+A7: i in dom decomp b by A4,A6,POLYNOM1:def 19;
+  (divisors b)/.i = b11 by A4,A6,FINSEQ_4:def 4;
+then A8: (decomp b)/.i = <*b11, b-'b11*> by A7,POLYNOM1:def 19;
+then A9: (decomp b)/.i = <*b11, b22*> by POLYNOM1:52;
+A10: dom s = Seg(len decomp b) by A3,FINSEQ_1:def 3
+         .= dom(decomp b) by FINSEQ_1:def 3;
+then A11: i in dom s by A4,A6,POLYNOM1:def 19;
+reconsider i as Nat by A6;
+A12:now let k be Nat;
+  assume A13: k in dom s & k <> i;
+  then consider b1', b2' being bag of n such that
+  A14: (decomp b)/.k = <*b1', b2'*> & b = b1'+b2' by A10,POLYNOM1:72;
+  consider b1,b2 being bag of n such that
+  A15: (decomp b)/.k = <*b1, b2*> & s/.k = p.b1*q.b2 by A3,A13;
+  A16: b1 = <*b1', b2'*>.1 by A14,A15,FINSEQ_1:61
+        .= b1' by FINSEQ_1:61;
+  A17: b2 = <*b1', b2'*>.2 by A14,A15,FINSEQ_1:61
+        .= b2' by FINSEQ_1:61;
+  A18: now assume p.b1 <> 0.L & q.b2 <> 0.L;
+      then not(b11 < b1) & not(b22 < b2) by A1,A2;
+      then A19: b1 <=' b11 & b2 <=' b22 by Lm4;
+      A20: now assume b1 = b11 & b2 = b22;
+          then (decomp b).k
+              = <*b11,b22*> by A10,A13,A15,FINSEQ_4:def 4
+              .= (decomp b)/.i by A8,POLYNOM1:52
+              .= (decomp b).i by A7,FINSEQ_4:def 4;
+          hence contradiction by A7,A10,A13,FUNCT_1:def 8;
+          end;
+        now per cases by A20;
+      case A21: b1 <> b11;
+        A22: now assume b1+b2 = b11+b2;
+            then b1 = (b11+b2)-'b2 by POLYNOM1:52;
+            hence contradiction by A21,POLYNOM1:52;
+            end;
+        A23: b11+b22 <=' b11+b2 by A14,A16,A17,A19,Lm2;
+          b11+b2 <=' b11+b22 by A19,Lm2;
+        hence contradiction by A14,A16,A17,A22,A23,Lm3;
+      end;
+      case A24: b2 <> b22;
+        A25: now assume b2+b1 = b22+b1;
+            then b2 = (b22+b1)-'b1 by POLYNOM1:52;
+            hence contradiction by A24,POLYNOM1:52;
+            end;
+        A26: b11+b22 <=' b22+b1 by A14,A16,A17,A19,Lm2;
+          b22+b1 <=' b11+b22 by A19,Lm2;
+        hence contradiction by A14,A16,A17,A25,A26,Lm3;
+      end;
+      end;
+      hence contradiction;
+      end;
+    now per cases by A18;
+  case p.b1 = 0.L;
+    hence p.b1*q.b2 = 0.L by BINOM:1;
+  end;
+  case q.b2 = 0.L;
+    hence p.b1*q.b2 = 0.L by BINOM:2;
+  end;
+  end;
+  hence s/.k = 0.L by A15;
+  end;
+consider b1,b2 being bag of n such that
+A27: (decomp b)/.i = <*b1, b2*> & s/.i = p.b1*q.b2
+   by A3,A11;
+A28: b1 = <*b11,b22*>.1 by A9,A27,FINSEQ_1:61
+     .= b11 by FINSEQ_1:61;
+  b2 = <*b11,b22*>.2 by A9,A27,FINSEQ_1:61
+  .= b22 by FINSEQ_1:61;
+then A29: (p*'q).b = p.b11 * q.b22 by A3,A11,A12,A27,A28,POLYNOM2:5;
+A30: b is Element of Bags n by POLYNOM1:def 14;
+  p.b11 * q.b22 <> 0.L by A1,A2,VECTSP_2:def 5;
+then b in Support(p*'q) by A29,A30,POLYNOM1:def 9;
+then p*'q <> 0_(n,L) by POLYNOM7:1;
+hence thesis by POLYNOM7:def 2;
 end;
+end;
+
 
 begin :: More on Polynomials and Monomials
 
@@ -156,13 +299,71 @@ func b *' p -> Series of n,L means
   for b' being bag of n st not(b divides b') holds it.b' = 0.L;
 end;
 
-definition
+registration
 let n be Ordinal,
     b be bag of n,
     L be non empty ZeroStr,
     p be finite-Support Series of n,L;
 cluster b *' p -> finite-Support;
+coherence
+ proof
+ A1: Support(b*'p) c=
+        {b + b' where b' is Element of Bags n : b' in Support p} by Lm10;
+ set f = {[b',b + b'] where b' is Element of Bags n : b' in Support p};
+ A2: now let u be set;
+    assume u in f;
+    then consider b' being Element of Bags n such that
+    A3: u = [b',b+b'] & b' in Support p;
+    thus ex y,z being set st u = [y,z] by A3;
+    end;
+   now let x,y1,y2 be set;
+    assume A4: [x,y1] in f & [x,y2] in f;
+    then consider b1 being Element of Bags n such that
+    A5: [x,y1] = [b1,b+b1] & b1 in Support p;
+    consider b2 being Element of Bags n such that
+    A6: [x,y2] = [b2,b+b2] & b2 in Support p by A4;
+      b1 = [x,y1]`1 by A5,MCART_1:def 1
+          .= x by MCART_1:def 1
+          .= [b2,b+b2]`1 by A6,MCART_1:def 1
+          .= b2 by MCART_1:def 1;
+    hence y1 = [x,y2]`2 by A5,A6,MCART_1:def 2
+           .= y2 by MCART_1:def 2;
+    end;
+ then reconsider f as Function by A2,FUNCT_1:def 1,RELAT_1:def 1;
+ A7: now let u be set;
+    assume u in dom f;
+    then consider v being set such that
+    A8: [u,v] in f by RELAT_1:def 4;
+    consider b' being Element of Bags n such that
+    A9: [u,v] = [b',b+b'] & b' in Support p by A8;
+      u = [b',b+b']`1 by A9,MCART_1:def 1
+     .= b' by MCART_1:def 1;
+    hence u in Support p by A9;
+    end;
+   now let u be set;
+   assume A10: u in Support p;
+   then reconsider u' = u as Element of Bags n;
+     [u',b+u'] in {[b',b + b'] where b' is Element of Bags n : b' in Support p}
+     by A10;
+   hence u in dom f by RELAT_1:def 4;
+   end;
+ then dom f = Support p by A7,TARSKI:2;
+ then dom f is finite by POLYNOM1:def 10;
+ then A11: rng f is finite by FINSET_1:26;
+   now let u be set;
+   assume u in Support(b*'p);
+   then u in {b + b' where b' is Element of Bags n : b' in Support p} by A1;
+   then consider b' being Element of Bags n such that
+   A12: u = b + b' & b' in Support p;
+     [b',u] in f by A12;
+   hence u in rng f by RELAT_1:def 5;
+   end;
+ then Support(b*'p) c= rng f by TARSKI:def 3;
+ then Support(b*'p) is finite by A11,FINSET_1:13;
+ hence thesis by POLYNOM1:def 10;
+ end;
 end;
+
 
 theorem :: POLYRED:13
   for n being Ordinal,
@@ -255,16 +456,66 @@ holds HT(p,T) in Support q implies HT(m*'p,T) in Support(m*'q);
 
 begin :: Orders on Polynomials
 
-definition
+registration
 let n be Ordinal,
     T be connected TermOrder of n;
 cluster RelStr(#Bags n, T#) -> connected;
+coherence
+ proof
+ set L = RelStr(# Bags n, T #);
+   now let x,y be Element of L;
+   A1: T is_connected_in field T by RELAT_2:def 14;
+   reconsider x' = x as bag of n by POLYNOM1:def 14;
+     x' <= x',T by TERMORD:6;
+   then [x',x'] in T by TERMORD:def 2;
+   then A2: x in field T by RELAT_1:30;
+   reconsider y' = y as bag of n by POLYNOM1:def 14;
+     y' <= y',T by TERMORD:6;
+   then [y',y'] in T by TERMORD:def 2;
+   then A3: y in field T by RELAT_1:30;
+     now per cases;
+   case x <> y;
+     then [x,y] in the InternalRel of L or [y,x] in the InternalRel of L
+          by A1,A2,A3,RELAT_2:def 6;
+     hence x <= y or y <= x by ORDERS_1:def 9;
+   end;
+   case x = y;
+     then x' <= y',T by TERMORD:6;
+     then [x',y'] in the InternalRel of L by TERMORD:def 2;
+     hence x <= y or y <= x by ORDERS_1:def 9;
+   end;
+   end;
+   hence x <= y or y <= x;
+   end;
+ hence thesis by WAYBEL_0:def 29;
+ end;
 end;
 
-definition
+
+registration
 let n be Nat,
     T be admissible TermOrder of n;
 cluster RelStr (#Bags n, T#) -> well_founded;
+coherence
+ proof
+ set R = RelStr(# Bags n, T #),
+     X = the carrier of R;
+   now let Y be set;
+   assume A1: Y c= X & Y <> {};
+     now let u be set;
+     assume u in Y;
+     then reconsider u' = u as bag of n by A1,POLYNOM1:def 14;
+       u' <= u',T by TERMORD:6;
+     then [u',u'] in T by TERMORD:def 2;
+     hence u in field T by RELAT_1:30;
+     end;
+   then Y c= field T by TARSKI:def 3;
+   hence ex a being set st a in Y & T-Seg a misses Y by A1,WELLORD1:def 2;
+   end;
+ then T is_well_founded_in the carrier of R
+   by WELLORD1:def 3;
+ hence thesis by WELLFND1:def 2;
+ end;
 end;
 
 definition :: according to p. 193
@@ -277,6 +528,7 @@ pred p <= q,T means
   [Support p, Support q] in FinOrd RelStr(# Bags n, T#);
 end;
 
+
 definition
 let n be Ordinal,
     T be connected TermOrder of n,
@@ -286,6 +538,7 @@ pred p < q,T means
 :: POLYRED:def 3
   p <= q,T & Support p <> Support q;
 end;
+
 
 definition
 let n being Ordinal,
@@ -297,6 +550,7 @@ func Support(p,T) ->
 :: POLYRED:def 4
   Support(p);
 end;
+
 
 theorem :: POLYRED:24
 ::: according to definition 5.15, p. 194
@@ -419,6 +673,7 @@ pred f reduces_to g,p,b,T means
   st s + HT(p,T) = b & g = f - (f.b/HC(p,T)) * (s *' p);
 end;
 
+
 definition
 ::: definition 5.18 (ii), p. 195
 let n be Ordinal,
@@ -431,6 +686,7 @@ pred f reduces_to g,p,T means
 :: POLYRED:def 6
   ex b being bag of n st f reduces_to g,p,b,T;
 end;
+
 
 definition
 ::: definition 5.18 (iii), p. 196
@@ -446,6 +702,7 @@ pred f reduces_to g,P,T means
   ex p being Polynomial of n,L st p in P & f reduces_to g,p,T;
 end;
 
+
 definition
 ::: definition 5.18 (iv), p. 196
 let n be Ordinal,
@@ -457,9 +714,18 @@ let n be Ordinal,
 pred f is_reducible_wrt p,T means
 :: POLYRED:def 8
   ex g being Polynomial of n,L st f reduces_to g,p,T;
-antonym f is_irreducible_wrt p,T;
-antonym f is_in_normalform_wrt p,T;
 end;
+notation
+::: definition 5.18 (iv), p. 196
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative well-unital distributive
+         Field-like (non trivial doubleLoopStr),
+    f,p be Polynomial of n,L;
+antonym f is_irreducible_wrt p,T for f is_reducible_wrt p,T ; antonym
+ f is_in_normalform_wrt p,T for f is_reducible_wrt p,T ; end;
+
 
 definition
 ::: definition 5.18 (v), p. 196
@@ -473,9 +739,19 @@ let n be Ordinal,
 pred f is_reducible_wrt P,T means
 :: POLYRED:def 9
     ex g being Polynomial of n,L st f reduces_to g,P,T;
-antonym f is_irreducible_wrt P,T;
-antonym f is_in_normalform_wrt P,T;
 end;
+notation
+::: definition 5.18 (v), p. 196
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative well-unital distributive
+         Field-like (non trivial doubleLoopStr),
+    f be Polynomial of n,L,
+    P be Subset of Polynom-Ring(n,L);
+antonym f is_irreducible_wrt P,T for f is_reducible_wrt P,T ; antonym
+ f is_in_normalform_wrt P,T for f is_reducible_wrt P,T ; end;
+
 
 definition
 ::: following definition 5.18, p. 196
@@ -490,6 +766,7 @@ pred f top_reduces_to g,p,T means
     f reduces_to g,p,HT(f,T),T;
 end;
 
+
 definition
 ::: following definition 5.18, p. 196
 let n be Ordinal,
@@ -502,6 +779,7 @@ pred f is_top_reducible_wrt p,T means
 :: POLYRED:def 11
     ex g being Polynomial of n,L st f top_reduces_to g,p,T;
 end;
+
 
 definition
 ::: following definition 5.18, p. 196
@@ -517,6 +795,7 @@ pred f is_top_reducible_wrt P,T means
     ex p being Polynomial of n,L
   st p in P & f is_top_reducible_wrt p,T;
 end;
+
 
 theorem :: POLYRED:36
 ::: lemma 5.20 (i), p. 197
@@ -632,7 +911,7 @@ theorem :: POLYRED:44
 holds PolyRedRel(P,T) reduces f,g implies
       g <= f,T & (g = 0_(n,L) or HT(g,T) <= HT(f,T),T);
 
-definition
+registration
 ::: theorem 5.21, p. 198
 let n be Nat,
     T be connected admissible TermOrder of n,
@@ -641,7 +920,124 @@ let n be Nat,
          Field-like non degenerated (non empty doubleLoopStr),
     P be Subset of Polynom-Ring(n,L);
 cluster PolyRedRel(P,T) -> strongly-normalizing;
+coherence
+ proof
+ set R = PolyRedRel(P,T);
+ A1: for R being
+    co-well_founded irreflexive Relation
+    holds R is strongly-normalizing;
+   now let x be set;
+   assume x in field R;
+   then A2: x in dom R \/ rng R by RELAT_1:def 6;
+   set A = (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)},
+       B = the carrier of Polynom-Ring(n,L);
+     now per cases by A2,XBOOLE_0:def 2;
+   case x in dom R;
+     then x in B by XBOOLE_0:def 4;
+     hence x is Polynomial of n,L by POLYNOM1:def 27;
+   end;
+   case x in rng R;
+     hence x is Polynomial of n,L by POLYNOM1:def 27;
+     end;
+     end;
+   then reconsider x' = x as Polynomial of n,L;
+     now assume A3: [x,x] in R;
+     then consider x1,y1 being set such that
+     A4: [x,x] = [x1,y1] & x1 in A & y1 in B by RELSET_1:6;
+       x = [x1,y1]`1 by A4,MCART_1:def 1 .= x1 by MCART_1:def 1;
+     then not(x' in {0_(n,L)}) by A4,XBOOLE_0:def 4;
+     then x' <> 0_(n,L) by TARSKI:def 1;
+     then reconsider x' as non-zero Polynomial of n,L by POLYNOM7:def 2;
+       x' reduces_to x',P,T by A3,Def13;
+     then ex p being Polynomial of n,L st
+      p in P & x' reduces_to x',p,T by Def7;
+     then x' < x',T by Th43;
+     then Support x' <> Support x' by Def3;
+     hence contradiction;
+     end;
+   hence not [x,x] in R;
+   end;
+ then R is_irreflexive_in field R by RELAT_2:def 2;
+ then A5: R is irreflexive by RELAT_2:def 10;
+ set BT = RelStr(#Bags n,T#),
+     X = the InternalRel of (FinPoset BT);
+   FinPoset BT is well_founded by BAGORDER:42;
+ then A6: the InternalRel of (FinPoset BT) is_well_founded_in
+         the carrier of (FinPoset BT) by WELLFND1:def 2;
+   now let Y be set;
+   assume A7: Y c= field (R~) & Y <> {};
+   set M = { Support y' where y' is Polynomial of n,L :
+                        ex y being set st y in Y & y' = y };
+   consider z being Element of Y;
+     z in Y by A7;
+   then z in field(R~) by A7;
+   then A8: z in dom(R~) \/ rng(R~) by RELAT_1:def 6;
+     now per cases by A8,XBOOLE_0:def 2;
+     case z in dom(R~);
+       hence z in the carrier of Polynom-Ring(n,L);
+     end;
+     case z in rng(R~);
+       hence z in the carrier of Polynom-Ring(n,L) by XBOOLE_0:def 4;
+     end;
+     end;
+   then reconsider z' = z as Polynomial of n,L by POLYNOM1:def 27;
+     Support z' in M by A7;
+   then reconsider M as non empty set;
+     now let u be set;
+     assume u in M;
+     then consider p being Polynomial of n,L such that
+     A9: Support p = u & ex y being set st y in Y & p = y;
+       FinPoset BT = RelStr(#Fin(the carrier of BT),FinOrd BT#)
+         by BAGORDER:def 18;
+     hence u in the carrier of (FinPoset BT) by A9,FINSUB_1:def 5;
+     end;
+   then M c= the carrier of (FinPoset BT) by TARSKI:def 3;
+   then consider a being set such that
+   A10: a in M & X-Seg a misses M by A6,WELLORD1:def 3;
+   consider p being Polynomial of n,L such that
+   A11: Support p = a & ex y being set st y in Y & p = y by A10;
+   consider z being set such that A12: z in Y & p = z by A11;
+     (R~)-Seg p /\ Y = {}
+     proof
+     assume A13: (R~)-Seg p /\ Y <> {};
+     consider b being Element of (R~)-Seg p /\ Y;
+     A14: b in (R~)-Seg p & b in Y by A13,XBOOLE_0:def 3;
+     then b <> p & [b,p] in R~ by WELLORD1:def 1;
+     then A15: [p,b] in R by RELAT_1:def 7;
+     then consider h',g' being set such that
+     A16: [p,b] = [h',g'] &
+         h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+         g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
+     A17: p = [h',g']`1 by A16,MCART_1:def 1 .= h' by MCART_1:def 1;
+       not(h' in {0_(n,L)}) by A16,XBOOLE_0:def 4;
+     then h' <> 0_(n,L) by TARSKI:def 1;
+     then reconsider p as non-zero Polynomial of n,L by A17,POLYNOM7:def 2;
+       b = [h',g']`2 by A16,MCART_1:def 2 .= g' by MCART_1:def 2;
+     then reconsider b' = b as Polynomial of n,L by A16,POLYNOM1:def 27;
+       p reduces_to b',P,T by A15,Def13;
+     then consider u being Polynomial of n,L such that
+     A18: u in P & p reduces_to b',u,T by Def7;
+     reconsider p as non-zero Polynomial of n,L;
+     A19: b' < p,T by A18,Th43;
+     then A20: Support b' <> Support p by Def3;
+     A21: b' <= p,T by A19,Def3;
+       FinPoset BT = RelStr (# Fin(the carrier of BT),FinOrd BT #)
+        by BAGORDER:def 18;
+     then [Support b',Support p] in X by A21,Def2;
+     then A22: (Support b') in X-Seg (Support p) by A20,WELLORD1:def 1;
+       (Support b') in M by A14;
+     then (Support b') in X-Seg a /\ M by A11,A22,XBOOLE_0:def 3;
+     hence contradiction by A10,XBOOLE_0:def 7;
+     end;
+   then (R~)-Seg p misses Y by XBOOLE_0:def 7;
+   hence ex p being set st p in Y & (R~)-Seg p misses Y by A12;
+   end;
+ then R~ is well_founded by WELLORD1:def 2;
+ then R is co-well_founded by REWRITE1:def 13;
+ hence thesis by A1,A5;
+ end;
 end;
+
 
 theorem :: POLYRED:45
 ::: lemma 5.24 (i), p. 200
@@ -737,6 +1133,7 @@ pred a,b are_congruent_mod I means
 :: POLYRED:def 14
   a - b in I;
 end;
+
 
 theorem :: POLYRED:52
   for R being add-associative left_zeroed right_zeroed

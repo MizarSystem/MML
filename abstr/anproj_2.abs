@@ -65,11 +65,13 @@ definition let V,u,v,w;
   u is_Prop_Vect & v is_Prop_Vect & w is_Prop_Vect;
 end;
 
+
 definition let V,u,v,w,u1,v1,w1;
  pred u,v,w,u1,v1,w1 lie_on_a_triangle means
 :: ANPROJ_2:def 2
   u,v,w1 are_LinDep & u,w,v1 are_LinDep & v,w,u1 are_LinDep;
 end;
+
 
 definition let V,o,u,v,w,u2,v2,w2;
  pred o,u,v,w,u2,v2,w2 are_perspective means
@@ -105,6 +107,7 @@ definition let V,o,u,v,w,u2,v2,w2;
   not o,u,u2 are_LinDep & o,u,v are_LinDep & o,u,w are_LinDep &
    o,u2,v2 are_LinDep & o,u2,w2 are_LinDep;
 end;
+
 
 definition let V,o,u,v,w,u2,v2,w2;
  pred o,u,v,w,u2,v2,w2 are_half_mutually_not_Prop means
@@ -283,11 +286,37 @@ definition let IT be RealLinearSpace;
    for a,b,c st a*u + b*v + c*w1 = 0.IT holds a = 0 & b = 0 & c = 0;
 end;
 
-definition cluster up-3-dimensional RealLinearSpace;
+
+registration cluster up-3-dimensional RealLinearSpace;
+  existence
+proof
+  consider V0 being non trivial RealLinearSpace such that
+  A1: ex u,v,w being Element of V0 st
+     (for a,b,c st a*u + b*v + c*w = 0.V0 holds a=0 & b=0 & c = 0) &
+     (for y being Element of V0 ex a,b,c st y = a*u + b*v + c*w) by Th16;
+  consider u0,v0,w0 being Element of V0 such that
+  A2: for a,b,c st a*u0 + b*v0 + c*w0 = 0.V0 holds a=0 & b=0 & c = 0 and
+     for y being Element of V0 ex a,b,c st y = a*u0 + b*v0 + c*w0 by A1;
+  take V0;
+  thus thesis by A2,Def6;
+ end;
 end;
 
-definition cluster up-3-dimensional -> non trivial RealLinearSpace;
+
+registration cluster up-3-dimensional -> non trivial RealLinearSpace;
+  coherence
+ proof let V be RealLinearSpace;
+ given u,v,w1 being Element of V such that
+  A1: for a,b,c st a*u + b*v + c*w1 = 0.V holds a = 0 & b = 0 & c = 0;
+    now assume w1 = 0.V; then A2: 0.V = 1*w1 by RLVECT_1:23;
+      0.V = 0*u & 0.V = 0*v by RLVECT_1:23;
+    then 0.V = 0*u + 0*v by RLVECT_1:10
+             .= 0*u + 0*v + 1*w1 by A2,RLVECT_1:10;
+    hence contradiction by A1; end;
+  hence thesis by ANPROJ_1:def 8;
+ end;
 end;
+
 
 definition let CS be non empty CollStr;
  redefine attr CS is reflexive means
@@ -302,6 +331,7 @@ definition let CS be non empty CollStr;
    st p<>q & p,q,r is_collinear & p,q,r1 is_collinear & p,q,r2 is_collinear
    holds r,r1,r2 is_collinear;
 end;
+
 
 definition let IT be non empty CollStr;
  attr IT is Vebleian means
@@ -318,6 +348,7 @@ definition let IT be non empty CollStr;
    Element of IT st p<>r & q<>r & p,q,r is_collinear;
 end;
 
+
 reserve V for non trivial RealLinearSpace;
 reserve u,v,w,y,u1,v1,w1,u2,w2 for Element of V;
 reserve p,p1,p2,p3,q,q1,q2,q3,r,r1,r2,r3 for
@@ -328,34 +359,48 @@ theorem :: ANPROJ_2:24
   p = Dir(u) & q = Dir(v) & r = Dir(w) & u is_Prop_Vect & v is_Prop_Vect &
   w is_Prop_Vect & u,v,w are_LinDep;
 
-definition let V;
+registration let V;
  cluster ProjectiveSpace V -> reflexive transitive;
+  coherence by Lm34,Lm35;
 end;
+
 
 theorem :: ANPROJ_2:25
  p,q,r is_collinear implies p,r,q is_collinear & q,p,r is_collinear &
    r,q,p is_collinear & r,p,q is_collinear & q,r,p is_collinear;
 
-definition let V;
+registration let V;
  cluster ProjectiveSpace(V) -> Vebleian;
+  coherence by Lm38;
 end;
 
-definition let V be up-3-dimensional RealLinearSpace;
+registration let V be up-3-dimensional RealLinearSpace;
   cluster ProjectiveSpace(V) -> proper;
+   coherence by Lm39;
 end;
+
 
 theorem :: ANPROJ_2:26
 (ex u,v st for a,b st a*u + b*v = 0.V holds a = 0 & b = 0 ) implies
     ProjectiveSpace(V) is at_least_3rank;
 
-definition let V be up-3-dimensional RealLinearSpace;
+registration let V be up-3-dimensional RealLinearSpace;
  cluster ProjectiveSpace(V) -> at_least_3rank;
+  coherence by Lm40;
 end;
 
-definition
+
+registration
  cluster transitive reflexive proper Vebleian at_least_3rank
                (non empty CollStr);
+  existence
+ proof
+  consider V0 being up-3-dimensional RealLinearSpace;
+  take ProjectiveSpace(V0);
+  thus thesis;
+ end;
 end;
+
 
 definition
  mode CollProjectiveSpace is
@@ -393,6 +438,7 @@ definition let IT be CollProjectiveSpace;
  p2,q3,r1 is_collinear & p3,q2,r1 is_collinear holds r1,r2,r3 is_collinear;
 end;
 
+
 definition let IT be CollProjectiveSpace;
  attr IT is 2-dimensional means
 :: ANPROJ_2:def 14
@@ -400,8 +446,10 @@ definition let IT be CollProjectiveSpace;
   for p,p1,q,q1 being Element of IT
   ex r being Element of IT st p,p1,r is_collinear &
   q,q1,r is_collinear;
- antonym IT is up-3-dimensional;
-end;
+ end;
+notation let IT be CollProjectiveSpace;
+ antonym IT is up-3-dimensional for IT is 2-dimensional ; end;
+
 
 definition let IT be CollProjectiveSpace;
  attr IT is at_most-3-dimensional means
@@ -410,6 +458,7 @@ definition let IT be CollProjectiveSpace;
   ex r,r1 being Element of IT st p,q,r is_collinear &
          p1,q1,r1 is_collinear & r2,r,r1 is_collinear;
 end;
+
 
 canceled;
 
@@ -420,9 +469,11 @@ theorem :: ANPROJ_2:28
 (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or p1,r1,q1 is_collinear
     or r2,r1,q1 is_collinear);
 
-definition let V be up-3-dimensional RealLinearSpace;
+registration let V be up-3-dimensional RealLinearSpace;
  cluster ProjectiveSpace V -> Fanoian Desarguesian Pappian;
+  coherence by Lm42,Lm43,Lm44;
 end;
+
 
 theorem :: ANPROJ_2:29
 (ex u,v,w st
@@ -486,16 +537,49 @@ theorem :: ANPROJ_2:36
    ex CS being CollProjectiveSpace st CS = ProjectiveSpace(V) &
        CS is up-3-dimensional at_most-3-dimensional;
 
-definition
+registration
  cluster strict Fanoian Desarguesian Pappian 2-dimensional CollProjectiveSpace;
+  existence
+proof
+  consider V being non trivial RealLinearSpace such that
+A1: (ex u,v,w being Element of V st
+     (for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0) &
+     (for y being Element of V ex a,b,c st y = a*u + b*v + c*w)) by Th16;
+    consider u,v,w being Element of V such that
+    A2: for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0 and
+       for y being Element of V ex a,b,c st y = a*u + b*v + c*w by A1;
+    reconsider V as up-3-dimensional RealLinearSpace by A2,Def6;
+    take CS = ProjectiveSpace(V);
+    thus CS is strict Fanoian Desarguesian Pappian;
+    consider CS1 being CollProjectiveSpace such that
+     A3: CS1 = ProjectiveSpace(V) and
+     A4: CS1 is 2-dimensional by A1,Th31;
+    thus thesis by A3,A4;
+ end;
 
  cluster strict Fanoian Desarguesian Pappian at_most-3-dimensional
          up-3-dimensional CollProjectiveSpace;
+  existence
+ proof
+  consider V being non trivial RealLinearSpace such that
+A5: (ex u,v,w,u1 being Element of V
+    st (for a,b,c,d st a*u + b*v + c*w + d*u1 = 0.V holds
+                      a = 0 & b = 0 & c = 0 & d = 0) &
+  (for y being Element of V ex a,b,c,d st y = a*u + b*v + c*w + d*u1)) by Th23;
+  reconsider V as up-3-dimensional RealLinearSpace by A5,Lm45;
+    take CS = ProjectiveSpace(V);
+    thus CS is strict Fanoian Desarguesian Pappian;
+     ex CS being CollProjectiveSpace st CS = ProjectiveSpace(V) &
+       CS is up-3-dimensional at_most-3-dimensional by A5,Th36;
+    hence thesis;
+ end;
 end;
+
 
 definition
  mode CollProjectivePlane is 2-dimensional CollProjectiveSpace;
 end;
+
 
 theorem :: ANPROJ_2:37
   for CS being non empty CollStr holds

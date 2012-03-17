@@ -18,11 +18,11 @@ begin
 
  reserve x,y for VECTOR of V;
 
-definition let AS be non empty AffinStruct;
+notation let AS be non empty AffinStruct;
            let a,b,c,d be Element of AS;
-  redefine pred a,b // c,d;
-  synonym a,b '//' c,d;
-end;
+  synonym a,b '//' c,d for a,b // c,d;
+  end;
+
 
 theorem :: DIRORT:1
 Gen x,y implies (for u,u1,v,v1,w,w1,w2 being
@@ -74,14 +74,35 @@ definition let IT be non empty AffinStruct;
   w<>u1 & u,v '//' w,u1 );
 end;
 
-definition
+
+registration
   cluster Oriented_Orthogonality_Space-like (non empty AffinStruct);
+  existence
+   proof
+     consider V,x,y such that A1:Gen x,y by ANALMETR:7;
+     take C = CESpace(V,x,y);
+     thus (for u,u1,v,v1,w,w1,w2 being Element of C holds
+  ((u,u '//' v,w) & (u,v '//' w,w) &
+  (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1) &
+  (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1) &
+  (u,v '//' u1,v1 implies v,u '//' v1,u1) &
+  (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w) &
+  (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u))) &
+  (for u,v,w being Element of C holds
+  ex u1 being Element of C st
+  w<>u1 & w,u1 '//' u,v ) &
+  (for u,v,w being Element of C holds
+  ex u1 being Element of C st
+  w<>u1 & u,v '//' w,u1 ) by A1,Th1;
+   end;
  end;
+
 
 definition
   mode Oriented_Orthogonality_Space is Oriented_Orthogonality_Space-like
    (non empty AffinStruct);
 end;
+
 
 canceled;
 
@@ -115,6 +136,7 @@ definition
 a,b '//' c,d or a,b '//' d,c;
 end;
 
+
 definition
   let AS be Oriented_Orthogonality_Space;
   let a,b,c,d be Element of AS;
@@ -124,6 +146,7 @@ definition
   st ( e<>f & e,f '//' a,b & e,f '//' c,d);
 end;
 
+
 definition let IT be Oriented_Orthogonality_Space;
   attr IT is bach_transitive means
 :: DIRORT:def 4
@@ -131,6 +154,7 @@ definition let IT be Oriented_Orthogonality_Space;
      ( (u,u1 '//' v,v1 & w,w1 '//' v,v1 & w,w1 '//' u2,v2 )
         implies (w=w1 or v=v1 or u,u1 '//' u2,v2) );
 end;
+
 
 definition let IT be Oriented_Orthogonality_Space;
   attr IT is right_transitive means
@@ -140,6 +164,7 @@ definition let IT be Oriented_Orthogonality_Space;
        implies (w=w1 or v=v1 or u,u1 '//' u2,v2) );
 end;
 
+
 definition let IT be Oriented_Orthogonality_Space;
   attr IT is left_transitive means
 :: DIRORT:def 6
@@ -148,6 +173,7 @@ definition let IT be Oriented_Orthogonality_Space;
   implies (u=u1 or v=v1 or u2,v2 '//' w,w1) );
 end;
 
+
 definition let IT be Oriented_Orthogonality_Space;
   attr IT is Euclidean_like means
 :: DIRORT:def 7
@@ -155,12 +181,14 @@ definition let IT be Oriented_Orthogonality_Space;
   (u,u1 '//' v,v1 implies v,v1 '//' u1,u );
 end;
 
+
 definition let IT be Oriented_Orthogonality_Space;
   attr IT is Minkowskian_like means
 :: DIRORT:def 8
   for u,u1,v,v1 being Element of IT
       holds (u,u1 '//' v,v1 implies v,v1 '//' u,u1 );
 end;
+
 
 theorem :: DIRORT:9
   u,u1 // w,w & w,w // u,u1;
@@ -187,18 +215,30 @@ theorem :: DIRORT:15
  Gen x,y & AS=CESpace(V,x,y) implies AS is
 Euclidean_like left_transitive right_transitive bach_transitive;
 
-definition
+registration
   cluster Euclidean_like left_transitive right_transitive bach_transitive
-          Oriented_Orthogonality_Space; end;
+          Oriented_Orthogonality_Space;
+existence
+proof consider V,x,y such that A1:Gen x,y by ANALMETR:7;
+reconsider AS=CESpace(V,x,y) as Oriented_Orthogonality_Space by A1,Th5;
+take AS; thus thesis by A1,Th15;
+end; end;
+
 
 theorem :: DIRORT:16
 Gen x,y & AS=CMSpace(V,x,y) implies AS is Minkowskian_like
 left_transitive right_transitive bach_transitive;
 
-definition
+registration
   cluster Minkowskian_like left_transitive right_transitive bach_transitive
           Oriented_Orthogonality_Space;
+existence
+proof consider V,x,y such that A1:Gen x,y by ANALMETR:7;
+reconsider AS=CMSpace(V,x,y) as Oriented_Orthogonality_Space by A1,Th4;
+take AS; thus thesis by A1,Th16;
 end;
+end;
+
 
 theorem :: DIRORT:17
 AS is left_transitive implies AS is right_transitive;

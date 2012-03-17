@@ -27,6 +27,7 @@ definition let L1,L2 be non empty 1-sorted, f be map of L1,L2;
      for x,y being Element of L1 st f.x = f.y holds x=y;
 end;
 
+
 theorem :: WAYBEL_1:1
   for L being non empty 1-sorted, f being map of L,L
     st for x being Element of L holds f.x = x
@@ -37,6 +38,7 @@ definition let L1,L2 be non empty RelStr, f be map of L1,L2;
 :: WAYBEL_1:def 2
  for x,y being Element of L1 st x <= y holds f.x <= f.y;
 end;
+
 
 theorem :: WAYBEL_1:2
    for L being antisymmetric transitive with_infima RelStr,
@@ -67,27 +69,41 @@ definition let L be non empty RelStr;
  (x "/\" z);
 end;
 
+
 theorem :: WAYBEL_1:6
    for L being LATTICE
     holds L is distributive iff
      for x,y,z being Element of L holds x "\/" (y "/\" z) = (x "\/" y) "/\" (x
 "\/" z);
 
-definition let X be set;
+registration let X be set;
  cluster BoolePoset X -> distributive;
+  coherence
+ proof
+   let x,y,z be Element of BoolePoset X;
+   thus x"/\"(y"\/"z) = x /\ (y"\/"z) by YELLOW_1:17
+                 .= x /\ (y \/ z) by YELLOW_1:17
+                 .= x/\y \/ x/\z by XBOOLE_1:23
+                 .= (x"/\"y)\/(x/\z) by YELLOW_1:17
+                 .= (x"/\"y)\/(x"/\"z) by YELLOW_1:17
+                 .= (x"/\"y)"\/"(x"/\"z) by YELLOW_1:17;
+ end;
 end;
+
 
 
 definition let S be non empty RelStr, X be set;
   pred ex_min_of X,S means
 :: WAYBEL_1:def 4
     ex_inf_of X,S & "/\"(X,S) in X;
-   synonym X has_the_min_in S;
-  pred ex_max_of X,S means
+   pred ex_max_of X,S means
 :: WAYBEL_1:def 5
   ex_sup_of X,S & "\/"(X,S) in X;
-   synonym X has_the_max_in S;
-end;
+   end;
+notation let S be non empty RelStr, X be set;
+  synonym X has_the_min_in S for ex_min_of X,S ; synonym X has_the_max_in S for
+ ex_max_of X,S ; end;
+
 
 definition
  let S be non empty RelStr, s be Element of S, X be set;
@@ -99,9 +115,26 @@ definition
   ex_sup_of X,S & s = "\/"(X,S) & "\/"(X,S)in X;
 end;
 
-definition let L be RelStr;
+
+registration let L be RelStr;
  cluster id L -> isomorphic;
+  coherence
+ proof
+  per cases;
+  suppose
+A1:  L is non empty;
+A2:  id L = id the carrier of L by GRCAT_1:def 11;
+then A3:  id L is one-to-one;
+A4:  id L is monotone by A1,YELLOW_2:13;
+A6: id L = (id L)" by A2,FUNCT_1:67;
+   thus thesis by A1,A3,A4,A6,WAYBEL_0:def 38;
+  end;
+  suppose L is empty;
+   hence thesis by WAYBEL_0:def 38;
+ end;
+ end;
 end;
+
 
 definition let L1,L2 be RelStr;
  pred L1,L2 are_isomorphic means
@@ -109,6 +142,7 @@ definition let L1,L2 be RelStr;
   ex f being map of L1,L2 st f is isomorphic;
  reflexivity;
 end;
+
 
 theorem :: WAYBEL_1:7
      for L1,L2 be non empty RelStr st L1,L2 are_isomorphic
@@ -126,9 +160,11 @@ definition let S,T be RelStr;
   ex g being map of S,T, d being map of T,S st it = [g,d];
 end;
 
+
 definition let S,T be RelStr, g be map of S,T, d be map of T,S;
  redefine func [g,d] -> Connection of S,T;
 end;
+
 
 :: Definition 3.1
 definition let S,T be non empty RelStr, gc be Connection of S,T;
@@ -139,6 +175,7 @@ definition let S,T be non empty RelStr, gc be Connection of S,T;
      for t being Element of T, s being Element of S
       holds t <= g.s iff d.t <= s;
 end;
+
 
 theorem :: WAYBEL_1:9
   for S,T being non empty Poset,g being map of S,T, d being map of T,S
@@ -152,16 +189,20 @@ definition let S,T be non empty RelStr, g be map of S,T;
  attr g is upper_adjoint means
 :: WAYBEL_1:def 11
   ex d being map of T,S st [g,d] is Galois;
- synonym g has_a_lower_adjoint;
-end;
+ end;
+notation let S,T be non empty RelStr, g be map of S,T;
+ synonym g has_a_lower_adjoint for g is upper_adjoint ; end;
+
 
 :: Definition 3.1
 definition let S,T be non empty RelStr, d be map of T,S;
  attr d is lower_adjoint means
 :: WAYBEL_1:def 12
   ex g being map of S,T st [g,d] is Galois;
- synonym d has_an_upper_adjoint;
-end;
+ end;
+notation let S,T be non empty RelStr, d be map of T,S;
+ synonym d has_an_upper_adjoint for d is lower_adjoint ; end;
+
 
 theorem :: WAYBEL_1:10
   for S,T being non empty Poset,g being map of S,T, d being map of T,S
@@ -186,18 +227,22 @@ theorem :: WAYBEL_1:13
   for S,T being non empty Poset,g being map of S,T st g is upper_adjoint
    holds g is infs-preserving;
 
-definition let S,T be non empty Poset;
+registration let S,T be non empty Poset;
  cluster upper_adjoint -> infs-preserving map of S,T;
+  coherence by Th13;
 end;
+
 
 :: Theorem 3.3 (second part)
 theorem :: WAYBEL_1:14
   for S,T being non empty Poset, d being map of T,S st d is lower_adjoint
    holds d is sups-preserving;
 
-definition let S,T be non empty Poset;
+registration let S,T be non empty Poset;
  cluster lower_adjoint -> sups-preserving map of S,T;
+  coherence by Th14;
 end;
+
 
 :: Theorem 3.4
 theorem :: WAYBEL_1:15
@@ -295,55 +340,98 @@ definition let L be non empty RelStr, p be map of L,L;
   attr p is projection means
 :: WAYBEL_1:def 13
  p is idempotent monotone;
-  synonym p is_a_projection_operator;
-end;
+  end;
+notation let L be non empty RelStr, p be map of L,L;
+  synonym p is_a_projection_operator for p is projection ; end;
 
-definition let L be non empty RelStr;
+
+registration let L be non empty RelStr;
   cluster id L -> projection;
+   coherence
+ proof
+  thus id L is idempotent by YELLOW_2:23;
+  thus id L is monotone;
+ end;
 end;
 
-definition let L be non empty RelStr;
+
+registration let L be non empty RelStr;
  cluster projection map of L,L;
+  existence
+ proof take id L;
+  thus thesis;
+ end;
 end;
+
 
 :: Definition 3.8 (ii)
 definition let L be non empty RelStr, c be map of L,L;
   attr c is closure means
 :: WAYBEL_1:def 14
  c is projection & id(L) <= c;
- synonym c is_a_closure_operator;
-end;
+ end;
+notation let L be non empty RelStr, c be map of L,L;
+  synonym c is_a_closure_operator for c is closure ; end;
 
-definition let L be non empty RelStr;
+
+registration let L be non empty RelStr;
  cluster closure -> projection map of L,L;
+  coherence by Def14;
 end;
 
-definition let L be non empty reflexive RelStr;
+registration let L be non empty reflexive RelStr;
  cluster closure map of L,L;
+  existence
+ proof take id L;
+  thus id L is projection;
+  thus thesis by Lm1;
+ end;
 end;
 
-definition let L be non empty reflexive RelStr;
+
+registration let L be non empty reflexive RelStr;
  cluster id L -> closure;
+  coherence
+ proof
+  thus id L is projection;
+  thus thesis by Lm1;
+ end;
 end;
+
 
 :: Definition 3.8 (iii)
 definition let L be non empty RelStr, k be map of L,L;
   attr k is kernel means
 :: WAYBEL_1:def 15
  k is projection & k <= id(L);
- synonym k is_a_kernel_operator;
-end;
+ end;
+notation let L be non empty RelStr, k be map of L,L;
+  synonym k is_a_kernel_operator for k is kernel ; end;
 
-definition let L be non empty RelStr;
+
+registration let L be non empty RelStr;
  cluster kernel -> projection map of L,L;
+  coherence by Def15;
 end;
 
-definition let L be non empty reflexive RelStr;
+
+registration let L be non empty reflexive RelStr;
  cluster kernel map of L,L;
+  existence
+ proof take id L;
+  thus id L is projection;
+  thus thesis by Lm1;
+ end;
 end;
 
-definition let L be non empty reflexive RelStr;
+
+registration let L be non empty reflexive RelStr;
  cluster id L -> kernel;
+  coherence
+ proof
+  thus id L is projection;
+  thus thesis by Lm1;
+ end;
 end;
 
 theorem :: WAYBEL_1:30
@@ -362,12 +450,15 @@ definition let L1, L2 be non empty RelStr, g be map of L1,L2;
   (the carrier of Image g)|g;
 end;
 
+
 theorem :: WAYBEL_1:32
   for L1, L2 being non empty RelStr,g being map of L1,L2 holds corestr g = g;
 
-definition let L1, L2 be non empty RelStr, g be map of L1,L2;
+registration let L1, L2 be non empty RelStr, g be map of L1,L2;
  cluster corestr g -> onto;
+  coherence by Lm3;
 end;
+
 
 theorem :: WAYBEL_1:33
   for L1, L2 being non empty RelStr, g being map of L1,L2 st g is monotone
@@ -379,14 +470,17 @@ definition let L1, L2 be non empty RelStr, g be map of L1,L2;
   id Image g;
 end;
 
+
 theorem :: WAYBEL_1:34
   for L1, L2 being non empty RelStr, g being map of L1,L2,
       s being Element of Image g
    holds (inclusion g).s = s;
 
-definition let L1, L2 be non empty RelStr, g be map of L1,L2;
+registration let L1, L2 be non empty RelStr, g be map of L1,L2;
  cluster inclusion g -> one-to-one monotone;
+  coherence by Lm4,Lm5;
 end;
+
 
 theorem :: WAYBEL_1:35
   for L being non empty RelStr, f being map of L,L
@@ -589,6 +683,7 @@ definition let S be non empty RelStr; let x be Element of S;
  for s being Element of S holds it.s = x"/\"s;
 end;
 
+
 theorem :: WAYBEL_1:62
   for S being non empty RelStr, x,t being Element of S
    holds {s where s is Element of S: x"/\"s <= t} = (x "/\")"(downarrow t);
@@ -597,9 +692,11 @@ theorem :: WAYBEL_1:63
   for S being Semilattice, x be Element of S
    holds x "/\" is monotone;
 
-definition let S be Semilattice, x be Element of S;
+registration let S be Semilattice, x be Element of S;
  cluster x "/\" -> monotone;
+  coherence by Th63;
 end;
+
 
 theorem :: WAYBEL_1:64
    for S being non empty RelStr, x being Element of S, X being Subset of S
@@ -640,13 +737,17 @@ definition let H be non empty RelStr;
 :: WAYBEL_1:def 19
  H is LATTICE & for x being Element of H holds x "/\"
 has_an_upper_adjoint;
- synonym H is_a_Heyting_algebra;
-end;
+ end;
+notation let H be non empty RelStr;
+ synonym H is_a_Heyting_algebra for H is Heyting ; end;
 
-definition
+
+registration
  cluster Heyting -> with_infima with_suprema
                      reflexive transitive antisymmetric (non empty RelStr);
+ coherence by Def19;
 end;
+
 
 definition let H be non empty RelStr, a be Element of H;
  assume
@@ -656,19 +757,23 @@ definition let H be non empty RelStr, a be Element of H;
  [it,a "/\"] is Galois;
 end;
 
+
 theorem :: WAYBEL_1:69
    for H being non empty RelStr st H is_a_Heyting_algebra
     holds H is distributive;
 
-definition
+registration
  cluster Heyting -> distributive (non empty RelStr);
+  coherence by Th69;
 end;
+
 
 definition let H be non empty RelStr, a,y be Element of H;
  func a => y -> Element of H equals
 :: WAYBEL_1:def 21
   (a=>).y;
 end;
+
 
 theorem :: WAYBEL_1:70
    for H being non empty RelStr st H is_a_Heyting_algebra
@@ -678,9 +783,11 @@ theorem :: WAYBEL_1:71
    for H being non empty RelStr st H is_a_Heyting_algebra
     holds H is upper-bounded;
 
-definition
+registration
  cluster Heyting -> upper-bounded (non empty RelStr);
+  coherence by Th71;
 end;
+
 
 theorem :: WAYBEL_1:72
    for H being non empty RelStr st H is_a_Heyting_algebra
@@ -728,6 +835,7 @@ definition let H be non empty RelStr, a be Element of H;
   a => Bottom H;
 end;
 
+
 theorem :: WAYBEL_1:82
      for H being non empty RelStr st H is_a_Heyting_algebra & H is
 lower-bounded
@@ -767,6 +875,7 @@ definition let L be non empty RelStr, x,y be Element of L;
  x "\/" y = Top L & x "/\" y = Bottom L;
 end;
 
+
 definition let L be non empty RelStr;
  attr L is complemented means
 :: WAYBEL_1:def 24
@@ -774,8 +883,29 @@ definition let L be non empty RelStr;
   for x being Element of L ex y being Element of L st y is_a_complement_of x;
 end;
 
-definition let X be set;
+
+registration let X be set;
  cluster BoolePoset X -> complemented;
+  coherence
+ proof
+  let x be Element of BoolePoset X;
+A1: the carrier of BoolePoset X
+     = the carrier of LattPOSet BooleLatt X by YELLOW_1:def 2
+    .= the carrier of RelStr (#the carrier of BooleLatt X,
+                              LattRel BooleLatt X#) by LATTICE3:def 2
+    .= bool X by LATTICE3:def 1;
+    X\x c= X by XBOOLE_1:109;
+  then reconsider y = X\x as Element of BoolePoset X by A1;
+  take y;
+  thus x "\/" y = x \/ y by YELLOW_1:17
+             .= X \/ x by XBOOLE_1:39
+             .= X by A1,XBOOLE_1:12
+             .= Top (BoolePoset X) by YELLOW_1:19;
+A2:x misses y by XBOOLE_1:79;
+  thus x "/\" y = x /\ y by YELLOW_1:17
+             .= {} by A2,XBOOLE_0:def 7
+             .= Bottom (BoolePoset X) by YELLOW_1:18;
+ end;
 end;
 
 :: Exercise 3.19
@@ -797,29 +927,53 @@ definition let B be non empty RelStr;
  attr B is Boolean means
 :: WAYBEL_1:def 25
  B is LATTICE & B is bounded distributive complemented;
-  synonym B is_a_Boolean_algebra;
-  synonym B is_a_Boolean_lattice;
-end;
+  end;
+notation let B be non empty RelStr;
+ synonym B is_a_Boolean_algebra for B is Boolean ; synonym
+ B is_a_Boolean_lattice for B is Boolean ; end;
 
-definition
+
+registration
  cluster Boolean -> reflexive transitive antisymmetric with_infima with_suprema
     bounded distributive complemented (non empty RelStr);
+  coherence by Def25;
 end;
 
-definition
+
+registration
  cluster reflexive transitive antisymmetric with_infima with_suprema
     bounded distributive complemented -> Boolean (non empty RelStr);
+  coherence by Def25;
 end;
 
-definition
+
+registration
  cluster Boolean -> Heyting (non empty RelStr);
+  coherence
+ proof let B be non empty RelStr;
+  assume B is LATTICE & B is bounded distributive complemented;
+  hence thesis by Th90;
+ end;
 end;
 
-definition
+
+registration
  cluster strict Boolean non empty LATTICE;
+  existence
+ proof consider X being set;
+  take BoolePoset X;
+  thus thesis;
+ end;
 end;
 
-definition
+
+registration
  cluster strict Heyting non empty LATTICE;
+  existence
+ proof consider L being strict Boolean non empty LATTICE;
+  take L;
+  thus thesis;
+ end;
 end;
+
 

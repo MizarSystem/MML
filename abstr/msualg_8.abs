@@ -41,19 +41,67 @@ begin
        p be FinSequence holds
     1 <= n & n < len p iff n in dom p & n+1 in dom p;
 
-  scheme NonUniqSeqEx{A()->Nat,P[set,set]}:
+  scheme :: MSUALG_8:sch 1
+ NonUniqSeqEx{A()->Nat,P[set,set]}:
     ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
    provided
-     for k st k in Seg A() ex x st P[k,x];
+     for k st k in Seg A() ex x st P[k,x]
+proof
+    defpred Z[set,set] means P[$1,$2];
+    A2: for x st x in Seg A() ex y st Z[x,y] by A1;
+    consider f being Function such that A3: dom f = Seg A() &
+     (for x st x in Seg A() holds Z[x,f.x]) from ZFREFLE1:sch 1(A2);
+    reconsider p = f as FinSequence by A3,FINSEQ_1:def 2;
+    take p;
+    thus thesis by A3;
+   end;
 
   theorem :: MSUALG_8:2
    for a,b be Element of EqRelLatt Y
    for A,B be Equivalence_Relation of Y st a = A & b = B holds
     a [= b iff A c= B;
 
-  definition let Y;
+  registration let Y;
    cluster EqRelLatt Y -> bounded;
+   coherence
+   proof
+      ex c being Element of EqRelLatt Y st
+     for a being Element of EqRelLatt Y holds
+      c"/\"a = c & a"/\"c = c
+    proof
+     set c' = id Y;
+     reconsider c = c' as Element of EqRelLatt Y by MSUALG_7:1;
+     take c;
+     let a be Element of EqRelLatt Y;
+     reconsider a' = a as Equivalence_Relation of Y by MSUALG_7:1;
+     thus c"/\"a = (the L_meet of EqRelLatt Y).(c,a) by LATTICES:def 2
+       .= c' /\ a' by MSUALG_5:def 2
+       .= c by EQREL_1:17;
+     hence a"/\"c = c;
+    end;
+    then A1: EqRelLatt Y is lower-bounded by LATTICES:def 13;
+      ex c being Element of EqRelLatt Y st
+     for a being Element of EqRelLatt Y holds
+      c"\/"a = c & a"\/"c = c
+    proof
+     set c' = nabla Y;
+     reconsider c = c' as Element of EqRelLatt Y
+                                                               by MSUALG_7:1;
+     take c;
+     let a be Element of EqRelLatt Y;
+     reconsider a' = a as Equivalence_Relation of Y by MSUALG_7:1;
+     thus c"\/"a = (the L_join of EqRelLatt Y).(c,a) by LATTICES:def 1
+       .= c' "\/" a' by MSUALG_5:def 2
+       .= EqCl (c' \/ a') by MSUALG_5:2
+       .= EqCl c' by MSUALG_5:4
+       .= c by MSUALG_5:3;
+     hence thesis;
+    end;
+    then EqRelLatt Y is upper-bounded by LATTICES:def 14;
+    hence EqRelLatt Y is bounded by A1,LATTICES:def 15;
+   end;
   end;
+
 
   theorem :: MSUALG_8:3
      Bottom EqRelLatt Y = id Y;
@@ -64,10 +112,12 @@ begin
   theorem :: MSUALG_8:5
    EqRelLatt Y is complete;
 
-  definition
+  registration
    let Y;
    cluster EqRelLatt Y -> complete;
+   coherence by Th5;
   end;
+
 
   theorem :: MSUALG_8:6
    for Y be set
@@ -118,6 +168,7 @@ begin
      : x is MSCongruence of A & E [= x},EqRelLatt the Sorts of A);
   end;
 
+
   definition
    let S,A;
    let X be Subset of EqRelLatt the Sorts of A;
@@ -126,6 +177,7 @@ begin
      "/\" ({x where x is Element of EqRelLatt the Sorts of A
      : x is MSCongruence of A & X is_less_than x},EqRelLatt the Sorts of A);
   end;
+
 
   theorem :: MSUALG_8:12
      for C be Element of EqRelLatt the Sorts of A st
@@ -155,16 +207,23 @@ begin
     ex E be Equivalence_Relation of M st E.i = e &
      for j be Element of I st j <> i holds E.j = nabla (M.j);
 
-  definition
+  notation
    let I be non empty set;
    let M be ManySortedSet of I;
    let i be Element of I;
    let X be Subset of EqRelLatt M;
-   redefine func pi(X,i) -> Subset of EqRelLatt M.i means
+   synonym EqRelSet (X,i) for pi(X,i) ;
+  end;
+definition
+   let I be non empty set;
+   let M be ManySortedSet of I;
+   let i be Element of I;
+   let X be Subset of EqRelLatt M;
+   redefine func EqRelSet (X,i) -> Subset of EqRelLatt M.i means
 :: MSUALG_8:def 3
     x in it iff ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X;
-   synonym EqRelSet (X,i);
-  end;
+   end;
+
 
   theorem :: MSUALG_8:17
    for i be Element of S
@@ -184,8 +243,10 @@ begin
   theorem :: MSUALG_8:20
    CongrLatt A is \/-inheriting;
 
-  definition
+  registration
    let S,A;
    cluster CongrLatt A -> /\-inheriting \/-inheriting;
+   coherence by Th19,Th20;
   end;
+
 

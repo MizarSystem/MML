@@ -28,17 +28,20 @@ definition let A,B; let F be BinOp of Funcs(A,B);
  redefine func F.(f,g) -> Element of Funcs(A,B);
 end;
 
+
 definition let A,B,C,D be non empty set;
  let F be Function of [:C,D:],Funcs(A,B);
            let cd be Element of [:C,D:];
  redefine func F.cd -> Element of Funcs(A,B);
 end;
 
+
 definition let A,B be non empty set; let f be Function of A,B;
  func @f -> Element of Funcs(A,B) equals
 :: FUNCSDOM:def 1
   f;
 end;
+
 
 reserve f,g,h for Element of Funcs(A,REAL);
 
@@ -47,10 +50,12 @@ definition let X,Z be non empty set;
  redefine func F.:(f,g) -> Element of Funcs(Z,X);
 end;
 
+
 definition let X,Z be non empty set;
  let F be (BinOp of X),a be Element of X,f be Function of Z,X;
  redefine func F[;](a,f) -> Element of Funcs(Z,X);
 end;
+
 
 definition let A; func RealFuncAdd(A) -> BinOp of Funcs(A,REAL)
  means
@@ -59,12 +64,14 @@ for f,g being Element of Funcs(A,REAL) holds
  it.(f,g) = addreal.:(f,g);
 end;
 
+
 definition let A; func RealFuncMult(A) -> BinOp of Funcs(A,REAL)
  means
 :: FUNCSDOM:def 3
 for f,g being Element of Funcs(A,REAL) holds
  it.(f,g) = multreal.:(f,g);
 end;
+
 
 definition let A;
  func RealFuncExtMult(A) ->
@@ -76,11 +83,13 @@ for a being Real,
                                             (it.[a,f]).x = a*(f.x);
 end;
 
+
 definition let A;
   func RealFuncZero(A) -> Element of Funcs(A,REAL) equals
 :: FUNCSDOM:def 5
    A --> 0;
 end;
+
 
 definition let A;
   func RealFuncUnit(A) -> Element of Funcs(A,REAL) equals
@@ -245,10 +254,18 @@ definition
                     (RealFuncUnit(A)),(RealFuncZero(A))#);
 end;
 
-definition
+
+registration
  let A;
  cluster RRing A -> non empty;
+ coherence
+  proof
+      RRing A = doubleLoopStr(#Funcs(A,REAL),RealFuncAdd(A),RealFuncMult(A),
+                    (RealFuncUnit(A)),(RealFuncZero(A))#) by Def12;
+   hence the carrier of RRing A is non empty;
+  end;
 end;
+
 
 canceled 4;
 
@@ -266,17 +283,38 @@ theorem :: FUNCSDOM:42
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x;
 
-definition
+registration
  cluster strict Abelian add-associative right_zeroed right_complementable
    associative commutative right_unital right-distributive
    (non empty doubleLoopStr);
+  existence
+    proof consider A;
+       for x,y,z being Element of RRing(A) holds
+         x+y = y+x &
+         (x+y)+z = x+(y+z) &
+         x+(0.RRing(A)) = x &
+         (ex t being Element of RRing(A) st
+           x+t=(0.RRing(A))) &
+         x*y = y*x &
+         (x*y)*z = x*(y*z) &
+         x*(1_ RRing(A)) = x &
+         x*(y+z) = x*y + x*z by Th42;
+      then RRing(A) is
+         Abelian add-associative right_zeroed right_complementable
+           associative commutative right_unital right-distributive
+        by RLVECT_1:def 5,def 6,def 7,def 8,VECTSP_1:def 11,def 13,def 16,def
+17;
+     hence thesis;
+    end;
 end;
+
 
 definition
   mode Ring is Abelian add-associative right_zeroed right_complementable
     associative left_unital right_unital
     distributive (non empty doubleLoopStr);
 end;
+
 
 theorem :: FUNCSDOM:43
 RRing(A) is commutative Ring;
@@ -288,9 +326,18 @@ definition
                  unity,Zero -> Element of the carrier #);
 end;
 
-definition
+
+registration
  cluster non empty AlgebraStr;
+ existence
+  proof
+    consider X being non empty set, m,a being BinOp of X,
+             M being Function of [:REAL,X:],X, u,Z being Element of X;
+   take AlgebraStr(#X,m,a,M,u,Z#);
+   thus the carrier of AlgebraStr(#X,m,a,M,u,Z#) is non empty;
+  end;
 end;
+
 
 definition let A;
  canceled 6;
@@ -301,9 +348,17 @@ definition let A;
             RealFuncExtMult(A),(RealFuncUnit(A)),(RealFuncZero(A))#);
 end;
 
-definition let A;
+
+registration let A;
  cluster RAlgebra(A) -> non empty;
+ coherence
+  proof
+      RAlgebra A = AlgebraStr(#Funcs(A,REAL),RealFuncMult(A),RealFuncAdd(A),
+            RealFuncExtMult(A),(RealFuncUnit(A)),(RealFuncZero(A))#) by Def19;
+   hence the carrier of RAlgebra A is non empty;
+  end;
 end;
+
 
 canceled 5;
 
@@ -337,15 +392,41 @@ theorem :: FUNCSDOM:49
          (a*b)*x = a*(b*x);
 end;
 
-definition
+
+registration
  cluster strict Abelian add-associative right_zeroed right_complementable
     commutative associative Algebra-like (non empty AlgebraStr);
+  existence
+   proof consider A;
+       for x,y,z being Element of RAlgebra(A)
+     for a,b holds
+         x+y = y+x &
+         (x+y)+z = x+(y+z) &
+         x+(0.RAlgebra(A)) = x &
+         (ex t being Element of RAlgebra(A) st
+          x+t=(0.RAlgebra(A))) &
+         x*y = y*x &
+         (x*y)*z = x*(y*z) &
+         x*(1_ RAlgebra(A)) = x &
+         x*(y+z) = x*y + x*z &
+         a*(x*y) = (a*x)*y &
+         a*(x+y) = a*x + a*y &
+         (a+b)*x = a*x + b*x &
+         (a*b)*x = a*(b*x) by Th49;
+     then RAlgebra(A) is Abelian add-associative right_zeroed
+right_complementable
+        Algebra-like commutative associative
+      by Def20,RLVECT_1:def 5,def 6,def 7,def 8,VECTSP_1:def 16,def 17;
+    hence thesis;
+   end;
 end;
+
 
 definition
   mode Algebra is Abelian add-associative right_zeroed right_complementable
     commutative associative Algebra-like (non empty AlgebraStr);
 end;
+
 
 theorem :: FUNCSDOM:50
     RAlgebra(A) is Algebra;

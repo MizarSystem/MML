@@ -32,6 +32,7 @@ definition
  redefine func p/.i -> Element of D;
 end;
 
+
   reserve k,t,i,j,m,n for Nat;
   reserve x,y,y1,y2 for set;
   reserve D for non empty set;
@@ -46,6 +47,7 @@ canceled;
     let k; let M be Matrix of D;
     redefine func Del(M,k) -> Matrix of D;
   end;
+
 
   theorem :: MATRLIN:3
     for M be FinSequence st len M = n+1 holds
@@ -70,6 +72,7 @@ canceled;
     redefine func <*P*> -> Matrix of 1,len P,D;
   end;
 
+
   begin :: MORE ON FINITE SEQUENCE
 
   theorem :: MATRLIN:7
@@ -87,9 +90,20 @@ canceled;
        for x st x in dom IT holds IT.x is FinSequence;
   end;
 
-  definition
+
+  registration
     cluster FinSequence-yielding Function;
+    existence
+    proof
+      consider f being FinSequence,I be set;
+      A1: dom (I --> f) = I by FUNCOP_1:19;
+      take F = I --> f;
+      let x;
+      assume x in dom F;
+      hence thesis by A1,FUNCOP_1:13;
+    end;
   end;
+
 
   definition
     let F,G be FinSequence-yielding Function;
@@ -100,6 +114,7 @@ canceled;
      for f,g being FinSequence st f = F.i & g = G.i
        holds it.i = f^g;
   end;
+
 
   begin :: CIAGI I MACIERZE DOTYCZACE PRZESTRZENI LINIOWYCH
 
@@ -137,10 +152,23 @@ canceled;
       ex A being finite Subset of V st A is Basis of V;
   end;
 
-  definition
+
+  registration
     let K be Field;
     cluster strict finite-dimensional VectSp of K;
+    existence
+    proof
+      consider V being VectSp of K;
+      take (0).V;
+      thus (0).V is strict;
+      take A = {}(the carrier of (0).V);
+      A1: A is linearly-independent by VECTSP_7:4;
+        Lin(A) = (0).(0).V by VECTSP_7:14;
+      then Lin(A) = the VectSpStr of (0).V by VECTSP_4:47;
+      hence thesis by A1,VECTSP_7:def 3;
+    end;
   end;
+
 
   definition
     let K be Field;
@@ -149,6 +177,7 @@ canceled;
 :: MATRLIN:def 4
       it is one-to-one & rng it is Basis of V;
   end;
+
 
   reserve s,p for FinSequence;
   reserve V1,V2,V3 for finite-dimensional VectSp of K;
@@ -173,6 +202,7 @@ canceled;
       for v be Element of V1 holds it.v = f1.v + f2.v;
   end;
 
+
   definition
     let K; let V1,V2; let f;
     let a be Element of K;
@@ -180,6 +210,7 @@ canceled;
 :: MATRLIN:def 6
       for v be Element of V1 holds it.v = a * (f.v);
   end;
+
 
   theorem :: MATRLIN:13
     for a being Element of V1
@@ -210,6 +241,7 @@ canceled;
         (the lmult of V1).:(p1,p2);
   end;
 
+
   theorem :: MATRLIN:16
      dom p1 = dom p2 implies dom lmlt(p1,p2) = dom p1;
 
@@ -219,6 +251,7 @@ canceled;
 :: MATRLIN:def 8
       len it = len M & for k st k in dom it holds it/.k = Sum (M/.k);
   end;
+
 
   theorem :: MATRLIN:17
     for M be Matrix of the carrier of V1 st len M = 0 holds Sum Sum M = 0.V1;
@@ -263,10 +296,20 @@ canceled;
      for b1 being OrdBasis of V1 st len b1 > 0 holds
       f1*b1 = f2*b1 implies f1 = f2;
 
-  definition
+  registration
     let D be non empty set;
     cluster -> FinSequence-yielding Matrix of D;
+    coherence
+    proof
+     let M be Matrix of D;
+     let x;
+     assume A1: x in dom M;
+     then reconsider i = x as Nat by FINSEQ_3:25;
+       M.i = Line(M,i) by A1,MATRIX_2:18;
+     hence M.x is FinSequence;
+    end;
   end;
+
 
   definition
     let D be non empty set;
@@ -274,12 +317,14 @@ canceled;
     redefine func F^^G -> Matrix of D;
   end;
 
+
   definition
     let D be non empty set; let n,m,k;
     let M1 be Matrix of n,k,D,
         M2 be Matrix of m,k,D;
     redefine func M1^M2 -> Matrix of n+m,k,D;
   end;
+
 
   theorem :: MATRLIN:27
       for M1 be Matrix of n,k,D,
@@ -321,6 +366,7 @@ canceled;
         P1,P2 be FinSequence of D;
    redefine func F.:(P1,P2) -> FinSequence of D;
   end;
+
 
   theorem :: MATRLIN:34
     for P1,P2 be FinSequence of the carrier of V1 st len P1 = len P2 holds

@@ -76,7 +76,7 @@ begin  :: Preliminaries
         .= Sum Rev (p^<*x*>) by FINSEQ_5:66;
     end;
     thus for p be FinSequence of the carrier of V holds P[p]
-     from IndSeqD(A1,A2);
+     from FINSEQ_2:sch 2(A1,A2);
    end;
 
   theorem Th3:
@@ -95,7 +95,7 @@ begin  :: Preliminaries
         .= Sum (<*x*>^Rev p) by A3,RVSUM_1:105
         .= Sum Rev (p^<*x*>) by FINSEQ_5:66;
     end;
-    thus for p be FinSequence of REAL holds P[p] from IndSeqD(A1,A2);
+    thus for p be FinSequence of REAL holds P[p] from FINSEQ_2:sch 2(A1,A2);
    end;
 
   theorem Th4:
@@ -126,13 +126,15 @@ begin  :: Preliminaries
        then Sum (p^<*x*>) >= p.i + x by RVSUM_1:104;
        then Sum (p^<*x*>) >= p.i by A6,AXIOMS:22;
        hence Sum (p^<*x*>) >= (p^<*x*>).i by A7,FINSEQ_1:def 7;
+      end;
       suppose i in {len p + 1};
        then i = len p + 1 by TARSKI:def 1;
        then (p^<*x*>).i = x by FINSEQ_1:59;
        then Sum p + x >= (p^<*x*>).i by NAT_1:29;
        hence Sum (p^<*x*>) >= (p^<*x*>).i by RVSUM_1:104;
     end;
-    thus for p be FinSequence of NAT holds P[p] from IndSeqD(A1,A2);
+    end;
+    thus for p be FinSequence of NAT holds P[p] from FINSEQ_2:sch 2(A1,A2);
    end;
 
   definition
@@ -143,12 +145,14 @@ begin  :: Preliminaries
    coherence by MATRIX_2:9;
   end;
 
+
   definition
    let D be non empty set;
    let a,b be Element of D;
    redefine func <*a,b*> -> Element of 2-tuples_on D;
    coherence by FINSEQ_2:121;
   end;
+
 
   definition
    let D be non empty set;
@@ -159,7 +163,8 @@ begin  :: Preliminaries
    coherence by FINSEQ_2:127;
   end;
 
-  definition
+
+  registration
    let D be non empty set;
    let n be Nat;
    cluster -> FinSequence-yielding FinSequence of n-tuples_on D;
@@ -174,6 +179,7 @@ begin  :: Preliminaries
     hence thesis;
    end;
   end;
+
 
   definition
    let D be non empty set;
@@ -202,6 +208,7 @@ begin  :: Preliminaries
    end;
   end;
 
+
   scheme SeqOfSeqLambdaD{D()->non empty set,A()->Nat,T(Nat)->Nat,
                          F(set,set)->Element of D()}:
    ex p be FinSequence of D()* st
@@ -210,7 +217,7 @@ begin  :: Preliminaries
      len (p/.k) = T(k) &
      for n be Nat st n in dom (p/.k) holds
       (p/.k).n = F(k,n)
-   proof
+proof
     defpred P[Nat,Element of D()*] means len $2 = T($1) &
      for n be Nat st n in dom $2 holds $2.n = F($1,n);
     A1: for k be Nat st k in Seg A() ex d be Element of D()* st P[k,d]
@@ -220,7 +227,7 @@ begin  :: Preliminaries
      deffunc G(Nat) = F(k,$1);
      consider d be FinSequence of D() such that
       A2: len d = T(k) and
-      A3: for n be Nat st n in Seg T(k) holds d.n = G(n) from SeqLambdaD;
+      A3: for n be Nat st n in Seg T(k) holds d.n = G(n) from FINSEQ_2:sch 1;
      reconsider d as Element of D()* by FINSEQ_1:def 11;
      take d;
      thus len d = T(k) by A2;
@@ -231,7 +238,7 @@ begin  :: Preliminaries
     end;
     consider p be FinSequence of D()* such that
      A4: dom p = Seg A() and
-     A5: for k be Nat st k in Seg A() holds P[k,p/.k] from SeqExD(A1);
+     A5: for k be Nat st k in Seg A() holds P[k,p/.k] from POLYNOM2:sch 1(A1);
     take p;
     thus len p = A() by A4,FINSEQ_1:def 3;
     let k be Nat;
@@ -262,13 +269,20 @@ begin  :: The Lexicographic Order of Finite Sequences
     per cases by REAL_1:def 5;
      suppose i < j;
       hence contradiction by A2,A6,A7;
+     end;
      suppose j < i;
       hence contradiction by A3,A5,A7;
+     end;
      suppose i = j;
       hence contradiction by A2,A5;
    end;
-   synonym q > p;
-  end;
+   end;
+   end;
+notation
+   let n be Nat;
+   let p,q be Element of n-tuples_on NAT;
+   synonym q > p for p < q ; end;
+
 
   definition
    let n be Nat;
@@ -276,8 +290,12 @@ begin  :: The Lexicographic Order of Finite Sequences
    pred p <= q means :Def2:
     p < q or p = q;
    reflexivity;
-   synonym q >= p;
-  end;
+   end;
+notation
+   let n be Nat;
+   let p,q be Element of n-tuples_on NAT;
+   synonym q >= p for p <= q ; end;
+
 
   theorem Th5:
    for n be Nat
@@ -308,12 +326,15 @@ begin  :: The Lexicographic Order of Finite Sequences
        then A11: t = i by SQUARE_1:def 1;
          i >= 1 by A4,FINSEQ_1:3;
        hence p.t < r.t by A5,A9,A10,A11;
+      end;
       suppose A12: i > j;
        then A13: t = j by SQUARE_1:def 1;
          j >= 1 by A7,FINSEQ_1:3;
        hence p.t < r.t by A6,A8,A12,A13;
+      end;
       suppose i = j;
        hence p.t < r.t by A5,A8,AXIOMS:22;
+     end;
      end;
      hence p.t < r.t;
      let k be Nat;
@@ -330,11 +351,14 @@ begin  :: The Lexicographic Order of Finite Sequences
      suppose p < q & q <= r;
       then p < q & (q < r or q = r) by Def2;
       hence p <= r by A1,Def2;
+     end;
      suppose p <= q & q < r;
       then (p < q or p = q) & q < r by Def2;
       hence p <= r by A1,Def2;
+     end;
      suppose p <= q & q <= r;
       hence p <= r by A1,Def2;
+   end;
    end;
 
   theorem Th6:
@@ -392,6 +416,7 @@ begin  :: The Lexicographic Order of Finite Sequences
        then A15: k in dom t1 & k in dom t2 by A8,A12,FINSEQ_3:27;
        hence p.k = t2.k by A5,A14,FINSEQ_1:def 7
           .= q.k by A6,A15,FINSEQ_1:def 7;
+      end;
       suppose A16: t1 = t2;
        take i = n+1;
        thus i in Seg (n+1) by FINSEQ_1:6;
@@ -406,7 +431,8 @@ begin  :: The Lexicographic Order of Finite Sequences
        hence p.k = t2.k by A5,A16,FINSEQ_1:def 7
           .= q.k by A6,A19,FINSEQ_1:def 7;
     end;
-    thus for n be Nat holds P[n] from Ind(A1,A3);
+    end;
+    thus for n be Nat holds P[n] from NAT_1:sch 1(A1,A3);
    end;
 
   theorem Th7:
@@ -439,7 +465,7 @@ begin  :: The Lexicographic Order of Finite Sequences
      $1 <= $2;
     consider R be Relation of n-tuples_on NAT,n-tuples_on NAT such that
      A1: for x,y be Element of n-tuples_on NAT holds
-      [x,y] in R iff P[x,y] from Rel_On_Dom_Ex;
+      [x,y] in R iff P[x,y] from RELSET_1:sch 2;
     A2: R is_reflexive_in n-tuples_on NAT
     proof
      let x be set;
@@ -511,7 +537,8 @@ A14:  dom R = n-tuples_on NAT & field R =n-tuples_on NAT by A2,ORDERS_1:98;
    end;
   end;
 
-  definition
+
+  registration
    let n be Nat;
    cluster TuplesOrder n -> being_linear-order;
    coherence
@@ -535,6 +562,7 @@ A14:  dom R = n-tuples_on NAT & field R =n-tuples_on NAT by A2,ORDERS_1:98;
    end;
   end;
 
+
 begin  :: Decomposition of Natural Numbers
 
   definition
@@ -549,7 +577,7 @@ begin  :: Decomposition of Natural Numbers
     defpred P[Element of i-tuples_on NAT] means Sum $1 = n;
     consider A be Subset of i-tuples_on NAT such that
      A1: for p be Element of i-tuples_on NAT holds
-      p in A iff P[p] from SubsetEx;
+      p in A iff P[p] from SETWISEO:sch 1;
       n+1 in Seg (n+1) by FINSEQ_1:6;
     then reconsider n1 = n+1 as non empty set by BINARITH:5;
       n+1 is finite by CARD_1:69;
@@ -611,7 +639,8 @@ begin  :: Decomposition of Natural Numbers
    end;
   end;
 
-  definition
+
+  registration
    let i be non empty Nat;
    let n be Nat;
    cluster Decomp(n,i) -> non empty one-to-one FinSequence-yielding;
@@ -632,6 +661,7 @@ begin  :: Decomposition of Natural Numbers
     hence thesis by A1;
    end;
   end;
+
 
   theorem Th8:
    for n be Nat holds len Decomp(n,1) = 1
@@ -706,7 +736,7 @@ begin  :: Decomposition of Natural Numbers
     deffunc F(Nat) = <*$1,n-'$1*>;
     consider q be FinSequence such that
      A12: len q = n and
-     A13: for k be Nat st k in Seg n holds q.k = F(k) from SeqLambda;
+     A13: for k be Nat st k in Seg n holds q.k = F(k) from FINSEQ_1:sch 2;
     set q1 = q^<*<*0,n*>*>;
     A14: rng q c= rng q1 by FINSEQ_1:42;
     A15: len q1 = n+1 by A12,FINSEQ_2:19;
@@ -730,10 +760,12 @@ begin  :: Decomposition of Natural Numbers
         A25: j <= n by A23,FINSEQ_1:3;
           q1.j = q.j by A17,A23,FINSEQ_1:def 7;
         hence x in {<*i,n-'i*> where i is Nat : i <= n} by A20,A24,A25;
+       end;
        suppose j = n+1;
         then q1.j = <*0,n*> by A12,FINSEQ_1:59
            .= <*0,n-'0*> by JORDAN3:2;
         hence x in {<*i,n-'i*> where i is Nat : i <= n} by A20,A22;
+      end;
       end;
       hence x in {<*i,n-'i*> where i is Nat : i <= n};
      end;
@@ -750,10 +782,12 @@ begin  :: Decomposition of Natural Numbers
          q1.(n+1) = <*0,n*> by A12,FINSEQ_1:59
           .= x by A26,A29,JORDAN3:2;
        hence x in rng q1 by A30,FUNCT_1:def 5;
+      end;
       suppose A31: i in Seg n;
        then q.i = x by A13,A26;
        then x in rng q by A17,A31,FUNCT_1:def 5;
        hence x in rng q1 by A14;
+     end;
      end;
      hence x in rng q1;
     end;
@@ -771,20 +805,24 @@ begin  :: Decomposition of Natural Numbers
        then A37: q1.k1 = q.k1 & q1.k2 = q.k2 by A17,FINSEQ_1:def 7;
          q.k1 = <*k1,n-'k1*> & q.k2 = <*k2,n-'k2*> by A13,A36;
        hence x1 = x2 by A34,A37,GROUP_7:2;
+      end;
       suppose A38: x1 in Seg n & x2 = n+1;
        then A39: q1.k1 = q.k1 by A17,FINSEQ_1:def 7
           .= <*k1,n-'k1*> by A13,A38;
          q1.k2 = <*0,n*> by A12,A38,FINSEQ_1:59;
        then k1 = 0 by A34,A39,GROUP_7:2;
        hence x1 = x2 by A38,FINSEQ_1:3;
+      end;
       suppose A40: x1 = n+1 & x2 in Seg n;
        then A41: q1.k2 = q.k2 by A17,FINSEQ_1:def 7
           .= <*k2,n-'k2*> by A13,A40;
          q1.k1 = <*0,n*> by A12,A40,FINSEQ_1:59;
        then k2 = 0 by A34,A41,GROUP_7:2;
        hence x1 = x2 by A40,FINSEQ_1:3;
+      end;
       suppose x1 = n+1 & x2 = n+1;
        hence x1 = x2;
+     end;
      end;
      hence x1 = x2;
     end;
@@ -867,11 +905,13 @@ begin  :: Decomposition of Natural Numbers
       suppose t = 1;
        then <*k1,n-'k1*>.t = k1 & <*k2,n-'k2*>.t = k2 by FINSEQ_1:61;
        hence k1<k2 by A9;
+      end;
       suppose t = 2;
        then <*k1,n-'k1*>.1 = <*k2,n-'k2*>.1 by A10;
        then <*k1,n-'k1*>.1 = k2 by FINSEQ_1:61;
        then k1 = k2 by FINSEQ_1:61;
        hence k1<k2 by A9;
+    end;
     end;
     assume A11: k1<k2;
     A12: 1 in Seg 2 by FINSEQ_1:3;
@@ -882,11 +922,13 @@ begin  :: Decomposition of Natural Numbers
     per cases by A15,REAL_1:def 5;
      suppose i = j;
       hence contradiction by A3,A4,A11,A13;
+     end;
      suppose j<i;
       then A16: <*k2,n-'k2*> <> <*k1,n-'k1*> & [<*k2,n-'k2*>,<*k1,n-'k1*>] in
                           TuplesOrder 2 by A1,A2,A3,A4,A5,A6,TRIANG_1:def 2;
       then <*k2,n-'k2*> <= <*k1,n-'k1*> by Def3;
       hence contradiction by A14,A16,Def2;
+   end;
    end;
 
   theorem Th12:
@@ -958,6 +1000,7 @@ begin  :: Decomposition of Natural Numbers
        now per cases by NAT_1:18;
       suppose d1 = 0;
        hence <*0,n*> <= <*d1,d2*> by A7;
+      end;
       suppose d1 > 0;
        then <*0,n*>.1 < d1 by FINSEQ_1:61;
        then A8: <*0,n*>.1 < <*d1,d2*>.1 by FINSEQ_1:61;
@@ -965,6 +1008,7 @@ begin  :: Decomposition of Natural Numbers
          for k be Nat st 1 <= k & k < 1 holds <*0,n*>.k = <*d1,d2*>.k;
        then <*0,n*> < <*d1,d2*> by A8,A9,Def1;
        hence <*0,n*> <= <*d1,d2*> by Def2;
+     end;
      end;
      hence [<*0,n*>,y] in TuplesOrder 2 by A6,Def3;
     end;
@@ -1038,7 +1082,7 @@ begin  :: Decomposition of Natural Numbers
      hence Decomp(n,2).(j+1) = <*j+1-'1,n+1-'(j+1)*>
                                                   by A12,A16,A22,BINARITH:39;
     end;
-      for j be non empty Nat holds P[j] from Ind_from_1(A6,A7);
+      for j be non empty Nat holds P[j] from BINARITH:sch 1(A6,A7);
     hence thesis by A2,A3;
    end;
 
@@ -1055,7 +1099,7 @@ begin  :: Decomposition of Natural Numbers
     deffunc F(Nat) = (p.((t/.$1)/.1))*(q.((t/.$1)/.2))*(r.((t/.$1)/.3));
     consider p1 be FinSequence of the carrier of L such that
      A1: len p1 = len t and
-     A2: for k be Nat st k in Seg len t holds p1.k = F(k) from SeqLambdaD;
+     A2: for k be Nat st k in Seg len t holds p1.k = F(k) from FINSEQ_2:sch 1;
     reconsider p1 as Element of (the carrier of L)* by FINSEQ_1:def 11;
     take p1;
     thus len p1 = len t by A1;
@@ -1082,6 +1126,7 @@ then A7:    i in dom t by FINSEQ_1:def 3;
     hence p1 = p2 by A3,A5,FINSEQ_2:10;
    end;
   end;
+
 
   theorem Th15:
    for L be non empty HGrStr
@@ -1163,9 +1208,11 @@ A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
           .= Cf/.j by A2,A12,FINSEQ_4:def 4
           .= (Cf|i)/.j by A5,A8,A11,TOPREAL1:1
           .= (Card f)|i.j by A5,A8,A11,FINSEQ_4:def 4;
+      end;
       suppose i > len f;
        then f|i = f & (Card f)|i = Card f by A1,A6,FINSEQ_2:23;
        hence Card (f|i).j = (Card f)|i.j;
+    end;
     end;
     hence thesis by A3,A4,FINSEQ_2:10;
    end;
@@ -1221,11 +1268,13 @@ A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
         Sum r >= 0 by NAT_1:18;
       then Sum q + Sum r >= Sum q + 0 by AXIOMS:24;
       hence Sum (p|i) <= Sum (p|j) by A4,A6,A8,A9,FINSEQ_2:10;
+     end;
      suppose j > len p;
       then A17: p|j = p by TOPREAL1:2;
         now per cases;
        suppose i >= len p;
         hence Sum (p|i) <= Sum (p|j) by A17,TOPREAL1:2;
+       end;
        suppose A18: i < len p;
         then consider t be Nat such that
          A19: len p = i + t by NAT_1:28;
@@ -1251,7 +1300,9 @@ A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
         then Sum q + Sum r >= Sum q + 0 by AXIOMS:24;
         hence Sum (p|i) <= Sum (p|j) by A17,A20,A22,A23,A24,FINSEQ_2:10;
       end;
+      end;
       hence thesis;
+   end;
    end;
 
   theorem Th19:
@@ -1317,6 +1368,7 @@ then A2: p|(i+1) = p|i ^ <*p/.(i+1)*> by JORDAN8:2;
       then Sum (p|j) = Sum (p|j) + k2 by A14,AXIOMS:21;
       then k2 = 0 by XCMPLX_1:3;
       hence contradiction by A4;
+     end;
      suppose i >= j;
       then j < i by A11,REAL_1:def 5;
       then j+1 <= i by NAT_1:38;
@@ -1327,6 +1379,7 @@ then A2: p|(i+1) = p|i ^ <*p/.(i+1)*> by JORDAN8:2;
       then Sum (p|i) = Sum (p|i) + k1 by A15,AXIOMS:21;
       then k1 = 0 by XCMPLX_1:3;
       hence contradiction by A3;
+   end;
    end;
 
   theorem Th22:
@@ -1378,6 +1431,7 @@ begin  :: Polynomials
    mode Polynomial of L is AlgSequence of L;
   end;
 
+
   theorem Th23:
    for L be non empty ZeroStr
    for p be Polynomial of L
@@ -1403,7 +1457,7 @@ begin  :: Polynomials
                            F(Nat)->Element of R()}:
    ex p be Polynomial of R() st
     len p <= A() & for n be Nat st n < A() holds p.n=F(n)
-  proof
+proof
    defpred P[Nat,Element of R()] means
     $1<A() & $2=F($1) or $1>=A() & $2=0.R();
    A1: for x be Element of NAT ex y be Element of R() st P[x,y]
@@ -1413,7 +1467,7 @@ begin  :: Polynomials
     hence thesis;
    end;
    ex f be Function of NAT,the carrier of R() st
-    for x be Element of NAT holds P[x,f.x] from FuncExD(A1);
+    for x be Element of NAT holds P[x,f.x] from FUNCT_2:sch 3(A1);
    then consider f be Function of NAT,the carrier of R() such that
     A2: for x be Element of NAT holds
      x<A() & f.x=F(x) or x>=A() & f.x=0.R();
@@ -1437,12 +1491,12 @@ begin  :: Polynomials
   scheme ExDLoopStrSeq{ R() -> non empty LoopStr,
                         F(set) -> Element of R() } :
    ex S be sequence of R() st for n be Nat holds S.n = F(n)
-   proof
+proof
     set Y = the carrier of R();
     deffunc G(set) = F($1);
     A1: for x be set st x in NAT holds G(x) in Y;
     ex f be Function of NAT,Y st for x be set st x in NAT holds f.x = G(x)
-     from Lambda1(A1);
+     from FUNCT_2:sch 2(A1);
     then consider f be Function of NAT,Y such that
 A2: for x be set st x in NAT holds f.x = F(x);
     reconsider f as sequence of R() by NORMSP_1:def 3;
@@ -1476,7 +1530,8 @@ A2: for x be set st x in NAT holds f.x = F(x);
    end;
   end;
 
-  definition
+
+  registration
    let L be right_zeroed (non empty LoopStr);
    let p,q be Polynomial of L;
    cluster p+q -> finite-Support;
@@ -1495,6 +1550,7 @@ A2: for x be set st x in NAT holds f.x = F(x);
         .= 0.L by RLVECT_1:def 7;
    end;
   end;
+
 
   theorem Th24:
    for L be right_zeroed (non empty LoopStr)
@@ -1557,6 +1613,7 @@ A2: for x be set st x in NAT holds f.x = F(x);
    end;
   end;
 
+
   theorem Th26:
    for L be add-associative (non empty LoopStr)
    for p,q,r be sequence of L holds
@@ -1600,7 +1657,8 @@ A2: for x be set st x in NAT holds f.x = F(x);
    end;
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable
     (non empty LoopStr);
    let p be Polynomial of L;
@@ -1616,6 +1674,7 @@ A2: for x be set st x in NAT holds f.x = F(x);
    end;
   end;
 
+
   definition
    let L be non empty LoopStr;
    let p,q be sequence of L;
@@ -1624,7 +1683,8 @@ A2: for x be set st x in NAT holds f.x = F(x);
    coherence;
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable
     (non empty LoopStr);
    let p,q be Polynomial of L;
@@ -1635,6 +1695,7 @@ A2: for x be set st x in NAT holds f.x = F(x);
     hence thesis;
    end;
   end;
+
 
   theorem Th27:
    for L be non empty LoopStr
@@ -1658,7 +1719,8 @@ A2: for x be set st x in NAT holds f.x = F(x);
    coherence by NORMSP_1:def 3;
   end;
 
-  definition
+
+  registration
    let L be non empty ZeroStr;
    cluster 0_.(L) -> finite-Support;
    coherence
@@ -1670,6 +1732,7 @@ A2: for x be set st x in NAT holds f.x = F(x);
         .= 0.L by FUNCOP_1:13;
    end;
   end;
+
 
   theorem Th28:
    for L be non empty ZeroStr
@@ -1721,7 +1784,8 @@ A2: for x be set st x in NAT holds f.x = F(x);
    coherence by NORMSP_1:def 3;
   end;
 
-  definition
+
+  registration
    let L be non empty multLoopStr_0;
    cluster 1_.(L) -> finite-Support;
    coherence
@@ -1735,6 +1799,7 @@ A2: for x be set st x in NAT holds f.x = F(x);
         .= 0.L by Th28;
    end;
   end;
+
 
   theorem Th31:
    for L be non empty multLoopStr_0 holds
@@ -1773,7 +1838,7 @@ A2: for x be set st x in NAT holds f.x = F(x);
      deffunc F(Nat) = p.($1-'1) * q.(i+1-'$1);
      consider r be FinSequence of the carrier of L such that
       A2: len r = i+1 and
-      A3: for k be Nat st k in Seg (i+1) holds r.k = F(k) from SeqLambdaD;
+      A3: for k be Nat st k in Seg (i+1) holds r.k = F(k) from FINSEQ_2:sch 1;
      take v = Sum r;
      take r;
      thus len r = i+1 by A2;
@@ -1784,7 +1849,7 @@ A2: for x be set st x in NAT holds f.x = F(x);
      hence r.k = p.(k-'1) * q.(i+1-'k) by A3;
     end;
     consider f be Function of NAT,the carrier of L such that
-     A4: for i be Element of NAT holds P[i,f.i] from FuncExD(A1);
+     A4: for i be Element of NAT holds P[i,f.i] from FUNCT_2:sch 3(A1);
     reconsider f as sequence of L by NORMSP_1:def 3;
     take f;
     thus thesis by A4;
@@ -1823,7 +1888,8 @@ A2: for x be set st x in NAT holds f.x = F(x);
    end;
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable distributive
     (non empty doubleLoopStr);
    let p,q be Polynomial of L;
@@ -1858,13 +1924,16 @@ A2: for x be set st x in NAT holds f.x = F(x);
         then i+1-'k >= len q by A8,BINARITH:def 3;
         then q.(i+1-'k) = 0.L by ALGSEQ_1:22;
         hence r.k = 0.L by A6,VECTSP_1:36;
+       end;
        suppose k-'1 >= len p;
         then p.(k-'1) = 0.L by ALGSEQ_1:22;
         hence r.k = 0.L by A6,VECTSP_1:39;
      end;
+     end;
      hence thesis by A2,Th1;
    end;
   end;
+
 
   theorem Th32:
    for L be Abelian add-associative right_zeroed right_complementable
@@ -1982,24 +2051,24 @@ A2: for x be set st x in NAT holds f.x = F(x);
      consider f2 be FinSequence of ((2+1)-tuples_on NAT)* such that
       A7: len f2 = i+1 and
       A8: for k be Nat st k in Seg (i+1) holds
-       f2.k = F(k) from SeqLambdaD;
+       f2.k = F(k) from FINSEQ_2:sch 1;
      reconsider f2 as FinSequence of (3-tuples_on NAT)*;
      deffunc F(Nat) = ((i+2-'$1) |-> <*$1-'1*>) ^^ (Decomp(i+1-'$1,2));
      consider g2 be FinSequence of ((1+2)-tuples_on NAT)* such that
       A9: len g2 = i+1 and
       A10: for k be Nat st k in Seg (i+1) holds
-       g2.k = F(k) from SeqLambdaD;
+       g2.k = F(k) from FINSEQ_2:sch 1;
      reconsider g2 as FinSequence of (3-tuples_on NAT)*;
      deffunc F(Nat) = prodTuples(p,q,r,f2/.$1);
      consider f1 be FinSequence of (the carrier of L)* such that
       A11: len f1 = len f2 and
       A12: for k be Nat st k in Seg len f2 holds
-       f1.k = F(k) from SeqLambdaD;
+       f1.k = F(k) from FINSEQ_2:sch 1;
      deffunc F(Nat) = prodTuples(p,q,r,g2/.$1);
      consider g1 be FinSequence of (the carrier of L)* such that
       A13: len g1 = len g2 and
       A14: for k be Nat st k in Seg len g2 holds
-       g1.k = F(k) from SeqLambdaD;
+       g1.k = F(k) from FINSEQ_2:sch 1;
      A15: len Sum f1 = i+1 by A7,A11,MATRLIN:def 8;
        now let j be Nat;
       assume A16: j in Seg (i+1);
@@ -2604,6 +2673,7 @@ A235:   i+1+1 >= i+1 by NAT_1:29;
    end;
   end;
 
+
   theorem
      for L be add-associative right_zeroed right_complementable
     right-distributive (non empty doubleLoopStr)
@@ -2715,7 +2785,7 @@ begin  :: The Ring of Polynomials
      thus thesis by A3,A4;
     end;
     consider Ad be Function of [:Ca,Ca:],Ca such that
-     A5: for x,y be Element of Ca holds P[x,y,Ad.[x,y]] from FuncEx2D(A2);
+     A5: for x,y be Element of Ca holds P[x,y,Ad.[x,y]] from FUNCT_2:sch 7(A2);
     defpred P[set,set,set] means
      ex p,q be Polynomial of L st p=$1 & q=$2 & $3=p*'q;
     A6: for x,y be Element of Ca ex u be Element of Ca st P[x,y,u]
@@ -2733,7 +2803,7 @@ begin  :: The Ring of Polynomials
      thus thesis by A7,A8;
     end;
     consider Mu be Function of [:Ca,Ca:],Ca such that
-     A9: for x,y be Element of Ca holds P[x,y,Mu.[x,y]] from FuncEx2D(A6);
+     A9: for x,y be Element of Ca holds P[x,y,Mu.[x,y]] from FUNCT_2:sch 7(A6);
       1_.(L) in {x where x is Polynomial of L : not contradiction};
     then reconsider Un = 1_.(L) as Element of Ca;
     reconsider Ze = 0_.(L) as Element of Ca by A1;
@@ -2836,7 +2906,8 @@ A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.[x,y] = p1*'q1 by A9;
    end;
   end;
 
-  definition
+
+  registration
    let L be Abelian add-associative right_zeroed right_complementable
                                       distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> Abelian;
@@ -2849,7 +2920,8 @@ A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.[x,y] = p1*'q1 by A9;
    end;
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable
                                       distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> add-associative;
@@ -2888,7 +2960,8 @@ A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.[x,y] = p1*'q1 by A9;
    end;
   end;
 
-  definition
+
+  registration
    let L be Abelian add-associative right_zeroed right_complementable
                           commutative distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> commutative;
@@ -2901,7 +2974,8 @@ A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.[x,y] = p1*'q1 by A9;
    end;
   end;
 
-  definition
+
+  registration
    let L be Abelian add-associative right_zeroed right_complementable unital
                           associative distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> associative;
@@ -2917,7 +2991,8 @@ A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.[x,y] = p1*'q1 by A9;
    end;
   end;
 
-  definition
+
+  registration
    let L be add-associative right_zeroed right_complementable right_unital
                                       distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> right_unital;
@@ -2931,7 +3006,8 @@ A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.[x,y] = p1*'q1 by A9;
    end;
   end;
 
-  definition
+
+  registration
    let L be Abelian add-associative right_zeroed right_complementable
                                       distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> distributive;
@@ -2951,3 +3027,4 @@ A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.[x,y] = p1*'q1 by A9;
        .= q*p+r*p by A2,Def12;
    end;
   end;
+

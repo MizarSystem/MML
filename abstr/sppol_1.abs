@@ -76,13 +76,46 @@ theorem :: SPPOL_1:13
 theorem :: SPPOL_1:14
   r>r1 & r>r2 implies r>max(r1,r2);
 
-scheme FinSeqFam{D()-> non empty set,f()->FinSequence of D(),
+scheme :: SPPOL_1:sch 1
+ FinSeqFam{D()-> non empty set,f()->FinSequence of D(),
                  F(FinSequence of D(),Nat)->set,P[Nat]}:
-  {F(f(),i): i in dom f() & P[i]} is finite;
+  {F(f(),i): i in dom f() & P[i]} is finite
+proof
+ deffunc U(Nat) = F(f(),$1);
+  set F = {U(i): i in dom f() & P[i]}, F' = {U(i): i in dom f()};
+A1:  F c= F'
+  proof
+   let x be set;
+   assume x in F;
+   then ex i st x = F(f(),i) & i in dom f() & P[i];
+   hence thesis;
+  end;
+A2:  dom f() is finite;
+    F' is finite from FRAENKEL:sch 21(A2);
+  hence thesis by A1,FINSET_1:13;
+end;
 
-scheme FinSeqFam'{D()-> non empty set,f()-> FinSequence of D(),
+scheme :: SPPOL_1:sch 2
+ FinSeqFam'{D()-> non empty set,f()-> FinSequence of D(),
                  F(FinSequence of D(),Nat)->set,P[Nat]}:
-  {F(f(),i): 1<=i & i<=len f() & P[i]} is finite;
+  {F(f(),i): 1<=i & i<=len f() & P[i]} is finite
+proof
+ deffunc U(Nat) = F(f(),$1);
+  set F = {U(i): 1<=i & i<=len f() & P[i]}, F' = {U(i): i in dom f()};
+A1:  F c= F'
+  proof
+   let x be set;
+   assume x in F;
+    then consider i such that
+A2:  x = F(f(),i) and
+A3:  1<=i & i<=len f() and P[i];
+     i in dom f() by A3,FINSEQ_3:27;
+   hence x in F' by A2;
+  end;
+A4:  dom f() is finite;
+    F' is finite from FRAENKEL:sch 21(A4);
+  hence thesis by A1,FINSET_1:13;
+end;
 
 theorem :: SPPOL_1:15
  for x1,x2,x3 being Element of REAL n
@@ -154,6 +187,7 @@ definition let n,p; let P be Subset of TOP-REAL n;
   for p1,p2 st p in LSeg(p1,p2) & LSeg(p1,p2) c= P holds p=p1 or p=p2;
 end;
 
+
 theorem :: SPPOL_1:30
     for P,Q being Subset of TOP-REAL n
    st p is_extremal_in P & Q c= P & p in Q holds p is_extremal_in Q;
@@ -191,10 +225,13 @@ definition let P;
   for p,q st p in P & q in P holds p`1=q`1;
 end;
 
-definition
+registration
  cluster non trivial horizontal -> non vertical Subset of TOP-REAL 2;
+  coherence by Lm2;
  cluster non trivial vertical -> non horizontal Subset of TOP-REAL 2;
+  coherence by Lm2;
 end;
+
 
 theorem :: SPPOL_1:36
   p`2=q`2 iff LSeg(p,q) is horizontal;
@@ -248,6 +285,7 @@ definition let IT be FinSequence of TOP-REAL 2;
  for i st 1 <= i & i+2 <= len IT holds
   (IT/.i)`1 <> (IT/.(i+2))`1 & (IT/.i)`2 <> (IT/.(i+2))`2;
 end;
+
 
 theorem :: SPPOL_1:50
  f is special alternating & 1 <= i & i+2 <= len f & (f/.i)`1 = (f/.(i+1))`1
@@ -313,6 +351,7 @@ definition let f1,f2,P;
    f1/.1 <> f1/.len f1 & L~f1 /\ L~f2 = {f1/.1,f1/.len f1} &
    P = L~f1 \/ L~f2;
 end;
+
 
 theorem :: SPPOL_1:61
     f1,f2 are_generators_of P & 1<i & i<len f1
