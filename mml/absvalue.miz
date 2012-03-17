@@ -7,11 +7,11 @@
 environ
 
  vocabularies NUMBERS, XREAL_0, ORDINAL1, COMPLEX1, CARD_1, XXREAL_0, ARYTM_1,
-      ARYTM_3, RELAT_1, SQUARE_1, REAL_1, ABSVALUE;
- notations ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, COMPLEX1, SQUARE_1,
-      XXREAL_0;
- constructors REAL_1, SQUARE_1, COMPLEX1;
- registrations XXREAL_0, XREAL_0, REAL_1, ORDINAL1, XBOOLE_0;
+      ARYTM_3, RELAT_1, SQUARE_1, REAL_1, ABSVALUE, INT_1;
+ notations ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, INT_1, COMPLEX1,
+      SQUARE_1, XXREAL_0;
+ constructors REAL_1, SQUARE_1, COMPLEX1, INT_1;
+ registrations XXREAL_0, XREAL_0, REAL_1, ORDINAL1, XBOOLE_0, INT_1;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
  theorems XREAL_0, XCMPLX_0, XCMPLX_1, COMPLEX1, SQUARE_1, XREAL_1, XXREAL_0;
 
@@ -73,8 +73,7 @@ A3: abs x <= y;
   then
 A4: 0 <= y by COMPLEX1:132;
   per cases;
-  suppose
-    0 < x;
+  suppose 0 < x;
     hence thesis by A3,A4,Def1;
   end;
   suppose
@@ -83,8 +82,7 @@ A5: x < 0;
     then -y <= --x by XREAL_1:26;
     hence thesis by A5;
   end;
-  suppose
-    x = -0;
+  suppose x = -0;
     hence thesis by A4;
   end;
 end;
@@ -94,8 +92,7 @@ canceled;
 theorem
   x <> 0 implies abs(x) * abs(1/x) = 1
 proof
-  assume
-  x <> 0;
+  assume x <> 0;
   then abs x * abs(1/x) = abs(x * (1/x)) & abs(x * (1/x)) = abs 1 by
   COMPLEX1:151,XCMPLX_1:107;
   hence thesis by Def1;
@@ -320,19 +317,20 @@ end;
 
 definition
   let x;
-  func sgn x equals
+  func sgn x -> real number equals
   :Def2:
   1 if 0 < x, -1 if x < 0 otherwise 0;
   coherence;
   consistency;
+  projectivity;
 end;
 
 registration
   let x;
-  cluster sgn x -> real;
+  cluster sgn x -> integer;
   coherence
   proof
-    0 < x or 0 > x or x = 0;
+    x = 0 or x > 0 or x < 0;
     hence thesis by Def2;
   end;
 end;
@@ -457,33 +455,13 @@ A16: sgn x * sgn y = -1 by A14,Def2;
     assume
 A17: x = 0 or y = 0;
     then sgn x = 0 or sgn y = 0 by Def2;
-    hence thesis by A17,Def2;
+    hence thesis by A17;
   end;
   hence thesis by A1,A5,A13,A9;
 end;
 
 theorem
-  sgn sgn x = sgn x
-proof
-A1: 0 < x implies sgn sgn x = sgn x
-  proof
-    assume
-A2: 0 < x;
-    then sgn sgn x = sgn 1 by Def2
-      .= 1 by Def2;
-    hence thesis by A2,Def2;
-  end;
-A3: x < 0 implies sgn sgn x = sgn x
-  proof
-    assume
-A4: x < 0;
-    then sgn sgn x = sgn (-1) by Def2
-      .= -1 by Def2;
-    hence thesis by A4,Def2;
-  end;
-  0 < x or x < 0 or x = 0;
-  hence thesis by A1,A3,Def2;
-end;
+  sgn sgn x = sgn x;
 
 theorem
   sgn (x + y) <= sgn x + sgn y + 1

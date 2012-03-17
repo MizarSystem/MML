@@ -125,6 +125,10 @@
   <xsl:param name="linkby">
     <xsl:text>0</xsl:text>
   </xsl:param>
+  <!-- if non zero, add icons for atp exlpanation calls to theorems and proofs in the same way as to by's -->
+  <xsl:param name="linkarproofs">
+    <xsl:text>0</xsl:text>
+  </xsl:param>
   <!-- if > 0, call the mk_by_title function to create a title for by|from|; -->
   <xsl:param name="by_titles">
     <xsl:text>0</xsl:text>
@@ -151,8 +155,9 @@
     <xsl:value-of select="concat($lbydlicgi,&quot;?url=&quot;,$lbydliurl)"/>
   </xsl:variable>
   <!-- URL of the MizAR root dir -->
+  <!-- #ltptproot= { "http://octopi.mizar.org/~mptp/"; } -->
   <xsl:param name="ltptproot">
-    <xsl:text>http://octopi.mizar.org/~mptp/</xsl:text>
+    <xsl:text>http://mws.cs.ru.nl/~mptp/</xsl:text>
   </xsl:param>
   <!-- URL of the TPTP-processor CGI -->
   <xsl:param name="ltptpcgi">
@@ -194,6 +199,8 @@
     <xsl:text>0</xsl:text>
   </xsl:param>
   <!-- tells if proofs are fetched through AJAX; default is off -->
+  <!-- value 2 tells to produce the proofs, but not to insert the ajax calls, -->
+  <!-- and instead insert tags for easy regexp-based post-insertion of files -->
   <xsl:param name="ajax_proofs">
     <xsl:text>0</xsl:text>
   </xsl:param>
@@ -3869,14 +3876,16 @@
   </xsl:template>
 
   <!-- Clusters -->
-  <!-- only attributes with pid are now printed, others are results of -->
+  <!-- only attributes with pid are now printed, unless %all=1; -->
+  <!-- others are results of -->
   <!-- cluster mechanisms - this holds in the current article -->
   <!-- (.xml file) only, environmental files do not have the @pid -->
   <!-- info (yet), so we print everything for them -->
   <xsl:template match="Cluster">
     <xsl:param name="i"/>
+    <xsl:param name="all"/>
     <xsl:choose>
-      <xsl:when test="$print_all_attrs = 1">
+      <xsl:when test="($print_all_attrs = 1) or ($all = 1)">
         <xsl:call-template name="list">
           <xsl:with-param name="separ">
             <xsl:text> </xsl:text>
@@ -5309,6 +5318,13 @@
 
   <xsl:template match="SkippedProof">
     <xsl:param name="nbr"/>
+    <xsl:if test="$ajax_proofs=2">
+      <xsl:element name="span">
+        <xsl:attribute name="filebasedproofinsert">
+          <xsl:value-of select="@newlevel"/>
+        </xsl:attribute>
+      </xsl:element>
+    </xsl:if>
     <xsl:call-template name="pkeyword">
       <xsl:with-param name="str">
         <xsl:text>@proof .. end;</xsl:text>
@@ -6077,7 +6093,11 @@
         <xsl:text>errorcluster</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="*[3]"/>
+        <xsl:apply-templates select="*[3]">
+          <xsl:with-param name="all">
+            <xsl:text>1</xsl:text>
+          </xsl:with-param>
+        </xsl:apply-templates>
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="*[2]"/>
       </xsl:otherwise>
@@ -6124,7 +6144,11 @@
         <xsl:text>errorcluster</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="*[2]"/>
+        <xsl:apply-templates select="*[2]">
+          <xsl:with-param name="all">
+            <xsl:text>1</xsl:text>
+          </xsl:with-param>
+        </xsl:apply-templates>
         <xsl:call-template name="pkeyword">
           <xsl:with-param name="str">
             <xsl:text> -&gt; </xsl:text>
@@ -6466,6 +6490,16 @@
           <xsl:with-param name="line" select="Proposition[1]/@line"/>
           <xsl:with-param name="col" select="Proposition[1]/@col"/>
         </xsl:call-template>
+        <xsl:text> </xsl:text>
+        <xsl:call-template name="add_ar_iconif">
+          <xsl:with-param name="line" select="Proposition[1]/@line"/>
+          <xsl:with-param name="col" select="Proposition[1]/@col"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
+        <xsl:call-template name="edit_for_thm">
+          <xsl:with-param name="line" select="Proposition[1]/@line"/>
+          <xsl:with-param name="col" select="Proposition[1]/@col"/>
+        </xsl:call-template>
       </xsl:if>
       <xsl:element name="br"/>
     </xsl:element>
@@ -6593,6 +6627,103 @@
           <xsl:text>Show TPTP problem</xsl:text>
         </xsl:attribute>
       </xsl:element>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="add_ar_iconif">
+    <xsl:param name="line"/>
+    <xsl:param name="col"/>
+    <xsl:if test="$linkarproofs&gt;0">
+      <xsl:variable name="byurl">
+        <xsl:choose>
+          <xsl:when test="$linkby=1">
+            <xsl:value-of select="concat($lbydir,$anamelc,&quot;/&quot;,$line,&quot;_&quot;,$col,&quot;.html&quot;)"/>
+          </xsl:when>
+          <xsl:when test="$linkby=2">
+            <xsl:value-of select="concat($lbydlicgipref,$anamelc,&quot;/&quot;,$line,&quot;_&quot;,$col,&quot;.dli&quot;)"/>
+          </xsl:when>
+          <xsl:when test="$linkby=3">
+            <xsl:value-of select="concat($lbytptpcgi,&quot;?article=&quot;,$anamelc,&quot;&amp;lc=&quot;,$line,&quot;_&quot;,$col,&quot;&amp;tmp=&quot;,$lbytmpdir,$lbycgiparams)"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:element name="a">
+        <xsl:choose>
+          <xsl:when test="$ajax_by &gt; 0">
+            <xsl:call-template name="add_ajax_attrs">
+              <xsl:with-param name="u" select="$byurl"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="href">
+              <xsl:value-of select="$byurl"/>
+            </xsl:attribute>
+            <xsl:attribute name="class">
+              <xsl:text>txt</xsl:text>
+            </xsl:attribute>
+            <xsl:choose>
+              <xsl:when test="$linkbytoself &gt; 0">
+                <xsl:attribute name="target">
+                  <xsl:text>_self</xsl:text>
+                </xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="target">
+                  <xsl:text>byATP</xsl:text>
+                </xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:variable name="txt">
+          <xsl:call-template name="mk_by_title">
+            <xsl:with-param name="line" select="$line"/>
+            <xsl:with-param name="col" select="$col"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$by_titles&gt;0">
+          <xsl:attribute name="title">
+            <xsl:call-template name="mk_by_title">
+              <xsl:with-param name="line" select="$line"/>
+              <xsl:with-param name="col" select="$col"/>
+            </xsl:call-template>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:element name="img">
+          <xsl:attribute name="src">
+            <xsl:value-of select="concat($ltptproot,&quot;AR.gif&quot;)"/>
+          </xsl:attribute>
+          <xsl:attribute name="alt">
+            <xsl:value-of select="$txt"/>
+          </xsl:attribute>
+          <xsl:if test="$by_titles&gt;0">
+            <xsl:attribute name="title">
+              <xsl:value-of select="$txt"/>
+            </xsl:attribute>
+          </xsl:if>
+        </xsl:element>
+        <xsl:text> </xsl:text>
+      </xsl:element>
+      <xsl:if test="$ajax_by &gt; 0">
+        <xsl:element name="span">
+          <xsl:text> </xsl:text>
+        </xsl:element>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="edit_for_thm">
+    <xsl:param name="line"/>
+    <xsl:param name="col"/>
+    <!-- $tptp_file = `concat($anamelc,".miz")`; -->
+    <xsl:variable name="thm_file" select="concat($anamelc,&quot;__&quot;,$line,&quot;_&quot;,$col)"/>
+    <xsl:text> ::</xsl:text>
+    <xsl:element name="a">
+      <!-- @href= `concat($ltmpftptpcgi,"?file=",$tptp_file,"&tmp=",$lbytmpdir,"&pos=",$line)`; -->
+      <xsl:attribute name="href">
+        <xsl:value-of select="concat($ltmpftptpcgi,&quot;?file=&quot;,$thm_file,&quot;&amp;tmp=&quot;,$lbytmpdir)"/>
+      </xsl:attribute>
+      <xsl:text>[edit]</xsl:text>
     </xsl:element>
   </xsl:template>
 
@@ -7088,6 +7219,9 @@
               <xsl:with-param name="nrt">
                 <xsl:text>1</xsl:text>
               </xsl:with-param>
+              <xsl:with-param name="old">
+                <xsl:text>1</xsl:text>
+              </xsl:with-param>
             </xsl:apply-templates>
           </xsl:for-each>
         </xsl:if>
@@ -7361,6 +7495,7 @@
           </xsl:with-param>
         </xsl:call-template>
       </xsl:element>
+      <!-- add_ar_iconif(#line=`EndPosition[1]/@line`, #col=`EndPosition[1]/@col`); -->
       <xsl:element name="div">
         <xsl:attribute name="class">
           <xsl:text>add</xsl:text>
@@ -7384,7 +7519,7 @@
     <xsl:element name="div">
       <xsl:element name="a">
         <xsl:choose>
-          <xsl:when test="$ajax_proofs&gt;0">
+          <xsl:when test="$ajax_proofs=1">
             <xsl:call-template name="add_ajax_attrs">
               <xsl:with-param name="u" select="$nm"/>
             </xsl:call-template>
@@ -7404,9 +7539,16 @@
           </xsl:with-param>
         </xsl:call-template>
       </xsl:element>
+      <!-- add_ar_iconif(#line=`EndPosition[1]/@line`, #col=`EndPosition[1]/@col`); -->
       <xsl:choose>
         <xsl:when test="$ajax_proofs&gt;0">
-          <xsl:element name="span"/>
+          <xsl:element name="span">
+            <xsl:if test="$ajax_proofs=2">
+              <xsl:attribute name="filebasedproofinsert">
+                <xsl:value-of select="@newlevel"/>
+              </xsl:attribute>
+            </xsl:if>
+          </xsl:element>
           <xsl:document href="{$ajax_proof_dir}/{$anamelc}/{@newlevel}" format="html"> 
           <xsl:element name="div">
             <xsl:attribute name="class">
@@ -7650,11 +7792,14 @@
   <!-- #argt is explicit list of argument types, useful for -->
   <!-- getting the @vid (identifier numbers) of loci -->
   <!-- #nrt tells not to showthe result type(s) -->
+  <!-- #old says that the constructor is from a redefinition and not new, -->
+  <!-- so an anchor should not be created -->
   <xsl:template match="Constructor">
     <xsl:param name="indef"/>
     <xsl:param name="nl"/>
     <xsl:param name="argt"/>
     <xsl:param name="nrt"/>
+    <xsl:param name="old"/>
     <xsl:variable name="loci">
       <xsl:choose>
         <xsl:when test="($mml=&quot;1&quot;) or ($generate_items&gt;0)">
@@ -7696,15 +7841,25 @@
         <xsl:with-param name="kind" select="@kind"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:element name="a">
-      <xsl:attribute name="NAME">
-        <xsl:value-of select="concat(@kind,@nr)"/>
-      </xsl:attribute>
-      <xsl:call-template name="pkeyword">
-        <xsl:with-param name="str" select="$mk"/>
-      </xsl:call-template>
-      <xsl:text> </xsl:text>
-    </xsl:element>
+    <xsl:choose>
+      <xsl:when test="$old=&quot;1&quot;">
+        <xsl:call-template name="pkeyword">
+          <xsl:with-param name="str" select="$mk"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="a">
+          <xsl:attribute name="NAME">
+            <xsl:value-of select="concat(@kind,@nr)"/>
+          </xsl:attribute>
+          <xsl:call-template name="pkeyword">
+            <xsl:with-param name="str" select="$mk"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:choose>
       <xsl:when test="@kind=&quot;G&quot;">
         <xsl:call-template name="abs">
@@ -7988,6 +8143,7 @@
                 <xsl:text>
 div { padding: 0 0 0 0; margin: 0 0 0 0; } 
 div.add { padding-left: 3mm; padding-bottom: 0mm;  margin: 0 0 0 0; } 
+div.box { border-width:thin; border-color:blue; border-style:solid; }
 p { margin: 0 0 0 0; } 
 body {font-family: monospace;}
 a {text-decoration:none} a:hover { color: red; } 

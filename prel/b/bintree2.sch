@@ -93,7 +93,7 @@
 </Func>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="299">
+<Func kind="K" nr="300">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -209,7 +209,7 @@
 </Typ>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="299">
+<Func kind="K" nr="300">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -227,7 +227,7 @@
 </Func>
 </Pred>
 <Pred kind="P" nr="2">
-<Func kind="K" nr="299">
+<Func kind="K" nr="300">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

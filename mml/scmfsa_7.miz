@@ -21,7 +21,7 @@ environ
       SCMFSA_2, FINSET_1, FINSEQ_2, CARD_1, RELSET_1, AMI_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, AMI_1, FINSEQ_1, FINSEQ_2, SCMFSA_2;
- theorems AMI_1, FUNCT_1, FUNCT_2, SCMFSA_2, INT_1, NAT_1, FINSEQ_1, FINSEQ_2,
+ theorems AMI_1, FUNCT_1, SCMFSA_2, INT_1, NAT_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSEQ_4, FINSEQ_5, FINSEQ_6, RELAT_1, CARD_1, TARSKI,
       GRFUNC_1, ABSVALUE, FUNCT_7, XBOOLE_1, FINSET_1, XREAL_1, XXREAL_0,
       FUNCOP_1, AMI_3, ORDINAL1, PARTFUN1, NAT_D, PRE_POLY;
@@ -974,8 +974,10 @@ theorem
   for s being State of SCM+FSA st IC s =  0 & s.intloc 0 = 1 for a
   being Int-Location, k being Integer st a:=k c= s & a<>intloc 0
    holds ProgramPart s halts_on s &
-    (Result s).a = k & (for b being Int-Location st b <> a holds (Result
-  s).b = s.b) & for f being FinSeq-Location holds (Result s).f = s.f
+    (Result(ProgramPart(s),s)).a = k & (for b being Int-Location st b <> a
+holds Result(ProgramPart s,
+  s).b = s.b) & for f being FinSeq-Location holds (Result(ProgramPart(s),s)).f
+= s.f
 proof
   let s be State of SCM+FSA;
   assume that
@@ -1218,12 +1220,15 @@ A57: Q[0] by AMI_1:13;
 A58: for i being Element of NAT holds Q[i] from NAT_1:sch 1(A57,A43);
 Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
  = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
-A59: CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s),s,k)
+TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
+by AMI_1:144;
+A59: CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,k)
 )
- = ( Comput(ProgramPart(s),s,k)). k by A33,Y
+ = ( Comput(ProgramPart(s),s,k)). k by A33,Y,TX
       .= halt SCM+FSA by A55,AMI_1:54;
     hence ProgramPart s halts_on s by AMI_1:146;
-    then Comput(ProgramPart(s),s,k) = Result s by A59,AMI_1:def 22;
+    then Comput(ProgramPart(s),s,k) = Result(ProgramPart(s),s)
+    by A59,AMI_1:def 22,TX;
     hence thesis by A58,A56;
   end;
   suppose
@@ -1462,14 +1467,16 @@ Y:  (ProgramPart Comput(ProgramPart(s),s,mk+1+1))/.IC Comput(ProgramPart(s),s,
 mk+1+1)
  = Comput(ProgramPart(s),s,mk+1+1).IC Comput(ProgramPart(s),s,mk+1+1) by AMI_1:
 150;
-A112: CurInstr(ProgramPart Comput(ProgramPart(s),s,mk+1+1),Comput(ProgramPart(s
+TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,mk+1+1)
+by AMI_1:144;
+A112: CurInstr(ProgramPart(s),Comput(ProgramPart(s
 ),s,mk+1+1))
-     = ( Comput(ProgramPart(s),s,mk+1+1)). (mk
-    +1+1) by A89,Y
+     = ( Comput(ProgramPart(s),s,mk+1+1)). (mk+1+1) by A89,Y,TX
       .= halt SCM+FSA by A111,AMI_1:54;
     hence ProgramPart s halts_on s by AMI_1:146;
     then
-A113: Comput(ProgramPart(s),s,mk+1+1) = Result s by A112,AMI_1:def 22;
+A113: Comput(ProgramPart(s),s,mk+1+1) = Result(ProgramPart(s),s) by A112,AMI_1:
+def 22,TX;
 A114: Q[0] by AMI_1:13;
 A115: for i being Element of NAT holds Q[i] from NAT_1:sch 1(A114,A99);
     -(mk+1+1)+1+1 = k & 0 + 1 <= mk+(1+1) by XREAL_1:9;
@@ -1481,9 +1488,11 @@ theorem
   for s being State of SCM+FSA st IC s =  0 & s.intloc 0 = 1 for f
   being FinSeq-Location, p being FinSequence of INT st f:=p c= s
    holds ProgramPart s halts_on s &
-    (Result s).f = p & (for b being Int-Location st b <> intloc 1 & b <>
-  intloc 2 holds (Result s).b = s.b) & for g being FinSeq-Location st g <> f
-  holds (Result s).g = s.g
+    (Result(ProgramPart(s),s)).f = p & (for b being Int-Location st b <> intloc
+1 & b <>
+  intloc 2 holds (Result(ProgramPart(s),s)).b = s.b) & for g being
+FinSeq-Location st g <> f
+  holds (Result(ProgramPart(s),s)).g = s.g
 proof
   set D = the Instructions of SCM+FSA;
   set V = intloc 2;
@@ -2047,6 +2056,9 @@ A121: ( for b being Int-Location st b <> I & b <> V holds Comput(ProgramPart(s)
   len (q0 ^ FlattenSeq pp0)).b = s.b)& for g being FinSeq-Location st g <> f
   holds Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).g = s.g;
 A122: dom p = Seg len pp0 by A15,A117,FINSEQ_1:def 3;
+TX: ProgramPart s =
+ ProgramPart Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp))
+by AMI_1:144;
 Y:  (ProgramPart Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp)))/.
 IC Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp))
  = Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp)).
@@ -2054,19 +2066,21 @@ IC Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp))
   IC Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp)) =  len (q0 ^
   FlattenSeq pp) by A117,A118;
   then
-A123: CurInstr(ProgramPart Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp)),
+A123: CurInstr(ProgramPart(s),
     Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp))) = q.(len (q0 ^
-  FlattenSeq pp) + 1) by A9,A18,Y
+  FlattenSeq pp) + 1) by A9,A18,Y,TX
     .= halt SCM+FSA by A17,FINSEQ_1:59;
   hence ProgramPart s halts_on s by AMI_1:146;
   then
-A124: Comput(ProgramPart(s),s,len (q0^FlattenSeq pp)) = Result s by A123,AMI_1:
-def 22;
+A124: Comput(ProgramPart(s),s,len (q0^FlattenSeq pp)) = Result(ProgramPart(s),s
+) by A123,AMI_1:
+def 22,TX;
   dom (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).f) = Seg len pp0 by
 A15,A117
 ,A120,FINSEQ_1:def 3;
-  then (Result s).f = p | Seg len pp0 by A117,A119,A124,RELAT_1:97;
-  hence (Result s).f = p by A122,RELAT_1:97;
+  then (Result(ProgramPart(s),s)).f = p | Seg len pp0 by A117,A119,A124,RELAT_1
+:97;
+  hence (Result(ProgramPart(s),s)).f = p by A122,RELAT_1:97;
   thus thesis by A117,A121,A124;
 end;
 

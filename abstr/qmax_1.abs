@@ -25,12 +25,10 @@ begin
 reserve X1,x,y,z for set,
   n,m for Element of NAT,
   X for non empty set;
-
 reserve A,B for Event of Borel_Sets,
   D for Subset of REAL;
 
-definition
-  let X;
+definition let X;
   let S be SigmaField of X;
   func Probabilities(S) -> set means
 :: QMAX_1:def 1
@@ -38,31 +36,29 @@ definition
   x in it iff x is Probability of S;
 end;
 
-registration
-  let X;
+registration let X;
   let S be SigmaField of X;
   cluster Probabilities(S) -> non empty;
 end;
 
 definition
-  struct QM_Str (# Observables, States -> non empty set, Quantum_Probability
--> Function of [:the Observables, the States:], Probabilities(Borel_Sets) #);
+  struct QM_Str (# Observables, FStates -> non empty set,
+     Quantum_Probability -> Function of [:the Observables, the FStates:],
+       Probabilities(Borel_Sets) #);
 end;
 
 reserve Q for QM_Str;
 
-definition
-  let Q;
+definition let Q;
   func Obs Q -> set equals
 :: QMAX_1:def 2
   the Observables of Q;
   func Sts Q -> set equals
 :: QMAX_1:def 3
-  the States of Q;
+  the FStates of Q;
 end;
 
-registration
-  let Q;
+registration let Q;
   cluster Obs Q -> non empty;
   cluster Sts Q -> non empty;
 end;
@@ -72,25 +68,23 @@ reserve s for Element of Sts Q;
 reserve E for Event of Borel_Sets;
 reserve ASeq for SetSequence of Borel_Sets;
 
-definition
-  let Q,A1,s;
+definition let Q,A1,s;
   func Meas(A1,s) -> Probability of Borel_Sets equals
 :: QMAX_1:def 4
-  (the Quantum_Probability
-  of Q).[A1,s];
+  (the Quantum_Probability of Q).[A1,s];
 end;
 
-definition
-  let IT be QM_Str;
+definition let IT be QM_Str;
   attr IT is Quantum_Mechanics-like means
 :: QMAX_1:def 5
 
-  (for A1,A2 being Element of
-Obs IT st for s being Element of Sts IT holds Meas(A1,s)=Meas(A2,s) holds A1=A2
-  ) & (for s1,s2 being Element of Sts IT st for A being Element of Obs IT holds
-Meas(A,s1)=Meas(A,s2) holds s1=s2) & for s1,s2 being Element of Sts IT, t being
-Real st 0<=t & t<=1 ex s being Element of Sts IT st for A being Element of Obs
-  IT, E holds Meas(A,s).E=t*(Meas(A,s1).E) + ((1-t)*Meas(A,s2).E);
+  (for A1,A2 being Element of Obs IT st
+  for s being Element of Sts IT holds Meas(A1,s)=Meas(A2,s) holds A1=A2) &
+  (for s1,s2 being Element of Sts IT st for A being Element of Obs IT holds
+  Meas(A,s1)=Meas(A,s2) holds s1=s2) &
+  for s1,s2 being Element of Sts IT, t being Real st 0<=t & t<=1
+  ex s being Element of Sts IT st for A being Element of Obs IT, E holds
+  Meas(A,s).E=t*(Meas(A,s1).E) + ((1-t)*Meas(A,s2).E);
 end;
 
 registration
@@ -105,48 +99,44 @@ reserve Q for Quantum_Mechanics;
 reserve s for Element of Sts Q;
 
 definition
-  struct(RelStr,ComplStr) OrthoRelStr(# carrier -> set, InternalRel -> (
-    Relation of the carrier), Compl -> Function of the carrier,the carrier #);
+  struct(RelStr,ComplStr) OrthoRelStr(# carrier -> set,
+  InternalRel -> (Relation of the carrier),
+  Compl -> Function of the carrier,the carrier #);
 end;
 
 reserve x1 for Element of X1;
 reserve Inv for Function of X1,X1;
 
-definition
-  let X1, Inv;
-  pred Inv is_an_involution_in X1 means
+definition let X1, Inv;
+  pred Inv is_an_involution means
 :: QMAX_1:def 6
   Inv.(Inv.x1) = x1;
 end;
 
-definition
-  let W be OrthoRelStr;
-  pred W is_a_Quantuum_Logic_on means
+definition let W be OrthoRelStr;
+  pred W is_a_Quantum_Logic means
 :: QMAX_1:def 7
 
-  the InternalRel of W
-  partially_orders the carrier of W & the Compl of W is_an_involution_in the
-  carrier of W & for x,y being Element of the carrier of W st [x,y] in the
-  InternalRel of W holds [(the Compl of W).y,(the Compl of W).x] in the
-  InternalRel of W;
+  the InternalRel of W partially_orders the carrier of W &
+  the Compl of W is_an_involution &
+  for x,y being Element of W st
+  [x,y] in the InternalRel of W holds
+  [(the Compl of W).y,(the Compl of W).x] in the InternalRel of W;
 end;
 
-definition
-  let Q;
+definition let Q;
   func Prop Q -> set equals
 :: QMAX_1:def 8
   [:Obs Q,Borel_Sets:];
 end;
 
-registration
-  let Q;
+registration let Q;
   cluster Prop Q -> non empty;
 end;
 
 reserve p,q,r,p1,q1 for Element of Prop Q;
 
-definition
-  let Q,p;
+definition let Q,p;
   redefine func p`1 -> Element of Obs Q;
   func p`2 -> Event of Borel_Sets;
 end;
@@ -156,23 +146,20 @@ canceled 15;
 theorem :: QMAX_1:16
   for E st E = p`2` holds Meas(p`1,s).p`2 = 1 - Meas(p`1,s).E;
 
-definition
-  let Q,p;
+definition let Q,p;
   func 'not' p -> Element of Prop Q equals
 :: QMAX_1:def 9
   [p`1,(p`2)`];
 end;
 
-definition
-  let Q,p,q;
+definition let Q,p,q;
   pred p |- q means
 :: QMAX_1:def 10
 
   for s holds Meas(p`1,s).p`2 <= Meas(q`1,s).q`2;
 end;
 
-definition
-  let Q,p,q;
+definition let Q,p,q;
   pred p <==> q means
 :: QMAX_1:def 11
 
@@ -207,13 +194,11 @@ theorem :: QMAX_1:27
 theorem :: QMAX_1:28
   p |- q implies 'not' q |- 'not' p;
 
-definition
-  let Q;
+definition let Q;
   func PropRel Q -> Equivalence_Relation of Prop Q means
 :: QMAX_1:def 12
 
-  [p,q] in it
-  iff p <==> q;
+  [p,q] in it iff p <==> q;
 end;
 
 reserve B,C for Subset of Prop Q;
@@ -225,14 +210,13 @@ theorem :: QMAX_1:30
   ,d being Element of Prop Q holds a in B & b in B & c in C & d in C & a |- c
   implies b |- d;
 
-definition
-  let Q;
+definition let Q;
   func OrdRel Q -> Relation of Class PropRel (Q) means
 :: QMAX_1:def 13
 
   [B,C] in it iff
-B in Class PropRel Q & C in Class PropRel Q & for p,q st p in B & q in C holds
-  p |- q;
+  B in Class PropRel Q & C in Class PropRel Q &
+  for p,q st p in B & q in C holds p |- q;
 end;
 
 canceled;
@@ -248,8 +232,7 @@ theorem :: QMAX_1:34
   for B,C st B in Class PropRel Q & C in Class PropRel Q for p,q holds
   'not' p in C & 'not' q in C & p in B implies q in B;
 
-definition
-  let Q;
+definition let Q;
   func InvRel Q -> Function of Class PropRel Q,Class PropRel Q means
 :: QMAX_1:def 14
 
@@ -258,7 +241,7 @@ end;
 
 canceled;
 
-theorem :: QMAX_1:36 ::Main Theorem
+theorem :: QMAX_1:36 :: Main Theorem
   for Q holds OrthoRelStr(#Class PropRel Q,OrdRel Q,InvRel Q#)
-  is_a_Quantuum_Logic_on;
+  is_a_Quantum_Logic;
 

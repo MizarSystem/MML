@@ -1,0 +1,282 @@
+:: The Sum and Product of Finite Sequences of Complex Numbers
+::  by Keiichi Miyajima and Takahiro Kato
+:: 
+:: Received January 12, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, FINSEQ_2, ARYTM_1, FUNCT_1, RELAT_1, BINOP_1, SETWISEO,
+      SQUARE_1, FUNCOP_1, RVSUM_1, RVSUM_2, CARD_3, XBOOLE_0, COMPLEX1,
+      XCMPLX_0, VALUED_0, BINOP_2, ZFMISC_1, NUMBERS, SUBSET_1, NAT_1, TARSKI,
+      ORDINAL4, ORDINAL1, ARYTM_3, CARD_1, VALUED_1, XREAL_0;
+ notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, VALUED_0, XBOOLE_0,
+      XCMPLX_0, XREAL_0, COMPLEX1, NAT_1, SQUARE_1, RELAT_1, FUNCT_1, PARTFUN1,
+      BINOP_2, FUNCT_2, BINOP_1, FUNCOP_1, FINSEQ_1, FINSEQ_2, VALUED_1,
+      COMPLSP1, FINSEQOP, SETWOP_2, RVSUM_1;
+ constructors BINOP_1, COMPLEX1, SETWISEO, SQUARE_1, BINOP_2, FINSEQOP,
+      FINSOP_1, RELSET_1, RVSUM_1, COMPLSP1;
+ registrations FUNCT_1, FUNCT_2, FUNCOP_1, NUMBERS, XREAL_0, BINOP_2, MEMBERED,
+      FINSEQ_1, FINSEQ_2, VALUED_0, VALUED_1, RELAT_1, RVSUM_1, NEWTON;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Auxiliary theorems
+
+definition let F be complex-valued Relation;
+  redefine func rng F -> Subset of COMPLEX;
+end;
+
+registration
+  let D be non empty set;
+  let F be Function of COMPLEX,D;
+  let F1 be complex-valued FinSequence;
+  cluster F*F1 -> FinSequence-like;
+end;
+
+reserve s for set,
+  i,j,k for Nat,
+  x,x1,x2,x3 for Element of COMPLEX,
+  c,c1,c2,c3 for complex number,
+  F,F1,F2,F3 for complex-valued FinSequence,
+  R,R1,R2,R3 for i-long FinSequence of COMPLEX;
+
+definition
+  func sqrcomplex -> UnOp of COMPLEX means
+:: RVSUM_2:def 1
+  for c holds it.c = c^2;
+end;
+
+theorem :: RVSUM_2:1
+  sqrcomplex is_distributive_wrt multcomplex;
+
+theorem :: RVSUM_2:2 ::: generalized COMPLSP1:17
+  c multcomplex is_distributive_wrt addcomplex;
+
+begin
+
+definition let F1,F2;
+  redefine func F1 + F2 -> FinSequence of COMPLEX equals
+:: RVSUM_2:def 2
+  addcomplex.:(F1,F2);
+  commutativity;
+end;
+
+definition let i,R1,R2;
+  redefine func R1 + R2 -> Element of i-tuples_on COMPLEX;
+end;
+
+theorem :: RVSUM_2:3
+  (R1+R2).s = R1.s + R2.s;
+
+theorem :: RVSUM_2:4
+  <*>COMPLEX + F = <*>COMPLEX;
+
+theorem :: RVSUM_2:5
+  <*c1*> + <*c2*> = <*c1+c2*>;
+
+theorem :: RVSUM_2:6
+  (i|->c1) + (i|->c2) = i|->(c1+c2);
+
+definition let F;
+  redefine func -F -> FinSequence of COMPLEX equals
+:: RVSUM_2:def 3
+  compcomplex*F;
+end;
+
+definition let i,R;
+  redefine func -R -> Element of i-tuples_on COMPLEX;
+end;
+
+theorem :: RVSUM_2:7
+  -<*c*> = <*-c*>;
+
+theorem :: RVSUM_2:8
+  -(i|->c) = i|->-c;
+
+theorem :: RVSUM_2:9
+  R1 + R = R2 + R implies R1 = R2;
+
+theorem :: RVSUM_2:10
+  -(F1 + F2) = -F1 + -F2;
+
+definition let F1,F2;
+  redefine func F1 - F2 -> FinSequence of COMPLEX equals
+:: RVSUM_2:def 4
+  diffcomplex.:(F1,F2);
+end;
+
+definition let i,R1,R2;
+  redefine func R1 - R2 -> Element of i-tuples_on COMPLEX;
+end;
+
+theorem :: RVSUM_2:11
+  (R1-R2).s = R1.s - R2.s;
+
+theorem :: RVSUM_2:12
+  <*>COMPLEX - F = <*>COMPLEX & F - <*>COMPLEX = <*>COMPLEX;
+
+theorem :: RVSUM_2:13
+  <*c1*> - <*c2*> = <*c1-c2*>;
+
+theorem :: RVSUM_2:14
+  (i|->c1) - (i|->c2) = i|->(c1-c2);
+
+theorem :: RVSUM_2:15
+  R - (i|-> 0c) = R;
+
+theorem :: RVSUM_2:16
+  -(F1 - F2) = F2 - F1;
+
+theorem :: RVSUM_2:17
+  -(F1 - F2) = -F1 + F2;
+
+theorem :: RVSUM_2:18
+  R1 - R2 = i|->0c implies R1 = R2;
+
+theorem :: RVSUM_2:19
+  R1 = R1 + R - R;
+
+theorem :: RVSUM_2:20
+  R1 = R1 - R + R;
+
+notation let F,c;
+  synonym c*F for c(#)F;
+end;
+
+definition let F,c;
+  redefine func c*F -> FinSequence of COMPLEX equals
+:: RVSUM_2:def 5
+  (c multcomplex)*F;
+end;
+
+definition let i,R,c;
+  redefine func c*R -> Element of i-tuples_on COMPLEX;
+end;
+
+theorem :: RVSUM_2:21
+  c*<*c1*> = <*c*c1*>;
+
+theorem :: RVSUM_2:22
+  c1*(i|->c2) = i|->(c1*c2);
+
+theorem :: RVSUM_2:23
+  (c1 + c2)*F = c1*F + c2*F;
+
+theorem :: RVSUM_2:24
+  0c*R = i|->0c;
+
+notation let F1,F2;
+  synonym mlt(F1,F2) for F1(#)F2;
+end;
+
+definition let F1,F2;
+  redefine func mlt(F1,F2) -> FinSequence of COMPLEX equals
+:: RVSUM_2:def 6
+  multcomplex.:(F1,F2);
+  commutativity;
+end;
+
+definition let i,R1,R2;
+  redefine func mlt(R1,R2) -> Element of i-tuples_on COMPLEX;
+end;
+
+theorem :: RVSUM_2:25
+  mlt(<*>COMPLEX,F) = <*>COMPLEX;
+
+theorem :: RVSUM_2:26
+  mlt(<*c1*>,<*c2*>) = <*c1*c2*>;
+
+theorem :: RVSUM_2:27
+  mlt(i|->c,R) = c*R;
+
+theorem :: RVSUM_2:28
+  mlt(i|->c1,i|->c2) = i|->(c1*c2);
+
+begin :: Finite Sum of Finite Sequence of Complex Numbers
+
+theorem :: RVSUM_2:29
+  Sum(<*> COMPLEX) = 0c;
+
+theorem :: RVSUM_2:30
+  Sum <*c*> = c;
+
+theorem :: RVSUM_2:31
+  Sum(F^<*c*>) = Sum F + c;
+
+theorem :: RVSUM_2:32
+  Sum(F1^F2) = Sum F1 + Sum F2;
+
+theorem :: RVSUM_2:33
+  Sum(<*c*>^F) = c + Sum F;
+
+theorem :: RVSUM_2:34
+  Sum<*c1,c2*> = c1 + c2;
+
+theorem :: RVSUM_2:35
+  Sum<*c1,c2,c3*> = c1 + c2 + c3;
+
+theorem :: RVSUM_2:36
+  Sum(i |-> c) = i*c;
+
+theorem :: RVSUM_2:37
+  Sum(i |-> 0c) = 0c;
+
+theorem :: RVSUM_2:38
+  Sum(c*F) = c*(Sum F);
+
+theorem :: RVSUM_2:39
+  Sum -F = -(Sum F);
+
+theorem :: RVSUM_2:40
+  Sum(R1 + R2) = Sum R1 + Sum R2;
+
+theorem :: RVSUM_2:41
+  Sum(R1 - R2) = Sum R1 - Sum R2;
+
+begin
+
+theorem :: RVSUM_2:42
+  Product <*>COMPLEX = 1;
+
+theorem :: RVSUM_2:43
+  Product (<*c*>^F) = c * Product F;
+
+theorem :: RVSUM_2:44
+  for R being Element of 0-tuples_on COMPLEX holds Product R = 1;
+
+theorem :: RVSUM_2:45
+  Product ((i+j) |->c) = (Product (i|->c))*(Product (j|->c));
+
+theorem :: RVSUM_2:46
+  Product ((i*j) |->c) = Product (j |-> (Product (i|->c)));
+
+theorem :: RVSUM_2:47
+  Product (i|->(c1*c2)) = (Product (i|->c1))*(Product (i|->c2));
+
+theorem :: RVSUM_2:48
+  Product mlt(R1,R2) = Product R1 * Product R2;
+
+theorem :: RVSUM_2:49
+  Product (c*R) = Product (i|->c) * Product R;
+
+begin :: from EUCLID_2 (partially modified)
+
+theorem :: RVSUM_2:50
+  for x being complex-valued FinSequence holds len (-x)=len x;
+
+theorem :: RVSUM_2:51
+  for x1,x2 being complex-valued FinSequence st len x1=len x2 holds
+  len (x1+x2)=len x1;
+
+theorem :: RVSUM_2:52
+  for x1,x2 being complex-valued FinSequence st len x1=len x2 holds
+  len (x1-x2)=len x1;
+
+theorem :: RVSUM_2:53
+  for a being real number, x being complex-valued FinSequence
+  holds len (a*x)=len x;
+
+theorem :: RVSUM_2:54
+  for x,y,z being complex-valued FinSequence st len x=len y & len y=len z
+  holds mlt(x+y,z) = mlt(x,z)+mlt(y,z);

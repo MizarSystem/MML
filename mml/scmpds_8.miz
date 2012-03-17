@@ -8,7 +8,7 @@ environ
 
  vocabularies NUMBERS, SCMPDS_2, FSM_1, AMI_2, SUBSET_1, SCMP_GCD, AMI_3,
       FUNCT_1, CARD_1, AMI_1, ARYTM_3, CARD_3, XXREAL_0, INT_1, SCMFSA_9,
-      TURING_1, ARYTM_1, SCMPDS_4, SCMFSA_7, SCMPDS_5, RELAT_1, UNIALG_2,
+      TURING_1, ARYTM_1, SCMPDS_4, SCMFSA_7, RELAT_1, UNIALG_2,
       SCMFSA7B, SCMFSA6A, FUNCT_4, CIRCUIT2, TARSKI, SCMFSA6B, MSUALG_1,
       GRAPHSP, STRUCT_0, VALUED_1, NAT_1, XBOOLE_0, SCMPDS_8, ORDINAL1,
       PARTFUN1, SCMNORM;
@@ -29,7 +29,7 @@ environ
  theorems AMI_1, NAT_1, TARSKI, FUNCT_4, FUNCT_1, INT_1, SCMPDS_2, AMI_2,
       SCMPDS_3, GRFUNC_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, ENUMSET1, SCMP_GCD,
       SCMPDS_7, RELAT_1, XBOOLE_1, XREAL_1, ORDINAL1, FUNCOP_1, XXREAL_0,
-      ZFMISC_1, PBOOLE, PARTFUN1;
+      ZFMISC_1, PBOOLE, PARTFUN1, AFINSQ_1;
  schemes NAT_1, SCMPDS_4, FUNCT_2;
 
 begin :: Preliminaries
@@ -223,8 +223,8 @@ A1: PF=i1 ';' I by SCMPDS_4:def 4;
 end;
 
 registration
-  let I be No-StopCode Program of SCMPDS, a be Int_position,i be Integer;
-  cluster while<0(a,i,I) -> No-StopCode;
+  let I be halt-free Program of SCMPDS, a be Int_position,i be Integer;
+  cluster while<0(a,i,I) -> halt-free;
   correctness;
 end;
 
@@ -257,7 +257,7 @@ proof
   let a be Int_position,i be Integer,m be Element of NAT, I be Program of
   SCMPDS;
   card while<0(a,i,I)=card I + 2 by Th6;
-  hence thesis by SCMPDS_4:1;
+  hence thesis by AFINSQ_1:70;
 end;
 
 theorem Th8:
@@ -332,7 +332,7 @@ by AMI_1:144;
     end;
   end;
   hence WHL is_closed_on s by SCMPDS_6:def 2;
-  ProgramPart s3 halts_on s3 by A9,AMI_1:146;
+  ProgramPart s3 halts_on s3 by A9,AMI_1:146,TX;
   hence thesis by SCMPDS_6:def 3;
 end;
 
@@ -362,7 +362,7 @@ Comput(ProgramPart(s3),s3,0)) by AMI_1:14
   iWHL c= s3 by FUNCT_4:26;
   then
 A6: pWHL c= s4 by AMI_1:81,SCMPDS_4:57;
-A7: IExec(WHL,s) = Result s3 +* s | A by SCMPDS_4:def 8;
+A7: IExec(WHL,s) = Result(ProgramPart(s3),s3) +* s | A by SCMPDS_4:def 8;
   assume
   s.d1 >= 0;
   then
@@ -370,6 +370,8 @@ A8: IC s4 = ICplusConst(s3,(card I+2)) by A5,A4,SCMPDS_2:69
     .= (0+(card I+2)) by A1,SCMPDS_6:23;
 Y:  (ProgramPart s4)/.IC s4
  = s4.IC s4 by AMI_1:150;
+TX: ProgramPart s4 = ProgramPart s3
+by AMI_1:144;
 A9: card WHL=card I+2 by Th6;
   then (card I+2) in dom pWHL by SCMPDS_6:25;
   then s4.(card I+2) = pWHL.(card I+2) by A6,GRFUNC_1:8
@@ -377,28 +379,27 @@ A9: card WHL=card I+2 by Th6;
   then
 A10: CurInstr(ProgramPart s4,s4) = halt SCMPDS by A8,Y;
   then
-A11: ProgramPart s3 halts_on s3 by AMI_1:146;
+A11: ProgramPart s3 halts_on s3 by AMI_1:146,TX;
 A12: CurInstr(ProgramPart s3,s3) = i1 by A2,SCMPDS_6:22;
   now
     let l be Element of NAT;
 u: Comput(ProgramPart(s3),s3,0) = s3 by AMI_1:13;
+TX: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,l)
+by AMI_1:144;
     assume
     l < 0+1;
     then l=0 by NAT_1:13;
-    then CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(
-s3),s3,l))
-     = CurInstr(ProgramPart s3,s3) by u;
-    hence CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(
-s3),s3,l)) <>
-     halt SCMPDS by A12,SCMPDS_6:31;
+    then CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,l))
+     = CurInstr(ProgramPart s3,s3) by u,TX;
+    hence CurInstr(ProgramPart (s3),Comput(ProgramPart(s3),s3,l)) <>
+     halt SCMPDS by A12,SCMPDS_6:31,TX;
   end;
   then for l be Element of NAT
-   st CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(s3),
-s3,l)) = halt SCMPDS
+   st CurInstr(ProgramPart (s3),Comput(ProgramPart(s3),s3,l)) = halt SCMPDS
   holds 1 <= l;
-  then LifeSpan s3 = 1 by A10,A11,AMI_1:def 46;
+  then LifeSpan(ProgramPart(s3),s3) = 1 by A10,A11,AMI_1:def 46,TX;
   then
-A13: s4 = Result s3 by A11,AMI_1:122;
+A13: s4 = Result(ProgramPart(s3),s3) by A11,AMI_1:122;
 A14: dom (s | A) = A by SCMPDS_6:1;
 A15: now
     let x be set;
@@ -475,7 +476,7 @@ end;
 
 scheme
   WhileLHalt { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,I()
--> No-StopCode shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
+-> halt-free shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
   P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) & while<0(a(),i(),I())
   is_closed_on s() & while<0(a(),i(),I()) is_halting_on s()
 provided
@@ -524,7 +525,8 @@ A16:    not b in dom iWHL by SCMPDS_4:31;
 A17:    WHL = i1 ';' (I() ';' i2) by SCMPDS_4:51;
         set t2 = t +* IsI, t3 = t +* iWHL, t4 = Comput(ProgramPart(t3),t3,1);
 A18:    IsI c= t2 by FUNCT_4:26;
-        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I() + 1
+        set m2=LifeSpan(ProgramPart(t2),t2), t5=Comput(ProgramPart(t4),t4,m2),
+l1= (card I() + 1
 );
 A19:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
@@ -559,7 +561,7 @@ A26:    ProgramPart t2 halts_on t2 by SCMPDS_6:def 3;
         then ProgramPart(t2+*IsI) halts_on t2+*IsI by A26;
         then
 A27:    I() is_halting_on t2 by SCMPDS_6:def 3;
-A28:    IExec(I(),t) = Result t2 +* t | A by SCMPDS_4:def 8;
+A28:    IExec(I(),t) = Result(ProgramPart(t2),t2) +* t | A by SCMPDS_4:def 8;
 A29:    P[Dstate(IExec(I(),t))] by A4,A8,A9,A10;
 A30:    I() is_closed_on t by A4,A8,A9,A10;
         then
@@ -597,8 +599,9 @@ A38:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A18,A27,A31,
 A32,A25,A22
 ,SCMPDS_7:36;
         then
-A39:    DataPart t5 = DataPart Result t2 by A26,AMI_1:122
-          .= DataPart(Result t2 +* t | A) by A15,AMI_2:29,FUNCT_4:76
+A39:    DataPart t5 = DataPart Result(ProgramPart(t2),t2) by A26,AMI_1:122
+          .= DataPart(Result(ProgramPart(t2),t2) +* t | A) by A15,AMI_2:29,
+FUNCT_4:76
 ,SCMPDS_2:100
           .=DataPart IExec(I(),t) by SCMPDS_4:def 8;
         InsCode i2=0 by SCMPDS_2:21;
@@ -615,7 +618,7 @@ A42:      F(Dstate(t7)) < k+1 by A7,A40,XXREAL_0:2;
           hence contradiction by A42,INT_1:20;
         end;
 A43:    t5.a()=Comput(ProgramPart(t2),t2,m2).a() by A38,SCMPDS_4:23
-          .=(Result t2).a() by A26,AMI_1:122
+          .=(Result(ProgramPart(t2),t2)).a() by A26,AMI_1:122
           .=s().a() by A9,A13,A28,A12,FUNCT_4:12;
 T1: ProgramPart t4 = ProgramPart t3
 by AMI_1:144;
@@ -659,7 +662,7 @@ A1,A18,A27,A31,A32,A25,A22,SCMPDS_7:34;
 A49:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A48,AMI_1:51,t;
                     IC Comput(ProgramPart(t2),t2,kn) in dom pI by A30,SCMPDS_6:
 def 2;
-                    then lm < card pI by SCMPDS_4:1;
+                    then lm < card pI by AFINSQ_1:70;
                     then lm < card I()+1 by SCMPDS_5:7;
                     then
 A50:                lm+1 <= card I() +1 by INT_1:20;
@@ -667,7 +670,7 @@ A50:                lm+1 <= card I() +1 by INT_1:20;
                     then lm+1 < card I() +3 by A50,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm1;
                     hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A49,
-SCMPDS_4:1;
+AFINSQ_1:70;
                   end;
                 end;
               end;
@@ -724,7 +727,7 @@ end;
 
 scheme
   WhileLExec { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,I()
--> No-StopCode shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
+-> halt-free shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
 P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) & IExec(while<0(a(),i(),I()),s()
   ) = IExec(while<0(a(),i(),I()),IExec(I(),s()))
 provided
@@ -740,8 +743,9 @@ is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) & P[Dstate(IExec(I(),t))
 proof
   set WHL=while<0(a(),i(),I()), iWHL=Initialized stop WHL, iI= Initialized
   stop I(), s1= s() +* iWHL, ps= s() | A;
-  set sI= s() +* iI, m1=LifeSpan sI+2, s2=IExec(I(),s()) +* iWHL, m2=LifeSpan
-  s2;
+  set sI= s() +* iI, m1=LifeSpan(ProgramPart(sI),sI)+2, s2=IExec(I(),s()) +*
+iWHL, m2=LifeSpan(ProgramPart s2,
+  s2);
 A6: P[Dstate s()] by A4;
 A7: iI c= sI by FUNCT_4:26;
   I() is_closed_on s() by A2,A4,A5;
@@ -783,7 +787,8 @@ A18: ProgramPart s2 halts_on s2 by SCMPDS_6:def 3;
   set i1=(a(),i())>=0_goto (card I()+2), i2=goto -(card I()+1);
   set b=DataLoc(s().a(),i());
 A19: WHL = i1 ';' (I() ';' i2) by SCMPDS_4:51;
-  set mI=LifeSpan sI, s5=Comput(ProgramPart(s4),s4,mI), l1= (card I() + 1);
+  set mI=LifeSpan(ProgramPart(sI),sI), s5=Comput(ProgramPart(s4),s4,mI), l1= (
+card I() + 1);
 A20: IC s1 = 0 by SCMPDS_6:21;
 A21: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
 Comput(ProgramPart(s1),s1,0)) by AMI_1:14
@@ -803,14 +808,15 @@ A23: DataPart sI = DataPart s4 by SCMPDS_4:23;
   then
 A24: l1 in dom WHL by Th7;
   thus F(s())=F(s()) or P[s()];
-  set m0=LifeSpan s1;
+  set m0=LifeSpan(ProgramPart(s1),s1);
 A25: dom ps = dom s() /\ A by RELAT_1:90
     .= ({IC SCMPDS} \/ D \/ A) /\ A by SCMPDS_4:19
     .= A by XBOOLE_1:21;
-A26: IExec(I(),s()) | A= (Result sI +* ps) | A by SCMPDS_4:def 8
+A26: IExec(I(),s()) | A= (Result(ProgramPart(sI),sI) +* ps) | A by SCMPDS_4:def
+8
     .= ps by A25,FUNCT_4:24;
   set s7=Comput(ProgramPart(s1),s1,m3+1);
-A27: IExec(I(),s()) = Result sI +* s() | A by SCMPDS_4:def 8;
+A27: IExec(I(),s()) = Result(ProgramPart(sI),sI) +* s() | A by SCMPDS_4:def 8;
 A28: dom (s() | A) = A by SCMPDS_6:1;
   WHL c= iWHL & iWHL c= s1 by FUNCT_4:26,SCMPDS_6:17;
   then
@@ -855,15 +861,15 @@ SCMPDS_7:36;
 A38: not x in dom iWHL by SCMPDS_4:31;
 A39: not x in dom (s() | A) by A28,SCMPDS_2:53;
     s5.x=Comput(ProgramPart(sI),sI,mI).x by A37,SCMPDS_4:23
-      .=(Result sI).x by A9,AMI_1:122
+      .=(Result(ProgramPart(sI),sI)).x by A9,AMI_1:122
       .=IExec(I(),s()).x by A27,A39,FUNCT_4:12;
     hence s7.x=IExec(I(),s()).x by A33,A35,SCMPDS_2:66
       .=s2.x by A38,FUNCT_4:12;
   end;
   then
 A40: DataPart s7 = DataPart s2 by SCMPDS_4:23;
-  s2 | A= (Result sI +* ps +* iWHL) | A by SCMPDS_4:def 8
-    .=(Result sI +* ps)|A +* iWHL | A by FUNCT_4:75
+  s2 | A= (Result(ProgramPart(sI),sI) +* ps +* iWHL) | A by SCMPDS_4:def 8
+    .=(Result(ProgramPart(sI),sI) +* ps)|A +* iWHL | A by FUNCT_4:75
     .= ps +* iWHL | A by A25,FUNCT_4:24
     .= s1 | A by FUNCT_4:75
     .= Comput(ProgramPart(s1),s1,m1) | A by SCMPDS_7:6;
@@ -878,29 +884,32 @@ A42: m0=m1+nn by NAT_1:10;
   reconsider nn as Element of NAT by ORDINAL1:def 13;
 T: ProgramPart s1 = ProgramPart s2
 by A41,AMI_1:144;
+TX: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m1+m2)
+by AMI_1:144;
   Comput(ProgramPart(s1),s1,m1+m2) = Comput(ProgramPart(s1),s2,m2) by A41,AMI_1
-:51;
-  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1+m2),Comput(ProgramPart
-(s1),s1,m1+m2))
-   = halt SCMPDS by A18,AMI_1:def 46,T;
-  then m1 + m2 >= m0 by A13,AMI_1:def 46;
+:51,T;
+  then CurInstr(ProgramPart s1 ,Comput(ProgramPart(s1),s1,m1+m2))
+   = halt SCMPDS by A18,AMI_1:def 46,T,TX;
+  then m1 + m2 >= m0 by A13,AMI_1:def 46,T,TX;
   then
 A43: m2 >= nn by A42,XREAL_1:8;
+TX: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,nn)
+by AMI_1:144;
 A44: Comput(ProgramPart(s1),s1,m0) = Comput(ProgramPart(s1),s2,nn) by A41,A42,
 AMI_1:51;
-  then CurInstr(ProgramPart Comput(ProgramPart(s2),s2,nn),Comput(ProgramPart(s2
-),s2,nn))
-   =halt SCMPDS by A13,AMI_1:def 46,T;
-  then nn >= m2 by A18,AMI_1:def 46;
+  then CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,nn))
+   =halt SCMPDS by A13,AMI_1:def 46,T,TX;
+  then nn >= m2 by A18,AMI_1:def 46,TX;
   then nn=m2 by A43,XXREAL_0:1;
-  then Result s1 = Comput(ProgramPart(s2),s2,m2) by A13,A44,AMI_1:122,T;
+  then Result(ProgramPart(s1),s1) = Comput(ProgramPart(s2),s2,m2) by A13,A44,
+AMI_1:122,T;
   hence IExec(WHL,s()) = Comput(ProgramPart(s2),s2,m2) +* ps by SCMPDS_4:def 8
-    .= Result s2 +* IExec(I(),s()) | A by A18,A26,AMI_1:122
+    .= Result(ProgramPart(s2),s2) +* IExec(I(),s()) | A by A18,A26,AMI_1:122
     .= IExec(WHL,IExec(I(),s())) by SCMPDS_4:def 8;
 end;
 
 theorem
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of
+  for s being State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position, i be Integer,X be set, f being Function of product
 the Object-Kind of SCMPDS,NAT st card I > 0 & ( for t be State of SCMPDS st f.
 Dstate(t)=0 holds t.DataLoc(s.a,i) >= 0 ) & (for t be State of SCMPDS st (for x
@@ -909,7 +918,7 @@ be Int_position st x in X holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i) < 0 holds
 is_halting_on t & for x be Int_position st x in X holds IExec(I,t).x=t.x) holds
   while<0(a,i,I) is_closed_on s & while<0(a,i,I) is_halting_on s
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
 Int_position, i be Integer,X be set,f be Function of product the Object-Kind of
   SCMPDS,NAT;
   set b=DataLoc(s.a,i);
@@ -976,7 +985,8 @@ A22:    WHL c= t3 by XBOOLE_1:1;
         then Shift(I,1) c= t3 by A22,XBOOLE_1:1;
         then
 A23:    Shift(I,1) c= t4 by AMI_1:81;
-        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I + 1);
+        set m2=LifeSpan(ProgramPart(t2),t2), t5=Comput(ProgramPart(t4),t4,m2),
+l1= (card I + 1);
 A24:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
         set t6=Comput(ProgramPart(t3),t3,m3);
@@ -1019,8 +1029,9 @@ A34:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A18,A29,A27,
 A30,A21,A23
 ,SCMPDS_7:36;
         then
-A35:    DataPart t5 =DataPart Result t2 by A28,AMI_1:122
-          .= DataPart(Result t2 +* t | A) by A17,AMI_2:29,FUNCT_4:76
+A35:    DataPart t5 =DataPart Result(ProgramPart(t2),t2) by A28,AMI_1:122
+          .= DataPart(Result(ProgramPart(t2),t2) +* t | A) by A17,AMI_2:29,
+FUNCT_4:76
 ,SCMPDS_2:100
           .=DataPart IExec(I,t) by SCMPDS_4:def 8;
 T: ProgramPart t3 = ProgramPart t6
@@ -1031,14 +1042,14 @@ A36:    t7 = Following(ProgramPart t3,t6) by AMI_1:14
           .= 0 by A31,A32,SCMPDS_7:1;
         then
 A37:    t7 +* iWHL=t7 by SCMPDS_7:37;
-A38:    IExec(I,t) = Result t2 +* t | A by SCMPDS_4:def 8;
+A38:    IExec(I,t) = Result(ProgramPart(t2),t2) +* t | A by SCMPDS_4:def 8;
 A39:    now
           let x be Int_position;
           assume
 A40:      x in X;
 A41: not x in dom (t | A) by A10,SCMPDS_2:53;
           t5.x=Comput(ProgramPart(t2),t2,m2).x by A34,SCMPDS_4:23
-            .=(Result t2).x by A28,AMI_1:122
+            .=(Result(ProgramPart(t2),t2)).x by A28,AMI_1:122
             .=IExec(I,t).x by A38,A41,FUNCT_4:12
             .=t.x by A3,A7,A8,A9,A40
             .=s.x by A7,A40;
@@ -1056,7 +1067,7 @@ A44:      f.Dstate(t7) > k;
           hence contradiction by A44,INT_1:20;
         end;
 A45:    t5.a=Comput(ProgramPart(t2),t2,m2).a by A34,SCMPDS_4:23
-          .=(Result t2).a by A28,AMI_1:122
+          .=(Result(ProgramPart(t2),t2)).a by A28,AMI_1:122
           .=s.a by A8,A12,A38,A11,FUNCT_4:12;
 T1: ProgramPart t4 = ProgramPart t3
 by AMI_1:144;
@@ -1100,7 +1111,7 @@ A1,A18,A29,A27,A30,A21,A23,SCMPDS_7:34;
 A51:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A50,AMI_1:51,t;
                     IC Comput(ProgramPart(t2),t2,kn) in dom pI by A26,SCMPDS_6:
 def 2;
-                    then lm < card pI by SCMPDS_4:1;
+                    then lm < card pI by AFINSQ_1:70;
                     then lm < card I+1 by SCMPDS_5:7;
                     then
 A52:                lm+1 <= card I +1 by INT_1:20;
@@ -1108,7 +1119,7 @@ A52:                lm+1 <= card I +1 by INT_1:20;
                     then lm+1 < card I +3 by A52,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm1;
                     hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A51,
-SCMPDS_4:1;
+AFINSQ_1:70;
                   end;
                 end;
               end;
@@ -1168,7 +1179,7 @@ A57: P[n];
 end;
 
 theorem
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of
+  for s being State of SCMPDS,I being halt-free shiftable Program of
   SCMPDS, a be Int_position, i be Integer,X be set,f being Function of product
 the Object-Kind of SCMPDS,NAT st card I > 0 & s.DataLoc(s.a,i) < 0 & (for t be
   State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) >= 0 ) & (for t be
@@ -1178,7 +1189,7 @@ is_halting_on t & f.Dstate(IExec(I,t)) < f.Dstate(t) & for x be Int_position st
 x in X holds IExec(I,t).x=t.x) holds IExec(while<0(a,i,I),s) =IExec(while<0(a,i
   ,I),IExec(I,s))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i be Integer,X be set, f be Function of product the Object-Kind
   of SCMPDS,NAT;
   set b=DataLoc(s.a,i);
@@ -1233,7 +1244,7 @@ A10: P[Dstate s] by Th4;
 end;
 
 theorem Th15:
-  for s being State of SCMPDS,I being No-StopCode shiftable
+  for s being State of SCMPDS,I being halt-free shiftable
   Program of SCMPDS, a be Int_position, i be Integer,X be set st card I > 0 & (
 for t be State of SCMPDS st (for x be Int_position st x in X holds t.x=s.x) & t
 .a=s.a & t.DataLoc(s.a,i) < 0 holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i
@@ -1241,7 +1252,7 @@ for t be State of SCMPDS st (for x be Int_position st x in X holds t.x=s.x) & t
   Int_position st x in X holds IExec(I,t).x=t.x) holds while<0(a,i,I)
   is_closed_on s & while<0(a,i,I) is_halting_on s
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i be Integer,X be set;
   set b=DataLoc(s.a,i);
   set WHL=while<0(a,i,I), pWHL=stop WHL, iWHL=Initialized pWHL, pI=stop I, IsI
@@ -1305,7 +1316,8 @@ A21:    WHL c= t3 by XBOOLE_1:1;
         then Shift(I,1) c= t3 by A21,XBOOLE_1:1;
         then
 A22:    Shift(I,1) c= t4 by AMI_1:81;
-        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I + 1);
+        set m2=LifeSpan(ProgramPart(t2),t2), t5=Comput(ProgramPart(t4),t4,m2),
+l1= (card I + 1);
 A23:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
         set t6=Comput(ProgramPart(t3),t3,m3);
@@ -1313,7 +1325,7 @@ A23:    IC t3 = 0 by SCMPDS_6:21;
         card I + 1 < card I + 2 by XREAL_1:8;
         then
 A24:    l1 in dom WHL by Th7;
-A25:    IExec(I,t) = Result t2 +* t | A by SCMPDS_4:def 8;
+A25:    IExec(I,t) = Result(ProgramPart(t2),t2) +* t | A by SCMPDS_4:def 8;
 A26:    I is_closed_on t by A2,A6,A7,A8;
         then
 A27:    I is_closed_on t2 by SCMPDS_6:38;
@@ -1350,7 +1362,7 @@ A30,A20,A22
 ,SCMPDS_7:36;
         then
 A35:    t5.a=Comput(ProgramPart(t2),t2,m2).a by SCMPDS_4:23
-          .=(Result t2).a by A28,AMI_1:122
+          .=(Result(ProgramPart(t2),t2)).a by A28,AMI_1:122
           .=s.a by A7,A14,A25,A10,FUNCT_4:12;
 T: ProgramPart t3 = ProgramPart t6
 by AMI_1:144;
@@ -1366,14 +1378,14 @@ A38:    now
 A39:      x in X;
 A40: not x in dom (t | A) by A9,SCMPDS_2:53;
           t5.x=Comput(ProgramPart(t2),t2,m2).x by A34,SCMPDS_4:23
-            .=(Result t2).x by A28,AMI_1:122
+            .=(Result(ProgramPart(t2),t2)).x by A28,AMI_1:122
             .=IExec(I,t).x by A25,A40,FUNCT_4:12
             .=t.x by A2,A6,A7,A8,A39
             .=s.x by A6,A39;
           hence t7.x=s.x by A32,A36,SCMPDS_2:66;
         end;
         t5.b=Comput(ProgramPart(t2),t2,m2).b by A34,SCMPDS_4:23
-          .=(Result t2).b by A28,AMI_1:122
+          .=(Result(ProgramPart(t2),t2)).b by A28,AMI_1:122
           .=IExec(I,t).b by A25,A11,FUNCT_4:12;
         then
 A41:    t7.b=IExec(I,t).b by A32,A36,SCMPDS_2:66;
@@ -1427,7 +1439,7 @@ A1,A17,A29,A27,A30,A20,A22,SCMPDS_7:34;
 A49:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A48,AMI_1:51,t;
                     IC Comput(ProgramPart(t2),t2,kn) in dom pI by A26,SCMPDS_6:
 def 2;
-                    then lm < card pI by SCMPDS_4:1;
+                    then lm < card pI by AFINSQ_1:70;
                     then lm < card I+1 by SCMPDS_5:7;
                     then
 A50:                lm+1 <= card I +1 by INT_1:20;
@@ -1435,7 +1447,7 @@ A50:                lm+1 <= card I +1 by INT_1:20;
                     then lm+1 < card I +3 by A50,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm1;
                     hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A49,
-SCMPDS_4:1;
+AFINSQ_1:70;
                   end;
                 end;
               end;
@@ -1501,7 +1513,7 @@ A55: for k being Element of NAT holds P[k] from NAT_1:sch 1(A53,A3);
 end;
 
 theorem
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of
+  for s being State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position,i be Integer,X be set st s.DataLoc(s.a,i) < 0 & card
 I > 0 & (for t be State of SCMPDS st (for x be Int_position st x in X holds t.x
   =s.x) & t.a=s.a & t.DataLoc(s.a,i) < 0 holds IExec(I,t).a=t.a & IExec(I,t).
@@ -1509,7 +1521,7 @@ DataLoc(s.a,i) > t.DataLoc(s.a,i) & I is_closed_on t & I is_halting_on t & for
 x be Int_position st x in X holds IExec(I,t).x=t.x) holds IExec(while<0(a,i,I),
   s) =IExec(while<0(a,i,I),IExec(I,s))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i be Integer,X be set;
   set b=DataLoc(s.a,i);
   set WHL=while<0(a,i,I), iWHL=Initialized stop WHL, iI= Initialized stop I,
@@ -1518,7 +1530,8 @@ proof
   assume
 A1: s.b < 0;
   set Es=IExec(I,s), bj=DataLoc(Es.a,i);
-  set sI= s +* iI, m1=LifeSpan sI+2, s2=IExec(I,s) +* iWHL, m2=LifeSpan s2;
+  set sI= s +* iI, m1=LifeSpan(ProgramPart(sI),sI)+2, s2=IExec(I,s) +* iWHL, m2
+=LifeSpan(ProgramPart(s2),s2);
   assume
 A2: card I > 0;
   assume
@@ -1558,7 +1571,7 @@ A13:  x in X;
   then WHL is_halting_on Es by A2,Th15;
   then
 A14: ProgramPart s2 halts_on s2 by SCMPDS_6:def 3;
-  set m0=LifeSpan s1;
+  set m0=LifeSpan(ProgramPart(s1),s1);
 A15: dom (s | A) = A by SCMPDS_6:1;
 A16: dom ps = dom s /\ A by RELAT_1:90
     .= ({IC SCMPDS} \/ D \/ A) /\ A by SCMPDS_4:19
@@ -1570,7 +1583,7 @@ A19: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
 Comput(ProgramPart(s1),s1,0)) by AMI_1:14
     .= Following(ProgramPart s1,s1) by AMI_1:13
     .= Exec(i1,s1) by A18,SCMPDS_6:22;
-A20: IExec(I,s) | A= (Result sI +* ps) | A by SCMPDS_4:def 8
+A20: IExec(I,s) | A= (Result(ProgramPart(sI),sI) +* ps) | A by SCMPDS_4:def 8
     .= ps by A16,FUNCT_4:24;
 A21: not b in dom iWHL by SCMPDS_4:31;
   not a in dom iWHL by SCMPDS_4:31;
@@ -1579,7 +1592,8 @@ A21: not b in dom iWHL by SCMPDS_4:31;
   then
 A22: IC s4 = succ IC s1 by A1,A19,SCMPDS_2:69
     .= (0+1) by A17;
-  set mI=LifeSpan sI, s5=Comput(ProgramPart(s4),s4,mI), l1= (card I + 1);
+  set mI=LifeSpan(ProgramPart(sI),sI), s5=Comput(ProgramPart(s4),s4,mI), l1= (
+card I + 1);
 A23: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   now
     let a;
@@ -1594,7 +1608,7 @@ A24: DataPart sI = DataPart s4 by SCMPDS_4:23;
   then
 A25: l1 in dom WHL by Th7;
   set s7=Comput(ProgramPart(s1),s1,m3+1);
-A26: IExec(I,s) = Result sI +* s | A by SCMPDS_4:def 8;
+A26: IExec(I,s) = Result(ProgramPart(sI),sI) +* s | A by SCMPDS_4:def 8;
   WHL c= iWHL & iWHL c= s1 by FUNCT_4:26,SCMPDS_6:17;
   then
 A27: WHL c= s1 by XBOOLE_1:1;
@@ -1636,15 +1650,15 @@ SCMPDS_7:36;
 A36: not x in dom iWHL by SCMPDS_4:31;
 A37: not x in dom (s | A) by A15,SCMPDS_2:53;
     s5.x=Comput(ProgramPart(sI),sI,mI).x by A35,SCMPDS_4:23
-      .=(Result sI).x by A7,AMI_1:122
+      .=(Result(ProgramPart(sI),sI)).x by A7,AMI_1:122
       .=IExec(I,s).x by A26,A37,FUNCT_4:12;
     hence s7.x=IExec(I,s).x by A31,A33,SCMPDS_2:66
       .=s2.x by A36,FUNCT_4:12;
   end;
   then
 A38: DataPart s7 = DataPart s2 by SCMPDS_4:23;
-  s2 | A= (Result sI +* ps +* iWHL) | A by SCMPDS_4:def 8
-    .=(Result sI +* ps)|A +* iWHL | A by FUNCT_4:75
+  s2 | A= (Result(ProgramPart(sI),sI) +* ps +* iWHL) | A by SCMPDS_4:def 8
+    .=(Result(ProgramPart(sI),sI) +* ps)|A +* iWHL | A by FUNCT_4:75
     .= ps +* iWHL | A by A16,FUNCT_4:24
     .= s1 | A by FUNCT_4:75
     .= Comput(ProgramPart(s1),s1,m1) | A by SCMPDS_7:6;
@@ -1659,24 +1673,27 @@ A40: m0=m1+nn by NAT_1:10;
   reconsider nn as Element of NAT by ORDINAL1:def 13;
 T: ProgramPart s1 = ProgramPart s2
 by A39,AMI_1:144;
+TX: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,nn)
+by AMI_1:144;
+TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m1+m2)
+by AMI_1:144;
   Comput(ProgramPart(s1),s1,m1+m2) = Comput(ProgramPart(s1),s2,m2) by A39,AMI_1
 :51;
-  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1+m2),Comput(ProgramPart
-(s1),s1,m1+m2))
-   = halt SCMPDS by A14,AMI_1:def 46,T;
-  then m1 + m2 >= m0 by A4,AMI_1:def 46;
+  then CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,m1+m2))
+   = halt SCMPDS by A14,AMI_1:def 46,T,TX1;
+  then m1 + m2 >= m0 by A4,AMI_1:def 46,T,TX1;
   then
 A41: m2 >= nn by A40,XREAL_1:8;
 A42: Comput(ProgramPart(s1),s1,m0) = Comput(ProgramPart(s1),s2,nn) by A39,A40,
 AMI_1:51;
-  then CurInstr(ProgramPart Comput(ProgramPart(s2),s2,nn),Comput(ProgramPart(s2
-),s2,nn))
-   =halt SCMPDS by A4,AMI_1:def 46,T;
-  then nn >= m2 by A14,AMI_1:def 46;
+  then CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,nn))
+   =halt SCMPDS by A4,AMI_1:def 46,T,TX,TX1;
+  then nn >= m2 by A14,AMI_1:def 46,T,TX,TX1;
   then nn=m2 by A41,XXREAL_0:1;
-  then Result s1 = Comput(ProgramPart(s2),s2,m2) by A4,A42,AMI_1:122,T;
+  then Result(ProgramPart(s1),s1) = Comput(ProgramPart(s2),s2,m2) by A4,A42,
+AMI_1:122,T;
   hence IExec(WHL,s) = Comput(ProgramPart(s2),s2,m2) +* ps by SCMPDS_4:def 8
-    .= Result s2 +* IExec(I,s) | A by A14,A20,AMI_1:122
+    .= Result(ProgramPart(s2),s2) +* IExec(I,s) | A by A14,A20,AMI_1:122
     .= IExec(WHL,IExec(I,s)) by SCMPDS_4:def 8;
 end;
 
@@ -1707,8 +1724,8 @@ A1: PF=i1 ';' I by SCMPDS_4:def 4;
 end;
 
 registration
-  let I be No-StopCode Program of SCMPDS,a be Int_position,i be Integer;
-  cluster while>0(a,i,I) -> No-StopCode;
+  let I be halt-free Program of SCMPDS,a be Int_position,i be Integer;
+  cluster while>0(a,i,I) -> halt-free;
   correctness;
 end;
 
@@ -1741,7 +1758,7 @@ proof
   let a be Int_position,i be Integer,m be Element of NAT, I be Program of
   SCMPDS;
   card while>0(a,i,I)=card I + 2 by Th17;
-  hence thesis by SCMPDS_4:1;
+  hence thesis by AFINSQ_1:70;
 end;
 
 theorem Th19:
@@ -1816,7 +1833,7 @@ by AMI_1:144;
     end;
   end;
   hence WHL is_closed_on s by SCMPDS_6:def 2;
-  ProgramPart s3 halts_on s3 by A9,AMI_1:146;
+  ProgramPart s3 halts_on s3 by A9,AMI_1:146,TX;
   hence thesis by SCMPDS_6:def 3;
 end;
 
@@ -1848,7 +1865,7 @@ Following(ProgramPart s3,Comput(ProgramPart(s3),s3,0)
   iWHL c= s3 by FUNCT_4:26;
   then
 A6: pWHL c= s4 by AMI_1:81,SCMPDS_4:57;
-A7: IExec(WHL,s) = Result s3 +* s | A by SCMPDS_4:def 8;
+A7: IExec(WHL,s) = Result(ProgramPart(s3),s3) +* s | A by SCMPDS_4:def 8;
   assume
   s.d1 <= 0;
   then
@@ -1856,6 +1873,8 @@ A8: IC s4 = ICplusConst(s3,(card I+2)) by A5,A4,SCMPDS_2:68
     .= (0+(card I+2)) by A1,SCMPDS_6:23;
 Y:  (ProgramPart s4)/.IC s4
  = s4.IC s4 by AMI_1:150;
+TX: ProgramPart s4 = ProgramPart s3
+by AMI_1:144;
 A9: card WHL=card I+2 by Th17;
   then (card I+2) in dom pWHL by SCMPDS_6:25;
   then s4.(card I+2) = pWHL.(card I+2) by A6,GRFUNC_1:8
@@ -1863,28 +1882,27 @@ A9: card WHL=card I+2 by Th17;
   then
 A10: CurInstr(ProgramPart s4,s4) = halt SCMPDS by A8,Y;
   then
-A11: ProgramPart s3 halts_on s3 by AMI_1:146;
+A11: ProgramPart s3 halts_on s3 by AMI_1:146,TX;
 A12: CurInstr(ProgramPart s3,s3) = i1 by A2,SCMPDS_6:22;
   now
     let l be Element of NAT;
 u: Comput(ProgramPart(s3),s3,0) = s3 by AMI_1:13;
+TX: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,l)
+by AMI_1:144;
     assume
     l < 0+1;
     then l=0 by NAT_1:13;
-    then CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(
-s3),s3,l))
+    then CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,l))
      = CurInstr(ProgramPart s3,s3) by u;
-    hence CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(
-s3),s3,l)) <>
+    hence CurInstr(ProgramPart (s3),Comput(ProgramPart(s3),s3,l)) <>
      halt SCMPDS by A12,SCMPDS_6:30;
   end;
   then for l be Element of NAT st
-   CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(s3),s3,
-l)) = halt SCMPDS
+   CurInstr(ProgramPart (s3),Comput(ProgramPart(s3),s3,l)) = halt SCMPDS
   holds 1 <= l;
-  then LifeSpan s3 = 1 by A10,A11,AMI_1:def 46;
+  then LifeSpan(ProgramPart(s3),s3) = 1 by A10,A11,AMI_1:def 46,TX;
   then
-A13: s4 = Result s3 by A11,AMI_1:122;
+A13: s4 = Result(ProgramPart(s3),s3) by A11,AMI_1:122;
 A14: dom (s | A) = A by SCMPDS_6:1;
 A15: now
     let x be set;
@@ -1961,7 +1979,7 @@ end;
 
 scheme
   WhileGHalt { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,I()
--> No-StopCode shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
+-> halt-free shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
   P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) & while>0(a(),i(),I())
   is_closed_on s() & while>0(a(),i(),I()) is_halting_on s()
 provided
@@ -2010,7 +2028,8 @@ A16:    not b in dom iWHL by SCMPDS_4:31;
 A17:    WHL = i1 ';' (I() ';' i2) by SCMPDS_4:51;
         set t2 = t +* IsI, t3 = t +* iWHL, t4 = Comput(ProgramPart(t3),t3,1);
 A18:    IsI c= t2 by FUNCT_4:26;
-        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I() + 1
+        set m2=LifeSpan(ProgramPart(t2),t2), t5=Comput(ProgramPart(t4),t4,m2),
+l1= (card I() + 1
 );
 A19:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
@@ -2045,7 +2064,7 @@ A26:    ProgramPart t2 halts_on t2 by SCMPDS_6:def 3;
         then ProgramPart(t2+*IsI) halts_on t2+*IsI by A26;
         then
 A27:    I() is_halting_on t2 by SCMPDS_6:def 3;
-A28:    IExec(I(),t) = Result t2 +* t | A by SCMPDS_4:def 8;
+A28:    IExec(I(),t) = Result(ProgramPart(t2),t2) +* t | A by SCMPDS_4:def 8;
 A29:    P[Dstate(IExec(I(),t))] by A4,A8,A9,A10;
 A30:    I() is_closed_on t by A4,A8,A9,A10;
         then
@@ -2083,8 +2102,9 @@ A38:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A18,A27,A31,
 A32,A25,A22
 ,SCMPDS_7:36;
         then
-A39:    DataPart t5 =DataPart Result t2 by A26,AMI_1:122
-          .= DataPart(Result t2 +* t | A) by A15,AMI_2:29,FUNCT_4:76
+A39:    DataPart t5 =DataPart Result(ProgramPart(t2),t2) by A26,AMI_1:122
+          .= DataPart(Result(ProgramPart(t2),t2) +* t | A) by A15,AMI_2:29,
+FUNCT_4:76
 ,SCMPDS_2:100
           .=DataPart IExec(I(),t) by SCMPDS_4:def 8;
         InsCode i2=0 by SCMPDS_2:21;
@@ -2101,7 +2121,7 @@ A42:      F(Dstate(t7)) < k+1 by A7,A40,XXREAL_0:2;
           hence contradiction by A42,INT_1:20;
         end;
 A43:    t5.a()=Comput(ProgramPart(t2),t2,m2).a() by A38,SCMPDS_4:23
-          .=(Result t2).a() by A26,AMI_1:122
+          .=(Result(ProgramPart(t2),t2)).a() by A26,AMI_1:122
           .=s().a() by A9,A13,A28,A12,FUNCT_4:12;
 T1: ProgramPart t4 = ProgramPart t3
 by AMI_1:144;
@@ -2145,7 +2165,7 @@ A1,A18,A27,A31,A32,A25,A22,SCMPDS_7:34;
 A49:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A48,AMI_1:51,t;
                     IC Comput(ProgramPart(t2),t2,kn) in dom pI by A30,SCMPDS_6:
 def 2;
-                    then lm < card pI by SCMPDS_4:1;
+                    then lm < card pI by AFINSQ_1:70;
                     then lm < card I()+1 by SCMPDS_5:7;
                     then
 A50:                lm+1 <= card I() +1 by INT_1:20;
@@ -2153,7 +2173,7 @@ A50:                lm+1 <= card I() +1 by INT_1:20;
                     then lm+1 < card I() +3 by A50,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm3;
                     hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A49,
-SCMPDS_4:1;
+AFINSQ_1:70;
                   end;
                 end;
               end;
@@ -2210,7 +2230,7 @@ end;
 
 scheme
   WhileGExec { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,I()
--> No-StopCode shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
+-> halt-free shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
 P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) & IExec(while>0(a(),i(),I()),s()
   ) = IExec(while>0(a(),i(),I()),IExec(I(),s()))
 provided
@@ -2226,8 +2246,9 @@ is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) & P[Dstate(IExec(I(),t))
 proof
   set WHL=while>0(a(),i(),I()), iWHL=Initialized stop WHL, iI= Initialized
   stop I(), s1= s() +* iWHL, ps= s() | A;
-  set sI= s() +* iI, m1=LifeSpan sI+2, s2=IExec(I(),s()) +* iWHL, m2=LifeSpan
-  s2;
+  set sI= s() +* iI, m1=LifeSpan(ProgramPart(sI),sI)+2, s2=IExec(I(),s()) +*
+iWHL, m2=LifeSpan(ProgramPart s2,
+  s2);
 A6: P[Dstate s()] by A4;
 A7: iI c= sI by FUNCT_4:26;
   I() is_closed_on s() by A2,A4,A5;
@@ -2269,7 +2290,8 @@ A18: ProgramPart s2 halts_on s2 by SCMPDS_6:def 3;
   set i1=(a(),i())<=0_goto (card I()+2), i2=goto -(card I()+1);
   set b=DataLoc(s().a(),i());
 A19: WHL = i1 ';' (I() ';' i2) by SCMPDS_4:51;
-  set mI=LifeSpan sI, s5=Comput(ProgramPart(s4),s4,mI), l1= (card I() + 1);
+  set mI=LifeSpan(ProgramPart(sI),sI), s5=Comput(ProgramPart(s4),s4,mI), l1= (
+card I() + 1);
 A20: IC s1 = 0 by SCMPDS_6:21;
 A21: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
 Comput(ProgramPart(s1),s1,0)) by AMI_1:14
@@ -2289,14 +2311,15 @@ A23: DataPart sI = DataPart s4 by SCMPDS_4:23;
   then
 A24: l1 in dom WHL by Th18;
   thus F(s())=F(s()) or P[s()];
-  set m0=LifeSpan s1;
+  set m0=LifeSpan(ProgramPart(s1),s1);
 A25: dom ps = dom s() /\ A by RELAT_1:90
     .= ({IC SCMPDS} \/ D \/ A) /\ A by SCMPDS_4:19
     .= A by XBOOLE_1:21;
-A26: IExec(I(),s()) | A= (Result sI +* ps) | A by SCMPDS_4:def 8
+A26: IExec(I(),s()) | A= (Result(ProgramPart(sI),sI) +* ps) | A by SCMPDS_4:def
+8
     .= ps by A25,FUNCT_4:24;
   set s7=Comput(ProgramPart(s1),s1,m3+1);
-A27: IExec(I(),s()) = Result sI +* s() | A by SCMPDS_4:def 8;
+A27: IExec(I(),s()) = Result(ProgramPart(sI),sI) +* s() | A by SCMPDS_4:def 8;
 A28: dom (s() | A) = A by SCMPDS_6:1;
   WHL c= iWHL & iWHL c= s1 by FUNCT_4:26,SCMPDS_6:17;
   then
@@ -2341,15 +2364,15 @@ SCMPDS_7:36;
 A38: not x in dom iWHL by SCMPDS_4:31;
 A39: not x in dom (s() | A) by A28,SCMPDS_2:53;
     s5.x=Comput(ProgramPart(sI),sI,mI).x by A37,SCMPDS_4:23
-      .=(Result sI).x by A9,AMI_1:122
+      .=(Result(ProgramPart(sI),sI)).x by A9,AMI_1:122
       .=IExec(I(),s()).x by A27,A39,FUNCT_4:12;
     hence s7.x=IExec(I(),s()).x by A33,A35,SCMPDS_2:66
       .=s2.x by A38,FUNCT_4:12;
   end;
   then
 A40: DataPart s7 = DataPart s2 by SCMPDS_4:23;
-  s2 | A= (Result sI +* ps +* iWHL) | A by SCMPDS_4:def 8
-    .=(Result sI +* ps)|A +* iWHL | A by FUNCT_4:75
+  s2 | A= (Result(ProgramPart(sI),sI) +* ps +* iWHL) | A by SCMPDS_4:def 8
+    .=(Result(ProgramPart(sI),sI) +* ps)|A +* iWHL | A by FUNCT_4:75
     .= ps +* iWHL | A by A25,FUNCT_4:24
     .= s1 | A by FUNCT_4:75
     .= Comput(ProgramPart(s1),s1,m1) | A by SCMPDS_7:6;
@@ -2364,29 +2387,32 @@ A42: m0=m1+nn by NAT_1:10;
   reconsider nn as Element of NAT by ORDINAL1:def 13;
 T: ProgramPart s1 = ProgramPart s2
 by A41,AMI_1:144;
+TX: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m1+m2)
+by AMI_1:144;
   Comput(ProgramPart(s1),s1,m1+m2) = Comput(ProgramPart(s1),s2,m2) by A41,AMI_1
 :51;
-  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1+m2),Comput(ProgramPart
-(s1),s1,m1+m2))
-   = halt SCMPDS by A18,AMI_1:def 46,T;
-  then m1 + m2 >= m0 by A13,AMI_1:def 46;
+  then CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,m1+m2))
+   = halt SCMPDS by A18,AMI_1:def 46,T,TX;
+  then m1 + m2 >= m0 by A13,AMI_1:def 46,T,TX;
   then
 A43: m2 >= nn by A42,XREAL_1:8;
+TX2: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,nn)
+by AMI_1:144;
 A44: Comput(ProgramPart(s1),s1,m0) = Comput(ProgramPart(s1),s2,nn) by A41,A42,
 AMI_1:51;
-  then CurInstr(ProgramPart Comput(ProgramPart(s2),s2,nn),Comput(ProgramPart(s2
-),s2,nn))
-   =halt SCMPDS by A13,AMI_1:def 46,T;
-  then nn >= m2 by A18,AMI_1:def 46;
+  then CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,nn))
+   =halt SCMPDS by A13,AMI_1:def 46,T,TX;
+  then nn >= m2 by A18,AMI_1:def 46,T,TX;
   then nn=m2 by A43,XXREAL_0:1;
-  then Result s1 = Comput(ProgramPart(s2),s2,m2) by A13,A44,AMI_1:122,T;
+  then Result(ProgramPart(s1),s1) = Comput(ProgramPart(s2),s2,m2) by A13,A44,
+AMI_1:122,T;
   hence IExec(WHL,s()) = Comput(ProgramPart(s2),s2,m2) +* ps by SCMPDS_4:def 8
-    .= Result s2 +* IExec(I(),s()) | A by A18,A26,AMI_1:122
+    .= Result(ProgramPart(s2),s2) +* IExec(I(),s()) | A by A18,A26,AMI_1:122
     .= IExec(WHL,IExec(I(),s())) by SCMPDS_4:def 8;
 end;
 
 theorem Th24:
-  for s being State of SCMPDS,I being No-StopCode shiftable
+  for s being State of SCMPDS,I being halt-free shiftable
   Program of SCMPDS, a be Int_position,i,c be Integer,X,Y be set, f being
   Function of product the Object-Kind of SCMPDS,NAT st card I > 0 & ( for t be
 State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) <= 0 ) & (for x st x in
@@ -2397,7 +2423,7 @@ in X holds t.x >= c+t.DataLoc(s.a,i)) & (for x st x in Y holds t.x=s.x) & t.a=s
 IExec(I,t).x >= c+IExec(I,t).DataLoc(s.a,i)) & for x st x in Y holds IExec(I,t)
   .x=t.x) holds while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position,i,c be Integer,X,Y be set, f be Function of product the
   Object-Kind of SCMPDS,NAT;
   set b=DataLoc(s.a,i);
@@ -2469,8 +2495,9 @@ A23:    WHL c= t3 by XBOOLE_1:1;
         then Shift(I,1) c= t3 by A23,XBOOLE_1:1;
         then
 A24:    Shift(I,1) c= t4 by AMI_1:81;
-A25:    IExec(I,t) = Result t2 +* t | A by SCMPDS_4:def 8;
-        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I + 1);
+A25:    IExec(I,t) = Result(ProgramPart(t2),t2) +* t | A by SCMPDS_4:def 8;
+        set m2=LifeSpan(ProgramPart(t2),t2), t5=Comput(ProgramPart(t4),t4,m2),
+l1= (card I + 1);
 A26:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
         set t6=Comput(ProgramPart(t3),t3,m3);
@@ -2521,8 +2548,9 @@ A38:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A19,A31,A29,
 A32,A22,A24
 ,SCMPDS_7:36;
         then
-A39:    DataPart t5 =DataPart Result t2 by A30,AMI_1:122
-          .= DataPart(Result t2 +* t | A) by A16,AMI_2:29,FUNCT_4:76
+A39:    DataPart t5 =DataPart Result(ProgramPart(t2),t2) by A30,AMI_1:122
+          .= DataPart(Result(ProgramPart(t2),t2) +* t | A) by A16,AMI_2:29,
+FUNCT_4:76
 ,SCMPDS_2:100
           .=DataPart IExec(I,t) by SCMPDS_4:def 8;
 A40:    now
@@ -2558,7 +2586,7 @@ A47:      x in X;
           hence t7.x >= c+t7.b by A4,A8,A9,A10,A11,A45,A47;
         end;
 A48:    t5.a=Comput(ProgramPart(t2),t2,m2).a by A38,SCMPDS_4:23
-          .=(Result t2).a by A30,AMI_1:122
+          .=(Result(ProgramPart(t2),t2)).a by A30,AMI_1:122
           .=s.a by A10,A14,A25,A13,FUNCT_4:12;
 T1: ProgramPart t4 = ProgramPart t3
 by AMI_1:144;
@@ -2602,7 +2630,7 @@ A1,A19,A31,A29,A32,A22,A24,SCMPDS_7:34;
 A54:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A53,AMI_1:51,t;
                     IC Comput(ProgramPart(t2),t2,kn) in dom pI by A28,SCMPDS_6:
 def 2;
-                    then lm < card pI by SCMPDS_4:1;
+                    then lm < card pI by AFINSQ_1:70;
                     then lm < card I+1 by SCMPDS_5:7;
                     then
 A55:                lm+1 <= card I +1 by INT_1:20;
@@ -2610,7 +2638,7 @@ A55:                lm+1 <= card I +1 by INT_1:20;
                     then lm+1 < card I +3 by A55,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm3;
                     hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A54,
-SCMPDS_4:1;
+AFINSQ_1:70;
                   end;
                 end;
               end;
@@ -2671,7 +2699,7 @@ A61: t.b <= 0 by A2;
 end;
 
 theorem Th25:
-  for s being State of SCMPDS,I being No-StopCode shiftable
+  for s being State of SCMPDS,I being halt-free shiftable
   Program of SCMPDS, a be Int_position, i,c be Integer,X,Y be set,f being
   Function of product the Object-Kind of SCMPDS,NAT st s.DataLoc(s.a,i) > 0 &
 card I > 0 & ( for t be State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i)
@@ -2683,7 +2711,7 @@ x st x in X holds IExec(I,t).x >= c+IExec(I,t).DataLoc(s.a,i)) & for x st x in
 Y holds IExec(I,t).x=t.x) holds IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),
   IExec(I,s))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i,c be Integer,X,Y be set, f be Function of product the
   Object-Kind of SCMPDS,NAT;
   set b=DataLoc(s.a,i);
@@ -2699,7 +2727,7 @@ A4: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
 Comput(ProgramPart(s1),s1,0)) by AMI_1:14
     .= Following(ProgramPart s1,s1) by AMI_1:13
     .= Exec(i1,s1) by A3,SCMPDS_6:22;
-  set m0=LifeSpan s1;
+  set m0=LifeSpan(ProgramPart(s1),s1);
 A5: dom (s | A) = A by SCMPDS_6:1;
 A6: dom ps = dom s /\ A by RELAT_1:90
     .= ({IC SCMPDS} \/ D \/ A) /\ A by SCMPDS_4:19
@@ -2723,7 +2751,8 @@ A11: ProgramPart s1 halts_on s1 by SCMPDS_6:def 3;
 A12: for x st x in Y holds s.x=s.x;
   then
 A13: bj=b by A1,A9,A10;
-  set sI= s +* iI, m1=LifeSpan sI+2, s2=IExec(I,s) +* iWHL, m2=LifeSpan s2;
+  set sI= s +* iI, m1=LifeSpan(ProgramPart(sI),sI)+2, s2=IExec(I,s) +* iWHL, m2
+=LifeSpan(ProgramPart(s2),s2);
 A14: iI c= sI by FUNCT_4:26;
 A15: IExec(I, s).a=s.a by A1,A9,A10,A12;
 A16: now
@@ -2760,12 +2789,13 @@ A25: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   end;
   then
 A26: DataPart sI = DataPart s4 by SCMPDS_4:23;
-  set mI=LifeSpan sI, s5=Comput(ProgramPart(s4),s4,mI), l1= (card I + 1);
+  set mI=LifeSpan(ProgramPart(sI),sI), s5=Comput(ProgramPart(s4),s4,mI), l1= (
+card I + 1);
   WHL c= iWHL & iWHL c= s1 by FUNCT_4:26,SCMPDS_6:17;
   then
 A27: WHL c= s1 by XBOOLE_1:1;
   set m3=mI +1;
-A28: IExec(I,s) = Result sI +* s | A by SCMPDS_4:def 8;
+A28: IExec(I,s) = Result(ProgramPart(sI),sI) +* s | A by SCMPDS_4:def 8;
   set s7=Comput(ProgramPart(s1),s1,m3+1);
   set s6=Comput(ProgramPart(s1),s1,m3);
   card I + 1 < card I + 2 by XREAL_1:8;
@@ -2782,7 +2812,7 @@ A31: ProgramPart sI halts_on sI by SCMPDS_6:def 3;
   then ProgramPart(sI+*iI) halts_on sI+*iI by A31;
   then
 A32: I is_halting_on sI by SCMPDS_6:def 3;
-A33: IExec(I,s) | A= (Result sI +* ps) | A by SCMPDS_4:def 8
+A33: IExec(I,s) | A= (Result(ProgramPart(sI),sI) +* ps) | A by SCMPDS_4:def 8
     .= ps by A6,FUNCT_4:24;
 A34: not b in dom iWHL by SCMPDS_4:31;
   not a in dom iWHL by SCMPDS_4:31;
@@ -2825,15 +2855,15 @@ SCMPDS_7:36;
 A43: not x in dom iWHL by SCMPDS_4:31;
 A44: not x in dom (s | A) by A5,SCMPDS_2:53;
     s5.x=Comput(ProgramPart(sI),sI,mI).x by A42,SCMPDS_4:23
-      .=(Result sI).x by A31,AMI_1:122
+      .=(Result(ProgramPart(sI),sI)).x by A31,AMI_1:122
       .=IExec(I,s).x by A28,A44,FUNCT_4:12;
     hence s7.x=IExec(I,s).x by A38,A40,SCMPDS_2:66
       .=s2.x by A43,FUNCT_4:12;
   end;
   then
 A45: DataPart s7 = DataPart s2 by SCMPDS_4:23;
-  s2 | A= (Result sI +* ps +* iWHL) | A by SCMPDS_4:def 8
-    .=(Result sI +* ps)|A +* iWHL | A by FUNCT_4:75
+  s2 | A= (Result(ProgramPart(sI),sI) +* ps +* iWHL) | A by SCMPDS_4:def 8
+    .=(Result(ProgramPart(sI),sI) +* ps)|A +* iWHL | A by FUNCT_4:75
     .= ps +* iWHL | A by A6,FUNCT_4:24
     .= s1 | A by FUNCT_4:75
     .= Comput(ProgramPart(s1),s1,m1) | A by SCMPDS_7:6;
@@ -2848,29 +2878,32 @@ A47: m0=m1+nn by NAT_1:10;
   reconsider nn as Element of NAT by ORDINAL1:def 13;
 T: ProgramPart s1 = ProgramPart s2
 by A46,AMI_1:144;
+TX: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m1+m2)
+by AMI_1:144;
   Comput(ProgramPart(s1),s1,m1+m2) = Comput(ProgramPart(s1),s2,m2) by A46,AMI_1
 :51;
-  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1+m2),Comput(ProgramPart
-(s1),s1,m1+m2))
-   = halt SCMPDS by A24,AMI_1:def 46,T;
-  then m1 + m2 >= m0 by A11,AMI_1:def 46;
+  then CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,m1+m2))
+   = halt SCMPDS by A24,AMI_1:def 46,T,TX;
+  then m1 + m2 >= m0 by A11,AMI_1:def 46,T,TX;
   then
 A48: m2 >= nn by A47,XREAL_1:8;
+TX: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,nn)
+by AMI_1:144;
 A49: Comput(ProgramPart(s1),s1,m0) = Comput(ProgramPart(s1),s2,nn) by A46,A47,
 AMI_1:51;
-  then CurInstr(ProgramPart Comput(ProgramPart(s2),s2,nn),Comput(ProgramPart(s2
-),s2,nn))
-   =halt SCMPDS by A11,AMI_1:def 46,T;
-  then nn >= m2 by A24,AMI_1:def 46;
+  then CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,nn))
+   =halt SCMPDS by A11,AMI_1:def 46,T,TX;
+  then nn >= m2 by A24,AMI_1:def 46,T,TX;
   then nn=m2 by A48,XXREAL_0:1;
-  then Result s1 = Comput(ProgramPart(s2),s2,m2) by A11,A49,AMI_1:122,T;
+  then Result(ProgramPart(s1),s1) = Comput(ProgramPart(s2),s2,m2) by A11,A49,
+AMI_1:122,T;
   hence IExec(WHL,s) = Comput(ProgramPart(s2),s2,m2) +* ps by SCMPDS_4:def 8
-    .= Result s2 +* IExec(I,s) | A by A24,A33,AMI_1:122
+    .= Result(ProgramPart(s2),s2) +* IExec(I,s) | A by A24,A33,AMI_1:122
     .= IExec(WHL,IExec(I,s)) by SCMPDS_4:def 8;
 end;
 
 theorem
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of
+  for s being State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position, i be Integer,X be set, f being Function of product
   the Object-Kind of SCMPDS,NAT st card I > 0 & (for t be State of SCMPDS st f.
 Dstate(t)=0 holds t.DataLoc(s.a,i) <= 0 ) & (for t be State of SCMPDS st (for x
@@ -2880,7 +2913,7 @@ a & I is_closed_on t & I is_halting_on t & f.Dstate(IExec(I,t)) < f.Dstate(t) &
 while>0(a,i,I) is_halting_on s & (s.DataLoc(s.a,i) > 0 implies IExec(while>0(a,
   i,I),s) =IExec(while>0(a,i,I),IExec(I,s)))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
 Int_position, i be Integer,X be set,f be Function of product the Object-Kind of
   SCMPDS,NAT;
   set b=DataLoc(s.a,i);
@@ -2913,7 +2946,7 @@ is_closed_on t & I is_halting_on t & f.Dstate(IExec(I,t)) < f.Dstate(t) & (for
 end;
 
 theorem Th27:
-  for s being State of SCMPDS,I being No-StopCode shiftable
+  for s being State of SCMPDS,I being halt-free shiftable
 Program of SCMPDS, a be Int_position, i,c be Integer,X,Y be set st card I > 0 &
   (for x st x in X holds s.x >= c+s.DataLoc(s.a,i)) & (for t be State of SCMPDS
 st (for x st x in X holds t.x >= c+t.DataLoc(s.a,i)) & (for x st x in Y holds t
@@ -2924,7 +2957,7 @@ i) & (for x st x in X holds IExec(I,t).x >= c+IExec(I,t).DataLoc(s.a,i)) & for
 while>0(a,i,I) is_halting_on s & ( s.DataLoc(s.a,i) > 0 implies IExec(while>0(a
   ,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i,c be Integer,X,Y be set;
   set b=DataLoc(s.a,i);
   assume
@@ -3047,7 +3080,7 @@ A21: s.b > 0;
 end;
 
 theorem
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of
+  for s being State of SCMPDS,I being halt-free shiftable Program of
   SCMPDS , a be Int_position, i be Integer,X be set st card I > 0 & (for t be
 State of SCMPDS st (for x st x in X holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i)
 > 0 holds IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t & IExec(I,t).
@@ -3056,7 +3089,7 @@ State of SCMPDS st (for x st x in X holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i)
 DataLoc(s.a,i) > 0 implies IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(
   I,s)))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i be Integer,X be set;
   set b=DataLoc(s.a,i);
   assume
@@ -3084,7 +3117,7 @@ holds IExec(I,t).x >= 0+IExec(I,t).b) & for x st x in X holds IExec(I,t).x=t.x
 end;
 
 theorem
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of
+  for s being State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position, i,c be Integer,X be set st card I > 0 & (for x st x
 in X holds s.x >= c+s.DataLoc(s.a,i)) & (for t be State of SCMPDS st (for x st
 x in X holds t.x >= c+t.DataLoc(s.a,i)) & t.a=s.a & t.DataLoc(s.a,i) > 0 holds
@@ -3094,7 +3127,7 @@ IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t & IExec(I,t).DataLoc(s.
 is_halting_on s & (s.DataLoc(s.a,i) > 0 implies IExec(while>0(a,i,I),s) =IExec(
   while>0(a,i,I),IExec(I,s)))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i,c be Integer,X be set;
   set b=DataLoc(s.a,i);
   assume

@@ -35,7 +35,7 @@ environ
       RELSET_1, TARSKI, INT_1, PARTFUN1, GRFUNC_1, RFINSEQ, SCMFSA_2, SCMFSA6B,
       SCMFSA7B, SCMFSA8B, SCMFSA8A, SCMFSA8C, SCMFSA_4, SCMFSA6C, SCM_HALT,
       ABSVALUE, FINSEQ_4, XBOOLE_0, XBOOLE_1, SCMFSA9A, XREAL_1, ORDINAL1,
-      SCMFSA_1, XXREAL_0, AMI_3, NAT_D, CLASSES1, PBOOLE, SCMNORM;
+      SCMFSA_1, XXREAL_0, AMI_3, NAT_D, CLASSES1, PBOOLE, SCMNORM, AFINSQ_1;
  schemes RELSET_1, FUNCT_1, NAT_1;
 
 begin :: Preliminaries
@@ -1219,7 +1219,7 @@ end;
 
 theorem Th47:
   for w be FinSequence of INT,f be FinSeq-Location,I be Program of SCM+FSA
-  holds Initialized I +* (f .--> w) starts_at 0
+  holds Initialized I +* (f .--> w) is 0-started
 proof
   let w be FinSequence of INT,f be FinSeq-Location, I be Program of SCM+FSA;
   set p = Initialized I, s = f .--> w;
@@ -1280,7 +1280,7 @@ A4: card (I ';' i) = card I + card Macro i by SCMFSA6A:61
     .= card I +2 by SCMFSA7B:6;
   card I + 0 < card I + 2 by XREAL_1:8;
   then
-A5: x1 in dom (I ';' i) by A3,A4,SCMFSA6A:15;
+A5: x1 in dom (I ';' i) by A3,A4,AFINSQ_1:70;
 A6: (Macro i).( 0) = i by SCMFSA6B:33;
 A7: card (Macro i) = 2 by SCMFSA7B:6;
 A8: (I ';' i).x1 = (I ';' Macro i). (card I+0) by A3
@@ -1291,7 +1291,7 @@ A8: (I ';' i).x1 = (I ';' Macro i). (card I+0) by A3
   set x2= (k+1);
   card I + 1 < card I + 2 by XREAL_1:8;
   then
-A9: x2 in dom (I ';' i) by A3,A4,SCMFSA6A:15;
+A9: x2 in dom (I ';' i) by A3,A4,AFINSQ_1:70;
   (Macro i).( 1) = halt SCM+FSA by SCMFSA6B:33;
   then
 A10: (I ';' i).x2 =IncAddr( halt SCM+FSA, card I ) by A3,A7,Th48
@@ -1403,15 +1403,17 @@ end;
 
 theorem Th57:
   for s be State of SCM+FSA,I be Program of SCM+FSA,f be FinSeq-Location
-  holds (Result (s +* Initialized I)).f = IExec(I,s).f
+  holds (Result(ProgramPart(s +* Initialized I),s +* Initialized I)).f = IExec(
+I,s).f
 proof
   let s be State of SCM+FSA,I be Program of SCM+FSA,f be FinSeq-Location;
   set D= Int-Locations \/ FinSeq-Locations;
   f in FinSeq-Locations by SCMFSA_2:10;
   then
 A1: f in D by XBOOLE_0:def 3;
-  hence (Result (s +* Initialized I)).f
-  = (DataPart Result (s +* Initialized I)).f by FUNCT_1:72,SCMFSA_2:127
+  hence (Result(ProgramPart(s +* Initialized I),s +* Initialized I)).f
+  = (DataPart Result(ProgramPart(s +* Initialized I),s +* Initialized I)).f by
+FUNCT_1:72,SCMFSA_2:127
     .=(DataPart IExec(I,s)).f by SCMFSA8B:35
     .= IExec(I,s).f by A1,FUNCT_1:72,SCMFSA_2:127;
 end;
@@ -1902,7 +1904,7 @@ proof
   assume
 A1: k < 63;
   card (bubble-sort f) = 63 by Th62;
-  hence thesis by A1,SCMFSA6A:15;
+  hence thesis by A1,AFINSQ_1:70;
 end;
 
 Lm20: for s being State of SCM+FSA st Bubble-Sort-Algorithm c= s holds
@@ -1988,8 +1990,8 @@ A16: card X6
     .=goto  12;
 end;
 
-Lm21: for s being State of SCM+FSA st Bubble-Sort-Algorithm c= s &
-s starts_at 0 holds Comput(ProgramPart( s), s,1).IC SCM+FSA =  1 &
+Lm21: for s being 0-started State of SCM+FSA st Bubble-Sort-Algorithm c= s
+ holds Comput(ProgramPart( s), s,1).IC SCM+FSA =  1 &
 Comput(ProgramPart( s), s,1).a0=s.a0 & Comput(ProgramPart( s), s,1).fsloc 0=s.
 fsloc 0 &
 Comput(ProgramPart( s), s,2).IC SCM+FSA =  2 &
@@ -2027,12 +2029,11 @@ Comput(ProgramPart( s), s,11).a2=s.a0 & Comput(ProgramPart( s), s,11).a3=s.a0 &
 Comput(ProgramPart( s), s,11).a4=s.a0 & Comput(ProgramPart( s), s,11).a5=s.a0 &
 Comput(ProgramPart( s), s,11).a6=s.a0
 proof
-  let s be State of SCM+FSA such that
-A1: Bubble-Sort-Algorithm c= s and
-A2: s starts_at 0;
+  let s be 0-started State of SCM+FSA such that
+A1: Bubble-Sort-Algorithm c= s;
 A3: Comput(ProgramPart(s),s,0) = s by AMI_1:13;
   then
-A4: IC Comput(ProgramPart(s),s,0) =  0 by A2,AMI_1:def 41;
+A4: IC Comput(ProgramPart(s),s,0) =  0 by AMI_1:def 41;
   then
 A5: Comput(ProgramPart(s),s,0+1) = Exec(s. 0,Comput(ProgramPart(s),s,0)) by
 AMI_1:55
@@ -3145,7 +3146,7 @@ theorem Th67:
   Initialized Bubble-Sort-Algorithm +*(fsloc 0 .--> t) c= s
   holds ex u being FinSequence of REAL
   st t,u are_fiberwise_equipotent & u is non-increasing &
-  u is FinSequence of INT & (Result s).(fsloc 0) = u
+  u is FinSequence of INT & (Result(ProgramPart(s),s)).(fsloc 0) = u
 proof
   let s be State of SCM+FSA,t be FinSequence of INT;
   set Ba=Bubble-Sort-Algorithm, p=Initialized Ba, x=fsloc 0 .--> t,
@@ -3193,6 +3194,7 @@ proof
   let w be FinSequence of INT;
   set p=Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w),
   q=Bubble-Sort-Algorithm;
+X: p is 0-started by Th47;
 A1: for s1,s2 being State of SCM+FSA,i st p c= s1 & p c= s2 & i <= 10 holds
   Comput(ProgramPart(s1),s1,i).intloc 0 = Comput(ProgramPart(s2),s2,i).intloc 0
 &
@@ -3206,8 +3208,8 @@ A2: p c= s1 and
 A3: p c=s2 and
 A4: i <= 10;
 A5: Comput(ProgramPart(s1),s1,0) = s1 by AMI_1:13;
-A6: s1 starts_at 0 by A2,Th47,AMI_1:92;
-A7: s2 starts_at 0 by A3,Th47,AMI_1:92;
+A6: s1 is 0-started by A2,X,AMI_1:92;
+A7: s2 is 0-started by A3,X,AMI_1:92;
 A8: q c= s1 by A2,Th53;
 A9: q c=s2 by A3,Th53;
 A10: s1.intloc 0 =1 by A2,Th54
@@ -3335,8 +3337,8 @@ A29: p c= s1 and
 A30: p c= s2;
     set Cs11= Comput(ProgramPart( s1), s1,11), Cs21= Comput(ProgramPart( s2),
 s2,11);
-A31: s1 starts_at 0 by A29,Th47,AMI_1:92;
-A32: s2 starts_at 0 by A30,Th47,AMI_1:92;
+A31: s1 is 0-started by A29,X,AMI_1:92;
+A32: s2 is 0-started by A30,X,AMI_1:92;
 A33: q c= s1 by A29,Th53;
 A34: q c= s2 by A30,Th53;
 A35: s1.intloc 0 =1 by A29,Th54
@@ -3513,16 +3515,17 @@ A11: p +* s c= t by PBOOLE:156;
 A12: w,u are_fiberwise_equipotent and
 A13: u is non-increasing
   and u is FinSequence of INT and
-A14: (Result t).(fsloc 0) = u by A1,A11,Th67;
+A14: (Result(ProgramPart(t),t)).(fsloc 0) = u by A1,A11,Th67;
 A15: u=z by A8,A9,A12,A13,CLASSES1:84,RFINSEQ:36;
   fsloc 0 in the carrier of SCM+FSA;
   then
-A16: fsloc 0 in dom Result t by PARTFUN1:def 4;
+A16: fsloc 0 in dom Result(ProgramPart(t),t) by PARTFUN1:def 4;
   s c= p +* s by FUNCT_4:26;
   then
 A17: dom s c= dom(p +* s) by RELAT_1:25;
 A18: dom(fsloc 0 .--> z) = { fsloc 0 } by FUNCOP_1:19;
-  Result(p +* s) = (Result t)|dom(p +* s) by A3,A7,A11,AMI_1:def 28;
+  Result(ProgramPart(p +* s),p +* s) = (Result(ProgramPart(t),t))|dom(p +* s)
+by A3,A7,A11,AMI_1:def 28;
   hence thesis by A2,A10,A14,A15,A16,A17,A18,FUNCT_4:90,RELAT_1:186;
 end;
 

@@ -13,6 +13,8 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
@@ -31,13 +33,13 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="48" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="50" value="false"/>
 <Adjective nr="64"/>
-<Adjective nr="65"/>
 <Adjective nr="66"/>
+<Adjective nr="67"/>
 <Adjective nr="68"/>
-<Adjective nr="69"/>
+<Adjective nr="70"/>
+<Adjective nr="71"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TAXONOM2" nr="2">
@@ -47,7 +49,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="2" value="false"/>
-<Adjective nr="70"/>
+<Adjective nr="72"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TAXONOM2" nr="3">
@@ -65,7 +67,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="71"/>
+<Adjective nr="73"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TAXONOM2" nr="4">
@@ -79,14 +81,14 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="46">
+<Adjective nr="48">
 <Func kind="K" nr="10">
 <Func kind="K" nr="10">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="72">
+<Adjective nr="74">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -100,7 +102,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="70"/>
+<Adjective nr="72"/>
 </Cluster>
 </CCluster>
 </Registrations>

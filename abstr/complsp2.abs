@@ -8,15 +8,15 @@ environ
 
  vocabularies SUBSET_1, NUMBERS, FINSEQ_1, FINSEQ_2, ARYTM_3, NAT_1, XXREAL_0,
       FUNCT_1, RELAT_1, TARSKI, BINOP_2, FUNCOP_1, ARYTM_1, XCMPLX_0, ORDINAL1,
-      CARD_1, COMPLEX1, RVSUM_1, REAL_1, ZFMISC_1;
+      CARD_1, COMPLEX1, RVSUM_1, REAL_1, ZFMISC_1, VALUED_0;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1, NAT_1, RELAT_1,
       FUNCT_1, FUNCT_2, ZFMISC_1, PARTFUN1, BINOP_1, FUNCOP_1, FINSEQ_1,
-      FINSEQOP, VALUED_1, COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2,
-      ORDINAL1, MATRIX_5, XXREAL_0, SEQ_1;
+      FINSEQOP, VALUED_0, VALUED_1, COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2,
+      BINOP_2, ORDINAL1, MATRIX_5, XXREAL_0, SEQ_1;
  constructors PARTFUN1, SETWISEO, XXREAL_0, REAL_1, BINOP_2, FINSEQOP,
       COMPLSP1, MATRIX_5, SEQ_1, BINOP_1, RVSUM_1, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
-      BINOP_2, MEMBERED, FINSEQ_2, XXREAL_0, VALUED_0, FINSEQ_1;
+      BINOP_2, MEMBERED, FINSEQ_2, XXREAL_0, VALUED_0, FINSEQ_1, VALUED_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -24,17 +24,14 @@ begin :: Preliminaries
 
 reserve i,j,k for Element of NAT,
   x,y,z for FinSequence of COMPLEX,
-  c for
-  Element of COMPLEX,
+  c for Element of COMPLEX,
   R,R1,R2 for Element of i-tuples_on COMPLEX;
 
-definition
-  let z be FinSequence of COMPLEX;
+definition let z be FinSequence of COMPLEX;
   func z*' -> FinSequence of COMPLEX means
 :: COMPLSP2:def 1
-
-  len it = len z & for i being
-  Nat st 1<=i & i<=len z holds it.i = (z.i)*';
+  len it = len z & for i being Nat st
+  1<=i & i<=len z holds it.i = (z.i)*';
 end;
 
 theorem :: COMPLSP2:1
@@ -43,18 +40,15 @@ theorem :: COMPLSP2:1
 theorem :: COMPLSP2:2
   i in dom (x-y) implies (x-y).i = x.i - y.i;
 
-definition
-  let i,R1,R2;
+definition let i,R1,R2;
   redefine func R1 - R2 -> Element of i-tuples_on COMPLEX;
 end;
 
-definition
-  let i,R1,R2;
+definition let i,R1,R2;
   redefine func R1 + R2 -> Element of i-tuples_on COMPLEX;
 end;
 
-definition
-  let i, R;
+definition let i, R;
   let r be complex number;
   redefine func r*R -> Element of i-tuples_on COMPLEX;
 end;
@@ -64,28 +58,27 @@ theorem :: COMPLSP2:3
   len (a*x)=len x;
 
 theorem :: COMPLSP2:4
-  for x being FinSequence of COMPLEX holds dom x = dom -x;
+  for x being complex-yielding FinSequence holds dom x = dom -x;
 
 theorem :: COMPLSP2:5
-  for x being FinSequence of COMPLEX holds len (-x)=len x;
+  for x being complex-valued FinSequence holds len (-x)=len x;
 
 theorem :: COMPLSP2:6
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds len
-  (x1+x2)=len x1;
+  for x1,x2 being complex-valued FinSequence st len x1=len x2 holds
+  len (x1+x2)=len x1;
 
 theorem :: COMPLSP2:7
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds len
-  (x1-x2)=len x1;
+  for x1,x2 being complex-valued FinSequence st len x1=len x2 holds
+  len (x1-x2)=len x1;
 
 theorem :: COMPLSP2:8
-  for f being FinSequence of COMPLEX holds f is Element of COMPLEX (len
-  f);
+  for f being complex-valued FinSequence holds f is Element of COMPLEX len f;
 
 theorem :: COMPLSP2:9
   R1 - R2 = R1 + - R2;
 
 theorem :: COMPLSP2:10
-  for x,y being FinSequence of COMPLEX st len x=len y holds x-y=x+(-y);
+  for x,y being complex-valued FinSequence st len x=len y holds x-y=x+(-y);
 
 theorem :: COMPLSP2:11
   (-1)*R = -R;
@@ -96,8 +89,7 @@ theorem :: COMPLSP2:12
 theorem :: COMPLSP2:13
   for x being FinSequence of COMPLEX holds (-x).i = -x.i;
 
-definition
-  let i,R;
+definition let i,R;
   redefine func -R -> Element of i-tuples_on COMPLEX;
 end;
 
@@ -108,8 +100,7 @@ theorem :: COMPLSP2:15
   for a being complex number holds dom(a*x) = dom x;
 
 theorem :: COMPLSP2:16
-  for i being Nat for a being complex number holds (a*x).i = a*(x.
-  i);
+  for i being Nat, a being complex number holds (a*x).i = a*(x.i);
 
 theorem :: COMPLSP2:17
   for a being complex number holds (a*x)*' = a*'*(x*');
@@ -118,15 +109,15 @@ theorem :: COMPLSP2:18
   (R1+R2).j = R1.j + R2.j;
 
 theorem :: COMPLSP2:19
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds (
-  x1 + x2)*' = x1*' + x2*';
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
+  (x1 + x2)*' = x1*' + x2*';
 
 theorem :: COMPLSP2:20
   (R1-R2).j = R1.j - R2.j;
 
 theorem :: COMPLSP2:21
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds (
-  x1 - x2)*' = x1*' - x2*';
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
+  (x1 - x2)*' = x1*' - x2*';
 
 theorem :: COMPLSP2:22
   for z being FinSequence of COMPLEX holds (z*')*' = z;
@@ -138,15 +129,14 @@ theorem :: COMPLSP2:24
   for z being complex number holds z+z*' = 2*(Re z);
 
 theorem :: COMPLSP2:25
-  for x,y being FinSequence of COMPLEX st len x=len y holds (x-y).
-  i = x.i - y.i;
+  for x,y being complex-valued FinSequence st len x=len y holds
+  (x-y).i = x.i - y.i;
 
 theorem :: COMPLSP2:26
-  for x,y being FinSequence of COMPLEX st len x=len y holds (x+y).
-  i = x.i + y.i;
+  for x,y being complex-valued FinSequence st len x=len y holds
+  (x+y).i = x.i + y.i;
 
-definition
-  let z be FinSequence of COMPLEX;
+definition let z be FinSequence of COMPLEX;
   func Re z -> FinSequence of REAL equals
 :: COMPLSP2:def 2
   1/2*(z+z*');
@@ -166,63 +156,60 @@ definition
   let x,y be FinSequence of COMPLEX;
   func |( x,y )| -> Element of COMPLEX equals
 :: COMPLSP2:def 4
-  |(Re x,Re y)| - <i>*(|(Re x,Im y
-  )|) + <i>*(|(Im x,Re y)|) + |(Im x,Im y)|;
+  |(Re x,Re y)| - <i>*(|(Re x,Im y)|) + <i>*(|(Im x,Re y)|) + |(Im x,Im y)|;
 end;
 
 theorem :: COMPLSP2:28
-  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
-  len z holds x + (y + z) = x + y + z;
+  for x,y,z being complex-valued FinSequence st len x=len y & len y=len z
+  holds x + (y + z) = x + y + z;
 
 theorem :: COMPLSP2:29
-  for x,y being FinSequence of COMPLEX st len x=len y holds x + y = y +
-  x;
+  for x,y being complex-valued FinSequence st len x=len y holds x + y = y + x;
 
 theorem :: COMPLSP2:30
   for c being complex number, x,y being FinSequence of COMPLEX st
   len x=len y holds c*(x+y) = c*x + c*y;
 
 theorem :: COMPLSP2:31
-  for x,y being FinSequence of COMPLEX st len x=len y holds x - y = x +
-  - y;
+  for x,y being complex-valued FinSequence st len x=len y holds
+  x - y = x + - y;
 
-definition
-  let i,c;
+definition let i,c;
   redefine func i |-> c -> Element of i-tuples_on COMPLEX;
 end;
 
 theorem :: COMPLSP2:32
-  for x,y being FinSequence of COMPLEX st len x=len y & x + y = 0c
+  for x,y being complex-valued FinSequence st len x=len y & x + y = 0c
   (len x) holds x = -y & y = -x;
 
 theorem :: COMPLSP2:33
-  for x being FinSequence of COMPLEX holds x + 0c (len x) = x;
+  for x being complex-valued FinSequence holds x + 0c (len x) = x;
 
 theorem :: COMPLSP2:34
-  for x being FinSequence of COMPLEX holds x + -x = 0c (len x);
+  for x being complex-valued FinSequence holds x + -x = 0c (len x);
 
 theorem :: COMPLSP2:35
-  for x,y being FinSequence of COMPLEX st len x=len y holds -(x +
-  y) = -x + -y;
+  for x,y being complex-valued FinSequence st len x=len y holds
+  -(x + y) = -x + -y;
 
 theorem :: COMPLSP2:36
-  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
-  len z holds x - y - z = x - (y + z);
+  for x,y,z being complex-valued FinSequence st len x=len y & len y=len z
+  holds x - y - z = x - (y + z);
 
 theorem :: COMPLSP2:37
-  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
-  len z holds x + (y - z) = x + y - z;
+  for x,y,z being complex-valued FinSequence st len x=len y & len y=len z
+  holds x + (y - z) = x + y - z;
 
 theorem :: COMPLSP2:38
-  for x being FinSequence of COMPLEX holds --x = x;
+  for x being complex-valued FinSequence holds --x = x;
 
 theorem :: COMPLSP2:39
-  for x,y being FinSequence of COMPLEX st len x=len y holds -(x -
-  y) = -x + y;
+  for x,y being complex-valued FinSequence st len x=len y holds
+  -(x - y) = -x + y;
 
 theorem :: COMPLSP2:40
-  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
-  len z holds x - (y - z) = x - y + z;
+  for x,y,z being complex-valued FinSequence st
+  len x=len y & len y=len z holds x - (y - z) = x - y + z;
 
 theorem :: COMPLSP2:41
   for c being complex number holds c*(0c (len x)) = 0c (len x);
@@ -273,8 +260,8 @@ theorem :: COMPLSP2:51
   REAL st x1 = x2 & y1 = y2 & len x1=len y2 holds x1 - y1 = x2 - y2;
 
 theorem :: COMPLSP2:52
-  for x,y being FinSequence of COMPLEX st len x=len y holds Re(x -
-  y) = Re x - Re y & Im(x - y) = Im x - Im y;
+  for x,y being FinSequence of COMPLEX st len x=len y holds
+  Re(x - y) = Re x - Re y & Im(x - y) = Im x - Im y;
 
 theorem :: COMPLSP2:53
   for a, b being complex number holds a*(b*z) = (a*b)*z;
@@ -303,8 +290,8 @@ theorem :: COMPLSP2:58
   Im (<i>*x) = Re x;
 
 theorem :: COMPLSP2:59
-  for x,y being FinSequence of COMPLEX st len x=len y holds |(<i>*
-  x,y)| = <i>*(|(x,y)|);
+  for x,y being FinSequence of COMPLEX st len x=len y holds
+  |(<i>*x,y)| = <i>*(|(x,y)|);
 
 theorem :: COMPLSP2:60
   for x,y being FinSequence of COMPLEX st len x=len y holds |(x,
@@ -338,49 +325,50 @@ theorem :: COMPLSP2:66
   x2=len y holds |((x1+x2),y)| = |(x1,y)| + |(x2,y)|;
 
 theorem :: COMPLSP2:67
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds |(
-  -x1, x2)| = -|(x1, x2)|;
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
+  |(-x1, x2)| = -|(x1, x2)|;
 
 theorem :: COMPLSP2:68
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds |(
-  x1, -x2)| = -|(x1, x2)|;
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
+  |(x1, -x2)| = -|(x1, x2)|;
 
 theorem :: COMPLSP2:69
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds |(-x1, -
-  x2)| = |(x1, x2)|;
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
+  |(-x1, -x2)| = |(x1, x2)|;
 
 theorem :: COMPLSP2:70
-  for x1,x2,x3 being FinSequence of COMPLEX st len x1=len x2 & len
-  x2=len x3 holds |(x1-x2, x3)| = |(x1, x3)| - |(x2, x3)|;
+  for x1,x2,x3 being FinSequence of COMPLEX st
+  len x1=len x2 & len x2=len x3 holds
+  |(x1-x2, x3)| = |(x1, x3)| - |(x2, x3)|;
 
 theorem :: COMPLSP2:71
-  for x,y1,y2 being FinSequence of COMPLEX st len x=len y1 & len
-  y1=len y2 holds |(x, y1+y2)| = |(x, y1)| + |(x, y2)|;
+  for x,y1,y2 being FinSequence of COMPLEX st
+  len x=len y1 & len y1=len y2 holds |(x, y1+y2)| = |(x, y1)| + |(x, y2)|;
 
 theorem :: COMPLSP2:72
-  for x,y1,y2 being FinSequence of COMPLEX st len x=len y1 & len
-  y1=len y2 holds |(x, y1-y2)| = |(x, y1)| - |(x, y2)|;
+  for x,y1,y2 being FinSequence of COMPLEX st len x=len y1 & len y1=len y2
+  holds |(x, y1-y2)| = |(x, y1)| - |(x, y2)|;
 
 theorem :: COMPLSP2:73
   for x1,x2,y1,y2 being FinSequence of COMPLEX st len x1=len x2 &
-len x2=len y1 & len y1=len y2 holds |(x1+x2, y1+y2)| = |(x1, y1)| + |(x1, y2)|
-  + |(x2, y1)| + |(x2, y2)|;
+  len x2=len y1 & len y1=len y2 holds
+  |(x1+x2, y1+y2)| = |(x1, y1)| + |(x1, y2)| + |(x2, y1)| + |(x2, y2)|;
 
 theorem :: COMPLSP2:74
-  for x1,x2,y1,y2 being FinSequence of COMPLEX st len x1=len x2 &
-len x2=len y1 & len y1=len y2 holds |(x1-x2, y1-y2)| = |(x1, y1)| - |(x1, y2)|
-  - |(x2, y1)| + |(x2, y2)|;
+  for x1,x2,y1,y2 being FinSequence of COMPLEX st
+  len x1=len x2 & len x2=len y1 & len y1=len y2 holds
+  |(x1-x2, y1-y2)| = |(x1, y1)| - |(x1, y2)| - |(x2, y1)| + |(x2, y2)|;
 
 theorem :: COMPLSP2:75
   for x,y being FinSequence of COMPLEX holds |(x,y)| = (|(y,x)|)*';
 
 theorem :: COMPLSP2:76
-  for x,y being FinSequence of COMPLEX st len x=len y holds |(x+y,x+y)|
-  = |(x,x)| + 2*Re(|(x,y)|) + |(y,y)|;
+  for x,y being FinSequence of COMPLEX st len x=len y holds
+  |(x+y,x+y)| = |(x,x)| + 2*Re(|(x,y)|) + |(y,y)|;
 
 theorem :: COMPLSP2:77
-  for x,y being FinSequence of COMPLEX st len x=len y holds |(x-y, x-y)|
-  = |(x, x)| - 2*Re(|(x, y)|) + |(y, y)|;
+  for x,y being FinSequence of COMPLEX st len x=len y holds
+  |(x-y, x-y)| = |(x, x)| - 2*Re(|(x, y)|) + |(y, y)|;
 
 theorem :: COMPLSP2:78
   for a being Element of COMPLEX, x,y being FinSequence of COMPLEX

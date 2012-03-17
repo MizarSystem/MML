@@ -53,6 +53,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
+<Adjective nr="4">
+<Func kind="K" nr="48"/>
+</Adjective>
 <Adjective nr="5">
 <Func kind="K" nr="48"/>
 </Adjective>
@@ -68,6 +71,7 @@
 <Adjective nr="51"/>
 <Adjective nr="168"/>
 <Adjective nr="170"/>
+<Adjective nr="171"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CATALAN2" nr="2">
@@ -77,6 +81,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
+<Adjective nr="4">
+<Func kind="K" nr="48"/>
+</Adjective>
 <Adjective nr="5">
 <Func kind="K" nr="48"/>
 </Adjective>
@@ -92,6 +99,7 @@
 <Adjective nr="51"/>
 <Adjective nr="168"/>
 <Adjective nr="170"/>
+<Adjective nr="171"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CATALAN2" nr="1">

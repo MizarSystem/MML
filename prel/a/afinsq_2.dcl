@@ -41,6 +41,7 @@
 <ArticleID name="PSCOMP_1"/>
 <ArticleID name="PARTFUN3"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="AFINSQ_1"/>
 <ArticleID name="AFINSQ_2"/>
 </Signature>
 <RCluster aid="AFINSQ_2" nr="1">
@@ -50,11 +51,15 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
+<Adjective nr="4">
+<Func kind="K" nr="85"/>
+</Adjective>
 <Adjective nr="6"/>
 <Adjective nr="11"/>
 <Adjective nr="22"/>
 <Adjective nr="32"/>
 <Adjective nr="49"/>
+<Adjective nr="170"/>
 </Cluster>
 </RCluster>
 <FCluster aid="AFINSQ_2" nr="1">
@@ -652,7 +657,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="372">
+<Func kind="K" nr="384">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -682,7 +687,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="385">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -716,7 +721,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="385">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
@@ -757,7 +762,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="374">
+<Func kind="K" nr="386">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
@@ -781,7 +786,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="375">
+<Func kind="K" nr="387">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -815,7 +820,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="376">
+<Func kind="K" nr="388">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
@@ -840,7 +845,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="376">
+<Func kind="K" nr="388">
 <LocusVar nr="1"/>
 <Func kind="K" nr="16"/>
 </Func>
@@ -858,7 +863,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="376">
+<Func kind="K" nr="388">
 <Func kind="K" nr="16"/>
 <LocusVar nr="1"/>
 </Func>
@@ -902,7 +907,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="390">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -921,7 +926,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="390">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -940,7 +945,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="390">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -959,7 +964,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="390">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -978,7 +983,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="390">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

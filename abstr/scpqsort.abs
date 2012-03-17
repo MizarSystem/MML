@@ -7,15 +7,15 @@
 environ
 
  vocabularies NUMBERS, SCMPDS_2, SUBSET_1, FSM_1, SCMPDS_4, AMI_1, TURING_1,
-      SCMFSA8A, SCMFSA_7, AMI_3, INT_1, SCMFSA8B, CARD_1, ARYTM_3, SCMPDS_5,
-      FUNCT_1, XXREAL_0, UNIALG_2, SCMFSA7B, SCMFSA6B, RELAT_1, FUNCT_4, AMI_2,
+      SCMFSA8A, SCMFSA_7, AMI_3, INT_1, SCMFSA8B, CARD_1, ARYTM_3, FUNCT_1,
+      XXREAL_0, UNIALG_2, SCMFSA7B, SCMFSA6B, RELAT_1, FUNCT_4, AMI_2,
       SCMFSA_9, ARYTM_1, VALUED_1, TARSKI, GRAPHSP, SCMFSA6A, CIRCUIT2,
       MSUALG_1, NAT_1, FUNCOP_1, FUNCT_7, XBOOLE_0, CARD_3, SCMPDS_8, FINSEQ_1,
       GRAPH_2, SCPISORT, SCMP_GCD, CLASSES1, SCPQSORT, ORDINAL1, PARTFUN1,
       SCMNORM;
  notations TARSKI, XBOOLE_0, FUNCT_2, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, RELAT_1, FUNCT_1, PARTFUN1, RECDEF_1, INT_1, NAT_1, AMI_1,
-      SCMNORM, AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5,
+      XXREAL_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, RECDEF_1, INT_1, NAT_1,
+      AMI_1, SCMNORM, AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5,
       SCMPDS_6, SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, GRAPH_2, CLASSES1,
       SCPISORT;
  constructors REAL_1, NAT_1, RECDEF_1, NEWTON, RFINSEQ, MESFUNC1, SCM_1,
@@ -38,15 +38,17 @@ registration
 end;
 
 theorem :: SCPQSORT:1  :: see SCMPDS_6:87
-  for s being State of SCMPDS,I being No-StopCode shiftable Program
+  for s being State of SCMPDS,I being halt-free shiftable Program
   of SCMPDS, J being shiftable Program of SCMPDS,a,b be Int_position,k1 being
   Integer st s.DataLoc(s.a,k1) > 0 & I is_closed_on s & I is_halting_on s holds
   IExec(if>0(a,k1,I,J),s).b = IExec(I,s).b;
 
 theorem :: SCPQSORT:2
-  for s,sm be State of SCMPDS,I be No-StopCode shiftable Program of
+  for s,sm be State of SCMPDS,I be halt-free shiftable Program of
   SCMPDS, a be Int_position,i be Integer, m be Element of NAT st card I>0 & I
-  is_closed_on s & I is_halting_on s & s.DataLoc(s.a,i) > 0 & m=LifeSpan (s +*
+  is_closed_on s & I is_halting_on s & s.DataLoc(s.a,i) > 0 & m=LifeSpan(
+ProgramPart(s +*
+Initialized stop I),s +*
 Initialized stop I)+2 & sm=Comput(ProgramPart((s +* Initialized stop while>0(a,
 i,I))),(s +* Initialized stop while>0(a,i,I)),m
 ) holds DataPart sm = DataPart IExec(I,s) & sm +*Initialized stop while>0(a,i,I
@@ -62,7 +64,7 @@ theorem :: SCPQSORT:4
   ';' i3 ';' i4)=4;
 
 theorem :: SCPQSORT:5
-  for s being State of SCMPDS,I being No-StopCode shiftable Program
+  for s being State of SCMPDS,I being halt-free shiftable Program
   of SCMPDS, a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c+s.
 DataLoc(s.a,i) & (for t be State of SCMPDS st t.x >= c+t.DataLoc(s.a,i) & t.y=s
 .y & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.a & I is_closed_on t &
@@ -72,7 +74,7 @@ is_closed_on s & while>0(a,i,I) is_halting_on s & (s.DataLoc(s.a,i) > 0 implies
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
 
 theorem :: SCPQSORT:6
-  for s being State of SCMPDS,I being No-StopCode shiftable Program
+  for s being State of SCMPDS,I being halt-free shiftable Program
   of SCMPDS, a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c & (
 for t be State of SCMPDS st t.x >= c & t.y=s.y & t.a=s.a & t.DataLoc(s.a,i) > 0
   holds IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t & IExec(I,t).
@@ -81,7 +83,7 @@ while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s & ( s.DataLoc(s.
   a,i) > 0 implies IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
 
 theorem :: SCPQSORT:7
-  for s being State of SCMPDS,I being No-StopCode shiftable Program
+  for s being State of SCMPDS,I being halt-free shiftable Program
 of SCMPDS, a,x1,x2,x3,x4 be Int_position, i,c,md be Integer st card I > 0 & s.
 x4=s.x3-c+s.x1 & md <= s.x3-c & (for t be State of SCMPDS st t.x4=t.x3-c+t.x1 &
 md <= t.x3-c & t.x2=s.x2 & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.
@@ -159,7 +161,7 @@ s.intpos 4 & (for i be Element of NAT st md<=i & i < m4 holds IExec(Partition,s
   intpos 4) holds IExec(Partition,s).intpos i = s.intpos i;
 
 theorem :: SCPQSORT:15
-  Partition is No-StopCode shiftable;
+  Partition is halt-free shiftable;
 
 begin :: The Basic Property of Quick Sort and Its Correctness
 

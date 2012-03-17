@@ -17,7 +17,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       PARTFUN1, FINSET_1, XREAL_0, INT_1, MEMBERED, EQREL_1, XXREAL_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, RELAT_1, FUNCT_1, REALSET1, SETFAM_1;
+ definitions TARSKI, XBOOLE_0, RELAT_1, FUNCT_1, REALSET1, SETFAM_1, INT_1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, EQREL_1, NAT_1, INT_1, MCART_1,
       SCHEME1, FUNCOP_1, SETFAM_1, XBOOLE_0, XBOOLE_1, FUNCT_7, XREAL_1,
       XXREAL_0, NAT_D, XXREAL_2;
@@ -27,21 +27,33 @@ begin
 
 reserve x, y, z, E, E1, E2, E3 for set,
   sE for Subset-Family of E,
-  f for
-  Function of E, E,
+  f for Function of E, E,
   k, l, m, n for Element of NAT;
 
 definition
-  let i be number;
+  let i be Integer;
   attr i is even means
   :Def1:
-  ex j being Integer st i = 2*j;
+  2 divides i;
 end;
 
 notation
-  let i be number;
+  let i be Integer;
   antonym i is odd for i is even;
 end;
+
+Lm0:
+    for i being Integer holds i is even iff ex j being Integer st i = 2*j
+    proof
+      let i be Integer;
+      hereby
+        assume i is even;
+        then 2 divides i by Def1;
+        hence ex j being Integer st i = 2*j by INT_1:def 9;
+      end;
+      assume ex j being Integer st i = 2*j;
+      hence 2 divides i by INT_1:def 9;
+    end;
 
 definition
   let n be Element of NAT;
@@ -50,16 +62,16 @@ definition
   compatibility
   proof
     hereby
-      assume
-      n is even;
+      assume n is even;
+      then 2 divides n by Def1;
       then consider k being Integer such that
-A1:   n = 2*k by Def1;
+A1:   n = 2*k by INT_1:def 9;
       0<=k by A1,NAT_1:2,XREAL_1:134;
       then reconsider k as Element of NAT by INT_1:16;
       take k;
       thus n = 2*k by A1;
     end;
-    thus thesis by Def1;
+    thus thesis by Lm0;
   end;
 end;
 
@@ -87,16 +99,14 @@ registration
   existence
   proof
     take 1;
-    assume
-    1 is even;
-    then ex k being Integer st 1 = 2*k by Def1;
+    assume 1 is even;
+    then ex k being Integer st 1 = 2*k by Lm0;
     hence contradiction by INT_1:22;
   end;
 end;
 
 theorem Th1:
-  for i being Integer holds i is odd iff ex j being Integer st i =
-  2*j+1
+  for i being Integer holds i is odd iff ex j being Integer st i = 2*j+1
 proof
   let i be Integer;
   hereby
@@ -111,12 +121,12 @@ A4: for j being Integer holds i <> 2*j+1;
     per cases by A1,A2;
     suppose
       i = k & k = 2*m;
-      hence contradiction by A3,Def1;
+      hence contradiction by A3,Lm0;
     end;
     suppose
       i = -k & k = 2*m;
       then i = 2*(-m);
-      hence contradiction by A3,Def1;
+      hence contradiction by A3,Lm0;
     end;
     suppose
       i = k & k = 2*m+1;
@@ -139,7 +149,7 @@ end;
 registration
   let i be Integer;
   cluster 2*i -> even;
-  coherence by Def1;
+  coherence by Lm0;
 end;
 
 registration
@@ -147,7 +157,7 @@ registration
   cluster i+1 -> odd;
   coherence
   proof
-    ex j being Integer st i = 2*j by Def1;
+    ex j being Integer st i = 2*j by Lm0;
     hence thesis by Th1;
   end;
 end;
@@ -170,7 +180,7 @@ registration
   coherence
   proof
     consider j being Integer such that
-A1: i = 2*j by Def1;
+A1: i = 2*j by Lm0;
     i-1 = 2*(j-1)+1 by A1;
     hence thesis;
   end;
@@ -192,7 +202,7 @@ registration
   coherence
   proof
     consider k being Integer such that
-A1: i = 2*k by Def1;
+A1: i = 2*k by Lm0;
     i*j = 2*(k*j) by A1;
     hence thesis;
   end;
@@ -220,9 +230,9 @@ registration
   coherence
   proof
     consider l being Integer such that
-A1: j = 2*l by Def1;
+A1: j = 2*l by Lm0;
     consider k being Integer such that
-A2: i = 2*k by Def1;
+A2: i = 2*k by Lm0;
     i+j = 2*(k+l) by A2,A1;
     hence thesis;
   end;
@@ -236,7 +246,7 @@ registration
     consider l being Integer such that
 A1: j = 2*l+1 by Th1;
     consider k being Integer such that
-A2: i = 2*k by Def1;
+A2: i = 2*k by Lm0;
     i+j = 2*(k+l)+1 by A2,A1;
     hence thesis;
   end;
@@ -266,7 +276,7 @@ registration
     consider l being Integer such that
 A1: j = 2*l+1 by Th1;
     consider k being Integer such that
-A2: i = 2*k by Def1;
+A2: i = 2*k by Lm0;
     i-j = 2*(k-l)-1 by A2,A1;
     hence thesis;
   end;
@@ -276,7 +286,7 @@ A2: i = 2*k by Def1;
     consider l being Integer such that
 A3: j = 2*l+1 by Th1;
     consider k being Integer such that
-A4: i = 2*k by Def1;
+A4: i = 2*k by Lm0;
     j-i = 2*(l-k)+1 by A4,A3;
     hence thesis;
   end;
@@ -919,7 +929,7 @@ A73:    ln+kmk = k*(dk+1);
       deffunc F(Element of c) = min (Odl.$1);
       consider odl being Function of c, NAT such that
 A74:  for x being Element of c holds odl.x = F(x) from FUNCT_2:sch 4;
-      defpred P1[set] means odl.$1 is even;
+      defpred P1[Element of c] means odl.$1 is even;
       set c1 = { x where x is Element of c : P1[x]};
       set d1 = c1 \ {r};
       c1 is Subset of c from DOMAIN_1:sch 7;
@@ -934,7 +944,7 @@ A76:  odl.r = 2*0 by A74;
       then
 A77:  r in c1;
       reconsider d1 as Subset of E by A75,XBOOLE_1:1;
-      defpred P2[set] means odl.$1 is odd;
+      defpred P2[Element of c] means odl.$1 is odd;
       set d2 = { x where x is Element of c : P2[x]};
       d2 is Subset of c from DOMAIN_1:sch 7;
       then reconsider d2 as Subset of E by XBOOLE_1:1;
@@ -1315,8 +1325,8 @@ begin :: Addenda
 :: from SCMFSA9A, 2006.03.14, A.T.
 
 theorem
-  for n being natural number holds n is odd iff ex k being Element of
-  NAT st n = 2*k+1
+  for n being natural number holds
+  n is odd iff ex k being Element of NAT st n = 2*k+1
 proof
   let n be natural number;
   hereby
@@ -1358,3 +1368,5 @@ proof
     .= f.(iter(f,n).x) by FUNCT_2:21;
 end;
 
+theorem
+  for i being Integer holds i is even iff ex j being Integer st i = 2*j by Lm0;

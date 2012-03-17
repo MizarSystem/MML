@@ -569,4 +569,80 @@
 <Adjective nr="50"/>
 </Cluster>
 </CCluster>
+<CCluster aid="AFINSQ_1" nr="4">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="18"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="57"/>
+</Cluster>
+</CCluster>
+<CCluster aid="AFINSQ_1" nr="5">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
+<Adjective nr="57"/>
+</Cluster>
+</CCluster>
+<CCluster aid="AFINSQ_1" nr="6">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4">
+<Func kind="K" nr="129"/>
+</Adjective>
+<Adjective nr="6"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
+</Cluster>
+</CCluster>
+<CCluster aid="AFINSQ_1" nr="7">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4">
+<Func kind="K" nr="129"/>
+</Adjective>
+<Adjective nr="6"/>
+<Adjective nr="33"/>
+<Adjective nr="57"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="15"/>
+</Cluster>
+</CCluster>
 </Registrations>

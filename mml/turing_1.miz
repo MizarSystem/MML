@@ -207,14 +207,15 @@ end;
 begin :: Definitions and terminology for TURING Machine
 
 definition
-  struct TuringStr (# Symbols, States -> finite non empty set, Tran ->
-Function of [: the States, the Symbols :], [: the States,the Symbols,{-1,0,1}
-    :], InitS,AcceptS -> Element of the States #);
+  struct TuringStr (# Symbols, FStates -> finite non empty set, 
+    Tran -> Function of [: the FStates, the Symbols :], 
+         [: the FStates,the Symbols,{-1,0,1}
+    :], InitS,AcceptS -> Element of the FStates #);
 end;
 
 definition
   let T be TuringStr;
-  mode State of T is Element of the States of T;
+  mode State of T is Element of the FStates of T;
   mode Tape of T is Element of Funcs(INT,the Symbols of T);
   mode Symbol of T is Element of the Symbols of T;
 end;
@@ -242,10 +243,13 @@ end;
 
 definition
   let T be TuringStr;
-  mode All-State of T is Element of [: the States of T, INT, Funcs(INT,the
+  mode All-State of T is Element of [: the FStates of T, INT, 
+Funcs(INT,the
     Symbols of T) :];
-  mode Tran-Source of T is Element of [: the States of T,the Symbols of T :];
-  mode Tran-Goal of T is Element of [: the States of T,the Symbols of T, {-1,0
+  mode Tran-Source of T is Element of [: the FStates of T,the Symbols of T 
+:];
+  mode Tran-Goal of T is Element of [: the FStates of T,the Symbols of T, 
+{-1,0
     ,1} :];
 end;
 
@@ -292,7 +296,8 @@ end;
 
 definition
   let T be TuringStr, s be All-State of T;
-  func Computation s -> Function of NAT, [: the States of T, INT, Funcs(INT,
+  func Computation s -> Function of NAT, [: the FStates of T, INT, 
+Funcs(INT,
   the Symbols of T) :] means
   :Def8:
   it.0 = s & for i being Nat holds it.(i+1) =
@@ -300,7 +305,8 @@ definition
   existence
   proof
     deffunc U(set,All-State of T) = Following $2;
-    consider f being Function of NAT, [: the States of T, INT, Funcs(INT,the
+    consider f being Function of NAT, [: the FStates of T, INT, 
+Funcs(INT,the
     Symbols of T) :] such that
 A1: f.0 = s & for n being Nat holds f.(n+1) = U(n,f.n) from NAT_1:sch
     12;
@@ -310,7 +316,7 @@ A1: f.0 = s & for n being Nat holds f.(n+1) = U(n,f.n) from NAT_1:sch
   uniqueness
   proof
     deffunc U(set,All-State of T) = Following $2;
-    let F1,F2 be Function of NAT, [: the States of T, INT, Funcs(INT,the
+    let F1,F2 be Function of NAT, [: the FStates of T, INT, Funcs(INT,the
     Symbols of T) :] such that
 A2: F1.0 = s and
 A3: for i being Nat holds F1.(i+1) = Following(F1.i) and
@@ -820,7 +826,8 @@ definition
   func SumTuring -> strict TuringStr means
   :Def15:
   the Symbols of it = { 0,1 }
-& the States of it = SegM 5 & the Tran of it = Sum_Tran & the InitS of it = 0 &
+& the FStates of it = SegM 5 & the Tran of it = Sum_Tran & the InitS of it 
+= 0 &
   the AcceptS of it = 5;
   existence
   proof
@@ -838,7 +845,7 @@ proof
   let n be Element of NAT;
   assume
 A1: n <= 5;
-  the States of SumTuring=SegM 5 by Def15;
+  the FStates of SumTuring=SegM 5 by Def15;
   hence thesis by A1,Th1;
 end;
 
@@ -1430,7 +1437,8 @@ definition
   func SuccTuring -> strict TuringStr means
   :Def18:
   the Symbols of it = { 0,1
-} & the States of it = SegM 4 & the Tran of it = Succ_Tran & the InitS of it =
+} & the FStates of it = SegM 4 & the Tran of it = Succ_Tran & the InitS of 
+it =
   0 & the AcceptS of it = 4;
   existence
   proof
@@ -1448,7 +1456,7 @@ proof
   let n be Element of NAT;
   assume
 A1: n <= 4;
-  the States of SuccTuring=SegM 4 by Def18;
+  the FStates of SuccTuring=SegM 4 by Def18;
   hence thesis by A1,Th1;
 end;
 
@@ -1848,7 +1856,8 @@ definition
   func ZeroTuring -> strict TuringStr means
   :Def20:
   the Symbols of it = { 0,1
-} & the States of it = SegM 4 & the Tran of it = Zero_Tran & the InitS of it =
+} & the FStates of it = SegM 4 & the Tran of it = Zero_Tran & the InitS of 
+it =
   0 & the AcceptS of it = 4;
   existence
   proof
@@ -1867,7 +1876,7 @@ proof
   let n be Element of NAT;
   assume
 A1: n <= 4;
-  the States of ZeroTuring=SegM 4 by Def20;
+  the FStates of ZeroTuring=SegM 4 by Def20;
   hence thesis by A1,Th1;
 end;
 
@@ -2126,7 +2135,8 @@ definition
   func U3(n)Turing -> strict TuringStr means
   :Def22:
   the Symbols of it = { 0,1
-} & the States of it = SegM 3 & the Tran of it = U3(n)Tran & the InitS of it =
+} & the FStates of it = SegM 3 & the Tran of it = U3(n)Tran & the InitS of 
+it =
   0 & the AcceptS of it = 3;
   existence
   proof
@@ -2145,7 +2155,7 @@ proof
   let n be Element of NAT;
   assume
 A1: n <= 3;
-  the States of U3(n)Turing=SegM 3 by Def22;
+  the FStates of U3(n)Turing=SegM 3 by Def22;
   hence thesis by A1,Th1;
 end;
 
@@ -2489,8 +2499,8 @@ begin :: Combining two Turing Machines into one Turing Machine
 definition
   let t1,t2 be TuringStr;
   func UnionSt(t1,t2) -> finite non empty set equals
-  [: the States of t1, {the
-  InitS of t2} :] \/ [: {the AcceptS of t1}, the States of t2 :];
+  [: the FStates of t1, {the
+  InitS of t2} :] \/ [: {the AcceptS of t1}, the FStates of t2 :];
   correctness;
 end;
 
@@ -2501,7 +2511,9 @@ t2 ] in UnionSt(t1,t2) & [ the AcceptS of t1,the AcceptS of t2 ] in UnionSt(t1,
 proof
   let t1,t2 be TuringStr;
   set p0=the InitS of t1, q0=the InitS of t2, p1=the AcceptS of t1, q1=the
-AcceptS of t2, A= [: the States of t1, { q0 } :], B= [: {p1}, the States of t2
+AcceptS of t2, A= [: the FStates of t1, { q0 } :], 
+   B= [: {p1}, the FStates 
+of t2
   :];
   reconsider q=q0 as Element of { q0 } by TARSKI:def 1;
   reconsider p=p1 as Element of { p1 } by TARSKI:def 1;
@@ -2516,7 +2528,7 @@ theorem Th45:
   t ] in UnionSt(s,t)
 proof
   let s,t be TuringStr,x be State of s;
-  set q0=the InitS of t, A= [: the States of s, { q0 } :];
+  set q0=the InitS of t, A= [: the FStates of s, { q0 } :];
   reconsider q=q0 as Element of { q0 } by TARSKI:def 1;
   [ x, q ] in A;
   hence thesis by XBOOLE_0:def 3;
@@ -2527,7 +2539,7 @@ theorem Th46:
   s, x] in UnionSt(s,t)
 proof
   let s,t be TuringStr,x be State of t;
-  set p1=the AcceptS of s, B= [:{p1},the States of t :];
+  set p1=the AcceptS of s, B= [:{p1},the FStates of t :];
   reconsider p=p1 as Element of { p1 } by TARSKI:def 1;
   [ p, x] in B;
   hence thesis by XBOOLE_0:def 3;
@@ -2538,8 +2550,9 @@ theorem Th47:
   x1 be State of s, x2 be State of t st x=[x1, x2]
 proof
   let s,t be TuringStr,x be Element of UnionSt(s,t);
-  set q0=the InitS of t, p1=the AcceptS of s, A= [: the States of s, { q0 } :]
-  , B= [: { p1 }, the States of t :];
+  set q0=the InitS of t, p1=the AcceptS of s, 
+  A= [: the FStates of s, { q0 } :]
+  , B= [: { p1 }, the FStates of t :];
   per cases by XBOOLE_0:def 3;
   suppose
     x in A;
@@ -2712,7 +2725,8 @@ definition
   func T1 ';' T2 -> strict TuringStr means
   :Def32:
   the Symbols of it = (the
-  Symbols of T1) \/ the Symbols of T2 & the States of it = UnionSt(T1,T2) & the
+  Symbols of T1) \/ the Symbols of T2 & 
+  the FStates of it = UnionSt(T1,T2) & the
 Tran of it = UnionTran(T1,T2) & the InitS of it = [the InitS of T1,the InitS of
   T2] & the AcceptS of it = [the AcceptS of T1,the AcceptS of T2];
   existence
@@ -2742,10 +2756,10 @@ A2: g = (the Tran of t1).[p, y];
   set q0=the InitS of t2;
   set x=[[p,q0],y];
   q0 in { q0 } by TARSKI:def 1;
-  then [p,q0] in [: the States of t1, {q0} :] by ZFMISC_1:def 2;
+  then [p,q0] in [: the FStates of t1, {q0} :] by ZFMISC_1:def 2;
   then
-A3: [p,q0] in [: the States of t1, {q0} :] \/ [: {the AcceptS of t1}, the
-  States of t2 :] by XBOOLE_0:def 3;
+A3: [p,q0] in [: the FStates of t1, {q0} :] \/ [: {the AcceptS of t1}, the
+  FStates of t2 :] by XBOOLE_0:def 3;
   y in (the Symbols of t1) \/ the Symbols of t2 by XBOOLE_0:def 3;
   then reconsider
   xx=x as Element of [: UnionSt(t1,t2), (the Symbols of t1) \/ the
@@ -2772,10 +2786,10 @@ A1: g = (the Tran of t2).[q, y];
   set pF=the AcceptS of t1;
   set x=[[pF,q],y];
   pF in { pF } by TARSKI:def 1;
-  then [pF,q] in [: {pF}, the States of t2 :] by ZFMISC_1:def 2;
+  then [pF,q] in [: {pF}, the FStates of t2 :] by ZFMISC_1:def 2;
   then
-A2: [pF,q] in [: the States of t1, {the InitS of t2} :] \/ [: {pF}, the
-  States of t2 :] by XBOOLE_0:def 3;
+A2: [pF,q] in [: the FStates of t1, {the InitS of t2} :] \/ [: {pF}, the
+  FStates of t2 :] by XBOOLE_0:def 3;
   y in (the Symbols of t1) \/ the Symbols of t2 by XBOOLE_0:def 3;
   then reconsider
   xx=x as Element of [: UnionSt(t1,t2), (the Symbols of t1) \/ the

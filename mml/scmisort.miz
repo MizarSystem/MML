@@ -35,7 +35,7 @@ environ
       GRFUNC_1, RFINSEQ, SCMFSA_2, SCMFSA6B, SCMFSA7B, SCMFSA8B, SCMFSA8A,
       SCMFSA8C, SCMFSA_4, SCMFSA6C, SCM_HALT, ABSVALUE, FINSEQ_4, SCMBSORT,
       SCMFSA_9, SCMFSA_5, SCMFSA9A, XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1,
-      XXREAL_0, VALUED_1, CLASSES1, PBOOLE, PARTFUN1, SCMNORM;
+      XXREAL_0, VALUED_1, CLASSES1, PBOOLE, PARTFUN1, SCMNORM, AFINSQ_1;
  schemes NAT_1;
 
 begin :: Preliminaries
@@ -139,7 +139,7 @@ proof
 A1: I4 < card I + 6 by XREAL_1:8;
   card F=card I +6 by SCMFSA_9:2;
   then
-A2: Lc4 in dom F by A1,SCMFSA6A:15;
+A2: Lc4 in dom F by A1,AFINSQ_1:70;
 A3:  0 + I4 =  ( 0 + I4);
 A4: Gi. 0=goto  0 by SCMFSA8A:47;
   then
@@ -153,7 +153,7 @@ x: card Stop SCM+FSA = 1 by SCMNORM:3;
     .=1 + 1 by SCMFSA8A:29,x
     .=2;
   then
-A8:  0 in dom GS by SCMFSA6A:15;
+A8:  0 in dom GS by AFINSQ_1:70;
   then  0 + I4 in { il+I4 where il is Element of NAT: il in dom GS};
   then
 A9: Lc4 in dom Shift(GS,I4) by VALUED_1:def 12;
@@ -168,7 +168,7 @@ A11: card MM = card (i ';' SS ';' Goto  (card I1 + 1)) + card I by SCMFSA6A:61
     .= 2 + 1 + 1 + card I by SCMFSA7B:6
     .=I4;
   then
-A12: not Lc4 in dom MM by SCMFSA6A:15;
+A12: not Lc4 in dom MM by AFINSQ_1:70;
 A13: F= i ';' SS ';' Goto  (card I1 + 1) ';' I1 ';' SS by SCMFSA8B:def 2
     .=MM ';' Gi ';' SS by SCMFSA6A:67
     .=MM ';' GS by SCMFSA6A:67
@@ -302,7 +302,8 @@ theorem Th10:
   is_halting_on Initialize s holds for a be Int-Location holds IExec(I,s).a =
 Comput(ProgramPart( (Initialize s +* (I +* Start-At( 0,SCM+FSA)))), (Initialize
 s +* (I +* Start-At( 0,SCM+FSA))),
-(LifeSpan (Initialize
+(LifeSpan(ProgramPart(Initialize
+  s +* (I +* Start-At( 0,SCM+FSA))),Initialize
   s +* (I +* Start-At( 0,SCM+FSA))))).a
 proof
   let s be State of SCM+FSA,I be Program of SCM+FSA;
@@ -318,9 +319,11 @@ A1: ProgramPart s1 halts_on s1 by SCMFSA7B:def 8;
     then
 A2: not a in dom (s | A) by RELAT_1:90;
     s +* Initialized I = s1 by SCMFSA8A:13;
-    hence IExec(I,s).a = (Result s1 +* s | A).a by SCMFSA6B:def 1
-      .= (Result s1).a by A2,FUNCT_4:12
-      .= Comput(ProgramPart( s1), s1,LifeSpan s1).a by A1,AMI_1:122;
+    hence IExec(I,s).a = (Result(ProgramPart(s1),s1) +* s | A).a by SCMFSA6B:
+def 1
+      .= (Result(ProgramPart(s1),s1)).a by A2,FUNCT_4:12
+      .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).a by A1,
+AMI_1:122;
   end;
 end;
 
@@ -329,10 +332,8 @@ theorem Th11: ::SCMFSA6B_28
 SCM+FSA st Initialized I c= s1 & Initialized I c= s2 & s1,s2 equal_outside NAT
   holds for k be Element of NAT holds Comput(ProgramPart( s1), s1,k), Comput(
 ProgramPart( s2), s2,k)
-  equal_outside NAT & CurInstr(ProgramPart Comput(ProgramPart(s1),s1,k),Comput(
-ProgramPart(s1),s1,k))
-   = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,k),Comput(ProgramPart(s2),
-s2,k))
+  equal_outside NAT & CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,k))
+   = CurInstr(ProgramPart (s2),Comput(ProgramPart(s2),s2,k))
 proof
   let s1,s2 be State of SCM+FSA,I be InitHalting Program of SCM+FSA;
   assume that
@@ -357,21 +358,24 @@ Y:  (ProgramPart Comput(ProgramPart(s2),s2,k))/.IC Comput(ProgramPart(s2),s2,k)
  = Comput(ProgramPart(s2),s2,k).IC Comput(ProgramPart(s2),s2,k) by AMI_1:150;
 Z:  (ProgramPart Comput(ProgramPart(s1),s1,k))/.IC Comput(ProgramPart(s1),s1,k)
  = Comput(ProgramPart(s1),s1,k).IC Comput(ProgramPart(s1),s1,k) by AMI_1:150;
-    thus CurInstr(ProgramPart Comput(ProgramPart(s2),s2,k),Comput(ProgramPart(
-s2),s2,k))
-     = s2.IC Comput(ProgramPart( s2), s2,k) by Y,AMI_1:54
+TX2: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,k)
+by AMI_1:144;
+TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
+by AMI_1:144;
+    thus CurInstr(ProgramPart (s2),Comput(ProgramPart(s2),s2,k))
+     = s2.IC Comput(ProgramPart( s2), s2,k) by Y,AMI_1:54,TX2
       .= I.IC Comput(ProgramPart(s2),s2,k) by A4,A7,GRFUNC_1:8
       .= s1.IC Comput(ProgramPart(s1),s1,k) by A5,A8,A6,GRFUNC_1:8
-      .= CurInstr(ProgramPart Comput(ProgramPart(s1),s1,k),Comput(ProgramPart(
-s1),s1,k))
-      by Z,AMI_1:54;
+      .= CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,k))
+      by Z,AMI_1:54,TX1;
   end;
 end;
 
 theorem Th12: ::SCMFSA6B_29
   for s1,s2 be State of SCM+FSA,I be InitHalting Program of
 SCM+FSA st Initialized I c= s1 & Initialized I c= s2 & s1,s2 equal_outside NAT
-  holds LifeSpan s1 = LifeSpan s2 & Result s1, Result s2 equal_outside NAT
+  holds LifeSpan(ProgramPart(s1),s1) = LifeSpan(ProgramPart(s2),s2) & Result(
+ProgramPart(s1),s1), Result(ProgramPart(s2),s2) equal_outside NAT
 proof
   let s1,s2 be State of SCM+FSA,I be InitHalting Program of SCM+FSA;
   assume that
@@ -382,29 +386,33 @@ A4: ProgramPart s2 halts_on s2 by A2,SCM_HALT:5;
 A5: ProgramPart s1 halts_on s1 by A1,SCM_HALT:5;
 A6: now
     let l be Element of NAT;
+TX2: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,l)
+by AMI_1:144;
+TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,l)
+by AMI_1:144;
     assume
-A7: CurInstr(ProgramPart Comput(ProgramPart(s2),s2,l),Comput(ProgramPart(s2),s2
-,l)) = halt SCM+FSA;
-    CurInstr(ProgramPart Comput(ProgramPart(s1),s1,l),Comput(ProgramPart(s1),s1
-,l))
-     = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,l),
-    Comput(ProgramPart(s2),s2,l))
-     by A1,A2,A3,Th11;
-    hence LifeSpan s1 <= l by A5,A7,AMI_1:def 46;
+A7: CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,l)) = halt SCM+FSA;
+    CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,l))
+     = CurInstr(ProgramPart (s2),Comput(ProgramPart(s2),s2,l))
+     by A1,A2,A3,Th11,TX1,TX2;
+    hence LifeSpan(ProgramPart(s1),s1) <= l by A5,A7,AMI_1:def 46,TX1,TX2;
   end;
-  CurInstr(ProgramPart Comput(ProgramPart(s2),s2,LifeSpan s1),Comput(
-ProgramPart(s2),s2,LifeSpan s1))
-   = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,LifeSpan s1),
-   Comput(ProgramPart(s1),s1,LifeSpan s1))
+  CurInstr(ProgramPart s2,
+Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)))
+   = CurInstr(ProgramPart s1,
+   Comput(ProgramPart(s1),s1,LifeSpan(ProgramPart(s1),s1)))
     by A1,A2,A3,Th11
     .= halt SCM+FSA by A5,AMI_1:def 46;
   hence
-X: LifeSpan s1 = LifeSpan s2 by A6,A4,AMI_1:def 46;
+X: LifeSpan(ProgramPart(s1),s1) = LifeSpan(ProgramPart(s2),s2) by A6,A4,AMI_1:
+def 46;
   ProgramPart s2 halts_on s2 by A2,SCM_HALT:5;
   then
-A8: Result s2 = Comput(ProgramPart( s2), s2,LifeSpan s1) by X,AMI_1:122;
+A8: Result(ProgramPart(s2),s2) = Comput(ProgramPart( s2), s2,LifeSpan(
+ProgramPart(s1),s1)) by X,AMI_1:122;
   ProgramPart s1 halts_on s1 by A1,SCM_HALT:5;
-  then Result s1 = Comput(ProgramPart( s1), s1,LifeSpan s1) by AMI_1:122;
+  then Result(ProgramPart(s1),s1) = Comput(ProgramPart( s1), s1,LifeSpan(
+ProgramPart(s1),s1)) by AMI_1:122;
   hence thesis by A1,A2,A3,A8,Th11;
 end;
 
@@ -459,7 +467,8 @@ end;
 theorem
   for a being Int-Location, I being Program of SCM+FSA, s being State of
 SCM+FSA,k being Element of NAT st I is_closed_onInit s & I is_halting_onInit s
-& k < LifeSpan (s +* Initialized I) & IC Comput(ProgramPart( (s +* Initialized
+& k < LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I) & IC Comput(
+ProgramPart( (s +* Initialized
 while>0
   (a,I))), (s +* Initialized while>0
   (a,I)),1 + k) = IC Comput(ProgramPart( (s +* Initialized I)), (s +*
@@ -497,7 +506,7 @@ A3: I is_closed_on s0 by SCM_HALT:40;
   then
 A4: I is_halting_on s0 by SCM_HALT:41;
   assume
-A5: k < LifeSpan sI;
+A5: k < LifeSpan(ProgramPart(sI),sI);
   assume
 A6: IC Comput(ProgramPart( sw), sw,1 + k)=l3 + 4;
   assume
@@ -512,15 +521,17 @@ theorem
 SCM+FSA st I is_closed_onInit s & I is_halting_onInit s & IC Comput(ProgramPart
 ( (s +*
 Initialized while>0(a,I))), (s +*
-Initialized while>0(a,I)),1 + LifeSpan (s +* Initialized I)) = IC Comput(
+Initialized while>0(a,I)),1 + LifeSpan(ProgramPart(s +* Initialized I),s +*
+Initialized I)) = IC Comput(
 ProgramPart(
   (s +* Initialized I)),
-  (s +* Initialized I),LifeSpan (s +* Initialized I)) + 4
+  (s +* Initialized I),LifeSpan(ProgramPart(s +* Initialized I),s +*
+Initialized I)) + 4
    holds CurInstr(ProgramPart
 Comput(ProgramPart((s +* Initialized while>0(a,I))),(s +* Initialized while>0(a
-,I)),1 + LifeSpan (s +* Initialized I)),
+,I)),1 + LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I)),
 Comput(ProgramPart((s +* Initialized while>0(a,I))),(s +* Initialized while>0(a
-,I)),1 + LifeSpan (s +* Initialized I)))
+,I)),1 + LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I)))
   = goto  (card I +4)
 proof
   let a be Int-Location,I be Program of SCM+FSA;
@@ -540,8 +551,9 @@ A3: I is_closed_on s0 by SCM_HALT:40;
   then
 A4: I is_halting_on s0 by SCM_HALT:41;
   assume
-  IC Comput(ProgramPart( sw), sw,1 + LifeSpan sI) = IC Comput(ProgramPart( sI),
-sI,LifeSpan sI
+  IC Comput(ProgramPart( sw), sw,1 + LifeSpan(ProgramPart(sI),sI)) = IC Comput(
+ProgramPart( sI),
+sI,LifeSpan(ProgramPart(sI),sI)
   ) + 4;
   hence thesis by A3,A4,A1,A2,SCMFSA_9:45;
 end;
@@ -550,8 +562,11 @@ theorem Th19:
   for s being State of SCM+FSA, I being Program of SCM+FSA, a
 being read-write Int-Location st I is_closed_onInit s & I is_halting_onInit s &
   s.a >0 holds IC Comput(ProgramPart( (s +* Initialized while>0(a,I))), (s +*
-Initialized while>0(a,I)), (LifeSpan (s +*
-Initialized I) + 3)) =  0 & for k being Element of NAT st k <= LifeSpan (
+Initialized while>0(a,I)), (LifeSpan(ProgramPart(s +*
+Initialized I),s +*
+Initialized I) + 3)) =  0 & for k being Element of NAT st k <= LifeSpan(
+ProgramPart(
+s +* Initialized I),
 s +* Initialized I) + 3 holds IC Comput(ProgramPart( (s +* Initialized while>0(
 a,I))), (s +* Initialized while>0(a,I)),k
   ) in dom while>0(a,I)
@@ -576,7 +591,8 @@ A4: I is_halting_on s0 by SCM_HALT:41;
   s.a >0;
   then
 A5: s0.a>0 by SCMFSA6C:3;
-  hence IC Comput(ProgramPart( sw), sw,LifeSpan sI + 3) =  0 by A3,A4,A1,A2,
+  hence IC Comput(ProgramPart( sw), sw,LifeSpan(ProgramPart(sI),sI) + 3) =  0
+by A3,A4,A1,A2,
 SCMFSA_9:47;
   thus thesis by A3,A4,A5,A1,A2,SCMFSA_9:47;
 end;
@@ -584,7 +600,8 @@ end;
 theorem ::SCM_9_36
   for s being State of SCM+FSA, I being Program of SCM+FSA,a be
 read-write Int-Location st I is_closed_onInit s & I is_halting_onInit s & s.a >
-  0 holds for k being Element of NAT st k <= LifeSpan (s +* Initialized I) + 3
+  0 holds for k being Element of NAT st k <= LifeSpan(ProgramPart(s +*
+Initialized I),s +* Initialized I) + 3
   holds IC Comput(ProgramPart( (s +* Initialized while>0(a,I))), (s +*
 Initialized while>0(a,I)),k) in dom while>0(a,I)
 proof
@@ -622,9 +639,10 @@ A4: s0.a > 0 by SCMFSA6C:3;
 X: s +* Initialized while>0(a,I) =
 Initialize s +* (while>0(a,I) +* Start-At( 0,SCM+FSA))
            by SCMFSA8A:13;
+XX: s +* Initialized I = s0 +* IA by SCMFSA8A:13;
     assume
-    k <= LifeSpan (s +* Initialized I) + 3;
-    then k <= LifeSpan (s0 +* IA) + 3 by SCMFSA8A:13;
+    k <= LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I) + 3;
+    then k <= LifeSpan(ProgramPart(s0 +* IA),s0 +* IA) + 3 by XX;
     then
     IC Comput(ProgramPart( (s0 +* (while>0(a,I) +* Start-At( 0,SCM+FSA)))), (s0
 +* (while>0(a,I) +* Start-At( 0,SCM+FSA))),k)
@@ -641,13 +659,16 @@ theorem Th21: ::SCM_9_37
   for s being State of SCM+FSA, I be Program of SCM+FSA,a be
 read-write Int-Location st I is_closed_onInit s & I is_halting_onInit s & s.a >
   0 holds IC Comput(ProgramPart( (s +* Initialized while>0(a,I))), (s +*
-Initialized while>0(a,I)), (LifeSpan (s +*
+Initialized while>0(a,I)), (LifeSpan(ProgramPart(s +*
+  Initialized I),s +*
   Initialized I) + 3)) =  0 & DataPart Comput(ProgramPart( (s +* Initialized
 while>0(a,I))), (s +* Initialized
-while>0(a,I)), (LifeSpan (s +* Initialized I) + 3)) = DataPart Comput(
+while>0(a,I)), (LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I) +
+3)) = DataPart Comput(
 ProgramPart( (s
   +* Initialized I)), (s
-  +* Initialized I),LifeSpan (s +* Initialized I))
+  +* Initialized I),LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I
+))
 proof
   let s be State of SCM+FSA,I be Program of SCM+FSA,a be read-write
   Int-Location;
@@ -656,13 +677,14 @@ proof
   set s1 = s0 +* (while>0(a,I) +* Start-At( 0,SCM+FSA)), s2 =
   Comput(ProgramPart( s1), s1,1),
   i = a >0_goto  4 , sI = s0 +* IA;
-  defpred P[Nat] means $1 <= LifeSpan sI implies IC Comput(ProgramPart( s1), s1
+  defpred P[Nat] means $1 <= LifeSpan(ProgramPart(sI),sI) implies IC Comput(
+ProgramPart( s1), s1
 ,1 + $1) =
   IC Comput(ProgramPart( sI), sI,$1) + 4 & DataPart Comput(ProgramPart( s1), s1
 ,1 + $1) = DataPart
   Comput(ProgramPart( sI), sI,$1);
   set loc4= (card I + 4);
-  set s3= Comput(ProgramPart( s1), s1,1+LifeSpan sI+1);
+  set s3= Comput(ProgramPart( s1), s1,1+LifeSpan(ProgramPart(sI),sI)+1);
 A1: loc4 in dom while>0(a,I) by SCMFSA_9:38;
   assume
 A2: I is_closed_onInit s;
@@ -693,8 +715,8 @@ A6: P[k];
     now
 A7:   k + 0 < k + 1 by XREAL_1:8;
       assume
-      k + 1 <= LifeSpan sI;
-      then k < LifeSpan sI by A7,XXREAL_0:2;
+      k + 1 <= LifeSpan(ProgramPart(sI),sI);
+      then k < LifeSpan(ProgramPart(sI),sI) by A7,XXREAL_0:2;
       hence IC Comput(ProgramPart( s1), s1,1 + k+1) = IC Comput(ProgramPart( sI
 ), sI,k+1) + 4 &
 DataPart Comput(ProgramPart( s1), s1,1 + k+1) = DataPart Comput(ProgramPart( sI
@@ -730,9 +752,8 @@ A13: for f be FinSeq-Location holds s2.f = s1.f by SCMFSA_2:97;
 A14: DataPart s2 = DataPart s1 by A13,SCMFSA6A:38
     .= DataPart s0 by SCMFSA8A:11
     .= DataPart sI by SCMFSA8A:11;
-  set s4= Comput(ProgramPart( s1), s1,1+LifeSpan sI+1+1);
-  set s2= Comput(ProgramPart( s1), s1,1 + LifeSpan sI);
-A15: LifeSpan sI+1+1+1 =LifeSpan sI+(2+1);
+  set s4= Comput(ProgramPart( s1), s1,1+LifeSpan(ProgramPart(sI),sI)+1+1);
+  set s2= Comput(ProgramPart( s1), s1,1 + LifeSpan(ProgramPart(sI),sI));
   not a in dom (while>0(a,I) +* Start-At( 0,SCM+FSA)) by SCMFSA6B:12;
   then
 A16: s1.a = s0.a by FUNCT_4:12;
@@ -743,7 +764,7 @@ A17: s0.a > 0 by SCMFSA6C:3;
 A18: P[ 0]
   proof
     assume
-    0 <= LifeSpan sI;
+    0 <= LifeSpan(ProgramPart(sI),sI);
 A19: IC SCM+FSA in dom (I +* Start-At( 0,SCM+FSA)) by SF_MASTR:65;
     IC Comput(ProgramPart( sI), sI,0) = sI.IC SCM+FSA by AMI_1:13
       .= (I +* Start-At( 0,SCM+FSA)).IC SCM+FSA by A19,FUNCT_4:14
@@ -752,7 +773,7 @@ A19: IC SCM+FSA in dom (I +* Start-At( 0,SCM+FSA)) by SF_MASTR:65;
   end;
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A18,A5);
   then
-A20: P[LifeSpan sI];
+A20: P[LifeSpan(ProgramPart(sI),sI)];
 T: ProgramPart s1 = ProgramPart s2
 by AMI_1:144;
 A21: s3 = Following(ProgramPart s1,s2) by AMI_1:14
@@ -777,33 +798,43 @@ A26: DataPart s3 = DataPart s2 by A22,SCMFSA6A:38;
 X: s +* Initialized while>0(a,I)
 = Initialize s +* (while>0(a,I) +* Start-At( 0,SCM+FSA))
            by SCMFSA8A:13;
+XX: sI = s +* Initialized I by SCMFSA8A:13;
 A27: Comput(ProgramPart( (s +* Initialized while>0(a,I))), (s +* Initialized
-while>0(a,I)), (LifeSpan (s +*
-Initialized I) + 3)) = Comput(ProgramPart( s1), s1, (LifeSpan (s +* Initialized
+while>0(a,I)), (LifeSpan(ProgramPart(s +*
+Initialized I),s +*
+Initialized I) + 3)) = Comput(ProgramPart( s1), s1, (LifeSpan(ProgramPart(s +*
+Initialized
+I),s +* Initialized
 I) + 3))
 by X
-    .=s4 by A15,SCMFSA8A:13;
+    .=s4 by XX;
   hence IC Comput(ProgramPart( (s +* Initialized while>0(a,I))), (s +*
-Initialized while>0(a,I)), (LifeSpan (s +*
+Initialized while>0(a,I)), (LifeSpan(ProgramPart(s +*
+  Initialized I),s +*
   Initialized I) + 3)) = 0 by A24,SCMFSA_2:95;
 X: s +* Initialized I = Initialize s +* (I +* Start-At( 0,SCM+FSA))
            by SCMFSA8A:13;
+XX: sI = s +* Initialized I by SCMFSA8A:13;
   for c be Int-Location holds s4.c = s3.c by A24,SCMFSA_2:95;
   then DataPart s4 = DataPart s2 by A26,A25,SCMFSA6A:38;
   hence DataPart Comput(ProgramPart( (s +* Initialized while>0(a,I))), (s +*
-Initialized while>0(a,I)), (LifeSpan (s +*
+Initialized while>0(a,I)), (LifeSpan(ProgramPart(s +*
+Initialized I),s +*
 Initialized I) + 3)) = DataPart Comput(ProgramPart( (s +* Initialized I)), (s
-+* Initialized I),LifeSpan sI)
++* Initialized I),LifeSpan(ProgramPart(sI),sI))
   by A20,A27,X
     .= DataPart Comput(ProgramPart( (s +* Initialized I)), (s +* Initialized I)
-, (LifeSpan (s +*
-  Initialized I))) by SCMFSA8A:13;
+, (LifeSpan(ProgramPart(s +*
+  Initialized I),s +*
+  Initialized I))) by XX;
 end;
 
 theorem
   for s be State of SCM+FSA, I be InitHalting Program of SCM+FSA, a be
   read-write Int-Location st s.a > 0 holds ex s2 be State of SCM+FSA, k be
-  Element of NAT st s2 = s +* Initialized (while>0(a,I)) & k =LifeSpan (s +*
+  Element of NAT st s2 = s +* Initialized (while>0(a,I)) & k =LifeSpan(
+ProgramPart(s +*
+Initialized I),s +*
 Initialized I) + 3 & IC Comput(ProgramPart( s2), s2,k) =  0 & (for b be
 Int-Location
   holds Comput(ProgramPart( s2), s2,k).b = IExec(I,s).b) & for f be
@@ -818,12 +849,11 @@ A1: s.a > 0;
   set Is=Initialize s +* (I +* Start-At( 0,SCM+FSA));
   set P = while>0(a,I), s1 = s +* Initialized I;
   take s2 = s +* Initialized P;
-  take k = LifeSpan s1 + 3;
-  thus s2 = s +* Initialized P & k = LifeSpan s1 + 3;
+  take k = LifeSpan(ProgramPart(s1),s1) + 3;
+  thus s2 = s +* Initialized P & k = LifeSpan(ProgramPart(s1),s1) + 3;
 A2: I is_halting_onInit s by SCM_HALT:36;
   then
 X:  ProgramPart s1 halts_on s1 by SCM_HALT:def 5;
-:::  for s being State of SCM+FSA, I being Program of SCM+FSA holds
   s+* Initialized I = Initialize s +* (I +* Start-At( 0,SCM+FSA))
   by SCMFSA8A:13;
   then ProgramPart Is halts_on Is by X;
@@ -832,20 +862,25 @@ A3: I is_halting_on Initialize s by SCMFSA7B:def 8;
 A4: I is_closed_onInit s by SCM_HALT:35;
   hence IC ( Comput(ProgramPart( s2), s2,k))= 0 by A1,A2,Th21;
   set s4= Comput(ProgramPart( s2), s2,k), s3= Comput(ProgramPart( s1), s1,
-LifeSpan s1);
+LifeSpan(ProgramPart(s1),s1));
 X: s +* Initialized I = Initialize s +* (I +* Start-At( 0,SCM+FSA))
            by SCMFSA8A:13;
-A5: s3= Comput(ProgramPart( Is), Is,LifeSpan s1) by X
-    .= Comput(ProgramPart( Is), Is,LifeSpan Is) by SCMFSA8A:13;
+XX: s1 = Is by SCMFSA8A:13;
+A5: s3= Comput(ProgramPart( Is), Is,LifeSpan(ProgramPart(s1),s1)) by X
+    .= Comput(ProgramPart( Is), Is,LifeSpan(ProgramPart(Is),Is))
+     by XX
+;
 A6: DataPart s4 = DataPart s3 by A1,A2,A4,Th21;
   hereby
     let b be Int-Location;
-    thus s4.b = Comput(ProgramPart( Is), Is,LifeSpan Is).b by A5,A6,SCMFSA6A:38
+    thus s4.b = Comput(ProgramPart( Is), Is,LifeSpan(ProgramPart(Is),Is)).b by
+A5,A6,SCMFSA6A:38
       .= IExec(I,s).b by A3,Th10;
   end;
   hereby
     let f be FinSeq-Location;
-    thus s4.f = Comput(ProgramPart( Is), Is,LifeSpan Is).f by A5,A6,SCMFSA6A:38
+    thus s4.f = Comput(ProgramPart( Is), Is,LifeSpan(ProgramPart(Is),Is)).f by
+A5,A6,SCMFSA6A:38
       .= IExec(I,s).f by A3,SCMFSA8C:87;
   end;
 end;
@@ -855,17 +890,20 @@ definition
   deffunc U(Nat, Element of product the Object-Kind of SCM+FSA) =
    Comput(ProgramPart(
   ($2 +* Initialized while>0(a,I))),
-  ($2 +* Initialized while>0(a,I)), (LifeSpan ($2+* Initialized I) + 3));
+  ($2 +* Initialized while>0(a,I)), (LifeSpan(ProgramPart($2+* Initialized I),
+$2+* Initialized I) + 3));
   deffunc V(Nat, Element of product the Object-Kind of SCM+FSA) =
    down Comput(ProgramPart(
   ($2 +* Initialized while>0(a,I))),
-  ($2 +* Initialized while>0(a,I)), (LifeSpan ($2+* Initialized I) + 3));
+  ($2 +* Initialized while>0(a,I)), (LifeSpan(ProgramPart($2+* Initialized I),
+$2+* Initialized I) + 3));
   func StepWhile>0(a,s,I) -> Function of NAT,product the Object-Kind of
   SCM+FSA means
   :Def1:
   it.0 = s & for i being Nat holds it.(i+1)= Comput(ProgramPart( (
   it.i +* Initialized while>0(a,I))), (
-  it.i +* Initialized while>0(a,I)), (LifeSpan (it.i +* Initialized I) + 3));
+  it.i +* Initialized while>0(a,I)), (LifeSpan(ProgramPart(it.i +* Initialized
+I),it.i +* Initialized I) + 3));
   existence
   proof
    reconsider ss=s as
@@ -909,7 +947,8 @@ proof
   StepWhile>0(a,s,I).(k+1) = Comput(ProgramPart((sk0 +* Initialized while>0(a,I
 )
   )),(sk0 +* Initialized while>0(a,I)
-  ), (LifeSpan (sk0 +* Initialized I) + 3)) by Def1
+  ), (LifeSpan(ProgramPart(sk0 +* Initialized I),sk0 +* Initialized I) + 3)) by
+Def1
     .=StepWhile>0(a,sk,I).(0+1) by Def1
     .=StepWhile>0(a,sk,I).1;
 end;
@@ -919,7 +958,8 @@ theorem Th26:
   s being State of SCM+FSA holds StepWhile>0(a,s,I).(0+1)= Comput(ProgramPart(
 (s +*
   Initialized while>0(a,I))), (s +*
-  Initialized while>0(a,I)), (LifeSpan (s+* Initialized I) + 3))
+  Initialized while>0(a,I)), (LifeSpan(ProgramPart(s+* Initialized I),s+*
+Initialized I) + 3))
 proof
   let I be Program of SCM+FSA,a be read-write Int-Location, s be State of
   SCM+FSA;
@@ -927,14 +967,17 @@ proof
 X: StepWhile>0(a,s,I).0 = s by Def1;
 thus StepWhile>0(a,s,I).(0+1)= Comput(ProgramPart( (StepWhile>0(a,s,I).0 +*
 Initialized while>0(a,I))), (StepWhile>0(a,s,I).0 +*
-Initialized while>0(a,I)),LifeSpan (StepWhile>0(a,s,I).0 +* Initialized I) + 3)
+Initialized while>0(a,I)),LifeSpan(ProgramPart(StepWhile>0(a,s,I).0 +*
+Initialized I),StepWhile>0(a,s,I).0 +* Initialized I) + 3)
   by Def1
     .= Comput(ProgramPart( (s +* Initialized while>0(a,I))), (s +* Initialized
-while>0(a,I)), (LifeSpan (StepWhile>0(
+while>0(a,I)), (LifeSpan(ProgramPart(StepWhile>0(
+  a,s,I).0+* Initialized I),StepWhile>0(
   a,s,I).0+* Initialized I) + 3)) by X
     .= Comput(ProgramPart( (s +* Initialized while>0(a,I))), (s +* Initialized
-while>0(a,I)), (LifeSpan (s+*
-  Initialized I) + 3)) by Def1;
+while>0(a,I)), (LifeSpan(ProgramPart(s+*
+  Initialized I),s+*
+  Initialized I) + 3)) by X;
 end;
 
 theorem Th27:
@@ -946,7 +989,9 @@ StepWhile>0(a,s,I).k.intloc 0=1 holds StepWhile>0(a,s,I).k = StepWhile>0(a,s,I)
   .k +* Initialized while>0(a,I) & StepWhile>0(a,s,I).(k+1)= Comput(ProgramPart
 ( (s +*
 Initialized while>0(a,I))), (s +*
-Initialized while>0(a,I)), (n +(LifeSpan (StepWhile>0(a,s,I).k +* Initialized I
+Initialized while>0(a,I)), (n +(LifeSpan(ProgramPart(StepWhile>0(a,s,I).k +*
+Initialized I
+  ),StepWhile>0(a,s,I).k +* Initialized I
   ) + 3)))
 proof
   let I be Program of SCM+FSA,a be read-write Int-Location, s be State of
@@ -975,10 +1020,14 @@ by A4,AMI_1:144;
     .= DataPart sk by A1,A6,SCMFSA8C:14;
   hence s3=sk by A3,A5,SCMFSA_9:29;
   hence
-  StepWhile>0(a,s,I).(k+1)= Comput(ProgramPart( s1), sk,LifeSpan (sk +*
+  StepWhile>0(a,s,I).(k+1)= Comput(ProgramPart( s1), sk,LifeSpan(ProgramPart(sk
++*
+Initialized I
+  ),sk +*
 Initialized I
   ) + 3) by Def1,T
-    .= Comput(ProgramPart( s1), s1,n +(LifeSpan (sk +* Initialized I) + 3)) by
+    .= Comput(ProgramPart( s1), s1,n +(LifeSpan(ProgramPart(sk +* Initialized I
+),sk +* Initialized I) + 3)) by
 A4,AMI_1:51;
 end;
 
@@ -1020,7 +1069,7 @@ A6: P[ 0]
   proof
     assume
     0+1 <= m;
-    take n=(LifeSpan (s +* IniI) + 3);
+    take n=(LifeSpan(ProgramPart(s +* IniI),s +* IniI) + 3);
     thus thesis by Th26;
   end;
 A7: now
@@ -1051,8 +1100,10 @@ A14:  I is_halting_onInit sk by A7;
       F(k) <> 0 by A5,A13;
       then
 A15:  sk.a > 0 by A1;
-      take m=n +(LifeSpan (sk1 +* IniI ) + 3);
-A16:  sk1= Comput(ProgramPart( (sk +* Iwhile)), (sk +* Iwhile),LifeSpan (sk +*
+      take m=n +(LifeSpan(ProgramPart(sk1 +* IniI ),sk1 +* IniI ) + 3);
+A16:  sk1= Comput(ProgramPart( (sk +* Iwhile)), (sk +* Iwhile),LifeSpan(
+ProgramPart(sk +*
+IniI ),sk +*
 IniI ) + 3) by Def1;
       I is_closed_onInit sk by A7,A13;
       then IC sk1 = 0 by A16,A14,A15,Th19;
@@ -1085,7 +1136,9 @@ A21:  I is_closed_onInit si by A7;
       then
 A22:  si.a > 0 by A1;
 A23:  I is_halting_onInit si by A7,A20;
-      sm= Comput(ProgramPart( (si +* Iwhile)), (si +* Iwhile), (LifeSpan (si +*
+      sm= Comput(ProgramPart( (si +* Iwhile)), (si +* Iwhile), (LifeSpan(
+ProgramPart(si +*
+IniI),si +*
 IniI) + 3)) by A19,Def1
 ;
       then
@@ -1096,7 +1149,7 @@ A25:  sm1=sm2 by A19,SCMFSA8C:18;
       then
 A26:  IC sm2 = Iwhile.IC SCM+FSA by A2,FUNCT_4:14
         .= IC sm by A24,SCMFSA6A:46;
-      set p=(LifeSpan (s+* IniI) + 3);
+      set p=(LifeSpan(ProgramPart(s+* IniI),s+* IniI) + 3);
 A27:  DataPart sm2 = DataPart sm by SCMFSA8A:11;
       m=i+1 by A19;
       then consider n being Element of NAT such that
@@ -1109,7 +1162,7 @@ A30:  sm.a <= 0 by A1,A4;
       then while>0(a,I) is_halting_onInit sm by Th16;
       then ProgramPart sm1 halts_on sm1 by SCM_HALT:def 5;
       then consider j being Element of NAT such that
-A31:  CurInstr(ProgramPart Comput(ProgramPart(sm),sm,j),Comput(ProgramPart(sm),
+A31:  CurInstr(ProgramPart sm,Comput(ProgramPart(sm),
 sm,j))
  = halt SCM+FSA by A29,AMI_1:146;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),
@@ -1117,7 +1170,7 @@ s1,n)
 by AMI_1:144;
 x: Comput(ProgramPart(s1),s1,j+n)
  = Comput(ProgramPart(s1),Comput(ProgramPart(s1),s1,n),j) by AMI_1:51;
-      CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n+j),Comput(ProgramPart(s1
+      CurInstr(ProgramPart s1,Comput(ProgramPart(s1
 ),s1,n+j))
        = halt SCM+FSA by A28,A31,x,T;
       then ProgramPart s1 halts_on s1 by AMI_1:146;
@@ -1192,7 +1245,7 @@ A51:          Dt.a > 0 by A1;
               consider z being Element of NAT such that
 A52:          StepWhile>0(a,s,I).t= Comput(ProgramPart( s1), s1,z) and
 A53:          z <= q by A40;
-              set z2=z +(LifeSpan (Dt +* IniI) + 3);
+              set z2=z +(LifeSpan(ProgramPart(Dt +* IniI),Dt +* IniI) + 3);
               consider w be Nat such that
 A54:          q = z+w by A53,NAT_1:10;
               set Dy=StepWhile>0(a,s,I).y;
@@ -1207,7 +1260,7 @@ A57:          Dy.a > 0 by A1;
 A58:          I is_halting_onInit Dy by A7,A55;
               reconsider w as Element of NAT by ORDINAL1:def 13;
               Dt= Comput(ProgramPart( (Dy +* Iwhile)), (Dy +* Iwhile), (
-LifeSpan (Dy +* IniI) + 3
+LifeSpan(ProgramPart(Dy +* IniI),Dy +* IniI) + 3
               )) by A49,Def1;
               then
 A59:          IC Dt = 0 by A56,A58,A57,Th19;
@@ -1225,9 +1278,10 @@ by A50,A52,A59,A60,Th27;
                 hence contradiction by A40,A61,XREAL_1:31;
               end;
               then
-A62:          w < LifeSpan (Dt +* IniI) + 3 by A54,XREAL_1:8;
+A62:          w < LifeSpan(ProgramPart(Dt +* IniI),Dt +* IniI) + 3 by A54,
+XREAL_1:8;
 T: ProgramPart s1 = ProgramPart Dt
-by A52,A54,AMI_1:144;
+by A52,AMI_1:144;
               Comput(ProgramPart( s1), s1,q) = Comput(ProgramPart(s1),Dt,w) by
 A52,A54,AMI_1:51
                 .= Comput(ProgramPart( (Dt +* Iwhile)), (Dt +* Iwhile),w) by X
@@ -1275,8 +1329,9 @@ A4:   t.a <= k+1;
 A5:     t.a=k+1;
         set l0=intloc 0;
         set Iwhile=Initialized while>0(a,I), tW0=t +* Iwhile, t1=t +*
-Initialized I, Wt= Comput(ProgramPart( tW0), tW0,(LifeSpan t1)+ 3), A = NAT, It
-= Comput(ProgramPart( t1), t1,LifeSpan t1);
+Initialized I, Wt= Comput(ProgramPart( tW0), tW0,(LifeSpan(ProgramPart(t1),t1))
++ 3), A = NAT, It
+= Comput(ProgramPart( t1), t1,LifeSpan(ProgramPart(t1),t1));
 A6:     I is_halting_onInit t by SCM_HALT:36;
         then
 A7:     ProgramPart t1 halts_on t1 by SCM_HALT:def 5;
@@ -1289,8 +1344,8 @@ A9:     I is_closed_onInit t by SCM_HALT:35;
 A10:    DataPart Wt = DataPart It by A5,A6,Th21;
         then
 A11:    Wt.l0 =It.l0 by SCMFSA6A:38
-          .=(Result t1).l0 by A7,AMI_1:122
-          .=(Result t1 +* t | A).l0 by A8,FUNCT_4:12
+          .=(Result(ProgramPart(t1),t1)).l0 by A7,AMI_1:122
+          .=(Result(ProgramPart(t1),t1) +* t | A).l0 by A8,FUNCT_4:12
           .=IExec(I,t).l0 by SCMFSA6B:def 1
           .=1 by SCM_HALT:17;
         not a in A by SCMFSA_2:84;
@@ -1304,8 +1359,8 @@ A13:    while>0(a,I) c= Iwhile by SCMFSA6A:26;
         then
 A14:    Wt +* while>0(a,I) = Wt by FUNCT_4:79;
         Wt.a =It.a by A10,SCMFSA6A:38
-          .=(Result t1).a by A7,AMI_1:122
-          .=(Result t1 +* t | A).a by A12,FUNCT_4:12
+          .=(Result(ProgramPart(t1),t1)).a by A7,AMI_1:122
+          .=(Result(ProgramPart(t1),t1) +* t | A).a by A12,FUNCT_4:12
           .=IExec(I,t).a by SCMFSA6B:def 1;
         then Wt.a < k+1 by A1,A5;
         then while>0(a,I) is_halting_onInit Wt by A3,INT_1:20;
@@ -1316,16 +1371,17 @@ A15:    ProgramPart(Wt+*Iwhile) halts_on Wt+*Iwhile by SCM_HALT:def 5;
 A16:    Wt +* Iwhile = Wt by A11,A14,Th6;
         now
           consider m be Element of NAT such that
-A17:      CurInstr(ProgramPart Comput(ProgramPart(Wt),Wt,m),Comput(ProgramPart(
+A17:      CurInstr(ProgramPart Wt,Comput(ProgramPart(
 Wt),Wt,m))
  = halt SCM+FSA by A16,A15,AMI_1:146;
-          take mm=((LifeSpan t1)+ 3)+m;
-T: ProgramPart tW0 = ProgramPart Comput(ProgramPart(tW0),tW0,LifeSpan t1+3)
+          take mm=((LifeSpan(ProgramPart(t1),t1))+ 3)+m;
+T: ProgramPart tW0 = ProgramPart Comput(ProgramPart(tW0),tW0,LifeSpan(
+ProgramPart(t1),t1)+3)
 by AMI_1:144;
-x: Comput(ProgramPart(tW0),tW0,(LifeSpan t1)+ 3+m)
+x: Comput(ProgramPart(tW0),tW0,(LifeSpan(ProgramPart(t1),t1))+ 3+m)
  = Comput(ProgramPart(tW0),Comput(
-ProgramPart(tW0),tW0,LifeSpan t1+3), m) by AMI_1:51;
-          thus CurInstr(ProgramPart Comput(ProgramPart(tW0),tW0,mm),Comput(
+ProgramPart(tW0),tW0,LifeSpan(ProgramPart(t1),t1)+3), m) by AMI_1:51;
+          thus CurInstr(ProgramPart tW0,Comput(
 ProgramPart(tW0),tW0,mm))
            = halt SCM+FSA by A17,x,T;
         end;
@@ -1412,8 +1468,9 @@ A4:   f.t <= k+1;
 A5:     f.t=k+1;
         set l0=intloc 0;
         set Iwhile=Initialized while>0(a,I), tW0=t +* Iwhile, t1=t +*
-Initialized I, Wt= Comput(ProgramPart( tW0), tW0,(LifeSpan t1)+ 3), A = NAT, It
-= Comput(ProgramPart( t1), t1,LifeSpan t1);
+Initialized I, Wt= Comput(ProgramPart( tW0), tW0,(LifeSpan(ProgramPart(t1),t1))
++ 3), A = NAT, It
+= Comput(ProgramPart( t1), t1,LifeSpan(ProgramPart(t1),t1));
 A6:     I is_closed_onInit t by SCM_HALT:35;
 A7:     while>0(a,I) c= Iwhile by SCMFSA6A:26;
         Iwhile c= tW0 by FUNCT_4:26;
@@ -1433,12 +1490,12 @@ A12:    not t.a <= 0 by A1,A5;
 A13:    DataPart Wt = DataPart It by A6,A10,Th21;
         then
 A14:    Wt.l0 =It.l0 by SCMFSA6A:38
-          .=(Result t1).l0 by A11,AMI_1:122
-          .=(Result t1 +* t | A).l0 by A9,FUNCT_4:12
+          .=(Result(ProgramPart(t1),t1)).l0 by A11,AMI_1:122
+          .=(Result(ProgramPart(t1),t1) +* t | A).l0 by A9,FUNCT_4:12
           .=IExec(I,t).l0 by SCMFSA6B:def 1
           .=1 by SCM_HALT:17;
-        DataPart Wt = DataPart Result t1 by A13,A11,AMI_1:122
-          .= DataPart(Result t1 +* t | A) by SCMFSA8C:35
+        DataPart Wt = DataPart Result(ProgramPart(t1),t1) by A13,A11,AMI_1:122
+          .= DataPart(Result(ProgramPart(t1),t1) +* t | A) by SCMFSA8C:35
           .= DataPart IExec(I,t) by SCMFSA6B:def 1;
         then f.Wt=f.IExec(I,t) by A1;
         then f.Wt < k+1 by A1,A5;
@@ -1450,17 +1507,17 @@ A15:    ProgramPart(Wt+*Iwhile) halts_on Wt+*Iwhile by SCM_HALT:def 5;
 A16:    Wt +* Iwhile = Wt by A14,A8,Th6;
         now
           consider m be Element of NAT such that
-A17:      CurInstr(ProgramPart Comput(ProgramPart(Wt),Wt,m),Comput(ProgramPart(
+A17:      CurInstr(ProgramPart Wt,Comput(ProgramPart(
 Wt),Wt,m))
  = halt SCM+FSA by A16,A15,AMI_1:146;
-T: ProgramPart tW0 = ProgramPart Comput(ProgramPart(tW0),tW0,LifeSpan t1+ 3)
+T: ProgramPart tW0 = ProgramPart Comput(ProgramPart(tW0),tW0,LifeSpan(
+ProgramPart(t1),t1)+ 3)
 by AMI_1:144;
-x: Comput(ProgramPart(tW0),tW0,((LifeSpan t1)+ 3)+m)
+x: Comput(ProgramPart(tW0),tW0,((LifeSpan(ProgramPart(t1),t1))+ 3)+m)
  = Comput(ProgramPart(tW0),Comput(
-ProgramPart(tW0),tW0,LifeSpan t1+ 3),m) by AMI_1:51;
-          take mm=((LifeSpan t1)+ 3)+m;
-          thus CurInstr(ProgramPart Comput(ProgramPart(tW0),tW0,mm),Comput(
-ProgramPart(tW0),tW0,mm))
+ProgramPart(tW0),tW0,LifeSpan(ProgramPart(t1),t1)+ 3),m) by AMI_1:51;
+          take mm=((LifeSpan(ProgramPart(t1),t1))+ 3)+m;
+          thus CurInstr(ProgramPart tW0,Comput(ProgramPart(tW0),tW0,mm))
            = halt SCM+FSA by A17,x,T;
         end;
         then ProgramPart tW0 halts_on tW0 by AMI_1:146;
@@ -1593,41 +1650,43 @@ AMI_1:14
     .= Exec(goto loc5,s4) by A18,A19,Y,T,SCMFSA_2:95;
 Y:  (ProgramPart s5)/.IC s5
  = s5.IC s5 by AMI_1:150;
+TX: ProgramPart s1 = ProgramPart s5
+by AMI_1:144;
   s5.loc5 = s1.loc5 by AMI_1:54
     .= (while>0(a,I) +* Start-At( 0,SCM+FSA)).loc5 by A2,A12,FUNCT_4:14
     .= while>0(a,I).loc5 by A12,SCMFSA6B:7
     .= halt SCM+FSA by SCMFSA_9:39;
   then
-A21: CurInstr(ProgramPart s5,s5) = halt SCM+FSA by A20,Y,SCMFSA_2:95;
+A21: CurInstr(ProgramPart s1,s5) = halt SCM+FSA by A20,Y,SCMFSA_2:95,TX;
   then
-A22: ProgramPart s1 halts_on s1 by AMI_1:146;
+A22: ProgramPart s1 halts_on s1 by AMI_1:146,TX;
 Y:  (ProgramPart s4)/.IC s4
  = s4.IC s4 by AMI_1:150;
-A23: CurInstr(ProgramPart s4,s4) = goto loc5 by A18,A19,Y,SCMFSA_2:95;
+A23: CurInstr(ProgramPart s1,s4) = goto loc5 by A18,A19,Y,SCMFSA_2:95,T;
   now
     let k be Element of NAT;
 A24: goto loc5 <> halt SCM+FSA by SCMFSA_9:9;
 u: Comput(ProgramPart(s1),s1,0) = s1 by AMI_1:13;
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,k))/.IC Comput(ProgramPart(s1),s1,k)
  = Comput(ProgramPart(s1),s1,k).IC Comput(ProgramPart(s1),s1,k) by AMI_1:150;
+TX: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
+by AMI_1:144;
     assume
-A25: CurInstr(ProgramPart Comput(ProgramPart(s1),s1,k),Comput(ProgramPart(s1),
-s1,k))
+A25: CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k))
  = halt SCM+FSA;
     then
-A26: k <> 2 by A17,A10,Y,SCMFSA_9:9;
-    CurInstr(ProgramPart Comput(ProgramPart(s1),s1,0),Comput(ProgramPart(s1),s1
-,0))
+A26: k <> 2 by A17,A10,Y,SCMFSA_9:9,TX;
+    CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,0))
      = i by A7,u;
     then
-A27: k <> 0 by A25,SCMFSA_9:8;
-xx:    k <> 1 by A15,A3,A25,Y,SCMFSA_9:9;
-    3<>k by A23,A25,A24;
+A27: k <> 0 by A25,SCMFSA_9:8,TX;
+xx:    k <> 1 by A15,A3,A25,Y,SCMFSA_9:9,TX;
+    3<>k by A23,A25,A24,TX;
     then 3<k by A27,A26,xx,NAT_1:28;
     hence 3+1<=k by INT_1:20;
   end;
   then
-A28: LifeSpan s1 = 4 by A21,A22,AMI_1:def 46;
+A28: LifeSpan(ProgramPart(s1),s1) = 4 by A21,A22,AMI_1:def 46,TX;
 A29: Is +* Initialized while>0(a,I) = Initialize Is +* (while>0(a,I) +*
   Start-At( 0,SCM+FSA)) by SCMFSA8A:13
     .=s1 by SCMFSA8C:15;
@@ -1652,9 +1711,10 @@ A32: now
   end;
   thus DataPart IExec(while>0(a,I),s) = DataPart IExec(while>0(a,I),Is) by
 SCMFSA8C:17
-    .= DataPart(Result (Is +* Initialized while>0(a,I)) +* Is | A) by
+    .= DataPart(Result(ProgramPart(Is +* Initialized while>0(a,I)),Is +*
+Initialized while>0(a,I)) +* Is | A) by
 SCMFSA6B:def 1
-    .= DataPart(Result s1) by A29,SCMFSA8C:35
+    .= DataPart(Result(ProgramPart(s1),s1)) by A29,SCMFSA8C:35
     .= DataPart s5 by A22,A28,AMI_1:122
     .= DataPart Is by A31,A32,SCMFSA6A:38;
 end;
@@ -1672,13 +1732,14 @@ proof
 A1: s.a > 0 and
 A2: while>0(a,I) is InitHalting;
   set ps = s | NAT, sI = s +* Initialized I, Iwhile= Initialized while>0(a,I),
-sW = s +* Iwhile, s3 = Comput(ProgramPart( sI), sI,LifeSpan sI) +* Iwhile, m1 =
-LifeSpan sI
-  , m3 = LifeSpan s3;
+sW = s +* Iwhile, s3 = Comput(ProgramPart( sI), sI,LifeSpan(ProgramPart(sI),sI)
+) +* Iwhile, m1 =
+LifeSpan(ProgramPart(sI),sI)
+  , m3 = LifeSpan(ProgramPart(s3),s3);
 A3: Iwhile c= sW by FUNCT_4:26;
   then
 A4: ProgramPart sW halts_on sW by A2,AMI_1:def 26;
-  set mW=LifeSpan sW;
+  set mW=LifeSpan(ProgramPart(sW),sW);
 A5: Iwhile c= s3 by FUNCT_4:26;
   then
 A6: ProgramPart s3 halts_on s3 by A2,AMI_1:def 26;
@@ -1734,13 +1795,13 @@ A19: ProgramPart Cm3 halts_on Cm3 by A2,AMI_1:def 26;
     IC Cm3=IC s3 by A10,FUNCT_4:26,SCMFSA6B:34;
     then
 A20: Cm3,s3 equal_outside A by A12,A15,SCMFSA6A:28;
-    then LifeSpan Cm3 = m3 by A2,A5,A18,Th12;
+    then LifeSpan(ProgramPart(Cm3),Cm3) = m3 by A2,A5,A18,Th12;
     hence
     DataPart Comput(ProgramPart( Cm3), Cm3,m3+mW) = DataPart Comput(ProgramPart
-( Cm3), Cm3,LifeSpan
-    Cm3) by A19,AMI_1:128,NAT_1:11
-      .= DataPart Result Cm3 by A19,AMI_1:122
-      .= DataPart Result s3 by A2,A5,A18,A20,Th12,SCMFSA6A:39
+( Cm3), Cm3,LifeSpan(ProgramPart Cm3,
+    Cm3)) by A19,AMI_1:128,NAT_1:11
+      .= DataPart Result(ProgramPart(Cm3),Cm3) by A19,AMI_1:122
+      .= DataPart Result(ProgramPart(s3),s3) by A2,A5,A18,A20,Th12,SCMFSA6A:39
       .= DataPart Comput(ProgramPart(s3),s3,m3) by A6,AMI_1:122;
   end;
   Initialized I c= sI by FUNCT_4:26;
@@ -1760,23 +1821,29 @@ SCMFSA6A:34
     .= A by XBOOLE_1:21;
   then
 A25: dom ps misses D by SCMFSA_2:13,14,XBOOLE_1:70;
-  IExec(I,s) = Result (s +* Initialized I) +* ps by SCMFSA6B:def 1
+  IExec(I,s) = Result(ProgramPart(s +* Initialized I),s +* Initialized I) +* ps
+by SCMFSA6B:def 1
     .= Comput(ProgramPart(sI),sI,m1) +* ps by A21,AMI_1:122;
   then
-  Result (IExec(I,s) +* Iwhile),Result s3 equal_outside A by A2,A5,A24,A23,A22
+  Result(ProgramPart(IExec(I,s) +* Iwhile),IExec(I,s) +* Iwhile),Result(
+ProgramPart(s3),s3) equal_outside A by A2,A5,A24,A23,A22
 ,Th12;
   then
-A26: Result (IExec(I,s) +* Iwhile) +* ps = Result s3 +* ps by A24,FUNCT_7:108;
-  IExec(I,s) | A = (Result (s +* Initialized I) +* ps) | A by SCMFSA6B:def 1
+A26: Result(ProgramPart(IExec(I,s) +* Iwhile),IExec(I,s) +* Iwhile) +* ps =
+Result(ProgramPart(s3),s3) +* ps by A24,FUNCT_7:108;
+  IExec(I,s) | A = (Result(ProgramPart(s +* Initialized I),s +* Initialized I)
++* ps) | A by SCMFSA6B:def 1
     .= ps by PBOOLE:157;
   then
-A27: IExec(while>0(a,I),IExec(I,s)) = Result (IExec(I,s) +* Iwhile) +* ps by
+A27: IExec(while>0(a,I),IExec(I,s)) = Result(ProgramPart(IExec(I,s) +* Iwhile),
+IExec(I,s) +* Iwhile) +* ps by
 SCMFSA6B:def 1
     .= Comput(ProgramPart(s3),s3,m3) +* ps by A6,A26,AMI_1:122;
 A28: mW <= (m1+3+m3) + mW by NAT_1:11;
 T: ProgramPart sW = ProgramPart Comput(ProgramPart(sW),sW,m1+3)
 by AMI_1:144;
-  IExec(while>0(a,I),s) = Result (s +* Iwhile) +* ps by SCMFSA6B:def 1
+  IExec(while>0(a,I),s) = Result(ProgramPart(s +* Iwhile),s +* Iwhile) +* ps by
+SCMFSA6B:def 1
     .= Comput(ProgramPart(sW),sW,mW) +* ps by A4,AMI_1:122
     .= Comput(ProgramPart(sW),sW,m1+3+(m3+mW)) +* ps by A4,A28,AMI_1:128;
   then DataPart IExec(while>0(a,I),s) = DataPart Comput(ProgramPart(sW),sW,m1+3
@@ -2321,7 +2388,7 @@ proof
   assume
 A1: k < 82;
   card (insert-sort f) = 82 by Th42;
-  hence thesis by A1,SCMFSA6A:15;
+  hence thesis by A1,AFINSQ_1:70;
 end;
 
 Lm1: for s being State of SCM+FSA st Insert-Sort-Algorithm c= s holds s.
@@ -2420,6 +2487,7 @@ A17: card X6 = 8 + card Macro W6 by SCMFSA6A:61
     .=goto  (10+2) by A6,A17,SCMBSORT:52
     .=goto  12;
 end;
+
 set f0=fsloc 0;
 
 set b1=intloc (0+1),b2=intloc (1+1),b3=intloc (2+1),b4=intloc (3+1), b5=intloc
@@ -2435,8 +2503,8 @@ SubFrom(b4,b4), Wg=while>0(b2,body2), t16=t1 ';' t2 ';' t3 ';' t4 ';' t5 ';' t6
 , body1=t16 ';' Wg ';' T3, WM=initializeWorkMem, j1=b1:=len f0, j2=SubFrom(b1,
 a0);
 
-Lm2: for s being State of SCM+FSA st Insert-Sort-Algorithm c= s & s starts_at
-0 holds (for k being Element of NAT st k>0 & k<12 holds Comput(ProgramPart( s),
+Lm2: for s being 0-started State of SCM+FSA st Insert-Sort-Algorithm c= s
+  holds (for k being Element of NAT st k>0 & k<12 holds Comput(ProgramPart( s),
 s,k).IC
 SCM+FSA =  k & Comput(ProgramPart( s), s,k).a0=s.a0 & Comput(ProgramPart( s), s
 ,k).fsloc 0=s.
@@ -2447,12 +2515,11 @@ Comput(ProgramPart( s), s,11).a5
 =s.a0 & Comput(ProgramPart( s), s,11).a6=s.a0
 
 proof
-  let s be State of SCM+FSA such that
-A1: Insert-Sort-Algorithm c= s and
-A2: s starts_at 0;
+  let s be 0-started State of SCM+FSA such that
+A1: Insert-Sort-Algorithm c= s;
 A3: Comput(ProgramPart(s),s,0) = s by AMI_1:13;
   then
-A4: IC Comput(ProgramPart(s),s,0) =  0 by A2,AMI_1:def 41;
+A4: IC Comput(ProgramPart(s),s,0) =  0 by AMI_1:def 41;
   then
 A5: Comput(ProgramPart(s),s,0+1) = Exec(s. 0,Comput(ProgramPart(s),s,0)) by
 AMI_1:55
@@ -3036,7 +3103,7 @@ A19: n-s.b6<=0;
 end;
 
 Lm17: for k be Element of NAT,s be State of SCM+FSA st s.b2=k & s.b2<=len(s.f0
-) holds s.f0=IExec(Wg,s).f0 & s.b6=IExec(Wg,s).b6 & s.b3=IExec(Wg,s).b3 & (k=0
+) holds s.f0=IExec(Wg,s).f0 & s.b3=IExec(Wg,s).b3 & (k=0
 or ex n be Element of NAT,x1 be Integer st n=IExec(Wg,s).b4-s.b4 & n<=k & (k-n
 >=1 implies x1=s.f0.(k-n) & x1 >= s.b6) & for i be Element of NAT st i>k-n & i<
 k+1 holds ex x2 be Integer st x2=s.f0.i & x2 <= s.b6 )
@@ -3045,7 +3112,7 @@ proof
 
   defpred P[Element of NAT] means for s be State of SCM+FSA st s.b2=$1 & s.b2
 
-<=len(s.f0) holds IExec(Wg,s).f0=s.f0 & IExec(Wg,s).b6=s.b6 & IExec(Wg,s).b3=s.
+<=len(s.f0) holds IExec(Wg,s).f0=s.f0 & IExec(Wg,s).b3=s.
 
 b3 & ($1=0 or ex n be Element of NAT,x1 be Integer st n=IExec(Wg,s).b4-s.b4 & n
 
@@ -3074,10 +3141,6 @@ A9:     m-s.b6>0;
         thus IExec(Wg,s).f0=IExec(WT,bs).f0 by A3,Th36
           .=bs.f0 by A7,A9,Th34
           .=s.f0 by A4,A5,Lm16;
-        thus IExec(Wg,s).b6=IExec(WT,bs).b6 by A3,Th37
-          .=bs0.b6 by A7,A9,Th35
-          .=bs.b6 by SCMFSA6C:3
-          .=s.b6 by A4,A5,Lm16;
         thus IExec(Wg,s).b3=IExec(WT,bs).b3 by A3,Th37
           .=bs0.b3 by A7,A9,Th35
           .=bs.b3 by SCMFSA6C:3
@@ -3112,12 +3175,9 @@ A11:    m-s.b6<=0;
         bs.b2<k+1 by A3,A7,A8,XREAL_1:31;
         then
 A12:    bs.b2<=len(s.f0) by A3,A4,XXREAL_0:2;
-A13:    bs.b6=s.b6 by A4,A5,Lm16;
 A14:    bs.f0=s.f0 by A4,A5,Lm16;
         thus IExec(Wg,s).f0=IExec(WT,bs).f0 by A3,Th36
           .=s.f0 by A2,A3,A8,A11,A14,A12;
-        thus IExec(Wg,s).b6=IExec(WT,bs).b6 by A3,Th37
-          .=s.b6 by A2,A3,A8,A11,A14,A12,A13;
         thus IExec(Wg,s).b3=IExec(WT,bs).b3 by A3,Th37
           .=bs.b3 by A2,A3,A8,A11,A14,A12
           .=s.b3 by A4,A5,Lm16;
@@ -3228,8 +3288,6 @@ A31: P[ 0]
 A32: s.b2=0 and
     s.b2<=len(s.f0);
     thus IExec(Wg,s).f0=s.f0 by A32,Th34;
-    thus IExec(Wg,s).b6=s0.b6 by A32,Th35
-      .=s.b6 by SCMFSA6C:3;
     thus IExec(Wg,s).b3=s0.b3 by A32,Th35
       .=s.b3 by SCMFSA6C:3;
     thus thesis;
@@ -3909,7 +3967,7 @@ theorem Th47:
   for s be State of SCM+FSA,t be FinSequence of INT st Initialized
   Insert-Sort-Algorithm +*(fsloc 0 .--> t) c= s holds ex u being FinSequence of
   REAL st t,u are_fiberwise_equipotent & u is non-increasing & u is FinSequence
-  of INT & (Result s).(fsloc 0) = u
+  of INT & (Result(ProgramPart(s),s)).(fsloc 0) = u
 proof
   let s be State of SCM+FSA,t be FinSequence of INT;
   set Ia=Insert-Sort-Algorithm, p=Initialized Ia, x=fsloc 0 .--> t, z=IExec(
@@ -3958,6 +4016,7 @@ proof
   let w be FinSequence of INT;
   set p=Initialized Insert-Sort-Algorithm +* ((fsloc 0) .--> w), q=
   Insert-Sort-Algorithm;
+X: p is 0-started by SCMBSORT:47;
   set UD={fsloc 0,a0,a1,a2,a3,a4,a5,a6}, Us=UsedInt*Loc q \/ UsedIntLoc q;
 A1: UsedIntLoc q ={a0,a1,a2,a3,a4,a5,a6} by Th38;
 A2: UsedInt*Loc q ={fsloc 0} by Th39;
@@ -3975,11 +4034,11 @@ A6: p c= s1 and
 A7: p c= s2;
 A8: s1.intloc 0 =1 by A6,SCMBSORT:54
       .= s2.intloc 0 by A7,SCMBSORT:54;
-A9: s2 starts_at 0 by A7,AMI_1:92,SCMBSORT:47;
+A9: s2 is 0-started by A7,AMI_1:92,X;
 A10: q c= s2 by A7,SCMBSORT:53;
     set Cs11= Comput(ProgramPart( s1), s1,11), Cs21= Comput(ProgramPart( s2),
 s2,11);
-A11: s1 starts_at 0 by A6,AMI_1:92,SCMBSORT:47;
+A11: s1 is 0-started by A6,AMI_1:92,X;
 A12: q c= s1 by A6,SCMBSORT:53;
 A13: s1.fsloc 0 =w by A6,SCMBSORT:54
       .=s2.fsloc 0 by A7,SCMBSORT:54;
@@ -4051,16 +4110,16 @@ s1), s1,i).fsloc 0 =
     let s1,s2 be State of SCM+FSA,i;
     assume that
 A29: p c= s1 and
-A30: p c=s2 and
+A30: p c= s2 and
 A31: i <= 10;
-A32: s2 starts_at 0 by A30,AMI_1:92,SCMBSORT:47;
+A32: s2 is 0-started by A30,AMI_1:92,X;
 A33: s1.fsloc 0 =w by A29,SCMBSORT:54
       .=s2.fsloc 0 by A30,SCMBSORT:54;
 A34: s1.intloc 0 =1 by A29,SCMBSORT:54
       .= s2.intloc 0 by A30,SCMBSORT:54;
 A35: Comput(ProgramPart(s1),s1,0) = s1 by AMI_1:13;
 A36: q c=s2 by A30,SCMBSORT:53;
-A37: s1 starts_at 0 by A29,AMI_1:92,SCMBSORT:47;
+A37: s1 is 0-started by A29,AMI_1:92,X;
     then
 A38: IC s1 =  0 by AMI_1:def 41
       .= IC s2 by A32,AMI_1:def 41;
@@ -4281,16 +4340,17 @@ A7: dom s c= dom(p +* s) by RELAT_1:25;
   thus p +* s is pre-program of SCM+FSA by A1,A4,Th48,AMI_1:def 26;
   fsloc 0 in the carrier of SCM+FSA;
   then
-A8: fsloc 0 in dom Result t by PARTFUN1:def 4;
+A8: fsloc 0 in dom Result(ProgramPart(t),t) by PARTFUN1:def 4;
   p +* s is autonomic by A1,Th48;
   then
-A9: Result(p +* s) = (Result t)|dom(p +* s) by A6,A2,AMI_1:def 28;
+A9: Result(ProgramPart(p +* s),p +* s) = (Result(ProgramPart(t),t))|dom(p +* s)
+by A6,A2,AMI_1:def 28;
 A10: dom s = { fsloc 0 } by A1,FUNCOP_1:19;
   consider u being FinSequence of REAL such that
 A11: w,u are_fiberwise_equipotent and
 A12: u is non-increasing and
   u is FinSequence of INT and
-A13: (Result t).(fsloc 0) = u by A1,A2,Th47;
+A13: (Result(ProgramPart(t),t)).(fsloc 0) = u by A1,A2,Th47;
   consider z being FinSequence of REAL such that
 A14: w,z are_fiberwise_equipotent and
 A15: z is non-increasing and

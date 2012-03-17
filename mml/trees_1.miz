@@ -8,18 +8,21 @@ environ
 
  vocabularies NUMBERS, XBOOLE_0, SUBSET_1, FUNCT_1, FINSEQ_1, TARSKI, RELAT_1,
       NAT_1, ORDINAL4, ARYTM_3, FINSET_1, CARD_1, ARYTM_1, XXREAL_0, ORDINAL1,
-      TREES_1;
+      TREES_1, AMISTD_3, FINSEQ_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, XCMPLX_0, NAT_1,
-      NUMBERS, ORDINAL1, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, XXREAL_0;
- constructors ENUMSET1, WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+      NUMBERS, ORDINAL1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FUNCT_2,
+      FINSET_1, XXREAL_0;
+ constructors ENUMSET1, WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, FINSEQ_2,
+      FUNCOP_1, FUNCT_2, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XXREAL_0,
-      XREAL_0, NAT_1, FINSEQ_1, CARD_1;
+      XREAL_0, NAT_1, FINSEQ_1, CARD_1, RELSET_1, FINSEQ_2, FUNCOP_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0;
+ definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0, FUNCOP_1,
+      FINSEQ_2;
  theorems TARSKI, NAT_1, FINSEQ_1, FINSET_1, FUNCT_1, CARD_1, RELAT_1,
       GRFUNC_1, CARD_2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1,
-      ENUMSET1, FINSEQ_2;
- schemes NAT_1, CLASSES1, XBOOLE_0;
+      ENUMSET1, FINSEQ_2, FINSEQ_3, FUNCOP_1, FUNCT_2;
+ schemes NAT_1, CLASSES1, XBOOLE_0, FUNCT_2;
 
 begin
 
@@ -1932,7 +1935,7 @@ A45: X is AntiChain_of_Prefixes-like
 A46:    x in X;
 A47:    x in T by A43,A46;
 A48:    T c= NAT* by Def5;
-        thus thesis by A47,A48,FINSEQ_1:def 11;
+        thus thesis by A47,A48;
       end;
       let p1,p2;
       assume
@@ -2429,5 +2432,144 @@ A16: r = <*x*>^p by A15,FINSEQ_2:150;
   reconsider x as Element of NAT by ORDINAL1:def 13;
 A17: q = t^<*x*>^p by A12,A16,FINSEQ_1:45;
   thus contradiction by A7,A9,A17,Th46;
+end;
+
+definition
+  func TrivialInfiniteTree equals
+  { k |-> 0 where k is Element of NAT: not
+  contradiction };
+  coherence;
+end;
+
+registration
+  cluster TrivialInfiniteTree -> non empty Tree-like;
+  coherence
+  proof
+    set X = TrivialInfiniteTree;
+    0 |-> 0 in X;
+    hence X is non empty;
+    thus X c= NAT*
+    proof
+      let x be set;
+      assume
+      x in X;
+      then ex k being Element of NAT st x = k |-> 0;
+      hence thesis by FINSEQ_1:def 11;
+    end;
+    thus for p being FinSequence of NAT st p in X holds ProperPrefixes p c= X
+    proof
+      let p be FinSequence of NAT;
+      assume
+      p in X;
+      then consider m being Element of NAT such that
+A1:   p = m |-> 0;
+      let x be set;
+      assume
+A2:   x in ProperPrefixes p;
+      then reconsider x as FinSequence by Th35;
+A3:   for k being Nat st 1 <= k & k <= len x holds x.k = (len x |-> 0).k
+      proof
+        x is_a_proper_prefix_of p by A2,Th36;
+        then
+A4:     x c= p by XBOOLE_0:def 8;
+        let k be Nat;
+        assume
+        1 <= k & k <= len x;
+        then
+A5:     k in dom x by FINSEQ_3:27;
+        then
+A6:     k in Seg len x by FINSEQ_1:def 3;
+        len x < len p by A2,Th37;
+        then Seg len x c= Seg len p by FINSEQ_1:7;
+        then k in Seg len p by A6;
+        then
+A7:     k in Seg m by A1,FINSEQ_1:def 18;
+        thus (len x |-> 0).k = 0 by A6,FUNCOP_1:13
+          .= p.k by A1,A7,FUNCOP_1:13
+          .= x.k by A5,A4,GRFUNC_1:8;
+      end;
+      len x = len (len x |-> 0) by FINSEQ_1:def 18;
+      then x = len x |-> 0 by A3,FINSEQ_1:18;
+      hence thesis;
+    end;
+    let p be FinSequence of NAT, m, n be Element of NAT;
+    assume
+    p^<*m*> in X;
+    then consider k being Element of NAT such that
+A8: p^<*m*> = k |-> 0;
+    0 = k or 0 < k;
+    then 0+1 <= k by A8,NAT_1:13;
+    then
+A9: k in Seg k by FINSEQ_1:3;
+    assume
+A10: n <= m;
+A11: len (p^<*m*>) = k by A8,FINSEQ_1:def 18;
+A12: len (p^<*m*>) = len p + 1 by FINSEQ_2:19;
+    then (p^<*m*>).len (p^<*m*>) = m by FINSEQ_1:59;
+    then
+A13: m = 0 by A8,A11,A9,FUNCOP_1:13;
+A14: for z being Nat st 1 <= z & z <= len (p^<*n*>) holds (len (p^<*n*>)
+    |-> 0).z = (p^<*n*>).z
+    proof
+      let z be Nat;
+      assume
+A15:  1 <= z & z <= len (p^<*n*>);
+      len (p^<*n*>) = len p + 1 by FINSEQ_2:19;
+      then
+A16:  z in Seg k by A12,A11,A15,FINSEQ_1:3;
+      z in dom (p^<*n*>) by A15,FINSEQ_3:27;
+      then z in Seg len (p^<*n*>) by FINSEQ_1:def 3;
+      hence (len (p^<*n*>) |-> 0).z = 0 by FUNCOP_1:13
+        .= (p^<*m*>).z by A8,A16,FUNCOP_1:13
+        .= (p^<*n*>).z by A10,A13;
+    end;
+    len (p^<*n*>) = len (len (p^<*n*>) |-> 0) by FINSEQ_1:def 18;
+    then len (p^<*n*>) |-> 0 = p^<*n*> by A14,FINSEQ_1:18;
+    hence thesis;
+  end;
+end;
+
+theorem Th19:
+  NAT,TrivialInfiniteTree are_equipotent
+proof
+  defpred P[Element of NAT,set] means $2 = $1 |-> 0;
+A1: for x being Element of NAT ex y being Element of TrivialInfiniteTree st
+  P[x,y]
+  proof
+    let x be Element of NAT;
+    x |-> 0 in TrivialInfiniteTree;
+    then reconsider y = x |-> 0 as Element of TrivialInfiniteTree;
+    take y;
+    thus thesis;
+  end;
+  consider f being Function of NAT,TrivialInfiniteTree such that
+A2: for x being Element of NAT holds P[x,f.x] from FUNCT_2:sch 3(A1);
+  take f;
+  thus f is one-to-one
+  proof
+    let x,y be set;
+    assume
+A3: x in dom f & y in dom f;
+    assume
+A4: f.x = f.y;
+    reconsider x, y as Element of NAT by A3,FUNCT_2:def 1;
+    ( P[x,f.x])& P[y,f.y] by A2;
+    hence thesis by A4,FINSEQ_2:163;
+  end;
+  thus
+A5: dom f = NAT by FUNCT_2:def 1;
+  thus rng f c= TrivialInfiniteTree by RELAT_1:def 19;
+  let a be set;
+  assume
+  a in TrivialInfiniteTree;
+  then consider k being Element of NAT such that
+A6: a = k |-> 0;
+  f.k = a by A2,A6;
+  hence thesis by A5,FUNCT_1:def 5;
+end;
+
+registration
+  cluster TrivialInfiniteTree -> infinite;
+  coherence by Th19,CARD_1:68;
 end;
 

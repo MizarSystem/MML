@@ -7,14 +7,14 @@
 environ
 
  vocabularies NUMBERS, SCMPDS_2, SUBSET_1, FSM_1, SCMPDS_4, AMI_1, TURING_1,
-      SCMFSA8A, SCMFSA_7, AMI_3, INT_1, SCMFSA8B, CARD_1, ARYTM_3, SCMPDS_5,
+      SCMFSA8A, SCMFSA_7, AMI_3, INT_1, SCMFSA8B, CARD_1, ARYTM_3,
       FUNCT_1, XXREAL_0, UNIALG_2, SCMFSA7B, SCMFSA6B, RELAT_1, FUNCT_4, AMI_2,
       SCMFSA_9, ARYTM_1, VALUED_1, TARSKI, GRAPHSP, SCMFSA6A, CIRCUIT2,
       MSUALG_1, NAT_1, FUNCOP_1, FUNCT_7, XBOOLE_0, CARD_3, SCMPDS_8, FINSEQ_1,
       GRAPH_2, SCPISORT, SCMP_GCD, CLASSES1, SCPQSORT, ORDINAL1, PARTFUN1,
       SCMNORM;
  notations TARSKI, XBOOLE_0, FUNCT_2, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, RELAT_1, FUNCT_1, PARTFUN1,
+      XXREAL_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4,
       RECDEF_1, INT_1, NAT_1, AMI_1, SCMNORM,
       AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5, SCMPDS_6,
       SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, GRAPH_2, CLASSES1, SCPISORT;
@@ -25,7 +25,7 @@ environ
       XREAL_0, NAT_1, INT_1, CARD_3, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6,
       SCMPDS_8, ORDINAL1, VALUED_0, SCMNORM, VALUED_1, AMI_1, FUNCT_4, RELAT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions SCMPDS_2, SCMP_GCD, SCMNORM;
+ definitions SCMPDS_2, SCMP_GCD, SCMNORM, AMI_1;
  theorems AMI_1, AMI_3, NAT_1, TARSKI, FUNCT_4, SCMPDS_2, FUNCT_7, GRFUNC_1,
       SCMPDS_4, SCMPDS_5, SCMPDS_7, SCMPDS_8, FINSEQ_1, FINSEQ_2, RFINSEQ,
       RELAT_1, SCPISORT, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, GRAPH_2, AMI_2,
@@ -65,12 +65,12 @@ registration
 end;
 
 theorem Th1: :: see SCMPDS_6:87
-  for s being State of SCMPDS,I being No-StopCode shiftable Program
+  for s being State of SCMPDS,I being halt-free shiftable Program
   of SCMPDS, J being shiftable Program of SCMPDS,a,b be Int_position,k1 being
   Integer st s.DataLoc(s.a,k1) > 0 & I is_closed_on s & I is_halting_on s holds
   IExec(if>0(a,k1,I,J),s).b = IExec(I,s).b
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, J be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, J be
   shiftable Program of SCMPDS,a,b be Int_position,k1 be Integer;
   assume that
 A1: s.DataLoc(s.a,k1)>0 and
@@ -108,15 +108,17 @@ A1: while>0(a,i,I) = i1 ';' I ';' i2 by SCMPDS_8:def 3
 end;
 
 theorem Th2:
-  for s,sm be State of SCMPDS,I be No-StopCode shiftable Program of
+  for s,sm be State of SCMPDS,I be halt-free shiftable Program of
   SCMPDS, a be Int_position,i be Integer, m be Element of NAT st card I>0 & I
-  is_closed_on s & I is_halting_on s & s.DataLoc(s.a,i) > 0 & m=LifeSpan (s +*
+  is_closed_on s & I is_halting_on s & s.DataLoc(s.a,i) > 0 & m=LifeSpan(
+ProgramPart(s +*
+Initialized stop I),s +*
 Initialized stop I)+2 & sm=Comput(ProgramPart((s +* Initialized stop while>0(a,
 i,I))),(s +* Initialized stop while>0(a,i,I)),m
 ) holds DataPart sm = DataPart IExec(I,s) & sm +*Initialized stop while>0(a,i,I
   )=sm
 proof
-  let s,sm be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a
+  let s,sm be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a
   be Int_position,i be Integer,m be Element of NAT;
   set b=DataLoc(s.a,i);
   set WH =while>0(a,i,I), iWH=Initialized stop WH, IsI=Initialized stop I;
@@ -127,7 +129,7 @@ A1: card I>0 and
 A2: I is_closed_on s and
 A3: I is_halting_on s and
 A4: s.b > 0 and
-A5: m=LifeSpan s2+2 and
+A5: m=LifeSpan(ProgramPart(s2),s2)+2 and
 A6: sm= Comput(ProgramPart((s +* iWH)),(s +* iWH),m);
 A7: IsI c= s2 by FUNCT_4:26;
 A8: iWH c= s3 by FUNCT_4:26;
@@ -145,7 +147,8 @@ A12: Comput(ProgramPart(s3),s3,0+1) = Following(ProgramPart s3,
 Comput(ProgramPart(s3),s3,0)) by AMI_1:14
     .= Following(ProgramPart s3,s3) by AMI_1:13
     .= Exec(i1,s3) by A11,AMI_1:def 18;
-  set m2=LifeSpan s2, s5= Comput(ProgramPart( s4), s4,m2), l1= (card I + 1);
+  set m2=LifeSpan(ProgramPart(s2),s2), s5= Comput(ProgramPart( s4), s4,m2), l1=
+(card I + 1);
 A13: IC s3 = 0 by SCMPDS_6:21;
 A14: s3.DataLoc(s3.a,i)= s3.b by SCMPDS_5:19
     .= s.b by SCMPDS_5:19;
@@ -181,8 +184,9 @@ A23: IC s4 = s4.IC SCMPDS by AMI_1:def 15
 A20,A10,
 SCMPDS_7:36;
   then
-A24: DataPart s5 = DataPart(Result s2) by A21,AMI_1:122
-    .= DataPart(Result s2 +* s | A) by A17,AMI_2:29,FUNCT_4:76,SCMPDS_2:100
+A24: DataPart s5 = DataPart(Result(ProgramPart(s2),s2)) by A21,AMI_1:122
+    .= DataPart(Result(ProgramPart(s2),s2) +* s | A) by A17,AMI_2:29,FUNCT_4:76
+,SCMPDS_2:100
     .= DataPart IExec(I,s) by SCMPDS_4:def 8;
 Y:  (ProgramPart s6)/.IC s6
  = s6.IC s6 by AMI_1:150;
@@ -306,7 +310,7 @@ proof
 end;
 
 theorem Th5:
-  for s being State of SCMPDS,I being No-StopCode shiftable Program
+  for s being State of SCMPDS,I being halt-free shiftable Program
   of SCMPDS, a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c+s.
 DataLoc(s.a,i) & (for t be State of SCMPDS st t.x >= c+t.DataLoc(s.a,i) & t.y=s
 .y & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.a & I is_closed_on t &
@@ -315,7 +319,7 @@ I is_halting_on t & IExec(I,t).DataLoc(s.a,i) < t.DataLoc(s.a,i) & IExec(I,t).x
 is_closed_on s & while>0(a,i,I) is_halting_on s & (s.DataLoc(s.a,i) > 0 implies
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a,x1,
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a,x1,
   y1 be Int_position, i,c be Integer;
   set b=DataLoc(s.a,i);
   assume
@@ -364,7 +368,7 @@ A11:  x in {y1};
 end;
 
 theorem Th6:
-  for s being State of SCMPDS,I being No-StopCode shiftable Program
+  for s being State of SCMPDS,I being halt-free shiftable Program
   of SCMPDS, a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c & (
 for t be State of SCMPDS st t.x >= c & t.y=s.y & t.a=s.a & t.DataLoc(s.a,i) > 0
   holds IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t & IExec(I,t).
@@ -372,7 +376,7 @@ DataLoc(s.a,i) < t.DataLoc(s.a,i) & IExec(I,t).x >= c & IExec(I,t).y=t.y) holds
 while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s & ( s.DataLoc(s.
   a,i) > 0 implies IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a,x,y
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a,x,y
   be Int_position, i,c be Integer;
   set b=DataLoc(s.a,i);
   assume
@@ -460,7 +464,7 @@ A17: s.b > 0;
 end;
 
 theorem Th7:
-  for s being State of SCMPDS,I being No-StopCode shiftable Program
+  for s being State of SCMPDS,I being halt-free shiftable Program
 of SCMPDS, a,x1,x2,x3,x4 be Int_position, i,c,md be Integer st card I > 0 & s.
 x4=s.x3-c+s.x1 & md <= s.x3-c & (for t be State of SCMPDS st t.x4=t.x3-c+t.x1 &
 md <= t.x3-c & t.x2=s.x2 & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.
@@ -470,7 +474,7 @@ DataLoc(s.a,i) & IExec(I,t).x4=IExec(I,t).x3-c+IExec(I,t).x1 & md <= IExec(I,t)
   ) is_halting_on s & ( s.DataLoc(s.a,i) > 0 implies IExec(while>0(a,i,I),s) =
   IExec(while>0(a,i,I),IExec(I,s)) )
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a,x1,
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a,x1,
   x2,x3,x4 be Int_position, i,c,md be Integer;
   set b=DataLoc(s.a,i);
   assume
@@ -659,7 +663,7 @@ A12:      i = k;
   hence thesis by GRAPH_2:def 13;
 end;
 
-Lm4: for s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a
+Lm4: for s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a
 be Int_position, i,c be Integer,f,g be FinSequence of INT,m,n,m1 be Element of
 NAT st card I> 0 & s.a=c & len f=n & len g=n & f is_FinSequence_on s,m & g
 is_FinSequence_on IExec(while>0(a,i,I),s),m & 1=s.DataLoc(c,i) & m1=m+n+1 & m+1
@@ -683,7 +687,7 @@ is_halting_on s & f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,n
 
 proof
 
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i,c be Integer,f,g be FinSequence of INT, m,n,m1 be Element of
   NAT;
 
@@ -774,7 +778,8 @@ A20: yn-y1<=0 and
 A21: f1 is_FinSequence_on t,m and
 A22: len f1=n;
 A23: I is_halting_on t by A12,A14,A15,A16,A17,A18,A19;
-    take k=LifeSpan (t +* Initialized stop I)+2;
+    take k=LifeSpan(ProgramPart(t +* Initialized stop I),t +* Initialized stop
+I)+2;
     set tk= Comput(ProgramPart(t+*iWH),t+*iWH,k);
 A24: I is_closed_on t by A12,A14,A15,A16,A17,A18,A19;
     then
@@ -885,7 +890,8 @@ A42,A44,A45;
       end;
       suppose
 A46:    yn-y1>0;
-        set m1=LifeSpan (t +* Initialized stop I)+2;
+        set m1=LifeSpan(ProgramPart(t +* Initialized stop I),t +* Initialized
+stop I)+2;
         set t1= Comput(ProgramPart((t +* iWH)),(t +* iWH),m1);
 A47:    I is_halting_on t by A12,A37,A38,A39,A40,A41,A42;
         y1-1 >= 0 by A40,A46,XREAL_1:49,50;
@@ -1412,9 +1418,12 @@ by A169,AMI_1:144;
  then
 A184: s2= Comput(ProgramPart(s+*iWH),s+*iWH,k+1) by A169,AMI_1:51;
   then
-A185: ProgramPart(s+*iWH) halts_on s+*iWH by A183,AMI_1:146;
+TX:   ProgramPart(s+*iWH) = ProgramPart s2 by AMI_1:144;
+  then
+A185: ProgramPart(s+*iWH) halts_on s+*iWH by A183,A184,AMI_1:146;
   hence WH is_halting_on s by SCMPDS_6:def 3;
-A186: Result (s +* iWH)=s2 by A183,A184,A185,AMI_1:def 22;
+A186: Result(ProgramPart(s +* iWH),s +* iWH)=s2
+ by A183,A184,A185,AMI_1:def 22,TX;
   now
     let i be Nat;
     reconsider a = i as Element of NAT by ORDINAL1:def 13;
@@ -1435,7 +1444,7 @@ A191: i <= n by A179,A189,FINSEQ_1:3;
   hence thesis by A4,A171,A172,A173,FINSEQ_2:10;
 end;
 
-Lm5: for s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a
+Lm5: for s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a
 be Int_position, i,c be Integer,m,n,m1 be Element of NAT st card I> 0 & s.a=c &
 1=s.DataLoc(c,i) & m1=m+n+1 & m+1=s.intpos m1 & m+n=s.intpos(m1+1) & (for t be
 State of SCMPDS,f1,f2 be FinSequence of INT, k1,k2,y1,yn be Element of NAT st t
@@ -1457,7 +1466,7 @@ are_fiberwise_equipotent)) holds while>0(a,i,I) is_halting_on s
 
 proof
 
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i,c be Integer,m,n,m1 be Element of NAT;
 
   set b=DataLoc(c,i);
@@ -1515,7 +1524,7 @@ be Element of NAT st ym < j & j <= yn holds IExec(I,t).intpos(m+j) >= IExec(I,t
   hence thesis by A1,A2,A6,A10,A11,A12,A3,A5,A7,A9,Lm4;
 end;
 
-Lm6: for s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a
+Lm6: for s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a
 be Int_position, i,c be Integer,m,n,m1 be Element of NAT st card I> 0 & s.a=c &
 1=s.DataLoc(c,i) & m1=m+n+1 & m+1=s.intpos m1 & m+n=s.intpos(m1+1) & (for t be
 State of SCMPDS,f1,f2 be FinSequence of INT, k1,k2,y1,yn be Element of NAT st t
@@ -1538,7 +1547,7 @@ are_fiberwise_equipotent)) holds while>0(a,i,I) is_halting_on s & while>0(a,i,I
 
 proof
 
-  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS, a be
+  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a be
   Int_position, i,c be Integer,m,n,m1 be Element of NAT;
 
   set b=DataLoc(c,i);
@@ -5188,7 +5197,7 @@ A109:   i < s.a2;
 end;
 
 theorem
-  Partition is No-StopCode shiftable;
+  Partition is halt-free shiftable;
 
 Lm29: for s being State of SCMPDS,p0,n being Element of NAT holds card
 QuickSort(n,p0)=57 & (p0 >= 7 implies QuickSort(n,p0) is_halting_on s & ex f,g
@@ -5198,7 +5207,7 @@ g is_non_decreasing_on 1,n)
 
 proof
   set b1=DataLoc(0,1);
-  reconsider Pt=Partition as No-StopCode shiftable Program of SCMPDS;
+  reconsider Pt=Partition as halt-free shiftable Program of SCMPDS;
   let s be State of SCMPDS,p0,n be Element of NAT;
   set pn=p0+n;
 

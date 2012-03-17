@@ -8,14 +8,17 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, ORDINAL1, CARD_1, FUNCT_1, ORDINAL2, TARSKI,
       CARD_3, RELAT_1, FINSET_1, XBOOLE_0, ARYTM_3, WELLORD1, WELLORD2,
-      ORDINAL4, CARD_2, ORDINAL3, ZFMISC_1, FUNCT_2, FUNCOP_1, MCART_1, CARD_5;
+      ORDINAL4, CARD_2, ORDINAL3, ZFMISC_1, FUNCT_2, FUNCOP_1, MCART_1, CARD_5,
+      MEMBERED;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
+      MEMBERED,
       RELAT_1, FUNCT_1, FINSET_1, ORDINAL1, FUNCT_2, WELLORD1, WELLORD2,
       MCART_1, FUNCOP_1, ORDINAL2, ORDINAL3, CARD_2, CARD_3, ORDINAL4;
  constructors WELLORD1, WELLORD2, FUNCOP_1, ORDINAL3, XXREAL_0, NAT_1,
-      FINSEQ_1, CARD_2, CARD_3, ORDINAL4, RELSET_1;
+      FINSEQ_1, CARD_2, CARD_3, ORDINAL4, RELSET_1, MEMBERED, ORDERS_1,
+      XREAL_0;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, FUNCOP_1, ORDINAL2, ORDINAL3,
-      NAT_1, CARD_1, CARD_3, ORDINAL4;
+      NAT_1, CARD_1, CARD_3, ORDINAL4, WELLORD2, MEMBERED, ORDERS_1, FINSET_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, ORDINAL2, CARD_1, CARD_3, XBOOLE_0;
  theorems TARSKI, FUNCT_1, FUNCT_2, FUNCOP_1, NAT_1, FINSET_1, MCART_1,
@@ -1897,5 +1900,133 @@ A67: exp(Sum (b-powerfunc_of a), cf a) c= exp(exp(a,b), cf a) by CARD_3:
   139;
   b*`cf a = b by A1,Th27;
   hence thesis by A67,A66,XBOOLE_0:def 10;
+end;
+
+reserve O for Ordinal;
+
+:: from AMISTD_3, 2010.10.01, A.T.
+
+Lm1: for X being finite set st X c= O holds order_type_of RelIncl X is finite
+proof
+  let X be finite set;
+  assume
+  X c= O;
+  then RelIncl X is well-ordering by WELLORD2:9;
+
+  then RelIncl X,RelIncl order_type_of RelIncl X are_isomorphic by
+  WELLORD2
+  :def 2;
+
+  hence thesis by CARD_3:155;
+end;
+
+theorem Th48:
+  for X being finite set st X c= O holds order_type_of RelIncl X =
+  card X
+proof
+  let X be finite set;
+  assume
+A1: X c= O;
+  then order_type_of RelIncl X is finite by Lm1;
+  then reconsider o = order_type_of RelIncl X as natural number;
+  card X = card order_type_of RelIncl X by A1,Th16;
+  then o = card X by CARD_1:def 5;
+  hence thesis;
+end;
+
+theorem Th49:
+  {x} c= O implies order_type_of RelIncl {x} = 1
+proof
+  card {x} = 1 by CARD_2:60;
+  hence thesis by Th48;
+end;
+
+theorem Th15:
+  {x} c= O implies canonical_isomorphism_of (RelIncl order_type_of
+  RelIncl {x}, RelIncl {x}) = 0 .--> x
+proof
+  set X = {x};
+  set R = RelIncl X;
+  set C = canonical_isomorphism_of (RelIncl order_type_of R,R);
+A1: RelIncl {0} = {[0,0]} by WELLORD2:32;
+  assume
+A2: X c= O;
+  then
+A3: order_type_of R = {0} by Th49,CARD_1:87;
+  R is well-ordering by A2,WELLORD2:9;
+  then R, RelIncl order_type_of R are_isomorphic by WELLORD2:def 2;
+  then
+A4: RelIncl order_type_of R, R are_isomorphic by WELLORD1:50;
+  RelIncl order_type_of R is well-ordering by WELLORD2:9;
+  then
+A5: C is_isomorphism_of RelIncl order_type_of R, R by A4,
+  WELLORD1:def 9;
+  then
+A6: rng canonical_isomorphism_of(RelIncl {0}, R) = field R by A3,
+  WELLORD1:def 7
+    .= X by WELLORD2:def 1;
+  dom canonical_isomorphism_of(RelIncl {0}, R) = field RelIncl {0} by A5,
+  A3,WELLORD1:def 7
+    .= {0} by A1,RELAT_1:208;
+  hence thesis by A3,A6,FUNCT_4:120;
+end;
+
+registration
+  let O be Ordinal, X be Subset of O, n be set;
+  cluster canonical_isomorphism_of (RelIncl order_type_of RelIncl X,RelIncl X)
+    .n -> ordinal;
+  coherence
+  proof
+    consider phi being Ordinal-Sequence such that
+A1: phi = canonical_isomorphism_of(RelIncl order_type_of RelIncl X,
+    RelIncl X) and
+    phi is increasing and
+    dom phi = order_type_of RelIncl X and
+A2: rng phi = X by Th14;
+    per cases;
+    suppose
+      n in dom phi;
+      then phi.n in rng phi by FUNCT_1:def 5;
+      hence thesis by A1,A2;
+    end;
+    suppose
+      not n in dom phi;
+      hence thesis by A1,FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let X be natural-membered set, n be set;
+  cluster canonical_isomorphism_of
+   (RelIncl order_type_of RelIncl X,RelIncl X).n -> natural;
+  coherence
+  proof
+    X c= NAT
+    proof
+      let x be set;
+      assume
+      x in X;
+      hence thesis by ORDINAL1:def 13;
+    end;
+    then reconsider X as Subset of NAT;
+    consider phi being Ordinal-Sequence such that
+A1: phi = canonical_isomorphism_of(RelIncl order_type_of RelIncl X,
+    RelIncl X) and
+    phi is increasing and
+    dom phi = order_type_of RelIncl X and
+A2: rng phi = X by Th14;
+    per cases;
+    suppose
+A3:   n in dom phi;
+      then reconsider a = phi.n as Element of X by A2,FUNCT_1:def 5;
+      phi.n in rng phi by A3,FUNCT_1:def 5;
+      hence thesis by A1,A2;
+    end;
+    suppose
+      not n in dom phi;
+      hence thesis by A1,FUNCT_1:def 4;
+    end;
+  end;
 end;
 

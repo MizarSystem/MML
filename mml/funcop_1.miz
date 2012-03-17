@@ -7,13 +7,13 @@
 environ
 
  vocabularies FUNCT_1, FUNCT_3, PARTFUN1, RELAT_1, ZFMISC_1, XBOOLE_0, TARSKI,
-      SUBSET_1, BINOP_1, MCART_1, FUNCOP_1;
+      SUBSET_1, BINOP_1, MCART_1, FUNCOP_1, WELLORD1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
-      RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1;
- constructors PARTFUN1, BINOP_1, FUNCT_3, RELSET_1;
+      RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, WELLORD1;
+ constructors PARTFUN1, BINOP_1, FUNCT_3, RELSET_1, WELLORD1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, RELSET_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, RELAT_1, BINOP_1, FUNCT_1;
+ definitions TARSKI, RELAT_1, BINOP_1, FUNCT_1, WELLORD1;
  theorems ZFMISC_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, FUNCT_3, TARSKI,
       BINOP_1, MCART_1, XBOOLE_0, XBOOLE_1, GRFUNC_1, PARTFUN1;
  schemes FUNCT_1;
@@ -305,7 +305,7 @@ A1: x in A;
   hence thesis by FUNCT_1:8;
 end;
 
-theorem
+theorem Th14:
   A <> {} implies rng (A --> x) = {x} by RELAT_1:195;
 
 theorem Th15:
@@ -1546,13 +1546,11 @@ end;
 definition
   let o,m,r be set;
   redefine func (o,m) :-> r -> Function of [:{o},{m}:],{r} means
-  not
-  contradiction;
+  not contradiction;
   coherence by Lm2;
   compatibility
   proof
     let f be Function of [:{o},{m}:],{r};
-    thus f = (o,m) .--> r implies not contradiction;
     (o,m) .--> r is Function of [:{o},{m}:],{r} by Lm2;
     hence thesis by FUNCT_2:66;
   end;
@@ -1769,5 +1767,40 @@ registration let I be set;
     dom(I --> 1) = I by Th19;
     hence thesis by PARTFUN1:def 4;
   end;
+end;
+
+theorem Th10:
+  x .--> y is_isomorphism_of {[x,x]},{[y,y]}
+proof
+  set F = x .--> y;
+  set R = {[x,x]};
+  set S = {[y,y]};
+A1: field R = {x} by RELAT_1:208;
+  hence dom F = field R by Th19;
+  field S = {y} by RELAT_1:208;
+  hence rng F = field S by Th14;
+  thus F is one-to-one;
+  let a,b be set;
+  hereby
+    assume
+    [a,b] in R;
+    then [a,b] = [x,x] by TARSKI:def 1;
+    then
+A2: a = x & b = x by ZFMISC_1:33;
+    hence a in field R & b in field R by A1,TARSKI:def 1;
+    F.x = y by Th87;
+    hence [F.a,F.b] in S by A2,TARSKI:def 1;
+  end;
+  assume
+  a in field R & b in field R;
+  then a = x & b = x by A1,TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
+end;
+
+theorem
+  {[x,x]}, {[y,y]} are_isomorphic
+proof
+  take f = x .--> y;
+  thus thesis by Th10;
 end;
 

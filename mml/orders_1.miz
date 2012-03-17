@@ -15,7 +15,7 @@ environ
  constructors SETFAM_1, RELAT_2, WELLORD1, PARTFUN1, WELLORD2, FUNCT_2,
       FINSET_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, PARTFUN1, FUNCT_2,
-      FINSET_1, RELSET_1;
+      FINSET_1, RELSET_1, WELLORD2;
  requirements BOOLE, SUBSET;
  definitions RELAT_2, TARSKI, WELLORD1, RELAT_1, ORDINAL1, XBOOLE_0;
  theorems FUNCT_1, FUNCT_2, MCART_1, RELAT_1, RELAT_2, RELSET_1, TARSKI,
@@ -648,56 +648,65 @@ A4: R is connected;
   R|_2 X is connected by A1,A2,A3,A4,WELLORD1:22,23,24,25;
 end;
 
-canceled 3;
+registration let R be empty Relation;
+ cluster field R -> empty;
+ coherence;
+end;
 
-theorem Th119:
-  {} is being_quasi-order & {} is being_partial-order & {} is
-  being_linear-order & {} is well-ordering
+registration
+ cluster empty ->  being_quasi-order being_partial-order
+         being_linear-order well-ordering Relation;
+ coherence
 proof
+ let R be Relation such that
+Z: R is empty;
   thus
-A1: {} is reflexive
+A1: R is reflexive
   proof
     let x;
     assume
-    x in field {};
-    hence thesis;
+    x in field R;
+    hence thesis by Z;
   end;
   thus
-A2: {} is transitive
+A2: R is transitive
   proof
     let x,y,z such that
-    x in field {};
-    thus thesis;
+    x in field R;
+    thus thesis by Z;
   end;
-  hence {} is reflexive & {} is transitive by A1;
+  hence R is reflexive & R is transitive by A1;
   thus
-A3: {} is antisymmetric
+A3: R is antisymmetric
   proof
     let x,y such that
-    x in field {};
-    thus thesis;
+    x in field R;
+    thus thesis by Z;
   end;
-  hence {} is reflexive & {} is transitive & {} is antisymmetric by A1,A2;
-  thus {} is connected
+  hence R is reflexive & R is transitive & R is antisymmetric by A1,A2;
+  thus R is connected
   proof
     let x,y such that
-    x in field {};
-    thus thesis;
+    x in field R;
+    thus thesis by Z;
   end;
-  hence {} is reflexive & {} is transitive & {} is antisymmetric & {} is
+  hence R is reflexive & R is transitive & R is antisymmetric & R is
   connected by A1,A2,A3;
   let Y;
   assume that
-A4: Y c= field {} and
+A4: Y c= field R and
 A5: Y <> {};
-  thus thesis by A4,A5;
+  thus thesis by A4,A5,Z;
+end;
 end;
 
-theorem Th120:
-  id X is being_quasi-order & id X is being_partial-order
+registration let X;
+ cluster id X -> being_quasi-order being_partial-order;
+ coherence
 proof
   thus id X is reflexive & id X is transitive & id X is reflexive & id X is
   transitive & id X is antisymmetric;
+end;
 end;
 
 definition
@@ -715,7 +724,7 @@ definition
   R is_antisymmetric_in X & R is_connected_in X;
 end;
 
-canceled 3;
+canceled 8;
 
 theorem Th124:
   R well_orders X implies R quasi_orders X & R partially_orders X
@@ -1125,12 +1134,10 @@ canceled 2;
 theorem
   id X quasi_orders X & id X partially_orders X
 proof
-A1: field id X = X \/ rng id X by RELAT_1:71
+    field id X = X \/ rng id X by RELAT_1:71
     .= X \/ X by RELAT_1:71
     .= X;
-A2: id X is being_partial-order by Th120;
-  id X is being_quasi-order by Th120;
-  hence thesis by A1,A2,Th127,Th130;
+ hence thesis by Th127,Th130;
 end;
 
 definition
@@ -1185,7 +1192,7 @@ proof
   assume
 A1: for Y st Y c= X & R|_2 Y is being_linear-order ex x st x in X & for
   y st y in Y holds [y,x] in R;
-  R|_2 {} is being_linear-order by Lm16,Th119;
+  R|_2 {} is being_linear-order by Lm16;
   then ex x st x in X & for y st y in {} holds [y,x] in R by A1,
   XBOOLE_1:2;
   hence thesis;
@@ -1197,7 +1204,7 @@ proof
   assume
 A1: for Y st Y c= X & R|_2 Y is being_linear-order ex x st x in X & for
   y st y in Y holds [x,y] in R;
-  R|_2 {} is being_linear-order by Lm16,Th119;
+  R|_2 {} is being_linear-order by Lm16;
   then ex x st x in X & for y st y in {} holds [x,y] in R by A1,
   XBOOLE_1:2;
   hence thesis;
@@ -3036,5 +3043,24 @@ A1: dom R is finite and
 A2: rng R is finite;
   field R is finite by A1,A2;
   hence thesis by Th196;
+end;
+
+:: from AMISTD_3, 2010.01.10, A.T
+
+registration
+  cluster order_type_of {} -> empty;
+  coherence
+  proof
+    {},RelIncl {} are_isomorphic by WELLORD1:48;
+    hence thesis by WELLORD2:def 2;
+  end;
+end;
+
+theorem
+ for O being Ordinal holds order_type_of RelIncl O = O
+proof let O be Ordinal;
+  RelIncl O is well-ordering & RelIncl O,RelIncl O are_isomorphic by
+  WELLORD1:48,WELLORD2:7;
+  hence thesis by WELLORD2:def 2;
 end;
 

@@ -8,10 +8,10 @@ environ
 
  vocabularies NUMBERS, SCMPDS_2, SUBSET_1, FINSEQ_1, FSM_1, XXREAL_0, FUNCT_1,
       SCMP_GCD, ARYTM_3, GRAPH_2, NAT_1, RELAT_1, CLASSES1, AMI_2, SCMPDS_8,
-      AMI_1, SCMPDS_5, SCMFSA6B, SCMPDS_4, UNIALG_2, SCMFSA7B, TURING_1,
-      SCMFSA_7, INT_1, CARD_1, SCMPDS_7, AMI_3, ARYTM_1, VALUED_1, TARSKI,
-      SCMFSA6A, FUNCT_4, CIRCUIT2, GRAPHSP, MSUALG_1, XBOOLE_0, SCMISORT,
-      SCMFSA_9, SCMFSA8B, COMPLEX1, SCPISORT, ORDINAL1, PARTFUN1, SCMNORM;
+      AMI_1, SCMFSA6B, SCMPDS_4, UNIALG_2, SCMFSA7B, TURING_1, SCMFSA_7, INT_1,
+      CARD_1, SCMPDS_7, AMI_3, ARYTM_1, VALUED_1, TARSKI, SCMFSA6A, FUNCT_4,
+      CIRCUIT2, GRAPHSP, MSUALG_1, XBOOLE_0, SCMISORT, SCMFSA_9, SCMFSA8B,
+      COMPLEX1, SCPISORT, ORDINAL1, PARTFUN1, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1, COMPLEX1, AMI_1, CARD_3,
       SCMNORM, AMI_2, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD,
@@ -64,18 +64,18 @@ theorem :: SCPISORT:5  ::see SCMPDS_8:2
   holds s1.a = s2.a) holds Dstate(s1)=Dstate(s2);
 
 theorem :: SCPISORT:6  :: see SCMPDS_7:50
-  for s being State of SCMPDS, I being No-StopCode Program of
+  for s being State of SCMPDS, I being halt-free Program of
 SCMPDS, j being parahalting shiftable Instruction of SCMPDS st I is_closed_on s
 & I is_halting_on s holds (I ';' j) is_closed_on s & (I ';' j) is_halting_on s;
 
 theorem :: SCPISORT:7 :: see SCMPDS_7:49
-  for s being State of SCMPDS, I being No-StopCode Program of SCMPDS, J
+  for s being State of SCMPDS, I being halt-free Program of SCMPDS, J
   being shiftable parahalting Program of SCMPDS,a be Int_position st I
 is_closed_on s & I is_halting_on s holds IExec(I ';' J, s).a = IExec(J,IExec(I,
   s)).a;
 
 theorem :: SCPISORT:8 :: see SCMPDS_7:49
-  for s being State of SCMPDS, I being No-StopCode parahalting Program
+  for s being State of SCMPDS, I being halt-free parahalting Program
   of SCMPDS , J being shiftable Program of SCMPDS,a be Int_position st J
 is_closed_on IExec(I,s) & J is_halting_on IExec(I,s) holds IExec(I ';' J, s).a
   = IExec(J,IExec(I,s)).a;
@@ -96,11 +96,11 @@ theorem :: SCPISORT:11 :: SCMPDS_7:43
   parahalting shiftable Instruction of SCMPDS st I is_closed_on s & I
   is_halting_on s holds I ';' j is_closed_on s & I ';' j is_halting_on s;
 
-begin :: Computing the Execution Result of For-loop Program by Loop-Invariant
+begin :: Computing the Execution Result(ProgramPart(of),of) For-loop Program by Loop-Invariant
 
 scheme :: SCPISORT:sch 1
 
-  ForDownHalt { P[set], s() -> State of SCMPDS,I() -> No-StopCode shiftable
+  ForDownHalt { P[set], s() -> State of SCMPDS,I() -> halt-free shiftable
 Program of SCMPDS, a() -> Int_position,i() -> Integer,n() -> Element of NAT}: (
 P[s()] or not P[s()]) & for-down(a(),i(),n(),I()) is_closed_on s() & for-down(a
   (),i(),n(),I()) is_halting_on s()
@@ -115,7 +115,7 @@ s().a(),i()) > 0 holds IExec(I() ';' AddTo(a(),i(),-n()),t).a()=t.a() & IExec(I
 
 scheme :: SCPISORT:sch 2
 
-  ForDownExec { P[set], s() -> State of SCMPDS,I() -> No-StopCode shiftable
+  ForDownExec { P[set], s() -> State of SCMPDS,I() -> halt-free shiftable
 Program of SCMPDS, a() -> Int_position,i() -> Integer,n() -> Element of NAT}: (
 P[s()] or not P[s()]) & IExec(for-down(a(),i(),n(),I()),s()) = IExec(for-down(a
   (),i(),n(),I()),IExec(I() ';' AddTo(a(),i(),-n()),s()))
@@ -131,7 +131,7 @@ s().a(),i()) > 0 holds IExec(I() ';' AddTo(a(),i(),-n()),t).a()=t.a() & IExec(I
 
 scheme :: SCPISORT:sch 3
 
-  ForDownEnd { P[set], s() -> State of SCMPDS,I() -> No-StopCode shiftable
+  ForDownEnd { P[set], s() -> State of SCMPDS,I() -> halt-free shiftable
 Program of SCMPDS, a() -> Int_position,i() -> Integer,n() -> Element of NAT}: (
 P[s()] or not P[s()]) & IExec(for-down(a(),i(),n(),I()),s()).DataLoc(s().a(),i(
   )) <= 0 & P[Dstate IExec(for-down(a(),i(),n(),I()),s())]
@@ -145,7 +145,7 @@ s().a(),i()) > 0 holds IExec(I() ';' AddTo(a(),i(),-n()),t).a()=t.a() & IExec(I
 (),-n()),t))];
 
 theorem :: SCPISORT:12
-  for s being State of SCMPDS,I being No-StopCode shiftable
+  for s being State of SCMPDS,I being halt-free shiftable
 Program of SCMPDS, a,x,y be Int_position, i,c be Integer,n be Element of NAT st
 n > 0 & s.x >= s.y +c & for t be State of SCMPDS st t.x >= t.y +c & t.a=s.a & t
   .DataLoc(s.a,i) > 0 holds IExec(I ';' AddTo(a,i,-n),t).a=t.a & IExec(I ';'
@@ -154,7 +154,7 @@ is_halting_on t & IExec(I ';' AddTo(a,i,-n),t).x>=IExec(I ';' AddTo(a,i,-n),t).
 y+c holds for-down(a,i,n,I) is_closed_on s & for-down(a,i,n,I) is_halting_on s;
 
 theorem :: SCPISORT:13
-  for s being State of SCMPDS,I being No-StopCode shiftable
+  for s being State of SCMPDS,I being halt-free shiftable
 Program of SCMPDS, a,x,y be Int_position, i,c be Integer,n be Element of NAT st
 n > 0 & s.x >= s.y +c & s.DataLoc(s.a,i) > 0 & for t be State of SCMPDS st t.x
 >= t.y +c & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I ';' AddTo(a,i,-n),t).a
@@ -164,7 +164,7 @@ n > 0 & s.x >= s.y +c & s.DataLoc(s.a,i) > 0 & for t be State of SCMPDS st t.x
   n,I),IExec(I ';' AddTo(a,i,-n),s));
 
 theorem :: SCPISORT:14
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of
+  for s being State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position, i be Integer,n be Element of NAT st s.DataLoc(s.a,i
 ) > 0 & n > 0 & card I > 0 & a <> DataLoc(s.a,i) & (for t be State of SCMPDS st
 t.a=s.a holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.DataLoc(s.a,i) & I

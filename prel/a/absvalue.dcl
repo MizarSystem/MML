@@ -11,6 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="ABSVALUE"/>
 </Signature>
 <FCluster aid="ABSVALUE" nr="1">
@@ -21,11 +22,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="52">
+<Func kind="K" nr="58">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

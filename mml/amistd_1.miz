@@ -131,83 +131,7 @@ registration
   end;
 end;
 
-Lm1: for S being steady-programmed IC-Ins-separated definite (non empty
-stored-program AMI-Struct over N), il being Element of NAT, I
-being Element of the Instructions of S, f being FinPartState of S st f = il
-.--> I holds f is autonomic
-
-proof
-
-  let S be steady-programmed IC-Ins-separated definite (non empty
-  stored-program AMI-Struct over N);
-
-  let il be Element of NAT;
-  let I be Element of the Instructions of S;
-  let f be FinPartState of S such that
-A1: f = il .--> I;
-A2: dom f = {il} by A1,FUNCOP_1:19;
-  let s1, s2 be State of S such that
-A3: f c= s1 and
-A4: f c= s2;
-  let i be Element of NAT;
-  set a = ( Comput(ProgramPart(s1),s1,i)|dom f), b = ( Comput(ProgramPart(s2),
-s2,i)|dom f);
-A5: for s being Function st f c= s holds s.il = I
-  proof
-A6: il in {il} by TARSKI:def 1;
-    let s be Function;
-    assume
-    f c= s;
-    hence s.il = f.il by A2,A6,GRFUNC_1:8
-      .= I by A1,FUNCOP_1:87;
-  end;
-A7: for x st x in {il} holds a.x = b.x
-  proof
-    let x;
-    assume
-A8: x in {il};
-    then
-A9: x = il by TARSKI:def 1;
-    thus a.x = Comput(ProgramPart(s1),s1,i).x by A2,A8,FUNCT_1:72
-      .= I by A1,A3,A5,A9,AMI_1:81
-      .= Comput(ProgramPart(s2),s2,i).x by A1,A4,A5,A9,AMI_1:81
-      .= b.x by A2,A8,FUNCT_1:72;
-  end;
-X: il in NAT;
-  NAT c= the carrier of S by AMI_1:def 3;
-  then il in the carrier of S by X;
-  then
-A10: {il} c= the carrier of S by ZFMISC_1:37;
-  then {il} c= dom ( Comput(ProgramPart(s2),s2,i)) by PARTFUN1:def 4;
-  then
-A11: dom b = {il} by A2,RELAT_1:91;
-  {il} c= dom ( Comput(ProgramPart(s1),s1,i)) by A10,PARTFUN1:def 4;
-  then dom a = {il} by A2,RELAT_1:91;
-
-  hence Comput(ProgramPart(s1),s1,i)|dom f = Comput(ProgramPart(s2),s2,i)|dom f
-by A11,A7,FUNCT_1:9;
-
-end;
-
-registration
-
-  let N be with_non-empty_elements non empty set;
-  let S be steady-programmed IC-Ins-separated definite (non empty
-  stored-program AMI-Struct over N);
-  cluster non empty trivial autonomic NAT-defined FinPartState of S;
-  existence
-  proof
-    consider I being Instruction of S;
-    consider l being Element of NAT;
-    take l.-->I;
-    thus thesis by Lm1;
-  end;
-end;
-
-theorem
-  for S being steady-programmed IC-Ins-separated definite (non empty
-  stored-program AMI-Struct over N), il being Element of NAT, I
-  being Element of the Instructions of S holds il .--> I is autonomic by Lm1;
+canceled;
 
 definition
   let N be with_non-empty_elements set;
@@ -2403,24 +2327,6 @@ registration
     thus for f being Element of NAT st F.f = halt S & f in dom F
     holds f = LastLoc F by Lm7;
     thus thesis by Th46;
-  end;
-end;
-
-registration
-  let N be with_non-empty_elements non empty set;
-  let S be standard halting realistic steady-programmed (IC-Ins-separated
-  definite (non empty stored-program AMI-Struct over N));
-  cluster halt-ending unique-halt autonomic trivial closed (lower non empty
-    NAT-defined FinPartState of S);
-  existence
-  proof
-    reconsider F = il.(S,0) .--> halt S as lower non empty NAT-defined
-    FinPartState of S by Th48;
-    take F;
-    thus F.(LastLoc F) = halt S by Lm7;
-    thus for f being Element of NAT st F.f = halt S & f in dom F
-    holds f = LastLoc F by Lm7;
-    thus thesis by Lm1,Th46;
   end;
 end;
 

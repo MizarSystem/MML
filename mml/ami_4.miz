@@ -7,16 +7,17 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, AMI_3, CARD_1, NAT_1, AMI_1, FUNCOP_1,
-      RELAT_1, GRAPHSP, FUNCT_4, FSM_1, FUNCT_1, XBOOLE_0, TARSKI, CIRCUIT2,
+      RELAT_1, GRAPHSP, FUNCT_4, FSM_1, FUNCT_1, XBOOLE_0, TARSKI,
       ARYTM_3, INT_1, XXREAL_0, MSUALG_1, INT_2, COMPLEX1, PARTFUN1, TURING_1,
       STRUCT_0, GLIB_000, AMI_4, ORDINAL1, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
-      INT_1, NAT_1, FUNCOP_1, INT_2, STRUCT_0, PARTFUN1, AMI_1, AMI_3,
+      INT_1, NAT_1, FUNCOP_1, INT_2, FUNCT_4,
+      STRUCT_0, PARTFUN1, AMI_1, AMI_3,
       XXREAL_0;
  constructors ENUMSET1, XXREAL_0, NAT_1, NAT_D, AMI_3, RELSET_1, PRE_POLY;
  registrations SETFAM_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, CARD_3, STRUCT_0, AMI_3, AMI_1, XBOOLE_0, FINSET_1, FUNCT_1,
-      FUNCT_2;
+      FUNCT_2, FUNCT_4;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions FUNCOP_1, AMI_1, TARSKI, AMI_3;
  theorems AMI_1, INT_1, ABSVALUE, INT_2, TARSKI, ENUMSET1, NAT_1, FUNCOP_1,
@@ -49,9 +50,9 @@ end;
 
 definition
   func Euclide-Algorithm -> NAT-defined FinPartState of SCM equals
-  (0 .--> (
-dl.2 := dl.1)) +* ((1 .--> Divide(dl.0,dl.1)) +* ((2 .--> (dl.0 := dl.2)) +* ((
-  3 .--> (dl.1 >0_goto 0)) +* (4 .--> halt SCM))));
+  (0 .--> (dl.2 := dl.1)) +* ((1 .--> Divide(dl.0,dl.1)) +*
+  ((2 .--> (dl.0 := dl.2)) +* ((3 .--> (dl.1 >0_goto 0)) +*
+  (4 .--> halt SCM))));
   coherence;
 end;
 
@@ -276,17 +277,17 @@ A1: Euclide-Algorithm c= s;
   hence thesis by AMI_1:89,NAT_1:11;
 end;
 
-Lm4: for s being State of SCM st s starts_at 0 & Euclide-Algorithm c= s & s.a
+Lm4: for s being 0-started State of SCM st Euclide-Algorithm c= s & s.a
 > 0 & s.b > 0 holds Comput(ProgramPart(s),s,4*k).a > 0 & ( Comput(ProgramPart(s
 ),s,4*k).b > 0 & IC
 Comput(ProgramPart(s),s,4*k) = 0 or Comput(ProgramPart(s),s,4*k).b = 0 & IC
 Comput(ProgramPart(s),s,4*k) = 4)
 
 proof
-  let s be State of SCM such that
-A1: IC s = 0 and
+  let s be 0-started State of SCM such that
 A2: Euclide-Algorithm c= s and
 A3: s.a > 0 & s.b > 0;
+A1: IC s = 0 by AMI_1:def 44;
 
   defpred P[Element of NAT] means Comput(ProgramPart(s),s,4*$1).a > 0 & (
 Comput(ProgramPart(s),s,
@@ -344,7 +345,7 @@ A18: P[0] by A1,A3,AMI_1:13;
   hence thesis;
 end;
 
-Lm5: for s being State of SCM st s starts_at 0 & Euclide-Algorithm c= s & s.a
+Lm5: for s being 0-started State of SCM st Euclide-Algorithm c= s & s.a
 > 0 & s.b > 0 holds Comput(ProgramPart(s),s,4*k).b > 0 implies Comput(
 ProgramPart(s),s,4*(k+1)).a =
 Comput(ProgramPart(s),s,4*k).b & Comput(ProgramPart(s),s,4*(k+1)).b = Comput(
@@ -352,8 +353,7 @@ ProgramPart(s),s,4*k).a mod
 Comput(ProgramPart(s),s,4*k).b
 
 proof
-  let s be State of SCM such that
-A1: s starts_at 0 and
+  let s be 0-started State of SCM such that
 A2: Euclide-Algorithm c= s and
 A3: s.a > 0 & s.b > 0 and
 A4: Comput(ProgramPart(s),s,4*k).b > 0;
@@ -362,7 +362,7 @@ A4: Comput(ProgramPart(s),s,4*k).b > 0;
 c6 = Comput(ProgramPart(s),s,4
   *k+2), c7 = Comput(ProgramPart(s),s,4*k+3);
 
-A5: c4.b > 0 & IC c4 = 0 or c4.b = 0 & IC c4 = 4 by A1,A2,A3,Lm4;
+A5: c4.b > 0 & IC c4 = 0 or c4.b = 0 & IC c4 = 4 by A2,A3,Lm4;
   then
 A6: c6 = Comput(ProgramPart(s),s,4*k+1+1) & IC c5 = 1 by A2,A4,Th5;
   then
@@ -385,13 +385,13 @@ A12: c6.b = c5.a mod c5.b by A2,A6,Th6;
   hence thesis by A2,A12,A9,A11,Th8;
 end;
 
-Lm6: for s being State of SCM st s starts_at 0 & Euclide-Algorithm c= s for x,
-y being Integer st s.a = x & s.b = y & x > y & y > 0 holds (Result s).a = x gcd
+Lm6: for s being 0-started State of SCM st Euclide-Algorithm c= s for x,
+y being Integer st s.a = x & s.b = y & x > y & y > 0 holds (Result(ProgramPart(
+s),s)).a = x gcd
 y & ex k st s halts_at IC Comput(ProgramPart(s),s,k)
 
 proof
-  let s be State of SCM such that
-A1: s starts_at 0 and
+  let s be 0-started State of SCM such that
 A2: Euclide-Algorithm c= s;
   deffunc G(Element of NAT) = abs( Comput(ProgramPart(s),s,4*$1).b);
   deffunc F(Element of NAT) = abs( Comput(ProgramPart(s),s,4*$1).a);
@@ -402,20 +402,17 @@ A5: x > y and
 A6: y > 0;
 A7: now
     let k;
-
-A8: Comput(ProgramPart(s),s,4*k).b > 0 or Comput(ProgramPart(s),s,4*k).b = 0 by
-A1,A2,A3,A4,A5,A6
-,Lm4;
-
+A8: Comput(ProgramPart(s),s,4*k).b > 0 or Comput(ProgramPart(s),s,4*k).b = 0
+      by A2,A3,A4,A5,A6,Lm4;
     assume
 A9: G(k) > 0;
-    hence F(k+1) = G(k) by A1,A2,A3,A4,A5,A6,A8,Lm5,ABSVALUE:7;
-A10: Comput(ProgramPart(s),s,4*k).a >= 0 by A1,A2,A3,A4,A5,A6,Lm4;
-    Comput(ProgramPart(s),s,4*(k+1)).b >= 0 by A1,A2,A3,A4,A5,A6,Lm4;
+    hence F(k+1) = G(k) by A2,A3,A4,A5,A6,A8,Lm5,ABSVALUE:7;
+A10: Comput(ProgramPart(s),s,4*k).a >= 0 by A2,A3,A4,A5,A6,Lm4;
+    Comput(ProgramPart(s),s,4*(k+1)).b >= 0 by A2,A3,A4,A5,A6,Lm4;
     hence G(k+1) = Comput(ProgramPart(s),s,4*(k+1)).b by ABSVALUE:def 1
 
       .= Comput(ProgramPart(s),s,4*k).a mod Comput(ProgramPart(s),s,4*k).b by
-A1,A2,A3,A4,A5,A6,A8
+A2,A3,A4,A5,A6,A8
 ,A9,Lm5,ABSVALUE:7
 
       .= F(k) mod G(k) by A8,A10,INT_2:49;
@@ -430,23 +427,23 @@ A14: 0 < y9 by A6;
   consider k such that
 A15: F(k) = x9 gcd y9 and
 A16: G(k) = 0 from NEWTON:sch 1(A14,A11,A12,A13,A7);
-A17: ( Comput(ProgramPart(s),s,4*k)).a > 0 by A1,A2,A3,A4,A5,A6,Lm4;
+A17: ( Comput(ProgramPart(s),s,4*k)).a > 0 by A2,A3,A4,A5,A6,Lm4;
   Comput(ProgramPart(s),s,4*k).b = 0 by A16,ABSVALUE:7;
   then
-A18: IC Comput(ProgramPart(s),s,4*k) = 4 by A1,A2,A3,A4,A5,A6,Lm4;
+A18: IC Comput(ProgramPart(s),s,4*k) = 4 by A2,A3,A4,A5,A6,Lm4;
 A19: s halts_at 4 by A2,Lm3;
-  hence (Result s).a = ( Comput(ProgramPart(s),s,4*k)).a by A18,AMI_1:87
+  hence (Result(ProgramPart(s),s)).a = ( Comput(ProgramPart(s),s,4*k)).a by A18
+,AMI_1:87
     .= x gcd y by A15,A17,ABSVALUE:def 1;
   thus thesis by A18,A19;
 end;
 
 theorem Th10:
-  for s being State of SCM st s starts_at 0 & Euclide-Algorithm c=
+  for s being 0-started State of SCM st Euclide-Algorithm c=
   s for x, y being Integer st s.dl.0 = x & s.dl.1 = y & x > 0 & y > 0 holds (
-  Result s).dl.0 = x gcd y
+  Result(ProgramPart(s),s)).dl.0 = x gcd y
 proof
-  let s be State of SCM such that
-A1: s starts_at 0 and
+  let s be 0-started State of SCM such that
 A2: Euclide-Algorithm c= s;
   let x, y be Integer such that
 A3: s.a = x & s.b = y and
@@ -457,7 +454,7 @@ A6: abs y = y by A5,ABSVALUE:def 1;
     per cases by XXREAL_0:1;
     case
       x > y;
-      hence thesis by A1,A2,A3,A5,Lm6;
+      hence thesis by A2,A3,A5,Lm6;
     end;
     case
 A7:   x = y;
@@ -467,38 +464,38 @@ A8:   s = Comput(ProgramPart(s),s,4*0) by AMI_1:13;
 A9:   s9 = Comput(ProgramPart(s),s,4*(0+1));
       x mod y = x9 mod y9
         .= 0 by A7,NAT_D:25;
-      then s9.b = 0 by A1,A2,A3,A4,A5,A8,A9,Lm5;
-      then IC s9 = 4 by A1,A2,A3,A4,A5,A9,Lm4;
+      then s9.b = 0 by A2,A3,A4,A5,A8,A9,Lm5;
+      then IC s9 = 4 by A2,A3,A4,A5,A9,Lm4;
       then s halts_at IC s9 by A2,Lm3;
-      hence (Result s).a = s9.a by AMI_1:87
-        .= y by A1,A2,A3,A4,A5,A8,A9,Lm5
+      hence (Result(ProgramPart(s),s)).a = s9.a by AMI_1:87
+        .= y by A2,A3,A4,A5,A8,A9,Lm5
         .= x gcd y by A6,A7,NAT_D:32;
     end;
     case
 A10:  y > x;
       reconsider x9 = x, y9 = y as Element of NAT by A4,A5,INT_1:16;
       take s9 = Comput(ProgramPart(s),s,4);
+TX: ProgramPart s = ProgramPart s9
+by AMI_1:144;
 A11:  s9 = Comput(ProgramPart(s),s,4*(0+1));
 A12:  s = Comput(ProgramPart(s),s,4*0) by AMI_1:13;
       then
-A13:  s9.a = y by A1,A2,A3,A4,A5,A11,Lm5;
+A13:  s9.a = y by A2,A3,A4,A5,A11,Lm5;
 A14:  Euclide-Algorithm c= s9 by A2,AMI_1:86;
       x mod y = x9 mod y9
         .= x9 by A10,NAT_D:24;
       then
-A15:  s9.b = x by A1,A2,A3,A4,A5,A12,A11,Lm5;
-      then IC s9 = 0 by A1,A2,A3,A4,A5,A11,Lm4;
+A15:  s9.b = x by A2,A3,A4,A5,A12,A11,Lm5;
+      then IC s9 = 0 by A2,A3,A4,A5,A11,Lm4;
       then
-A16:  s9 starts_at 0 by AMI_1:def 41;
+A16:  s9 is 0-started by AMI_1:def 44;
       then consider k0 being Element of NAT such that
-A17:  s9 halts_at IC Comput(ProgramPart(s9),s9,k0) by A4,A10,A13,A15,A14,Lm6;
-T: ProgramPart s = ProgramPart s9
-by AMI_1:144;
+A17:  s9 halts_at IC Comput(ProgramPart s,s9,k0) by A4,A10,A13,A15,A14,Lm6,TX;
       Comput(ProgramPart(s),s,k0+4) = Comput(ProgramPart(s),s9,k0) by AMI_1:51
 ;
       then
-A18:  s halts_at IC Comput(ProgramPart(s),s,k0+4) by A17,AMI_1:91,T;
-      (Result s9).a = x gcd y by A4,A10,A13,A15,A16,A14,Lm6;
+A18:  s halts_at IC Comput(ProgramPart(s),s,k0+4) by A17,AMI_1:91;
+      (Result(ProgramPart s,s9)).a = x gcd y by A4,A10,A13,A15,A16,A14,Lm6,TX;
       hence thesis by A18,AMI_1:90;
     end;
   end;
@@ -706,9 +703,9 @@ A22: dom p c= dom(p +* s) by A19,RELAT_1:25;
     .= (Start-At(0,SCM)).IC SCM by A3,FUNCT_4:12
     .= 0 by FUNCOP_1:87;
   then
-A23: p +* s starts_at 0 by A22,A20,AMI_1:def 44;
+A23: p +* s is 0-started by A22,A20,AMI_1:def 41;
   then
-A24: t starts_at 0 by A7,AMI_1:92;
+A24: t is 0-started by A7,AMI_1:92;
   q c= p by FUNCT_4:26;
   then
 A25: q c= p +* s by A19,XBOOLE_1:1;
@@ -731,7 +728,7 @@ Comput(ProgramPart(s2
     b = Comput(ProgramPart(s2),s2,$1).b;
 A32: Comput(ProgramPart(s1),s1,0) = s1 & Comput(ProgramPart(s2),s2,0) = s2 by
 AMI_1:13;
-A33: s1 starts_at 0 by A23,A27,AMI_1:92;
+A33: s1 is 0-started by A23,A27,AMI_1:92;
 A34: dom( Comput(ProgramPart(s1),s1,k)) = the carrier of SCM by PARTFUN1:def 4
       .= dom( Comput(ProgramPart(s2),s2,k)) by PARTFUN1:def 4;
 A35: Euclide-Algorithm c= s1 by A25,A27,XBOOLE_1:1;
@@ -739,7 +736,7 @@ A35: Euclide-Algorithm c= s1 by A25,A27,XBOOLE_1:1;
     then
 A36: ( Comput(ProgramPart(s1),s1,k))|C = Euclide-Algorithm by Th4,GRFUNC_1:64
       .= ( Comput(ProgramPart(s2),s2,k))|C by A31,Th4,GRFUNC_1:64;
-A37: s2 starts_at 0 by A23,A28,AMI_1:92;
+A37: s2 is 0-started by A23,A28,AMI_1:92;
 A38: for i,j being Nat st P[4*i] & j<>0 & j<=4 holds P[4*i+j]
     proof
       let i,j be Nat;
@@ -863,7 +860,7 @@ A69: p +* s c= t;
     then
 A70: q c= t by A25,XBOOLE_1:1;
 A71: t.b = i2 by A11,A69;
-A72: t starts_at 0 & t.a = i1 by A23,A11,A69,AMI_1:92;
+A72: t is 0-started & t.a = i1 by A23,A11,A69,AMI_1:92;
     per cases by XXREAL_0:1;
     suppose
       i1 > i2;
@@ -893,7 +890,7 @@ A79:  t = Comput(ProgramPart(t),t,4*0) by AMI_1:13;
 A80:  t9.b = i1 by A4,A5,A70,A72,A71,A79,A77,Lm5;
       then IC t9 = 0 by A4,A5,A70,A72,A71,A77,Lm4;
       then
-A81:  t9 starts_at 0 by AMI_1:def 41;
+A81:  t9 is 0-started by AMI_1:def 44;
       t9.a = i2 by A4,A5,A70,A72,A71,A79,A77,Lm5;
       then consider k0 being Element of NAT such that
 A82:  t9 halts_at IC Comput(ProgramPart(t9),t9,k0) by A4,A76,A80,A81,A78,Lm6;
@@ -906,10 +903,11 @@ by AMI_1:144;
     end;
   end;
   hence p +* s is pre-program of SCM by A26;
-A83: Result(p +* s) = (Result t)|dom(p +* s) by A26,A68,A7,AMI_1:def 28;
+A83: Result(ProgramPart(p +* s),p +* s) = (Result(ProgramPart(t),t))|dom(p +* s
+) by A26,A68,A7,AMI_1:def 28;
   a in the carrier of SCM;
   then
-A84: a in dom Result t by PARTFUN1:def 4;
+A84: a in dom Result(ProgramPart(t),t) by PARTFUN1:def 4;
   q c= p by FUNCT_4:26;
   then
 A85: q c= p +* s by A19,XBOOLE_1:1;
@@ -926,7 +924,8 @@ A92: t.b = i2 by A90,A87,GRFUNC_1:8;
   a in dom s by A91,TARSKI:def 2;
   then t.a = i1 by A90,A86,GRFUNC_1:8;
   then
-A93: (Result t).a = i1 gcd i2 by A4,A5,A7,A85,A24,A92,Th10,XBOOLE_1:1;
+A93: (Result(ProgramPart(t),t)).a = i1 gcd i2 by A4,A5,A7,A85,A24,A92,Th10,
+XBOOLE_1:1;
   dom(a .--> (i1 gcd i2)) = { a } by FUNCOP_1:19;
   then dom(a .--> (i1 gcd i2)) c= dom s by A91,ZFMISC_1:12;
   then

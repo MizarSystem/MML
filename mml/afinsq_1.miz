@@ -9,7 +9,7 @@ environ
  vocabularies NUMBERS, SUBSET_1, FUNCT_1, ARYTM_3, XXREAL_0, XBOOLE_0, TARSKI,
       NAT_1, ORDINAL1, FINSEQ_1, CARD_1, FINSET_1, RELAT_1, PARTFUN1, FUNCOP_1,
       ORDINAL4, ORDINAL2, ARYTM_1, REAL_1, ZFMISC_1, FUNCT_4, VALUED_0,
-      AFINSQ_1, PRGCOR_2;
+      AFINSQ_1, PRGCOR_2, CAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
       FUNCT_1, ORDINAL1, ORDINAL2, ORDINAL4, XCMPLX_0, REAL_1, NAT_1, PARTFUN1,
       NAT_D,
@@ -2174,3 +2174,95 @@ A2: 0<len p;
   then q=<*>D by X;
   hence thesis;
 end;
+
+:: from SCMNORM, 2010.01.11, A.T.
+
+definition
+  let F be Function;
+  attr F is initial means
+:Def13:
+  for m,n being Nat st n in dom F & m < n holds m in dom F;
+end;
+
+registration
+  cluster empty -> initial Function;
+  coherence
+  proof
+    let F be Function such that
+A1: F is empty;
+    let n be Nat;
+    thus thesis by A1;
+  end;
+end;
+
+registration
+  cluster -> initial XFinSequence;
+  coherence
+  proof
+    let p be XFinSequence;
+    let m,n being Nat such that
+A1: n in dom p;
+    assume m < n;
+    then m in n by NAT_1:45;
+    hence m in dom p by A1,ORDINAL1:19;
+  end;
+end;
+
+:: following, 2010.01.11, A.T.
+
+registration
+ cluster -> NAT-defined XFinSequence;
+ coherence
+  proof let f be XFinSequence;
+   thus dom f c= NAT;
+  end;
+end;
+
+theorem
+ for F being non empty initial NAT-defined Function holds 0 in dom F
+proof
+ let F be non empty initial NAT-defined Function;
+  consider x such that
+W: x in dom F by XBOOLE_0:def 1;
+  dom F c= NAT by RELAT_1:def 18;
+  then reconsider x as Element of NAT by W;
+  0 <= x by NAT_1:2;
+  then x = 0 or 0 < x;
+ hence 0 in dom F by W,Def13;
+end;
+
+registration
+ cluster initial finite NAT-defined -> T-Sequence-like Function;
+ coherence
+  proof let F be Function;
+   assume
+Z0:   F is initial finite NAT-defined;
+    then
+XX:   dom F c= NAT by RELAT_1:def 18;
+   thus dom F is epsilon-transitive
+    proof let x;
+     assume
+Z1:    x in dom F;
+      then reconsider i = x as Nat by XX;
+     let y;
+     assume
+Z2:   y in x;
+      x in NAT by Z1,XX;
+      then x c= NAT by ORDINAL1:def 2;
+      then y in NAT by Z2;
+      then reconsider j = y as Nat by Z2;
+      j < i by Z2,NAT_1:45;
+     hence y in dom F by Z0,Z1,Def13;
+    end;
+  let x,y;
+  assume x in dom F & y in dom F;
+    then reconsider x,y as Ordinal by XX;
+    x in y or x = y or y in x by ORDINAL1:24;
+   hence thesis;
+  end;
+end;
+
+theorem
+ for F being finite initial NAT-defined Function
+ for n being Nat holds
+  n in dom F iff n < card F by NAT_1:45;

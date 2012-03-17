@@ -1,0 +1,639 @@
+:: On $L^p$ Space Formed by Real-valued Partial Functions
+::  by Yasushige Watase , Noboru Endou and Yasunari Shidama
+:: 
+:: Received February 4, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies FUNCT_1, COMPLEX1, XBOOLE_0, XXREAL_0, VALUED_1, NAT_1, PARTFUN1,
+      SEQ_1, ARYTM_1, ORDINAL2, ZFMISC_1, NUMBERS, CARD_1, RELAT_1, SEQFUNC,
+      ARYTM_3, PBOOLE, RLVECT_1, SUPINF_2, RSSPACE, STRUCT_0, ALGSTR_0,
+      VECTSP10, REALSET1, FUNCOP_1, PRE_TOPC, LPSPACE1, BINOP_1, NORMSP_1,
+      PROB_1, MEASURE1, MEASURE2, MEASURE6, MESFUNC1, TARSKI, RFUNCT_3,
+      SETFAM_1, MESFUNC5, MESFUNC8, IDEAL_1, SUBSET_1, FUNCT_7, PREPOWER,
+      POWER, LPSPACE2, RSSPACE3, SEQ_2, SERIES_1, REAL_1, INTEGRA5, ORDINAL1,
+      XREAL_0, VALUED_0, CARD_3, REWRITE1, NEWTON, XXREAL_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      COMPLEX1, XXREAL_0, XREAL_0, SUPINF_2, EXTREAL1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, VALUED_1, RFUNCT_3, BINOP_1, REAL_1, NAT_1, STRUCT_0,
+      ALGSTR_0, RLVECT_1, IDEAL_1, SETFAM_1, PRE_TOPC, NORMSP_1, PROB_1,
+      ASYMPT_0, MEASURE1, MEASURE2, MEASURE3, MEASURE6, SEQFUNC, MESFUNC1,
+      MESFUNC2, MESFUNC5, MESFUNC6, FUNCT_7, MESFUNC8, NEWTON, PREPOWER, POWER,
+      MESFUN6C, SEQ_1, SEQ_2, RECDEF_1, SERIES_1, RSSPACE3, LOPBAN_1, MESFUN7C,
+      MESFUN9C, LPSPACE1;
+ constructors EXTREAL1, REAL_1, IDEAL_1, NEWTON, MEASURE3, MEASURE6, MESFUNC2,
+      MESFUNC6, MESFUNC9, SEQ_1, MESFUN6C, MESFUN7C, MESFUN9C, RECDEF_1, SEQ_2,
+      EXTREAL2, RINFSUP2, FUNCT_7, SERIES_1, PREPOWER, ASYMPT_0, LPSPACE1,
+      SUPINF_1, SEQFUNC, MESFUNC5, RSSPACE3, LOPBAN_1, MESFUNC1, RELSET_1;
+ registrations ORDINAL1, RELSET_1, NUMBERS, MEMBERED, VALUED_0, NAT_1,
+      SUBSET_1, PARTFUN1, RLVECT_1, STRUCT_0, NORMSP_1, MEASURE1, SEQ_4, SEQ_2,
+      MESFUN6C, MESFUNC8, LPSPACE1, XCMPLX_0, XREAL_0, XXREAL_0, VALUED_1,
+      FUNCT_2, MESFUN7C;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin :: Preliminaries of Powers of Numbers and Operations of Real Sequences.
+
+reserve X for non empty set,
+        x for Element of X,
+        S for SigmaField of X,
+        M for sigma_Measure of S,
+        E,E1,E2,A,B for Element of S,
+        f,g,h,f1,g1 for PartFunc of X,REAL,
+        l,l1,m,m1,n,n1,n2,n3,i,j for Element of NAT,
+        a,b,c,r,r1,r2,s1,s2,p for Real,
+        seq1,seq2 for Real_Sequence;
+
+theorem :: LPSPACE2:1
+for m,n be positive (real number) st 1/m + 1/n = 1 holds m > 1;
+
+theorem :: LPSPACE2:2
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+A be Element of S, f be PartFunc of X,ExtREAL st
+  A = dom f & f is_measurable_on A & f is nonnegative holds
+   Integral(M,f) in REAL iff f is_integrable_on M;
+
+definition
+  let r be real number;
+  attr r is geq_than_1 means
+:: LPSPACE2:def 1
+  1 <= r;
+end;
+
+registration
+  cluster geq_than_1 -> positive (real number);
+end;
+
+registration
+  cluster geq_than_1 Real;
+end;
+
+reserve k for positive Real;
+
+theorem :: LPSPACE2:3
+for a,b,p be Real st 0 < p & 0 <= a & a < b holds a to_power p < b to_power p;
+
+theorem :: LPSPACE2:4
+a >= 0 & b > 0 implies a to_power b >= 0;
+
+theorem :: LPSPACE2:5
+a >= 0 & b >= 0 & c > 0 implies
+  (a*b) to_power c = a to_power c * b to_power c;
+
+theorem :: LPSPACE2:6
+for a,b be Real, f st f is nonnegative & a > 0 & b > 0 holds
+  (f to_power a) to_power b = f to_power (a*b);
+
+theorem :: LPSPACE2:7
+for a,b be Real, f st f is nonnegative & a > 0 & b > 0 holds
+  (f to_power a)(#)(f to_power b) = f to_power (a+b);
+
+theorem :: LPSPACE2:8
+f to_power 1 = f;
+
+theorem :: LPSPACE2:9
+for seq1,seq2 be Real_Sequence, k be positive Real st
+  for n be Element of NAT holds seq1.n = (seq2.n) to_power k & seq2.n >= 0
+holds (seq1 is convergent iff seq2 is convergent);
+
+theorem :: LPSPACE2:10
+for seq be Real_Sequence, n,m be Element of NAT st m <= n holds
+  abs( (Partial_Sums seq).n - (Partial_Sums seq).m )
+   <= (Partial_Sums abs seq).n - (Partial_Sums abs seq).m &
+  abs( (Partial_Sums seq).n - (Partial_Sums seq).m )
+   <= (Partial_Sums abs seq).n;
+
+theorem :: LPSPACE2:11
+for seq,seq2 be Real_Sequence, k be positive Real st
+  seq is convergent &
+  for n be Element of NAT holds
+    seq2.n = ( |. lim seq -seq.n .|) to_power k
+holds seq2 is convergent & lim seq2 = 0;
+
+begin :: Real Linear Space of Lp Integrable Functions
+
+theorem :: LPSPACE2:12
+for k be positive Real, X be non empty set holds
+  (X -->0) to_power k = X --> 0;
+
+theorem :: LPSPACE2:13
+for f be PartFunc of X,REAL, D be set holds abs(f|D) = (abs f)|D;
+
+registration
+  let X; let f be PartFunc of X,REAL;
+  cluster abs f -> nonnegative;
+end;
+
+theorem :: LPSPACE2:14
+for f be PartFunc of X,REAL st f is nonnegative holds abs f = f;
+
+theorem :: LPSPACE2:15
+(X = dom f & for x st x in dom f holds 0 = f.x) implies
+  f is_integrable_on M & Integral(M,f) =0;
+
+definition
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+  k be positive Real;
+func Lp_Functions(M,k) -> non empty Subset of RLSp_PFunct X equals
+:: LPSPACE2:def 2
+  {f where f is PartFunc of X,REAL :
+     ex Ef be Element of S st M.(Ef`)=0 & dom f = Ef &
+       f is_measurable_on Ef & (abs f) to_power k is_integrable_on M};
+end;
+
+theorem :: LPSPACE2:16
+for a,b,k be Real st k > 0 holds
+ abs(a+b) to_power k <= (abs a + abs b) to_power k &
+ (abs a + abs b) to_power k <= (2 * max(abs a,abs b)) to_power k &
+ abs(a+b) to_power k <= (2*max(abs a,abs b)) to_power k;
+
+theorem :: LPSPACE2:17
+for a, b, k be Real st a >= 0 & b >= 0 & k > 0 holds
+  max(a,b) to_power k <= a to_power k + b to_power k;
+
+theorem :: LPSPACE2:18
+for f be PartFunc of X,REAL, a,b be Real st b > 0 holds
+((abs a) to_power b)(#)((abs f) to_power b) = (abs(a(#)f)) to_power b;
+
+theorem :: LPSPACE2:19
+for f be PartFunc of X,REAL, a,b be Real st a > 0 & b > 0 holds
+(a to_power b)(#)((abs f) to_power b) = (a(#)(abs f)) to_power b;
+
+theorem :: LPSPACE2:20
+for f be PartFunc of X,REAL, k be real number, E be set holds
+  (f|E) to_power k = (f to_power k)|E;
+
+theorem :: LPSPACE2:21
+for a,b,k be Real st k > 0 holds
+  (abs(a+b)) to_power k
+    <= (2 to_power k)*((abs a) to_power k + (abs b) to_power k);
+
+theorem :: LPSPACE2:22
+for k be positive Real, f,g be PartFunc of X,REAL st
+  f in Lp_Functions(M,k) & g in Lp_Functions (M,k) holds
+    (abs f) to_power k is_integrable_on M &
+    (abs g) to_power k is_integrable_on M &
+    (abs f) to_power k + (abs g) to_power k is_integrable_on M;
+
+theorem :: LPSPACE2:23
+X --> 0 is PartFunc of X,REAL & X --> 0 in Lp_Functions(M,k);
+
+theorem :: LPSPACE2:24
+for k be Real st k > 0
+ for f,g be PartFunc of X,REAL holds
+  for x be Element of X st x in dom f /\ dom g holds
+   (abs(f + g) to_power k).x <=
+    ((2 to_power k)(#)((abs f) to_power k + (abs g) to_power k)).x;
+
+theorem :: LPSPACE2:25
+f in Lp_Functions(M,k) & g in Lp_Functions(M,k) implies
+  f + g in Lp_Functions(M,k);
+
+theorem :: LPSPACE2:26
+f in Lp_Functions(M,k) implies a(#)f in Lp_Functions(M,k);
+
+theorem :: LPSPACE2:27
+f in Lp_Functions(M,k) & g in Lp_Functions(M,k) implies
+  f - g in Lp_Functions(M,k);
+
+theorem :: LPSPACE2:28
+f in Lp_Functions(M,k) implies abs f in Lp_Functions(M,k);
+
+registration
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  cluster Lp_Functions(M,k) -> multi-closed add-closed;
+end;
+
+registration
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  cluster RLSStruct (# Lp_Functions(M,k),
+                     In(0.(RLSp_PFunct X),Lp_Functions(M,k)),
+                     add|(Lp_Functions(M,k),RLSp_PFunct X),
+                     Mult_(Lp_Functions(M,k)) #)
+   -> Abelian add-associative right_zeroed RealLinearSpace-like;
+end;
+
+definition
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  func RLSp_LpFunct(M,k) -> strict Abelian add-associative right_zeroed
+        RealLinearSpace-like (non empty RLSStruct) equals
+:: LPSPACE2:def 3
+  RLSStruct (# Lp_Functions(M,k),
+               In(0.(RLSp_PFunct X),Lp_Functions(M,k)),
+               add|(Lp_Functions(M,k),RLSp_PFunct X),
+               Mult_(Lp_Functions(M,k)) #);
+end;
+
+begin :: Preliminaries of Real Normed Space of Lp Integrable Functions
+
+reserve v,u for VECTOR of RLSp_LpFunct(M,k);
+
+theorem :: LPSPACE2:29
+f = v & g = u implies f+g = v+u;
+
+theorem :: LPSPACE2:30
+f = u implies a(#)f = a*u;
+
+theorem :: LPSPACE2:31
+f=u implies
+  u + (-1)*u = (X --> 0)|dom f &
+  ex v,g be PartFunc of X,REAL st
+    v in Lp_Functions(M,k) & g in Lp_Functions(M,k) &
+    v = u + (-1)*u & g = X --> 0 & v a.e.= g,M;
+
+definition
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  func AlmostZeroLpFunctions(M,k) ->
+      non empty Subset of RLSp_LpFunct(M,k) equals
+:: LPSPACE2:def 4
+        { f where f is PartFunc of X,REAL :
+            f in Lp_Functions(M,k) & f a.e.= X-->0,M };
+end;
+
+registration
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  cluster AlmostZeroLpFunctions(M,k) -> add-closed multi-closed;
+end;
+
+theorem :: LPSPACE2:32
+0.(RLSp_LpFunct(M,k)) = X-->0 &
+0.(RLSp_LpFunct(M,k)) in AlmostZeroLpFunctions(M,k);
+
+definition
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  func RLSp_AlmostZeroLpFunct(M,k) -> non empty RLSStruct equals
+:: LPSPACE2:def 5
+   RLSStruct (# AlmostZeroLpFunctions(M,k),
+                In(0.(RLSp_LpFunct(M,k)),AlmostZeroLpFunctions(M,k)),
+                add|(AlmostZeroLpFunctions(M,k),RLSp_LpFunct(M,k)),
+                Mult_(AlmostZeroLpFunctions(M,k)) #);
+end;
+
+registration
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  cluster RLSp_LpFunct(M,k) ->
+    strict Abelian add-associative right_zeroed RealLinearSpace-like;
+end;
+
+reserve v,u for VECTOR of RLSp_AlmostZeroLpFunct(M,k);
+
+theorem :: LPSPACE2:33
+f=v & g=u implies f+g=v+u;
+
+theorem :: LPSPACE2:34
+f=u implies a(#)f=a*u;
+
+definition
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+      f be PartFunc of X,REAL, k be positive Real;
+  func a.e-eq-class_Lp(f,M,k) -> Subset of Lp_Functions(M,k) equals
+:: LPSPACE2:def 6
+  {h where h is PartFunc of X,REAL : h in Lp_Functions(M,k) & f a.e.= h,M};
+end;
+
+theorem :: LPSPACE2:35
+f in Lp_Functions(M,k) implies
+ ex E be Element of S st M.(E`) = 0 & dom f = E & f is_measurable_on E;
+
+theorem :: LPSPACE2:36
+g in Lp_Functions(M,k) & g a.e.= f,M implies
+  g in a.e-eq-class_Lp(f,M,k);
+
+theorem :: LPSPACE2:37
+(ex E be Element of S st M.(E`)=0 & E = dom f & f is_measurable_on E) &
+g in a.e-eq-class_Lp(f,M,k) implies
+  g a.e.= f,M & f in Lp_Functions(M,k);
+
+theorem :: LPSPACE2:38
+f in Lp_Functions(M,k) implies f in a.e-eq-class_Lp(f,M,k);
+
+theorem :: LPSPACE2:39
+(ex E be Element of S st M.(E`)=0 & E = dom g & g is_measurable_on E) &
+a.e-eq-class_Lp(f,M,k) <> {} &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k) implies
+  f a.e.= g,M;
+
+theorem :: LPSPACE2:40
+f in Lp_Functions(M,k) &
+(ex E be Element of S st M.(E`)=0 & E = dom g & g is_measurable_on E) &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k)
+  implies f a.e.= g,M;
+
+theorem :: LPSPACE2:41
+f a.e.= g,M implies a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k);
+
+theorem :: LPSPACE2:42
+f a.e.= g,M implies a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k);
+
+theorem :: LPSPACE2:43
+f in Lp_Functions (M,k) & g in a.e-eq-class_Lp(f,M,k) implies
+  a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k);
+
+theorem :: LPSPACE2:44
+(ex E be Element of S st M.(E`)=0 & E = dom f & f is_measurable_on E) &
+(ex E be Element of S st M.(E`)=0 & E = dom f1 & f1 is_measurable_on E) &
+(ex E be Element of S st M.(E`)=0 & E = dom g & g is_measurable_on E) &
+(ex E be Element of S st M.(E`)=0 & E = dom g1 & g1 is_measurable_on E) &
+a.e-eq-class_Lp(f,M,k) is non empty &
+a.e-eq-class_Lp(g,M,k) is non empty &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(f1,M,k) &
+a.e-eq-class_Lp(g,M,k) = a.e-eq-class_Lp(g1,M,k)
+implies a.e-eq-class_Lp(f+g,M,k) = a.e-eq-class_Lp(f1+g1,M,k);
+
+theorem :: LPSPACE2:45
+f in Lp_Functions(M,k) & f1 in Lp_Functions(M,k) &
+g in Lp_Functions(M,k) & g1 in Lp_Functions(M,k) &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(f1,M,k) &
+a.e-eq-class_Lp(g,M,k) = a.e-eq-class_Lp(g1,M,k)
+  implies a.e-eq-class_Lp(f+g,M,k) = a.e-eq-class_Lp(f1+g1,M,k);
+
+theorem :: LPSPACE2:46
+(ex E be Element of S st M.(E`) = 0 & dom f = E & f is_measurable_on E) &
+(ex E be Element of S st M.(E`) = 0 & dom g = E & g is_measurable_on E) &
+a.e-eq-class_Lp(f,M,k) is non empty &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k) implies
+  a.e-eq-class_Lp(a(#)f,M,k) = a.e-eq-class_Lp(a(#)g,M,k);
+
+theorem :: LPSPACE2:47
+f in Lp_Functions(M,k) & g in Lp_Functions(M,k) &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k) implies
+  a.e-eq-class_Lp(a(#)f,M,k) = a.e-eq-class_Lp(a(#)g,M,k);
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+func CosetSet(M,k) -> non empty Subset-Family of Lp_Functions(M,k) equals
+:: LPSPACE2:def 7
+    {a.e-eq-class_Lp(f,M,k) where f is PartFunc of X,REAL :
+      f in Lp_Functions(M,k)};
+end;
+
+definition
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+  k be positive Real;
+  func addCoset(M,k) -> BinOp of CosetSet(M,k) means
+:: LPSPACE2:def 8
+    for A,B be Element of CosetSet(M,k), a,b be PartFunc of X,REAL st
+      a in A & b in B holds it.(A,B) = a.e-eq-class_Lp(a+b,M,k);
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+func zeroCoset(M,k) -> Element of CosetSet(M,k) equals
+:: LPSPACE2:def 9
+      a.e-eq-class_Lp(X-->0,M,k);
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+func lmultCoset(M,k) -> Function of [:REAL,CosetSet(M,k):],CosetSet(M,k) means
+:: LPSPACE2:def 10
+
+  for z be Element of REAL, A be Element of CosetSet(M,k),
+      f be PartFunc of X,REAL st
+   f in A holds it.(z,A) = a.e-eq-class_Lp(z(#)f,M,k);
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+ func Pre-Lp-Space(M,k) -> strict RLSStruct means
+:: LPSPACE2:def 11
+  the carrier of it = CosetSet(M,k) &
+  the addF of it = addCoset(M,k) &
+  0.it = zeroCoset(M,k) &
+  the Mult of it = lmultCoset(M,k);
+end;
+
+registration let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+  cluster Pre-Lp-Space(M,k) -> non empty;
+end;
+
+registration let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+  cluster Pre-Lp-Space(M,k) -> Abelian add-associative right_zeroed
+   right_complementable RealLinearSpace-like;
+end;
+
+begin :: Real Normed Space of Lp Integrable Functions
+
+theorem :: LPSPACE2:48
+f in Lp_Functions(M,k) & g in Lp_Functions(M,k) & f a.e.= g,M implies
+  Integral(M,(abs f) to_power k) = Integral(M,(abs g) to_power k);
+
+theorem :: LPSPACE2:49
+f in Lp_Functions(M,k) implies
+  Integral(M,(abs f) to_power k) in REAL & 0 <= Integral(M,(abs f) to_power k);
+
+theorem :: LPSPACE2:50
+(ex x be VECTOR of Pre-Lp-Space(M,k) st f in x & g in x) implies
+  f a.e.= g,M & f in Lp_Functions(M,k) & g in Lp_Functions(M,k);
+
+theorem :: LPSPACE2:51
+for k be positive Real holds
+ ex NORM be Function of the carrier of Pre-Lp-Space(M,k),REAL st
+  for x be Point of Pre-Lp-Space(M,k)
+   ex f be PartFunc of X,REAL st
+     f in x &
+     ex r be Real st
+       r = Integral(M,(abs f) to_power k) & NORM.x = r to_power(1/k);
+
+reserve x for Point of Pre-Lp-Space(M,k);
+
+theorem :: LPSPACE2:52
+f in x implies
+  (abs f) to_power k is_integrable_on M & f in Lp_Functions(M,k);
+
+theorem :: LPSPACE2:53
+f in x & g in x implies
+  f a.e.= g,M &
+  Integral(M,(abs f) to_power k) = Integral(M,(abs g) to_power k);
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+ func Lp-Norm(M,k) -> Function of the carrier of Pre-Lp-Space (M,k),REAL means
+:: LPSPACE2:def 12
+
+  for x be Point of Pre-Lp-Space(M,k)
+    ex f be PartFunc of X,REAL st
+      f in x &
+      ex r be Real st
+        r = Integral(M,(abs f) to_power k) & it.x = r to_power (1/k);
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+ func Lp-Space(M,k) -> non empty NORMSTR equals
+:: LPSPACE2:def 13
+    NORMSTR (# the carrier of Pre-Lp-Space(M,k),
+               the ZeroF of Pre-Lp-Space(M,k),
+               the addF of Pre-Lp-Space(M,k),
+               the Mult of Pre-Lp-Space(M,k),
+               Lp-Norm(M,k) #);
+end;
+
+reserve x,y for Point of Lp-Space(M,k);
+
+theorem :: LPSPACE2:54
+(ex f be PartFunc of X,REAL st
+   f in Lp_Functions(M,k) & x= a.e-eq-class_Lp(f,M,k)) &
+for f be PartFunc of X,REAL st f in x holds
+  ex r be Real st
+    0<=r & r = Integral(M,(abs f) to_power k) & ||.x.|| =r to_power (1/k);
+
+theorem :: LPSPACE2:55
+(f in x & g in y implies f+g in x+y) &
+(f in x implies a(#)f in a*x);
+
+theorem :: LPSPACE2:56
+f in x implies
+  x= a.e-eq-class_Lp(f,M,k) &
+  ( ex r be Real st
+     0 <=r & r = Integral(M,(abs f) to_power k) & ||.x.|| = r to_power (1/k) );
+
+theorem :: LPSPACE2:57
+X --> 0 in L1_Functions M;
+
+theorem :: LPSPACE2:58
+f in Lp_Functions(M,k) & Integral(M,(abs f) to_power k) = 0 implies
+   f a.e.= X-->0,M;
+
+theorem :: LPSPACE2:59
+Integral(M,(abs(X-->0)) to_power k) = 0;
+
+:: lemma for Holder
+
+theorem :: LPSPACE2:60
+for m,n be positive Real st
+  1/m +1/n =1 & f in Lp_Functions(M,m) & g in Lp_Functions(M,n) holds
+    f(#)g in L1_Functions M & f(#)g is_integrable_on M;
+
+:: Holder
+theorem :: LPSPACE2:61
+for m,n be positive Real st 1/m +1/n =1 &
+f in Lp_Functions(M,m) & g in Lp_Functions(M,n) holds
+ex r1 be Real st r1 = Integral(M,(abs f) to_power m) &
+ex r2 be Real st r2 = Integral(M,(abs g) to_power n) &
+Integral(M,abs(f(#)g)) <= r1 to_power (1/m) * r2 to_power (1/n);
+
+:: Minkowski
+
+theorem :: LPSPACE2:62
+for m be positive Real
+for r1,r2,r3 be Element of REAL st
+ 1 <= m &
+ f in Lp_Functions(M,m) & g in Lp_Functions(M,m) &
+ r1 = Integral(M,(abs f) to_power m) &
+ r2 = Integral(M,(abs g) to_power m) &
+ r3 = Integral(M,(abs (f+g)) to_power m) holds
+ r3 to_power (1/m) <= r1 to_power (1/m) + r2 to_power (1/m);
+
+registration
+  let k be geq_than_1 Real;
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S;
+  cluster Lp-Space (M,k) -> RealNormSpace-like RealLinearSpace-like
+      Abelian add-associative right_zeroed right_complementable;
+end;
+
+begin :: Preliminaries of completeness of Lp Space
+
+theorem :: LPSPACE2:63
+for Sq be sequence of Lp-Space(M,k) holds
+ ex Fsq be Functional_Sequence of X,REAL st
+  for n be Element of NAT holds
+    Fsq.n in Lp_Functions(M,k) & Fsq.n in Sq.n &
+    Sq.n= a.e-eq-class_Lp(Fsq.n,M,k) &
+    ex r be Real st
+     r = Integral(M,(abs (Fsq.n)) to_power k) &
+     ||. Sq.n .|| = r to_power (1/k);
+
+theorem :: LPSPACE2:64
+for Sq be sequence of Lp-Space(M,k) holds
+ ex Fsq be with_the_same_dom Functional_Sequence of X,REAL st
+  for n be Element of NAT holds
+    Fsq.n in Lp_Functions(M,k) & Fsq.n in Sq.n &
+    Sq.n= a.e-eq-class_Lp(Fsq.n,M,k) &
+    ex r be Real st 0 <= r &
+      r = Integral(M,(abs (Fsq.n)) to_power k) &
+      ||. Sq.n .|| =r to_power (1/k);
+
+theorem :: LPSPACE2:65
+for X be RealNormSpace, Sq be sequence of X, Sq0 be Point of X st
+ ||.Sq -Sq0.|| is convergent & lim ||.Sq -Sq0.|| =0
+holds Sq is convergent & lim Sq = Sq0;
+
+theorem :: LPSPACE2:66
+for X be RealNormSpace, Sq be sequence of X st
+ Sq is Cauchy_sequence_by_Norm holds
+  ex N be increasing sequence of NAT st
+   for i,j be Element of NAT st j >= N.i holds
+    ||. Sq.j - Sq.(N.i) .|| < 2 to_power (-i);
+
+theorem :: LPSPACE2:67
+for F be Functional_Sequence of X,REAL st
+ (for m be Nat holds F.m in Lp_Functions(M,k))
+ holds
+  for m be Nat holds (Partial_Sums F).m in Lp_Functions(M,k);
+
+theorem :: LPSPACE2:68
+for F be Functional_Sequence of X,REAL st
+ (for m be Nat holds F.m is nonnegative)
+holds
+ for m be Nat holds (Partial_Sums F).m is nonnegative;
+
+theorem :: LPSPACE2:69
+for F be Functional_Sequence of X,REAL, x be Element of X, n,m be Nat st
+ F is with_the_same_dom & x in dom(F.0) &
+(for k be Nat holds F.k is nonnegative) & n <= m holds
+   ((Partial_Sums F).n).x <= ((Partial_Sums F).m).x;
+
+theorem :: LPSPACE2:70
+for F be Functional_Sequence of X,REAL st
+  F is with_the_same_dom holds (abs F) is with_the_same_dom;
+
+theorem :: LPSPACE2:71
+for k be geq_than_1 Real, Sq be sequence of Lp-Space(M,k) st
+  Sq is Cauchy_sequence_by_Norm holds Sq is convergent;
+
+registration let X,S,M;
+  let k be geq_than_1 Real;
+  cluster Lp-Space (M,k) -> complete;
+end;
+
+begin
+
+theorem :: LPSPACE2:72
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds CosetSet M = CosetSet(M,1);
+
+theorem :: LPSPACE2:73
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds addCoset M = addCoset(M,1);
+
+theorem :: LPSPACE2:74
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds zeroCoset M = zeroCoset(M,1);
+
+theorem :: LPSPACE2:75
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds lmultCoset M = lmultCoset(M,1);
+
+theorem :: LPSPACE2:76
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds
+  Pre-L-Space M = Pre-Lp-Space(M,1);
+
+theorem :: LPSPACE2:77
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S holds
+ L-1-Norm M = Lp-Norm(M,1);
+
+theorem :: LPSPACE2:78
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S holds
+  L-1-Space M = Lp-Space(M,1);

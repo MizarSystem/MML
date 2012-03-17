@@ -1,0 +1,4897 @@
+:: On $L^p$ Space Formed by Real-valued Partial Functions
+::  by Yasushige Watase , Noboru Endou and Yasunari Shidama
+:: 
+:: Received February 4, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies FUNCT_1, COMPLEX1, XBOOLE_0, XXREAL_0, VALUED_1, NAT_1, PARTFUN1,
+      SEQ_1, ARYTM_1, ORDINAL2, ZFMISC_1, NUMBERS, CARD_1, RELAT_1, SEQFUNC,
+      ARYTM_3, PBOOLE, RLVECT_1, SUPINF_2, RSSPACE, STRUCT_0, ALGSTR_0,
+      VECTSP10, REALSET1, FUNCOP_1, PRE_TOPC, LPSPACE1, BINOP_1, NORMSP_1,
+      PROB_1, MEASURE1, MEASURE2, MEASURE6, MESFUNC1, TARSKI, RFUNCT_3,
+      SETFAM_1, MESFUNC5, MESFUNC8, IDEAL_1, SUBSET_1, FUNCT_7, PREPOWER,
+      POWER, LPSPACE2, RSSPACE3, SEQ_2, SERIES_1, REAL_1, INTEGRA5, ORDINAL1,
+      XREAL_0, VALUED_0, CARD_3, REWRITE1, NEWTON, XXREAL_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      COMPLEX1, XXREAL_0, XREAL_0, SUPINF_2, EXTREAL1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, VALUED_1, RFUNCT_3, BINOP_1, REAL_1, NAT_1, STRUCT_0,
+      ALGSTR_0, RLVECT_1, IDEAL_1, SETFAM_1, PRE_TOPC, NORMSP_1, PROB_1,
+      ASYMPT_0, MEASURE1, MEASURE2, MEASURE3, MEASURE6, SEQFUNC, MESFUNC1,
+      MESFUNC2, MESFUNC5, MESFUNC6, FUNCT_7, MESFUNC8, NEWTON, PREPOWER, POWER,
+      MESFUN6C, SEQ_1, SEQ_2, RECDEF_1, SERIES_1, RSSPACE3, LOPBAN_1, MESFUN7C,
+      MESFUN9C, LPSPACE1;
+ constructors EXTREAL1, REAL_1, IDEAL_1, NEWTON, MEASURE3, MEASURE6, MESFUNC2,
+      MESFUNC6, MESFUNC9, SEQ_1, MESFUN6C, MESFUN7C, MESFUN9C, RECDEF_1, SEQ_2,
+      EXTREAL2, RINFSUP2, FUNCT_7, SERIES_1, PREPOWER, ASYMPT_0, LPSPACE1,
+      SUPINF_1, SEQFUNC, MESFUNC5, RSSPACE3, LOPBAN_1, MESFUNC1, RELSET_1;
+ registrations ORDINAL1, RELSET_1, NUMBERS, MEMBERED, VALUED_0, NAT_1,
+      SUBSET_1, PARTFUN1, RLVECT_1, STRUCT_0, NORMSP_1, MEASURE1, SEQ_4, SEQ_2,
+      MESFUN6C, MESFUNC8, LPSPACE1, XCMPLX_0, XREAL_0, XXREAL_0, VALUED_1,
+      FUNCT_2, MESFUN7C;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions TARSKI, STRUCT_0, ALGSTR_0, RLVECT_1, NORMSP_1, MEASURE6,
+      MESFUN7C, MESFUNC5, MESFUNC6, SUBSET_1, LPSPACE1, XBOOLE_0, VALUED_1,
+      RELAT_1, XCMPLX_0;
+ theorems FUNCT_1, FUNCT_2, PARTFUN1, COMPLEX1, MESFUN9C, RINFSUP2, SEQ_2,
+      SETFAM_1, LOPBAN_1, PREPOWER, XBOOLE_0, TARSKI, RELAT_1, SEQM_3,
+      VALUED_1, SERIES_1, IDEAL_1, RLVECT_1, FUNCOP_1, XBOOLE_1, BINOP_1,
+      SUPINF_2, MESFUNC5, MESFUNC2, EXTREAL1, MEASURE1, MESFUNC6, RFUNCT_1,
+      XXREAL_0, ABSVALUE, MESFUNC1, MEASURE2, EXTREAL2, RSSPACE3, NORMSP_1,
+      FUNCT_7, XREAL_1, HOLDER_1, POWER, XREAL_0, SUBSET_1, LPSPACE1, MESFUN6C,
+      MESFUN7C, MESFUNC8, ORDINAL1, NAT_1, XCMPLX_0, XCMPLX_1, VALUED_0,
+      XXREAL_3, SEQFUNC, MESFUNC9, SEQ_4, RELSET_1, COMSEQ_3, SEQ_1, SERIES_3,
+      LOPBAN_3, NAGATA_2;
+ schemes NAT_1, RECDEF_1, BINOP_1, FUNCT_2, SEQ_1, SEQFUNC;
+
+begin :: Preliminaries of Powers of Numbers and Operations of Real Sequences.
+
+reserve X for non empty set,
+        x for Element of X,
+        S for SigmaField of X,
+        M for sigma_Measure of S,
+        E,E1,E2,A,B for Element of S,
+        f,g,h,f1,g1 for PartFunc of X,REAL,
+        l,l1,m,m1,n,n1,n2,n3,i,j for Element of NAT,
+        a,b,c,r,r1,r2,s1,s2,p for Real,
+        seq1,seq2 for Real_Sequence;
+
+theorem Lm300:
+for m,n be positive (real number) st 1/m + 1/n = 1 holds m > 1
+proof
+   let m,n be positive (real number);
+   assume 1/m +1/n =1; then
+A2:1/n = 1-1/m;
+   assume m <=1; then
+   1<= 1/m by XREAL_1:183;
+   hence contradiction by A2,XREAL_1:49;
+end;
+
+theorem MPreLm8:
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+A be Element of S, f be PartFunc of X,ExtREAL st
+  A = dom f & f is_measurable_on A & f is nonnegative holds
+   Integral(M,f) in REAL iff f is_integrable_on M
+proof
+   let X be non empty set,
+       S be SigmaField of X,
+       M be sigma_Measure of S,
+       A be Element of S,
+       f be PartFunc of X,ExtREAL;
+   assume AS: A = dom f & f is_measurable_on A & f is nonnegative;
+H1:now assume f is_integrable_on M; then
+    -infty < Integral(M,f) & Integral(M,f) < +infty by MESFUNC5:102;
+    hence Integral(M,f) in REAL by XXREAL_0:14;
+   end;
+   now assume P3: Integral(M,f) in REAL;
+Q0: dom (max-f) = A & max-f is_measurable_on A by MESFUNC2:28,def 3,AS;
+Q1: dom (max+f) = A & max+f is_measurable_on A by MESFUNC2:27,def 2,AS;
+    for x being Element of X holds 0 <= (max+f).x by MESFUNC2:14; then
+    max+f is nonnegative by SUPINF_2:58; then
+Q2: Integral(M,max+f) = integral+(M,max+f) by Q1,MESFUNC5:94;
+Q2a:for x be Element of X st x in dom f holds (max+f).x = f.x
+    proof
+     let x be Element of X;
+A3:  f.x >= 0 by AS,SUPINF_2:58;
+     assume x in dom f; then
+     (max+f).x = max(f.x,0) by AS,Q1,MESFUNC2:def 2;
+     hence thesis by A3,XXREAL_0:def 10;
+    end; then
+    max+f = f by AS,Q1,PARTFUN1:34; then
+Q4: Integral(M,max+f) < +infty by P3,XXREAL_0:9;
+    for x being Element of X holds 0 <= (max-f).x by MESFUNC2:15; then
+    max-f is nonnegative by SUPINF_2:58; then
+Q5: Integral(M,max-f) = integral+(M,max-f) by Q0,MESFUNC5:94;
+    for x be Element of X st x in dom (max-f) holds 0= (max-f).x
+    proof
+     let x be Element of X;
+     assume x in dom (max-f);
+     max+f.x = f.x by AS,Q1,Q2a,PARTFUN1:34;
+     hence 0= max-f.x by MESFUNC2:21;
+    end; then
+    Integral(M,max-f) = 0 by Q0,LPSPACE1:22;
+    hence f is_integrable_on M by AS,Q2,Q4,Q5,MESFUNC5:def 17;
+   end;
+   hence thesis by H1;
+end;
+
+definition
+  let r be real number;
+  attr r is geq_than_1 means :defH:
+  1 <= r;
+end;
+
+registration
+  cluster geq_than_1 -> positive (real number);
+  coherence
+  proof
+    let r be real number;
+    assume 1 <= r;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster geq_than_1 Real;
+existence
+proof
+   take 1;
+   thus thesis by defH;
+end;
+end;
+
+reserve k for positive Real;
+
+theorem HOLDER13:
+for a,b,p be Real st 0 < p & 0 <= a & a < b holds a to_power p < b to_power p
+proof
+   let a,b,p be Real;
+   assume A1: 0 < p & 0 <= a & a< b;
+   now assume a = 0; then
+    a to_power p = 0 by A1,POWER:def 2;
+    hence a to_power p < b to_power p by A1,POWER:39;
+   end;
+   hence thesis by A1,POWER:42;
+ end;
+
+theorem LmPW001:
+a >= 0 & b > 0 implies a to_power b >= 0
+proof
+   assume A1: a >= 0;
+   assume b > 0; then
+   a = 0 implies a to_power b >= 0 by POWER:def 2;
+   hence thesis by A1,POWER:39;
+end;
+
+theorem LmPW003:
+a >= 0 & b >= 0 & c > 0 implies
+  (a*b) to_power c = a to_power c * b to_power c
+proof
+   assume that
+A1: a >= 0 & b >= 0 and
+A3: c > 0;
+   now assume A6: a = 0 or b = 0; then
+    (a*b) to_power c = 0 by A3,POWER:def 2;
+    hence (a*b) to_power c = a to_power c * b to_power c by A6;
+   end;
+   hence thesis by A1,POWER:35;
+end;
+
+theorem LmPW004:
+for a,b be Real, f st f is nonnegative & a > 0 & b > 0 holds
+  (f to_power a) to_power b = f to_power (a*b)
+proof
+   let a,b be Real;
+   let f;
+   assume AS: f is nonnegative & a > 0 & b > 0;
+A1:dom (f to_power a) = dom f &
+   dom((f to_power a) to_power b) = dom (f to_power a) &
+   dom(f to_power (a*b)) = dom f by MESFUN6C:def 6;
+   for x be set st x in dom((f to_power a) to_power b) holds
+     ((f to_power a) to_power b).x = (f to_power (a*b)).x
+   proof
+    let x be set;
+    assume A6: x in dom ((f to_power a) to_power b); then
+A7: ((f to_power a) to_power b).x
+       = ((f to_power a).x) to_power b by MESFUN6C:def 6
+      .= ((f.x) to_power a) to_power b by A1,A6,MESFUN6C:def 6;
+A8: (f to_power (a*b)).x = (f.x) to_power (a*b) by A1,A6,MESFUN6C:def 6; then
+A9: f.x > 0 implies ((f to_power a) to_power b).x = (f to_power (a*b)).x
+      by A7,POWER:38;
+    now assume C1: f.x = 0; then
+     ((f to_power a) to_power b).x = 0 to_power b by AS,A7,POWER:def 2; then
+     ((f to_power a) to_power b).x = 0 by AS,POWER:def 2;
+     hence ((f to_power a) to_power b).x = (f to_power (a*b)).x
+       by AS,C1,A8,POWER:def 2;
+    end;
+    hence thesis by A9,AS,MESFUNC6:51;
+   end;
+   hence thesis by A1,FUNCT_1:9;
+end;
+
+theorem LmPW005:
+for a,b be Real, f st f is nonnegative & a > 0 & b > 0 holds
+  (f to_power a)(#)(f to_power b) = f to_power (a+b)
+proof
+   let a,b be Real; let f;
+   assume AS: f is nonnegative & a >0 & b >0;
+A1:dom(f to_power a) = dom f & dom(f to_power b) = dom f by MESFUN6C:def 6;
+A2:dom((f to_power a)(#)(f to_power b))
+    = dom (f to_power a) /\ dom (f to_power b) by VALUED_1:def 4; then
+A4:dom ((f to_power a)(#)(f to_power b)) = dom(f to_power (a+b))
+     by A1,MESFUN6C:def 6;
+   for x be set st x in dom((f to_power a)(#)(f to_power b)) holds
+    ((f to_power a)(#)(f to_power b)).x = (f to_power (a+b)).x
+   proof
+    let x be set;
+    assume A6: x in dom((f to_power a)(#)(f to_power b));
+    (f to_power a).x = ((f.x) to_power a) &
+    (f to_power b).x = ((f.x) to_power b) by A1,A2,A6,MESFUN6C:def 6; then
+A7: ((f to_power a)(#)(f to_power b)).x
+     = ((f.x) to_power a) * ((f.x) to_power b) by A6,VALUED_1:def 4;
+A8: (f to_power (a+b)).x = (f.x) to_power (a+b) by A4,A6,MESFUN6C:def 6;
+A9: f.x > 0 implies ((f to_power a)(#)(f to_power b)).x = (f to_power (a+b)).x
+      by A8,A7,POWER:32;
+    now assume C1: f.x = 0; then
+     ((f to_power a)(#)(f to_power b)).x = 0 * (0 to_power b)
+        by AS,A7,POWER:def 2;
+     hence ((f to_power a)(#)(f to_power b)).x = (f to_power (a+b)).x
+        by A8,AS,C1,POWER:def 2;
+    end;
+    hence thesis by AS,A9,MESFUNC6:51;
+   end;
+   hence thesis by A4,FUNCT_1:9;
+end;
+
+theorem LmPW006:
+f to_power 1 = f
+proof
+A1:dom (f to_power 1) = dom f by MESFUN6C:def 6;
+   for x be set st x in dom (f to_power 1) holds (f to_power 1).x = f.x
+   proof
+    let x be set;
+    assume x in dom(f to_power 1); then
+    (f to_power 1).x = (f.x) to_power 1 by MESFUN6C:def 6;
+    hence thesis by POWER:30;
+   end;
+   hence thesis by A1,FUNCT_1:9;
+end;
+
+theorem LMSQ1:
+for seq1,seq2 be Real_Sequence, k be positive Real st
+  for n be Element of NAT holds seq1.n = (seq2.n) to_power k & seq2.n >= 0
+holds (seq1 is convergent iff seq2 is convergent)
+proof
+   let seq1,seq2 be Real_Sequence, k be positive Real;
+   assume
+AS: for n be Element of NAT holds
+      seq1.n = (seq2.n) to_power k & seq2.n >= 0;
+A1:for n holds seq1.n >= 0
+   proof
+    let n;
+    (seq2.n) to_power k >= 0 by AS,LmPW001;
+    hence thesis by AS;
+   end;
+   thus seq1 is convergent implies seq2 is convergent
+   proof
+    assume A2: seq1 is convergent;
+    for n be Element of NAT holds seq2.n = (seq1.n) to_power (1/k)
+    proof
+     let n be Element of NAT;
+     (seq1.n) to_power (1/k) = (seq2.n) to_power k to_power (1/k) by AS
+      .= (seq2.n) to_power (k*(1/k)) by AS,HOLDER_1:2
+      .= (seq2.n) to_power 1 by XCMPLX_1:107;
+     hence thesis by POWER:30;
+    end;
+    hence thesis by A1,A2,HOLDER_1:10;
+   end;
+   assume seq2 is convergent;
+   hence thesis by AS,HOLDER_1:10;
+end;
+
+theorem LMSQ4:
+for seq be Real_Sequence, n,m be Element of NAT st m <= n holds
+  abs( (Partial_Sums seq).n - (Partial_Sums seq).m )
+   <= (Partial_Sums abs seq).n - (Partial_Sums abs seq).m &
+  abs( (Partial_Sums seq).n - (Partial_Sums seq).m )
+   <= (Partial_Sums abs seq).n
+proof
+   let seq be Real_Sequence;
+   let n, m be Element of NAT;
+   assume AS: m<= n;
+A3:for n holds abs(seq).n >= 0
+   proof
+    let n;
+    abs(seq.n)=abs(seq).n by SEQ_1:16;
+    hence thesis by COMPLEX1:132;
+   end; then
+A4:abs((Partial_Sums abs seq).n - (Partial_Sums abs seq).m)
+    = (Partial_Sums abs seq).n - (Partial_Sums abs seq).m by AS,COMSEQ_3:9;
+   (Partial_Sums abs seq).m >= 0 by A3,SERIES_3:34; then
+   abs((Partial_Sums seq).n - (Partial_Sums seq).m)
+    <= (Partial_Sums abs seq).n - (Partial_Sums abs seq).m
+      + (Partial_Sums abs seq).m by A4,AS,SERIES_1:39,XREAL_1:40;
+   hence thesis by A4,AS,SERIES_1:39;
+end;
+
+theorem LMSQ5:
+for seq,seq2 be Real_Sequence, k be positive Real st
+  seq is convergent &
+  for n be Element of NAT holds
+    seq2.n = ( |. lim seq -seq.n .|) to_power k
+holds seq2 is convergent & lim seq2 = 0
+proof
+   let seq, seq2 be Real_Sequence, k be positive Real;
+   set r = lim seq;
+   assume
+AS: seq is convergent &
+    for n be Element of NAT holds seq2.n = (|. r -seq.n .|) to_power k;
+   deffunc U(Element of NAT) = |.r -seq.$1.|;
+   consider seq1 be Real_Sequence such that
+A2: for n holds seq1.n = U(n) from SEQ_1:sch 1;
+   deffunc U(Element of NAT) = r;
+   consider seq0 be Real_Sequence such that
+A3: for n holds seq0.n = U(n) from SEQ_1:sch 1;
+   for n be Nat holds seq0.n = r
+   proof
+    let n be Nat;
+    n in NAT by ORDINAL1:def 13;
+    hence thesis by A3;
+   end; then
+A4:seq0 is constant by VALUED_0:def 18; then
+A5:seq0 - seq is convergent by AS,SEQ_2:25;
+A6:dom seq0 = NAT & dom seq = NAT & dom (seq0 - seq)= NAT
+   & dom seq1 = NAT by FUNCT_2:def 1;
+A7:dom abs(seq0 - seq) = dom (seq0 - seq) by VALUED_1:def 11;
+   for n be Element of NAT holds abs(seq0 - seq).n = seq1.n
+   proof
+    let n be Element of NAT;
+    seq1.n = |. r - seq.n .| by A2; then
+    seq1.n = |. seq0.n - seq.n .| by A3; then
+    seq1.n = abs((seq0-seq).n) by A6,VALUED_1:13;
+    hence thesis by A6,A7,VALUED_1:def 11;
+   end; then
+A8:abs(seq0 - seq) = seq1 by FUNCT_2:113; then
+A9:seq1 is convergent by A5,SEQ_4:26;
+   lim (seq0-seq) = seq0.0 - lim seq by SEQ_4:59,A4,AS; then
+   lim (seq0-seq) = r - lim seq by A3; then
+A10:lim seq1 = 0 by A5,A8,SEQ_4:27,COMPLEX1:130;
+   for n holds seq2.n = (seq1.n) to_power k & seq1.n >= 0
+   proof
+    let n;
+    |. r -seq.n .| = seq1.n by A2;
+    hence thesis by AS,COMPLEX1:132;
+   end; then
+   seq2 is convergent & lim seq2 = (lim seq1) to_power k by HOLDER_1:10,A9;
+   hence thesis by A10,POWER:def 2;
+end;
+
+LMSQ6:
+for seq be Real_Sequence, n be Element of NAT holds
+   abs((Partial_Sums seq).n) <= (Partial_Sums abs seq).n by NAGATA_2:13;
+
+begin :: Real Linear Space of Lp Integrable Functions
+
+theorem Lm001:
+for k be positive Real, X be non empty set holds
+  (X -->0) to_power k = X --> 0
+proof
+   let k be positive Real, X be non empty set;
+A1:dom ((X -->0) to_power k) = dom (X-->0) by MESFUN6C:def 6;
+   now let x be Element of X;
+    assume x in dom((X -->0) to_power k); then
+    ((X -->0) to_power k).x = ((X -->0).x) to_power k by MESFUN6C:def 6; then
+    ((X -->0) to_power k).x = 0 to_power k by FUNCOP_1:13; then
+    ((X -->0) to_power k).x = 0 by POWER:def 2;
+    hence ((X -->0) to_power k).x = (X --> 0).x by FUNCOP_1:13;
+   end;
+   hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem Lm001x:
+for f be PartFunc of X,REAL, D be set holds abs(f|D) = (abs f)|D
+proof
+   let f be PartFunc of X,REAL;
+   let D be set;
+A2:dom abs(f|D) = dom (f|D) by VALUED_1:def 11; then
+   dom abs(f|D) = dom f /\ D by RELAT_1:90; then
+   dom abs(f|D) = dom abs f /\ D by VALUED_1:def 11; then
+A3:dom abs(f|D) = dom((abs f)|D) by RELAT_1:90;
+   for x be Element of X st x in dom abs(f|D) holds
+     (abs(f|D)).x = ((abs f)|D).x
+   proof
+    let x be Element of X;
+    assume B1: x in dom abs(f|D); then
+    x in dom f by A2,RELAT_1:86; then
+B2: x in dom abs f by VALUED_1:def 11;
+    (abs(f|D)).x = abs((f|D).x) by B1,VALUED_1:def 11; then
+    (abs(f|D)).x = abs(f.x) by B1,A2,FUNCT_1:70; then
+    (abs(f|D)).x = (abs f).x by B2,VALUED_1:def 11;
+    hence (abs(f|D)).x = ((abs f)|D).x by B1,A3,FUNCT_1:70;
+   end;
+   hence thesis by A3,PARTFUN1:34;
+end;
+
+registration
+  let X; let f be PartFunc of X,REAL;
+  cluster abs f -> nonnegative;
+coherence
+proof
+   now let x be set;
+    assume x in dom abs f; then
+    (abs f).x = abs(f.x) by VALUED_1:def 11;
+    hence 0 <= (abs f).x by COMPLEX1:132;
+   end;
+   hence thesis by MESFUNC6:52;
+end;
+end;
+
+theorem Lm002b:
+for f be PartFunc of X,REAL st f is nonnegative holds abs f = f
+proof
+   let f be PartFunc of X,REAL;
+A2:dom f = dom (abs f) by VALUED_1:def 11;
+   assume A1: f is nonnegative;
+   now let x be Element of X;
+A3: f.x >= 0 by A1,MESFUNC6:51;
+    assume x in dom f; then
+    x in dom abs f by VALUED_1:def 11; then
+    (abs f).x = abs(f.x) by VALUED_1:def 11;
+    hence (abs f).x = f.x by A3,ABSVALUE:def 1;
+   end;
+   hence thesis by A2,PARTFUN1:34;
+end;
+
+theorem Lm2:
+(X = dom f & for x st x in dom f holds 0 = f.x) implies
+  f is_integrable_on M & Integral(M,f) =0
+proof
+   assume A1:X=dom f & for x st x in dom f holds 0 = f.x;
+   X is Element of S by MEASURE1:21; then
+   R_EAL f is_integrable_on M & Integral(M,R_EAL f) = 0 by LPSPACE1:22,A1;
+   hence thesis by MESFUNC6:def 9;
+end;
+
+definition
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+  k be positive Real;
+func Lp_Functions(M,k) -> non empty Subset of RLSp_PFunct X equals
+  {f where f is PartFunc of X,REAL :
+     ex Ef be Element of S st M.(Ef`)=0 & dom f = Ef &
+       f is_measurable_on Ef & (abs f) to_power k is_integrable_on M};
+correctness
+proof
+   set V = {f where f is PartFunc of X,REAL :
+     ex Ef be Element of S st M.(Ef`)=0 & dom f = Ef &
+       f is_measurable_on Ef & (abs f) to_power k is_integrable_on M};
+A1:V c= PFuncs(X,REAL)
+   proof
+    let x be set;
+    assume x in V; then
+    ex f be PartFunc of X,REAL st
+     x = f &
+     ex Ef be Element of S st M.(Ef`)=0 & dom f = Ef &
+      f is_measurable_on Ef & (abs f) to_power k is_integrable_on M;
+    hence x in PFuncs(X,REAL) by PARTFUN1:119;
+   end;
+   reconsider g = X--> 0 as Function of X,REAL by FUNCOP_1:58;
+   reconsider Ef = X as Element of S by MEASURE1:66;
+   set h = (abs g) to_power k;
+A3:dom g = X by FUNCOP_1:19;
+   for x be set st x in dom g holds g.x = 0 by FUNCOP_1:13; then
+A4:g is_measurable_on Ef by LPSPACE1:53,A3;
+   Ef` = {} by XBOOLE_1:37; then
+A6:M.(Ef`) = 0 by VALUED_0:def 19;
+   for x be set st x in dom (X-->0) holds 0 <= (X-->0).x; then
+   abs g = X-->0 by Lm002b,MESFUNC6:52; then
+A7:h = g by Lm001; then
+   for x be Element of X st x in dom h holds h.x = 0 by FUNCOP_1:13; then
+   h is_integrable_on M by Lm2,A7,A3; then
+   g in V by A4,A6,A3;
+   hence thesis by A1;
+end;
+end;
+
+theorem Lm003:
+for a,b,k be Real st k > 0 holds
+ abs(a+b) to_power k <= (abs a + abs b) to_power k &
+ (abs a + abs b) to_power k <= (2 * max(abs a,abs b)) to_power k &
+ abs(a+b) to_power k <= (2*max(abs a,abs b)) to_power k
+proof
+   let a,b,k be Real;
+   assume A0: k > 0;
+A3:abs(a+b) <= abs a + abs b by ABSVALUE:21;
+   abs a <= max(abs a,abs b) & abs b <= max(abs a,abs b) by XXREAL_0:25; then
+A5:abs a + abs b <= max(abs a,abs b) + max(abs a,abs b) by XREAL_1:9; then
+A6:abs(a+b) <= 2*max(abs a,abs b) by A3,XXREAL_0:2;
+   0 <= abs(a+b) by COMPLEX1:132;
+   hence thesis by A0,A3,A5,A6,HOLDER_1:3;
+end;
+
+theorem Lm004:
+for a, b, k be Real st a >= 0 & b >= 0 & k > 0 holds
+  max(a,b) to_power k <= a to_power k + b to_power k
+proof
+   let a,b,k be Real;
+   assume A0: a >= 0 & b >= 0 & k > 0;
+   per cases;
+   suppose a <> 0 & b <> 0; then
+A1: a to_power k >= 0 & b to_power k >= 0 by A0,POWER:39;
+    max(a,b) = a or max(a,b) = b by XXREAL_0:def 10;
+    hence max(a,b) to_power k <= a to_power k + b to_power k
+      by A1,XREAL_1:42;
+   end;
+   suppose A3: a = 0; then
+    a to_power k = 0 by A0,POWER:def 2;
+    hence max(a,b) to_power k <= a to_power k + b to_power k
+      by A0,A3,XXREAL_0:def 10;
+   end;
+   suppose A6: b =0; then
+    b to_power k = 0 by A0,POWER:def 2;
+    hence (max(a,b)) to_power k <= a to_power k + b to_power k
+      by A0,A6,XXREAL_0:def 10;
+   end;
+end;
+
+theorem Lm001e:
+for f be PartFunc of X,REAL, a,b be Real st b > 0 holds
+((abs a) to_power b)(#)((abs f) to_power b) = (abs(a(#)f)) to_power b
+proof
+   let f be PartFunc of X,REAL;
+   let a,b be Real;
+   assume A1: b >0;
+A2:dom(((abs a) to_power b)(#)((abs f) to_power b)) = dom((abs f) to_power b) &
+   dom(a(#)f) = dom f by VALUED_1:def 5;
+A3:dom((abs f) to_power b) = dom (abs f) &
+   dom abs(a(#)f) = dom ((abs (a(#)f)) to_power b) by MESFUN6C:def 6;
+A4:dom (abs f) = dom f & dom abs(a(#)f) = dom (a(#)f) by VALUED_1:def 11;
+   for x be Element of X st
+    x in dom (((abs a) to_power b)(#)((abs f) to_power b)) holds
+    (((abs a) to_power b)(#)((abs f) to_power b)).x
+      = ((abs(a(#)f)) to_power b).x
+   proof
+    let x be Element of X;
+    assume A5: x in dom (((abs a) to_power b)(#)((abs f) to_power b));
+A6:abs(f.x) >= 0 & abs a >= 0 by COMPLEX1:132;
+    (((abs a) to_power b)(#)((abs f) to_power b)).x
+     = ((abs a) to_power b) * ((abs f) to_power b).x by VALUED_1:def 5,A5
+    .= ((abs a) to_power b) * (((abs f).x) to_power b) by A2,A5,MESFUN6C:def 6
+    .= ((abs a) to_power b) * ((abs(f.x)) to_power b) by VALUED_1:18
+    .= ((abs a) * (abs (f.x))) to_power b by A1,A6,LmPW003
+    .= (abs (a * f.x)) to_power b by COMPLEX1:151
+    .= (abs((a(#)f).x)) to_power b by VALUED_1:6
+    .= ((abs(a(#)f)).x) to_power b by VALUED_1:18;
+    hence thesis by A2,A3,A4,A5,MESFUN6C:def 6;
+   end;
+   hence thesis by A2,A3,A4,PARTFUN1:34;
+end;
+
+theorem Lm001f:
+for f be PartFunc of X,REAL, a,b be Real st a > 0 & b > 0 holds
+(a to_power b)(#)((abs f) to_power b) = (a(#)(abs f)) to_power b
+proof
+   let f be PartFunc of X,REAL;
+   let a,b be Real;
+   assume A1: a > 0 & b > 0; then
+A2:abs a = a by COMPLEX1:129; then
+   (a to_power b)(#)((abs f) to_power b)
+     = (abs(a(#)f)) to_power b by A1,Lm001e;
+   hence thesis by A2,RFUNCT_1:37;
+end;
+
+theorem Lm001g:
+for f be PartFunc of X,REAL, k be real number, E be set holds
+  (f|E) to_power k = (f to_power k)|E
+proof
+   let f be PartFunc of X,REAL;
+   let k be real number;
+   let E be set;
+B1:dom((f|E) to_power k) = dom(f|E) by MESFUN6C:def 6; then
+   dom((f|E) to_power k) = dom f /\ E by RELAT_1:90; then
+B3:dom((f|E) to_power k) = dom(f to_power k) /\ E
+      by MESFUN6C:def 6; then
+A1:dom((f|E) to_power k) = dom((f to_power k)|E) by RELAT_1:90;
+   now let x be Element of X;
+    assume B2: x in dom((f|E) to_power k); then
+    ((f|E) to_power k).x = ((f|E).x) to_power k by MESFUN6C:def 6; then
+B5: ((f|E) to_power k).x = (f.x) to_power k by B1,B2,FUNCT_1:70;
+    x in dom(f to_power k) by B3,B2,XBOOLE_0:def 4; then
+    ((f|E) to_power k).x = (f to_power k).x by B5,MESFUN6C:def 6;
+    hence ((f|E) to_power k).x = ((f to_power k)|E).x by B2,A1,FUNCT_1:70;
+   end;
+   hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem Lm005:
+for a,b,k be Real st k > 0 holds
+  (abs(a+b)) to_power k
+    <= (2 to_power k)*((abs a) to_power k + (abs b) to_power k)
+proof
+   let a,b,k be Real;
+   assume A0: k > 0; then
+A3:(abs(a+b)) to_power k <= (2*max(abs a,abs b)) to_power k by Lm003;
+A4:abs a >= 0 & abs b >= 0 by COMPLEX1:132; then
+A5:(max(abs a,abs b)) to_power k
+     <= abs a to_power k + abs b to_power k by A0,Lm004;
+   max(abs a,abs b) = abs a or max(abs a,abs b)= abs b by XXREAL_0:16; then
+A6:(2*max(abs a,abs b)) to_power k
+     = (2 to_power k)*(max(abs a,abs b)) to_power k by A0,A4,LmPW003;
+   (2 to_power k) > 0 by POWER:39; then
+   (2 to_power k) *(max(abs a,abs b)) to_power k
+    <= (2 to_power k)*(abs a to_power k + abs b to_power k) by A5,XREAL_1:66;
+   hence thesis by A3,A6,XXREAL_0:2;
+end;
+
+theorem Lm007:
+for k be positive Real, f,g be PartFunc of X,REAL st
+  f in Lp_Functions(M,k) & g in Lp_Functions (M,k) holds
+    (abs f) to_power k is_integrable_on M &
+    (abs g) to_power k is_integrable_on M &
+    (abs f) to_power k + (abs g) to_power k is_integrable_on M
+proof
+   let k be positive Real;
+   let f,g be PartFunc of X,REAL;
+   assume A0: f in Lp_Functions (M,k) & g in Lp_Functions (M,k); then
+A2:ex f1 be PartFunc of X,REAL st
+    f=f1 & ex Ev be Element of S st M.(Ev`) = 0 & dom f1 = Ev &
+     f1 is_measurable_on Ev & (abs f1) to_power k is_integrable_on M;
+   ex g1 be PartFunc of X, REAL st
+    g = g1 & ex Eu be Element of S st M.(Eu`) = 0 & dom g1 = Eu &
+     g1 is_measurable_on Eu & (abs g1) to_power k is_integrable_on M by A0;
+   hence thesis by A2,MESFUNC6:100;
+end;
+
+theorem LmDef1Lp:
+X --> 0 is PartFunc of X,REAL & X --> 0 in Lp_Functions(M,k)
+proof
+   reconsider g = X --> 0 as Function of X,REAL by FUNCOP_1:58;
+   reconsider ND = X as Element of S by MEASURE1:66;
+   ND` = {} by XBOOLE_1:37; then
+A1:M.ND` = 0 by VALUED_0:def 19;
+A2:dom g = X by FUNCT_2:def 1;
+   for x be Element of X st x in dom g holds g.x = 0 by FUNCOP_1:13; then
+A3:g is_integrable_on M by A2,Lm2;
+   for x be set st x in dom g holds 0 <= g.x; then
+   abs g = g by MESFUNC6:52,Lm002b; then
+A4:(abs g) to_power k = g by Lm001;
+   for x be set st x in dom g holds g.x = 0 by FUNCOP_1:13; then
+   g is_measurable_on ND by LPSPACE1:53,A2;
+   hence thesis by A1,A2,A3,A4;
+end;
+
+theorem Lm008:
+for k be Real st k > 0
+ for f,g be PartFunc of X,REAL holds
+  for x be Element of X st x in dom f /\ dom g holds
+   (abs(f + g) to_power k).x <=
+    ((2 to_power k)(#)((abs f) to_power k + (abs g) to_power k)).x
+proof
+   let k be Element of REAL;
+   assume A1: k > 0;
+   let f,g be PartFunc of X,REAL;
+   let x be Element of X;
+   assume A2: x in dom f /\ dom g;
+A3:dom(f + g) = dom f /\ dom g by VALUED_1:def 1; then
+   dom abs(f + g) = dom f /\ dom g by VALUED_1:def 11; then
+   x in dom (abs(f + g) to_power k) by A2,MESFUN6C:def 6; then
+A5:(abs(f + g) to_power k).x
+     = ((abs(f + g)).x) to_power k by MESFUN6C:def 6
+    .= abs((f + g).x) to_power k by VALUED_1:18
+    .= abs(f.x + g.x) to_power k by VALUED_1:def 1,A3,A2;
+   dom (abs f) = dom f & dom (abs g) = dom g by VALUED_1:def 11; then
+   x in dom (abs f) & x in dom (abs g) by A2,XBOOLE_0:def 4; then
+A6:x in dom ((abs f) to_power k) & x in dom ((abs g) to_power k)
+      by MESFUN6C:def 6;
+   abs(f.x) to_power k = ((abs f).x) to_power k &
+   abs(g.x) to_power k = ((abs g).x) to_power k by VALUED_1:18; then
+A7:abs(f.x) to_power k = ((abs f) to_power k).x &
+   abs(g.x) to_power k = ((abs g) to_power k).x by A6,MESFUN6C:def 6;
+   dom ((abs f) to_power k + (abs g) to_power k) =
+    dom ((abs f) to_power k) /\ dom ((abs g) to_power k) by VALUED_1:def 1;then
+   x in dom((abs f) to_power k + (abs g) to_power k) by A6,XBOOLE_0:def 4; then
+   (2 to_power k)*(abs(f.x) to_power k + abs(g.x) to_power k)
+    = (2 to_power k) * ((abs f) to_power k + (abs g) to_power k).x
+      by A7,VALUED_1:def 1
+   .= ((2 to_power k)(#)((abs f) to_power k + (abs g) to_power k)).x
+      by VALUED_1:6;
+   hence thesis by A1,A5,Lm005;
+end;
+
+theorem Th01aLp:
+f in Lp_Functions(M,k) & g in Lp_Functions(M,k) implies
+  f + g in Lp_Functions(M,k)
+proof
+   set W = Lp_Functions(M,k);
+   assume A1: f in W & g in W;
+   consider f1 be PartFunc of X,REAL such that
+A1a: f1=f & ex Ef1 be Element of S st M.(Ef1`) = 0 & dom f1 = Ef1 &
+     f1 is_measurable_on Ef1 & (abs f1) to_power k is_integrable_on M by A1;
+   consider Ef be Element of S such that
+A2: M.(Ef`) = 0 & dom f1 = Ef &
+    f1 is_measurable_on Ef & (abs f1) to_power k is_integrable_on M by A1a;
+   consider g1 be PartFunc of X,REAL such that
+A2a: g1=g & ex Eg1 be Element of S st M.(Eg1`) = 0 & dom g1 = Eg1 &
+     g1 is_measurable_on Eg1 & (abs g1) to_power k is_integrable_on M by A1;
+   consider Eg be Element of S such that
+A3: M.(Eg`) = 0 & dom g1 = Eg &
+    g1 is_measurable_on Eg & (abs g1) to_power k is_integrable_on M by A2a;
+A4:dom (f1+g1)= Ef /\ Eg by A2,A3,VALUED_1:def 1;
+   set Efg = Ef /\ Eg;
+   set s = abs(f1 + g1) to_power k;
+   set t = (2 to_power k)(#)((abs f1) to_power k + (abs g1) to_power k);
+A6:Efg` = (X \ Ef) \/ (X \ Eg) by XBOOLE_1:54;
+   Ef` is Element of S & Eg` is Element of S by MEASURE1:66; then
+   Ef` is measure_zero of M & Eg` is measure_zero of M
+     by MEASURE1:def 13,A2,A3; then
+   Ef` \/ Eg` is measure_zero of M by MEASURE1:70; then
+A8:M.(Efg`) = 0 by A6,MEASURE1:def 13;
+   f1 is_measurable_on Efg & g1 is_measurable_on Efg
+     by A2,A3,XBOOLE_1:17,MESFUNC6:16; then
+A11: f1 + g1 is_measurable_on Efg by MESFUNC6:26; then
+A13: abs(f1 + g1) is_measurable_on Efg by A4,MESFUNC6:48;
+   (abs f1) to_power k + (abs g1) to_power k is_integrable_on M
+     by A1,A1a,A2a,Lm007; then
+A17: t is_integrable_on M by MESFUNC6:102;
+C1:dom abs f1 = dom f1 & dom abs g1 = dom g1 &
+   dom abs(f1 + g1) = dom (f1+g1) by VALUED_1:def 11; then
+A21: s is_measurable_on Efg by A4,A13,MESFUN6C:29;
+A22: abs s = (abs(f1 + g1) to_power k) by Lm002b;
+A25: dom s = Efg by A4,C1,MESFUN6C:def 6;
+A28:dom t = dom ((abs f1) to_power k + (abs g1) to_power k) by VALUED_1:def 5
+    .= dom((abs f1) to_power k) /\ dom((abs g1) to_power k) by VALUED_1:def 1
+    .= dom (abs f1) /\ dom ((abs g1) to_power k) by MESFUN6C:def 6
+    .= dom (abs f1) /\ dom (abs g1) by MESFUN6C:def 6
+    .= dom (f1+g1) by C1,VALUED_1:def 1
+    .= dom s by C1,MESFUN6C:def 6;
+   now let x be Element of X;
+    assume x in dom s; then
+    (abs s).x <= t.x by A22,Lm008,A2,A3,A25;
+    hence abs(s.x) <= t.x by VALUED_1:18;
+   end; then
+   s is_integrable_on M by A21,A25,A28,A17,MESFUNC6:96;
+   hence thesis by A1a,A2a,A8,A4,A11;
+end;
+
+theorem Th01bLp:
+f in Lp_Functions(M,k) implies a(#)f in Lp_Functions(M,k)
+proof
+   assume f in Lp_Functions(M,k); then
+   consider f1 be PartFunc of X,REAL such that
+A2: f1=f & ex Ef1 be Element of S st M.(Ef1`) = 0 & dom f1 = Ef1 &
+    f1 is_measurable_on Ef1 & (abs f1) to_power k is_integrable_on M;
+   consider Ef be Element of S such that
+A3: M.(Ef`) = 0 & dom f1 = Ef &
+    f1 is_measurable_on Ef & (abs f1) to_power k is_integrable_on M by A2;
+A4:dom(a(#)f1) = Ef & a(#)f1 is_measurable_on Ef
+     by A3,VALUED_1:def 5,MESFUNC6:21;
+   ((abs a) to_power k)(#)((abs f1) to_power k) is_integrable_on M
+     by A2,MESFUNC6:102; then
+   (abs(a(#)f1)) to_power k is_integrable_on M by Lm001e;
+   hence thesis by A2,A3,A4;
+end;
+
+theorem Th01cLp:
+f in Lp_Functions(M,k) & g in Lp_Functions(M,k) implies
+  f - g in Lp_Functions(M,k)
+proof
+   assume A1: f in Lp_Functions(M,k) & g in Lp_Functions(M,k); then
+   (-1)(#)g in Lp_Functions(M,k) by Th01bLp;
+   hence thesis by Th01aLp,A1;
+end;
+
+theorem Th01dLp:
+f in Lp_Functions(M,k) implies abs f in Lp_Functions(M,k)
+proof
+   set W = Lp_Functions(M,k);
+   assume f in W; then
+   consider f1 be PartFunc of X,REAL such that
+A2: f1=f & ex Ef1 be Element of S st M.(Ef1`) = 0 & dom f1 = Ef1 &
+     f1 is_measurable_on Ef1 & (abs f1) to_power k is_integrable_on M;
+   consider Ef be Element of S such that
+A3: M.(Ef`) = 0 & dom f1 = Ef &
+    f1 is_measurable_on Ef & (abs f1) to_power k is_integrable_on M by A2;
+   dom (abs f1) = Ef by A3,VALUED_1:def 11; then
+   ex Ef be Element of S st M.(Ef`) = 0 & dom (abs f1) = Ef &
+   (abs f1) is_measurable_on Ef & (abs(abs f1)) to_power k is_integrable_on M
+       by A3,MESFUNC6:48;
+   hence thesis by A2;
+end;
+
+Th01Lp:
+Lp_Functions(M,k) is add-closed & Lp_Functions(M,k) is multi-closed
+proof
+   set W = Lp_Functions(M,k);
+   now let v,u be Element of the carrier of RLSp_PFunctX;
+    assume A2: v in W & u in W; then
+    consider v1 be PartFunc of X, REAL such that
+A3:  v1=v & ex ND be Element of S st M.ND`=0 & dom v1 = ND &
+     v1 is_measurable_on ND & (abs v1) to_power k is_integrable_on M;
+    consider u1 be PartFunc of X, REAL such that
+A4:  u1=u & ex ND be Element of S st M.ND`=0 & dom u1 = ND &
+     u1 is_measurable_on ND & (abs u1) to_power k is_integrable_on M by A2;
+    reconsider h = v+u as Element of PFuncs(X,REAL);
+    dom h = dom v1 /\ dom u1 &
+    for x be set st x in dom h holds h.x = v1.x + u1.x
+       by A3,A4,LPSPACE1:6; then
+    v+u=v1+u1 by VALUED_1:def 1;
+    hence v+u in Lp_Functions(M,k) by A2,A3,A4,Th01aLp;
+   end;
+   hence Lp_Functions(M,k) is add-closed by IDEAL_1:def 1;
+   now let a be Real, u be VECTOR of RLSp_PFunctX;
+    assume A7: u in W; then
+    consider u1 be PartFunc of X,REAL such that
+A8:  u1=u & ex ND be Element of S st M.ND`=0 & dom u1 = ND &
+     u1 is_measurable_on ND & (abs u1) to_power k is_integrable_on M;
+    reconsider h = a*u as Element of PFuncs(X,REAL);
+A9: dom h = dom u1 &
+    for x being Element of X st x in dom u1 holds h.x = a * (u1.x)
+      by A8,LPSPACE1:9; then
+    for x be set st x in dom h holds h.x = a*(u1.x); then
+    a*u=a(#)u1 by VALUED_1:def 5,A9;
+    hence a*u in Lp_Functions(M,k) by Th01bLp,A7,A8;
+   end;
+   hence Lp_Functions(M,k) is multi-closed by LPSPACE1:def 1;
+end;
+
+registration
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  cluster Lp_Functions(M,k) -> multi-closed add-closed;
+  coherence by Th01Lp;
+end;
+
+Th02Lp: RLSStruct (# Lp_Functions(M,k),
+             In(0.(RLSp_PFunct X),Lp_Functions(M,k)),
+             add|(Lp_Functions(M,k),RLSp_PFunct X),
+             Mult_(Lp_Functions(M,k)) #)
+  is Abelian add-associative right_zeroed RealLinearSpace-like
+proof
+   0.(RLSp_PFunct X) in Lp_Functions(M,k) by LmDef1Lp;
+   hence thesis by LPSPACE1:3;
+end;
+
+registration
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  cluster RLSStruct (# Lp_Functions(M,k),
+                     In(0.(RLSp_PFunct X),Lp_Functions(M,k)),
+                     add|(Lp_Functions(M,k),RLSp_PFunct X),
+                     Mult_(Lp_Functions(M,k)) #)
+   -> Abelian add-associative right_zeroed RealLinearSpace-like;
+  coherence by Th02Lp;
+end;
+
+definition
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  func RLSp_LpFunct(M,k) -> strict Abelian add-associative right_zeroed
+        RealLinearSpace-like (non empty RLSStruct) equals
+  RLSStruct (# Lp_Functions(M,k),
+               In(0.(RLSp_PFunct X),Lp_Functions(M,k)),
+               add|(Lp_Functions(M,k),RLSp_PFunct X),
+               Mult_(Lp_Functions(M,k)) #);
+  coherence;
+end;
+
+begin :: Preliminaries of Real Normed Space of Lp Integrable Functions
+
+reserve v,u for VECTOR of RLSp_LpFunct(M,k);
+
+theorem ThB10:
+f = v & g = u implies f+g = v+u
+proof
+   reconsider v2=v, u2=u as VECTOR of RLSp_PFunct(X) by TARSKI:def 3;
+   reconsider h = v2+u2 as Element of PFuncs(X,REAL);
+   reconsider v2,u2 as Element of PFuncs(X,REAL);
+   assume A1:f=v & g=u;
+A3:dom h= dom v2 /\ dom u2 &
+   for x being Element of X st x in dom h holds h.x = v2.x + u2.x
+      by LPSPACE1:6;
+   for x be set st x in dom h holds h.x = f.x + g.x by A1,LPSPACE1:6; then
+   h= f+g by VALUED_1:def 1,A1,A3;
+   hence thesis by LPSPACE1:4;
+end;
+
+theorem ThB11:
+f = u implies a(#)f = a*u
+proof
+   reconsider u2=u as VECTOR of RLSp_PFunct X by TARSKI:def 3;
+   reconsider h = a*u2 as Element of PFuncs(X,REAL);
+   assume A1:f=u; then
+A3:dom h = dom f by LPSPACE1:9; then
+   for x be set st x in dom h holds h.x = a*(f.x) by A1,LPSPACE1:9; then
+   h= a(#)f by VALUED_1:def 5,A3;
+   hence thesis by LPSPACE1:5;
+end;
+
+theorem ThB11Z:
+f=u implies
+  u + (-1)*u = (X --> 0)|dom f &
+  ex v,g be PartFunc of X,REAL st
+    v in Lp_Functions(M,k) & g in Lp_Functions(M,k) &
+    v = u + (-1)*u & g = X --> 0 & v a.e.= g,M
+proof
+   reconsider u2=u as VECTOR of RLSp_PFunct X by TARSKI:def 3;
+   reconsider h = u2+(-1)*u2 as Element of PFuncs(X,REAL);
+   assume A1: f=u;
+   (-1)*u =(-1)*u2 by LPSPACE1:5; then
+A2:u+(-1)*u =u2+(-1)*u2 by LPSPACE1:4;
+   hence u+(-1)*u = (X --> 0)|dom f by A1,LPSPACE1:16;
+   u+(-1)*u in Lp_Functions(M,k); then
+   consider v be PartFunc of X,REAL such that
+A4: v=u+(-1)*u &
+    ex ND be Element of S st M.ND`= 0 & dom v = ND & v is_measurable_on ND &
+    (abs v)to_power k is_integrable_on M;
+   u in Lp_Functions(M,k); then
+   ex uu1 be PartFunc of X,REAL st
+    uu1=u & ex ND be Element of S st M.ND`=0 & dom uu1 = ND &
+    uu1 is_measurable_on ND & (abs uu1) to_power k is_integrable_on M; then
+   consider ND be Element of S such that
+A6: M.ND`=0 & dom f = ND & f is_measurable_on ND &
+    (abs f) to_power k is_integrable_on M by A1;
+   set g = X-->0;
+A7:ND` is Element of S & (ND`)`= ND by MEASURE1:66;
+A8:g in Lp_Functions(M,k) by LmDef1Lp;
+   v|ND = g|ND|ND by A2,A4,A6,A1,LPSPACE1:16; then
+   v|ND = g|ND by FUNCT_1:82; then
+   v a.e.= g,M by LPSPACE1:def 10,A6,A7;
+   hence thesis by A4,A8;
+end;
+
+definition
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  func AlmostZeroLpFunctions(M,k) ->
+      non empty Subset of RLSp_LpFunct(M,k) equals
+        { f where f is PartFunc of X,REAL :
+            f in Lp_Functions(M,k) & f a.e.= X-->0,M };
+coherence
+proof
+A1:now let x be set;
+    assume x in { f where f is PartFunc of X,REAL: f in Lp_Functions(M,k) &
+               f a.e.= X-->0,M }; then
+    ex f be PartFunc of X,REAL st
+     x=f & f in Lp_Functions(M,k) & f a.e.= X-->0,M;
+    hence x in the carrier of RLSp_LpFunct(M,k);
+   end;
+A3:X-->0 a.e.= X-->0,M by LPSPACE1:28;
+   X-->0 in Lp_Functions(M,k) by LmDef1Lp; then
+   X-->0 in { f where f is PartFunc of X,REAL :
+           f in Lp_Functions (M,k) & f a.e.= X-->0,M } by A3;
+   hence thesis by A1,TARSKI:def 3;
+end;
+end;
+
+Th09:
+AlmostZeroLpFunctions(M,k) is add-closed &
+AlmostZeroLpFunctions(M,k) is multi-closed
+proof
+   set Z = AlmostZeroLpFunctions(M,k);
+   set V = RLSp_LpFunct(M,k);
+   now let v,u be VECTOR of V;
+    assume A2: v in Z & u in Z; then
+    consider v1 be PartFunc of X,REAL such that
+A3:  v1=v & v1 in Lp_Functions(M,k) & v1 a.e.= X-->0,M;
+    consider u1 be PartFunc of X,REAL such that
+A4:  u1=u & u1 in Lp_Functions(M,k) & u1 a.e.= X-->0,M by A2;
+A5: v+u=v1+u1 by ThB10,A3,A4;
+    (X-->0)+(X-->0)=X-->0 by LPSPACE1:33; then
+    v1+u1 in Lp_Functions(M,k) & v1+u1 a.e.=X-->0,M by A5,A3,A4,LPSPACE1:31;
+    hence v+u in Z by A5;
+   end;
+   hence Z is add-closed by IDEAL_1:def 1;
+   now let a be Real, u be VECTOR of V;
+    assume u in Z; then
+    consider u1 be PartFunc of X,REAL such that
+A10: u1=u & u1 in Lp_Functions(M,k) & u1 a.e.= X-->0,M;
+A11:a*u=a(#)u1 by ThB11,A10;
+    a(#)(X-->0)=X-->0 by LPSPACE1:33; then
+    a(#)u1 in Lp_Functions(M,k) & a(#)u1 a.e.=X-->0,M by A11,A10,LPSPACE1:32;
+    hence a*u in Z by A11;
+   end;
+   hence Z is multi-closed by LPSPACE1:def 1;
+end;
+
+registration
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  cluster AlmostZeroLpFunctions(M,k) -> add-closed multi-closed;
+  coherence by Th09;
+end;
+
+theorem Th09a:
+0.(RLSp_LpFunct(M,k)) = X-->0 &
+0.(RLSp_LpFunct(M,k)) in AlmostZeroLpFunctions(M,k)
+proof
+   thus 0.(RLSp_LpFunct(M,k)) = X --> 0 by LmDef1Lp,FUNCT_7:def 1;
+A2:X-->0 a.e.= X-->0,M & X --> 0 in Lp_Functions(M,k) by LPSPACE1:28,LmDef1Lp;
+   0.(RLSp_LpFunct(M,k)) = 0.(RLSp_PFunctX) by LmDef1Lp,FUNCT_7:def 1;
+   hence 0.(RLSp_LpFunct(M,k)) in AlmostZeroLpFunctions(M,k) by A2;
+end;
+
+definition
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  func RLSp_AlmostZeroLpFunct(M,k) -> non empty RLSStruct equals
+   RLSStruct (# AlmostZeroLpFunctions(M,k),
+                In(0.(RLSp_LpFunct(M,k)),AlmostZeroLpFunctions(M,k)),
+                add|(AlmostZeroLpFunctions(M,k),RLSp_LpFunct(M,k)),
+                Mult_(AlmostZeroLpFunctions(M,k)) #);
+  coherence;
+end;
+
+registration
+  let X be non empty set, S be SigmaField of X,
+      M be sigma_Measure of S, k be positive Real;
+  cluster RLSp_LpFunct(M,k) ->
+    strict Abelian add-associative right_zeroed RealLinearSpace-like;
+  coherence;
+end;
+
+reserve v,u for VECTOR of RLSp_AlmostZeroLpFunct(M,k);
+
+theorem
+f=v & g=u implies f+g=v+u
+proof
+   reconsider v2=v, u2=u as VECTOR of RLSp_LpFunct(M,k) by TARSKI:def 3;
+   assume A1: f=v & g=u;
+   v+u=v2+u2 by LPSPACE1:4;
+   hence v+u = f+g by ThB10,A1;
+end;
+
+theorem
+f=u implies a(#)f=a*u
+proof
+   reconsider u2=u as VECTOR of RLSp_LpFunct(M,k) by TARSKI:def 3;
+   assume A1: f=u;
+   a*u=a*u2 by LPSPACE1:5;
+   hence a*u = a(#)f by ThB11,A1;
+end;
+
+definition
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+      f be PartFunc of X,REAL, k be positive Real;
+  func a.e-eq-class_Lp(f,M,k) -> Subset of Lp_Functions(M,k) equals
+  {h where h is PartFunc of X,REAL : h in Lp_Functions(M,k) & f a.e.= h,M};
+correctness
+proof
+   now let x be set;
+    assume x in {g where g is PartFunc of X,REAL :
+                  g in Lp_Functions (M,k) & f a.e.= g,M }; then
+    ex g be PartFunc of X,REAL st x=g & g in Lp_Functions (M,k) & f a.e.= g,M;
+    hence x in Lp_Functions(M,k);
+   end;
+   hence thesis by TARSKI:def 3;
+end;
+end;
+
+theorem EQC00a:
+f in Lp_Functions(M,k) implies
+ ex E be Element of S st M.(E`) = 0 & dom f = E & f is_measurable_on E
+proof
+   assume f in Lp_Functions(M,k); then
+   ex f1 be PartFunc of X,REAL st
+    f = f1 &
+    (ex E be Element of S st M.(E`) = 0 & dom f1 = E &
+     f1 is_measurable_on E & (abs f1) to_power k is_integrable_on M);
+   hence thesis;
+end;
+
+theorem EQC00b:
+g in Lp_Functions(M,k) & g a.e.= f,M implies
+  g in a.e-eq-class_Lp(f,M,k)
+proof
+   assume that
+A2: g in Lp_Functions(M,k) and
+A3: g a.e.= f,M;
+   f a.e.= g,M by A3,LPSPACE1:29;
+   hence g in a.e-eq-class_Lp(f,M,k) by A2;
+end;
+
+theorem EQC00c:
+(ex E be Element of S st M.(E`)=0 & E = dom f & f is_measurable_on E) &
+g in a.e-eq-class_Lp(f,M,k) implies
+  g a.e.= f,M & f in Lp_Functions(M,k)
+proof
+   assume that
+A1: ex E be Element of S st M.(E`)=0 & E = dom f & f is_measurable_on E and
+A2: g in a.e-eq-class_Lp(f,M,k);
+A3:ex r be PartFunc of X,REAL st g=r & r in Lp_Functions (M,k) &
+     f a.e.= r,M by A2;
+   hence g a.e.= f,M by LPSPACE1:29;
+
+   g in Lp_Functions(M,k) by A2; then
+   consider g1 be PartFunc of X,REAL such that
+A4: g = g1 &
+    ex E be Element of S st M.(E`)=0 & dom g1 = E &
+     g1 is_measurable_on E & (abs g1) to_power k is_integrable_on M;
+   consider Eh be Element of S such that
+A5: M.(Eh`) = 0 & dom g = Eh &
+    g is_measurable_on Eh & (abs g) to_power k is_integrable_on M by A4;
+
+   reconsider ND = Eh` as Element of S by MEASURE1:66;
+
+   ex E be Element of S st M.E` = 0 & dom f = E &
+      f is_measurable_on E & (abs f) to_power k is_integrable_on M
+   proof
+    set AFK = (abs f) to_power k;
+    set AGK = (abs g) to_power k;
+
+    consider Ef be Element of S such that
+B1:  M.(Ef`)=0 & Ef = dom f & f is_measurable_on Ef by A1;
+    take Ef;
+
+    consider EE be Element of S such that
+B2:  M.EE = 0 & g|EE` = f|EE` by A3,LPSPACE1:def 10;
+
+    reconsider E1 = ND \/ EE as Element of S;
+
+    EE c= E1 by XBOOLE_1:7; then
+    E1` c= EE` by SUBSET_1:31; then
+B3: f|E1` = (f|EE`)|E1` & g|E1` = (g|EE`)|E1` by FUNCT_1:82;
+
+B4: dom(abs f) = Ef by B1,VALUED_1:def 11; then
+    dom AFK = Ef by MESFUN6C:def 6; then
+B5: dom max+(R_EAL AFK) = Ef & dom max-(R_EAL AFK) = Ef
+       by MESFUNC2:def 2,def 3;
+    abs f is_measurable_on Ef by B1,MESFUNC6:48; then
+    AFK is_measurable_on Ef by B4,MESFUN6C:29; then
+B6: Ef = dom(R_EAL AFK) & (R_EAL AFK) is_measurable_on Ef
+       by B4,MESFUN6C:def 6,MESFUNC6:def 6; then
+B7: max+(R_EAL AFK) is_measurable_on Ef &
+    max-(R_EAL AFK) is_measurable_on Ef by MESFUNC2:27,28;
+
+    (for x being Element of X holds 0. <= (max+(R_EAL AFK)).x) &
+    (for x being Element of X holds 0. <= (max-(R_EAL AFK)).x)
+       by MESFUNC2:14,15; then
+B8: max+(R_EAL AFK) is nonnegative &
+    max-(R_EAL AFK) is nonnegative by SUPINF_2:58;
+
+B9: Ef = (Ef /\ E1) \/ (Ef \ E1) by XBOOLE_1:51;
+
+    reconsider E0 = Ef /\ E1 as Element of S;
+    reconsider E2 = Ef \ E1 as Element of S;
+
+    max+(R_EAL AFK) = (max+(R_EAL AFK))|(dom(max+(R_EAL AFK))) &
+    max-(R_EAL AFK) = (max-(R_EAL AFK))|(dom(max-(R_EAL AFK)))
+       by RELAT_1:98; then
+B10:integral+(M,max+(R_EAL AFK)) = integral+(M,(max+(R_EAL AFK))|E0)
+        + integral+(M,(max+(R_EAL AFK))|E2) &
+    integral+(M,max-(R_EAL AFK)) = integral+(M,(max-(R_EAL AFK))|E0)
+        + integral+(M,(max-(R_EAL AFK))|E2)
+         by B5,B7,B8,B9,XBOOLE_1:89,MESFUNC5:87;
+
+B11:integral+(M,(max+(R_EAL AFK))|E0) >= 0 &
+    integral+(M,(max-(R_EAL AFK))|E0) >= 0 by B7,B8,B5,MESFUNC5:86;
+
+    ND is measure_zero of M & EE is measure_zero of M
+       by A5,B2,MEASURE1:def 13; then
+    E1 is measure_zero of M by MEASURE1:70; then
+    M.E1 = 0 by MEASURE1:def 13; then
+    integral+(M,(max+(R_EAL AFK))|E1) = 0 &
+    integral+(M,(max-(R_EAL AFK))|E1) = 0 by B5,B7,B8,MESFUNC5:88; then
+    integral+(M,(max+(R_EAL AFK))|E0) = 0 &
+    integral+(M,(max-(R_EAL AFK))|E0) = 0
+        by B5,B7,B8,B11,MESFUNC5:89,XBOOLE_1:17; then
+B12:integral+(M,max+(R_EAL AFK)) = integral+(M,(max+(R_EAL AFK))|E2) &
+    integral+(M,max-(R_EAL AFK)) = integral+(M,(max-(R_EAL AFK))|E2)
+        by B10,XXREAL_3:4;
+    Ef \ E1 = Ef /\ E1` by SUBSET_1:32; then
+B13:E2 c= E1` by XBOOLE_1:17; then
+    f|E2 = (g|E1`)|E2 by B2,B3,FUNCT_1:82; then
+B14:f|E2 = g|E2 by B13,FUNCT_1:82;
+B15:(abs f)|E2 = abs(f|E2) & (abs g)|E2 = abs(g|E2) by RFUNCT_1:62;
+B16:((abs f)|E2) to_power k = AFK|E2 &
+    ((abs g)|E2) to_power k = AGK|E2 by Lm001g;
+B17:max+(R_EAL AFK)|E2 = max+((R_EAL AFK)|E2) &
+    max+(R_EAL AGK)|E2 = max+((R_EAL AGK)|E2) &
+    max-(R_EAL AFK)|E2 = max-((R_EAL AFK)|E2) &
+    max-(R_EAL AGK)|E2 = max-((R_EAL AGK)|E2) by MESFUNC5:34;
+B18:R_EAL AGK is_integrable_on M by A5,MESFUNC6:def 9; then
+B19:integral+(M,max+(R_EAL AGK)) < +infty &
+    integral+(M,max-(R_EAL AGK)) < +infty by MESFUNC5:def 17;
+    integral+(M,max+((R_EAL AGK)|E2)) <= integral+(M,max+(R_EAL AGK)) &
+    integral+(M,max-((R_EAL AGK)|E2)) <= integral+(M,max-(R_EAL AGK))
+       by B18,MESFUNC5:103; then
+    integral+(M,max+(R_EAL AFK)) < +infty &
+    integral+(M,max-(R_EAL AFK)) < +infty
+       by B12,B14,B15,B16,B17,B19,XXREAL_0:2; then
+    (R_EAL((abs f) to_power k)) is_integrable_on M by B6,MESFUNC5:def 17;
+    hence thesis by B1,MESFUNC6:def 9;
+   end;
+   hence f in Lp_Functions(M,k);
+end;
+
+theorem EQC01:
+f in Lp_Functions(M,k) implies f in a.e-eq-class_Lp(f,M,k)
+proof
+   assume A1: f in Lp_Functions(M,k);
+   f a.e.= f,M by LPSPACE1:28;
+   hence thesis by A1;
+end;
+
+theorem EQC02a:
+(ex E be Element of S st M.(E`)=0 & E = dom g & g is_measurable_on E) &
+a.e-eq-class_Lp(f,M,k) <> {} &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k) implies
+  f a.e.= g,M
+proof
+   assume that
+A02:(ex E be Element of S st M.(E`)=0 & E = dom g & g is_measurable_on E) and
+A1: a.e-eq-class_Lp(f,M,k) <> {} and
+A2: a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k);
+   consider x be set such that
+A3: x in a.e-eq-class_Lp(f,M,k) by A1,XBOOLE_0:def 1;
+   consider r be PartFunc of X,REAL such that
+A4: x = r & r in Lp_Functions(M,k) & f a.e.= r,M by A3;
+   r a.e.= g,M by A02,A2,A3,A4,EQC00c;
+   hence thesis by A4,LPSPACE1:30;
+end;
+
+theorem
+f in Lp_Functions(M,k) &
+(ex E be Element of S st M.(E`)=0 & E = dom g & g is_measurable_on E) &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k)
+  implies f a.e.= g,M
+proof
+   assume that
+A1: f in Lp_Functions(M,k) and
+A2: (ex E be Element of S st M.(E`)=0 & E = dom g & g is_measurable_on E) and
+A3: a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k);
+   a.e-eq-class_Lp(f,M,k) is non empty by A1,EQC01;
+   hence thesis by A2,A3,EQC02a;
+end;
+
+theorem EQC02b:
+f a.e.= g,M implies a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k)
+proof
+   assume
+A2: f a.e.= g,M;
+   now let x be set;
+    assume x in a.e-eq-class_Lp(f,M,k); then
+    consider r be PartFunc of X,REAL such that
+A3:  x=r & r in Lp_Functions(M,k) & f a.e.= r,M;
+    r a.e.= f,M by A3,LPSPACE1:29; then
+    r a.e.= g,M by A2,LPSPACE1:30; then
+    g a.e.= r,M by LPSPACE1:29;
+    hence x in a.e-eq-class_Lp(g,M,k) by A3;
+   end; then
+A4:a.e-eq-class_Lp(f,M,k) c= a.e-eq-class_Lp(g,M,k) by TARSKI:def 3;
+   now let x be set;
+    assume x in a.e-eq-class_Lp(g,M,k); then
+    consider r be PartFunc of X,REAL such that
+A5:  x=r & r in Lp_Functions(M,k) & g a.e.= r,M;
+    r a.e.= g,M & g a.e.= f,M by A2,A5,LPSPACE1:29; then
+    r a.e.= f,M by LPSPACE1:30; then
+    f a.e.= r,M by LPSPACE1:29;
+    hence x in a.e-eq-class_Lp(f,M,k) by A5;
+   end; then
+   a.e-eq-class_Lp(g,M,k) c= a.e-eq-class_Lp(f,M,k) by TARSKI:def 3;
+   hence a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k) by A4,XBOOLE_0:def 10;
+end;
+
+theorem EQC02bx:
+f a.e.= g,M implies a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k)
+  by EQC02b;
+
+theorem
+f in Lp_Functions (M,k) & g in a.e-eq-class_Lp(f,M,k) implies
+  a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k)
+proof
+   assume that
+A1: f in Lp_Functions(M,k) and
+A2: g in a.e-eq-class_Lp(f,M,k);
+   ex E be Element of S st M.(E`) = 0 & dom f = E & f is_measurable_on E
+      by A1,EQC00a;
+   hence thesis by EQC02b,A2,EQC00c;
+end;
+
+theorem
+(ex E be Element of S st M.(E`)=0 & E = dom f & f is_measurable_on E) &
+(ex E be Element of S st M.(E`)=0 & E = dom f1 & f1 is_measurable_on E) &
+(ex E be Element of S st M.(E`)=0 & E = dom g & g is_measurable_on E) &
+(ex E be Element of S st M.(E`)=0 & E = dom g1 & g1 is_measurable_on E) &
+a.e-eq-class_Lp(f,M,k) is non empty &
+a.e-eq-class_Lp(g,M,k) is non empty &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(f1,M,k) &
+a.e-eq-class_Lp(g,M,k) = a.e-eq-class_Lp(g1,M,k)
+implies a.e-eq-class_Lp(f+g,M,k) = a.e-eq-class_Lp(f1+g1,M,k)
+proof
+   assume
+A1: (ex E be Element of S st M.(E`)=0 & E = dom f & f is_measurable_on E) &
+    (ex E be Element of S st M.(E`)=0 & E = dom f1 & f1 is_measurable_on E) &
+    (ex E be Element of S st M.(E`)=0 & E = dom g & g is_measurable_on E) &
+    (ex E be Element of S st M.(E`)=0 & E = dom g1 & g1 is_measurable_on E) &
+    a.e-eq-class_Lp(f,M,k) is non empty &
+    a.e-eq-class_Lp(g,M,k) is non empty &
+    a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(f1,M,k) &
+    a.e-eq-class_Lp(g,M,k) = a.e-eq-class_Lp(g1,M,k);
+   f a.e.= f1,M & g a.e.= g1,M by A1,EQC02a;
+   hence thesis by EQC02b,LPSPACE1:31;
+end;
+
+theorem EQC03b:
+f in Lp_Functions(M,k) & f1 in Lp_Functions(M,k) &
+g in Lp_Functions(M,k) & g1 in Lp_Functions(M,k) &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(f1,M,k) &
+a.e-eq-class_Lp(g,M,k) = a.e-eq-class_Lp(g1,M,k)
+  implies a.e-eq-class_Lp(f+g,M,k) = a.e-eq-class_Lp(f1+g1,M,k)
+proof
+   assume that
+A1:f in Lp_Functions(M,k) and
+A2:f1 in Lp_Functions(M,k) and
+A3:g in Lp_Functions(M,k) and
+A4:g1 in Lp_Functions(M,k) and
+A5:a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(f1,M,k) &
+   a.e-eq-class_Lp(g,M,k) = a.e-eq-class_Lp(g1,M,k);
+A8:(ex E be Element of S st M.(E`) = 0 & dom f1 = E & f1 is_measurable_on E) &
+   (ex E be Element of S st M.(E`) = 0 & dom g1 = E & g1 is_measurable_on E)
+     by A2,A4,EQC00a;
+   f in a.e-eq-class_Lp(f,M,k) &
+   g in a.e-eq-class_Lp(g,M,k) by A1,A3,EQC01; then
+   f a.e.= f1,M & g a.e.= g1,M by A5,A8,EQC00c;
+   hence thesis by EQC02b,LPSPACE1:31;
+end;
+
+theorem
+(ex E be Element of S st M.(E`) = 0 & dom f = E & f is_measurable_on E) &
+(ex E be Element of S st M.(E`) = 0 & dom g = E & g is_measurable_on E) &
+a.e-eq-class_Lp(f,M,k) is non empty &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k) implies
+  a.e-eq-class_Lp(a(#)f,M,k) = a.e-eq-class_Lp(a(#)g,M,k)
+proof
+   assume
+A1: (ex E be Element of S st M.(E`) = 0 & dom f = E & f is_measurable_on E) &
+    (ex E be Element of S st M.(E`) = 0 & dom g = E & g is_measurable_on E) &
+    a.e-eq-class_Lp(f,M,k) is non empty &
+    a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k);
+   a(#)f a.e.= a(#)g,M by A1,EQC02a,LPSPACE1:32;
+   hence thesis by EQC02b;
+end;
+
+theorem EQC04b:
+f in Lp_Functions(M,k) & g in Lp_Functions(M,k) &
+a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k) implies
+  a.e-eq-class_Lp(a(#)f,M,k) = a.e-eq-class_Lp(a(#)g,M,k)
+proof
+   assume A1: f in Lp_Functions (M,k) & g in Lp_Functions (M,k) &
+    a.e-eq-class_Lp(f,M,k) = a.e-eq-class_Lp(g,M,k); then
+A2:(ex E be Element of S st M.(E`) = 0 & dom f = E & f is_measurable_on E) &
+   (ex E be Element of S st M.(E`) = 0 & dom g = E & g is_measurable_on E)
+      by EQC00a;
+   f in a.e-eq-class_Lp(g,M,k) by A1,EQC01; then
+   f a.e.= g,M &
+   a(#)f in Lp_Functions(M,k) &
+   a(#)g in Lp_Functions(M,k) by A2,EQC00c,Th01bLp;
+   hence thesis by EQC02bx,LPSPACE1:32;
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+func CosetSet(M,k) -> non empty Subset-Family of Lp_Functions(M,k) equals
+    {a.e-eq-class_Lp(f,M,k) where f is PartFunc of X,REAL :
+      f in Lp_Functions(M,k)};
+correctness
+proof
+   set C = {a.e-eq-class_Lp(f,M,k) where f is PartFunc of X,REAL :
+             f in Lp_Functions(M,k)};
+A1:C c= bool Lp_Functions (M,k)
+   proof
+    let x be set;assume x in C; then
+    ex f be PartFunc of X,REAL st
+     a.e-eq-class_Lp(f,M,k) = x & f in Lp_Functions (M,k);
+    hence x in bool Lp_Functions (M,k);
+   end;
+   X-->0 in Lp_Functions (M,k) by LmDef1Lp; then
+   a.e-eq-class_Lp(X-->0,M,k) in C;
+   hence thesis by A1;
+end;
+end;
+
+definition
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+  k be positive Real;
+  func addCoset(M,k) -> BinOp of CosetSet(M,k) means :VSPDef3X:
+    for A,B be Element of CosetSet(M,k), a,b be PartFunc of X,REAL st
+      a in A & b in B holds it.(A,B) = a.e-eq-class_Lp(a+b,M,k);
+existence
+proof
+   set C = CosetSet(M,k);
+   defpred P[set,set,set] means
+    for a,b be PartFunc of X,REAL st a in  $1& b in $2 holds
+      $3 = a.e-eq-class_Lp(a+b,M,k);
+A1:now let A,B be Element of C;
+    A in C; then
+    consider a be PartFunc of X,REAL such that
+A2:  A=a.e-eq-class_Lp(a,M,k) & a in Lp_Functions(M,k);
+B2: ex E be Element of S st M.E` = 0 & dom a = E & a is_measurable_on E
+       by A2,EQC00a;
+    B in C; then
+    consider b be PartFunc of X,REAL such that
+A3:  B=a.e-eq-class_Lp(b,M,k) & b in Lp_Functions(M,k);
+B3: ex E be Element of S st M.E` = 0 & dom b = E & b is_measurable_on E
+       by A3,EQC00a;
+    set z = a.e-eq-class_Lp(a+b,M,k);
+    a+b in Lp_Functions(M,k) by Th01aLp,A2,A3; then
+    z in C; then
+    reconsider z as Element of C;
+    take z;
+    now let a1,b1 be PartFunc of X,REAL;
+     assume a1 in A & b1 in B; then
+     a1 a.e.= a,M & b1 a.e.= b,M by A2,B2,A3,B3,EQC00c;
+     hence z = a.e-eq-class_Lp(a1+b1,M,k) by EQC02bx,LPSPACE1:31;
+    end;
+    hence P[A,B,z];
+   end;
+   consider f be Function of [:C,C:],C such that
+A8: for A,B be Element of C holds P[A,B, f.(A,B)] from BINOP_1:sch 3(A1);
+   reconsider f as BinOp of C;
+   take f;
+   let A,B be Element of C;
+   let a,b be PartFunc of X,REAL;
+   assume a in A  & b in B;
+   hence f.(A,B) = a.e-eq-class_Lp(a+b,M,k) by A8;
+end;
+uniqueness
+proof
+   let f1,f2 be BinOp of CosetSet(M,k) such that
+A9: for A,B be Element of CosetSet(M,k), a,b be PartFunc of X,REAL st
+      a in A & b in B holds f1.(A,B) = a.e-eq-class_Lp(a+b,M,k) and
+A10:for A,B be Element of CosetSet(M,k), a,b be PartFunc of X,REAL st
+      a in A & b in B holds f2.(A,B) = a.e-eq-class_Lp(a+b,M,k);
+   now let A,B be Element of CosetSet(M,k);
+    A in CosetSet(M,k); then
+    consider a1 be PartFunc of X,REAL such that
+A11: A=a.e-eq-class_Lp(a1,M,k) & a1 in Lp_Functions(M,k);
+    B in CosetSet(M,k); then
+    consider b1 be PartFunc of X,REAL such that
+A12: B=a.e-eq-class_Lp(b1,M,k) & b1 in Lp_Functions(M,k);
+A13:a1 in A & b1 in B by A11,A12,EQC01; then
+    f1.(A,B) = a.e-eq-class_Lp(a1+b1,M,k) by A9;
+    hence f1.(A,B) = f2.(A,B) by A10,A13;
+   end;
+   hence thesis by BINOP_1:2;
+end;
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+func zeroCoset(M,k) -> Element of CosetSet(M,k) equals
+      a.e-eq-class_Lp(X-->0,M,k);
+correctness
+proof
+   X-->0 in Lp_Functions(M,k) by LmDef1Lp; then
+   a.e-eq-class_Lp(X-->0,M,k) in CosetSet(M,k);
+   hence thesis;
+end;
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+func lmultCoset(M,k) -> Function of [:REAL,CosetSet(M,k):],CosetSet(M,k) means
+ :VSPDef5X:
+  for z be Element of REAL, A be Element of CosetSet(M,k),
+      f be PartFunc of X,REAL st
+   f in A holds it.(z,A) = a.e-eq-class_Lp(z(#)f,M,k);
+existence
+proof
+   set C = CosetSet(M,k);
+   defpred P[Element of REAL,set,set] means
+     for f be PartFunc of X,REAL st f in $2 holds
+      $3 = a.e-eq-class_Lp($1(#)f,M,k);
+A1:now let z be Element of REAL, A be Element of C;
+    A in C; then
+    consider a be PartFunc of X,REAL such that
+A2:  A = a.e-eq-class_Lp(a,M,k) & a in Lp_Functions(M,k);
+B2: ex E be Element of S st M.E`=0 & E = dom a & a is_measurable_on E
+       by A2,EQC00a;
+    set c = a.e-eq-class_Lp(z(#)a,M,k);
+    z(#)a in Lp_Functions(M,k) by Th01bLp,A2; then
+    c in C; then
+    reconsider c as Element of C;
+    take c;
+    now let a1 be PartFunc of X,REAL;
+     assume a1 in A; then
+     z(#)a1 a.e.= z(#)a,M by LPSPACE1:32,A2,B2,EQC00c;
+     hence c = a.e-eq-class_Lp(z(#)a1,M,k) by EQC02bx;
+    end;
+    hence P[z,A,c];
+   end;
+   consider f be Function of [:REAL,C:],C such that
+A7: for z be Element of REAL, A be Element of C holds P[z,A, f.(z,A)]
+      from BINOP_1:sch 3(A1);
+   take f;
+   let z be Element of REAL, A be Element of C, a be PartFunc of X,REAL;
+   assume a in A;
+   hence f.(z,A) = a.e-eq-class_Lp(z(#)a,M,k) by A7;
+end;
+uniqueness
+proof
+   set C = CosetSet(M,k);
+   let f1,f2 be Function of [:REAL,C:],C such that
+A8: for z be Element of REAL, A be Element of CosetSet(M,k),
+     a be PartFunc of X,REAL st a in A holds
+     f1.(z,A) = a.e-eq-class_Lp(z(#)a,M,k) and
+A9: for z be Element of REAL, A be Element of CosetSet(M,k),
+     a be PartFunc of X,REAL st a in A holds
+     f2.(z,A) = a.e-eq-class_Lp(z(#)a,M,k);
+   now let z be Element of REAL, A be Element of CosetSet(M,k);
+    A in C; then
+    consider a1 be PartFunc of X,REAL such that
+A10: A=a.e-eq-class_Lp(a1,M,k) & a1 in Lp_Functions(M,k);
+    thus f1.(z,A) = a.e-eq-class_Lp(z(#)a1,M,k) by A8,A10,EQC01
+                 .= f2.(z,A) by A9,A10,EQC01;
+   end;
+   hence thesis by BINOP_1:2;
+end;
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+ func Pre-Lp-Space(M,k) -> strict RLSStruct means :VSPDef6X:
+  the carrier of it = CosetSet(M,k) &
+  the addF of it = addCoset(M,k) &
+  0.it = zeroCoset(M,k) &
+  the Mult of it = lmultCoset(M,k);
+existence
+proof
+   take
+   RLSStruct(# CosetSet(M,k),zeroCoset(M,k),addCoset(M,k),lmultCoset(M,k) #);
+   thus thesis;
+end;
+uniqueness;
+end;
+
+registration let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+  cluster Pre-Lp-Space(M,k) -> non empty;
+coherence
+proof
+  the carrier of Pre-Lp-Space(M,k) = CosetSet(M,k) by VSPDef6X;
+  hence thesis;
+end;
+end;
+
+registration let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+  cluster Pre-Lp-Space(M,k) -> Abelian add-associative right_zeroed
+   right_complementable RealLinearSpace-like;
+coherence
+proof
+   set C = CosetSet(M,k), aC = addCoset(M,k), zC = zeroCoset(M,k),
+      lC = lmultCoset(M,k), AA = RLSStruct(# C,zC,aC,lC #);
+   set A = Pre-Lp-Space(M,k);
+A0: the carrier of A = CosetSet(M,k) &
+   the addF of A = addCoset(M,k) &
+   0.A = zeroCoset(M,k) &
+   the Mult of A = lmultCoset(M,k) by VSPDef6X;
+   thus A is Abelian
+   proof
+    let A1,A2 be Element of A;
+    A1 in C by A0; then
+    consider a be PartFunc of X,REAL such that
+A2:  A1 = a.e-eq-class_Lp(a,M,k) & a in Lp_Functions(M,k);
+    A2 in C by A0; then
+    consider b be PartFunc of X,REAL such that
+A4:  A2 = a.e-eq-class_Lp(b,M,k) & b in Lp_Functions(M,k);
+A3: a in A1 & b in A2 by A2,A4,EQC01; then
+    A1+A2 = a.e-eq-class_Lp(a+b,M,k) by A0,VSPDef3X;
+    hence A1+A2 = A2+A1 by A0,A3,VSPDef3X;
+   end;
+   thus A is add-associative
+   proof
+    let A1,A2,A3 be Element of A;
+    A1 in C by A0; then
+    consider a be PartFunc of X,REAL such that
+A7:  A1=a.e-eq-class_Lp(a,M,k) & a in Lp_Functions(M,k);
+    A2 in C by A0; then
+    consider b be PartFunc of X,REAL such that
+A9:  A2=a.e-eq-class_Lp(b,M,k) & b in Lp_Functions(M,k);
+    A3 in C by A0; then
+    consider c be PartFunc of X,REAL such that
+A11: A3=a.e-eq-class_Lp(c,M,k) & c in Lp_Functions(M,k);
+A8: a in A1 & b in A2 & c in A3 by A7,A9,A11,EQC01; then
+    aC.(A1,A2) =a.e-eq-class_Lp(a+b,M,k) &
+    aC.(A2,A3) =a.e-eq-class_Lp(b+c,M,k) by A0,VSPDef3X; then
+A15:a+b in A1+A2 & b+c in A2+A3 by A0,EQC01,Th01aLp,A7,A9,A11;
+    reconsider a1=a,b1=b,c1=c as VECTOR of RLSp_LpFunct(M,k) by A7,A9,A11;
+A17:a+b = a1+b1 & b+c = b1+c1 by ThB10; then
+    a+(b+c) =a1+(b1+c1) by ThB10; then
+    a+(b+c) =(a1+b1)+c1 by RLVECT_1:def 6; then
+    a+(b+c) = a+b+c by A17,ThB10; then
+    A1+A2+A3 = a.e-eq-class_Lp(a+(b+c),M,k) by A8,A15,VSPDef3X,A0;
+    hence A1+A2+A3 = A1+(A2+A3) by A8,A15,VSPDef3X,A0;
+   end;
+   thus A is right_zeroed
+   proof
+    let A1 be Element of A;
+    A1 in C by A0; then
+    consider a be PartFunc of X,REAL such that
+A20: A1=a.e-eq-class_Lp(a,M,k) & a in Lp_Functions(M,k);
+A21:a in A1 by A20,EQC01;
+    reconsider a1=a as VECTOR of RLSp_LpFunct(M,k) by A20;
+    set z = X-->0;
+A23:z in 0.A by A0,EQC01,LmDef1Lp;
+    reconsider a1=a,z1=z as VECTOR of RLSp_LpFunct(M,k) by A20,LmDef1Lp;
+    a+z =a1+z1 by ThB10
+       .=a1+0.RLSp_LpFunct(M,k) by Th09a
+       .=a by RLVECT_1:def 7;
+    hence A1+0.A = A1 by A0,A20,A21,A23,VSPDef3X;
+   end;
+   thus A is right_complementable
+   proof
+    let A1 be Element of A;
+    A1 in C by A0; then
+    consider a be PartFunc of X,REAL such that
+A26: A1=a.e-eq-class_Lp(a,M,k) & a in Lp_Functions(M,k);
+A27:a in A1 by A26,EQC01;
+    reconsider a1=a as VECTOR of RLSp_LpFunct(M,k) by A26;
+A28:(-1)(#)a in Lp_Functions (M,k) by A26,Th01bLp;
+    set A2 = a.e-eq-class_Lp((-1)(#)a,M,k);
+    A2 in C by A28; then
+    reconsider A2 as Element of A by A0;
+    take A2;
+A29:(-1)(#)a in A2 by EQC01,A26,Th01bLp;
+    consider v,g be PartFunc of X,REAL such that
+A30: v in Lp_Functions (M,k) & g in Lp_Functions (M,k) &
+     v = a1+(-1)*a1 & g = X --> 0 & v a.e.= g,M by ThB11Z;
+    (-1)(#)a = (-1)*a1 by ThB11; then
+    a+(-1)(#)a a.e.= g,M by ThB10,A30; then
+    0.A = a.e-eq-class_Lp(a+ (-1)(#)a,M,k) by EQC02bx,A30,A0;
+    hence A1 + A2 = 0.A by A27,A29,VSPDef3X,A0;
+   end;
+   now let x0,y0 be real number, A1,A2 be Element of A;
+   reconsider x=x0,y=y0 as Real by XREAL_0:def 1;
+   A1 in C by A0; then
+   consider a be PartFunc of X,REAL such that
+A35: A1=a.e-eq-class_Lp(a,M,k) & a in Lp_Functions(M,k);
+   A2 in C by A0; then
+   consider b be PartFunc of X,REAL such that
+A37: A2=a.e-eq-class_Lp(b,M,k) & b in Lp_Functions(M,k);
+A36:a in A1 & b in A2 by A35,A37,EQC01; then
+   aC.(A1,A2) =a.e-eq-class_Lp(a+b,M,k) by A0,VSPDef3X; then
+A40:a+b in (A1+A2) by EQC01,Th01aLp,A35,A37,A0;
+   reconsider a1=a,b1=b as VECTOR of RLSp_LpFunct (M,k) by A35,A37;
+A42:y(#)a = y*a1 & x(#)a = x*a1 & x(#)b = x*b1 &
+    (x+y)(#)a = (x+y)*a1 & 1(#)a =1*a1 by ThB11;
+   a+b = a1+b1 by ThB10; then
+   x(#)(a+b) = x*(a1+b1) by ThB11; then
+   x(#)(a+b) = x*a1+x*b1 by RLVECT_1:def 9; then
+A45:x(#)(a+b) = x(#)a + x(#)b by A42,ThB10;
+   (x+y)(#)a = x*a1+y*a1 by A42,RLVECT_1:def 9; then
+A46:(x+y)(#)a = x(#)a + y(#)a by A42,ThB10;
+   x(#)(y(#)a) =x*(y*a1) by A42,ThB11 .= (x*y)*a1 by RLVECT_1:def 9; then
+A48:x(#)(y(#)a) = (x*y)(#)a by ThB11;
+   lC.(x,A1) =a.e-eq-class_Lp(x(#)a,M,k) &
+   lC.(x,A2) =a.e-eq-class_Lp(x(#)b,M,k) &
+   lC.(y,A1) =a.e-eq-class_Lp(y(#)a,M,k) by A0,A36,VSPDef5X; then
+A49:x(#)a in x*A1 & x(#)b in x*A2 & y(#)a in y*A1 by A0,EQC01,Th01bLp,A35,A37;
+   x*(A1+A2) = a.e-eq-class_Lp(x(#)a+x(#)b,M,k) by A0,A45,A40,VSPDef5X;
+   hence x0*(A1+A2) = x0*A1+x0*A2 by A0,A49,VSPDef3X;
+   (x+y)*A1 = a.e-eq-class_Lp(x(#)a+y(#)a,M,k) by A0,A46,A36,VSPDef5X;
+   hence (x0+y0)*A1 = x0*A1+y0*A1 by A49,VSPDef3X,A0;
+   (x0*y0)*A1 = a.e-eq-class_Lp(x(#)(y(#)a),M,k) by A0,A48,A36,VSPDef5X;
+   hence (x0*y0)*A1 =x0*(y0*A1) by A49,VSPDef5X,A0;
+   1(#)a = a by A42,RLVECT_1:def 9;
+   hence 1*A1 = A1 by A35,A36,VSPDef5X,A0;
+   end;
+   hence thesis by RLVECT_1:def 9;
+end;
+end;
+
+begin :: Real Normed Space of Lp Integrable Functions
+
+theorem Th14:
+f in Lp_Functions(M,k) & g in Lp_Functions(M,k) & f a.e.= g,M implies
+  Integral(M,(abs f) to_power k) = Integral(M,(abs g) to_power k)
+proof
+   set t = (abs f) to_power k;
+   set s = (abs g) to_power k;
+   assume
+A1: f in Lp_Functions (M,k) & g in Lp_Functions (M,k) & f a.e.= g,M;
+   ex f1 be PartFunc of X,REAL st
+    f=f1 & ex E be Element of S st M.E` =0 & dom f1 = E &
+    f1 is_measurable_on E & (abs f1) to_power k is_integrable_on M by A1; then
+   consider Df be Element of S such that
+A2: M.Df`=0 & dom f = Df & f is_measurable_on Df & t is_integrable_on M;
+   ex g1 be PartFunc of X,REAL st
+    g=g1 & ex E be Element of S st M.E` =0 & dom g1 = E &
+    g1 is_measurable_on E & (abs g1) to_power k is_integrable_on M by A1; then
+   consider Dg be Element of S such that
+A3: M.Dg`=0 & dom g = Dg & g is_measurable_on Dg & s is_integrable_on M;
+A4:dom(abs f) = dom f & dom(abs g) = dom g by VALUED_1:def 11;
+   consider E1 being Element of S such that
+A5: M.E1 = 0 & f|E1` = g|E1` by A1,LPSPACE1:def 10;
+   reconsider NDf = Df`, NDg = Dg` as Element of S by MEASURE1:66;
+   set Ef = Df \ (NDg \/ E1);
+   set Eg = Dg \ (NDf \/ E1);
+   set E2 = NDf \/ NDg \/ E1;
+
+   NDf is measure_zero of M & NDg is measure_zero of M &
+   E1 is measure_zero of M by A2,A3,A5,MEASURE1:def 13; then
+   NDf \/ E1 is measure_zero of M & NDg \/ E1 is measure_zero of M
+         by MEASURE1:70; then
+A6:M.(NDf \/ E1) = 0 & M.(NDg \/ E1) = 0 by MEASURE1:def 13;
+
+   X \ NDf = X /\ Df & X \ NDg = X /\ Dg by XBOOLE_1:48; then
+A7:X \ NDf = Df & X \ NDg = Dg by XBOOLE_1:28;
+
+   Ef = (Df \ NDg) \ E1 & Eg = (Dg \ NDf) \ E1 by XBOOLE_1:41; then
+A8:Ef = (X \ (NDf \/ NDg)) \ E1 & Eg = (X \ (NDf \/ NDg)) \ E1
+        by A7,XBOOLE_1:41; then
+A9:Ef = X \ E2 & Eg = X \ E2 by XBOOLE_1:41;
+
+   (abs f) is_measurable_on Df & (abs g) is_measurable_on Dg
+     by A2,A3,MESFUNC6:48; then
+B1:t is_measurable_on Df & s is_measurable_on Dg
+       by A2,A3,A4,MESFUN6C:29;
+
+B2:dom t = Df & dom s = Dg by A2,A3,A4,MESFUN6C:def 6; then
+B3:Integral(M,t|Ef) = Integral(M,t) &
+   Integral(M,s|Eg) = Integral(M,s) by A6,B1,MESFUNC6:89;
+
+   dom(t|Ef) = dom t /\ Ef & dom(s|Ef) = dom s /\ Ef by RELAT_1:90; then
+B4:dom(t|Ef) = (Df /\ Df) \ (NDg \/ E1) &
+   dom(s|Ef) = (Dg /\ Dg) \ (NDf \/ E1) by B2,A8,XBOOLE_1:49;
+
+   now let x be Element of X;
+    assume B5: x in dom(t|Ef);
+
+B6: dom(t|Ef) c= dom t & dom(s|Ef) c= dom s by RELAT_1:89;
+
+    E2` c= E1` by XBOOLE_1:7,34; then
+B7: f.x =(f|E1`).x & g.x = (g|E1`).x by B5,B4,A9,FUNCT_1:72;
+
+    (t|Ef).x = t.x & (s|Ef).x = s.x by B5,B4,FUNCT_1:72; then
+    (t|Ef).x = ((abs f).x) to_power k &
+    (s|Ef).x = ((abs g).x) to_power k by A8,B4,B5,B6,MESFUN6C:def 6; then
+    (t|Ef).x = (abs(f.x)) to_power k & (s|Ef).x = (abs(g.x)) to_power k
+       by VALUED_1:18;
+    hence (t|Ef).x = (s|Ef).x by A5,B7;
+   end;
+   hence thesis by B3,B4,A8,PARTFUN1:34;
+end;
+
+theorem Lm15:
+f in Lp_Functions(M,k) implies
+  Integral(M,(abs f) to_power k) in REAL & 0 <= Integral(M,(abs f) to_power k)
+proof
+   assume f in Lp_Functions(M,k); then
+A2:ex f1 be PartFunc of X,REAL st
+    f=f1 & ex ND be Element of S st M.ND` =0 & dom f1 = ND &
+    f1 is_measurable_on ND & (abs f1) to_power k is_integrable_on M; then
+   -infty < Integral(M,(abs f) to_power k) &
+   Integral(M,(abs f) to_power k) < +infty by MESFUNC6:90;
+   hence Integral(M,(abs f) to_power k) in REAL by XXREAL_0:14;
+
+   R_EAL((abs f) to_power k) is_integrable_on M by A2,MESFUNC6:def 9; then
+   consider A be Element of S such that
+A3: A = dom(R_EAL((abs f) to_power k)) &
+    R_EAL((abs f) to_power k) is_measurable_on A by MESFUNC5:def 17;
+    A = dom((abs f) to_power k) &
+   (abs f) to_power k is_measurable_on A by MESFUNC6:def 6,A3;
+   hence thesis by MESFUNC6:84;
+end;
+
+theorem Lm10:
+(ex x be VECTOR of Pre-Lp-Space(M,k) st f in x & g in x) implies
+  f a.e.= g,M & f in Lp_Functions(M,k) & g in Lp_Functions(M,k)
+proof
+   assume ex x be VECTOR of Pre-Lp-Space(M,k) st f in x & g in x; then
+   consider x be VECTOR of Pre-Lp-Space(M,k) such that
+A1: f in x & g in x;
+   x in the carrier of Pre-Lp-Space(M,k); then
+   x in CosetSet(M,k) by VSPDef6X; then
+   consider h be PartFunc of X,REAL such that
+A2: x=a.e-eq-class_Lp(h,M,k) & h in Lp_Functions(M,k);
+   (ex i be PartFunc of X,REAL st f=i & i in Lp_Functions(M,k) & h a.e.= i,M) &
+   (ex j be PartFunc of X,REAL st g=j & j in Lp_Functions(M,k) & h a.e.= j,M)
+     by A1,A2; then
+   f a.e.= h,M & h a.e.= g,M by LPSPACE1:29;
+   hence thesis by A1,A2,LPSPACE1:30;
+end;
+
+theorem Th15:
+for k be positive Real holds
+ ex NORM be Function of the carrier of Pre-Lp-Space(M,k),REAL st
+  for x be Point of Pre-Lp-Space(M,k)
+   ex f be PartFunc of X,REAL st
+     f in x &
+     ex r be Real st
+       r = Integral(M,(abs f) to_power k) & NORM.x = r to_power(1/k)
+proof
+   let k be positive Real;
+   defpred P[set,set] means
+     ex f be PartFunc of X,REAL st
+      f in $1 &
+      ex r be Real st
+       r = Integral(M,(abs f) to_power k) & $2 = r to_power (1/k);
+A1:for x be Point of Pre-Lp-Space(M,k)
+     ex y being Element of REAL st P[x,y]
+   proof
+    let x be Point of Pre-Lp-Space(M,k);
+    x in the carrier of Pre-Lp-Space(M,k); then
+    x in CosetSet(M,k) by VSPDef6X; then
+    consider f be PartFunc of X,REAL such that
+A2:  x=a.e-eq-class_Lp(f,M,k) & f in Lp_Functions(M,k);
+
+    reconsider r1 = Integral(M,(abs f) to_power k)
+      as Element of REAL by A2,Lm15;
+    r1 to_power (1/k) in REAL;
+    hence thesis by A2,EQC01;
+   end;
+   consider F being Function of the carrier of Pre-Lp-Space(M,k),REAL such that
+A5: for x being Point of Pre-Lp-Space (M,k) holds P[x,F.x]
+       from FUNCT_2:sch 3(A1);
+   take F;
+   thus thesis by A5;
+end;
+
+reserve x for Point of Pre-Lp-Space(M,k);
+
+theorem Lm16:
+f in x implies
+  (abs f) to_power k is_integrable_on M & f in Lp_Functions(M,k)
+proof
+   assume A1: f in x;
+   x in the carrier of Pre-Lp-Space(M,k); then
+   x in CosetSet(M,k) by VSPDef6X; then
+   consider h be PartFunc of X,REAL such that
+A2: x=a.e-eq-class_Lp(h,M,k) & h in Lp_Functions(M,k);
+   ex g be PartFunc of X,REAL st
+    f=g & g in Lp_Functions (M,k) & h a.e.= g,M by A1,A2; then
+   ex f0 be PartFunc of X,REAL st
+    f=f0 & ex ND be Element of S st M.ND` =0 & dom f0 = ND  &
+    f0 is_measurable_on ND & (abs f0) to_power k is_integrable_on M;
+   hence thesis;
+end;
+
+theorem Lm17:
+f in x & g in x implies
+  f a.e.= g,M &
+  Integral(M,(abs f) to_power k) = Integral(M,(abs g) to_power k)
+proof
+   assume f in x & g in x; then
+   f a.e.= g,M & f in Lp_Functions(M,k) & g in Lp_Functions(M,k) by Lm10;
+   hence thesis by Th14;
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+ func Lp-Norm(M,k) -> Function of the carrier of Pre-Lp-Space (M,k),REAL means
+   :DefLpNORM:
+  for x be Point of Pre-Lp-Space(M,k)
+    ex f be PartFunc of X,REAL st
+      f in x &
+      ex r be Real st
+        r = Integral(M,(abs f) to_power k) & it.x = r to_power (1/k);
+existence by Th15;
+uniqueness
+proof
+   let N1,N2 be Function of the carrier of Pre-Lp-Space (M,k),REAL;
+   assume
+A1: (for x be Point of Pre-Lp-Space(M,k) ex f be PartFunc of X,REAL st
+       f in x & ex r1 be Real st r1 = Integral(M,(abs f) to_power k) &
+       N1.x = r1 to_power (1/k)) &
+    (for x be Point of Pre-Lp-Space(M,k) ex g be PartFunc of X,REAL st
+       g in x & ex r2 be Real st r2 = Integral(M,(abs g) to_power k) &
+       N2.x = r2 to_power (1/k));
+
+   now let x be Point of Pre-Lp-Space(M,k);
+    (ex f be PartFunc of X,REAL st f in x & ex r1 be Real st
+     r1 = Integral(M,(abs f) to_power k) & N1.x = r1 to_power (1/k)) &
+    (ex g be PartFunc of X,REAL st g in x & ex r2 be Real st
+     r2 = Integral(M,(abs g) to_power k) & N2.x = r2 to_power (1/k)) by A1;
+    hence N1.x=N2.x by Lm17;
+   end;
+   hence N1=N2 by FUNCT_2:113;
+end;
+end;
+
+definition let X be non empty set, S be SigmaField of X,
+               M be sigma_Measure of S, k be positive Real;
+ func Lp-Space(M,k) -> non empty NORMSTR equals
+    NORMSTR (# the carrier of Pre-Lp-Space(M,k),
+               the ZeroF of Pre-Lp-Space(M,k),
+               the addF of Pre-Lp-Space(M,k),
+               the Mult of Pre-Lp-Space(M,k),
+               Lp-Norm(M,k) #);
+  coherence;
+end;
+
+reserve x,y for Point of Lp-Space(M,k);
+
+theorem Lm17x:
+(ex f be PartFunc of X,REAL st
+   f in Lp_Functions(M,k) & x= a.e-eq-class_Lp(f,M,k)) &
+for f be PartFunc of X,REAL st f in x holds
+  ex r be Real st
+    0<=r & r = Integral(M,(abs f) to_power k) & ||.x.|| =r to_power (1/k)
+proof
+   x in the carrier of Pre-Lp-Space(M,k); then
+   x in CosetSet(M,k) by VSPDef6X; then
+   ex g be PartFunc of X,REAL st
+    x=a.e-eq-class_Lp(g,M,k) & g in Lp_Functions(M,k);
+   hence ex f be PartFunc of X,REAL st f in Lp_Functions(M,k) &
+    x= a.e-eq-class_Lp(f,M,k);
+   consider f be PartFunc of X,REAL such that
+A1: f in x & ex r be Real st r = Integral(M,(abs f) to_power k) &
+    (Lp-Norm(M,k)).x = r to_power (1/k) by DefLpNORM;
+   hereby let g be PartFunc of X,REAL;
+    assume K1: g in x; then
+K2: g in Lp_Functions(M,k) by Lm10;
+    Integral(M,(abs g) to_power k) = Integral(M,(abs f) to_power k)
+      by A1,Lm17,K1;
+    hence ex r be Real st
+           0 <= r & r = Integral(M,(abs g) to_power k) &
+           ||.x.|| =r to_power (1/k) by A1,K2,Lm15;
+   end;
+end;
+
+theorem Lm17Y:
+(f in x & g in y implies f+g in x+y) &
+(f in x implies a(#)f in a*x)
+proof
+   set C = CosetSet(M,k);
+   hereby assume A2: f in x & g in y;
+    x in the carrier of Pre-Lp-Space(M,k); then
+A3: x in C by VSPDef6X; then
+    consider a be PartFunc of X,REAL such that
+A4:  x=a.e-eq-class_Lp(a,M,k) & a in Lp_Functions(M,k);
+A5: a in x by A4,EQC01;
+    y in the carrier of Pre-Lp-Space(M,k); then
+A6: y in C by VSPDef6X; then
+    consider b be PartFunc of X,REAL such that
+A7:  y=a.e-eq-class_Lp(b,M,k) & b in Lp_Functions(M,k);
+    b in y by A7,EQC01; then
+    (addCoset(M,k)).(x,y) = a.e-eq-class_Lp(a+b,M,k) by A3,A6,A5,VSPDef3X;
+    then
+A9: x+y = a.e-eq-class_Lp(a+b,M,k) by VSPDef6X;
+    ex r be PartFunc of X,REAL st f=r & r in Lp_Functions(M,k) &
+      a a.e.= r,M by A2,A4; then
+A11:a.e-eq-class_Lp(a,M,k) = a.e-eq-class_Lp(f,M,k) by EQC02bx;
+    ex r be PartFunc of X,REAL st g=r & r in Lp_Functions (M,k) &
+      b a.e.= r,M by A2,A7; then
+    a.e-eq-class_Lp(b,M,k) = a.e-eq-class_Lp(g,M,k) by EQC02bx; then
+    a.e-eq-class_Lp(a+b,M,k) = a.e-eq-class_Lp(f+g,M,k) by A2,A4,A7,A11,EQC03b;
+    hence f+g in x+y by EQC01,A9,Th01aLp,A4,A2,A7;
+   end;
+   hereby assume A15:f in x;
+    x in the carrier of Pre-Lp-Space (M,k); then
+A16:x in C by VSPDef6X; then
+    consider f1 be PartFunc of X,REAL such that
+A17: x=a.e-eq-class_Lp(f1,M,k) & f1 in Lp_Functions (M,k);
+    f1 in x by A17,EQC01; then
+    (lmultCoset(M,k)).(a,x) = a.e-eq-class_Lp(a(#)f1,M,k) by A16,VSPDef5X;
+    then
+A19:a*x = a.e-eq-class_Lp(a(#)f1,M,k) by VSPDef6X;
+    ex r be PartFunc of X,REAL st f=r & r in Lp_Functions (M,k) &
+      f1 a.e.= r,M by A15,A17; then
+    a.e-eq-class_Lp(f1,M,k) = a.e-eq-class_Lp(f,M,k) by EQC02bx; then
+    a.e-eq-class_Lp(a(#)f1,M,k) = a.e-eq-class_Lp(a(#)f,M,k) by A17,A15,EQC04b;
+    hence a(#)f in a*x by A19,Th01bLp,A15,A17,EQC01;
+   end;
+end;
+
+theorem Lm17z:
+f in x implies
+  x= a.e-eq-class_Lp(f,M,k) &
+  ( ex r be Real st
+     0 <=r & r = Integral(M,(abs f) to_power k) & ||.x.|| = r to_power (1/k) )
+proof
+   assume A1:f in x;
+   x in the carrier of Pre-Lp-Space(M,k); then
+   x in CosetSet(M,k) by VSPDef6X; then
+   consider g be PartFunc of X,REAL such that
+A2: x=a.e-eq-class_Lp(g,M,k) & g in Lp_Functions(M,k);
+   g in x by A2,EQC01; then
+   f a.e.= g,M & f in Lp_Functions(M,k) & g in Lp_Functions(M,k) by A1,Lm10;
+   hence thesis by Lm17x,A1,A2,EQC02bx;
+end;
+
+theorem LmDef1:
+X --> 0 in L1_Functions M
+proof
+   reconsider ND = {} as Element of S by MEASURE1:66;
+A1:M.ND =0 by VALUED_0:def 19;
+   X --> 0 is Function of X,REAL by FUNCOP_1:58; then
+A2:dom (X --> 0) = ND` by FUNCT_2:def 1;
+   for x be Element of X st x in dom (X --> 0) holds (X --> 0).x = 0
+     by FUNCOP_1:13; then
+   X --> 0 is_integrable_on M by A2,Lm2;
+   hence thesis by A1,A2;
+end;
+
+theorem Lm261:
+f in Lp_Functions(M,k) & Integral(M,(abs f) to_power k) = 0 implies
+   f a.e.= X-->0,M
+proof
+   assume that
+AS1: f in Lp_Functions(M,k) and
+AS2: Integral(M,(abs f) to_power k) = 0;
+
+   ex h be PartFunc of X,REAL st
+    f=h & ex ND be Element of S st M.ND` =0 & dom h = ND &
+    h is_measurable_on ND & (abs h) to_power k is_integrable_on M by AS1; then
+   consider NDf be Element of S such that
+A3: M.NDf`=0 & dom f = NDf & f is_measurable_on NDf &
+    (abs f) to_power k is_integrable_on M;
+
+   reconsider t = (abs f) to_power k as PartFunc of X,REAL;
+   reconsider ND = NDf` as Element of S by MEASURE1:66;
+
+A4:dom t = dom (abs f) by MESFUN6C:def 6; then
+A5:dom t = NDf by A3,VALUED_1:def 11;
+   dom t = ND` by A4,A3,VALUED_1:def 11; then
+A6:t in L1_Functions M by A3;
+   abs t = t by Lm002b; then
+   t a.e.= X-->0,M by AS2,A6,LPSPACE1:54; then
+   consider ND1 be Element of S such that
+A7: M.ND1 = 0 & (abs f) to_power k|ND1` = (X-->0)|ND1` by LPSPACE1:def 10;
+
+   set ND2= ND \/ ND1;
+
+   ND is measure_zero of M & ND1 is measure_zero of M
+     by A3,A7,MEASURE1:def 13; then
+   ND2 is measure_zero of M by MEASURE1:70; then
+A8:M.ND2 = 0 by MEASURE1:def 13;
+A9:ND2` c= ND` & ND2` c= ND1` by XBOOLE_1:7,34;
+
+   dom(X-->0) = X by FUNCOP_1:19; then
+B1:dom((X-->0)|ND2`) = ND2` by RELAT_1:91;
+
+B2:dom(f|ND2`) = ND2` by A3,A9,RELAT_1:91;
+
+   for x be set st x in dom (f|ND2`) holds (f|ND2`).x = ((X-->0)|ND2`).x
+   proof
+    let x be set;
+    assume B3: x in dom (f|ND2`);
+
+B4: now assume f.x <> 0; then
+     abs(f.x) > 0 by COMPLEX1:133; then
+     abs(f.x) to_power k <> 0 by POWER:39; then
+     ((abs f).x) to_power k <> 0 by VALUED_1:18; then
+K1:  ((abs f) to_power k).x <> 0 by A5,A9,B3,B2,MESFUN6C:def 6;
+
+     ((X-->0)|ND1`).x = (X-->0).x by A9,B3,B2,FUNCT_1:72; then
+     ((X-->0)|ND1`).x = 0 by B3,FUNCOP_1:13;
+     hence contradiction by K1,A7,A9,B3,B2,FUNCT_1:72;
+    end;
+    ((X-->0)|ND2`).x =(X-->0).x by B2,B3,FUNCT_1:72; then
+    ((X-->0)|ND2`).x = 0 by B3,FUNCOP_1:13;
+    hence thesis by B2,B3,B4,FUNCT_1:72;
+   end; then
+   f |ND2` = (X-->0)|ND2` by B1,B2,FUNCT_1:def 17;
+   hence thesis by A8,LPSPACE1:def 10;
+end;
+
+theorem Lm262:
+Integral(M,(abs(X-->0)) to_power k) = 0
+proof
+A1:for x be set st x in dom (X-->0) holds 0 <= (X-->0).x;
+   Integral(M,(abs(X-->0)) to_power k)
+     = Integral(M,(X-->0) to_power k) by A1,Lm002b,MESFUNC6:52
+    .= Integral(M,(X-->0)) by Lm001
+    .= Integral(M,abs(X-->0)) by A1,Lm002b,MESFUNC6:52;
+   hence thesis by LPSPACE1:55;
+end;
+
+:: lemma for Holder
+
+theorem Th001a:
+for m,n be positive Real st
+  1/m +1/n =1 & f in Lp_Functions(M,m) & g in Lp_Functions(M,n) holds
+    f(#)g in L1_Functions M & f(#)g is_integrable_on M
+proof
+    let m,n be positive Real;
+    assume that
+AS1:  1/m +1/n =1 and
+AS2:  f in Lp_Functions(M,m) & g in Lp_Functions(M,n);
+A2: m > 1 & n > 1 by AS1,Lm300;
+    consider f1 be PartFunc of X,REAL such that
+A3:  f=f1 & ex NDf be Element of S st M.NDf` =0 & dom f1 = NDf &
+     f1 is_measurable_on NDf & (abs f1) to_power m is_integrable_on M by AS2;
+    consider EDf be Element of S such that
+A4:  M.EDf` =0 & dom f1 = EDf & f1 is_measurable_on EDf by A3;
+    consider g1 be PartFunc of X,REAL such that
+A5:  g=g1 & ex NDg be Element of S st M.NDg` =0 & dom g1 = NDg &
+     g1 is_measurable_on NDg & (abs g1) to_power n is_integrable_on M by AS2;
+    consider EDg be Element of S such that
+A6:  M.EDg` =0 & dom g1 = EDg & g1 is_measurable_on EDg by A5;
+    set u =(abs f1) to_power m;
+    set v =(abs g1) to_power n;
+    set w = f1(#)g1;
+    set z = (1/m)(#)u + (1/n)(#)v;
+
+A7: dom f1 = dom(abs f1) & dom g1 = dom(abs g1) by VALUED_1:def 11; then
+A8: dom u = dom f1 & dom v = dom g1 by MESFUN6C:def 6; then
+A9: dom w = dom u /\ dom v by VALUED_1:def 4;
+
+    set Nf = EDf`;
+    set Ng = EDg`;
+    set E = EDf /\ EDg;
+
+    reconsider Nf,Ng as Element of S by MEASURE1:66;
+
+    dom u = Nf` & dom v = Ng` by A4,A6,A7,MESFUN6C:def 6; then
+    u in L1_Functions M & v in L1_Functions M by A3,A4,A5,A6; then
+    (1/m)(#)u in L1_Functions M & (1/n)(#)v in L1_Functions M
+       by LPSPACE1:24; then
+    z in L1_Functions M by LPSPACE1:23; then
+A10:ex h be PartFunc of X,REAL st
+     z = h &
+     ex ND be Element of S st M.ND=0 & dom h = ND` & h is_integrable_on M;
+
+    dom((1/m)(#)u) = dom u & dom((1/n)(#)v) = dom v by VALUED_1:def 5; then
+A11:dom z = dom u /\ dom v by VALUED_1:def 1;
+
+A12:E` = EDf` \/ EDg` by XBOOLE_1:54;
+
+    Nf is measure_zero of M & Ng is measure_zero of M
+      by A4,A6,MEASURE1:def 13; then
+    Nf \/ Ng is measure_zero of M by MEASURE1:70; then
+A13:M.E` = 0 by A12,MEASURE1:def 13;
+
+    f1 is_measurable_on E & g1 is_measurable_on E
+       by A4,A6,MESFUNC6:16,XBOOLE_1:17; then
+A14:w is_measurable_on E by A4,A6,MESFUN7C:31;
+
+    for x be Element of X st x in dom w holds abs(w.x) <= z.x
+    proof
+     let x be Element of X;
+     assume A15: x in dom w;
+
+     abs(f1(#)g1) = (abs f1)(#)(abs g1) by RFUNCT_1:36; then
+     abs(f1(#)g1).x = (abs f1).x * (abs g1).x by VALUED_1:5; then
+A16: abs((f1(#)g1).x) = (abs f1).x * (abs g1).x by VALUED_1:18;
+A17: (abs f1).x >= 0 & (abs g1).x >= 0 by MESFUNC6:51;
+A18: x in dom u & x in dom v by A15,A9,XBOOLE_0:def 4;
+
+     ((abs f1).x) to_power m /m = (1/m)*(((abs f1) to_power m).x) &
+     ((abs g1).x) to_power n /n = (1/n)*(((abs g1) to_power n).x)
+          by A18,MESFUN6C:def 6; then
+     ((abs f1).x) to_power m /m = ((1/m)(#)((abs f1) to_power m)).x &
+     ((abs g1).x) to_power n /n = ((1/n)(#)((abs g1) to_power n)).x
+          by VALUED_1:6; then
+     abs(w.x) <= ((1/m)(#)u).x + ((1/n)(#)v).x by AS1,A2,A16,A17,HOLDER_1:5;
+     hence thesis by A15,A9,A11,VALUED_1:def 1;
+    end;then
+A19:w is_integrable_on M by A4,A6,A8,A9,A10,A14,A11,MESFUNC6:96;
+    set ND = E`;
+    reconsider ND as Element of S by MEASURE1:66;
+    dom w = ND` by A4,A6,VALUED_1:def 4;
+    hence thesis by A3,A5,A13,A19;
+end;
+
+:: Holder
+theorem Th001:
+for m,n be positive Real st 1/m +1/n =1 &
+f in Lp_Functions(M,m) & g in Lp_Functions(M,n) holds
+ex r1 be Real st r1 = Integral(M,(abs f) to_power m) &
+ex r2 be Real st r2 = Integral(M,(abs g) to_power n) &
+Integral(M,abs(f(#)g)) <= r1 to_power (1/m) * r2 to_power (1/n)
+proof
+    let m,n be positive Real;
+    assume
+A1:  1/m +1/n =1 & f in Lp_Functions(M,m) & g in Lp_Functions(M,n);
+A2: m > 1 & n > 1 by A1,Lm300;
+    consider f1 be PartFunc of X,REAL such that
+A4:  f=f1 & ex NDf be Element of S st M.NDf` =0 & dom f1 = NDf &
+     f1 is_measurable_on NDf & (abs f1) to_power m is_integrable_on M by A1;
+    consider EDf be Element of S such that
+A5:  M.EDf` =0 & dom f1 = EDf & f1 is_measurable_on EDf by A4;
+
+    consider g1 be PartFunc of X,REAL such that
+A6:  g=g1 & ex NDg be Element of S st M.NDg` =0 & dom g1 = NDg &
+     g1 is_measurable_on NDg & (abs g1) to_power n is_integrable_on M by A1;
+    consider EDg be Element of S such that
+A7:  M.EDg` =0 & dom g1 = EDg & g1 is_measurable_on EDg by A6;
+
+    set u =(abs f1) to_power m;
+    set v =(abs g1) to_power n;
+
+A8: 0 <= Integral(M,u) & 0 <= Integral(M,v) by A4,A6,A1,Lm15;
+
+    reconsider s1 = Integral(M,u), s2 = Integral(M,v) as Real by A4,A6,A1,Lm15;
+
+A9: dom f1 = dom (abs f1) & dom g1 = dom (abs g1) by VALUED_1:def 11;
+
+    reconsider Nf = EDf`, Ng = EDg` as Element of S by MEASURE1:66;
+
+    set t1 = s1 to_power (1/m);
+    set t2 = s2 to_power (1/n);
+    set E = EDf /\ EDg;
+
+A11:E` = EDf` \/ EDg` by XBOOLE_1:54;
+    Nf is measure_zero of M & Ng is measure_zero of M
+       by MEASURE1:def 13,A5,A7; then
+A13:E` is measure_zero of M by A11,MEASURE1:70;
+
+A14:dom (f1(#)g1) = EDf /\ EDg  by A5,A7,VALUED_1:def 4;
+
+    f1 is_measurable_on E & g1 is_measurable_on E
+         by A5,A7,MESFUNC6:16,XBOOLE_1:17; then
+A15:f1(#)g1 is_measurable_on E by A5,A7,MESFUN7C:31;
+
+A16:f1(#)g1 in L1_Functions M by A1,A4,A6,Th001a; then
+A17:ex fg1 be PartFunc of X,REAL st
+     fg1=f1(#)g1 & ex ND be Element of S st M.ND=0 & dom fg1 = ND` &
+     fg1 is_integrable_on M; then
+A18:Integral(M,abs(f1(#)g1)) in REAL & abs(f1(#)g1) is_integrable_on M
+        by LPSPACE1:44;
+
+    per cases by A4,A6,A1,Lm15;
+    suppose A19: s1 = 0 & s2 >= 0;
+     f1 in Lp_Functions (M,m) by A4; then
+     f1 a.e.= X-->0,M  by A19,Lm261; then
+     consider Nf1 be Element of S such that
+A20:  M.Nf1 = 0 & f1|Nf1` = (X-->0)|Nf1` by LPSPACE1:def 10;
+
+     reconsider Z = (E \ Nf1)` as Element of S by MEASURE1:66;
+
+A21: (E \ Nf1)` = E` \/ Nf1 by SUBSET_1:33;
+
+     Nf1 is measure_zero of M by A20,MEASURE1:def 13; then
+     Z is measure_zero of M by A13,A21,MEASURE1:70; then
+A22: M.Z = 0 by MEASURE1:def 13;
+
+     dom (X-->0) = X by FUNCOP_1:19; then
+A23: dom ((X-->0)|Z`) = Z` by RELAT_1:91;
+A24: dom ((f1(#)g1)|Z`) = Z` by A14,RELAT_1:91,XBOOLE_1:36;
+
+     for x be set st x in dom((f1(#)g1)|Z`) holds
+       ((f1(#)g1)|Z`).x = ((X-->0)|Z`).x
+     proof
+      let x be set;
+      assume A25: x in dom ((f1(#)g1)|Z`); then
+      x in X & not x in Nf1 by A24,XBOOLE_0:def 5; then
+      x in Nf1` by XBOOLE_0:def 5; then
+      f1.x = (f1|Nf1`).x & (X-->0).x = ((X-->0)|Nf1`).x by FUNCT_1:72; then
+A26:  f1.x = 0 by A20,A25,FUNCOP_1:13;
+
+A27:  dom ((f1(#)g1)|Z`) c= dom(f1(#)g1) by RELAT_1:89;
+
+      ((f1(#)g1)|Z`).x = (f1(#)g1).x by A25,FUNCT_1:70
+                      .= f1.x * g1.x by A25,A27,VALUED_1:def 4
+                      .= (Z`-->0).x by A25,A24,A26,FUNCOP_1:13
+                      .= (X/\Z`-->0).x by XBOOLE_1:28;
+      hence thesis by FUNCOP_1:18;
+     end; then
+     (f1(#)g1)|Z` =(X-->0)|Z` by A23,A24,FUNCT_1:def 17; then
+A28: f1(#)g1 a.e.= X-->0,M by A22,LPSPACE1:def 10;
+     X-->0 in L1_Functions M by LmDef1; then
+     Integral(M,abs(f1(#)g1)) = Integral(M,abs(X-->0))
+       by A16,A28,LPSPACE1:45; then
+A29: Integral(M,abs (f1(#)g1)) = 0 by LPSPACE1:55;
+     t1 * t2 = 0 * t2 by A19,POWER:def 2;
+     hence thesis by A4,A6,A29;
+    end;
+    suppose A30: s1 > 0 & s2 = 0;
+     g1 in Lp_Functions(M,n) by A6; then
+     g1 a.e.= X-->0,M  by A30,Lm261; then
+     consider Ng1 be Element of S such that
+A31:  M.Ng1 = 0 & g1|Ng1` = (X-->0)|Ng1` by LPSPACE1:def 10;
+     reconsider Z = (E \ Ng1)` as Element of S by MEASURE1:66;
+A32: (E \ Ng1)` = E` \/ Ng1 by SUBSET_1:33;
+     Ng1 is measure_zero of M by A31,MEASURE1:def 13; then
+     Z is measure_zero of M by A13,A32,MEASURE1:70; then
+A33: M.Z = 0 by MEASURE1:def 13;
+     dom (X-->0) = X by FUNCOP_1:19; then
+A34: dom ((X-->0)|Z`) = Z` by RELAT_1:91;
+A35: dom ((f1(#)g1)|Z`) = Z` by A14,RELAT_1:91,XBOOLE_1:36;
+     for x be set st x in dom((f1(#)g1)|Z`) holds
+       ((f1(#)g1)|Z`).x = ((X-->0)|Z`).x
+     proof
+      let x be set;
+      assume A36: x in dom((f1(#)g1)|Z`); then
+      x in X & not x in Ng1 by A35,XBOOLE_0:def 5; then
+      x in Ng1` by XBOOLE_0:def 5; then
+      g1.x = (g1|Ng1`).x & (X-->0).x = ((X-->0)|Ng1`).x by FUNCT_1:72; then
+A37:  g1.x = 0 by A31,A36,FUNCOP_1:13;
+A38:  dom ((f1(#)g1)|Z`) c= dom(f1(#)g1) by RELAT_1:89;
+      ((f1(#)g1)|Z`).x = (f1(#)g1).x by A36,FUNCT_1:70
+                      .= f1.x * g1.x by A36,A38,VALUED_1:def 4
+                      .= (Z`-->0).x by A36,A35,A37,FUNCOP_1:13
+                      .= (X/\Z`-->0).x by XBOOLE_1:28;
+      hence thesis by FUNCOP_1:18;
+     end; then
+     (f1(#)g1)|Z` =(X-->0)|Z` by A34,A35,FUNCT_1:def 17; then
+A39: f1(#)g1 a.e.= X-->0,M by A33,LPSPACE1:def 10;
+     X-->0 in L1_Functions M by LmDef1; then
+     Integral(M,abs(f1(#)g1))=Integral(M,abs(X-->0))
+         by A16,A39,LPSPACE1:45; then
+A40: Integral(M,abs(f1(#)g1))=0 by LPSPACE1:55;
+     t1 * t2 = t1 * 0 by A30,POWER:def 2;
+     hence thesis by A4,A6,A40;
+    end;
+
+    suppose A41: s1 <> 0 & s2 <> 0; then
+A42: t1 > 0 & t2 >0 by A8,POWER:39; then
+A43: abs(1/(t1*t2)) = 1/(t1*t2) by ABSVALUE:def 1;
+
+     set w = (1/(t1*t2))(#)(f1(#)g1);
+
+     set F = (1/m)(#)((1/t1(#)(abs f1)) to_power m);
+     set G = (1/n)(#)((1/t2(#)(abs g1)) to_power n);
+     set z = F + G;
+
+A44: dom (1/t1(#)(abs f1)) = dom abs f1 &
+     dom (1/t2(#)(abs g1)) = dom abs g1 by VALUED_1:def 5;
+
+     dom F = dom ((1/t1(#)(abs f1)) to_power m) &
+     dom G = dom ((1/t2(#)(abs g1)) to_power n ) by VALUED_1:def 5; then
+A45: dom F = dom abs f1 & dom G = dom abs g1 by A44,MESFUN6C:def 6; then
+A46: dom z = dom abs f1 /\ dom abs g1 by VALUED_1:def 1;
+
+     ((1/t1)(#)(abs f1)) to_power m = ((1/t1) to_power m)(#)u &
+     ((1/t2)(#)(abs g1)) to_power n = ((1/t2) to_power n)(#)v
+        by A42,Lm001f; then
+A47: (1/t1(#)(abs f1)) to_power m is_integrable_on M &
+     (1/t2(#)(abs g1)) to_power n is_integrable_on M
+        by A4,A6,MESFUNC6:102;then
+A48: F is_integrable_on M & G is_integrable_on M by MESFUNC6:102; then
+A49: z is_integrable_on M by MESFUNC6:100;
+
+A51:dom w = dom (f1(#)g1) by VALUED_1:def 5; then
+A52:dom w = dom f1 /\ dom g1 by VALUED_1:def 4;
+
+    dom((1/(t1*t2))(#)abs(f1(#)g1)) = dom abs(f1(#)g1) by VALUED_1:def 5; then
+A53:dom((1/(t1*t2))(#)abs(f1(#)g1)) = dom (f1(#)g1) by VALUED_1:def 11;
+
+A54:w is_measurable_on E by A14,A15,MESFUNC6:21;
+
+    for x be Element of X st x in dom w holds abs(w.x) <= z.x
+    proof
+     let x be Element of X;
+     assume A55: x in dom w;
+     (abs f1).x >= 0 & (abs g1).x >= 0 by MESFUNC6:51;then
+A56: (1/t1*(abs f1).x) * (1/t2*(abs g1).x) <=
+     (1/t1*(abs f1).x) to_power m /m + (1/t2*(abs g1).x)to_power n /n
+        by A1,A2,A42,HOLDER_1:5;
+     dom((abs f1)(#)(abs g1)) = dom abs f1 /\ dom abs g1
+        by VALUED_1:def 4; then
+A57: ((abs f1)(#)(abs g1)).x = (abs f1).x * (abs g1).x
+       by A9,A52,A55,VALUED_1:def 4;
+A58: ((1/t1*(abs f1).x) * (1/t2*(abs g1).x))
+        = ((1/t1)*(1/t2)*(abs f1).x)*((abs g1).x)
+       .= (1/(t1*t2))*(abs f1).x * (abs g1).x by XCMPLX_1:103
+       .= (1/(t1*t2))*(((abs f1)(#)(abs g1)).x) by A57
+       .= (1/(t1*t2))*abs(f1(#)g1).x  by RFUNCT_1:36
+       .= ((1/(t1*t2))(#)abs(f1(#)g1)).x by A51,A55,A53,VALUED_1:def 5
+       .= (abs w).x by A43,RFUNCT_1:37;
+A59: 1/t1*(abs f1).x = (1/t1(#)(abs f1)).x &
+     1/t2*(abs g1).x = (1/t2(#)(abs g1)).x by VALUED_1:6;
+     dom((1/t1(#)(abs f1)) to_power m) = dom f1 &
+     dom((1/t2(#)(abs g1)) to_power n) = dom g1 by A9,A44,MESFUN6C:def 6; then
+     x in dom ((1/t1(#)(abs f1)) to_power m) &
+     x in dom ((1/t2(#)(abs g1)) to_power n) by A52,A55,XBOOLE_0:def 4; then
+A60: ((1/t1(#)(abs f1)).x) to_power m = ((1/t1(#)(abs f1)) to_power m).x &
+     ((1/t2(#)(abs g1)).x) to_power n = ((1/t2(#)(abs g1)) to_power n).x
+         by MESFUN6C:def 6;
+
+     ((1/t1(#)(abs f1)).x) to_power m /m = F.x &
+     ((1/t2(#)(abs g1)).x) to_power n /n = G.x by A60,VALUED_1:6; then
+     (1/t1*(abs f1).x) to_power m /m + (1/t2*(abs g1).x)to_power n /n = z.x
+        by A9,A52,A55,A46,A59,VALUED_1:def 1;
+     hence thesis by A56,A58,VALUED_1:18;
+    end; then
+A61:Integral(M,abs w) <= Integral(M,z) by A5,A7,A49,A9,A52,A46,A54,MESFUNC6:96;
+
+A62:ex E1 be Element of S st
+     E1 = dom F /\ dom G & Integral(M,F+G) =Integral(M,F|E1)+Integral(M,G|E1)
+        by A48,MESFUNC6:101;
+
+    EDf = X /\ EDf & EDg = X /\ EDg by XBOOLE_1:28; then
+A63:EDf = X \ Nf & EDg = X \ Ng by XBOOLE_1:48;
+A64:EDf \ E = EDf \ EDg by XBOOLE_1:47
+           .= (X \ Nf) \ X \/ (X \ Nf) /\ Ng by A63,XBOOLE_1:52
+           .= X \(Nf \/ X) \/ (X \ Nf) /\ Ng by XBOOLE_1:41
+           .= X \ X \/(X \ Nf)/\ Ng by XBOOLE_1:12
+           .= {} \/ (X \ Nf) /\ Ng by XBOOLE_1:37;
+
+A65:EDg \ E = EDg \ EDf by XBOOLE_1:47
+           .= (X \ Ng) \ X \/ (X \ Ng) /\ Nf by A63,XBOOLE_1:52
+           .= X \(Ng \/ X) \/ (X \ Ng) /\ Nf by XBOOLE_1:41
+           .= X \ X \/(X \ Ng)/\ Nf by XBOOLE_1:12
+           .= {} \/ (X \ Ng) /\ Nf by XBOOLE_1:37;
+
+    set NF = EDf /\ Ng;
+    set NG = EDg /\ Nf;
+
+    Nf is measure_zero of M & Ng is measure_zero of M
+        by A5,A7,MEASURE1:def 13; then
+    NF is measure_zero of M & NG is measure_zero of M
+        by MEASURE1:69,XBOOLE_1:17; then
+A66:M.NF = 0 & M.NG = 0 by MEASURE1:def 13;
+
+    E = EDf /\ E & E = EDg /\ E by XBOOLE_1:17,28; then
+A67:E = EDf \ NF & E = EDg \ NG by A63,A64,A65,XBOOLE_1:48;
+
+    R_EAL F is_integrable_on M by A48,MESFUNC6:def 9; then
+    ex E being Element of S st
+     E = dom R_EAL F & R_EAL F is_measurable_on E by MESFUNC5:def 17; then
+A68:F is_measurable_on EDf by A45,A9,A5,MESFUNC6:def 6;
+
+    R_EAL G is_integrable_on M by A48,MESFUNC6:def 9; then
+    ex E being Element of S st
+     E = dom R_EAL G & R_EAL G is_measurable_on E by MESFUNC5:def 17; then
+A69:G is_measurable_on EDg by A45,A9,A7,MESFUNC6:def 6;
+
+    (1/t1) to_power m = t1 to_power (-m) by A41,A8,POWER:37,39; then
+    (1/t1) to_power m = s1 to_power((1/m)*(-m)) by A8,A41,POWER:38; then
+    (1/t1) to_power m = s1 to_power (-1*(1/m)*m); then
+    (1/t1) to_power m = s1 to_power (-1) by XCMPLX_1:107; then
+    (1/t1) to_power m = (1/s1) to_power 1 by A8,A41,POWER:37; then
+A70:(1/t1) to_power m = 1/s1 by POWER:30;
+
+    R_EAL(1/s1) * R_EAL s1 = (1/s1) * s1 &
+    R_EAL(1/s2) * R_EAL s2 = (1/s2) * s2 by EXTREAL1:38; then
+A71:R_EAL(1/s1) * R_EAL s1 = 1 & R_EAL(1/s2) * R_EAL s2 = 1
+       by A41,XCMPLX_1:107;
+
+A72:(1/t2) to_power n = t2 to_power (-n) by A41,A8,POWER:37,39
+     .= s2 to_power((1/n)*(-n)) by A8,A41,POWER:38
+     .= s2 to_power (-1*(1/n)*n)
+     .= s2 to_power (-1) by XCMPLX_1:107
+     .= (1/s2) to_power 1 by A8,A41,POWER:37
+     .= 1/s2 by POWER:30;
+
+A73:Integral(M,F|E) = Integral(M,F) by A5,A9,A45,A67,A66,A68,MESFUNC6:89
+  .= R_EAL (1/m) *Integral(M,(1/t1(#)(abs f1)) to_power m) by A47,MESFUNC6:102
+  .= R_EAL (1/m) *Integral(M,((1/t1) to_power m)(#)((abs f1) to_power m))
+     by A42,Lm001f
+  .= R_EAL (1/m) * (R_EAL((1/t1) to_power m) * Integral(M,(abs f1) to_power m))
+     by A4,MESFUNC6:102
+  .= 1/m by A70,A71,XXREAL_3:92;
+
+A74:Integral(M,G|E) = Integral(M,G) by A7,A9,A45,A67,A66,A69,MESFUNC6:89
+  .= R_EAL (1/n)*Integral(M,(1/t2(#)(abs g1)) to_power n) by A47,MESFUNC6:102
+  .= R_EAL (1/n) * Integral(M,((1/t2) to_power n)(#)((abs g1) to_power n))
+     by A42,Lm001f
+  .= R_EAL (1/n) * (R_EAL((1/t2) to_power n) * Integral(M,(abs g1) to_power n))
+     by A6,MESFUNC6:102
+  .= 1/n by A71,A72,XXREAL_3:92;
+
+A75:Integral(M,z) = 1 by A1,A45,A5,A7,A9,A62,A73,A74,SUPINF_2:1;
+    abs w = abs(1/(t1*t2))(#)abs(f1(#)g1) by RFUNCT_1:37; then
+    abs w = (1/(t1*t2))(#)abs(f1(#)g1) by A42,ABSVALUE:def 1; then
+A76:Integral(M,abs w) = R_EAL(1/(t1*t2)) * Integral(M,abs(f1(#)g1))
+        by A18,MESFUNC6:102;
+    reconsider c1 = Integral(M,abs(f1(#)g1)) as Real by A17,LPSPACE1:44;
+    R_EAL(1/(t1*t2)) * Integral(M,abs(f1(#)g1)) = R_EAL(1/(t1*t2)) * R_EAL c1;
+     then
+    R_EAL(1/(t1*t2)) * Integral(M,abs(f1(#)g1)) = (1/(t1*t2)) * c1
+       by EXTREAL1:38; then
+    (t1*t2)*((1/(t1*t2)) * c1) <= (t1*t2)*1
+       by A42,A61,A76,A75,XREAL_1:66; then
+A77:(t1*t2)*(1/(t1*t2)) * c1 <= (t1*t2);
+    (t1*t2)*(1/(t1*t2)) = 1 by A42,XCMPLX_1:107;
+    hence thesis by A4,A6,A77;
+    end;
+end;
+
+::Minkowski
+Th002:
+for m,n be positive Real st 1/m +1/n =1 &
+  f in Lp_Functions(M,m) & g in Lp_Functions(M,m) holds
+  ex r1,r2,r3 be Real st
+    r1 = Integral(M,(abs f) to_power m) &
+    r2 = Integral(M,(abs g) to_power m) &
+    r3 = Integral(M,(abs (f+g)) to_power m) &
+    r3 to_power (1/m) <= r1 to_power (1/m) + r2 to_power (1/m)
+proof
+    let m,n be positive Real;
+    assume
+A1: 1/m +1/n =1 & f in Lp_Functions(M,m) & g in Lp_Functions(M,m); then
+    (m+n)*(m*n)"*(m*n) = 1* (m*n) by XCMPLX_1:213;then
+    (m+n)*((m*n)"*(m*n)) = (m*n); then
+    (m+n)*1 = (m*n) by XCMPLX_0:def 7; then
+A3: m = n*(m-1);
+
+A2: 1-1 < m - 1 by A1,Lm300,XREAL_1:16; then
+A3b:m -1 > 0;
+
+    ex f1 be PartFunc of X,REAL st
+     f=f1 & ex NDf be Element of S st M.NDf` =0 & dom f1 = NDf &
+     f1 is_measurable_on NDf & (abs f1) to_power m is_integrable_on M
+        by A1; then
+    consider EDf be Element of S such that
+A6:  M.EDf` =0 & dom f = EDf & f is_measurable_on EDf;
+
+    ex g1 be PartFunc of X,REAL st
+     g=g1 & ex NDg be Element of S st M.NDg` =0 & dom g1 = NDg &
+     g1 is_measurable_on NDg & (abs g1) to_power m is_integrable_on M
+        by A1; then
+    consider EDg be Element of S such that
+A8:  M.EDg` =0 & dom g = EDg & g is_measurable_on EDg;
+
+    set E = EDf /\ EDg;
+
+A4: f + g in Lp_Functions(M,m) by A1,Th01aLp; then
+A9: ex h1 be PartFunc of X,REAL st
+     f+g = h1 & ex NDfg be Element of S st M.NDfg` =0 & dom h1 = NDfg &
+     h1 is_measurable_on NDfg & (abs h1) to_power m is_integrable_on M;
+
+B13:dom(f+g) = E by A6,A8,VALUED_1:def 1; then
+A13:abs(f+g) is_measurable_on E by A9,MESFUNC6:48;
+
+    reconsider s1 = Integral(M,(abs f) to_power m) as Real by A1,Lm15;
+    reconsider s2 = Integral(M,(abs g) to_power m) as Real by A1,Lm15;
+    reconsider s3 = Integral(M,(abs(f+g)) to_power m) as Real by A4,Lm15;
+    set t = (abs(f+g)) to_power (m-1);
+
+B27:dom t = dom abs(f+g) by MESFUN6C:def 6; then
+A27:dom t = E by B13,VALUED_1:def 11; then
+A34:t is_measurable_on E by A2,A13,B27,MESFUN6C:29;
+
+A31:t to_power n = abs(f+g) to_power m by A3,A2,LmPW004;
+
+A34a:abs t = t by Lm002b,A3b; then
+B34:t in Lp_Functions(M,n) by B13,A27,A31,A9,A34; then
+    reconsider s4 = Integral(M,(abs t) to_power n) as Real by Lm15;
+    t(#)f is_integrable_on M & t(#)g is_integrable_on M
+       by A1,B34,Th001a; then
+    reconsider u1 = Integral(M,abs(t(#)f)), u2 = Integral(M,abs(t(#)g))
+      as Real by LPSPACE1:44;
+
+A36:dom (abs f)= EDf & dom (abs g)= EDg by A6,A8,VALUED_1:def 11;
+
+    dom (t(#)abs f) = dom t /\ dom(abs f) &
+    dom (t(#)abs g) = dom t /\ dom(abs g) by VALUED_1:def 4; then
+A41:dom (t(#)abs f) = E & dom (t(#)abs g) = E by A27,A36,XBOOLE_1:17,28;
+
+A48:abs(t(#)f)= t(#)abs f & abs(t(#)g)= t(#)abs g &
+    abs(t(#)(f+g)) = t(#)abs (f+g) by A34a,RFUNCT_1:36;
+
+    t(#)f is_integrable_on M &
+    t(#)g is_integrable_on M &
+    t(#)(f+g) is_integrable_on M by A1,B34,A4,Th001a; then
+A49:t(#)abs f is_integrable_on M &
+    t(#)abs g is_integrable_on M &
+    t(#)abs(f+g) is_integrable_on M by A48,LPSPACE1:44;
+
+    set F = t(#)abs(f+g);
+    set G = t(#)abs f + t(#)abs g;
+C50:dom F = E /\ E by B27,A27,VALUED_1:def 4;
+B51:dom G = E /\ E by A41,VALUED_1:def 1;
+    R_EAL F is_integrable_on M by A49,MESFUNC6:def 9; then
+    ex E1 being Element of S st
+      E1 = dom R_EAL F & R_EAL F is_measurable_on E1 by MESFUNC5:def 17; then
+A52:F is_measurable_on E by C50,MESFUNC6:def 6;
+A53:G is_integrable_on M by A49,MESFUNC6:100;
+    for x be Element of X st x in dom F holds abs(F.x) <= G.x
+    proof
+     let x be Element of X;
+     assume A55: x in dom F; then
+     abs(f.x+g.x) = abs((f+g).x) by B13,C50,VALUED_1:def 1; then
+A62: abs(f.x+g.x) = (abs(f+g)).x &
+     abs(f.x) = (abs f).x & abs(g.x) = (abs g).x by VALUED_1:18;
+
+     R_EAL f.x+ R_EAL g.x = f.x + g.x by SUPINF_2:1; then
+A59: |. R_EAL f.x .| = abs(f.x)  & |. R_EAL g.x .|= abs(g.x) &
+     |. R_EAL f.x + R_EAL g.x .| = abs(f.x+g.x) by EXTREAL2:49;
+
+A68: t.x >= 0 & (abs(f+g)).x >= 0 by A2,MESFUNC6:51;
+     |. R_EAL f.x+ R_EAL g.x .| <= |. R_EAL f.x .| + |. R_EAL g.x .|
+        by EXTREAL2:61; then
+     abs(f.x+g.x) <= abs(f.x) + abs(g.x) by SUPINF_2:1,A59; then
+A69: t.x * (abs(f+g)).x <= t.x * (abs(f).x + abs(g).x) by A62,A68,XREAL_1:66;
+     t.x * abs(f).x = (t(#)abs f).x & t.x * abs(g).x = (t(#)abs(g)).x
+        by VALUED_1:5; then
+     t.x * (abs(f).x + abs(g).x) = (t(#)abs f).x + (t(#)abs(g)).x; then
+A66: t.x * (abs(f).x + abs(g).x) = G.x by C50,B51,A55,VALUED_1:def 1;
+     t.x * (abs(f+g)).x = F.x by VALUED_1:5;
+     hence thesis by A66,A69,A68,ABSVALUE:def 1;
+    end; then
+A71:Integral(M,abs F) <= Integral(M,G) by C50,B51,A52,A53,MESFUNC6:96;
+A73:ex E1 be Element of S st
+     E1 = E /\ E &
+     Integral(M,G) = Integral(M,(t(#)abs f)|E1)+Integral(M,(t(#)abs g)|E1)
+        by A41,A49,MESFUNC6:101;
+    Integral(M,(t(#)abs f)|E) = Integral(M,t(#)abs f) &
+    Integral(M,(t(#)abs g)|E) = Integral(M,t(#)abs g) by A41,RELAT_1:98; then
+A87:Integral(M,G) = u1 + u2 by A48,A73,SUPINF_2:1;
+
+    set v1 = s4 to_power (1/n) * s1 to_power (1/m);
+    set v2 = s4 to_power (1/n) * s2 to_power (1/m);
+
+    (ex r4 be Real st r4=Integral(M,(abs t) to_power n) &
+     ex r1 be Real st r1 = Integral(M,(abs f) to_power m) &
+     Integral(M,abs(t(#)f)) <= r4 to_power (1/n) * r1 to_power (1/m)) &
+    (ex r4 be Real st r4=Integral(M,(abs t) to_power n) &
+     ex r2 be Real st r2 = Integral(M,(abs g) to_power m) &
+     Integral(M,abs(t(#)g)) <= r4 to_power (1/n) * r2 to_power (1/m))
+       by A1,B34,Th001; then
+A88:u1 + u2 <= v1 + v2 by XREAL_1:9;
+    F = ((abs(f+g)) to_power (m-1))(#)((abs(f+g)) to_power 1) by LmPW006
+     .= (abs(f+g)) to_power ((m-1) +1) by LmPW005,A2; then
+    Integral(M,abs F)= s3 by Lm002b; then
+A92:s3 <= (s3 to_power (1/n))*(s1 to_power (1/m))
+        + (s3 to_power (1/n))*(s2 to_power (1/m))
+           by A31,A34a,A71,A87,A88,XXREAL_0:2;
+    per cases by A4,Lm15;
+    suppose s3 = 0; then
+A96: s3 to_power (1/m)= 0 by POWER:def 2;
+     s1 to_power (1/m) >= 0 & s2 to_power (1/m) >= 0 by A1,Lm15,LmPW001; then
+     s3 to_power (1/m) <= s1 to_power (1/m) + s2 to_power (1/m) by A96;
+     hence thesis;
+    end;
+    suppose A98: s3 > 0; then
+A99: s3 to_power (1/n) > 0 by POWER:39;
+     set w1 = s3 to_power (1/n);
+     (1/w1) * (w1*(s1 to_power (1/m))+w1*(s2 to_power (1/m)))
+       =(1/w1) * w1*((s1 to_power (1/m)) + (s2 to_power (1/m))); then
+A101:(1/w1) * (w1*(s1 to_power (1/m))+w1*(s2 to_power (1/m)))
+       =1*((s1 to_power (1/m)) + (s2 to_power (1/m))) by XCMPLX_1:107,A99;
+     (1/w1) * s3 = (s3 to_power (-1/n)) * s3 by A98,POWER:33
+                .= (s3 to_power (-1/n)) * (s3 to_power 1) by POWER:30
+                .= s3 to_power ((-1/n)+1) by POWER:32,A98
+                .= s3 to_power (1/m) by A1;
+     hence thesis by A99,A101,A92,XREAL_1:66;
+    end;
+end;
+
+:: Minkowski
+
+theorem Th002X:
+for m be positive Real
+for r1,r2,r3 be Element of REAL st
+ 1 <= m &
+ f in Lp_Functions(M,m) & g in Lp_Functions(M,m) &
+ r1 = Integral(M,(abs f) to_power m) &
+ r2 = Integral(M,(abs g) to_power m) &
+ r3 = Integral(M,(abs (f+g)) to_power m) holds
+ r3 to_power (1/m) <= r1 to_power (1/m) + r2 to_power (1/m)
+proof
+   let m be positive Real;
+   let r1,r2,r3 be Element of REAL;
+   assume
+AS: 1 <= m &
+    f in Lp_Functions(M,m) & g in Lp_Functions(M,m) &
+    r1 = Integral(M,(abs f) to_power m) &
+    r2 = Integral(M,(abs g) to_power m) &
+    r3 = Integral(M,(abs (f+g)) to_power m);
+   per cases;
+   suppose S1: m=1; then
+K1: r1 = Integral(M,(abs f)) & r2 = Integral(M,(abs g)) &
+    r3 = Integral(M,(abs (f+g))) by AS,LmPW006;
+L01:ex f1 be PartFunc of X,REAL st
+     f=f1 & ex ND be Element of S st M.ND` =0 & dom f1 = ND &
+     f1 is_measurable_on ND & (abs f1) to_power m is_integrable_on M by AS;
+R01:ex g1 be PartFunc of X,REAL st
+     g=g1 & ex ND be Element of S st M.ND` =0 & dom g1 = ND &
+     g1 is_measurable_on ND & (abs g1) to_power m is_integrable_on M by AS;
+    (abs f) is_integrable_on M &
+    (abs g) is_integrable_on M by S1,L01,R01,LmPW006; then
+    f is_integrable_on M & g is_integrable_on M by L01,R01,MESFUNC6:94; then
+    Integral(M,abs(f+g)) <= Integral(M,abs f) + Integral(M,abs g)
+       by LPSPACE1:56; then
+L:  r3 <= r1 + r2 by K1,XXREAL_3:def 2;
+    r1 to_power (1/m) = r1 & r2 to_power (1/m) = r2 by S1,POWER:30;
+    hence thesis by L,S1,POWER:30;
+   end;
+   suppose S2: m <> 1;
+    set n1= 1 - 1/m;
+   1 < m by AS,XXREAL_0:1,S2; then
+   1/m < 1 by XREAL_1:191; then
+   0 < n1 by XREAL_1:52; then
+   reconsider n=1/n1 as positive Real;
+   1/m +1/n =1; then
+   ex rr1,rr2,rr3 be Real st
+    rr1 = Integral(M,(abs f) to_power m) &
+    rr2 = Integral(M,(abs g) to_power m) &
+    rr3 = Integral(M,(abs (f+g)) to_power m) &
+    rr3 to_power (1/m) <= rr1 to_power (1/m) + rr2 to_power (1/m) by AS,Th002;
+   hence thesis by AS;
+   end;
+end;
+
+Th003:
+for k be geq_than_1 Real holds
+  Lp-Space(M,k) is RealNormSpace-like RealLinearSpace-like Abelian
+               add-associative right_zeroed right_complementable
+proof
+   let k be geq_than_1 Real;
+   now let x,y be Point of Lp-Space (M,k), a be Real;
+ASK:1<=k by defH;
+    hereby assume A2: ||.x.|| = 0;
+     consider f be PartFunc of X, REAL such that
+A3:   f in x & ex r be Real st r = Integral(M,(abs f) to_power k) &
+      ||.x.|| = r to_power (1/k) by DefLpNORM;
+A3a: f in Lp_Functions(M,k) by Lm16,A3;
+     consider r1 be Real such that
+A3c:  r1 = Integral(M,(abs f) to_power k) & r1 >= 0 &
+      (Lp-Norm (M,k)).x = r1 to_power (1/k) by A3,A3a,Lm15;
+     r1 = 0 by A2,A3c,POWER:39; then
+     zeroCoset(M,k) = a.e-eq-class_Lp(f,M,k) by A3a,A3c,Lm261,EQC02bx; then
+     0.(Pre-Lp-Space(M,k)) = a.e-eq-class_Lp(f,M,k) by VSPDef6X;
+     hence x =0.(Lp-Space(M,k)) by A3,Lm17z;
+    end;
+    hereby assume x = 0.(Lp-Space(M,k)); then
+     x =0.(Pre-Lp-Space(M,k)); then
+     x = zeroCoset(M,k) by VSPDef6X; then
+     X-->0 in x by EQC01,LmDef1Lp; then
+     ex r be Real st 0 <=r & r = Integral(M,(abs(X-->0)) to_power k) &
+      ||.x.|| = r to_power (1/k) by Lm17z; then
+     consider r0 be Real such that
+A14a: r0 = Integral(M,(abs(X-->0)) to_power k) &
+      (Lp-Norm (M,k)).x = r0 to_power (1/k);
+     r0 = 0 by A14a,Lm262;
+     hence ||.x.||=0 by A14a,POWER:def 2;
+    end;
+    consider f be PartFunc of X,REAL such that
+A15: f in x & ex r1 be Real st r1 = Integral(M,(abs f) to_power k) &
+     ||.x.|| = r1 to_power (1/k) by DefLpNORM;
+A15a:
+    (abs f) to_power k is_integrable_on M & f in Lp_Functions(M,k) by Lm16,A15;
+    consider g be PartFunc of X,REAL such that
+A16: g in y & ex r2 be Real st r2 = Integral(M,(abs g) to_power k) &
+     ||.y.|| = r2 to_power (1/k) by DefLpNORM;
+A16a:
+    (abs g) to_power k is_integrable_on M & g in Lp_Functions (M,k)
+      by Lm16,A16;
+    consider s1 be Real such that
+A17: s1 = Integral(M,(abs f) to_power k) & ||.x.|| = s1 to_power (1/k) by A15;
+B17:s1 = 0 implies s1 to_power (1/k) >= 0 by POWER:def 2;
+    s1 > 0 implies s1 to_power (1/k) >= 0 by POWER:39;
+    hence 0 <= ||.x.|| by B17,A15a,A17,Lm15;
+    set t = f+g;
+    set w = x + y;
+A17a: s1 >= 0 by A15a,A17,Lm15;
+    consider s2 be Real such that
+A17b:s2 = Integral(M,(abs g) to_power k) &
+     ||.y.|| = s2 to_power (1/k) by A16;
+    f+g in x+y by Lm17Y,A15,A16; then
+    ex r be Real st 0 <= r &
+     r = Integral(M,(abs t) to_power k) & ||.w.|| =r to_power (1/k) by Lm17x;
+    hence ||.x+y.|| <= ||.x.|| + ||.y.|| by Th002X,ASK,A15a,A16a,A17b,A17;
+    set t = a(#)f;
+    set w = a*x;
+    a(#)f in a*x by Lm17Y,A15; then
+    ex r be Real st 0 <= r & r = Integral(M, (abs t) to_power k)
+     & ||.w.|| =r to_power (1/k) by Lm17x; then
+    consider s be Real such that
+A30: s =Integral(M,(abs t) to_power k) & ||.w.|| =s to_power (1/k);
+A32:s = Integral(M,( (abs a) to_power k (#) (abs f) to_power k)) by A30,Lm001e
+     .= R_EAL ((abs a) to_power k) * R_EAL s1 by A17,A15a,MESFUNC6:102
+     .= (abs a) to_power k  * s1 by EXTREAL1:38;
+    (abs a) to_power k >=0 by LmPW001,COMPLEX1:132; then
+    ||.a*x.|| = ((abs a) to_power k to_power (1/k)) * s1 to_power (1/k)
+        by A17a,A30,A32,LmPW003
+    .= (abs a) to_power (k*(1/k)) * s1 to_power (1/k)
+        by COMPLEX1:132,HOLDER_1:2
+    .= (abs a) to_power 1 * s1 to_power (1/k) by XCMPLX_1:107;
+    hence ||.a*x.|| = abs a * ||.x.|| by A17,POWER:30;
+   end;
+   hence thesis by NORMSP_1:def 2,RSSPACE3:4;
+end;
+
+registration
+  let k be geq_than_1 Real;
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S;
+  cluster Lp-Space (M,k) -> RealNormSpace-like RealLinearSpace-like
+      Abelian add-associative right_zeroed right_complementable;
+  coherence by Th003;
+end;
+
+begin :: Preliminaries of completeness of Lp Space
+
+theorem Th004X:
+for Sq be sequence of Lp-Space(M,k) holds
+ ex Fsq be Functional_Sequence of X,REAL st
+  for n be Element of NAT holds
+    Fsq.n in Lp_Functions(M,k) & Fsq.n in Sq.n &
+    Sq.n= a.e-eq-class_Lp(Fsq.n,M,k) &
+    ex r be Real st
+     r = Integral(M,(abs (Fsq.n)) to_power k) &
+     ||. Sq.n .|| = r to_power (1/k)
+proof
+   let Sq be sequence of Lp-Space(M,k);
+   defpred P[Element of NAT,set ] means
+    ex f be PartFunc of X,REAL st $2=f & f in Lp_Functions(M,k) &
+      f in Sq.$1 & Sq.$1= a.e-eq-class_Lp(f,M,k) &
+      ex r be Real st
+        r = Integral(M,(abs f) to_power k) & ||. Sq.$1 .|| =r to_power (1/k);
+
+A2:for x being Element of NAT
+    ex y being Element of PFuncs(X,REAL) st P[x,y]
+   proof
+    let x be Element of NAT;
+    consider y be PartFunc of X,REAL such that
+A21: y in Lp_Functions(M,k) & Sq.x= a.e-eq-class_Lp(y,M,k) by Lm17x;
+
+    ex r be Real st 0 <= r &
+      r = Integral(M,(abs y) to_power k) & ||. Sq.x .|| =r to_power (1/k)
+        by Lm17x,A21,EQC01;
+    hence thesis by A21,EQC01;
+   end;
+   consider G be Function of NAT,PFuncs(X,REAL) such that
+A3: for n be Element of NAT holds P[n,G.n] from FUNCT_2:sch 10(A2);
+   reconsider G as Functional_Sequence of X,REAL;
+   now let n be Element of NAT;
+    ex f be PartFunc of X,REAL st
+     G.n=f & f in Lp_Functions(M,k) & f in Sq.n &
+     Sq.n= a.e-eq-class_Lp(f,M,k) &
+     ex r be Real st
+      r = Integral(M,(abs f) to_power k) &
+      ||. Sq.n .|| =r to_power (1/k) by A3;
+    hence
+     G.n in Lp_Functions(M,k) & G.n in Sq.n &
+     Sq.n= a.e-eq-class_Lp(G.n,M,k) &
+     ex r be Real st
+      r = Integral(M,(abs (G.n)) to_power k) & ||. Sq.n .|| =r to_power (1/k);
+   end;
+   hence thesis;
+end;
+
+theorem Th004:
+for Sq be sequence of Lp-Space(M,k) holds
+ ex Fsq be with_the_same_dom Functional_Sequence of X,REAL st
+  for n be Element of NAT holds
+    Fsq.n in Lp_Functions(M,k) & Fsq.n in Sq.n &
+    Sq.n= a.e-eq-class_Lp(Fsq.n,M,k) &
+    ex r be Real st 0 <= r &
+      r = Integral(M,(abs (Fsq.n)) to_power k) &
+      ||. Sq.n .|| =r to_power (1/k)
+proof
+    let Sq be sequence of Lp-Space(M,k);
+    consider Fsq be Functional_Sequence of X,REAL such that
+A1:  for n be Element of NAT holds
+      Fsq.n in Lp_Functions(M,k) & Fsq.n in Sq.n &
+      Sq.n= a.e-eq-class_Lp(Fsq.n,M,k) &
+      ex r be Real st r = Integral(M,(abs (Fsq.n)) to_power k) &
+                      ||. Sq.n .|| = r to_power (1/k) by Th004X;
+
+    defpred P[Element of NAT,set] means
+     ex DMFSQN be Element of S st $2 = DMFSQN &
+      ex FSQN be PartFunc of X,REAL st
+       Fsq.$1 = FSQN & M.DMFSQN` = 0 & dom FSQN = DMFSQN &
+       FSQN is_measurable_on DMFSQN &
+       (abs FSQN) to_power k is_integrable_on M;
+
+A2: for n being Element of NAT ex y being Element of S st P[n,y]
+    proof
+     let n be Element of NAT;
+     Fsq.n in Lp_Functions(M,k) by A1; then
+     ex FMF be PartFunc of X,REAL st
+      Fsq.n = FMF &
+      ex ND be Element of S st M.ND` =0 & dom FMF = ND &
+      FMF is_measurable_on ND & (abs FMF) to_power k is_integrable_on M;
+     hence thesis;
+    end;
+
+    consider G be Function of NAT,S such that
+A3:  for n be Element of NAT holds P[n,G.n] from FUNCT_2:sch 10(A2);
+
+    reconsider E0 = meet rng G as Element of S;
+
+A4: for n be Element of NAT holds M.(X \ G.n) =0 & E0 c= dom(Fsq.n)
+    proof
+     let n be Element of NAT;
+     ex D be Element of S st
+      G.n=D &
+      ex F be PartFunc of X,REAL st
+       Fsq.n= F & M.D` =0 & dom F = D & F is_measurable_on D &
+       (abs F) to_power k is_integrable_on M by A3;
+     hence M.(X \ (G.n)) =0 & E0 c= dom(Fsq.n) by SETFAM_1:4,FUNCT_2:6;
+    end;
+
+B1: (X \ rng G) is N_Sub_set_fam of X by MEASURE1:42;
+
+    for A be set st A in (X \ rng G) holds A in S & A is measure_zero of M
+    proof
+     let A being set;
+     assume B11: A in (X \ rng G); then
+     reconsider A0 = A as Subset of X;
+     A0` in rng G by B11,SETFAM_1:def 8; then
+     consider n be set such that
+B12:  n in NAT & A0` = G.n by FUNCT_2:17;
+     reconsider n as Element of NAT by B12;
+B13: (A0`)` = A0; then
+     A0 = X \ G.n by B12;
+     hence A in S by MEASURE1:66;
+B14: M.A0= 0 by A4,B12,B13;
+     A0= X \ (G.n) by B12,B13; then
+     A is Element of S by MEASURE1:66;
+     hence A is measure_zero of M by B14,MEASURE1:def 13;
+    end; then
+B2: (for A be set st A in (X \ rng G) holds A in S) &
+    (for A be set st A in (X \ rng G) holds A is measure_zero of M); then
+    (X \ rng G) c= S by TARSKI:def 3; then
+    (X \ rng G) is N_Measure_fam of S by B1,MEASURE2:def 1; then
+B3: union (X \ rng G) is measure_zero of M by B2,MEASURE2:16;
+
+    E0` = X \ (X \ (union (X \ rng G))) by MEASURE1:15
+       .= X /\ union (X \ rng G) by XBOOLE_1:48
+       .= union (X \ rng G) by XBOOLE_1:28; then
+B4: M.E0` =0 by B3,MEASURE1:def 13;
+
+    set Fsq2 = Fsq||E0;
+
+A5: for n be Element of NAT holds dom (Fsq2.n) = E0
+    proof
+     let n be Element of NAT;
+     dom (Fsq2.n) = dom((Fsq.n)|E0) by MESFUN9C:def 1; then
+     dom (Fsq2.n) =dom(Fsq.n) /\ E0 by RELAT_1:90;
+     hence dom (Fsq2.n) = E0 by A4,XBOOLE_1:28;
+    end;
+
+    now let n,m be natural number;
+     n is Element of NAT & m is Element of NAT by ORDINAL1:def 13; then
+     dom(Fsq2.n) =E0 & dom(Fsq2.m) = E0 by A5;
+     hence dom(Fsq2.n) = dom(Fsq2.m);
+    end; then
+    reconsider Fsq2 as with_the_same_dom Functional_Sequence of X,REAL
+      by MESFUNC8:def 2;
+
+    take Fsq2;
+
+    hereby let n be Element of NAT;
+     Fsq.n in Lp_Functions(M,k) by A1; then
+A7:  ex FMF be PartFunc of X,REAL st
+      Fsq.n= FMF &
+      ex ND be Element of S st M.ND` =0 & dom FMF = ND &
+       FMF is_measurable_on ND & (abs FMF) to_power k is_integrable_on M;
+
+     reconsider E2 = dom (Fsq.n) as Element of S by A7;
+
+A8:  E2 /\ E0 = E0 by A4,XBOOLE_1:28;
+
+     R_EAL (Fsq.n) is_measurable_on E2 by A7,MESFUNC6:def 6; then
+     R_EAL (Fsq.n) is_measurable_on E0 by A4,MESFUNC1:34; then
+     Fsq.n is_measurable_on E0 by MESFUNC6:def 6; then
+     (Fsq.n)|E0 is_measurable_on E0 by A8,MESFUNC6:76; then
+A9:  Fsq2.n is_measurable_on E0 by MESFUN9C:def 1;
+A10: dom (Fsq2.n)= E0 by A5;
+     dom ((abs (Fsq.n)) to_power k) = dom abs (Fsq.n) &
+     dom ((abs (Fsq2.n)) to_power k) = dom abs (Fsq2.n) by MESFUN6C:def 6; then
+A11: dom ((abs (Fsq.n)) to_power k) = dom (Fsq.n) &
+     dom ((abs (Fsq2.n)) to_power k) = dom (Fsq2.n) by VALUED_1:def 11;
+     for x be set st x in dom((abs (Fsq2.n)) to_power k) holds
+       ((abs (Fsq2.n)) to_power k ).x = ((abs (Fsq.n)) to_power k).x
+     proof
+      let x be set;
+      assume L1: x in dom((abs (Fsq2.n)) to_power k); then
+      reconsider x0=x as Element of X;
+L2:   x in dom((abs (Fsq.n)) to_power k) by A10,A11,A8,L1,XBOOLE_0:def 4;
+      thus ((abs (Fsq2.n)) to_power k ).x
+        = ((abs (Fsq2.n)).x0) to_power k by L1,MESFUN6C:def 6
+       .= (abs((Fsq2.n).x0)) to_power k by VALUED_1:18
+       .= (abs(((Fsq.n)|E0).x0)) to_power k by MESFUN9C:def 1
+       .= (abs((Fsq.n).x0)) to_power k by A10,A11,L1,FUNCT_1:72
+       .= (abs(Fsq.n).x0) to_power k by VALUED_1:18
+       .= ((abs (Fsq.n)) to_power k).x by L2,MESFUN6C:def 6;
+     end; then
+     ((abs (Fsq.n)) to_power k)|E0 = (abs (Fsq2.n)) to_power k
+        by A5,A8,A11,FUNCT_1:68; then
+     ((abs (Fsq2.n)) to_power k) is_integrable_on M by A7,MESFUNC6:91;
+     hence
+A12: Fsq2.n in Lp_Functions(M,k) by A9,A10,B4;
+A13: Fsq.n in Sq.n & Sq.n= a.e-eq-class_Lp(Fsq.n,M,k) by A1;
+     reconsider EB = E0` as Element of S by MEASURE1:66;
+     (Fsq2.n)|EB` = Fsq2.n by A10,RELAT_1:97; then
+     (Fsq2.n)|EB` =(Fsq.n)|EB` by MESFUN9C:def 1; then
+A14: (Fsq2.n) a.e.= (Fsq.n),M by B4,LPSPACE1:def 10;
+     hence Fsq2.n in Sq.n by A13,A12,EQC00b;
+     a.e-eq-class_Lp((Fsq2.n),M,k) = a.e-eq-class_Lp((Fsq.n),M,k)
+        by EQC02bx,A14;
+     hence Sq.n= a.e-eq-class_Lp(Fsq2.n,M,k) by A1;
+     hence ex r be Real st
+       0 <= r & r = Integral(M, (abs (Fsq2.n)) to_power k) &
+       ||. Sq.n .|| =r to_power (1/k) by Lm17x,EQC01,A12;
+    end;
+end;
+
+LM005X:
+for X be RealNormSpace, Sq be sequence of X, Sq0 be Point of X,
+ R1 be Real_Sequence, N be increasing sequence of NAT st
+  Sq is Cauchy_sequence_by_Norm &
+  (for i be Nat holds R1.i = ||. Sq0-Sq.(N.i) .||) &
+  R1 is convergent & lim R1=0
+holds
+   Sq is convergent & lim Sq = Sq0 &
+   ||.Sq -Sq0.|| is convergent & lim ||.Sq -Sq0.|| = 0
+proof
+    let X be RealNormSpace, Sq be sequence of X, Sq0 be Point of X,
+        R1 be Real_Sequence, N be increasing sequence of NAT;
+    assume that
+AS1: Sq is Cauchy_sequence_by_Norm and
+AS2: for i be Nat holds R1.i = ||. Sq0 - Sq.(N.i) .|| and
+AS3: R1 is convergent & lim R1=0;
+
+    set seq2 = ||. Sq - Sq0 .||;
+
+L:  now let p be Real;
+     assume A12: 0<p; then
+     consider n2 such that
+A14:  for m,n st n2<=m & n2 <= n holds ||.Sq.m-Sq.n.||< p/2 by AS1,RSSPACE3:10;
+     consider n1 such that
+A13:  for l st n1<=l holds abs((R1.l)-0 )<p/2 by AS3,A12,SEQ_2:def 7;
+
+     reconsider n3= max(n1,n2) as Element of NAT;
+     take n3;
+
+     thus for n be Element of NAT st n3 <= n holds ||. Sq.n - Sq0 .|| < p
+     proof
+      let n be Element of NAT;
+      assume D1: n3 <= n;
+
+      n1 <= n3 by XXREAL_0:25; then
+      n1 <= n by D1,XXREAL_0:2; then
+      abs((R1.n)-0 )<p/2 by A13; then
+P0:   abs(||.Sq0-Sq.(N.n).||) < p/2 by AS2;
+      0 <= ||.Sq0-Sq.(N.n).|| by NORMSP_1:8; then
+P1:   ||.Sq0-Sq.(N.n).|| < p/2 by P0,ABSVALUE:def 1;
+      n <= N.n by SEQM_3:33; then
+P21:  n3 <=N.n by D1,XXREAL_0:2;
+      n2 <= n3 by XXREAL_0:25; then
+      n2 <= N.n & n2 <= n by D1,P21,XXREAL_0:2; then
+      ||. Sq.(N.n)-Sq.n .|| < p/2 by A14; then
+P3:   ||.Sq0-Sq.(N.n).|| + ||. Sq.(N.n)-Sq.n .|| < p/2 + p/2 by XREAL_1:10,P1;
+P4:   ||.Sq.n-Sq0 .|| = ||. Sq0 - Sq.n .|| by NORMSP_1:11
+         .= ||. (Sq0 - Sq.(N.n)) + (Sq.(N.n)-Sq.n) .|| by LOPBAN_3:3;
+      ||. (Sq0 - Sq.(N.n)) + (Sq.(N.n)-Sq.n) .||
+         <= ||.Sq0-Sq.(N.n).|| + ||. Sq.(N.n)-Sq.n .|| by NORMSP_1:def 2;
+      hence ||.Sq.n-Sq0 .|| < p by P4,P3,XXREAL_0:2;
+     end;
+    end;
+    hence
+L1:   Sq is convergent by NORMSP_1:def 9;
+    hence lim Sq = Sq0 by NORMSP_1:def 11,L;
+    hence thesis by NORMSP_1:41,L1;
+end;
+
+theorem
+for X be RealNormSpace, Sq be sequence of X, Sq0 be Point of X st
+ ||.Sq -Sq0.|| is convergent & lim ||.Sq -Sq0.|| =0
+holds Sq is convergent & lim Sq = Sq0
+proof
+   let X be RealNormSpace, Sq be sequence of X, Sq0 be Point of X;
+   assume
+AS: ||.Sq -Sq0.|| is convergent & lim ||.Sq -Sq0.|| = 0;
+
+A2:for p be Real st 0 < p
+    ex n be Element of NAT st
+     for m be Element of NAT st n <= m holds ||. Sq.m - Sq0 .|| < p
+   proof
+    let p be Real;
+    assume 0 < p; then
+    consider n such that
+A5:  for m st n<=m holds abs((||.Sq - Sq0.||).m - 0) < p by AS,SEQ_2:def 7;
+    take n;
+    hereby let m be Element of NAT;
+     assume n<=m; then
+     abs ((||.Sq -Sq0.||).m-0) < p by A5; then
+     abs (||. (Sq -Sq0).m .||) < p by NORMSP_1:def 10; then
+A6:  abs (||.Sq.m -Sq0.||) < p by NORMSP_1:def 7;
+     0<= ||.Sq.m -Sq0.|| by NORMSP_1:8;
+     hence ||.Sq.m -Sq0.|| < p by ABSVALUE:def 1,A6;
+    end;
+   end;
+   hence Sq is convergent by NORMSP_1:def 9;
+   hence lim Sq =Sq0 by NORMSP_1:def 11,A2;
+end;
+
+theorem Th005:
+for X be RealNormSpace, Sq be sequence of X st
+ Sq is Cauchy_sequence_by_Norm holds
+  ex N be increasing sequence of NAT st
+   for i,j be Element of NAT st j >= N.i holds
+    ||. Sq.j - Sq.(N.i) .|| < 2 to_power (-i)
+proof
+   let X be RealNormSpace, Sq be sequence of X;
+   assume AS: Sq is Cauchy_sequence_by_Norm;
+   1 =2 to_power (-0) by POWER:29; then
+   consider N0 be Element of NAT such that
+P1: for j,i be Element of NAT st j >= N0 & i >= N0 holds
+      ||. Sq.j - Sq.i .|| < 2 to_power (-0) by AS,RSSPACE3:10;
+
+   defpred P[set,set,set] means
+    ex n,x,y be Element of NAT st n=$1 & x=$2 & y=$3 &
+     (  ( for j be Element of NAT st j >= x holds
+             ||.Sq.j -Sq.x.|| < 2 to_power (-n) ) implies x < y &
+        ( for j be Element of NAT st j >= y holds
+             ||.Sq.j -Sq.y.|| < 2 to_power (-(n+1)) ) );
+
+P2:for n,x being Element of NAT
+    ex y being Element of NAT st P[n,x,y]
+   proof
+    let n,x be Element of NAT;
+    now assume
+     for j be Element of NAT st j >= x
+       holds ||.Sq.j -Sq.x.|| < 2 to_power (-n);
+
+     0 < 2 to_power (-(n+1)) by POWER:39; then
+     consider N2 be Element of NAT such that
+P22:  for j,i be Element of NAT st j >= N2 & i >= N2 holds
+        ||.Sq.j -Sq.i.|| < 2 to_power (-(n+1)) by AS,RSSPACE3:10;
+
+     set y= max(x,N2)+1;
+     take y;
+
+     x <= max(x,N2) by XXREAL_0:25;
+     hence x < y by NAT_1:13;
+
+     N2 <= max(x,N2) by XXREAL_0:25; then
+P24: N2 < y by NAT_1:13;
+
+     thus for j be Element of NAT st j >= y holds
+              ||.Sq.j -Sq.y.|| < 2 to_power (-(n+1))
+     proof
+      let j be Element of NAT;
+      assume j >= y; then
+      j >= N2 & y >=N2 by P24,XXREAL_0:2;
+      hence thesis by P22;
+     end;
+    end;
+    hence thesis;
+   end;
+
+   consider f being Function of NAT,NAT such that
+P3: f.0 = N0 &
+    for n being Element of NAT holds P[n,f.n,f.(n+1)] from RECDEF_1:sch 2(P2);
+
+   defpred Q[Element of NAT] means
+    for j be Element of NAT st j >= f.$1 holds
+       ||. Sq.j - Sq.(f.$1) .|| < 2 to_power (-$1);
+
+P5:Q[ 0] by P1,P3;
+P6:now let i be Element of NAT;
+    assume AS1: Q[i];
+    ex n,x,y be Element of NAT st
+     n=i & x=f.i & y=f.(i+1) &
+     (  (for j be Element of NAT st j >= x holds
+          ||.Sq.j -Sq.x.|| < 2 to_power (-n))
+        implies
+         x < y &
+         (for j be Element of NAT st j >= y holds
+           ||.Sq.j -Sq.y.|| < 2 to_power (-(n+1)) )
+     ) by P3;
+    hence Q[i+1] by AS1;
+   end;
+
+P4:for i be Element of NAT holds Q[i] from NAT_1:sch 1(P5,P6);
+
+P7:f is Real_Sequence by FUNCT_2:9;
+   now let i be Element of NAT;
+    ex n,x,y be Element of NAT st
+     n=i & x=f.i & y=f.(i+1) &
+     ( (for j be Element of NAT st j >= x holds
+          ||.Sq.j -Sq.x.|| < 2 to_power (-n))
+       implies
+        x < y &
+        (for j be Element of NAT st j >= y holds
+           ||.Sq.j -Sq.y.|| < 2 to_power (-(n+1)))
+     ) by P3;
+    hence f.i < f.(i+1) by P4;
+   end; then
+   f is increasing by P7,SEQM_3:def 11;
+   hence thesis by P4;
+end;
+
+theorem C935:
+for F be Functional_Sequence of X,REAL st
+ (for m be Nat holds F.m in Lp_Functions(M,k))
+ holds
+  for m be Nat holds (Partial_Sums F).m in Lp_Functions(M,k)
+proof
+   let F be Functional_Sequence of X,REAL;
+   assume A1: for m be Nat holds F.m in Lp_Functions(M,k);
+
+   defpred P[Nat] means (Partial_Sums F).$1 in Lp_Functions(M,k);
+
+   (Partial_Sums F).0 = F.0 by MESFUN9C:def 2; then
+B1:P[ 0] by A1;
+B2:now let j be Nat;
+    assume P[j]; then
+B01:(Partial_Sums F).j in Lp_Functions(M,k) &
+    F.(j+1) in Lp_Functions(M,k) by A1;
+    (Partial_Sums F).(j+1) = (Partial_Sums F).j + F.(j+1) by MESFUN9C:def 2;
+    hence P[j+1] by B01,Th01aLp;
+   end;
+   for j being Nat holds P[j] from NAT_1:sch 2(B1,B2);
+   hence thesis;
+end;
+
+theorem C936:
+for F be Functional_Sequence of X,REAL st
+ (for m be Nat holds F.m is nonnegative)
+holds
+ for m be Nat holds (Partial_Sums F).m is nonnegative
+proof
+   let F be Functional_Sequence of X,REAL;
+   assume A1: for m be Nat holds F.m is nonnegative;
+
+   defpred P[Nat] means (Partial_Sums F).$1 is nonnegative;
+
+   (Partial_Sums F).0 = F.0 by MESFUN9C:def 2; then
+B1:P[ 0] by A1;
+
+B2:now let k be Nat;
+    assume P[k]; then
+B01:(Partial_Sums F).k is nonnegative & F.(k+1) is nonnegative by A1;
+    (Partial_Sums F).(k+1) = (Partial_Sums F).k + F.(k+1)
+by MESFUN9C:def 2;
+    hence P[k+1] by B01,MESFUNC6:56;
+   end;
+   for k being Nat holds P[k] from NAT_1:sch 2(B1,B2);
+   hence thesis;
+end;
+
+theorem C937:
+for F be Functional_Sequence of X,REAL, x be Element of X, n,m be Nat st
+ F is with_the_same_dom & x in dom(F.0) &
+(for k be Nat holds F.k is nonnegative) & n <= m holds
+   ((Partial_Sums F).n).x <= ((Partial_Sums F).m).x
+proof
+   let F be Functional_Sequence of X,REAL, x be Element of X, n,m be Nat;
+   assume A0: F is with_the_same_dom;
+   assume A81: x in dom(F.0);
+   assume A1: for m be Nat holds F.m is nonnegative;
+   assume C1: n <= m;
+
+   set PF = Partial_Sums F;
+
+   defpred P[Nat] means (PF.n).x <= (PF.$1).x;
+
+Q1:for k be Nat holds (PF.k).x <= (PF.(k+1)).x
+   proof
+    let k be Nat;
+Q11:PF.(k+1) = PF.k + F.(k+1) by MESFUN9C:def 2;
+Q12:dom(PF.(k+1)) = dom(F.0) by A0,MESFUN9C:11;
+    F.(k+1) is nonnegative & PF.k is nonnegative by A1,C936; then
+    0 <= (F.(k+1)).x & 0 <= (PF.k).x by MESFUNC6:51; then
+    (PF.k).x + 0 <= (PF.k).x + (F.(k+1)).x by XREAL_1:9;
+    hence thesis by Q12,A81,Q11,VALUED_1:def 1;
+   end;
+
+Q2:for k be Nat st k >= n &
+      (for l be Nat st l >= n & l < k holds P[l]) holds P[k]
+   proof
+    let k be Nat;
+    assume
+Q21: k >= n & for l be Nat st l >= n & l < k holds P[l];
+    now assume k > n; then
+     k >= n + 1 by NAT_1:13; then
+Q22: k = n+1 or k > n+1 by XXREAL_0:1;
+     now assume Q23: k > n+1; then
+      reconsider l = k-1 as Element of NAT by NAT_1:20;
+      k < k+1 by NAT_1:13; then
+      k > l & l >= n by Q23,XREAL_1:21; then
+Q24:  (PF.n).x <= (PF.l).x by Q21;
+      k = l+1; then
+      (PF.l).x <= (PF.k).x by Q1;
+      hence thesis by Q24,XXREAL_0:2;
+     end;
+     hence thesis by Q22,Q1;
+    end;
+    hence thesis by Q21,XXREAL_0:1;
+   end;
+   for k being Nat st k >= n holds P[k] from NAT_1:sch 9(Q2);
+   hence thesis by C1;
+end;
+
+theorem C938:
+for F be Functional_Sequence of X,REAL st
+  F is with_the_same_dom holds (abs F) is with_the_same_dom
+proof
+   let F be Functional_Sequence of X,REAL;
+   assume A1: F is with_the_same_dom;
+   for n,m be natural number holds dom((abs F).n) = dom((abs F).m)
+   proof
+    let n,m be natural number;
+    (abs F).n = abs(F.n) & (abs F).m = abs(F.m) by SEQFUNC:def 5; then
+    dom((abs F).n) = dom(F.n) & dom((abs F).m) = dom(F.m) by VALUED_1:def 11;
+    hence dom((abs F).n) = dom((abs F).m) by A1,MESFUNC8:def 2;
+   end;
+   hence abs F is with_the_same_dom by MESFUNC8:def 2;
+end;
+
+theorem Th006:
+for k be geq_than_1 Real, Sq be sequence of Lp-Space(M,k) st
+  Sq is Cauchy_sequence_by_Norm holds Sq is convergent
+proof
+    let k be geq_than_1 Real;
+    let Sq be sequence of Lp-Space(M,k);
+AKS:1 <= k by defH;
+    assume A1: Sq is Cauchy_sequence_by_Norm;
+    consider Fsq be with_the_same_dom Functional_Sequence of X,REAL such that
+A2:  for n be Element of NAT holds
+      Fsq.n in Lp_Functions(M,k) & Fsq.n in Sq.n &
+      Sq.n= a.e-eq-class_Lp(Fsq.n,M,k) &
+      ex r be Real st 0<=r & r = Integral(M,(abs (Fsq.n)) to_power k) &
+        ||. Sq.n .|| =r to_power (1/k) by Th004;
+
+    Fsq.0 in Lp_Functions(M,k) by A2; then
+A3: ex D be Element of S st M.D` =0 & dom(Fsq.0) = D &
+     (Fsq.0) is_measurable_on D by EQC00a; then
+    reconsider E = dom(Fsq.0) as Element of S;
+
+    consider N be increasing sequence of NAT such that
+A4:  for i,j be Element of NAT st j >= N.i holds
+      ||. Sq.j - Sq.(N.i) .|| < 2 to_power (-i) by Th005,A1;
+
+    deffunc FsqN(Nat) = Fsq.(N.$1);
+    consider F1 be Functional_Sequence of X,REAL such that
+A5:  for n be Nat holds F1.n = FsqN(n) from SEQFUNC:sch 1;
+
+A6: for n be natural number holds
+      dom(F1.n) = E & F1.n in Lp_Functions(M,k) &
+      F1.n is_measurable_on E & abs(F1.n) in Lp_Functions(M,k)
+    proof
+     let n be natural number;
+E61: F1.n = Fsq.(N.n) by A5;
+     hence
+B2:   dom(F1.n) = E & F1.n in Lp_Functions(M,k) by A2,MESFUNC8:def 2; then
+     ex F be PartFunc of X,REAL st
+      F1.n = F & ex ND be Element of S st M.ND` =0 & dom F = ND &
+      F is_measurable_on ND & (abs F) to_power k is_integrable_on M;
+     hence F1.n is_measurable_on E by E61,MESFUNC8:def 2;
+     thus abs(F1.n) in Lp_Functions(M,k) by B2,Th01dLp;
+    end;
+
+    for n,m be natural number holds dom (F1.n) = dom (F1.m)
+    proof
+     let n,m be natural number;
+     dom(F1.n) = E & dom(F1.m) = E by A6;
+     hence thesis;
+    end; then
+    reconsider F1 as with_the_same_dom Functional_Sequence of X,REAL
+      by MESFUNC8:def 2;
+
+    deffunc FF(Nat) = F1.($1+1) - F1.$1;
+    consider FMF be Functional_Sequence of X,REAL such that
+A7:  for n be Nat holds FMF.n = FF(n) from SEQFUNC:sch 1;
+
+A8: for n be natural number holds dom(FMF.n) = E & FMF.n in Lp_Functions(M,k)
+    proof
+     let n be natural number;
+B1:  dom(F1.n) = E & dom(F1.(n+1)) = E by A6;
+     FMF.n = F1.(n+1) - F1.n by A7; then
+     dom(FMF.n) = dom (F1.(n+1)) /\ dom (F1.n) by VALUED_1:12;
+     hence dom(FMF.n) = E by B1;
+
+     Fsq.(N.(n+1)) in Lp_Functions(M,k) & Fsq.(N.n) in Lp_Functions(M,k)
+       by A2; then
+     F1.(n+1) in Lp_Functions(M,k) & F1.n in Lp_Functions(M,k) by A5; then
+     F1.(n+1) - F1.n in Lp_Functions(M,k) by Th01cLp;
+     hence FMF.n in Lp_Functions(M,k) by A7;
+    end;
+
+    for n,m be natural number holds dom(FMF.n) = dom(FMF.m)
+    proof
+     let n,m be natural number;
+     dom(FMF.n) = E & dom(FMF.m) = E by A8;
+     hence thesis;
+    end; then
+    reconsider FMF as with_the_same_dom Functional_Sequence of X,REAL
+       by MESFUNC8:def 2;
+
+    set AbsFMF = abs FMF;
+    reconsider ExtAbsFMF = R_EAL AbsFMF as Functional_Sequence of X,ExtREAL;
+
+A9: for n be natural number holds
+     AbsFMF.n is nonnegative & dom(AbsFMF.n) = E & abs(AbsFMF.n) = AbsFMF.n &
+     AbsFMF.n in Lp_Functions(M,k) & AbsFMF.n is_measurable_on E
+    proof
+     let n be natural number;
+PQ:  AbsFMF.n = abs (FMF.n) by SEQFUNC:def 5;
+     hence AbsFMF.n is nonnegative;
+
+PP:  dom(FMF.n) = E & FMF.n in Lp_Functions(M,k) by A8;
+     hence dom(AbsFMF.n) = E & abs(AbsFMF.n) = AbsFMF.n by PQ,VALUED_1:def 11;
+
+     thus AbsFMF.n in Lp_Functions(M,k) by A8,PQ,Th01dLp; then
+     ex D be Element of S st M.D` = 0 & dom(AbsFMF.n) = D &
+       AbsFMF.n is_measurable_on D by EQC00a;
+     hence AbsFMF.n is_measurable_on E by PP,PQ,VALUED_1:def 11;
+    end;
+    reconsider
+      AbsFMF as with_the_same_dom Functional_Sequence of X,REAL by C938;
+    deffunc Gk(Nat) =abs(F1.0) + (Partial_Sums AbsFMF).$1;
+    consider G be Functional_Sequence of X,REAL such that
+A10: for n be Nat holds G.n = Gk(n) from SEQFUNC:sch 1;
+A11:for n be natural number holds
+      dom(G.n) = E & G.n in Lp_Functions(M,k) & G.n is nonnegative &
+      G.n is_measurable_on E & abs(G.n) = G.n
+    proof
+     let n be natural number;
+H2:  G.n = abs(F1.0) + (Partial_Sums AbsFMF).n by A10; then
+P0:  dom(G.n)
+        = dom(abs(F1.0)) /\ dom((Partial_Sums AbsFMF).n) by VALUED_1:def 1
+       .= dom(F1.0) /\ dom((Partial_Sums AbsFMF).n) by VALUED_1:def 11
+       .= dom(F1.0) /\ dom(AbsFMF.0) by MESFUN9C:11;
+P1:  (Partial_Sums AbsFMF).n in Lp_Functions(M,k) &
+     (Partial_Sums AbsFMF).n is nonnegative &
+     (Partial_Sums AbsFMF).n is_measurable_on E
+        by A9,C935,C936,MESFUN9C:16;
+T1:  dom(AbsFMF.0) = E by A9;
+P2:  F1.0 in Lp_Functions(M,k) & dom(F1.0) = E & F1.0 is_measurable_on E
+        by A6; then
+     abs(F1.0) in Lp_Functions(M,k) &
+     abs(F1.0) is nonnegative &
+     abs(F1.0) is_measurable_on E by Th01dLp,MESFUNC6:48;
+     hence thesis by P0,P2,T1,H2,P1,Lm002b,Th01aLp,MESFUNC6:26,56;
+    end;
+
+    deffunc Gpk(Nat) =(G.$1) to_power k;
+    consider Gp be Functional_Sequence of X,REAL such that
+A12: for n be Nat holds Gp.n = Gpk(n) from SEQFUNC:sch 1;
+A13:for n be Nat holds
+     ((G.n) to_power k) is nonnegative & ((G.n) to_power k) is_measurable_on E
+    proof
+     let n be Nat;
+L0:  G.n is nonnegative by A11;
+     hence ((G.n) to_power k) is nonnegative;
+     G.n is_measurable_on E & dom(G.n) = E by A11;
+     hence ((G.n) to_power k) is_measurable_on E by L0,MESFUN6C:29;
+    end;
+    reconsider ExtGp = R_EAL Gp as Functional_Sequence of X,ExtREAL;
+A14:for n be natural number holds
+      dom(ExtGp.n) = E & ExtGp.n is_measurable_on E &
+      ExtGp.n is nonnegative
+    proof
+     let n be natural number;
+     ExtGp.n = R_EAL((G.n) to_power k) by A12; then
+     dom(ExtGp.n) = dom (G.n) by MESFUN6C:def 6;
+     hence dom(ExtGp.n) = E by A11;
+     ((G.n) to_power k) is_measurable_on E by A13; then
+     R_EAL((G.n) to_power k) is_measurable_on E by MESFUNC6:def 6;
+     hence ExtGp.n is_measurable_on E by A12;
+     ((G.n) to_power k) is nonnegative by A13;
+     hence ExtGp.n is nonnegative by A12;
+    end; then
+A15:dom(ExtGp.0) = E & ExtGp.0 is nonnegative;
+
+    for n,m be natural number holds dom (ExtGp.n) = dom (ExtGp.m)
+    proof
+     let n,m be natural number;
+     dom (ExtGp.n) = E & dom(ExtGp.m) = E by A14;
+     hence thesis;
+    end; then
+    reconsider ExtGp as with_the_same_dom Functional_Sequence of X,ExtREAL
+      by MESFUNC8:def 2;
+
+A16:for n,m be Nat st n <=m holds
+     for x be Element of X st x in E holds (ExtGp.n).x <= (ExtGp.m).x
+    proof
+     let n,m be Nat;
+     assume AS1:n <=m;
+     let x be Element of X;
+     assume AS2:x in E; then
+B1:  x in dom (G.n) & x in dom (G.m) by A11; then
+     x in dom((G.n) to_power k) &
+     x in dom((G.m) to_power k) by MESFUN6C:def 6; then
+     ((G.n).x) to_power k = ((G.n) to_power k).x &
+     ((G.m).x) to_power k = ((G.m) to_power k).x by MESFUN6C:def 6; then
+B2:  ((G.n).x) to_power k = (ExtGp.n).x &
+     ((G.m).x) to_power k = (ExtGp.m).x by A12;
+     dom(AbsFMF.0) = E by A9; then
+     ((Partial_Sums AbsFMF).n).x <= ((Partial_Sums AbsFMF).m).x
+        by C937,AS1,AS2,A9; then
+B3:  (abs(F1.0)).x + ((Partial_Sums AbsFMF).n).x
+       <= (abs(F1.0)).x + ((Partial_Sums AbsFMF).m).x by XREAL_1:8;
+
+     G.m= abs(F1.0) + (Partial_Sums AbsFMF).m &
+     G.n= abs(F1.0) + (Partial_Sums AbsFMF).n by A10; then
+B4:  (G.m).x= (abs(F1.0)).x + ((Partial_Sums AbsFMF).m).x &
+     (G.n).x= (abs(F1.0)).x + ((Partial_Sums AbsFMF).n).x by B1,VALUED_1:def 1;
+
+     G.n is nonnegative by A11; then
+     0 <= (G.n).x by MESFUNC6:51;
+     hence thesis by B2,B3,B4,HOLDER_1:3;
+    end;
+
+A17:for x be Element of X st x in E holds ExtGp#x is non-decreasing
+    proof
+     let x be Element of X;
+     assume AS: x in E;
+     for n,m be Element of NAT st m<=n holds ((ExtGp)#x).m <= ((ExtGp)#x).n
+     proof
+      let n,m be Element of NAT;
+      assume m <= n; then
+      ((ExtGp).m).x <= ((ExtGp).n).x by A16,AS; then
+      ((ExtGp)#x).m <= ((ExtGp).n).x by MESFUNC5:def 13;
+      hence thesis by MESFUNC5:def 13;
+     end;
+     hence ExtGp#x is non-decreasing by RINFSUP2:7;
+    end;
+
+A18:for x be Element of X st x in E holds ExtGp#x is convergent
+    proof
+     let x be Element of X;
+     assume x in E; then
+     ExtGp#x is non-decreasing by A17;
+     hence thesis by RINFSUP2:37;
+    end; then
+    consider I be ExtREAL_sequence such that
+A19: (for n be Nat holds I.n = Integral(M,ExtGp.n)) &
+     I is convergent & Integral(M,lim ExtGp) = lim I
+        by A15,A14,A16,MESFUNC9:52;
+
+    now let y be set;
+     assume y in rng I; then
+     consider x be Element of NAT such that
+B1:   y = I.x by FUNCT_2:190;
+B2:  y = Integral(M,Gp.x) by B1,A19;
+     G.x = abs(G.x) by A11; then
+B3:  Gp.x = abs(G.x) to_power k by A12;
+     G.x in Lp_Functions(M,k) by A11;
+     hence y in REAL by B2,B3,Lm15;
+    end; then
+    rng I c= REAL by TARSKI:def 3; then
+    reconsider Ir = I as Function of NAT,REAL by FUNCT_2:8;
+
+
+
+    deffunc KAbsFMF(Nat) = Integral(M,(AbsFMF.$1) to_power k);
+
+A20:for x being Element of NAT holds KAbsFMF(x) is Element of REAL
+    proof
+     let x being Element of NAT;
+     (AbsFMF.x) in Lp_Functions(M,k) by A9; then
+     Integral(M,(abs(AbsFMF.x)) to_power k) in REAL by Lm15;
+     hence thesis by A9;
+    end;
+    consider KPAbsFMF being Function of NAT,REAL such that
+A21: for x be Element of NAT holds
+      KPAbsFMF.x = KAbsFMF(x) from FUNCT_2:sch 9(A20);
+
+    deffunc KKAbsFMF(Nat) = (KPAbsFMF.$1) to_power (1/k);
+A22:for x being Element of NAT holds KKAbsFMF(x) is Element of REAL;
+    consider PAbsFMF being Function of NAT,REAL such that
+A23: for x be Element of NAT holds
+       PAbsFMF.x = KKAbsFMF(x) from FUNCT_2:sch 9(A22);
+
+    F1.0 in Lp_Functions(M,k) by A6; then
+    reconsider
+      RF0=Integral(M,(abs(F1.0)) to_power k) as Element of REAL by Lm15;
+
+    deffunc LAbsFMF(Element of NAT)
+      = RF0 to_power (1/k) + (Partial_Sums PAbsFMF).$1;
+A24:for x being Element of NAT holds LAbsFMF(x) is Element of REAL;
+    consider QAbsFMF being Function of NAT,REAL such that
+A25: for x being Element of NAT holds QAbsFMF.x = LAbsFMF(x)
+        from FUNCT_2:sch 9(A24);
+
+A26:for n being Element of NAT holds (Ir.n) to_power (1/k) <= QAbsFMF.n
+    proof
+     defpred PN[Nat] means (Ir.$1) to_power (1/k) <= QAbsFMF.$1;
+
+B1:  abs(F1.0) in Lp_Functions(M,k) & AbsFMF.0 in Lp_Functions(M,k) by A9,A6;
+
+     G.0 = abs(F1.0) + (Partial_Sums AbsFMF).0 by A10; then
+B2:  G.0 =abs(F1.0) + AbsFMF.0 by MESFUN9C:def 2;
+
+     Ir.0 = Integral(M,Gp.0) by A19; then
+     Ir.0 = Integral(M,(G.0) to_power k) by A12; then
+B3:  Ir.0 = Integral(M,abs( abs(F1.0) + AbsFMF.0 ) to_power k) by A11,B2;
+
+     KPAbsFMF.0 = Integral(M,(AbsFMF.0) to_power k) by A21; then
+B4:  KPAbsFMF.0 = Integral(M,abs(AbsFMF.0) to_power k) by A9;
+
+B5:  RF0 = Integral(M,abs(abs(F1.0)) to_power k);
+
+     QAbsFMF.0 = RF0 to_power (1/k) + (Partial_Sums PAbsFMF).0 by A25; then
+     QAbsFMF.0 = RF0 to_power (1/k) + PAbsFMF.0 by SERIES_1:def 1; then
+     QAbsFMF.0 = RF0 to_power (1/k) + (KPAbsFMF.0) to_power (1/k) by A23; then
+P1:  PN[ 0] by AKS,B1,B3,B4,B5,Th002X;
+
+P2:  now let n being Element of NAT;
+      assume PN[n]; then
+B0:   (Ir.n) to_power (1/k) + PAbsFMF.(n+1) <= QAbsFMF.n + PAbsFMF.(n+1)
+         by XREAL_1:8;
+
+      G.(n+1) = abs(F1.0) + (Partial_Sums AbsFMF).(n+1) by A10
+      .= abs(F1.0) + ((Partial_Sums AbsFMF).n + AbsFMF.(n+1)) by MESFUN9C:def 2
+      .= abs(F1.0) +(Partial_Sums AbsFMF).n + AbsFMF.(n+1) by RFUNCT_1:19; then
+B1:   G.(n+1) = G.n + AbsFMF.(n+1) by A10;
+
+B2:   AbsFMF.(n+1) in Lp_Functions(M,k) & G.n in Lp_Functions(M,k) by A9,A11;
+
+      KPAbsFMF.(n+1) = Integral(M,(AbsFMF.(n+1)) to_power k) by A21; then
+B3:   KPAbsFMF.(n+1) = Integral(M,abs (AbsFMF.(n+1)) to_power k) by A9;
+
+B4:   PAbsFMF.(n+1) = (KPAbsFMF.(n+1)) to_power (1/k) by A23;
+
+      Ir.n = Integral(M,Gp.n) & Ir.(n+1) = Integral(M,Gp.(n+1)) by A19; then
+      Ir.n = Integral(M,(G.n) to_power k) &
+      Ir.(n+1) = Integral(M,(G.(n+1)) to_power k) by A12; then
+      Ir.n = Integral(M,abs (G.n) to_power k) &
+      Ir.(n+1) =Integral(M,abs (G.n + AbsFMF.(n+1)) to_power k) by B1,A11; then
+      (Ir.(n+1)) to_power (1/k) <= (Ir.n) to_power (1/k) + PAbsFMF.(n+1)
+         by AKS,B2,B3,B4,Th002X; then
+B6:   (Ir.(n+1)) to_power (1/k) <= QAbsFMF.n + PAbsFMF.(n+1) by B0,XXREAL_0:2;
+
+      QAbsFMF.n + PAbsFMF.(n+1)
+       = RF0 to_power (1/k) + (Partial_Sums PAbsFMF).n + PAbsFMF.(n+1) by A25
+      .= RF0 to_power (1/k) + ((Partial_Sums PAbsFMF).n + PAbsFMF.(n+1))
+      .= RF0 to_power (1/k) + (Partial_Sums PAbsFMF).(n+1) by SERIES_1:def 1;
+      hence PN[n+1] by B6,A25;
+     end;
+
+     for n be Element of NAT holds PN[n] from NAT_1:sch 1(P1,P2);
+     hence thesis;
+    end;
+
+A27:for n be Element of NAT holds PAbsFMF.n = ||. Sq.(N.(n+1))-Sq.(N.n) .||
+    proof
+     let n be Element of NAT;
+     set m = N.n;
+     set m1 = N.(n+1);
+B4:  F1.(n+1) = Fsq.(N.(n+1)) & F1.n = Fsq.(N.n) by A5;
+     AbsFMF.n = abs (FMF.n) by SEQFUNC:def 5; then
+B5:  AbsFMF.n = abs( Fsq.(N.(n+1)) - Fsq.(N.n) ) by B4,A7;
+B6:  Fsq.(N.(n+1)) in Lp_Functions(M,k) & Fsq.(N.(n+1)) in Sq.(N.(n+1)) &
+     Fsq.(N.n) in Lp_Functions(M,k) & Fsq.(N.n) in Sq.m by A2; then
+     (-1)(#)(Fsq.m) in (-1)*(Sq.m) by Lm17Y; then
+     Fsq.m1 - Fsq.m in Sq.m1 + (-1)*(Sq.m) by Lm17Y,B6; then
+     Fsq.m1 - Fsq.m in Sq.m1 - Sq.m by RLVECT_1:29; then
+B9:  ex r be Real st
+      0<=r & r = Integral(M,(abs (Fsq.m1 - Fsq.m)) to_power k) &
+      ||. Sq.m1 - Sq.m .|| = r to_power (1/k) by Lm17x;
+     PAbsFMF.n = (KPAbsFMF.n) to_power (1/k) by A23;
+     hence thesis by B9,B5,A21;
+    end;
+    1/2 < 1; then
+    abs(1/2) < 1 by ABSVALUE:def 1; then
+A28:(1/2) GeoSeq is summable & Sum((1/2) GeoSeq) = 1/(1-(1/2)) by SERIES_1:28;
+    for n be Element of NAT holds 0<=PAbsFMF.n & PAbsFMF.n <= ((1/2) GeoSeq).n
+    proof
+     let n be Element of NAT;
+LL1: PAbsFMF.n = ||. Sq.(N.(n+1)) - Sq.(N.n) .|| by A27;
+     hence 0 <= PAbsFMF.n by NORMSP_1:8;
+     ((1/2) GeoSeq).n = (1/2) |^n by PREPOWER:def 1
+                     .= (1/2) to_power n by POWER:46; then
+LL2: ((1/2) GeoSeq).n = 2 to_power (-n) by POWER:37;
+     N is Real_Sequence by FUNCT_2:9; then
+     N.n < N.(n+1) by SEQM_3:def 11;
+     hence PAbsFMF.n <= ((1/2) GeoSeq).n by A4,LL1,LL2;
+    end; then
+    PAbsFMF is summable & Sum(PAbsFMF) <= Sum((1/2) GeoSeq)
+      by A28,SERIES_1:24; then
+    Partial_Sums(PAbsFMF) is convergent by SERIES_1:def 2; then
+    Partial_Sums(PAbsFMF) is bounded by SEQ_2:27; then
+    consider Br be real number such that
+A29: for n be Element of NAT holds Partial_Sums(PAbsFMF).n < Br by SEQ_2:def 3;
+
+    for n being Element of NAT holds
+      Ir.n < (RF0 to_power (1/k) + Br) to_power k
+    proof
+     let n being Element of NAT;
+     (Ir.n) to_power (1/k) <= QAbsFMF.n by A26; then
+D1:  (Ir.n) to_power (1/k) <= RF0 to_power (1/k) + (Partial_Sums PAbsFMF).n
+        by A25;
+
+     RF0 to_power (1/k) + (Partial_Sums PAbsFMF).n < RF0 to_power (1/k) + Br
+        by A29,XREAL_1:10; then
+R10: (Ir.n)  to_power (1/k) < RF0 to_power (1/k) + Br by D1,XXREAL_0:2;
+
+     Ir.n = Integral(M,Gp.n) by A19; then
+     Ir.n = Integral(M,(G.n) to_power k) by A12; then
+R110:Ir.n = Integral(M,abs(G.n) to_power k) by A11;
+
+R11: G.n in Lp_Functions(M,k) by A11; then
+     0 <= (Ir.n) to_power (1/k) by Lm15,R110,LmPW001; then
+     ((Ir.n) to_power (1/k)) to_power k
+       < (RF0 to_power (1/k) + Br) to_power k by R10,HOLDER13; then
+     (Ir.n) to_power ((1/k)*k) < (RF0 to_power (1/k) + Br) to_power k
+         by R11,Lm15,R110,HOLDER_1:2; then
+     (Ir.n) to_power 1 < (RF0 to_power (1/k) + Br) to_power k by XCMPLX_1:107;
+     hence thesis by POWER:30;
+    end; then
+A30:Ir is bounded_above by SEQ_2:def 3;
+
+    for n,m be Element of NAT st n <=m holds Ir.n <= Ir.m
+    proof
+     let n,m be Element of NAT;
+     assume n <=m; then
+D2:  for x be Element of X st x in E holds (ExtGp.n).x <= (ExtGp.m).x by A16;
+
+D7:  ExtGp.n is_measurable_on E & ExtGp.m is_measurable_on E &
+     ExtGp.n is nonnegative & ExtGp.m is nonnegative by A14;
+
+D5:  dom(ExtGp.n) = E & dom(ExtGp.m) = E by A14; then
+D11: (ExtGp.n)|E = ExtGp.n & (ExtGp.m)|E = ExtGp.m by RELAT_1:97;
+
+     I.n = Integral(M,ExtGp.n) & I.m = Integral(M,ExtGp.m) by A19;
+     hence thesis by D2,D5,D7,D11,MESFUNC9:15;
+    end; then
+    Ir is non-decreasing by SEQM_3:12; then
+A31:I is convergent_to_finite_number & lim I = lim Ir by A30,RINFSUP2:14;
+
+    reconsider LExtGp = lim ExtGp as PartFunc of X,ExtREAL;
+
+A32:E = dom LExtGp & LExtGp is_measurable_on E
+       by A14,A15,A18,MESFUNC8:def 10,25;
+
+A33:for x be set st x in dom LExtGp holds 0 <= LExtGp.x
+    proof
+     let x be set;
+     assume B0: x in dom LExtGp; then
+     reconsider x1 = x as Element of X;
+B1:  x1 in E by A15,B0,MESFUNC8:def 10;
+     now let k1 being Nat;
+      reconsider k=k1 as Element of NAT by ORDINAL1:def 13;
+      ExtGp#x1 is non-decreasing by A17,B1; then
+C23:  (ExtGp#x1).0 <= (ExtGp#x1).k by RINFSUP2:7;
+      0 <= (ExtGp.0).x1 by A15,SUPINF_2:58;
+      hence 0 <= (ExtGp#x1).k1 by C23,MESFUNC5:def 13;
+     end; then
+     0 <= lim (ExtGp#x1) by B1,A18,MESFUNC9:10;
+     hence thesis by B0,MESFUNC8:def 10;
+    end;
+
+A34:eq_dom(LExtGp,+infty) = E /\ eq_dom(LExtGp,+infty)
+       by A32,RELAT_1:167,XBOOLE_1:28; then
+    reconsider EE=eq_dom(LExtGp,+infty) as Element of S by A32,MESFUNC1:37;
+    reconsider E0= E \ EE as Element of S;
+
+    E0` = (X \ E) \/ (X /\ EE) by XBOOLE_1:52; then
+A35:E0` = E` \/ EE by XBOOLE_1:28;
+
+    M.EE = 0 by A19,A31,A32,A33,A34,MESFUNC9:13,SUPINF_2:71; then
+A36:EE is measure_zero of M by MEASURE1:def 13;
+
+    E` is Element of S by MEASURE1:66; then
+    E` is measure_zero of M by A3,MEASURE1:def 13; then
+    E0` is measure_zero of M by A35,A36,MEASURE1:70; then
+A37:M.E0` = 0 by MEASURE1:def 13;
+
+A38:for x be Element of X st x in E0 holds LExtGp.x in REAL
+    proof
+     let x be Element of X;
+     assume x in E0; then
+     x in E & not x in EE by XBOOLE_0:def 5; then
+     LExtGp.x <> +infty & 0<= LExtGp.x by A32,A33,MESFUNC1:def 16;
+     hence LExtGp.x in REAL by XXREAL_0:14;
+    end;
+
+A39:for x be Element of X st x in E0 holds
+     Gp#x is convergent & lim (Gp#x)= lim (ExtGp#x)
+    proof
+     let x be Element of X;
+     assume B1: x in E0; then
+B2:  x in E by XBOOLE_0:def 5; then
+     LExtGp.x = lim((ExtGp)#x) by A32,MESFUNC8:def 10; then
+B3:  lim((ExtGp)#x) in REAL by A38,B1;
+     (ExtGp)#x is convergent by A18,B2; then
+B4:  ex g be real number st lim((ExtGp)#x) = g &
+      (for p be real number st 0<p ex n be Nat st
+        for m be Nat st n<=m holds |. ((ExtGp)#x).m - lim((ExtGp)#x) .| < p) &
+      (ExtGp)#x is convergent_to_finite_number
+        by B3,MESFUNC5:def 12;
+     ExtGp#x = Gp#x by MESFUN7C:1;
+     hence thesis by RINFSUP2:15,B4;
+    end;
+A40:for x be Element of X st x in E0 holds
+     for n be Element of NAT holds (Gp#x).n = ((G#x).n) to_power k
+    proof
+     let x be Element of X;
+     assume B1: x in E0;
+     hereby let n be Element of NAT;
+      x in E by XBOOLE_0:def 5,B1; then
+      x in dom(G.n) by A11; then
+B2:   x in dom((G.n) to_power k) by MESFUN6C:def 6;
+      (Gp#x).n = (Gp.n).x by SEQFUNC:def 11
+              .= ((G.n) to_power k ).x by A12
+              .= ((G.n).x) to_power k by B2,MESFUN6C:def 6;
+      hence (Gp#x).n = ((G#x).n) to_power k by SEQFUNC:def 11;
+     end;
+    end;
+
+A41:for x be Element of X st x in E0 holds
+      (Partial_Sums AbsFMF)#x is convergent
+    proof
+     let x be Element of X;
+     assume B1: x in E0; then
+B2:  Gp#x is convergent by A39;
+B3:  now let n be Element of NAT;
+      G.n is nonnegative by A11; then
+      0 <= (G.n).x by MESFUNC6:51; hence
+      0 <= (G#x).n by SEQFUNC:def 11;
+     end;
+     for n be Element of NAT holds
+       (Gp#x).n = ((G#x).n) to_power k by B1,A40; then
+B4:  G#x is convergent by B2,B3,LMSQ1;
+     now let s be real number;
+      assume 0<s; then
+      consider n be Element of NAT such that
+B5:    for m be Element of NAT st n<=m holds abs((G#x).m -(G#x).n)<s
+         by B4,SEQ_4:58;
+
+      now let m be Element of NAT;
+       assume B6: n<=m;
+       x in E by XBOOLE_0:def 5,B1; then
+B7:    x in dom(G.n) & x in dom(G.m) by A11;
+
+       G.m = abs(F1.0) + (Partial_Sums AbsFMF).m &
+       G.n = abs(F1.0) + (Partial_Sums AbsFMF).n by A10; then
+       (G.m).x = abs(F1.0).x + ((Partial_Sums AbsFMF).m).x &
+       (G.n).x = abs(F1.0).x + ((Partial_Sums AbsFMF).n).x
+          by B7,VALUED_1:def 1; then
+       (G#x).m = abs(F1.0).x + ((Partial_Sums AbsFMF).m).x &
+       (G#x).n = abs(F1.0).x + ((Partial_Sums AbsFMF).n).x
+         by SEQFUNC:def 11; then
+B8:    (G#x).m -(G#x).n
+        = ((Partial_Sums AbsFMF).m).x -((Partial_Sums AbsFMF).n).x;
+
+       ((Partial_Sums AbsFMF)#x).m = ((Partial_Sums AbsFMF).m).x &
+       ((Partial_Sums AbsFMF)#x).n = ((Partial_Sums AbsFMF).n).x
+          by SEQFUNC:def 11;
+       hence abs(((Partial_Sums AbsFMF)#x).m -((Partial_Sums AbsFMF)#x).n) < s
+         by B5,B6,B8;
+      end;
+      hence ex n be Element of NAT st
+       for m be Element of NAT st n<=m holds
+        abs(((Partial_Sums AbsFMF)#x).m - ((Partial_Sums AbsFMF)#x).n) < s;
+     end;
+     hence thesis by SEQ_4:58;
+    end;
+
+A42:for x be Element of X st x in E0 holds
+     Partial_Sums abs(FMF#x) = (Partial_Sums AbsFMF)#x
+    proof
+     let x be Element of X;
+     assume x in E0; then
+B0:  x in E by XBOOLE_0:def 5;
+
+     defpred PQ[Nat] means
+      (Partial_Sums abs(FMF#x)).$1 = ((Partial_Sums AbsFMF)#x).$1;
+     (Partial_Sums abs(FMF#x)).0 = abs(FMF#x).0 by SERIES_1:def 1
+      .= abs((FMF#x).0) by VALUED_1:18
+      .= abs((FMF.0).x) by SEQFUNC:def 11
+      .= (abs(FMF.0)).x by VALUED_1:18
+      .= (AbsFMF.0).x by SEQFUNC:def 5
+      .= ((Partial_Sums AbsFMF).0).x by MESFUN9C:def 2
+      .= ((Partial_Sums AbsFMF)#x).0 by SEQFUNC:def 11; then
+P0:  PQ[ 0];
+P1:  now let n be Element of NAT;
+      assume D1: PQ[n];
+D0:   (Partial_Sums AbsFMF).(n+1) = (Partial_Sums AbsFMF).n + AbsFMF.(n+1)
+         by MESFUN9C:def 2;
+      dom(AbsFMF.0) = E by A9; then
+D5:   x in dom((Partial_Sums AbsFMF).(n+1)) by MESFUN9C:11,B0;
+D2:   abs(FMF#x).(n+1) = abs((FMF#x).(n+1)) by VALUED_1:18
+       .= abs((FMF.(n+1)).x) by SEQFUNC:def 11
+       .= abs(FMF.(n+1)).x by VALUED_1:18
+       .= (AbsFMF.(n+1)).x by SEQFUNC:def 5;
+
+      (Partial_Sums abs(FMF#x)).(n+1)
+        = (Partial_Sums abs(FMF#x)).n + abs(FMF#x).(n+1) by SERIES_1:def 1
+       .= ((Partial_Sums AbsFMF).n).x + (AbsFMF.(n+1)).x
+             by D1,D2,SEQFUNC:def 11
+       .= ((Partial_Sums AbsFMF).(n+1)).x by VALUED_1:def 1,D0,D5
+       .= ((Partial_Sums AbsFMF)#x).(n+1) by SEQFUNC:def 11;
+      hence PQ[n+1];
+     end;
+     for n be Element of NAT holds PQ[n] from NAT_1:sch 1(P0,P1);
+     hence thesis by FUNCT_2:113;
+    end;
+A43:for x be Element of X st x in E0
+     for n be Element of NAT holds
+      (F1#x).(n+1) = (F1#x).0 + (Partial_Sums (FMF#x)).n
+    proof
+     let x be Element of X;
+     assume x in E0; then
+A252:x in E by XBOOLE_0:def 5;
+     defpred PQ[Nat] means
+      (F1#x).($1+1) = (F1#x).0 + (Partial_Sums(FMF#x)).$1;
+
+     dom (FMF.0) = E by A8; then
+D4:  x in dom (F1.(0+1) - F1.0) by A7,A252;
+
+     (Partial_Sums (FMF#x)).0 = (FMF#x).0 by SERIES_1:def 1
+       .= (FMF.0).x by SEQFUNC:def 11
+       .= ( F1.(0+1) - F1.0 ).x by A7; then
+D1:  (Partial_Sums (FMF#x)).0 = (F1.(0+1)).x - (F1.0).x by D4,VALUED_1:13;
+
+     (F1#x).0 + (Partial_Sums(FMF#x)).0
+       = (F1.0).x + (Partial_Sums (FMF#x)).0 by SEQFUNC:def 11; then
+ P0: PQ[ 0] by D1,SEQFUNC:def 11;
+ P1: now let n be Element of NAT;
+      assume D1:PQ[n];
+
+      dom (FMF.(n+1)) = E by A8; then
+DN4:  x in dom (F1.((n+1)+1) - F1.(n+1)) by A7,A252;
+      (FMF#x).(n+1) = (FMF.(n+1)).x by SEQFUNC:def 11
+       .= ((F1.((n+1)+1) - F1.(n+1)).x) by A7; then
+D2:   (FMF#x).(n+1) = (F1.((n+1)+1)).x  - (F1.(n+1)).x by DN4,VALUED_1:13;
+      (F1#x).0 + (Partial_Sums (FMF#x)).(n+1)
+       = (F1#x).0 + ((Partial_Sums(FMF#x)).n + (FMF#x).(n+1)) by SERIES_1:def 1
+      .= (F1#x).0 + (Partial_Sums (FMF#x)).n + (FMF#x).(n+1)
+      .= (F1.(n+1)).x + (FMF#x).(n+1) by D1,SEQFUNC:def 11;
+      hence PQ[n+1] by D2,SEQFUNC:def 11;
+     end;
+     for n be Element of NAT holds PQ[n] from NAT_1:sch 1(P0,P1);
+     hence thesis;
+    end;
+
+A44:for x be Element of X st x in E0 holds F1#x is convergent
+    proof
+     let x be Element of X;
+     assume A281: x in E0; then
+     Partial_Sums abs(FMF#x) = (Partial_Sums AbsFMF)#x by A42; then
+     Partial_Sums abs(FMF#x) is convergent by A281,A41; then
+     abs(FMF#x) is summable by SERIES_1:def 2; then
+     FMF#x is absolutely_summable by SERIES_1:def 5; then
+     FMF#x is summable by SERIES_1:40; then
+A285:(Partial_Sums (FMF#x)) is convergent by SERIES_1:def 2;
+
+     now let s be real number;
+      assume 0<s; then
+      consider n be Element of NAT such that
+A286:  for m be Element of NAT st n<=m holds
+        abs((Partial_Sums (FMF#x)).m -(Partial_Sums (FMF#x)).n)<s
+          by A285,SEQ_4:58;
+      set n1=n+1;
+
+      now let m1 be Element of NAT;
+       assume AD2: n1<=m1;
+       1 <=n1 by NAT_1:11; then
+       reconsider m=m1-1 as Element of NAT by AD2,XXREAL_0:2,NAT_1:21;
+       n1-1<=m1-1 by AD2,XREAL_1:11; then
+AD3:   abs((Partial_Sums (FMF#x)).m -(Partial_Sums (FMF#x)).n)<s by A286;
+       m1=m+1; then
+       (F1#x).(n1) = (F1#x).0 + (Partial_Sums (FMF#x)).n &
+       (F1#x).(m1) = (F1#x).0 + (Partial_Sums (FMF#x)).m by A43,A281;
+       hence abs((F1#x).m1-(F1#x).n1)<s by AD3;
+      end;
+      hence ex n be Element of NAT st
+             for m be Element of NAT st n<=m holds abs((F1#x).m-(F1#x).n)<s;
+     end;
+     hence thesis by SEQ_4:58;
+    end;
+
+    set F2 = F1||E0;
+
+A59:for x be Element of X st x in E0 holds F2#x is convergent
+    proof
+     let x be Element of X;
+     assume AA0: x in E0; then
+     F1#x is convergent by A44;
+     hence thesis by AA0,MESFUN9C:1;
+    end;
+
+A45:for x be Element of X st x in E0 holds F2#x = F1#x
+    proof
+     let x be Element of X;
+     assume A281:x in E0;
+     now let n be Element of NAT;
+      (F2#x).n = (F2.n).x by SEQFUNC:def 11
+       .= ((F1.n)|E0).x by MESFUN9C:def 1
+       .= (F1.n).x by A281,FUNCT_1:72;
+      hence (F2#x).n = (F1#x).n by SEQFUNC:def 11;
+     end;
+     hence thesis by FUNCT_2:113;
+    end;
+
+A46:for n be natural number holds dom(F2.n) = E0 & F2.n is_measurable_on E0
+    proof
+     let n be natural number;
+DD0: dom(F1.0) = E by A6;
+     dom (F2.n) = dom((F1.n)|E0) by MESFUN9C:def 1; then
+     dom (F2.n) =dom(F1.n) /\ E0 by RELAT_1:90; then
+     dom (F2.n) = E /\ E0 by A6;
+     hence dom(F2.n) = E0 by XBOOLE_1:36,28;
+
+     for m be Nat holds F1.m is_measurable_on E0
+     proof
+      let m be Nat;
+      F1.m is_measurable_on E by A6;
+      hence F1.m is_measurable_on E0 by XBOOLE_1:36,MESFUNC6:16;
+     end;
+     hence F2.n is_measurable_on E0 by DD0,XBOOLE_1:36,MESFUN9C:4;
+    end;
+
+    reconsider F2 as with_the_same_dom Functional_Sequence of X,REAL
+      by MESFUN9C:2;
+
+A47:for n be Nat holds F2.n in Lp_Functions(M,k) & F2.n in Sq.(N.n)
+    proof
+     let n1 be Nat;
+     F2.n1 = (F1.n1)|E0 by MESFUN9C:def 1; then
+     abs(F2.n1) = (abs(F1.n1))|E0 by Lm001x; then
+DY6: ((abs (F1.n1)) to_power k)|E0 = (abs (F2.n1)) to_power k by Lm001g;
+L1:  F2.n1 is_measurable_on E0 & dom(F2.n1) = E0 by A46;
+     F1.n1 in Lp_Functions(M,k) by A6; then
+     ex FMF be PartFunc of X,REAL st
+      F1.n1= FMF & ex ND be Element of S st M.ND` =0 & dom FMF = ND &
+      FMF is_measurable_on ND & (abs FMF) to_power k is_integrable_on M; then
+     ((abs (F2.n1)) to_power k) is_integrable_on M by DY6,MESFUNC6:91;
+     hence D1: F2.n1 in Lp_Functions(M,k) by L1,A37;
+     reconsider n=n1 as Element of NAT by ORDINAL1:def 13;
+     set m = N.n;
+     F1.n = Fsq.m by A5; then
+L2:  F1.n in Sq.(N.n) & Sq.(N.n) = a.e-eq-class_Lp(F1.n,M,k) by A2;
+     reconsider EB = E0` as Element of S by MEASURE1:66;
+     (F2.n)|EB` = F2.n by L1,RELAT_1:97; then
+     (F2.n)|EB` =(F1.n)|EB` by MESFUN9C:def 1; then
+     (F2.n) a.e.= (F1.n),M by A37,LPSPACE1:def 10;
+     hence thesis by D1,L2,EQC00b;
+    end;
+
+A48:dom (lim F2) = dom (F2.0) by MESFUNC8:def 10; then
+A49:dom (lim F2) = E0 by A46;
+
+A50:for x be Element of X st x in E0 holds (lim F2).x = lim (F2#x)
+    proof
+     let x be Element of X;
+     assume x in E0; then
+     (lim F2).x =lim R_EAL(F2#x) & F2#x is convergent by A49,A59,MESFUN7C:14;
+     hence (lim F2).x = lim (F2#x) by RINFSUP2:14;
+    end;
+
+    now let y be set;
+     assume y in rng (lim F2); then
+     consider x be Element of X such that
+D1:   x in dom (lim F2) & y= (lim F2).x by PARTFUN1:26;
+     y = lim (F2#x) by D1,A49,A50;
+     hence y in REAL;
+    end; then
+    rng (lim F2) c= REAL by TARSKI:def 3; then
+    reconsider F = lim F2 as PartFunc of X,REAL by A48,RELSET_1:11;
+
+A51:dom(LExtGp|E0) = E /\ E0 by A32,RELAT_1:90; then
+A52:dom(LExtGp|E0) = E0 by XBOOLE_1:36,28;
+
+    now let y be set;
+     assume y in rng (LExtGp|E0); then
+     consider x be Element of X such that
+AA2:  x in dom (LExtGp|E0) & y=(LExtGp|E0).x by PARTFUN1:26;
+     y =(LExtGp).x by A52,AA2,FUNCT_1:72;
+     hence y in REAL by A52,AA2,A38;
+    end; then
+    rng (LExtGp|E0) c= REAL by TARSKI:def 3; then
+    reconsider gp = LExtGp|E0 as PartFunc of X,REAL by A51,RELSET_1:11;
+
+A53:for x be Element of X st x in E0 holds gp.x = lim (Gp#x)
+    proof
+     let x be Element of X;
+     assume AA01: x in E0; then
+     x in dom LExtGp by A32,XBOOLE_0:def 5; then
+     LExtGp.x = lim((ExtGp)#x) by MESFUNC8:def 10; then
+     gp.x = lim((ExtGp)#x) by AA01,FUNCT_1:72;
+     hence gp.x = lim (Gp#x) by A39,AA01;
+    end;
+
+    LExtGp is nonnegative by A33,SUPINF_2:71; then
+    LExtGp is_integrable_on M by A31,A19,A32,MPreLm8; then
+    R_EAL gp is_integrable_on M by MESFUNC5:103; then
+A54:gp is_integrable_on M by MESFUNC6:def 9;
+
+A55:dom(F2.0) = E0 by A46; then
+A56:dom F = E0 by MESFUNC8:def 10; then
+A58:E0 =dom abs F by VALUED_1:def 11; then
+A57:E0 = dom((abs F) to_power k) by MESFUN6C:def 6;
+
+A61:for x be Element of X, n be Element of NAT st x in E0 holds
+      abs((F1#x).0) + abs((Partial_Sums (FMF#x)).n) <= (G#x).n
+    proof
+     let x be Element of X,n be Element of NAT;
+     assume ASP: x in E0; then
+     x in E by XBOOLE_0:def 5; then
+P1:  x in dom(G.n) by A11;
+     G.n = abs(F1.0) + (Partial_Sums AbsFMF).n by A10; then
+     (G.n).x = abs(F1.0).x + ((Partial_Sums AbsFMF).n).x
+        by P1,VALUED_1:def 1; then
+P6:  (G.n).x = abs((F1.0).x) + ((Partial_Sums AbsFMF).n).x by VALUED_1:18;
+     (G#x).n = (G.n).x by SEQFUNC:def 11
+       .=abs((F1.0).x) + ((Partial_Sums AbsFMF)#x).n by P6,SEQFUNC:def 11
+       .=abs((F1#x).0) + ((Partial_Sums AbsFMF)#x).n by SEQFUNC:def 11; then
+P9:  (G#x).n =abs((F1#x).0) + (Partial_Sums abs(FMF#x)).n by A42,ASP;
+     abs((Partial_Sums (FMF#x)).n) <= Partial_Sums abs(FMF#x).n by LMSQ6;
+     hence thesis by P9,XREAL_1:8;
+    end;
+
+A62:for x be Element of X, n be Element of NAT st x in E0 holds
+     (abs((F1#x).0 + (Partial_Sums (FMF#x)).n)) to_power k <= (Gp#x).n
+    proof
+     let x be Element of X ,n be Element of NAT;
+     assume A281: x in E0; then
+P1:  (Gp#x).n = (((G#x)).n) to_power k by A40;
+
+P11: abs((F1#x).0) + abs((Partial_Sums (FMF#x)).n) <= (G#x).n by A61,A281;
+
+     abs((F1#x).0 + (Partial_Sums (FMF#x)).n)
+       <= abs((F1#x).0) + abs((Partial_Sums (FMF#x)).n) by COMPLEX1:142; then
+P12: abs((F1#x).0 + (Partial_Sums (FMF#x)).n) <= (G#x).n by XXREAL_0:2,P11;
+
+     0 <= abs((F1#x).0 + (Partial_Sums (FMF#x)).n) by COMPLEX1:132;
+     hence thesis by P1,P12,HOLDER_1:3;
+    end;
+
+A63:for x be Element of X, n be Element of NAT st x in E0 holds
+      (abs((F2#x).n)) to_power k <= (Gp#x).n
+    proof
+     let x be Element of X, n be Element of NAT;
+     assume B1: x in E0; then
+B2:  F1#x = F2#x by A45;
+
+     per cases;
+     suppose C1:n = 0;
+
+C2:   (Gp#x).n = (((G#x)).n) to_power k by B1,A40;
+
+C3:   abs((F1#x).0) + abs((Partial_Sums (FMF#x)).n) <= (G#x).n by A61,B1;
+
+      0 <= abs((Partial_Sums(FMF#x)).n) by COMPLEX1:132; then
+      0 + abs((F1#x).0) <= abs((F1#x).0) + abs((Partial_Sums (FMF#x)).n)
+           by XREAL_1:8; then
+C4:   abs((F1#x).0) <= (G#x).n by C3,XXREAL_0:2;
+
+      0 <= abs((F1#x).0) by COMPLEX1:132;
+      hence (abs((F2#x).n)) to_power k <= (Gp#x).n by B2,C1,C2,C4,HOLDER_1:3;
+     end;
+     suppose n <> 0; then
+      consider m be Nat such that
+P1:    n=m+1 by NAT_1:6;
+      reconsider m as Element of NAT by ORDINAL1:def 13;
+
+      (F1#x).(m+1) = (F1#x).0 + (Partial_Sums(FMF#x)).m by A43,B1; then
+P3:   abs((F1#x).(m+1)) to_power k <= (Gp#x).m by A62,B1;
+
+      x in E by B1,XBOOLE_0:def 5; then
+P4:   ExtGp#x is non-decreasing by A17;
+
+      m <=m+1 by NAT_1:11; then
+P5:   ((ExtGp)#x).m <= ((ExtGp)#x).(m+1) by RINFSUP2:7,P4;
+
+      ExtGp#x = Gp#x by MESFUN7C:1;
+      hence (abs((F2#x).n)) to_power k <= (Gp#x).n by B2,P1,P3,P5,XXREAL_0:2;
+     end;
+    end;
+
+A64:for x be Element of X st x in E0 holds abs(((abs F) to_power k).x) <= gp.x
+    proof
+     let x be Element of X;
+     assume PY61: x in E0; then
+L0:  Gp#x is convergent by A39;
+
+     deffunc ABSF2(set) = (abs(F2#x).$1 ) to_power k;
+
+     consider s be Real_Sequence such that
+D0:   for n be Element of NAT holds s.n=ABSF2(n) from SEQ_1:sch 1;
+
+D2:  gp.x = lim (Gp#x) by A53,PY61;
+
+D6:  ((abs F) to_power k).x
+      = ((abs F).x) to_power k by A57,PY61,MESFUN6C:def 6
+     .= (abs (F.x)) to_power k by A58,PY61,VALUED_1:def 11
+     .= (abs (lim (F2#x))) to_power k by PY61,A50
+     .= (lim (abs (F2#x))) to_power k by A59,SEQ_4:27,PY61;
+
+D71: now let n be Element of NAT;
+      0 <= abs ((F2#x).n) by COMPLEX1:132;
+      hence 0 <=(abs(F2#x)).n by VALUED_1:18;
+     end;
+
+     abs (F2#x) is convergent by PY61,A59,SEQ_4:26; then
+D7:  s is convergent & (lim (abs (F2#x))) to_power k = lim s
+        by D71,HOLDER_1:10,D0;
+
+     now let n be Element of NAT;
+      (abs((F2#x).n)) to_power k <= (Gp#x).n by A63,PY61; then
+      (abs(F2#x).n) to_power k <= (Gp#x).n by VALUED_1:18;
+      hence s.n <=(Gp#x).n by D0;
+     end; then
+Q1:  ((abs F) to_power k).x <= gp.x by D7,D2,D6,L0,SEQ_2:32;
+     0 <= ((abs F) to_power k).x by MESFUNC6:51;
+     hence abs(((abs F) to_power k).x) <= gp.x by Q1,ABSVALUE:def 1;
+    end;
+
+    R_EAL F is_measurable_on E0 by A46,A55,A59,MESFUN7C:21; then
+A65:F is_measurable_on E0 by MESFUNC6:def 6; then
+A66:(abs F) is_measurable_on E0 by A56,MESFUNC6:48;
+
+    dom abs F = E0 by A56,VALUED_1:def 11; then
+    (abs F) to_power k is_measurable_on E0 by A66,MESFUN6C:29; then
+    (abs F) to_power k is_integrable_on M by A52,A54,A57,A64,MESFUNC6:96; then
+A67:F in Lp_Functions(M,k) by A37,A56,A65;
+
+A68:for x be Element of X, n,m be Element of NAT st x in E0 & m <= n holds
+      |. (F1#x).n -(F1#x).m .| to_power k <= (Gp#x).n
+    proof
+     let x be Element of X, n1,m1 be Element of NAT;
+     assume ASP: x in E0 & m1 <= n1;
+
+     now per cases;
+      suppose C1: m1= 0;
+       now per cases;
+        suppose C11: n1=0;
+         ((G.n1) to_power k) is nonnegative by A13; then
+         Gp.n1 is nonnegative by A12; then
+         0 <= (Gp.n1).x by MESFUNC6:51; then
+         0 <= (Gp#x).n1 by SEQFUNC:def 11;
+         hence |. (F1#x).n1-(F1#x).m1 .| to_power k <= (Gp#x).n1
+            by C1,C11,POWER:def 2,COMPLEX1:130;
+        end;
+        suppose n1<> 0; then
+         consider n be Nat such that
+C111:     n1=n+1 by NAT_1:6;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
+
+LLL0:    (F1#x).(n+1) = (F1#x).0 + (Partial_Sums (FMF#x)).n by ASP,A43;
+
+Q2:      abs((F1#x).0) + abs((Partial_Sums (FMF#x)).n) <= (G#x).n by A61,ASP;
+
+         0 <= abs((F1#x).0) by COMPLEX1:132; then
+         abs((Partial_Sums (FMF#x)).n) + 0
+           <= abs((F1#x).0) + abs((Partial_Sums (FMF#x)).n) by XREAL_1:8; then
+Q3:      abs((Partial_Sums (FMF#x)).n) <= (G#x).n by Q2,XXREAL_0:2;
+         0 <= abs((Partial_Sums (FMF#x)).n) by COMPLEX1:132; then
+AAA1:    |. (Partial_Sums(FMF#x)).n .| to_power k
+           <= ((G#x).n) to_power k by HOLDER_1:3,Q3;
+
+LLL1:    (Gp#x).n = (((G#x)).n) to_power k by ASP,A40;
+
+         x in E by XBOOLE_0:def 5,ASP; then
+PPP2:    ExtGp#x is non-decreasing by A17;
+
+         n <=n+1 by NAT_1:11; then
+PPP3:    ((ExtGp)#x).n <= ((ExtGp)#x).(n+1) by RINFSUP2:7,PPP2;
+
+         ExtGp#x = Gp#x by MESFUN7C:1;
+         hence |. (F1#x).n1  -(F1#x).m1 .| to_power k <= (Gp#x).n1
+           by C1,C111,PPP3,XXREAL_0:2,AAA1,LLL1,LLL0;
+        end;
+       end;
+       hence |. (F1#x).n1-(F1#x).m1 .| to_power k <= (Gp#x).n1;
+      end;
+
+      suppose C1: m1<> 0; then
+       consider m be Nat such that
+C11:    m1=m+1 by NAT_1:6;
+       reconsider m as Element of NAT by ORDINAL1:def 13;
+       0 < n1 by ASP,C1; then
+       consider n be Nat such that
+C12:    n1=n+1 by NAT_1:6;
+       reconsider n as Element of NAT by ORDINAL1:def 13;
+C13:   m1-1 <= n1-1 by ASP,XREAL_1:11;
+
+       x in E by XBOOLE_0:def 5,ASP; then
+P11:   x in dom(G.n) by A11; then
+A284:  x in dom ((G.n) to_power k) by MESFUN6C:def 6;
+
+       (Gp#x).n = (Gp.n).x by SEQFUNC:def 11; then
+       (Gp#x).n = ((G.n) to_power k).x by A12; then
+P100:  (Gp#x).n = ((G.n).x) to_power k by A284,MESFUN6C:def 6;
+
+       G.n = abs(F1.0) + (Partial_Sums AbsFMF).n by A10; then
+       (G.n).x = abs(F1.0).x + ((Partial_Sums AbsFMF).n).x
+           by P11,VALUED_1:def 1
+       .= abs((F1.0).x) + ((Partial_Sums AbsFMF).n).x by VALUED_1:18; then
+P61:   (G.n).x = abs((F1.0).x) + ((Partial_Sums AbsFMF)#x).n by SEQFUNC:def 11;
+
+Q1:    (F1#x).(n+1) = (F1#x).0 + (Partial_Sums (FMF#x)).n &
+       (F1#x).(m+1) = (F1#x).0 + (Partial_Sums (FMF#x)).m by ASP,A43;
+
+Q3:    |. (Partial_Sums (FMF#x)).n - (Partial_Sums (FMF#x)).m .|
+         <= (Partial_Sums abs(FMF#x)).n by LMSQ4,C11,C12,C13;
+
+Q5:    (Partial_Sums abs(FMF#x)).n = ((Partial_Sums AbsFMF)#x).n by A42,ASP;
+
+       0 <= abs((F1.0).x) by COMPLEX1:132; then
+       0 + (Partial_Sums abs(FMF#x)).n
+         <= abs((F1.0).x) + ((Partial_Sums AbsFMF)#x).n by XREAL_1:8,Q5; then
+Q71:   |. (F1#x).(n+1)-(F1#x).(m+1) .| <= (G.n).x by P61,Q1,Q3,XXREAL_0:2;
+
+       0 <= |. (F1#x).(n+1)-(F1#x).(m+1) .| by COMPLEX1:132; then
+FF1:   (|. (F1#x).(n+1)-(F1#x).(m+1) .|) to_power k <= (Gp#x).n
+           by P100,Q71,HOLDER_1:3;
+
+       x in E by XBOOLE_0:def 5,ASP; then
+PPP2:  ExtGp#x is non-decreasing by A17;
+
+       n <=n+1 by NAT_1:11; then
+PPP3:  ((ExtGp)#x).n <= ((ExtGp)#x).(n+1) by RINFSUP2:7,PPP2;
+       ExtGp#x = Gp#x by MESFUN7C:1;
+       hence (|. (F1#x).(n1)-(F1#x).(m1) .|) to_power k <= (Gp#x).n1
+          by C11,C12,PPP3,XXREAL_0:2,FF1;
+      end;
+     end;
+     hence thesis;
+    end;
+
+A69:for x be Element of X, n be Nat st x in E0 holds
+      |. F.x -(F2#x).n .| to_power k <= gp.x
+    proof
+     let x be Element of X, n1 be Nat;
+     assume PY61: x in E0; then
+L0:  Gp#x is convergent by A39;
+
+E1:  F1#x = F2#x by A45,PY61;
+
+L1:  F2#x is convergent by PY61,A59;
+
+     reconsider n=n1 as Element of NAT by ORDINAL1:def 13;
+
+     deffunc AF2F20(Element of NAT) = (F2#x).$1 -(F2#x).n;
+     consider s0 be Real_Sequence  such that
+D00:  for j be Element of NAT holds s0.j=AF2F20(j) from SEQ_1:sch 1;
+
+JJ0: now let p be real number;
+      assume 0<p; then
+      consider n1 be Element of NAT such that
+J2:    for m be Element of NAT st n1<=m holds
+         abs((F2#x).m-lim (F2#x))<p by L1,SEQ_2:def 7;
+      take n1;
+      thus for m be Element of NAT st n1<=m holds
+             abs(s0.m-(lim (F2#x)- (F2#x).n)) < p
+      proof
+       let m be Element of NAT;
+       assume J3: n1<=m;
+       s0.m-(lim (F2#x)- (F2#x).n)
+        = (F2#x).m -(F2#x).n-(lim (F2#x)- (F2#x).n) by D00; then
+       s0.m-(lim (F2#x)- (F2#x).n) = (F2#x).m - lim (F2#x);
+       hence abs(s0.m-(lim (F2#x)- (F2#x).n))<p by J3,J2;
+      end;
+     end; then
+F00: s0 is convergent by SEQ_2:def 6; then
+     lim s0 = lim (F2#x) - (F2#x).n by JJ0,SEQ_2:def 7; then
+F03: lim abs s0 = abs(lim (F2#x) - (F2#x).n) by F00,SEQ_4:27;
+
+F02: abs s0 is convergent  by F00,SEQ_4:26;
+
+     deffunc AF2F2(Element of NAT)= |. (F2#x).$1-(F2#x).n .| to_power k;
+     consider s be Real_Sequence such that
+D0:   for j be Element of NAT holds s.j=AF2F2(j) from SEQ_1:sch 1;
+
+E21: for j be Element of NAT st n <= j holds s.j <= (Gp#x).j
+     proof
+      let j be Element of NAT;
+      assume n <= j; then
+      |. (F2#x).j  -(F2#x).n .| to_power k <= (Gp#x).j by E1,PY61,A68;
+      hence thesis by D0;
+     end;
+
+D71: now let n be Element of NAT;
+      0 <= abs (s0.n) by COMPLEX1:132;
+      hence  0 <=(abs(s0)).n by VALUED_1:18;
+     end;
+
+     now let j be Element of NAT;
+      thus s.j = |. (F2#x).j-(F2#x).n .| to_power k by D0
+             .= abs(s0.j) to_power k by D00
+             .= (abs(s0).j) to_power k by VALUED_1:18;
+     end; then
+D72: s is convergent & lim s = (lim (abs s0)) to_power k
+        by D71,F02,HOLDER_1:10; then
+D73: s^\n is convergent & lim (s^\n)=lim s by SEQ_4:33;
+
+     gp.x = lim (Gp#x) by A53,PY61; then
+D74: (Gp#x)^\n is convergent & lim ((Gp#x)^\n) = gp.x by L0,SEQ_4:33;
+
+     for j be Element of NAT holds (s^\n).j <= ((Gp#x)^\n).j
+     proof
+      let j be Element of NAT;
+      (s^\n).j = s.(n+j) & ((Gp#x)^\n).j = (Gp#x).(n+j) by NAT_1:def 3;
+      hence thesis by E21,NAT_1:11;
+     end; then
+     lim s <= gp.x by D73,D74,SEQ_2:32;
+     hence thesis by F03,D72,A50,PY61;
+    end;
+
+    deffunc FX3(Nat) = (|. F -F2.$1 .|) to_power k;
+    consider FP be Functional_Sequence of X,REAL such that
+A70: for n be Nat holds FP.n = FX3(n) from SEQFUNC:sch 1;
+
+A71:for n be natural number holds dom (FP.n) = E0
+    proof
+     let n1 be natural number;
+     reconsider n=n1 as Element of NAT by ORDINAL1:def 13;
+B1:  dom(F2.n) = E0 by A46;
+     dom(FP.n1) = dom(abs( F - F2.n ) to_power k) by A70; then
+     dom(FP.n1) = dom(abs(F - F2.n)) by MESFUN6C:def 6; then
+     dom(FP.n1) = dom (F - F2.n) by VALUED_1:def 11; then
+     dom(FP.n1) = E0 /\ E0 by B1,A49,VALUED_1:12;
+     hence dom(FP.n1) = E0;
+    end; then
+A72:E0 = dom(FP.0); then
+A74:dom (lim FP) = E0 by MESFUNC8:def 10;
+
+    for n,m be natural number holds dom(FP.n) = dom(FP.m)
+    proof
+     let n,m be natural number;
+     thus dom (FP.n) =E0 by A71 .=dom (FP.m) by A71;
+    end; then
+    reconsider FP as with_the_same_dom Functional_Sequence of X,REAL
+       by MESFUNC8:def 2;
+
+A73:for n be Nat holds FP.n is_measurable_on E0
+    proof
+     let n1 be Nat;
+     reconsider n=n1 as Element of NAT by ORDINAL1:def 13;
+     dom (F2.n) = E0 by A46; then
+D0:  dom (F - F2.n) = E0 /\ E0 by A49,VALUED_1:12;
+     F2.n is_measurable_on E0 & dom (F2.n) = E0 by A46; then
+     F - F2.n is_measurable_on E0 by A65,MESFUNC6:29; then
+Y621:abs (F - F2.n) is_measurable_on E0 by D0,MESFUNC6:48;
+
+     dom (abs (F - F2.n) ) =E0 by VALUED_1:def 11,D0; then
+     (abs (F - F2.n) to_power k) is_measurable_on E0 by MESFUN6C:29,Y621;
+     hence thesis by A70;
+    end;
+
+    for x be Element of X, n be Nat st x in E0 holds (|. FP.n .|).x <= gp.x
+    proof
+     let x be Element of X, n1 be Nat;
+     reconsider n=n1 as Element of NAT by ORDINAL1:def 13;
+     assume ASP: x in E0; then
+D1:  x in dom (FP.n) by A71; then
+     x in dom (( |.F -F2.n .| ) to_power k) by A70; then
+     x in dom (( |.F -F2.n .| ) ) by MESFUN6C:def 6; then
+D3:  x in dom (F -F2.n) by VALUED_1:def 11;
+
+DD2: FP.n1 = (|. F -F2.n1 .|) to_power k by A70;
+
+DD21:0 <= (|.F.x -(F2.n1).x .|) to_power k by LmPW001,COMPLEX1:132;
+
+     (|. FP.n .|).x =(|. (FP.n).x .|) by VALUED_1:18
+     .= |. (|. F -F2.n1 .|.x) to_power k .| by D1,DD2,MESFUN6C:def 6
+     .= |. (|. (F -F2.n1).x .|) to_power k .| by VALUED_1:18
+     .= |. (|. F.x -(F2.n1).x .|) to_power k .| by D3,VALUED_1:13
+     .= (|. F.x -(F2.n1).x .|) to_power k by DD21,ABSVALUE:def 1
+     .= |. F.x - (F2#x).n .| to_power k by SEQFUNC:def 11;
+     hence thesis by A69,ASP;
+    end; then
+    consider Ip be Real_Sequence such that
+A75: (for n be Nat holds Ip.n = Integral(M,FP.n)) &
+     ( (for x be Element of X st x in E0 holds FP#x is convergent)
+         implies Ip is convergent & lim Ip = Integral(M,lim FP) )
+            by A52,A54,A72,A73,MESFUN9C:48;
+
+A76:for x be Element of X st x in E0 holds FP#x is convergent & lim (FP#x) = 0
+    proof
+     let x be Element of X;
+     assume ASP1: x in E0;
+D1:  for n be Element of NAT holds
+      (FP#x).n = ( |.lim (F2#x) - (F2#x).n .|) to_power k
+     proof
+      let n be Element of NAT;
+      x in dom (FP.n) by ASP1,A71; then
+D0:   x in dom (( |.F -F2.n .| ) to_power k) by A70; then
+      x in dom ( |.F -F2.n .| ) by MESFUN6C:def 6; then
+D3:   x in dom (F -F2.n) by VALUED_1:def 11;
+
+      thus
+      (FP#x).n =(FP.n).x by SEQFUNC:def 11
+      .= (( |.F -F2.n .| ) to_power k).x by A70
+      .= ( (|.F -F2.n .|).x ) to_power k by D0,MESFUN6C:def 6
+      .= ( |.(F -F2.n).x .|) to_power k by VALUED_1:18
+      .= ( |.(F.x -(F2.n).x) .|) to_power k by D3,VALUED_1:13
+      .= ( |.(lim (F2#x) -(F2.n).x) .|) to_power k by A50,ASP1
+      .= ( |.(lim (F2#x) -(F2#x).n) .|) to_power k by SEQFUNC:def 11;
+     end;
+     F2#x is convergent by ASP1,A59;
+     hence thesis by D1,LMSQ5;
+    end;
+
+A77:for x be Element of X st x in dom (lim FP) holds 0= (lim FP).x
+    proof
+     let x be Element of X;
+     assume ASP: x in dom (lim FP); then
+AA1: lim (FP#x) = 0 & (FP#x) is convergent by A76,A74;
+     (lim FP).x =lim R_EAL(FP#x) by ASP,MESFUN7C:14;
+     hence thesis by AA1,RINFSUP2:14;
+    end;
+    a.e-eq-class_Lp(F,M,k) in CosetSet(M,k) by A67; then
+    reconsider Sq0= a.e-eq-class_Lp(F,M,k) as Point of Lp-Space(M,k)
+       by VSPDef6X;
+Y21:for n be Element of NAT holds Ip.n = (||.Sq0-Sq.(N.n).||) to_power k
+    proof
+     let n be Element of NAT;
+     set m = N.n;
+     reconsider n1=n as Nat;
+B5:  FP.n = abs( F - F2.n1 ) to_power k by A70;
+B6:  F in Lp_Functions(M,k) & F in Sq0 by A67,EQC01;
+     F2.n1 in Lp_Functions(M,k) & F2.n1 in (Sq.m) by A47; then
+     (-1)(#)(F2.n1) in (-1)*(Sq.m) by Lm17Y; then
+     F -(F2.n1) in (Sq0) + (-1)*(Sq.m) by Lm17Y,B6; then
+     F -(F2.n1) in (Sq0) - (Sq.m) by RLVECT_1:29; then
+     consider r be Real such that
+B9:   0<= r & r = Integral(M,(abs (F -(F2.n1)) ) to_power k) &
+      ||. Sq0 - (Sq.m) .|| =r to_power (1/k) by Lm17x;
+     ||. Sq0 - (Sq.m) .|| to_power k = r to_power ((1/k)*k)  by B9,HOLDER_1:2
+     .= r to_power 1 by XCMPLX_1:107
+     .= r by POWER:30;
+     hence thesis by B9,B5,A75;
+    end;
+
+    deffunc UZ(Element of NAT) = ||.Sq0-Sq.(N.$1).||;
+    consider Iq be Real_Sequence such that
+Y221:for n be Element of NAT holds Iq.n = UZ(n) from SEQ_1:sch 1;
+Y22:now let n be Nat;
+     reconsider n0=n as Element of NAT by ORDINAL1:def 13;
+     Iq.n = ||. Sq0-Sq.(N.n0) .|| by Y221;
+     hence Iq.n = ||.Sq0-Sq.(N.n).||;
+    end;
+    Iq is convergent & lim Iq = 0
+    proof
+A1a: for n holds Ip.n >= 0
+     proof
+      let n;
+      ||. Sq0-Sq.(N.n) .|| to_power k >= 0 by LmPW001,NORMSP_1:8;
+      hence Ip.n >= 0 by Y21;
+     end;
+A3:  for n be Element of NAT holds Iq.n = (Ip.n) to_power (1/k)
+     proof
+      let n be Element of NAT;
+      thus (Ip.n) to_power (1/k)
+       = ( ||.Sq0-Sq.(N.n).|| to_power k) to_power (1/k) by Y21
+      .= ||.Sq0-Sq.(N.n).|| to_power (k*(1/k)) by NORMSP_1:8,HOLDER_1:2
+      .= (||.Sq0-Sq.(N.n).||) to_power 1 by XCMPLX_1:107
+      .= ||.Sq0-Sq.(N.n).|| by POWER:30
+      .= Iq.n by Y22;
+     end;
+     hence Iq is convergent by A1a,A76,A75,HOLDER_1:10;
+     lim Iq = (lim Ip) to_power (1/k) by A76,A75,A1a,A3,HOLDER_1:10; then
+     lim Iq = 0 to_power (1/k) by A76,A75,A77,A74,LPSPACE1:22;
+     hence lim Iq = 0 by POWER:def 2;
+    end;
+    hence thesis by A1,Y22,LM005X;
+end;
+
+registration let X,S,M;
+  let k be geq_than_1 Real;
+  cluster Lp-Space (M,k) -> complete;
+coherence
+proof
+  for Sq be sequence of Lp-Space(M,k) st Sq is Cauchy_sequence_by_Norm holds
+    Sq is convergent by Th006;
+  hence thesis by LOPBAN_1:def 16;
+end;
+end;
+
+begin :: Relations between L1 Space and Lp Space
+
+Lem00:
+f in L1_Functions M implies
+f is_integrable_on M &
+(ex E be Element of S st M.E`=0 & E = dom f & f is_measurable_on E)
+proof
+   assume f in L1_Functions M; then
+   ex f2 be PartFunc of X,REAL st
+    f = f2 &
+    ex E be Element of S st M.E=0 & dom f2 = E` & f2 is_integrable_on M; then
+   consider D be Element of S such that
+A9: M.D = 0 & dom f = D` & f is_integrable_on M;
+   thus f is_integrable_on M by A9;
+   reconsider E=D` as Element of S by MEASURE1:66;
+   take E;
+   thus M.E` = 0 & dom f = E by A9;
+    R_EAL f is_integrable_on M by A9,MESFUNC6:def 9; then
+    ex B be Element of S st
+     B = dom (R_EAL f) & (R_EAL f) is_measurable_on B by MESFUNC5:def 17;
+    hence f is_measurable_on E by A9,MESFUNC6:def 6;
+end;
+
+Lem00a:
+f in Lp_Functions(M,k) implies
+(abs f) to_power k is_integrable_on M
+proof
+   assume f in Lp_Functions(M,k); then
+   ex f2 be PartFunc of X,REAL st
+    f = f2 &
+    ex E be Element of S st M.E` = 0 & dom f2 = E &
+     f2 is_measurable_on E & (abs f2) to_power k is_integrable_on M;
+  hence thesis;
+end;
+
+Lem01:
+(ex E be Element of S st M.E`=0 & E = dom f & f is_measurable_on E)
+implies
+  a.e-eq-class_Lp(f,M,1) c= a.e-eq-class(f,M)
+proof
+   assume A2: ex E be Element of S st
+               M.E`=0 & E = dom f & f is_measurable_on E;
+   now let x be set;
+    assume x in a.e-eq-class_Lp(f,M,1); then
+    consider h be PartFunc of X,REAL such that
+A3:  x = h & h in Lp_Functions(M,1) & f a.e.= h,M;
+A4: ex g be PartFunc of X,REAL st
+     h = g &
+     (ex E be Element of S st M.E`=0 & dom g = E &
+       g is_measurable_on E & (abs g) to_power 1 is_integrable_on M)
+         by A3; then
+    consider Eh be Element of S such that
+A5:  M.(Eh`) = 0 & dom h = Eh &
+     h is_measurable_on Eh & (abs h) to_power 1 is_integrable_on M;
+
+A6: dom((abs h) to_power 1) = dom(abs h) by MESFUN6C:def 6;
+    for x be Element of X st x in dom((abs h) to_power 1) holds
+     ((abs h) to_power 1).x = (abs h).x
+    proof
+     let x be Element of X;
+     assume x in dom((abs h) to_power 1); then
+     ((abs h) to_power 1).x = ((abs h).x) to_power 1 by MESFUN6C:def 6;
+     hence thesis by POWER:30;
+    end; then
+    (abs h) to_power 1 = abs h by A6,PARTFUN1:34; then
+A7: h is_integrable_on M by A4,MESFUNC6:94;
+
+    reconsider ND = Eh` as Element of S by MEASURE1:66;
+
+    M.ND = 0 & dom h = ND` by A5; then
+A8: h in L1_Functions M by A7;
+
+    ex E be Element of S st M.E = 0 & dom f = E` & f is_integrable_on M
+    proof
+     consider Ef be Element of S such that
+B1:   M.(Ef`)=0 & Ef = dom f & f is_measurable_on Ef by A2;
+     reconsider E = Ef` as Element of S by MEASURE1:66;
+     take E;
+     consider EE be Element of S such that
+B3:   M.EE = 0 & f|EE` = h|EE` by A3,LPSPACE1:def 10;
+     reconsider E1 = ND \/ EE as Element of S;
+     ND is measure_zero of M & EE is measure_zero of M
+       by A5,B3,MEASURE1:def 13; then
+     E1 is measure_zero of M by MEASURE1:70; then
+E2:  M.E1 = 0 by MEASURE1:def 13;
+     EE c= E1 by XBOOLE_1:7; then
+     E1` c= EE` by SUBSET_1:31; then
+E3:  f|E1` = (f|EE`)|E1` & h|E1` = (h|EE`)|E1` by FUNCT_1:82;
+C3:  dom max+(R_EAL f) = Ef & dom max-(R_EAL f) = Ef
+        by B1,MESFUNC2:def 2,def 3;
+C1:  Ef = dom(R_EAL f) & (R_EAL f) is_measurable_on Ef
+       by B1,MESFUNC6:def 6; then
+D1:  max+(R_EAL f) is_measurable_on Ef &
+     max-(R_EAL f) is_measurable_on Ef by MESFUNC2:27,28;
+
+     (for x being Element of X holds 0. <= (max+(R_EAL f)).x) &
+     (for x being Element of X holds 0. <= (max-(R_EAL f)).x)
+        by MESFUNC2:14,15; then
+C4:  max+(R_EAL f) is nonnegative & max-(R_EAL f) is nonnegative
+        by SUPINF_2:58;
+C5:  Ef = (Ef /\ E1) \/ (Ef \ E1) by XBOOLE_1:51;
+     reconsider E0 = Ef /\ E1 as Element of S;
+D6:  Ef \ E1 = Ef /\ E1` by SUBSET_1:32;
+     reconsider E2 = Ef \ E1 as Element of S;
+     max+(R_EAL f) = (max+(R_EAL f))|(dom(max+(R_EAL f))) &
+     max-(R_EAL f) = (max-(R_EAL f))|(dom(max-(R_EAL f))) by RELAT_1:98; then
+D5:  integral+(M,max+(R_EAL f))
+      = integral+(M,(max+(R_EAL f))|E0) + integral+(M,(max+(R_EAL f))|E2) &
+     integral+(M,max-(R_EAL f))
+      = integral+(M,(max-(R_EAL f))|E0) + integral+(M,(max-(R_EAL f))|E2)
+         by C3,C4,C5,D1,XBOOLE_1:89,MESFUNC5:87;
+D2:  integral+(M,(max+(R_EAL f))|E0) >= 0 &
+     integral+(M,(max-(R_EAL f))|E0) >= 0 by C4,D1,C3,MESFUNC5:86;
+     integral+(M,(max+(R_EAL f))|E1) = 0 &
+     integral+(M,(max-(R_EAL f))|E1) = 0 by E2,C3,C4,D1,MESFUNC5:88; then
+     integral+(M,(max+(R_EAL f))|E0) = 0 & integral+(M,(max-(R_EAL f))|E0) = 0
+        by D2,C3,C4,D1,MESFUNC5:89,XBOOLE_1:17; then
+G1:  integral+(M,max+(R_EAL f)) = integral+(M,(max+(R_EAL f))|E2) &
+     integral+(M,max-(R_EAL f)) = integral+(M,(max-(R_EAL f))|E2)
+        by D5,XXREAL_3:4;
+D7:  E2 c= E1` by D6,XBOOLE_1:17; then
+     f|E2 = (h|E1`)|E2 by B3,E3,FUNCT_1:82; then
+D8:  (R_EAL f)|E2 = (R_EAL h)|E2 by D7,FUNCT_1:82;
+F3:  max+(R_EAL f)|E2 = max+((R_EAL f)|E2) &
+     max+(R_EAL h)|E2 = max+((R_EAL h)|E2) &
+     max-(R_EAL f)|E2 = max-((R_EAL f)|E2) &
+     max-(R_EAL h)|E2 = max-((R_EAL h)|E2) by MESFUNC5:34;
+F1:  R_EAL h is_integrable_on M by A7,MESFUNC6:def 9; then
+F2:  integral+(M,max+(R_EAL h)) < +infty &
+     integral+(M,max-(R_EAL h)) < +infty by MESFUNC5:def 17;
+     integral+(M,max+((R_EAL h)|E2)) <= integral+(M,max+(R_EAL h)) &
+     integral+(M,max-((R_EAL h)|E2)) <= integral+(M,max-(R_EAL h))
+        by F1,MESFUNC5:103; then
+     integral+(M,max+(R_EAL f)) < +infty &
+     integral+(M,max-(R_EAL f)) < +infty by G1,F2,F3,D8,XXREAL_0:2; then
+     (R_EAL f) is_integrable_on M by C1,MESFUNC5:def 17;
+     hence thesis by B1,MESFUNC6:def 9;
+    end; then
+    f in L1_Functions M;
+    hence x in a.e-eq-class(f,M) by A3,A8;
+   end;
+   hence thesis by TARSKI:def 3;
+end;
+
+Lem02:
+a.e-eq-class(f,M) c= a.e-eq-class_Lp(f,M,1)
+proof
+   now let x be set;
+    assume x in a.e-eq-class(f,M); then
+    consider g be PartFunc of X,REAL such that
+A1:  x = g & g in L1_Functions M & f in L1_Functions M & f a.e.= g,M;
+A2: ex h be PartFunc of X,REAL st
+     g = h &
+     ex D be Element of S st M.D=0 & dom h = D` & h is_integrable_on M
+       by A1; then
+    R_EAL g is_integrable_on M by MESFUNC6:def 9; then
+    consider A be Element of S such that
+A5:  A = dom(R_EAL g) & R_EAL g is_measurable_on A by MESFUNC5:def 17;
+A6: A = dom g & g is_measurable_on A by A5,MESFUNC6:def 6;
+A7: M.A` = 0 by A2,A5;
+    (abs g) to_power 1 = abs g by LmPW006; then
+    (abs g) to_power 1 is_integrable_on M by A2,A6,MESFUNC6:94; then
+    g in {p where p is PartFunc of X,REAL :
+       ex Ep be Element of S st M.(Ep`)=0 & dom p = Ep &
+         p is_measurable_on Ep & (abs p) to_power 1 is_integrable_on M}
+      by A6,A7;
+    hence x in a.e-eq-class_Lp(f,M,1) by A1;
+   end;
+   hence thesis by TARSKI:def 3;
+end;
+
+Lem03:
+(ex E be Element of S st M.E`=0 & E = dom f & f is_measurable_on E)
+implies
+  a.e-eq-class_Lp(f,M,1) = a.e-eq-class(f,M)
+proof
+   assume ex E be Element of S st M.E`=0 & E = dom f
+     & f is_measurable_on E; then
+A1:a.e-eq-class_Lp(f,M,1) c= a.e-eq-class(f,M) by Lem01;
+   a.e-eq-class(f,M) c= a.e-eq-class_Lp(f,M,1) by Lem02;
+   hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th9a:
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds CosetSet M = CosetSet(M,1)
+proof
+   let X be non empty set;
+   let S be SigmaField of X;
+   let M be sigma_Measure of S;
+   now let x be set;
+    assume x in CosetSet M; then
+    consider g be PartFunc of X,REAL such that
+A1:  x = a.e-eq-class(g,M) & g in L1_Functions M;
+A2: g is_integrable_on M &
+    ex E be Element of S st M.E`=0 & E = dom g & g is_measurable_on E
+       by A1,Lem00; then
+A3: x = a.e-eq-class_Lp(g,M,1) by A1,Lem03;
+    (abs g) to_power 1 = abs g by LmPW006; then
+    (abs g) to_power 1 is_integrable_on M by A2,MESFUNC6:94; then
+    g in Lp_Functions(M,1) by A2;
+    hence x in CosetSet(M,1) by A3;
+   end; then
+A4:CosetSet M c= CosetSet(M,1) by TARSKI:def 3;
+   now let x be set;
+    assume x in CosetSet(M,1); then
+    consider g be PartFunc of X,REAL such that
+A5:  x = a.e-eq-class_Lp(g,M,1) & g in Lp_Functions(M,1);
+    consider E be Element of S such that
+A6:  M.E` = 0 & dom g = E & g is_measurable_on E by A5,EQC00a;
+A7: x = a.e-eq-class(g,M) by A5,A6,Lem03;
+    reconsider D = E` as Element of S by MEASURE1:66;
+A8: M.D = 0 & dom g = D` by A6;
+    (abs g) to_power 1 is_integrable_on M by A5,Lem00a; then
+    abs g is_integrable_on M by LmPW006; then
+    g is_integrable_on M by A6,MESFUNC6:94; then
+    g in L1_Functions M by A8;
+    hence x in CosetSet M by A7;
+   end; then
+   CosetSet(M,1) c= CosetSet M by TARSKI:def 3;
+   hence thesis by A4,XBOOLE_0:def 10;
+end;
+
+theorem Th9b:
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds addCoset M = addCoset(M,1)
+proof
+   let X be non empty set;
+   let S be SigmaField of X;
+   let M be sigma_Measure of S;
+A1:CosetSet M = CosetSet(M,1) by Th9a;
+   now let A,B be Element of CosetSet M;
+    A in {a.e-eq-class(f,M) where f is PartFunc of X,REAL
+          : f in L1_Functions M}; then
+    consider a be PartFunc of X,REAL such that
+A2:  A = a.e-eq-class(a,M) & a in L1_Functions M;
+    B in {a.e-eq-class(f,M) where f is PartFunc of X,REAL
+          : f in L1_Functions M}; then
+    consider b be PartFunc of X,REAL such that
+A3:  B = a.e-eq-class(b,M) & b in L1_Functions M;
+B1: A is Element of CosetSet(M,1) & B is Element of CosetSet(M,1) by Th9a;
+B2: a in a.e-eq-class(a,M) & b in a.e-eq-class(b,M) by A2,A3,LPSPACE1:38; then
+A4: (addCoset M).(A,B) = a.e-eq-class(a+b,M) by A2,A3,LPSPACE1:def 15;
+    a+b in L1_Functions M by A2,A3,LPSPACE1:23; then
+    ex E be Element of S st M.E`=0 & E = dom(a+b) & (a+b) is_measurable_on E
+       by Lem00; then
+    (addCoset M).(A,B) = a.e-eq-class_Lp(a+b,M,1) by A4,Lem03;
+    hence (addCoset M).(A,B) = (addCoset(M,1)).(A,B) by B1,B2,A2,A3,VSPDef3X;
+   end;
+   hence addCoset M = addCoset(M,1) by A1,BINOP_1:2;
+end;
+
+theorem Th9c:
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds zeroCoset M = zeroCoset(M,1)
+proof
+   let X be non empty set;
+   let S be SigmaField of X;
+   let M be sigma_Measure of S;
+   reconsider z = zeroCoset(M,1) as Element of CosetSet M by Th9a;
+   X-->0 in Lp_Functions(M,1) by LmDef1Lp; then
+   ex E be Element of S st
+    M.E`=0 & dom (X-->0) = E & (X-->0) is_measurable_on E by EQC00a; then
+A3:z = a.e-eq-class(X-->0,M) by Lem03;
+   X-->0 in L1_Functions M by LmDef1;
+   hence thesis by A3,LPSPACE1:def 16;
+end;
+
+theorem Th9d:
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds lmultCoset M = lmultCoset(M,1)
+proof
+   let X be non empty set;
+   let S be SigmaField of X;
+   let M be sigma_Measure of S;
+A1:CosetSet M = CosetSet(M,1) by Th9a;
+   now let z be Element of REAL, A be Element of CosetSet M;
+    A in {a.e-eq-class(f,M) where f is PartFunc of X,REAL
+          : f in L1_Functions M}; then
+    consider a be PartFunc of X,REAL such that
+A2:  A = a.e-eq-class(a,M) & a in L1_Functions M;
+A3: A is Element of CosetSet(M,1) by Th9a;
+A4: a in A by A2,LPSPACE1:38; then
+A5: (lmultCoset M).(z,A) = a.e-eq-class(z(#)a,M) by LPSPACE1:def 17;
+    z(#)a in L1_Functions M by A2,LPSPACE1:24; then
+    ex E be Element of S st M.E`=0 & E = dom(z(#)a)
+        & (z(#)a) is_measurable_on E by Lem00; then
+    (lmultCoset M).(z,A) = a.e-eq-class_Lp(z(#)a,M,1) by A5,Lem03;
+    hence (lmultCoset M).(z,A) = (lmultCoset(M,1)).(z,A) by A3,A4,VSPDef5X;
+   end;
+   hence lmultCoset M = lmultCoset(M,1) by A1,BINOP_1:2;
+end;
+
+theorem Th009:
+for X be non empty set, S be SigmaField of X,
+ M be sigma_Measure of S holds
+  Pre-L-Space M = Pre-Lp-Space(M,1)
+proof
+   let X be non empty set, S be SigmaField of X, M be sigma_Measure of S;
+A1:the carrier of Pre-L-Space M = CosetSet M &
+   the addF of Pre-L-Space M = addCoset M &
+   0.(Pre-L-Space M) = zeroCoset M &
+   the Mult of Pre-L-Space M = lmultCoset M by LPSPACE1:def 18;
+   CosetSet M = CosetSet(M,1) & addCoset M = addCoset(M,1) &
+   zeroCoset M = zeroCoset(M,1) & lmultCoset M = lmultCoset(M,1)
+      by Th9a,Th9b,Th9c,Th9d;
+   hence thesis by A1,VSPDef6X;
+end;
+
+theorem Th10a:
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S holds
+ L-1-Norm M = Lp-Norm(M,1)
+proof
+   let X be non empty set, S be SigmaField of X, M be sigma_Measure of S;
+A1:the carrier of Pre-L-Space M = the carrier of Pre-Lp-Space(M,1) by Th009;
+   now let x be Element of the carrier of Pre-L-Space M;
+    x in the carrier of Pre-L-Space M; then
+A2: x in CosetSet M by LPSPACE1:def 18;
+    consider g be PartFunc of X,REAL such that
+B1:  x = a.e-eq-class(g,M) & g in L1_Functions M by A2;
+    consider a be PartFunc of X,REAL such that
+A4:  a in x & (L-1-Norm M).x = Integral(M,abs a) by LPSPACE1:def 19;
+B2: ex p be PartFunc of X,REAL st
+     a = p & p in L1_Functions M & g in L1_Functions M & g a.e.= p,M
+       by B1,A4;
+    consider b be PartFunc of X,REAL such that
+A5:  b in x &
+     ex r be Real st
+      r = Integral(M,(abs b) to_power 1) &
+      (Lp-Norm(M,1)).x = r to_power (1/1) by A1,DefLpNORM;
+B4: ex q be PartFunc of X,REAL st b = q & q in L1_Functions M
+      & g in L1_Functions M & g a.e.= q,M by B1,A5;
+    a a.e.= g,M by B2,LPSPACE1:29; then
+    a a.e.= b,M by B4,LPSPACE1:30; then
+B6: Integral(M,abs a) = Integral(M,abs b) by B1,A4,A5,LPSPACE1:45;
+    (abs b) to_power 1 = abs b by LmPW006;
+    hence (L-1-Norm M).x = (Lp-Norm(M,1)).x by A4,A5,B6,POWER:30;
+   end;
+   hence thesis by A1,FUNCT_2:113;
+end;
+
+theorem
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S holds
+  L-1-Space M = Lp-Space(M,1)
+proof
+   let X be non empty set,
+       S be SigmaField of X,
+       M be sigma_Measure of S;
+   Pre-L-Space M = Pre-Lp-Space(M,1) by Th009;
+   hence thesis by Th10a;
+end;

@@ -13,10 +13,10 @@ environ
       CARD_3, SCMFSA6C, SCMFSA7B, UNIALG_2, SCMFSA8B, ARYTM_1, SCMFSA8C,
       SCMFSA8A, SCM_HALT, PARTFUN1, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      NAT_1, RELAT_1, FINSEQ_1, FUNCT_1, PARTFUN1, FUNCT_7, CARD_3, VALUED_1,
-      STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, FUNCOP_1, SCMFSA_4, SCMFSA6B,
-      SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA7B,
-      NAT_D, SCMFSA_3, SCMFSA6C, XXREAL_0;
+      NAT_1, RELAT_1, FINSEQ_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, CARD_3,
+      VALUED_1, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, FUNCOP_1, SCMFSA_4,
+      SCMFSA6B, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C,
+      SCMFSA7B, NAT_D, SCMFSA_3, SCMFSA6C, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, PARTFUN1, SCM_1, SCMFSA_3,
       SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
       SCMFSA8C, SCMNORM, SCMFSA_4, NAT_D, RELSET_1, SCMFSA_1;
@@ -116,22 +116,15 @@ registration
   cluster InitHalting -> non empty Program of SCM+FSA;
 end;
 
-theorem :: SCM_HALT:10
-  for I being InitHalting Program of SCM+FSA holds dom I <> {};
-
-theorem :: SCM_HALT:11
-  for I being InitHalting Program of SCM+FSA holds  0 in dom
-  I;
+canceled 2;
 
 theorem :: SCM_HALT:12
   for J being InitHalting Program of SCM+FSA st Initialized J c=
   s1 for n being Element of NAT st ProgramPart Relocated(J,n) c= s2 & IC s2 =
    n & DataPart s1 = DataPart s2 for i being Element of NAT holds IC
 Comput(ProgramPart(s1),s1,i) + n = IC Comput(ProgramPart(s2),s2,i) &
- IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
-s1),s1,i)),n)
- = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),s2,
-i)) &
+ IncAddr(CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,i)),n)
+ = CurInstr(ProgramPart (s2),Comput(ProgramPart(s2),s2,i)) &
  DataPart Comput(ProgramPart(s1),s1,i) = DataPart
   Comput(ProgramPart(s2),s2,i);
 
@@ -150,8 +143,10 @@ s2,k));
 
 theorem :: SCM_HALT:15
   for I being InitHalting Program of SCM+FSA st Initialized I c=
-s1 & Initialized I c= s2 & s1,s2 equal_outside NAT holds LifeSpan s1 = LifeSpan
-  s2 & Result s1, Result s2 equal_outside NAT;
+s1 & Initialized I c= s2 & s1,s2 equal_outside NAT holds LifeSpan(ProgramPart(
+s1),s1) = LifeSpan(ProgramPart s2,
+  s2) & Result(ProgramPart(s1),s1), Result(ProgramPart(s2),s2)
+  equal_outside NAT;
 
 registration
   cluster keeping_0 InitHalting Program of SCM+FSA;
@@ -174,7 +169,7 @@ end;
 theorem :: SCM_HALT:18
   for I being InitClosed Program of SCM+FSA, J being Program of
   SCM+FSA st Initialized I c= s & ProgramPart s halts_on s
-   for m st m <= LifeSpan s holds
+   for m st m <= LifeSpan(ProgramPart(s),s) holds
   Comput(ProgramPart(s),s,m),Comput(ProgramPart((s+*(I ';' J))),(s+*(I ';' J)),
 m) equal_outside NAT;
 
@@ -186,9 +181,9 @@ theorem :: SCM_HALT:19
 theorem :: SCM_HALT:20
   ((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA) c= s implies
 Initialized I c= s +* (I +* (((intloc 0) .--> 1) +*
-Start-At( 0,SCM+FSA))) & s +*
-  (I +* (((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA))) =
-  s +* I & s +* (I +* (((
+Start-At( 0,SCM+FSA))) &
+s +* (I +* (((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA))) = s +* I &
+ s +* (I +* (((
   intloc 0) .--> 1) +* Start-At( 0,SCM+FSA))) +* Directed I =
   s +* Directed I;
 
@@ -197,20 +192,21 @@ theorem :: SCM_HALT:21
    st ProgramPart(s+*I) halts_on s+*I &
   Directed I c= s & ((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA) c= s
    holds IC
-  Comput(ProgramPart( s), s,LifeSpan (s +*I) + 1) =  card I;
+  Comput(ProgramPart( s), s,LifeSpan(ProgramPart(s +*I),s +*I) + 1) =  card I;
 
 theorem :: SCM_HALT:22
   for I being InitClosed Program of SCM+FSA
    st ProgramPart(s+*I) halts_on s+*I &
 Directed I c= s & ((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA) c= s
  holds DataPart
-Comput(ProgramPart( s), s,LifeSpan (s +*I)) = DataPart Comput(ProgramPart( s),
-s,LifeSpan (s +*I) + 1
+Comput(ProgramPart( s), s,LifeSpan(ProgramPart(s +*I),s +*I)) = DataPart Comput
+(ProgramPart( s),
+s,LifeSpan(ProgramPart(s +*I),s +*I) + 1
   );
 
 theorem :: SCM_HALT:23
   for I being InitHalting Program of SCM+FSA st Initialized I c= s
-holds for k being Element of NAT st k <= LifeSpan s
+holds for k being Element of NAT st k <= LifeSpan(ProgramPart(s),s)
  holds CurInstr(ProgramPart Comput(ProgramPart(
   (s +* Directed I)),
   (s +* Directed I),k),
@@ -222,7 +218,8 @@ theorem :: SCM_HALT:24
   for I being InitClosed Program of SCM+FSA
    st ProgramPart(s+*Initialized I) halts_on s+*Initialized I
    for J being Program of SCM+FSA, k being Element of NAT st k <=
-  LifeSpan (s +* Initialized I ) holds Comput(ProgramPart( (s +* Initialized I)
+  LifeSpan(ProgramPart(s +* Initialized I ),s +* Initialized I ) holds Comput(
+ProgramPart( (s +* Initialized I)
 ), (s +* Initialized I),k),
   Comput(ProgramPart( (s +* Initialized (I ';' J))), (s +* Initialized (I ';' J
 )),k) equal_outside NAT;
@@ -230,16 +227,23 @@ theorem :: SCM_HALT:24
 theorem :: SCM_HALT:25
   for I being keepInt0_1 InitHalting Program of SCM+FSA, J being
 InitHalting Program of SCM+FSA, s being State of SCM+FSA st Initialized (I ';'
-  J) c= s holds IC Comput(ProgramPart( s), s,LifeSpan (s +* I) + 1) =  card I &
-DataPart Comput(ProgramPart( s), s,LifeSpan (s +* I) + 1) = DataPart(Comput(
+  J) c= s holds IC Comput(ProgramPart( s), s,LifeSpan(ProgramPart(s +* I),s +*
+I) + 1) =  card I &
+DataPart Comput(ProgramPart( s), s,LifeSpan(ProgramPart(s +* I),s +* I) + 1) =
+DataPart(Comput(
 ProgramPart( (s +* I)
   ), (s +* I)
-  ,LifeSpan (s +* I)) +* Initialized J) & ProgramPart Relocated(J,card I) c=
-Comput(ProgramPart( s), s,LifeSpan (s +* I) + 1) & Comput(ProgramPart( s), s,
-LifeSpan (s +* I) + 1).
+  ,LifeSpan(ProgramPart(s +* I),s +* I)) +* Initialized J) & ProgramPart
+Relocated(J,card I) c=
+Comput(ProgramPart( s), s,LifeSpan(ProgramPart(s +* I),s +* I) + 1) & Comput(
+ProgramPart( s), s,
+LifeSpan(ProgramPart(s +* I),s +* I) + 1).
   intloc 0 = 1 & ProgramPart s halts_on s &
-   LifeSpan s = LifeSpan (s +* I) + 1 + LifeSpan (
-Result (s +* I) +* Initialized J) & (J is keeping_0 implies (Result s).intloc 0
+   LifeSpan(ProgramPart(s),s) = LifeSpan(ProgramPart(s +* I),s +* I) + 1 +
+LifeSpan(ProgramPart(
+Result(ProgramPart(s +* I),s +* I) +* Initialized J),
+Result(ProgramPart(s +* I),s +* I) +* Initialized J) & (J is keeping_0 implies
+(Result(ProgramPart(s),s)).intloc 0
   = 1);
 
 registration
@@ -251,12 +255,14 @@ end;
 theorem :: SCM_HALT:26
   for I being keepInt0_1 Program of SCM+FSA st ProgramPart(s+*I) halts_on s+*I
   for J being InitClosed Program of SCM+FSA st Initialized (I ';' J) c= s for k
-being Element of NAT holds Comput(ProgramPart( (Result(s +*I) +* Initialized J
-)), (Result(s +*I) +* Initialized J ),k) +*
+being Element of NAT holds Comput(ProgramPart( (Result(ProgramPart(s +*I),s +*I
+) +* Initialized J
+)), (Result(ProgramPart(s +*I),s +*I) +* Initialized J ),k) +*
   Start-At (IC Comput(ProgramPart( (
-  Result(s +*I) +* Initialized J )), (
-  Result(s +*I) +* Initialized J ),k) + card I,SCM+FSA),
-  Comput(ProgramPart( (s +* (I ';' J))), (s +* (I ';' J)),LifeSpan (s +* I)+1+k
+  Result(ProgramPart(s +*I),s +*I) +* Initialized J )), (
+  Result(ProgramPart(s +*I),s +*I) +* Initialized J ),k) + card I,SCM+FSA),
+  Comput(ProgramPart( (s +* (I ';' J))), (s +* (I ';' J)),LifeSpan(ProgramPart(
+s +* I),s +* I)+1+k
 ) equal_outside NAT;
 
 theorem :: SCM_HALT:27
@@ -270,8 +276,11 @@ Comput(ProgramPart( (s +* Initialized (I
 
 theorem :: SCM_HALT:28
   for I being keepInt0_1 InitHalting Program of SCM+FSA, J being
-  InitHalting Program of SCM+FSA holds LifeSpan (s +* Initialized (I ';' J)) =
-  LifeSpan (s +* Initialized I) + 1 + LifeSpan (Result (s +* Initialized I) +*
+  InitHalting Program of SCM+FSA holds LifeSpan(ProgramPart(s +* Initialized (I
+';' J)),s +* Initialized (I ';' J)) =
+  LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I) + 1 + LifeSpan(
+ProgramPart(Result(ProgramPart(s +* Initialized I),s +* Initialized I) +*
+  Initialized J),Result(ProgramPart(s +* Initialized I),s +* Initialized I) +*
   Initialized J);
 
 theorem :: SCM_HALT:29
@@ -541,7 +550,8 @@ theorem :: SCM_HALT:61
 ProgramPart( (
   Initialize s +* (I +* Start-At( 0,SCM+FSA)))), (
   Initialize s +* (I +* Start-At( 0,SCM+FSA))),
-  (LifeSpan (Initialize s +* (I +*
+  (LifeSpan(ProgramPart(Initialize s +* (I +*
+  Start-At( 0,SCM+FSA))),Initialize s +* (I +*
   Start-At( 0,SCM+FSA))))).a;
 
 theorem :: SCM_HALT:62
@@ -564,7 +574,8 @@ Comput(ProgramPart( (Initialize s +* (I ';' SubFrom(a,intloc 0) +*
 Start-At( 0,SCM+FSA)))
 ), (Initialize s +* (I ';' SubFrom(a,intloc 0) +*
 Start-At( 0,SCM+FSA)))
-,LifeSpan (Initialize s +* (I ';' SubFrom(a,intloc 0) +*
+,LifeSpan(ProgramPart(Initialize s +* (I ';' SubFrom(a,intloc 0) +*
+Start-At( 0,SCM+FSA))),Initialize s +* (I ';' SubFrom(a,intloc 0) +*
 Start-At( 0,SCM+FSA)))).a
   = s.a - 1;
 
@@ -572,13 +583,15 @@ theorem :: SCM_HALT:65
   for s being State of SCM+FSA, I being InitClosed Program of
 SCM+FSA st Initialized I c= s & ProgramPart s halts_on s
  for m being Element of NAT st m <=
-LifeSpan s holds Comput(ProgramPart(s),s,m), Comput(ProgramPart( (s +* loop I))
+LifeSpan(ProgramPart(s),s) holds Comput(ProgramPart(s),s,m), Comput(ProgramPart
+( (s +* loop I))
 , (s +* loop I),m) equal_outside
   NAT;
 
 theorem :: SCM_HALT:66
   for s being State of SCM+FSA, I being InitHalting Program of SCM+FSA
-st Initialized I c= s holds for k being Element of NAT st k <= LifeSpan s holds
+st Initialized I c= s holds for k being Element of NAT st k <= LifeSpan(
+ProgramPart(s),s) holds
   CurInstr(ProgramPart Comput(ProgramPart( (s +* loop I)), (s +* loop I),k),
    Comput(ProgramPart( (s +* loop I)), (s +* loop I),k)) <> halt SCM+FSA;
 
@@ -588,7 +601,8 @@ theorem :: SCM_HALT:67
 theorem :: SCM_HALT:68
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
   is_closed_onInit s & I is_halting_onInit s for m being Element of NAT st m <=
-  LifeSpan (s +* Initialized I) holds Comput(ProgramPart( (s +* Initialized I))
+  LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I) holds Comput(
+ProgramPart( (s +* Initialized I))
 , (s +* Initialized I),m),
   Comput(ProgramPart((s +* Initialized (loop I))),(s +* Initialized (loop I)),m
 ) equal_outside NAT;
@@ -596,7 +610,7 @@ theorem :: SCM_HALT:68
 theorem :: SCM_HALT:69
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
   is_closed_onInit s & I is_halting_onInit s for m being Element of NAT st m <
-LifeSpan (s +* Initialized I) holds
+LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I) holds
  CurInstr(ProgramPart Comput(ProgramPart( (s +* Initialized I)), (s +*
 Initialized I),m),
   Comput(ProgramPart( (s +* Initialized I)), (s +* Initialized I),m))
@@ -615,11 +629,12 @@ theorem :: SCM_HALT:71
    holds CurInstr(
    ProgramPart Comput(ProgramPart( (s +*Initialized (loop I))), (s +*
 Initialized (loop I)),
-      LifeSpan (s +* Initialized I)),
+      LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I)),
    Comput(ProgramPart( (s +*Initialized (loop I))), (s +*Initialized (loop I)),
-LifeSpan (s +* Initialized I)))
+LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I)))
     = goto  0 & for m
-  being Element of NAT st m <= LifeSpan (s +* Initialized I)
+  being Element of NAT st m <= LifeSpan(ProgramPart(s +* Initialized I),s +*
+Initialized I)
    holds CurInstr(
   ProgramPart Comput(ProgramPart( (s +* Initialized (loop I))), (s +*
 Initialized (loop I)),m),
@@ -660,7 +675,8 @@ theorem :: SCM_HALT:77
   of SCM+FSA, a being read-write Int-Location st I does_not_destroy a & s.a > 0
   holds ex s2 being State of SCM+FSA, k being Element of NAT st s2 = s +*
   Initialized (loop if=0(a,Goto  2, I ';' SubFrom(a,intloc 0))) & k =
-LifeSpan (s +* Initialized (if=0(a,Goto  2, I ';' SubFrom(a,intloc 0))))
+LifeSpan(ProgramPart(s +* Initialized (if=0(a,Goto  2, I ';' SubFrom(a,intloc 0
+)))),s +* Initialized (if=0(a,Goto  2, I ';' SubFrom(a,intloc 0))))
   + 1 & Comput(ProgramPart(s2),s2,k).a = s.a - 1 & Comput(ProgramPart(s2),s2,k)
 .intloc 0 = 1 & (for b
 being read-write Int-Location st b <> a holds Comput(ProgramPart(s2),s2,k).b =

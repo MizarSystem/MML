@@ -13,14 +13,14 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="ORDERS_1"/>
@@ -78,8 +78,8 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="66"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -104,17 +104,17 @@
 <CCluster aid="KNASTER" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="66"/>
 <Adjective nr="133"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="69"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="66"/>
+<Adjective nr="71"/>
 </Cluster>
 </CCluster>
 </Registrations>

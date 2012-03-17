@@ -275,9 +275,9 @@
 </FCluster>
 <FCluster aid="AOFA_I00" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="382">
-<Func kind="K" nr="413"/>
-<Func kind="K" nr="441"/>
+<Func kind="K" nr="383">
+<Func kind="K" nr="414"/>
+<Func kind="K" nr="442"/>
 </Func>
 <Cluster>
 <Adjective nr="36" value="false"/>
@@ -348,7 +348,7 @@
 <LocusVar nr="4"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="459">
+<Func kind="K" nr="460">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -370,12 +370,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="149">
-<Func kind="K" nr="382">
-<Func kind="K" nr="413"/>
-<Func kind="K" nr="441"/>
+<Func kind="K" nr="383">
+<Func kind="K" nr="414"/>
+<Func kind="K" nr="442"/>
 </Func>
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="416">
+<Func kind="K" nr="417">
 <Func kind="K" nr="111">
 <Func kind="K" nr="48"/>
 <Func kind="K" nr="47"/>
@@ -438,9 +438,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="149">
-<Func kind="K" nr="382">
-<Func kind="K" nr="413"/>
-<Func kind="K" nr="441"/>
+<Func kind="K" nr="383">
+<Func kind="K" nr="414"/>
+<Func kind="K" nr="442"/>
 </Func>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

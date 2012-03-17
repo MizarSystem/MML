@@ -8,7 +8,7 @@ environ
 
  vocabularies NUMBERS, CARD_1, INT_1, POWER, SUBSET_1, XXREAL_0, RELAT_1,
       ARYTM_3, ARYTM_1, NAT_1, AMI_3, AFINSQ_1, AMI_1, ORDINAL4, GRAPHSP,
-      SCM_1, FINSEQ_1, MSUALG_1, FUNCT_1, PRE_FF, CIRCUIT2, FSM_1, NEWTON,
+      SCM_1, FINSEQ_1, MSUALG_1, FUNCT_1, PRE_FF, FSM_1, NEWTON,
       FIB_FUSC, SCMNORM;
  notations XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON, POWER, CARD_3,
       ORDINAL4, FUNCT_1, AFINSQ_1, FINSEQ_1, AMI_1, SCM_1, AMI_3, PRE_FF,
@@ -125,7 +125,8 @@ theorem
    holds ProgramPart (s qua PartState of SCM)
    halts_on s &
    (N = 0 implies
-  LifeSpan s = 1) & (N > 0 implies LifeSpan s = 6 * N - 2) & (Result s).dl.3 =
+  LifeSpan(ProgramPart(s),s) = 1) & (N > 0 implies LifeSpan(ProgramPart(s),s) =
+6 * N - 2) & (Result(ProgramPart(s),s)).dl.3 =
   Fib N
 proof
   let N be Element of NAT, s be State-consisting of 0, 0, 0, Fib_Program, <*1
@@ -258,9 +259,9 @@ A42: s.(IC s1) = halt SCM by A1,A31,A32,A2,SCM_1:25;
       assume
       N = 0;
       halt SCM <> n >0_goto L2 by SCM_1:26;
-      hence LifeSpan s = 1 by A1,A2,A42,SCM_1:17;
+      hence LifeSpan(ProgramPart(s),s) = 1 by A1,A2,A42,SCM_1:17;
     end;
-    thus N > 0 implies LifeSpan s = 6 * N - 2 by A41;
+    thus N > 0 implies LifeSpan(ProgramPart(s),s) = 6 * N - 2 by A41;
     thus thesis by A7,A41,A42,PRE_FF:1,SCM_1:4;
   end;
   suppose
@@ -279,9 +280,10 @@ A46: r.FC = Fib (k+1) by A40,A44;
     then
 A47: IC t = L1 by A6,A45,SCM_1:24;
     hence ProgramPart s halts_on s by A31,SCM_1:3;
-    thus N = 0 implies LifeSpan s = 1 by A43,NAT_1:5;
-    thus N > 0 implies LifeSpan s = 6 * N - 2 by A31,A43,A45,A47,SCM_1:17;
-    thus (Result s).FC = t.FC by A31,A47,SCM_1:4
+    thus N = 0 implies LifeSpan(ProgramPart(s),s) = 1 by A43,NAT_1:5;
+    thus N > 0 implies LifeSpan(ProgramPart(s),s) = 6 * N - 2 by A31,A43,A45,
+A47,SCM_1:17;
+    thus (Result(ProgramPart(s),s)).FC = t.FC by A31,A47,SCM_1:4
       .= Fib N by A6,A43,A46,A45,SCM_1:24;
   end;
 end;
@@ -323,8 +325,8 @@ end;
 theorem
   for N being Element of NAT st N > 0 for s being State-consisting of 0,
 0, 0, Fusc_Program, <*2*>^<*N*>^<*1*>^<*0*> holds ProgramPart s halts_on s &
- (Result s).dl.
-  3 = Fusc N & LifeSpan s = 6 * ([\ log(2, N) /] + 1) + 1
+ (Result(ProgramPart(s),s)).dl.
+  3 = Fusc N & LifeSpan(ProgramPart(s),s) = 6 * ([\ log(2, N) /] + 1) + 1
 proof
   set c2 = dl.0, n = dl.1, a = dl.2, b = dl.3, aux = dl.4;
   set L6 = 6, L7 = 7, L8 = 8;
@@ -549,7 +551,7 @@ A72: s.L8 = halt SCM by A4,SCM_1:14;
   A69,Def2,PRE_FF:17
     .= u.b * Fusc (0+1) by A69,Def2
     .= u.b by PRE_FF:17;
-  hence (Result S).dl.3 = Fusc N by A4,A72,A66,A70,A68,SCM_1:4;
+  hence (Result(ProgramPart(S),S)).dl.3 = Fusc N by A4,A72,A66,A70,A68,SCM_1:4;
   s.(IC h)=halt SCM by A4,A70,SCM_1:14;
   hence thesis by A4,A71,SCM_1:17;
 end;
@@ -558,16 +560,18 @@ theorem
   for N being Element of NAT, k, Fk, Fk1 being Element of NAT, s being
 State-consisting of 3, 0, 0, Fib_Program, <* 1 *>^<* N *>^<* Fk *>^<* Fk1 *> st
 N > 0 & Fk = Fib k & Fk1 = Fib (k+1) holds ProgramPart s halts_on s &
- LifeSpan s = 6 * N -
-4 & ex m being Element of NAT st m = k+N-1 & (Result s).dl.2 = Fib m & (Result
+ LifeSpan(ProgramPart(s),s) = 6 * N -
+4 & ex m being Element of NAT st m = k+N-1 & (Result(ProgramPart(s),s)).dl.2 =
+Fib m & Result(ProgramPart s,
   s).dl.3 = Fib (m+1)
 proof
   defpred P[Element of NAT] means for k, Fk, Fk1 be Element of NAT, s be
   State-consisting of 3, 0, 0, Fib_Program, <* 1 *>^<* $1 *>^<* Fk *>^<* Fk1 *>
 st $1 > 0 & Fk = Fib k & Fk1 = Fib (k+1) holds ProgramPart s halts_on s &
- LifeSpan s = 6 *
-$1 - 4 & ex m being Element of NAT st m = k+$1-1 & (Result s).dl.2 = Fib m & (
-  Result s).dl.3 = Fib (m+1);
+ LifeSpan(ProgramPart(s),s) = 6 *
+$1 - 4 & ex m being Element of NAT st m = k+$1-1 & (Result(ProgramPart(s),s)).
+dl.2 = Fib m & (
+  Result(ProgramPart(s),s)).dl.3 = Fib (m+1);
 A1: for N be Element of NAT st P[N] holds P[N+1]
   proof
     set C1 = dl.0, n = dl.1, FP = dl.2, FC = dl.3, AUX = dl.4;
@@ -622,7 +626,7 @@ A23:  N = 0;
 A24:  s.(IC s2) = halt SCM by A8,A12,A19,A10,SCM_1:24;
       hence ProgramPart s halts_on s by SCM_1:3;
       s.(IC s1) <> halt SCM by A12,A10,SCM_1:26;
-      hence LifeSpan s = 6 * (N+1) - 4 by A23,A24,SCM_1:16;
+      hence LifeSpan(ProgramPart(s),s) = 6 * (N+1) - 4 by A23,A24,SCM_1:16;
       take m = k;
       thus m = k+(N+1)-1 by A23;
       thus thesis by A4,A5,A15,A13,A24,SCM_1:4;
@@ -678,20 +682,21 @@ A43:  s6 is State-consisting of 3, 0, 0, Fib_Program, <* 1 *>^<* N *>^<*
       Fk1 *>^<* Fk2 *> by A5,A36,A40,A35,A39,A28,A42,A41,A37,A27,SCM_1:30;
       then consider m being Element of NAT such that
 A44:  m = (k+1)+N-1 and
-      (Result s6).dl.2 = Fib m and
-      (Result s6).dl.3 = Fib (m+1) by A2,A5,A25;
+      (Result(ProgramPart(s6),s6)).dl.2 = Fib m and
+      (Result(ProgramPart(s6),s6)).dl.3 = Fib (m+1) by A2,A5,A25;
 A45:  ProgramPart s6 halts_on s6 by A2,A5,A25,A43;
       then
 Y:     ProgramPart s halts_on s6 by AMI_1:144;
       hence ProgramPart s halts_on s by AMI_1:93;
-      LifeSpan s6 = 6 * N - 4 by A2,A5,A25,A43;
-      hence LifeSpan s = 6 + (6 * N - 4) by A45,A26,SCM_1:28
+      LifeSpan(ProgramPart(s6),s6) = 6 * N - 4 by A2,A5,A25,A43;
+      hence LifeSpan(ProgramPart(s),s) = 6 + (6 * N - 4) by A45,A26,SCM_1:28
         .= 6 * (N+1) - 4;
       take m;
       thus m = k+(N+1)-1 by A44;
-X:    Result s6 = Result s by SCM_1:29,Y;
-      ex m being Element of NAT st m = (k+1)+N-1 & (Result s6).dl.2 = Fib
-      m & (Result s6).dl.3 = Fib (m+1) by A2,A5,A25,A43;
+X:    Result(ProgramPart(s6),s6) = Result(ProgramPart(s),s) by SCM_1:29,Y;
+      ex m being Element of NAT st m = (k+1)+N-1 & (Result(ProgramPart(s6),s6))
+.dl.2 = Fib
+      m & (Result(ProgramPart(s6),s6)).dl.3 = Fib (m+1) by A2,A5,A25,A43;
       hence thesis by A44,X;
     end;
   end;
@@ -705,15 +710,17 @@ theorem Th5:
   for n being Element of NAT, N, A, B being Element of NAT, s being
   State-consisting of 0, 0, 0, Fusc_Program, <*2*>^<*n*>^<*A*>^<*B*> st N > 0 &
   Fusc N = A * Fusc n + B * Fusc (n+1) holds ProgramPart s halts_on s &
-   (Result s).dl.3 =
-  Fusc N & (n = 0 implies LifeSpan s = 1) & (n > 0 implies LifeSpan s = 6 * ([\
+   (Result(ProgramPart(s),s)).dl.3 =
+  Fusc N & (n = 0 implies LifeSpan(ProgramPart(s),s) = 1) & (n > 0 implies
+LifeSpan(ProgramPart(s),s) = 6 * ([\
   log(2, n) /] + 1) + 1)
 proof
   defpred P[Nat] means for N, A, B being Element of NAT, s being
 State-consisting of 0, 0, 0, Fusc_Program, <*2*>^<*$1*>^<*A*>^<*B*> st N > 0 &
   Fusc N = A * Fusc $1 + B * Fusc ($1+1) holds ProgramPart s halts_on s &
-   (Result s).dl.3 =
-Fusc N & ($1 = 0 implies LifeSpan s = 1) & ($1 > 0 implies LifeSpan s = 6 * ([\
+   (Result(ProgramPart(s),s)).dl.3 =
+Fusc N & ($1 = 0 implies LifeSpan(ProgramPart(s),s) = 1) & ($1 > 0 implies
+LifeSpan(ProgramPart(s),s) = 6 * ([\
   log(2, $1) /] + 1)+1);
 A1: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
   proof
@@ -723,8 +730,9 @@ A1: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
 A2: for n9 being Nat st n9 < nn holds for N, A, B being Element of NAT
 , s being State-consisting of 0, 0, 0, Fusc_Program, <*2*>^<*n9*>^<*A*>^<*B*>
 st N > 0 & Fusc N = A * Fusc n9 + B * Fusc (n9+1)
- holds ProgramPart s halts_on s & (Result
-s).dl.3 = Fusc N & (n9 = 0 implies LifeSpan s = 1) & (n9 > 0 implies LifeSpan s
+ holds ProgramPart s halts_on s & Result(ProgramPart s,
+s).dl.3 = Fusc N & (n9 = 0 implies LifeSpan(ProgramPart(s),s) = 1) & (n9 > 0
+implies LifeSpan(ProgramPart(s),s)
     = 6 * ([\ log(2, n9) /] + 1)+1);
     reconsider n2 = nn as Element of NAT by ORDINAL1:def 13;
     let N, A, B be Element of NAT, s be State-consisting of 0, 0, 0,
@@ -755,15 +763,16 @@ A15:  nn = 0;
       then
 A16:  s.(IC s1) = halt SCM by A6,A7,A5,A9,SCM_1:24;
       hence ProgramPart s halts_on s by SCM_1:3;
-      thus (Result s).b = s1.b by A16,SCM_1:4
+      thus (Result(ProgramPart(s),s)).b = s1.b by A16,SCM_1:4
         .= Fusc N by A4,A13,A15,PRE_FF:20;
       hereby
         assume
         nn = 0;
         halt SCM <> n =0_goto 8 by SCM_1:26;
-        hence LifeSpan s = 1 by A6,A9,A16,SCM_1:17;
+        hence LifeSpan(ProgramPart(s),s) = 1 by A6,A9,A16,SCM_1:17;
       end;
-      thus nn>0 implies LifeSpan s=6 * ([\ log(2, nn) /] + 1)+1 by A15;
+      thus nn>0 implies LifeSpan(ProgramPart(s),s)=6 * ([\ log(2, nn) /] + 1)+1
+by A15;
     end;
 A17: s.1 = aux := c2 by SCM_1:14;
 A18: s.5 = SCM-goto 0 by SCM_1:14;
@@ -839,18 +848,21 @@ A51:    nn9 < nn by A33,A34,A41,PRE_FF:19;
 A52:    Fusc N = A * Fusc nn9 + (B+A)*Fusc (nn9+1) by A4,A33,A34,A41,A50,
         PRE_FF:21;
         then
-A53:    nn9 > 0 implies LifeSpan s6 = 6 * ([\ log(2, nn9) /] + 1)+1 by A2
+A53:    nn9 > 0 implies LifeSpan(ProgramPart(s6),s6) = 6 * ([\ log(2, nn9) /] +
+1)+1 by A2
         ,A3,A49,A51;
 A54:    ProgramPart s6 halts_on s6 by A2,A3,A49,A51,A52;
         then
 Y:       ProgramPart s halts_on s6 by AMI_1:144;
         hence ProgramPart s halts_on s by AMI_1:93;
-X:      Result s6 = Result s by SCM_1:29,Y;
-        (Result s6).dl.3 = Fusc N by A2,A3,A49,A51,A52;
-        hence (Result s).dl.3 = Fusc N by X;
-        thus nn = 0 implies LifeSpan s = 1 by A25;
-A55:    nn9 = 0 implies LifeSpan s6 = 1 by A2,A3,A33,A34,A24,A41,A49,A52;
-        thus nn > 0 implies LifeSpan s = 6 * ([\ log(2, nn) /] + 1)+1
+X:      Result(ProgramPart(s6),s6) = Result(ProgramPart(s),s) by SCM_1:29,Y;
+        (Result(ProgramPart(s6),s6)).dl.3 = Fusc N by A2,A3,A49,A51,A52;
+        hence (Result(ProgramPart(s),s)).dl.3 = Fusc N by X;
+        thus nn = 0 implies LifeSpan(ProgramPart(s),s) = 1 by A25;
+A55:    nn9 = 0 implies LifeSpan(ProgramPart(s6),s6) = 1 by A2,A3,A33,A34,A24,
+A41,A49,A52;
+        thus nn > 0 implies LifeSpan(ProgramPart(s),s) = 6 * ([\ log(2, nn) /]
++ 1)+1
         proof
           assume
           nn > 0;
@@ -865,7 +877,8 @@ A56:        nn9 <> 0;
 A57:        nn9 > 0 by NAT_1:3;
             then reconsider F = [\ log(2, nn9) /] as Element of NAT by Lm2;
             6 * (F+1)+1 > 0 by A57,Lm2;
-            hence LifeSpan s=6 + (6 * (F+1)+1) by A54,A53,A56,NAT_1:3 ,
+            hence LifeSpan(ProgramPart(s),s)=6 + (6 * (F+1)+1) by A54,A53,A56,
+NAT_1:3 ,
             SCM_1:28
               .= 6 * ([\ log(2, nn) /] + 1) + 1 by A33,A34,A41,A50,A57,Lm3;
           end;
@@ -910,13 +923,15 @@ A73:    ProgramPart s6 halts_on s6 by A2,A3,A71;
         then
 Y:       ProgramPart s halts_on s6 by AMI_1:144;
         hence ProgramPart s halts_on s by AMI_1:93;
-X:      Result s6 = Result s by SCM_1:29,Y;
-        (Result s6).dl.3 = Fusc N by A2,A3,A71,A72;
-        hence (Result s).dl.3 = Fusc N by X;
-        thus nn = 0 implies LifeSpan s = 1 by A25;
-A74:    nn9 > 0 implies LifeSpan s6 = 6 * ([\ log(2, nn9) /] + 1)+1 by
+X:      Result(ProgramPart(s6),s6) = Result(ProgramPart(s),s) by SCM_1:29,Y;
+        (Result(ProgramPart(s6),s6)).dl.3 = Fusc N by A2,A3,A71,A72;
+        hence (Result(ProgramPart(s),s)).dl.3 = Fusc N by X;
+        thus nn = 0 implies LifeSpan(ProgramPart(s),s) = 1 by A25;
+A74:    nn9 > 0 implies LifeSpan(ProgramPart(s6),s6) = 6 * ([\ log(2, nn9) /] +
+1)+1 by
         A2,A3,A71,A72;
-        thus nn > 0 implies LifeSpan s = 6 * ([\ log(2, nn) /] + 1)+1
+        thus nn > 0 implies LifeSpan(ProgramPart(s),s) = 6 * ([\ log(2, nn) /]
++ 1)+1
         proof
           assume
           nn > 0;
@@ -931,7 +946,8 @@ A75:        nn9 <> 0;
 A76:        nn9 > 0 by NAT_1:3;
             then reconsider F = [\ log(2, nn9) /] as Element of NAT by Lm2;
             6 * (F+1)+1 > 0 by A76,Lm2;
-            hence LifeSpan s=6 + (6 * (F+1)+1) by A73,A74,A75,NAT_1:3 ,
+            hence LifeSpan(ProgramPart(s),s)=6 + (6 * (F+1)+1) by A73,A74,A75,
+NAT_1:3 ,
             SCM_1:28
               .= 6 * ([\ log(2, nn) /] + 1) + 1 by A33,A34,A24,A58,A76,Lm5;
           end;
@@ -948,8 +964,9 @@ end;
 theorem
   for N being Element of NAT st N > 0 for s being State-consisting of 0,
 0, 0, Fusc_Program, <*2*>^<*N*>^<*1*>^<*0*> holds ProgramPart s halts_on s &
- (Result s).dl.
-3 = Fusc N & (N = 0 implies LifeSpan s = 1) & (N > 0 implies LifeSpan s = 6 * (
+ (Result(ProgramPart(s),s)).dl.
+3 = Fusc N & (N = 0 implies LifeSpan(ProgramPart(s),s) = 1) & (N > 0 implies
+LifeSpan(ProgramPart(s),s) = 6 * (
   [\ log(2, N) /] + 1)+1)
 proof
   let N be Element of NAT such that

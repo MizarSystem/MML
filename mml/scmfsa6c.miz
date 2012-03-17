@@ -24,7 +24,7 @@ environ
  definitions FUNCOP_1, AMI_1, SCMFSA_2, SCMFSA6B, SCMFSA6A, SCMNORM;
  theorems RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, SCMFSA_3, ZFMISC_1, FUNCOP_1,
       TARSKI, NAT_1, AMI_1, SCMFSA_2, ENUMSET1, GRFUNC_1, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, XBOOLE_0, XBOOLE_1, SCMNORM, PARTFUN1;
+      SCMFSA6B, XBOOLE_0, XBOOLE_1, PARTFUN1, AFINSQ_1;
 
 begin :: Consequences of the main theorem from SCMFSA6B
 
@@ -1100,8 +1100,8 @@ definition
     reconsider EI = {} as FinPartState of SCM+FSA by FUNCT_1:174,RELAT_1:206;
 A1: for m,n be Nat st n in dom EI & m < n holds m in dom EI;
     dom EI c= NAT by RELAT_1:60,XBOOLE_1:2;
-    then reconsider EI as Program of SCM+FSA by A1,RELAT_1:def 18,SCMNORM:def 1
-;
+    then reconsider EI as Program of SCM+FSA
+     by A1,RELAT_1:def 18,AFINSQ_1:def 13;
     s +* ((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA) = s +* EI
      +* ((intloc 0
     ) .--> 1) +* Start-At( 0,SCM+FSA) by FUNCT_4:22
@@ -2133,7 +2133,7 @@ A5: now
     set Y = NAT;
     set X = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA};
     assume
-A6: Result sI = Exec(i, sI);
+A6: Result(ProgramPart(sI),sI) = Exec(i, sI);
 A7: s+* ((intloc 0) .--> 1),s+*Mi+* ((intloc 0) .--> 1) equal_outside Y
     by AMI_1:120,FUNCT_7:106;
     sI = s+* (Mi +* (((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA)))
@@ -2215,13 +2215,15 @@ Comput(ProgramPart(sI),sI,0)) by AMI_1:14
     .= Following(ProgramPart sI,sI) by AMI_1:13
     .= Exec(sI. 0, sI) by FUNCT_4:26,SCMFSA6B:34,Y
     .= Exec(i, sI) by A1,A23,A4,GRFUNC_1:8;
+TX: ProgramPart sI = ProgramPart Comput(ProgramPart(sI),sI,1)
+by AMI_1:144;
   per cases by A2,SCMFSA6B:32;
   suppose
 A25: IC1 =  0;
     then
-A26: CurInstr(ProgramPart Comput(ProgramPart(sI),sI,1),Comput(ProgramPart(sI),
+A26: CurInstr(ProgramPart(sI),Comput(ProgramPart(sI),
 sI,1)) = sI. 0
- by A24,AMI_1:def 13,Z
+ by A24,AMI_1:def 13,Z,TX
       .= i by A1,A23,A4,GRFUNC_1:8;
     succ IC sI = succ  0 by FUNCT_4:26,SCMFSA6B:34
       .=  1;
@@ -2233,7 +2235,7 @@ A27: InsCode i in {0, 6, 7, 8} by A24,A25,SCMFSA6A:23;
         InsCode i = 0;
         then
 A28:    i = halt SCM+FSA by SCMFSA_2:122;
-        then ProgramPart sI halts_on sI by A26,AMI_1:146;
+        then ProgramPart sI halts_on sI by A26,AMI_1:146,TX;
         hence thesis by A5,A24,A26,A28,AMI_1:def 22;
       end;
       suppose
@@ -2291,10 +2293,8 @@ Following(ProgramPart sI,Comput(ProgramPart(sI),sI,0)
 ProgramPart(sI),sI,0))
              by A33,A34,AMI_1:13
             .= Comput(ProgramPart(sI),sI,0+1) by AMI_1:14;
-          hence CurInstr(ProgramPart Comput(ProgramPart(sI),sI,n),Comput(
-ProgramPart(sI),sI,n))
-           <> halt SCM+FSA by A26,A29,
-SCMFSA_2:124;
+          hence CurInstr(ProgramPart(sI),Comput(ProgramPart(sI),sI,n))
+           <> halt SCM+FSA by A26,A29,SCMFSA_2:124,TX;
         end;
         then not ProgramPart sI halts_on sI by AMI_1:146;
         hence thesis by A4,AMI_1:def 26;
@@ -2306,11 +2306,11 @@ S:    IC1 =  1;
   (ProgramPart Comput(ProgramPart(sI),sI,1))/.IC Comput(ProgramPart(sI),sI,1)
  = Comput(ProgramPart(sI),sI,1).IC Comput(ProgramPart(sI),sI,1) by AMI_1:150;
     then
-A35: CurInstr(ProgramPart Comput(ProgramPart(sI),sI,1),Comput(ProgramPart(sI),
+A35: CurInstr(ProgramPart(sI),Comput(ProgramPart(sI),
 sI,1))
- = sI. 1 by A24,AMI_1:def 13,S
+ = sI. 1 by A24,AMI_1:def 13,S,TX
       .= halt SCM+FSA by A21,A22,A3,A4,GRFUNC_1:8;
-    then ProgramPart sI halts_on sI by AMI_1:146;
+    then ProgramPart sI halts_on sI by AMI_1:146,TX;
     hence thesis by A5,A24,A35,AMI_1:def 22;
   end;
 end;

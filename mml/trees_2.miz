@@ -8,15 +8,17 @@ environ
 
  vocabularies NUMBERS, TREES_1, SUBSET_1, FUNCT_1, XBOOLE_0, FINSEQ_1,
       ORDINAL4, XXREAL_0, ARYTM_3, RELAT_1, TARSKI, CARD_1, NAT_1, ORDINAL1,
-      FINSET_1, REAL_1, ARYTM_1, ZFMISC_1, FUNCOP_1, TREES_2;
+      FINSET_1, REAL_1, ARYTM_1, ZFMISC_1, FUNCOP_1, TREES_2, AMISTD_3,
+      FINSEQ_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, XCMPLX_0,
-      FUNCT_1, REAL_1, NAT_1, CARD_1, NUMBERS, FINSEQ_1, FINSET_1, RELSET_1,
+      FUNCT_1, REAL_1, NAT_1, CARD_1, NUMBERS, FINSEQ_1, FINSEQ_2,
+      FINSET_1, RELSET_1,
       BINOP_1, FUNCT_2, FUNCOP_1, TREES_1, XXREAL_0;
  constructors WELLORD2, BINOP_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, TREES_1,
-      RELSET_1;
+      RELSET_1, FINSEQ_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, TREES_1, CARD_1,
-      RELSET_1;
+      RELSET_1, FINSEQ_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions RELAT_1, TARSKI, FUNCT_1, TREES_1, ORDINAL1, XBOOLE_0, BINOP_1;
  theorems FUNCT_1, NAT_1, FINSEQ_1, TREES_1, TARSKI, ORDERS_1, ZFMISC_1,
@@ -482,7 +484,7 @@ A11: len <*i*> = 1 & w9 = <*i*> by A1,FINSEQ_1:47,56;
   thus thesis by A9,A11;
 end;
 
-theorem
+theorem Th16:
   W = union { W-level n: not contradiction }
 proof
   thus W c= union { W-level n: not contradiction }
@@ -3172,5 +3174,79 @@ A229: t^<*n*> in succ t2 by A220,A222,A228;
 A230: T2 in E by A125,A216,FUNCT_1:def 5;
 A231: T2.(t^<*n*>) = T.(t^<*n*>) by A190,A229,A230;
   thus thesis by A216,A220,A221,A228,A231;
+end;
+
+:: from AMISTD_3, 2010.01.10, A.T.
+
+theorem Th18:
+  for T1, T2 being Tree st
+     for n being Element of NAT holds T1-level n = T2-level n
+   holds T1 = T2
+proof
+  let T1, T2 be Tree such that
+A1: for n being Element of NAT holds T1-level n = T2-level n;
+  for p being FinSequence of NAT holds p in T1 iff p in T2
+  proof
+    let p be FinSequence of NAT;
+A2: T1 = union { T1-level n where n is Element of NAT: not contradiction }
+    by Th16;
+    hereby
+      assume
+      p in T1;
+      then consider Y being set such that
+A3:   p in Y and
+A4:   Y in { T1-level n where n is Element of NAT: not contradiction }
+      by A2,TARSKI:def 4;
+      consider n being Element of NAT such that
+A5:   Y = T1-level n by A4;
+      Y = T2-level n by A1,A5;
+      hence p in T2 by A3;
+    end;
+    assume
+A6: p in T2;
+    T2 = union { T2-level n where n is Element of NAT: not contradiction }
+    by Th16;
+    then consider Y being set such that
+A7: p in Y and
+A8: Y in { T2-level n where n is Element of NAT: not contradiction }
+    by A6,TARSKI:def 4;
+    consider n being Element of NAT such that
+A9: Y = T2-level n by A8;
+    Y = T1-level n by A1,A9;
+    hence thesis by A7;
+  end;
+  hence thesis by Th7;
+end;
+
+theorem
+  for n being Element of NAT
+   holds TrivialInfiniteTree-level n = { n |-> 0 }
+proof
+  set T = TrivialInfiniteTree;
+  let n be Element of NAT;
+  set L = { w where w is Element of T: len w = n };
+  set f = n |-> 0;
+  {f} = L
+  proof
+    hereby
+      let a be set;
+      assume
+      a in {f};
+      then
+A1:   a = f by TARSKI:def 1;
+      f in T & len f = n by FINSEQ_1:def 18;
+      hence a in L by A1;
+    end;
+    let a be set;
+    assume
+    a in L;
+    then consider w being Element of T such that
+A2: a = w & len w = n;
+    w in T;
+    then ex k being Element of NAT st w = k |-> 0;
+    then a = f by A2,FINSEQ_1:def 18;
+    hence thesis by TARSKI:def 1;
+  end;
+  hence thesis;
 end;
 

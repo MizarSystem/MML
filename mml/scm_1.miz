@@ -7,11 +7,11 @@
 environ
 
  vocabularies NUMBERS, INT_1, FINSEQ_1, SUBSET_1, FSM_1, AMI_3, NAT_1,
-      FINSET_1, PARTFUN1, AMI_1, SCMNORM, RELAT_1, FUNCT_1, CIRCUIT2, MSUALG_1,
+      PARTFUN1, AMI_1, SCMNORM, RELAT_1, FUNCT_1, CIRCUIT2, MSUALG_1,
       ARYTM_3, XXREAL_0, CARD_1, TARSKI, AFINSQ_1, AMI_2, ORDINAL4, GRAPHSP,
       ARYTM_1, MCART_1, SCM_1, STRUCT_0, ORDINAL1;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, MCART_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, ORDINAL4, FINSEQ_1, XXREAL_0,
+      FUNCT_1, PARTFUN1, FUNCT_2, ORDINAL4, FINSEQ_1, XXREAL_0,
       AFINSQ_1, AMI_2, STRUCT_0, AMI_1, AMI_3, SCMNORM;
  constructors XXREAL_0, NAT_1, AMI_3, SCMNORM, RELSET_1, PARTFUN1, AMI_2,
       AFINSQ_1, ORDINAL4, PBOOLE, PRE_POLY;
@@ -21,7 +21,7 @@ environ
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions AFINSQ_1, AMI_1, NAT_1, AMI_3;
  theorems NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, FINSEQ_1, AMI_1, AMI_2,
-      AMI_3, FINSEQ_3, RELSET_1, ORDINAL1, SCMNORM, RELAT_1, AFINSQ_1,
+      AMI_3, FINSEQ_3, RELSET_1, ORDINAL1, RELAT_1, AFINSQ_1,
       PARTFUN1;
  schemes PARTFUN1, WELLORD2;
 
@@ -54,25 +54,27 @@ Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
   hence IC Comput(ProgramPart(s),s,k) in dom ProgramPart s by AMI_1:143;
    CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s),s,k))
     = halt SCM by A1,AMI_1:54,Y;
-  hence (ProgramPart s)/.IC Comput(ProgramPart(s),s,k) = halt SCM by AMI_1:145;
+  hence CurInstr(ProgramPart s, Comput(ProgramPart(s),s,k)) = halt SCM
+       by AMI_1:145;
 end;
 
 theorem Th4:
   for s being State of SCM, k being Element of NAT st s.(IC
-  Comput(ProgramPart(s),s,k)) = halt SCM holds (Result s) = Comput(ProgramPart(
-s),s,k)
+  Comput(ProgramPart(s),s,k)) = halt SCM holds (Result(ProgramPart(s),s)) =
+Comput(ProgramPart(s),s,k)
 proof
   let s be State of SCM, k be Element of NAT;
+TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
+by AMI_1:144;
 Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
  = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
   assume
-  s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
-  then ProgramPart s halts_on s &
-  CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s),s,k)) =
-halt SCM
-   by Th3,
-AMI_1:54,Y;
-  hence thesis by AMI_1:def 22;
+Z:  s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
+  then
+X:  ProgramPart s halts_on s by Th3;
+  CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k)) = halt SCM
+   by Z,AMI_1:54,Y,TX;
+  hence thesis by AMI_1:def 22,X;
 end;
 
 canceled 2;
@@ -365,55 +367,58 @@ theorem Th16:
   for s being State of SCM, k being Element of NAT holds s.(IC
   Comput(ProgramPart(s),s,k)) <> halt SCM & s.(IC Comput(ProgramPart(s),s,k+1))
 = halt SCM iff
-  LifeSpan s = k+1 & ProgramPart s halts_on s
+  LifeSpan(ProgramPart(s),s) = k+1 & ProgramPart s halts_on s
 proof
   let s be State of SCM, k be Element of NAT;
+TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
+by AMI_1:144;
+TY: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k+1)
+by AMI_1:144;
   hereby
     assume that
 A1: s.(IC Comput(ProgramPart(s),s,k)) <> halt SCM and
 A2: s.(IC Comput(ProgramPart(s),s,k+1)) = halt SCM;
-Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
-A3: CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s),s,k))
+Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k)
+ = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150,TX;
+A3: CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k))
 <> halt SCM
 by A1,AMI_1:54,Y;
 A4: now
       let i be Element of NAT;
       assume that
-A5:   CurInstr(ProgramPart Comput(ProgramPart(s),s,i),Comput(ProgramPart(s),s,i
-)) = halt SCM and
+A5:   CurInstr(ProgramPart s,Comput(ProgramPart(s),s,i)) = halt SCM and
 A6:   k+1 > i;
 T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,i)
 by AMI_1:144;
       i <= k by A6,NAT_1:13;
       then Comput(ProgramPart(s),s,k) = Comput(ProgramPart(s),s,i)
        by AMI_1:52,A5,T;
-      hence contradiction by A3,A5;
+      hence contradiction by A3,A5,TX;
     end;
-Y:  (ProgramPart Comput(ProgramPart(s),s,k+1))/.IC Comput(ProgramPart(s),s,k+1)
- = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1) by AMI_1:150;
-    ProgramPart s halts_on s & CurInstr(ProgramPart Comput(ProgramPart(s),s,k+1
-),
+Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k+1)
+ = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1)
+  by AMI_1:150,TY;
+    ProgramPart s halts_on s & CurInstr(ProgramPart s,
     Comput(ProgramPart(s),s,k+1)) = halt SCM
-     by A2,Th3,AMI_1:54,Y;
-    hence LifeSpan s = k+1 & ProgramPart s halts_on s by A4,AMI_1:def 46;
+     by A2,Th3,AMI_1:54,Y,TY;
+    hence LifeSpan(ProgramPart(s),s) = k+1 & ProgramPart s halts_on s by A4,
+AMI_1:def 46,TX,TY;
   end;
   assume
-A7: LifeSpan s = k+1 & ProgramPart s halts_on s;
+A7: LifeSpan(ProgramPart(s),s) = k+1 & ProgramPart s halts_on s;
 A8: now
     assume
-    CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s),s,k))
-= halt SCM;
+    CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k)) = halt SCM;
     then k+1 <= k by A7,AMI_1:def 46;
     hence contradiction by NAT_1:13;
   end;
-Z:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
-Y:  (ProgramPart Comput(ProgramPart(s),s,k+1))/.IC Comput(ProgramPart(s),s,k+1)
- = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1) by AMI_1:150;
-  CurInstr(ProgramPart Comput(ProgramPart(s),s,k+1),Comput(ProgramPart(s),s,k+1
-))
-   = halt SCM by A7,AMI_1:def 46;
+Z:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k)
+ = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150,TX;
+Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k+1)
+ = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1)
+    by AMI_1:150,TY;
+  CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k+1))
+   = halt SCM by A7,AMI_1:def 46,TX;
   hence thesis by A8,AMI_1:54,Y,Z;
 end;
 
@@ -421,7 +426,7 @@ theorem Th17:
   for s being State of SCM, k being Element of NAT st IC
   Comput(ProgramPart(s),s,k) <> IC Comput(ProgramPart(s),s,k+1) & s.(IC Comput(
 ProgramPart(s),s,k+1)) = halt
-  SCM holds LifeSpan s = k+1
+  SCM holds LifeSpan(ProgramPart(s),s) = k+1
 proof
   let s be State of SCM, k be Element of NAT;
   assume that
@@ -436,7 +441,7 @@ by AMI_1:144;
     s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
     then CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,k)) = halt SCM
     by AMI_1:54,Y,T;
-    hence contradiction by A1,AMI_1:52,NAT_1:11,T;
+    hence contradiction by A1,AMI_1:52,NAT_1:11;
   end;
   hence thesis by A2,Th16;
 end;
@@ -683,14 +688,15 @@ canceled;
 
 theorem
   for s1, s2 being State of SCM, k, c being Element of NAT st s2 =
-Comput(ProgramPart(s1),s1,k) & LifeSpan s2 = c & ProgramPart s2 halts_on s2 &
- 0 < c holds LifeSpan s1 =
+Comput(ProgramPart(s1),s1,k) & LifeSpan(ProgramPart(s2),s2) = c & ProgramPart
+s2 halts_on s2 &
+ 0 < c holds LifeSpan(ProgramPart(s1),s1) =
   k+c
 proof
   let s1, s2 be State of SCM, k, c be Element of NAT;
   assume that
 A1: s2 = Comput(ProgramPart(s1),s1,k) and
-A2: LifeSpan s2 = c & ProgramPart s2 halts_on s2 and
+A2: LifeSpan(ProgramPart(s2),s2) = c & ProgramPart s2 halts_on s2 and
 A3: 0 < c;
   consider l being Nat such that
 A4: c = l+1 by A3,NAT_1:6;
@@ -703,14 +709,15 @@ A5: s1.(IC Comput(ProgramPart(s1),s1,k+(l+1))) = halt SCM by A1,AMI_1:54;
   s2.(IC Comput(ProgramPart(s2),s2,l)) <> halt SCM by A2,A4,Th16;
   then s2.(IC Comput(ProgramPart(s1),s1,k+l)) <> halt SCM by A1,AMI_1:51,T;
   then s1.(IC Comput(ProgramPart(s1),s1,k+l)) <> halt SCM by A1,AMI_1:54;
-  hence LifeSpan s1 = (k+l)+1 by A5,Th16
+  hence LifeSpan(ProgramPart(s1),s1) = (k+l)+1 by A5,Th16
     .= k+c by A4;
 end;
 
 theorem
   for s1 being State of SCM, k being Element of NAT
    st ProgramPart s1 halts_on Comput(ProgramPart(s1),s1,k)
-   holds Result (Comput(ProgramPart(s1),s1,k)) = Result s1
+   holds Result(ProgramPart(Comput(ProgramPart(s1),s1,k)),Comput(ProgramPart(s1
+),s1,k)) = Result(ProgramPart(s1),s1)
 proof
   let s1 be State of SCM, k be Element of NAT;
   set s2 = Comput(ProgramPart(s1),s1,k);
@@ -718,13 +725,14 @@ proof
 A2: ProgramPart s1 halts_on s2;
   then ProgramPart s2 halts_on s2 by AMI_1:144;
   then consider l being Element of NAT such that
-A4: Result s2 = Comput(ProgramPart(s2),s2,l) &
-    CurInstr(ProgramPart Result s2,Result s2) = halt SCM by AMI_1:def 22;
+A4: Result(ProgramPart(s2),s2) = Comput(ProgramPart(s2),s2,l) &
+    CurInstr(ProgramPart s2,Result(ProgramPart(s2),s2)) = halt SCM
+     by AMI_1:def 22;
 A3: ProgramPart s1 halts_on s1 by A2,AMI_1:93;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
 by AMI_1:144;
-  Comput(ProgramPart(s1),Comput(ProgramPart(s1),s1,k)
-,l) = Comput(ProgramPart(s1),s1,k+l) by AMI_1:51;
+  Comput(ProgramPart(s1),Comput(ProgramPart(s1),s1,k),l)
+   = Comput(ProgramPart(s1),s1,k+l) by AMI_1:51;
   hence thesis by A3,A4,AMI_1:def 22,T;
 end;
 
@@ -796,22 +804,21 @@ end;
 
 theorem
   for s being State-consisting of 0, 0, 0, <%halt SCM%>, <*>INT
-   holds ProgramPart s halts_on s & LifeSpan s = 0 & Result s = s
+   holds ProgramPart s halts_on s & LifeSpan(ProgramPart(s),s) = 0 & Result(
+ProgramPart(s),s) = s
 proof
   let s be State-consisting of 0, 0, 0, <%halt SCM%>, <*>INT;
-  set s0 = Comput(ProgramPart(s),s,0);
   1 = len <%halt SCM%> by AFINSQ_1:38;
   then
 A1: s.(0+0) = <%halt SCM%>.0 by Def1
     .= halt SCM by AFINSQ_1:38;
-A2: s = s0 by AMI_1:13;
-  then s.IC s0 = halt SCM by A1,Def1;
+A2: s = Comput(ProgramPart(s),s,0) by AMI_1:13;
+  then s.IC s = halt SCM by A1,Def1;
   hence
-A3: ProgramPart s halts_on s by Th3;
-Y:  (ProgramPart s0)/.IC s0
- = s0.IC s0 by AMI_1:150;
-  CurInstr(ProgramPart s0,s0) = halt SCM by A1,A2,Def1,Y;
-  hence LifeSpan s = 0 by A3,AMI_1:def 46;
+A3: ProgramPart s halts_on s by Th3,A2;
+Y:  (ProgramPart s)/.IC s = s.IC s by AMI_1:150;
+  CurInstr(ProgramPart s,s) = halt SCM by A1,A2,Def1,Y;
+  hence LifeSpan(ProgramPart(s),s) = 0 by A3,AMI_1:def 46,A2;
   IC s = 0 by Def1;
   hence thesis by A1,A2,Th4;
 end;
@@ -821,8 +828,9 @@ end;
 theorem
   for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%dl.0
   := dl.1%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s &
-   LifeSpan s = 1 & (
-Result s).dl.0 = i2 & for d being Data-Location st d<>dl.0 holds (Result s).d =
+   LifeSpan(ProgramPart(s),s) = 1 & (
+Result(ProgramPart(s),s)).dl.0 = i2 & for d being Data-Location st d<>dl.0
+holds (Result(ProgramPart(s),s)).d =
   s.d
 proof
   let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%dl.0 := dl.1%>^<%
@@ -835,13 +843,13 @@ A3: s.0 = dl.0 := dl.1 by Th15;
 A4: IC s1 = (0+1) by A2,Th18;
 A5: s.1 = halt SCM by Th15;
   hence ProgramPart s halts_on s by A4,Th3;
-  thus LifeSpan s = 1 by A5,A2,A4,Th17;
+  thus LifeSpan(ProgramPart(s),s) = 1 by A5,A2,A4,Th17;
   s1.dl.0 = s.dl.1 by A3,A2,Th18;
-  hence (Result s).dl.0 = i2 by A5,A1,A4,Th4;
+  hence (Result(ProgramPart(s),s)).dl.0 = i2 by A5,A1,A4,Th4;
   let d be Data-Location;
   assume
 A6: d<>dl.0;
-  thus (Result s).d = s1.d by A5,A4,Th4
+  thus (Result(ProgramPart(s),s)).d = s1.d by A5,A4,Th4
     .= s.d by A3,A2,A6,Th18;
 end;
 
@@ -850,8 +858,9 @@ end;
 theorem
   for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%AddTo
 (dl.0,dl.1)%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s &
- LifeSpan s = 1 &
-(Result s).dl.0 = i1 + i2 & for d being Data-Location st d<>dl.0 holds (Result
+ LifeSpan(ProgramPart(s),s) = 1 &
+(Result(ProgramPart(s),s)).dl.0 = i1 + i2 & for d being Data-Location st d<>dl.
+0 holds Result(ProgramPart s,
   s).d = s.d
 proof
   let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%AddTo(dl.0,dl.1)
@@ -866,13 +875,13 @@ A4: s.0 = AddTo(dl.0,dl.1) by Th15;
 A5: IC s1 = (0+1) by A3,A1,Th19;
 A6: s.1 = halt SCM by Th15;
   hence ProgramPart s halts_on s by A5,Th3;
-  thus LifeSpan s = 1 by A3,A6,A1,A5,Th17;
+  thus LifeSpan(ProgramPart(s),s) = 1 by A3,A6,A1,A5,Th17;
   s1.dl.0 = s0.dl.0 + s0.dl.1 by A3,A4,A1,Th19;
-  hence (Result s).dl.0 = i1 + i2 by A6,A2,A1,A5,Th4;
+  hence (Result(ProgramPart(s),s)).dl.0 = i1 + i2 by A6,A2,A1,A5,Th4;
   let d be Data-Location;
   assume
 A7: d<>dl.0;
-  thus (Result s).d = s1.d by A6,A5,Th4
+  thus (Result(ProgramPart(s),s)).d = s1.d by A6,A5,Th4
     .= s.d by A3,A4,A1,A7,Th19;
 end;
 
@@ -881,9 +890,10 @@ end;
 theorem
   for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%
 SubFrom(dl.0,dl.1)%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan
-s = 1 & (Result s).dl.0 = i1 - i2 & for d being Data-Location st d<>dl.0 holds
-  (Result s).d = s.d
+ & LifeSpan(ProgramPart s,s) = 1 &
+ (Result(ProgramPart(s),s)).dl.0 = i1 - i2 & for d being Data-Location
+st d<>dl.0 holds
+  (Result(ProgramPart(s),s)).d = s.d
 proof
   let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%SubFrom(dl.0,dl.1
   )%>^<%halt SCM%>, <*i1*>^<*i2*>;
@@ -897,13 +907,13 @@ A4: s.0 = SubFrom(dl.0,dl.1) by Th15;
 A5: IC s1 = (0+1) by A3,A1,Th20;
 A6: s.1 = halt SCM by Th15;
   hence ProgramPart s halts_on s by A5,Th3;
-  thus LifeSpan s = 1 by A3,A6,A1,A5,Th17;
+  thus LifeSpan(ProgramPart(s),s) = 1 by A3,A6,A1,A5,Th17;
   s1.dl.0 = s0.dl.0 - s0.dl.1 by A3,A4,A1,Th20;
-  hence (Result s).dl.0 = i1 - i2 by A6,A2,A1,A5,Th4;
+  hence (Result(ProgramPart(s),s)).dl.0 = i1 - i2 by A6,A2,A1,A5,Th4;
   let d be Data-Location;
   assume
 A7: d<>dl.0;
-  thus (Result s).d = s1.d by A6,A5,Th4
+  thus (Result(ProgramPart(s),s)).d = s1.d by A6,A5,Th4
     .= s.d by A3,A4,A1,A7,Th20;
 end;
 
@@ -912,9 +922,10 @@ end;
 theorem
   for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%
 MultBy(dl.0,dl.1)%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan s
-= 1 & (Result s).dl.0 = i1 * i2 & for d being Data-Location st d<>dl.0 holds (
-  Result s).d = s.d
+ & LifeSpan(ProgramPart(s),s)
+= 1 & (Result(ProgramPart(s),s)).dl.0 = i1 * i2 & for d being Data-Location st
+d<>dl.0 holds (
+  Result(ProgramPart(s),s)).d = s.d
 proof
   let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%MultBy(dl.0,dl.1)
   %>^<%halt SCM%>, <*i1*>^<*i2*>;
@@ -928,13 +939,13 @@ A4: s.0 = MultBy(dl.0,dl.1) by Th15;
 A5: IC s1 = (0+1) by A3,A1,Th21;
 A6: s.1 = halt SCM by Th15;
   hence ProgramPart s halts_on s by A5,Th3;
-  thus LifeSpan s = 1 by A3,A6,A1,A5,Th17;
+  thus LifeSpan(ProgramPart(s),s) = 1 by A3,A6,A1,A5,Th17;
   s1.dl.0 = s0.dl.0 * s0.dl.1 by A3,A4,A1,Th21;
-  hence (Result s).dl.0 = i1 * i2 by A6,A2,A1,A5,Th4;
+  hence (Result(ProgramPart(s),s)).dl.0 = i1 * i2 by A6,A2,A1,A5,Th4;
   let d be Data-Location;
   assume
 A7: d<>dl.0;
-  thus (Result s).d = s1.d by A6,A5,Th4
+  thus (Result(ProgramPart(s),s)).d = s1.d by A6,A5,Th4
     .= s.d by A3,A4,A1,A7,Th21;
 end;
 
@@ -943,9 +954,10 @@ end;
 theorem
   for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%
 Divide(dl.0,dl.1)%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan s
-  = 1 & (Result s).dl.0 = i1 div i2 & (Result s).dl.1 = i1 mod i2 & for d being
-  Data-Location st d<>dl.0 & d<>dl.1 holds (Result s).d = s.d
+ & LifeSpan(ProgramPart(s),s)
+  = 1 & (Result(ProgramPart(s),s)).dl.0 = i1 div i2 & (Result(ProgramPart(s),s)
+).dl.1 = i1 mod i2 & for d being
+  Data-Location st d<>dl.0 & d<>dl.1 holds (Result(ProgramPart(s),s)).d = s.d
 proof
   let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%Divide(dl.0,dl.1)
   %>^<%halt SCM%>, <*i1*>^<*i2*>;
@@ -959,15 +971,15 @@ A4: s = Comput(ProgramPart(s),s,0) by AMI_1:13;
 A5: s.(IC s1) = halt SCM by A2,A1,A4,Th22;
   hence ProgramPart s halts_on s by Th3;
   Divide(dl.0, dl.1) <> halt SCM by Th26;
-  hence LifeSpan s = 1 by A2,A4,A5,Th16;
-  thus (Result s).dl.0 = s1.dl.0 by A5,Th4
+  hence LifeSpan(ProgramPart(s),s) = 1 by A2,A4,A5,Th16;
+  thus (Result(ProgramPart(s),s)).dl.0 = s1.dl.0 by A5,Th4
     .= i1 div i2 by A2,A3,A1,A4,Th22;
-  thus (Result s).dl.1 = s1.dl.1 by A5,Th4
+  thus (Result(ProgramPart(s),s)).dl.1 = s1.dl.1 by A5,Th4
     .= i1 mod i2 by A2,A3,A1,A4,Th22;
   let d be Data-Location;
   assume
 A6: d<>dl.0 & d<>dl.1;
-  thus (Result s).d = s1.d by A5,Th4
+  thus (Result(ProgramPart(s),s)).d = s1.d by A5,Th4
     .= s.d by A2,A1,A4,A6,Th22;
 end;
 
@@ -976,8 +988,8 @@ end;
 theorem
   for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%SCM-goto
 1%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s &
- LifeSpan s = 1 & for d
-  being Data-Location holds (Result s).d = s.d
+ LifeSpan(ProgramPart(s),s) = 1 & for d
+  being Data-Location holds (Result(ProgramPart(s),s)).d = s.d
 proof
   let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%SCM-goto 1%>^<%
   halt SCM%>, <*i1*>^<*i2*>;
@@ -988,9 +1000,9 @@ A2: s.0 = SCM-goto 1 by Th15;
 A3: IC s1 = (0+1) by A1,Th23;
 A4: s.1 = halt SCM by Th15;
   hence ProgramPart s halts_on s by A3,Th3;
-  thus LifeSpan s = 1 by A4,A1,A3,Th17;
+  thus LifeSpan(ProgramPart(s),s) = 1 by A4,A1,A3,Th17;
   let d be Data-Location;
-  thus (Result s).d = s1.d by A4,A3,Th4
+  thus (Result(ProgramPart(s),s)).d = s1.d by A4,A3,Th4
     .= s.d by A2,A1,Th23;
 end;
 
@@ -999,8 +1011,8 @@ end;
 theorem
   for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%dl.0
 =0_goto 1%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan s = 1
-  & for d being Data-Location holds (Result s).d = s.d
+ & LifeSpan(ProgramPart(s),s) = 1
+  & for d being Data-Location holds (Result(ProgramPart(s),s)).d = s.d
 proof
   let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%dl.0 =0_goto 1
   %>^<%halt SCM%>, <*i1*>^<*i2*>;
@@ -1012,9 +1024,9 @@ A3: IC s = 0 & s = Comput(ProgramPart(s),s,0) by Th15,AMI_1:13;
   then
 A4: IC s1 = (0+1) by A1,A3,Th24;
   hence ProgramPart s halts_on s by A2,Th3;
-  thus LifeSpan s = 1 by A2,A3,A4,Th17;
+  thus LifeSpan(ProgramPart(s),s) = 1 by A2,A3,A4,Th17;
   let d be Data-Location;
-  thus (Result s).d = s1.d by A2,A4,Th4
+  thus (Result(ProgramPart(s),s)).d = s1.d by A2,A4,Th4
     .= s.d by A1,A3,Th24;
 end;
 
@@ -1023,8 +1035,8 @@ end;
 theorem
   for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%dl.0
 >0_goto 1%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan s = 1
-  & for d being Data-Location holds (Result s).d = s.d
+ & LifeSpan(ProgramPart(s),s) = 1
+  & for d being Data-Location holds (Result(ProgramPart(s),s)).d = s.d
 proof
   let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%dl.0 >0_goto 1
   %>^<%halt SCM%>, <*i1*>^<*i2*>;
@@ -1036,9 +1048,9 @@ A3: IC s = 0 & s = Comput(ProgramPart(s),s,0) by Th15,AMI_1:13;
   then
 A4: IC s1 = (0+1) by A1,A3,Th25;
   hence ProgramPart s halts_on s by A2,Th3;
-  thus LifeSpan s = 1 by A2,A3,A4,Th17;
+  thus LifeSpan(ProgramPart(s),s) = 1 by A2,A3,A4,Th17;
   let d be Data-Location;
-  thus (Result s).d = s1.d by A2,A4,Th4
+  thus (Result(ProgramPart(s),s)).d = s1.d by A2,A4,Th4
     .= s.d by A1,A3,Th25;
 end;
 

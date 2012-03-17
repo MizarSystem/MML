@@ -14,16 +14,16 @@ environ
       SCMFSA8C, ORDINAL1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, FUNCOP_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, CARD_3,
-      VALUED_1, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5,
-      SF_MASTR, SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
-      NAT_D, XXREAL_0;
+      VALUED_1, AFINSQ_1, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4,
+      SCMFSA_5, SF_MASTR, SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A,
+      SCMFSA8B, NAT_D, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, SCMFSA_5, SCMFSA6A,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMNORM, SCMFSA_4,
       AFINSQ_1, NAT_D, RELSET_1, PRE_POLY, SCMFSA_1, SCMFSA_7;
  registrations SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, ORDINAL1, XBOOLE_0, SCMNORM,
-      VALUED_1, FUNCT_4, RELAT_1, AFINSQ_1;
+      AFINSQ_1, VALUED_1, FUNCT_4, RELAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -171,13 +171,7 @@ theorem :: SCMFSA8C:39
   for s being State of SCM+FSA,I being Program of SCM+FSA st I
   is_closed_on s holds  0 in dom I;
 
-theorem :: SCMFSA8C:40
-  for s being State of SCM+FSA,I being paraclosed Program of SCM+FSA
-  holds  0 in dom I;
-
-theorem :: SCMFSA8C:41
-  for i being Instruction of SCM+FSA holds rng Macro i = {i,halt SCM+FSA
-  };
+canceled 2;
 
 theorem :: SCMFSA8C:42
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA st I
@@ -213,8 +207,8 @@ theorem :: SCMFSA8C:44
   is_closed_on s1 & I is_halting_on s1 & I +* Start-At( 0,SCM+FSA) c= s1
    & I +*
   Start-At( 0,SCM+FSA) c= s2 & DataPart s1 = DataPart s2
-  holds LifeSpan s1 =
-  LifeSpan s2;
+  holds LifeSpan(ProgramPart(s1),s1) =
+  LifeSpan(ProgramPart(s2),s2);
 
 theorem :: SCMFSA8C:45
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA st
@@ -250,19 +244,22 @@ theorem :: SCMFSA8C:50
   for s being State of SCM+FSA, I being initial FinPartState of
   SCM+FSA st I is_pseudo-closed_on s holds I is_pseudo-closed_on s +* (I +*
 Start-At( 0,SCM+FSA)) & pseudo-LifeSpan(s,I) =
-pseudo-LifeSpan(s +* (I +* Start-At( 0,SCM+FSA)),I);
+pseudo-LifeSpan(s +* (I +*
+Start-At( 0,SCM+FSA)),I);
 
 theorem :: SCMFSA8C:51
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA st
 I +* Start-At( 0,SCM+FSA) c= s1 & I is_pseudo-closed_on s1
 for n being Element of
   NAT st ProgramPart Relocated(I,n) c= s2 & IC s2 =  n & DataPart s1 =
-  DataPart s2 holds ((for i being Element of NAT st i < pseudo-LifeSpan(s1,I)
+  DataPart s2 holds ((for i being Element of NAT st i < pseudo-LifeSpan(
+s1,I)
   holds IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(
 ProgramPart(s1),s1,i)),n)
    = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),
 s2,i))) &
-for i being Element of NAT st i <= pseudo-LifeSpan(s1,I) holds IC Comput(
+for i being Element of NAT st i <= pseudo-LifeSpan(s1,I)
+holds IC Comput(
 ProgramPart(
   s1),
   s1,i) + n = IC Comput(ProgramPart( s2), s2,i) & DataPart Comput(ProgramPart(
@@ -303,16 +300,21 @@ Element of NAT st n < card I + card J + 3 holds n in dom if>0(a,I,J) & if>0(a,I
 theorem :: SCMFSA8C:58
   for s being State of SCM+FSA, I being Program of SCM+FSA st
   Directed I is_pseudo-closed_on s holds I ';' Stop SCM+FSA is_closed_on s & I
-  ';' Stop SCM+FSA is_halting_on s & LifeSpan (s +* (I ';' Stop SCM+FSA +*
-  Start-At( 0,SCM+FSA))) = pseudo-LifeSpan(s,Directed I) &
+  ';' Stop SCM+FSA is_halting_on s & LifeSpan(ProgramPart(s +* (I ';' Stop
+SCM+FSA +*
+  Start-At( 0,SCM+FSA))),s +* (I ';' Stop SCM+FSA +*
+  Start-At( 0,SCM+FSA))) = pseudo-LifeSpan(s,Directed
+I) &
   (for n being Element of
-  NAT st n < pseudo-LifeSpan(s,Directed I) holds IC Comput(ProgramPart( (s +* (
+  NAT st n < pseudo-LifeSpan(s,Directed I) holds IC
+Comput(ProgramPart( (s +* (
 I +*
 Start-At( 0,SCM+FSA)))), (s +* (I +*
 Start-At( 0,SCM+FSA))),n) = IC Comput(ProgramPart( (s +* (I ';'
 Stop SCM+FSA +* Start-At( 0,SCM+FSA)))), (s +* (I ';'
 Stop SCM+FSA +* Start-At( 0,SCM+FSA))),n)) &
-for n being Element of NAT st n <= pseudo-LifeSpan(s,Directed
+for n being Element of NAT st n <= pseudo-LifeSpan(
+  s,Directed
   I) holds DataPart Comput(ProgramPart( (s +* (I +* Start-At( 0,SCM+FSA)))), (s
 +* (I +* Start-At( 0,SCM+FSA))),n)
    = DataPart
@@ -321,7 +323,9 @@ for n being Element of NAT st n <= pseudo-LifeSpan(s,Directed
 
 theorem :: SCMFSA8C:59
   for s being State of SCM+FSA, I being Program of SCM+FSA st
-  Directed I is_pseudo-closed_on s holds DataPart Result (s +* (I ';' Stop
+  Directed I is_pseudo-closed_on s holds DataPart Result(ProgramPart(s +* (I
+';' Stop
+  SCM+FSA +* Start-At( 0,SCM+FSA))),s +* (I ';' Stop
   SCM+FSA +* Start-At( 0,SCM+FSA))) =
   DataPart Comput(ProgramPart( (s +* (I +* Start-At( 0,SCM+FSA)))), (s +* (I +*
 Start-At( 0,SCM+FSA))),
@@ -332,7 +336,8 @@ theorem :: SCMFSA8C:60
 = 1 & Directed I is_pseudo-closed_on s holds DataPart IExec(I ';' Stop SCM+FSA,
 s) = DataPart Comput(ProgramPart( (s +* (I +* Start-At( 0,SCM+FSA)))), (s +* (I
 +* Start-At( 0,SCM+FSA))),
-pseudo-LifeSpan(s,
+pseudo-LifeSpan(
+  s,
   Directed I));
 
 theorem :: SCMFSA8C:61
@@ -358,8 +363,12 @@ theorem :: SCMFSA8C:65
 theorem :: SCMFSA8C:66
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
   being read-write Int-Location st s.a = 0 & Directed I is_pseudo-closed_on s
-holds if=0(a,I,J) is_halting_on s & if=0(a,I,J) is_closed_on s & LifeSpan (s +*
-  (if=0(a,I,J) +* Start-At( 0,SCM+FSA))) = LifeSpan (s +* (I ';'
+holds if=0(a,I,J) is_halting_on s & if=0(a,I,J) is_closed_on s & LifeSpan(
+ProgramPart(s +*
+  (if=0(a,I,J) +* Start-At( 0,SCM+FSA))),s +*
+  (if=0(a,I,J) +* Start-At( 0,SCM+FSA))) = LifeSpan(ProgramPart(s +* (I ';'
+  Stop SCM+FSA +*
+  Start-At( 0,SCM+FSA))),s +* (I ';'
   Stop SCM+FSA +*
   Start-At( 0,SCM+FSA))) + 1;
 
@@ -372,8 +381,12 @@ theorem :: SCMFSA8C:67
 theorem :: SCMFSA8C:68
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
   being read-write Int-Location st s.a > 0 & Directed I is_pseudo-closed_on s
-holds if>0(a,I,J) is_halting_on s & if>0(a,I,J) is_closed_on s & LifeSpan (s +*
-  (if>0(a,I,J) +* Start-At( 0,SCM+FSA))) = LifeSpan (s +* (I ';'
+holds if>0(a,I,J) is_halting_on s & if>0(a,I,J) is_closed_on s & LifeSpan(
+ProgramPart(s +*
+  (if>0(a,I,J) +* Start-At( 0,SCM+FSA))),s +*
+  (if>0(a,I,J) +* Start-At( 0,SCM+FSA))) = LifeSpan(ProgramPart(s +* (I ';'
+  Stop SCM+FSA +*
+  Start-At( 0,SCM+FSA))),s +* (I ';'
   Stop SCM+FSA +*
   Start-At( 0,SCM+FSA))) + 1;
 
@@ -386,8 +399,12 @@ theorem :: SCMFSA8C:69
 theorem :: SCMFSA8C:70
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
   being read-write Int-Location st s.a <> 0 & Directed J is_pseudo-closed_on s
-holds if=0(a,I,J) is_halting_on s & if=0(a,I,J) is_closed_on s & LifeSpan (s +*
-  (if=0(a,I,J) +* Start-At( 0,SCM+FSA))) = LifeSpan (s +* (J ';'
+holds if=0(a,I,J) is_halting_on s & if=0(a,I,J) is_closed_on s & LifeSpan(
+ProgramPart(s +*
+  (if=0(a,I,J) +* Start-At( 0,SCM+FSA))),s +*
+  (if=0(a,I,J) +* Start-At( 0,SCM+FSA))) = LifeSpan(ProgramPart(s +* (J ';'
+  Stop SCM+FSA +*
+  Start-At( 0,SCM+FSA))),s +* (J ';'
   Stop SCM+FSA +*
   Start-At( 0,SCM+FSA))) + 3;
 
@@ -400,8 +417,12 @@ theorem :: SCMFSA8C:71
 theorem :: SCMFSA8C:72
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
   being read-write Int-Location st s.a <= 0 & Directed J is_pseudo-closed_on s
-holds if>0(a,I,J) is_halting_on s & if>0(a,I,J) is_closed_on s & LifeSpan (s +*
-  (if>0(a,I,J) +* Start-At( 0,SCM+FSA))) = LifeSpan (s +* (J ';'
+holds if>0(a,I,J) is_halting_on s & if>0(a,I,J) is_closed_on s & LifeSpan(
+ProgramPart(s +*
+  (if>0(a,I,J) +* Start-At( 0,SCM+FSA))),s +*
+  (if>0(a,I,J) +* Start-At( 0,SCM+FSA))) = LifeSpan(ProgramPart(s +* (J ';'
+  Stop SCM+FSA +*
+  Start-At( 0,SCM+FSA))),s +* (J ';'
   Stop SCM+FSA +*
   Start-At( 0,SCM+FSA))) + 3;
 
@@ -472,13 +493,14 @@ theorem :: SCMFSA8C:87
   is_halting_on Initialize s holds (for a being read-write Int-Location holds
 IExec(I,s).a = Comput(ProgramPart(Initialize s +* (I +* Start-At( 0,SCM+FSA))),
 Initialize s +* (I +* Start-At( 0,SCM+FSA)),
- (LifeSpan
-  (Initialize s +* (I +* Start-At( 0,SCM+FSA))))).a) &
+ (LifeSpan(ProgramPart(Initialize s +* (I +* Start-At( 0,SCM+FSA))),Initialize
+s +* (I +* Start-At( 0,SCM+FSA))))).a) &
   for f being FinSeq-Location
   holds IExec(I,s).f = Comput(ProgramPart(Initialize s +* (I +*
   Start-At( 0,SCM+FSA))),Initialize s +* (I +*
   Start-At( 0,SCM+FSA)),
-  LifeSpan(Initialize s +* (I +* Start-At( 0,SCM+FSA)))).f;
+  LifeSpan(ProgramPart(Initialize s +* (I +* Start-At( 0,SCM+FSA))),Initialize
+s +* (I +* Start-At( 0,SCM+FSA)))).f;
 
 theorem :: SCMFSA8C:88
   for s being State of SCM+FSA, I being parahalting Program of
@@ -486,7 +508,8 @@ theorem :: SCMFSA8C:88
 ProgramPart(
   Initialize s +* (I +* Start-At( 0,SCM+FSA))),
   Initialize s +* (I +* Start-At( 0,SCM+FSA)),
-  (LifeSpan (Initialize s +* (I +*
+  (LifeSpan(ProgramPart(Initialize s +* (I +*
+  Start-At( 0,SCM+FSA))),Initialize s +* (I +*
   Start-At( 0,SCM+FSA))))).a;
 
 theorem :: SCMFSA8C:89
@@ -568,7 +591,9 @@ theorem :: SCMFSA8C:98
   Program of SCM+FSA, a being read-write Int-Location st I does_not_destroy a
   holds Comput(ProgramPart( (Initialize s +* (I ';' SubFrom(a,intloc 0) +*
   Start-At( 0,SCM+FSA)))), (Initialize s +* (I ';' SubFrom(a,intloc 0) +*
-  Start-At( 0,SCM+FSA))),LifeSpan (Initialize s +* (I ';'
+  Start-At( 0,SCM+FSA))),LifeSpan(ProgramPart(Initialize s +* (I ';'
+  SubFrom(a,intloc 0) +*
+  Start-At( 0,SCM+FSA))),Initialize s +* (I ';'
   SubFrom(a,intloc 0) +*
   Start-At( 0,SCM+FSA)))).a = s.a - 1;
 
@@ -598,10 +623,14 @@ CurInstr(ProgramPart Comput(ProgramPart( (s2 +*
 theorem :: SCMFSA8C:101
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA st
   I is_closed_on s1 & I is_halting_on s1 & DataPart s1 = DataPart s2 holds
-  LifeSpan (s1 +* (I +* Start-At( 0,SCM+FSA))) =
-  LifeSpan (s2 +* (I +* Start-At( 0,SCM+FSA))) &
-  Result (s1 +* (I +* Start-At( 0,SCM+FSA))),
-  Result (s2 +* (I +*
+  LifeSpan(ProgramPart(s1 +* (I +* Start-At( 0,SCM+FSA))),s1 +* (I +* Start-At(
+0,SCM+FSA))) =
+  LifeSpan(ProgramPart(s2 +* (I +* Start-At( 0,SCM+FSA))),s2 +* (I +* Start-At(
+0,SCM+FSA))) &
+  Result(ProgramPart(s1 +* (I +* Start-At( 0,SCM+FSA))),s1 +* (I +* Start-At( 0
+,SCM+FSA))),
+  Result(ProgramPart(s2 +* (I +*
+  Start-At( 0,SCM+FSA))),s2 +* (I +*
   Start-At( 0,SCM+FSA))) equal_outside NAT;
 
 canceled;
@@ -612,7 +641,8 @@ theorem :: SCMFSA8C:103
   I +* Start-At( 0,SCM+FSA) c= s1 & I +*
   Start-At( 0,SCM+FSA) c= s2 & ex k being Element of NAT
   st Comput(ProgramPart( s1), s1,k),s2
-  equal_outside NAT holds Result s1,Result s2 equal_outside NAT;
+  equal_outside NAT holds Result(ProgramPart(s1),s1),Result(ProgramPart(s2),s2)
+equal_outside NAT;
 
 begin :: loop
 
@@ -650,8 +680,9 @@ canceled;
 
 theorem :: SCMFSA8C:109
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
-is_closed_on s & I is_halting_on s for m being Element of NAT st m <= LifeSpan
-(s +* (I +* Start-At( 0,SCM+FSA))) holds Comput(ProgramPart( (s +* (I +*
+is_closed_on s & I is_halting_on s for m being Element of NAT st m <= LifeSpan(
+ProgramPart(s +* (I +* Start-At( 0,SCM+FSA))),s +* (I +* Start-At( 0,SCM+FSA)))
+holds Comput(ProgramPart( (s +* (I +*
 Start-At( 0,SCM+FSA)))), (s +* (I +*
 Start-At( 0,SCM+FSA))),m), Comput(ProgramPart((s +* (loop I +*
 Start-At( 0,SCM+FSA)))),(s +* (loop I +*
@@ -660,7 +691,9 @@ Start-At( 0,SCM+FSA))),m)
 
 theorem :: SCMFSA8C:110
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
-is_closed_on s & I is_halting_on s for m being Element of NAT st m < LifeSpan (
+is_closed_on s & I is_halting_on s for m being Element of NAT st m < LifeSpan(
+ProgramPart(
+s +* (I +* Start-At( 0,SCM+FSA))),
 s +* (I +* Start-At( 0,SCM+FSA)))
 holds CurInstr(ProgramPart Comput(ProgramPart( (s +* (I +*
 Start-At( 0,SCM+FSA)))), (s +* (I +*
@@ -677,8 +710,8 @@ Start-At( 0,SCM+FSA))),m))
 
 theorem :: SCMFSA8C:111
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
-is_closed_on s & I is_halting_on s for m being Element of NAT st m <= LifeSpan
-  (s +* (I +* Start-At( 0,SCM+FSA)))
+is_closed_on s & I is_halting_on s for m being Element of NAT st m <= LifeSpan(
+ProgramPart(s +* (I +* Start-At( 0,SCM+FSA))),s +* (I +* Start-At( 0,SCM+FSA)))
   holds CurInstr(ProgramPart Comput(ProgramPart(s +* (loop I +*
   Start-At( 0,SCM+FSA))),s +* (loop I +*
   Start-At( 0,SCM+FSA)),m),
@@ -689,13 +722,13 @@ is_closed_on s & I is_halting_on s for m being Element of NAT st m <= LifeSpan
 theorem :: SCMFSA8C:112
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
 is_closed_on s & I is_halting_on s holds
- CurInstr(ProgramPart Comput(ProgramPart( (s +* (loop I +*
-Start-At( 0,SCM+FSA)))), (s +* (loop I +*
-Start-At( 0,SCM+FSA))), LifeSpan (s +* (I +*
-Start-At( 0,SCM+FSA)))),
+ CurInstr(ProgramPart
+ (s +* (loop I +*
+Start-At( 0,SCM+FSA))),
   Comput(ProgramPart( (s +* (loop I +*
 Start-At( 0,SCM+FSA)))), (s +* (loop I +*
-Start-At( 0,SCM+FSA))), LifeSpan (s +* (I +*
+Start-At( 0,SCM+FSA))), LifeSpan(ProgramPart(s +* (I +*
+Start-At( 0,SCM+FSA))),s +* (I +*
 Start-At( 0,SCM+FSA)))))
  = goto  0;
 
@@ -703,13 +736,15 @@ theorem :: SCMFSA8C:113
   for s being State of SCM+FSA, I being paraclosed Program of
   SCM+FSA st I +* Start-At( 0,SCM+FSA) c= s & ProgramPart s halts_on s
    for m being Element of
-  NAT st m <= LifeSpan s holds Comput(ProgramPart( s), s,m), Comput(ProgramPart
+  NAT st m <= LifeSpan(ProgramPart(s),s) holds Comput(ProgramPart( s), s,m),
+Comput(ProgramPart
 ( (s +* loop I)), (s +* loop I),m)
   equal_outside NAT;
 
 theorem :: SCMFSA8C:114
   for s being State of SCM+FSA, I being parahalting Program of SCM+FSA
-st Initialized I c= s holds for k being Element of NAT st k <= LifeSpan s holds
+st Initialized I c= s holds for k being Element of NAT st k <= LifeSpan(
+ProgramPart(s),s) holds
   CurInstr(ProgramPart Comput(ProgramPart( (s +* loop I)), (s +* loop I),k),
    Comput(ProgramPart( (s +* loop I)), (s +* loop I),k)) <> halt SCM+FSA;
 
@@ -765,7 +800,8 @@ of SCM+FSA, a being read-write Int-Location st I does_not_destroy a & s.intloc
   0 = 1 & s.a > 0 holds ex s2 being State of SCM+FSA, k being Element of NAT st
   s2 = s +* (loop if=0(a,Goto  2, I ';' SubFrom(a,intloc 0)) +*
   Start-At( 0,SCM+FSA)) &
-  k = LifeSpan (s +* (if=0(a,Goto  2, I ';' SubFrom(a,intloc 0)
+  k = LifeSpan(ProgramPart(s +* (if=0(a,Goto  2, I ';' SubFrom(a,intloc 0)
+) +* Start-At( 0,SCM+FSA))),s +* (if=0(a,Goto  2, I ';' SubFrom(a,intloc 0)
 ) +* Start-At( 0,SCM+FSA))) + 1 & Comput(ProgramPart( s2), s2,k).a = s.a - 1 &
 Comput(ProgramPart( s2
   ), s2

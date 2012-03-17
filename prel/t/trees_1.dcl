@@ -118,6 +118,21 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
+<FCluster aid="TREES_1" nr="4">
+<ArgTypes/>
+<Func kind="K" nr="83"/>
+<Cluster>
+<Adjective nr="18" value="false"/>
+<Adjective nr="31"/>
+</Cluster>
+</FCluster>
+<FCluster aid="TREES_1" nr="5">
+<ArgTypes/>
+<Func kind="K" nr="83"/>
+<Cluster>
+<Adjective nr="21" value="false"/>
+</Cluster>
+</FCluster>
 <CCluster aid="TREES_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">

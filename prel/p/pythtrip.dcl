@@ -73,6 +73,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
 <Adjective nr="51"/>
 <Adjective nr="53"/>
 </Cluster>
@@ -83,6 +87,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
 <Adjective nr="51" value="false"/>
 <Adjective nr="53"/>
 </Cluster>
@@ -139,6 +147,21 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="27"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="169">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="27"/>
+</Cluster>
+</FCluster>
+<FCluster aid="PYTHTRIP" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="27"/>
 <Adjective nr="51"/>
 </Cluster>
 </Typ>
@@ -150,7 +173,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </FCluster>
-<FCluster aid="PYTHTRIP" nr="4">
+<FCluster aid="PYTHTRIP" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -166,16 +189,18 @@
 <Adjective nr="51" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster aid="PYTHTRIP" nr="5">
+<FCluster aid="PYTHTRIP" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="27"/>
 <Adjective nr="51" value="false"/>
 <Adjective nr="53"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="27"/>
 <Adjective nr="51" value="false"/>
 <Adjective nr="53"/>
 </Cluster>

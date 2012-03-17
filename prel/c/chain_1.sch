@@ -20,8 +20,8 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>

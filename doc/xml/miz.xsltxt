@@ -11,7 +11,7 @@ xmlns dc "http://purl.org/dc/elements/1.1/";
 output method=html;
 
 
-// $Revision: 1.13 $
+// $Revision: 1.8 $
 //
 // File: mhtml_main.xsltxt - html-ization of Mizar XML, main file
 //
@@ -120,6 +120,9 @@ $print_lab_identifiers = { "1"; }
 // 3 - dynamic linking to the TPTP-processor CGI ($lbytptpcgi)
 #linkby= { "0"; }
 
+// if non zero, add icons for atp exlpanation calls to theorems and proofs in the same way as to by's
+#linkarproofs= { "0"; }
+
 // if > 0, call the mk_by_title function to create a title for by|from|;
 #by_titles = { "0"; }
 
@@ -140,7 +143,8 @@ $print_lab_identifiers = { "1"; }
 $lbydlicgipref= { `concat($lbydlicgi,"?url=",$lbydliurl)`; }
 
 // URL of the MizAR root dir
-#ltptproot= { "http://octopi.mizar.org/~mptp/"; }
+// #ltptproot= { "http://octopi.mizar.org/~mptp/"; }
+#ltptproot= { "http://mws.cs.ru.nl/~mptp/"; }
 
 // URL of the TPTP-processor CGI
 #ltptpcgi= { `concat($ltptproot,"cgi-bin/")`; }
@@ -175,6 +179,8 @@ $lbydlicgipref= { `concat($lbydlicgi,"?url=",$lbydliurl)`; }
 #const_links = { "0"; }
 
 // tells if proofs are fetched through AJAX; default is off
+// value 2 tells to produce the proofs, but not to insert the ajax calls,
+// and instead insert tags for easy regexp-based post-insertion of files
 #ajax_proofs = { "0"; }
 
 // the dir with proofs that are fetched through AJAX
@@ -1598,11 +1604,12 @@ tpl descent_many_vis(#patt,#fix,#vis,#i)
   {
     $v1= `$vis[position()=1]/@x`;
     $v2= `$vis[position()>1]`;
+    $adjnrs = { for-each [$patt/Cluster[1]/Adjective] { ":"; `@nr`; ":"; } }
 //DEBUG    "descen:"; $v1; ":"; apply[$patt]; ":"; 
-    descent_many(#patts = `$patt/*`,
-		 #fixs  = `$fix/*`,
+    descent_many(#patts = `$patt/*[(not(name()="Cluster"))] | $patt/Cluster[1]/Adjective`,
+		 #fixs  = `$fix/*[(not(name()="Cluster"))] | $fix/Cluster[1]/Adjective[(contains($adjnrs, concat(":",@nr,":")))]`,
 		 #lnr   = $v1,
-		 #nr    = `count($patt/*)`,
+		 #nr    = `count($patt/*[(not(name()="Cluster"))]) + count($patt/Cluster[1]/Adjective)`,
 		 #i     = $i); 
     if [$v2] { ","; descent_many_vis(#patt=$patt,#fix=$fix,
 		    #vis=`$vis[position()>1]`, #i = $i); }
@@ -1635,13 +1642,14 @@ tpl descent_many(#patts,#fixs,#lnr,#nr,#i)
 }
 
 // Clusters
-// only attributes with pid are now printed, others are results of 
+// only attributes with pid are now printed, unless %all=1;
+// others are results of 
 // cluster mechanisms - this holds in the current article 
 // (.xml file) only, environmental files do not have the @pid 
 // info (yet), so we print everything for them
-tpl [Cluster](#i) 
+tpl [Cluster](#i,#all) 
 { 
-   if [$print_all_attrs = 1]
+   if [($print_all_attrs = 1) or ($all = 1)]
    {
       list(#separ=" ", #elems=`*`);
    }
@@ -2385,8 +2393,12 @@ tpl [Ref]
 
 tpl [ErrorInf](#nbr) { "errorinference;"; if [not($nbr="1")] { <br;  } }
 tpl [IterStep/ErrorInf] { "errorinference"; }
-tpl [SkippedProof](#nbr) { pkeyword(#str="@proof .. end;"); 
-			   if [not($nbr="1")] { <br;  } }
+tpl [SkippedProof](#nbr) 
+{ 
+  if[$ajax_proofs=2] { <span {  @filebasedproofinsert=`@newlevel`;}}
+  pkeyword(#str="@proof .. end;"); 
+  if [not($nbr="1")] { <br;  } 
+}
 tpl [IterStep/SkippedProof] { pkeyword(#str="@proof .. end;"); }
 
 //   Term, elIterStep+
@@ -2792,7 +2804,7 @@ tpl rc
     @NAME=`concat("RC",$nr1)`;
     pkeyword(#str="cluster "); 
   }
-  if [ErrorCluster] { "errorcluster"; } else { apply[*[3]]; " "; apply[*[2]]; }
+  if [ErrorCluster] { "errorcluster"; } else { apply[*[3]](#all="1"); " "; apply[*[2]]; }
   ";"; <br; if [$mml="1"] { <br; }
 }
 
@@ -2807,14 +2819,28 @@ tpl [CCluster] {
     else { cc(); } }
 
 
-tpl cc         { if [($mml="1") or ($generate_items>0)] { apply[ArgTypes]; }
-		 $nr1 = `1 + count(preceding::CCluster)`;
-		 <a { @NAME=`concat("CC",$nr1)`;
-		      pkeyword(#str="cluster "); }
-                 if [ErrorCluster] { "errorcluster"; }
-	         else { apply[*[2]]; pkeyword(#str=" -> "); apply[*[4]]; " "; 
-                        apply[*[3]]; }
-                 ";"; <br; if [$mml="1"] { <br; }}
+tpl cc
+{ 
+  if [($mml="1") or ($generate_items>0)] 
+  { 
+     apply[ArgTypes]; 
+  }
+  
+  $nr1 = `1 + count(preceding::CCluster)`;
+  <a { 
+       @NAME=`concat("CC",$nr1)`;
+       pkeyword(#str="cluster "); }
+       if [ErrorCluster] { "errorcluster"; }
+       else 
+       { 
+          apply[*[2]](#all="1"); 
+	  pkeyword(#str=" -> "); 
+	  apply[*[4]]; " "; 
+	  apply[*[3]]; 
+       }
+       ";"; <br; 
+       if [$mml="1"] { <br; }
+}
 
 tpl [FCluster] { 
     $nr1 = `1 + count(preceding::FCluster)`;
@@ -3017,6 +3043,8 @@ tpl jt
        if [$thms_tptp_links = 1]
        {
           tptp_for_thm(#line=`Proposition[1]/@line`, #col=`Proposition[1]/@col`);
+	  " "; add_ar_iconif(#line=`Proposition[1]/@line`, #col=`Proposition[1]/@col`); 
+	  " "; edit_for_thm(#line=`Proposition[1]/@line`, #col=`Proposition[1]/@col`);
        }
 
        <br;
@@ -3107,6 +3135,57 @@ tpl tptp_for_thm(#line, #col)
     }
   }
 } 
+
+tpl add_ar_iconif(#line,#col) 
+{ 
+   if [$linkarproofs>0] 
+   { 
+      $byurl = 
+      { 
+         choose 
+	 { 
+	    when [$linkby=1] { `concat($lbydir,$anamelc,"/",$line,"_",$col,".html")`; }
+	    when [$linkby=2] { `concat($lbydlicgipref,$anamelc,"/",$line,"_",$col,".dli")`; } 
+	    when [$linkby=3] { `concat($lbytptpcgi,"?article=",$anamelc,"&lc=",$line,"_",$col,"&tmp=",$lbytmpdir,$lbycgiparams)`; } 
+
+	 } 
+      }
+
+      <a { 
+            if[$ajax_by > 0] { add_ajax_attrs(#u=$byurl); }
+	    else
+	    {
+	       @href=$byurl; @class="txt"; 
+	       if[$linkbytoself > 0] {@target="_self"; } else {@target="byATP";} 
+            }
+	    $txt = { mk_by_title(#line=$line,#col=$col); }
+	    if [$by_titles>0] { @title=mk_by_title(#line=$line,#col=$col); }
+	    <img
+	    {
+       	       @src= `concat($ltptproot,"AR.gif")`;
+       	       @alt= $txt;
+	       if [$by_titles>0] { @title = $txt; }
+            }
+	    " ";  
+	 }
+      if[$ajax_by > 0] { <span { " "; } } 
+    }
+}
+
+
+tpl edit_for_thm(#line, #col)
+{
+//  $tptp_file = `concat($anamelc,".miz")`;
+  $thm_file = `concat($anamelc,"__",$line,"_",$col)`;
+  " ::";
+  <a
+  {
+//    @href= `concat($ltmpftptpcgi,"?file=",$tptp_file,"&tmp=",$lbytmpdir,"&pos=",$line)`; 
+    @href= `concat($ltmpftptpcgi,"?file=",$thm_file,"&tmp=",$lbytmpdir)`; 
+    "[edit]";
+  }
+}
+
 
 tpl [DefTheorem] 
 { 
@@ -3400,7 +3479,7 @@ tpl dfs()
 
 	     for-each [document($doc, /)] 
 	     { 
-	        apply[key($ckind, $cnr)](#indef = "1", #nl = $nl, #argt = $argtypes, #nrt= "1"); 
+	        apply[key($ckind, $cnr)](#indef = "1", #nl = $nl, #argt = $argtypes, #nrt= "1",#old="1"); 
 	     } 
           }
 
@@ -3553,7 +3632,7 @@ tpl [Proof/Proof | Now/Proof | Conclusion/Proof | CaseBlock/Proof | SupposeBlock
 	  if [$proof_links>0] { @title=`@newlevel`; } 
 	  pkeyword(#str="proof "); 
        }
-
+//       add_ar_iconif(#line=`EndPosition[1]/@line`, #col=`EndPosition[1]/@col`);
        <div { @class="add"; apply; }
        pkeyword(#str="end;"); 
     } 
@@ -3567,11 +3646,12 @@ tpl [Proof] {
     $nm = `concat($ajax_proof_dir,"/",$anamelc,"/",@newlevel)`;
     <div { 
 	 <a { 
-	    if [$ajax_proofs>0]	{ add_ajax_attrs(#u=$nm); } else { add_hs2_attrs(); }
+	    if [$ajax_proofs=1]	{ add_ajax_attrs(#u=$nm); } else { add_hs2_attrs(); }
 	    if [$proof_links>0] { @title=`@newlevel`; } 
 	    pkeyword(#str="proof "); 
 	    }
-         if [$ajax_proofs>0]	{ <span; 
+//	  add_ar_iconif(#line=`EndPosition[1]/@line`, #col=`EndPosition[1]/@col`); 
+         if [$ajax_proofs>0]	{ <span { if[$ajax_proofs=2] {@filebasedproofinsert=`@newlevel`;}} 
 // <xsl:document href="{$ajax_proof_dir}/{$anamelc}/{@newlevel}" format="html">
 	    <div { @class="add"; apply; }
 // </xsl:document>
@@ -3722,7 +3802,9 @@ tpl argtypes(#el)
 // #argt is explicit list of argument types, useful for
 // getting the @vid (identifier numbers) of loci
 // #nrt tells not to showthe result type(s)
-tpl [Constructor](#indef,#nl,#argt,#nrt) 
+// #old says that the constructor is from a redefinition and not new,
+//      so an anchor should not be created
+tpl [Constructor](#indef,#nl,#argt,#nrt,#old) 
 { 
     $loci = { if [($mml="1") or ($generate_items>0)] { "1"; } else { "2"; }}
 
@@ -3738,7 +3820,11 @@ tpl [Constructor](#indef,#nl,#argt,#nrt)
 
     $mk = { mkind(#kind=`@kind`); }
 
-    <a { @NAME=`concat(@kind,@nr)`; pkeyword(#str=$mk);  " "; }
+    if [$old="1"] { pkeyword(#str=$mk);  " "; }
+    else
+    {
+       <a { @NAME=`concat(@kind,@nr)`; pkeyword(#str=$mk);  " "; }
+    }
  
     if [@kind="G"] 
     { 
@@ -3887,6 +3973,7 @@ else {
         <style { @type="text/css";  "
 div { padding: 0 0 0 0; margin: 0 0 0 0; } 
 div.add { padding-left: 3mm; padding-bottom: 0mm;  margin: 0 0 0 0; } 
+div.box { border-width:thin; border-color:blue; border-style:solid; }
 p { margin: 0 0 0 0; } 
 body {font-family: monospace;}
 a {text-decoration:none} a:hover { color: red; } 

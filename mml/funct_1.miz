@@ -23,23 +23,7 @@ definition
   let X be set;
   attr X is Function-like means
   :Def1:
-  for x,y1,y2 st [x,y1] in X & [x,y2] in
-  X holds y1 = y2;
-end;
-
-registration
-  cluster Function-like Relation;
-  existence
-  proof
-    reconsider E={} as Relation;
-    take E;
-    for x,y1,y2 st [x,y1] in E & [x,y2] in E holds y1 = y2;
-    hence thesis by Def1;
-  end;
-end;
-
-definition
-  mode Function is Function-like Relation;
+  for x,y1,y2 st [x,y1] in X & [x,y2] in X holds y1 = y2;
 end;
 
 registration
@@ -47,10 +31,22 @@ registration
   coherence
   proof
     let f be set;
-    assume
-    f is empty;
+    assume f is empty;
     hence for x,y1,y2 st [x,y1] in f & [x,y2] in f holds y1 = y2;
   end;
+end;
+
+registration
+  cluster Function-like Relation;
+  existence
+  proof
+    take {};
+    thus thesis;
+  end;
+end;
+
+definition
+  mode Function is Function-like Relation;
 end;
 
 registration
@@ -78,14 +74,13 @@ reserve f,g,g1,g2,h for Function,
 canceled 2;
 
 scheme
-  GraphFunc{A()->set,P[set,set]}: ex f st for x,y holds [x,y] in f iff x in A(
-  ) & P[x,y]
+  GraphFunc { A()->set,P[set,set] } :
+  ex f st for x,y holds [x,y] in f iff x in A() & P[x,y]
 provided
 A1: for x,y1,y2 st P[x,y1] & P[x,y2] holds y1 = y2
 proof
   consider Y such that
-A2: for y holds y in Y iff ex x st x in A() & P[x,y] from TARSKI:sch 1(
-  A1);
+A2: for y holds y in Y iff ex x st x in A() & P[x,y] from TARSKI:sch 1(A1);
   defpred R[set] means ex x,y st [x,y] = $1 & P[x,y];
   consider F being set such that
 A3: p in F iff p in [:A(),Y:] & R[p] from XBOOLE_0:sch 1;
@@ -160,8 +155,7 @@ A1: [x,y] in f;
 end;
 
 theorem Th9:
-  dom f = dom g & (for x st x in dom f holds f.x = g.x) implies f =
-  g
+  dom f = dom g & (for x st x in dom f holds f.x = g.x) implies f = g
 proof
   assume that
 A1: dom f = dom g and
@@ -190,8 +184,7 @@ definition
   let f;
   redefine func rng f means
   :Def5:
-  for y holds y in it iff ex x st x in dom f
-  & y = f.x;
+  for y holds y in it iff ex x st x in dom f & y = f.x;
   compatibility
   proof
     let Y;
@@ -268,8 +261,8 @@ A4: y = f.x by TARSKI:def 1;
 end;
 
 scheme
-  FuncEx{A()->set,P[set,set]}: ex f st dom f = A() & for x st x in A() holds P
-  [x,f.x]
+  FuncEx { A()->set,P[set,set] } :
+  ex f st dom f = A() & for x st x in A() holds P[x,f.x]
 provided
 A1: for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1 = y2 and
 A2: for x st x in A() ex y st P[x,y]
@@ -307,8 +300,9 @@ A9: P[x,y] by A2;
 end;
 
 scheme
-  Lambda{A() -> set,F(set) -> set}: ex f being Function st dom f = A() & for x
-  st x in A() holds f.x = F(x) proof
+  Lambda { A() -> set,F(set) -> set } :
+  ex f being Function st dom f = A() & for x st x in A() holds f.x = F(x)
+proof
   defpred P[set,set] means $2 = F($1);
 A1: for x st x in A() ex y st P[x,y];
 A2: for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1 = y2;
@@ -798,8 +792,7 @@ definition
   canceled 2;
   attr f is one-to-one means
   :Def8:
-  for x1,x2 st x1 in dom f & x2 in dom f & f
-  .x1 = f.x2 holds x1 = x2;
+  for x1,x2 st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1 = x2;
 end;
 
 canceled;
@@ -1639,8 +1632,7 @@ definition
   canceled 2;
   redefine func f.:X means
   :Def12:
-  for y holds y in it iff ex x st x in dom f
-  & x in X & y = f.x;
+  for y holds y in it iff ex x st x in dom f & x in X & y = f.x;
   compatibility
   proof
     let Y;
@@ -1685,7 +1677,7 @@ A11:    y = f.x by A8;
       given x such that
 A12:  [x,y] in f and
 A13:  x in X;
-      x in dom f & y = f.x by A12,Th8,RELAT_1:def 4;
+      x in dom f & y = f.x by A12,Th8;
       hence y in Y by A8,A13;
     end;
     hence thesis by RELAT_1:def 13;
@@ -1898,8 +1890,7 @@ definition
   let f,Y;
   redefine func f"Y means
   :Def13:
-  for x holds x in it iff x in dom f & f.x in
-  Y;
+  for x holds x in it iff x in dom f & f.x in Y;
   compatibility
   proof
     let X;
@@ -1936,7 +1927,7 @@ A6:     x in X;
       given y such that
 A7:   [x,y] in f and
 A8:   y in Y;
-      x in dom f & y = f.x by A7,Th8,RELAT_1:def 4;
+      x in dom f & y = f.x by A7,Th8;
       hence x in X by A5,A8;
     end;
     hence thesis by RELAT_1:def 14;
@@ -2472,8 +2463,7 @@ end;
 definition
   let f be Function;
   redefine attr f is empty-yielding means
-:Def15: for x st x in dom f holds f.x is
-  empty;
+  for x st x in dom f holds f.x is empty;
   compatibility
   proof
     hereby
@@ -2502,8 +2492,7 @@ definition
   let F be Function;
   redefine attr F is non-empty means
   :Def15:
-  for n being set st n in dom F
-  holds F.n is non empty;
+  for n being set st n in dom F holds F.n is non empty;
   compatibility
   proof
     hereby
@@ -2540,13 +2529,12 @@ end;
 :: from MSUALG_2
 
 scheme
-  LambdaB {D()->non empty set, F(set)->set}: ex f be Function st dom f = D() &
-  for d be Element of D() holds f.d = F(d) proof
+  LambdaB { D()->non empty set, F(set)->set } :
+  ex f be Function st dom f = D() & for d be Element of D() holds f.d = F(d)
+proof
   consider f be Function such that
 A1: dom f = D() & for d be set st d in D() holds f.d = F(d) from Lambda;
   take f;
-  thus dom f = D() by A1;
-  let d be Element of D();
   thus thesis by A1;
 end;
 
@@ -2570,7 +2558,7 @@ definition
   let f be Function;
   attr f is constant means
   :Def16:
-  x in dom f & y in dom f implies f.x=f.y;
+  x in dom f & y in dom f implies f.x = f.y;
 end;
 
 theorem
@@ -2610,8 +2598,7 @@ end;
 definition
   let f,g;
   redefine pred f = g means
-  dom f = dom g & for x st x in dom f holds f.x = g.
-  x;
+  dom f = dom g & for x st x in dom f holds f.x = g.x;
   compatibility by Th9;
 end;
 
@@ -3141,8 +3128,7 @@ definition
   let IT be set;
   attr IT is functional means
   :Def19:
-  for x being set st x in IT holds x is
-  Function;
+  for x being set st x in IT holds x is Function;
 end;
 
 registration
@@ -3230,7 +3216,7 @@ theorem Th174:
  {} is f-compatible
  proof
   let x;
-  thus thesis by Def20;
+  thus thesis;
  end;
 
 registration

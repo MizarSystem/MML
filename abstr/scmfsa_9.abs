@@ -12,8 +12,8 @@ environ
       ARYTM_1, FSM_1, SF_MASTR, SCMFSA7B, UNIALG_2, CIRCUIT2, GRAPHSP,
       SCMFSA6B, SCMFSA_9, PBOOLE, ORDINAL1, PARTFUN1, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, RELAT_1,
-      FUNCT_1, FUNCT_2, PARTFUN1, FUNCT_4, CARD_3, AMI_1, VALUED_1, NAT_1,
-      PBOOLE, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SF_MASTR,
+      FUNCT_1, FUNCT_2, PARTFUN1, AFINSQ_1, FUNCT_4, CARD_3, AMI_1, VALUED_1,
+      NAT_1, PBOOLE, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SF_MASTR,
       SCMFSA6B, SCMFSA7B, SCMFSA8A, SCMFSA8B, XXREAL_0;
  constructors XXREAL_0, NAT_1, SEQ_1, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B,
       SCMFSA8A, SCMFSA8B, SCMNORM, SCMFSA_4, RELSET_1, PRE_POLY, SCMFSA_7,
@@ -133,7 +133,8 @@ being read-write Int-Location st s.a <> 0 holds while=0(a,I) is_halting_on s &
 theorem :: SCMFSA_9:19
   for a being Int-Location, I being Program of SCM+FSA, s being
 State of SCM+FSA,k being Element of NAT st I is_closed_on s & I is_halting_on s
-& k < LifeSpan (s +* (I +* Start-At( 0,SCM+FSA))) &
+& k < LifeSpan(ProgramPart(s +* (I +* Start-At( 0,SCM+FSA))),s +* (I +*
+Start-At( 0,SCM+FSA))) &
 IC Comput(ProgramPart( (s +* (while=0
   (a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while=0
   (a,I) +* Start-At( 0,SCM+FSA))),1+k) = IC Comput(ProgramPart( (s +* (
@@ -164,20 +165,25 @@ theorem :: SCMFSA_9:20
   State of SCM+FSA st I is_closed_on s & I is_halting_on s & IC Comput(
 ProgramPart( (s
   +* (while=0(a,I) +* Start-At( 0,SCM+FSA)))), (s
-  +* (while=0(a,I) +* Start-At( 0,SCM+FSA))),(1 + LifeSpan (s +*
+  +* (while=0(a,I) +* Start-At( 0,SCM+FSA))),(1 + LifeSpan(ProgramPart(s +*
+  (I +* Start-At(
+ 0,SCM+FSA))),s +*
   (I +* Start-At(
  0,SCM+FSA))) ) ) =
 IC Comput(ProgramPart( (s +* ( I +* Start-At( 0,SCM+FSA)))), (s +* ( I +*
 Start-At( 0,SCM+FSA))),
-LifeSpan (s
+LifeSpan(ProgramPart(s
++* (I +* Start-At( 0,SCM+FSA) )),s
 +* (I +* Start-At( 0,SCM+FSA) )) ) + 4
 holds CurInstr(ProgramPart Comput(ProgramPart( (s +* (while=0(
   a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while=0(
-  a,I) +* Start-At( 0,SCM+FSA))),(1 + LifeSpan (s +* (I +*
+  a,I) +* Start-At( 0,SCM+FSA))),(1 + LifeSpan(ProgramPart(s +* (I +*
+  Start-At( 0,SCM+FSA))),s +* (I +*
   Start-At( 0,SCM+FSA))))),
    Comput(ProgramPart( (s +* (while=0(
   a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while=0(
-  a,I) +* Start-At( 0,SCM+FSA))),(1 + LifeSpan (s +* (I +*
+  a,I) +* Start-At( 0,SCM+FSA))),(1 + LifeSpan(ProgramPart(s +* (I +*
+  Start-At( 0,SCM+FSA))),s +* (I +*
   Start-At( 0,SCM+FSA)))))) =
   goto  (card I +4);
 
@@ -193,10 +199,12 @@ theorem :: SCMFSA_9:22
 being read-write Int-Location st I is_closed_on s & I is_halting_on s & s.a =0
 holds IC Comput(ProgramPart( (s +* (while=0(a,I) +* Start-At( 0,SCM+FSA)))), (s
 +* (while=0(a,I) +* Start-At( 0,SCM+FSA))),
-(LifeSpan (s
+(LifeSpan(ProgramPart(s
++* (I +* Start-At( 0,SCM+FSA))),s
 +* (I +* Start-At( 0,SCM+FSA))) + 3)) =  0 &
 for k being Element of NAT st k
-  <= LifeSpan (s +* (I +* Start-At( 0,SCM+FSA))) + 3
+  <= LifeSpan(ProgramPart(s +* (I +* Start-At( 0,SCM+FSA))),s +* (I +* Start-At
+( 0,SCM+FSA))) + 3
   holds IC Comput(ProgramPart( (s +* (
   while=0(a,I) +* Start-At( 0,SCM+FSA)))), (s +* (
   while=0(a,I) +* Start-At( 0,SCM+FSA))),k) in dom while=0(a,I);
@@ -215,7 +223,8 @@ definition
   it.0 = s & for i being Nat holds it.(i+1)= Comput(ProgramPart( (
   it.i +* (while=0(a,I) +* (Start-At( 0,SCM+FSA))))), (
   it.i +* (while=0(a,I) +* (Start-At( 0,SCM+FSA)))),
-  (LifeSpan (it.i +* (I +* (
+  (LifeSpan(ProgramPart(it.i +* (I +* (
+  Start-At( 0,SCM+FSA)))),it.i +* (I +* (
   Start-At( 0,SCM+FSA)))) + 3));
 end;
 
@@ -237,7 +246,9 @@ theorem :: SCMFSA_9:30
   s being State of SCM+FSA holds StepWhile=0(a,I,s).(0+1)= Comput(ProgramPart(
 (s +* (
 while=0(a,I) +* (Start-At( 0,SCM+FSA)) ))), (s +* (
-while=0(a,I) +* (Start-At( 0,SCM+FSA)) )),(LifeSpan (s+* (I +*
+while=0(a,I) +* (Start-At( 0,SCM+FSA)) )),(LifeSpan(ProgramPart(s+* (I +*
+(Start-At( 0,SCM+FSA))
+  )),s+* (I +*
 (Start-At( 0,SCM+FSA))
   )) + 3));
 
@@ -253,7 +264,10 @@ StepWhile=0(a,I,s).k +* (while=0(a,I
 )+* Start-At( 0,SCM+FSA)) & StepWhile=0(a,I,s).(k+1)=
 Comput(ProgramPart( (s +* (while=0(
   a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while=0(
-  a,I) +* Start-At( 0,SCM+FSA))), (n +(LifeSpan (StepWhile=0(a,I,s).k
+  a,I) +* Start-At( 0,SCM+FSA))), (n +(LifeSpan(ProgramPart(StepWhile=0(a,I,s).
+k
+   +* (I +*
+  Start-At( 0,SCM+FSA))),StepWhile=0(a,I,s).k
    +* (I +*
   Start-At( 0,SCM+FSA))) + 3)));
 
@@ -333,7 +347,8 @@ being read-write Int-Location st s.a <= 0 holds while>0(a,I) is_halting_on s &
 theorem :: SCMFSA_9:44
   for a being Int-Location, I being Program of SCM+FSA, s being
 State of SCM+FSA,k being Element of NAT st I is_closed_on s & I is_halting_on s
-& k < LifeSpan (s +* (I +* Start-At( 0,SCM+FSA))) &
+& k < LifeSpan(ProgramPart(s +* (I +* Start-At( 0,SCM+FSA))),s +* (I +*
+Start-At( 0,SCM+FSA))) &
 IC Comput(ProgramPart( (s +* (while>0
   (a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while>0
   (a,I) +* Start-At( 0,SCM+FSA))),1+k) = IC Comput(ProgramPart( (s +* ( I +*
@@ -364,20 +379,25 @@ theorem :: SCMFSA_9:45
   State of SCM+FSA st I is_closed_on s & I is_halting_on s & IC Comput(
 ProgramPart( (s
   +* (while>0(a,I) +* Start-At( 0,SCM+FSA)))), (s
-  +* (while>0(a,I) +* Start-At( 0,SCM+FSA))),1 + LifeSpan (s +*
+  +* (while>0(a,I) +* Start-At( 0,SCM+FSA))),1 + LifeSpan(ProgramPart(s +*
+  (I +* Start-At(
+ 0,SCM+FSA)) ),s +*
   (I +* Start-At(
  0,SCM+FSA)) ) ) =
 IC Comput(ProgramPart( (s +* ( I +* Start-At( 0,SCM+FSA)))), (s +* ( I +*
 Start-At( 0,SCM+FSA))),
-LifeSpan (s
+LifeSpan(ProgramPart(s
++* (I +* Start-At( 0,SCM+FSA) )),s
 +* (I +* Start-At( 0,SCM+FSA) ))) + 4
 holds CurInstr(ProgramPart Comput(ProgramPart( (s +* (while>0(a
   ,I) +* Start-At( 0,SCM+FSA)))), (s +* (while>0(a
-  ,I) +* Start-At( 0,SCM+FSA))),1 + LifeSpan (s +* (I +*
+  ,I) +* Start-At( 0,SCM+FSA))),1 + LifeSpan(ProgramPart(s +* (I +*
+  Start-At( 0,SCM+FSA))),s +* (I +*
   Start-At( 0,SCM+FSA))) ),
    Comput(ProgramPart( (s +* (while>0(a
   ,I) +* Start-At( 0,SCM+FSA)))), (s +* (while>0(a
-  ,I) +* Start-At( 0,SCM+FSA))),1 + LifeSpan (s +* (I +*
+  ,I) +* Start-At( 0,SCM+FSA))),1 + LifeSpan(ProgramPart(s +* (I +*
+  Start-At( 0,SCM+FSA))),s +* (I +*
   Start-At( 0,SCM+FSA))) )) =
   goto  (card I +4);
 
@@ -390,10 +410,12 @@ theorem :: SCMFSA_9:47
 being read-write Int-Location st I is_closed_on s & I is_halting_on s & s.a >0
 holds IC Comput(ProgramPart( (s +* (while>0(a,I) +* Start-At( 0,SCM+FSA)))), (s
 +* (while>0(a,I) +* Start-At( 0,SCM+FSA))),
-(LifeSpan (s
+(LifeSpan(ProgramPart(s
++* (I +* Start-At( 0,SCM+FSA))),s
 +* (I +* Start-At( 0,SCM+FSA))) + 3)) =  0 &
 for k being Element of NAT st k
-  <= LifeSpan (s +* (I +* Start-At( 0,SCM+FSA))) + 3
+  <= LifeSpan(ProgramPart(s +* (I +* Start-At( 0,SCM+FSA))),s +* (I +* Start-At
+( 0,SCM+FSA))) + 3
   holds IC Comput(ProgramPart( (s +* (
   while>0(a,I) +* Start-At( 0,SCM+FSA)))), (s +* (
   while>0(a,I) +* Start-At( 0,SCM+FSA))),k) in dom while>0(a,I);
@@ -412,7 +434,8 @@ definition
   it.0 = s & for i being Nat holds it.(i+1)= Comput(ProgramPart( (
   it.i +* (while>0(a,I) +*(Start-At( 0,SCM+FSA))))), (
   it.i +* (while>0(a,I) +*(Start-At( 0,SCM+FSA)))),
-  (LifeSpan (it.i +* (I +* (
+  (LifeSpan(ProgramPart(it.i +* (I +* (
+  Start-At( 0,SCM+FSA)))),it.i +* (I +* (
   Start-At( 0,SCM+FSA)))) + 3));
 end;
 
@@ -426,7 +449,9 @@ theorem :: SCMFSA_9:51
   s being State of SCM+FSA holds StepWhile>0(a,I,s).(0+1)= Comput(ProgramPart(
 (s +* (
 while>0(a,I) +* (Start-At( 0,SCM+FSA))))), (s +* (
-while>0(a,I) +* (Start-At( 0,SCM+FSA)))), (LifeSpan (s+* (I +*
+while>0(a,I) +* (Start-At( 0,SCM+FSA)))), (LifeSpan(ProgramPart(s+* (I +*
+(Start-At( 0,SCM+FSA))
+  )),s+* (I +*
 (Start-At( 0,SCM+FSA))
   )) + 3));
 
@@ -442,7 +467,10 @@ s being State of SCM+FSA,k,n being Element of NAT st IC StepWhile>0(a,I,s).k =
 )+* Start-At( 0,SCM+FSA)) & StepWhile>0(a,I,s).(k+1)=
 Comput(ProgramPart( (s +* (while>0(
   a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while>0(
-  a,I) +* Start-At( 0,SCM+FSA))), (n +(LifeSpan (StepWhile>0(a,I,s).k
+  a,I) +* Start-At( 0,SCM+FSA))), (n +(LifeSpan(ProgramPart(StepWhile>0(a,I,s).
+k
+   +* (I +*
+  Start-At( 0,SCM+FSA))),StepWhile>0(a,I,s).k
    +* (I +*
   Start-At( 0,SCM+FSA))) + 3)));
 

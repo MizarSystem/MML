@@ -80,7 +80,7 @@
 </FCluster>
 <FCluster aid="NAT_LAT" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="121"/>
+<Func kind="K" nr="120"/>
 <Cluster>
 <Adjective nr="33" value="false"/>
 <Adjective nr="46"/>
@@ -88,7 +88,7 @@
 </FCluster>
 <FCluster aid="NAT_LAT" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="121"/>
+<Func kind="K" nr="120"/>
 <Cluster>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
@@ -166,7 +166,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="121"/>
+<Func kind="K" nr="120"/>
 </Func>
 </Typ>
 <Cluster>

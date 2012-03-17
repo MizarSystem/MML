@@ -13,7 +13,8 @@ environ
       TURING_1, SCMFSA6A, ORDINAL1;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
-      FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, STRUCT_0, AMI_1,
+      FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1,
+      STRUCT_0, AMI_1,
       SCMNORM, FUNCT_7, SCMFSA_2, SCMFSA_4, SCMFSA_5, XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, INT_2, RELOC,
       SCMFSA_4, SCMFSA_5, SCMNORM, RELSET_1, SCMFSA_1;
@@ -22,11 +23,12 @@ environ
       SCMNORM, FUNCT_4, RELAT_1, CARD_1, VALUED_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FUNCOP_1, SCMFSA_2, SCMFSA_4, FUNCT_7, XBOOLE_0, TARSKI, AMI_1,
-      SCMNORM, FUNCT_4, SCMFSA_5, RELAT_1;
+      SCMNORM, FUNCT_4, SCMFSA_5, RELAT_1, AFINSQ_1;
  theorems FUNCT_2, RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, ZFMISC_1, FUNCOP_1,
       TARSKI, NAT_1, SCMFSA_4, AMI_1, SCMFSA_2, CARD_1, WELLORD2, CARD_2,
       ENUMSET1, INT_1, SCMFSA_5, GRFUNC_1, FINSEQ_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, ORDINAL1, AMI_3, VALUED_1, SCMNORM, PARTFUN1;
+      XBOOLE_1, XREAL_1, ORDINAL1, AMI_3, VALUED_1, PARTFUN1,
+      AFINSQ_1;
  schemes DOMAIN_1, FRAENKEL, FUNCT_7, CLASSES1;
 
 begin
@@ -101,7 +103,7 @@ registration
 A1: n in dom Directed I and
 A2: m < n;
      n in dom I by A1,FUNCT_4:105;
-    then  m in dom I by A2,SCMNORM:def 1;
+    then  m in dom I by A2,AFINSQ_1:def 13;
     hence thesis by FUNCT_4:105;
   end;
 end;
@@ -157,55 +159,7 @@ registration
   coherence;
 end;
 
-theorem Th15:
-  for P being Program of SCM+FSA, n being Nat holds n < card P iff
-  n in dom P
-proof
-  deffunc U(Element of NAT) = $1;
-  let P be Program of SCM+FSA, n be Nat;
-  set A = { m : U(m) in dom P};
-A1: now
-    let x be set;
-A2: dom P c= NAT by RELAT_1:def 18;
-    assume
-    x in dom P;
-    then reconsider l = x as Element of NAT by A2;
-    take l;
-    thus x = U(l);
-  end;
-A3: for n,m st U(n) = U(m) holds n = m;
-A4: dom P,A are_equipotent from FUNCT_7:sch 3(A1,A3);
-  defpred X[Element of NAT] means U($1) in dom P;
-A5: card n = n by CARD_1:def 5;
-  set A = { m : X[m]};
-A6: A is Subset of NAT from DOMAIN_1:sch 7;
-  now
-    let n,m such that
-A7: n in A and
-A8: m < n;
-    ex l st l = n & l in dom P by A7;
-    then m in dom P by A8,SCMNORM:def 1;
-    hence m in A;
-  end;
-  then reconsider A as Cardinal by A6,FUNCT_7:22;
-A9: card A = A by CARD_1:def 5;
-  hereby
-    assume
-    n < card P;
-    then card n in card card P by NAT_1:42;
-    then n in card dom P by A5,CARD_1:104;
-    then n in card A by A4,CARD_1:21;
-    then ex m st m = n & m in dom P by A9;
-    hence n in dom P;
-  end;
-A10: n in NAT by ORDINAL1:def 13;
-  assume
-  n in dom P;
-  then n in card A by A9,A10;
-  then n in card dom P by A4,CARD_1:21;
-  then card n in card card P by A5,CARD_1:104;
-  hence thesis by NAT_1:42;
-end;
+canceled;
 
 theorem Th16:
   dom I misses dom ProgramPart Relocated(J, card I)
@@ -223,7 +177,7 @@ A3: x in { l+card I: l in dom J } by A1,XBOOLE_0:3;
   consider l such that
 A4: x = l+card I and
   l in dom J by A3;
-  l+card I < card I by A2,A4,Th15;
+  l+card I < card I by A2,A4,AFINSQ_1:70;
   hence contradiction by NAT_1:11;
 end;
 
@@ -2158,7 +2112,7 @@ A3:   dom(P) = dom I \/ D by FUNCT_4:def 1;
       per cases by A1,A3,XBOOLE_0:def 3;
       suppose
          n in dom I;
-        then  m in dom I by A2,SCMNORM:def 1;
+        then  m in dom I by A2,AFINSQ_1:def 13;
         hence thesis by A3,XBOOLE_0:def 3;
       end;
       suppose
@@ -2170,7 +2124,7 @@ A5:     l in dom ProgramPart J;
           per cases;
           case
             m < card I;
-            then  m in dom I by Th15;
+            then  m in dom I by AFINSQ_1:70;
             hence  m in dom(P) by A3,XBOOLE_0:def 3;
           end;
           case
@@ -2179,7 +2133,7 @@ A5:     l in dom ProgramPart J;
 A6:         m = card I + l1 by NAT_1:10;
             reconsider l1 as Element of NAT by ORDINAL1:def 13;
             l1 < l by A2,A4,A6,XREAL_1:8;
-            then l1 in dom ProgramPart J by A5,SCMNORM:def 1;
+            then l1 in dom ProgramPart J by A5,AFINSQ_1:def 13;
             hence  m in D by A6;
           end;
         end;
@@ -2211,7 +2165,7 @@ A3: dom ProgramPart Relocated(J, card I) = dom Shift(ProgramPart J,card I)
     then consider m such that
 A4: l = m+card I and
     m in dom ProgramPart J;
-    m + card I < card I by A1,A4,Th15;
+    m + card I < card I by A1,A4,AFINSQ_1:70;
     hence contradiction by NAT_1:11;
   end;
   hence (I ';' J).l = (Directed I).l by FUNCT_4:12
@@ -2383,7 +2337,7 @@ registration
   proof
     halt SCM+FSA <> goto l by SCMFSA_2:47,124;
     then not halt SCM+FSA in rng Directed(P,l) by FUNCT_4:106;
-    hence thesis by AMI_1:def 53;
+    hence thesis by AMI_1:def 12;
   end;
 end;
 
@@ -2401,7 +2355,7 @@ proof
   let l be Element of NAT;
   assume
   I is halt-free;
-  then not halt SCM+FSA in rng I by AMI_1:def 53;
+  then not halt SCM+FSA in rng I by AMI_1:def 12;
   hence thesis by FUNCT_4:109;
 end;
 

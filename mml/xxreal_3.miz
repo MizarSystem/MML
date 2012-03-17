@@ -25,8 +25,8 @@ definition
   let x,y;
   redefine pred x <= y means
   :Def1:
-  ex p,q being Element of REAL st p = x & q
-  = y & p <= q if x in REAL & y in REAL otherwise x = -infty or y = +infty;
+  ex p,q being Element of REAL st p = x & q = y & p <= q
+  if x in REAL & y in REAL otherwise x = -infty or y = +infty;
   consistency;
   compatibility
   proof
@@ -109,25 +109,44 @@ registration
 end;
 
 theorem Th3:
-  0 < x implies ex y being real number st 0 < y & y < x
+  x < z implies ex y being real number st x < y & y < z
 proof
   assume
-A1: 0 < x;
-  per cases by A1,XXREAL_0:14;
-  suppose
-    x in REAL;
-    then reconsider z = x as real number;
-    consider t being real number such that
-A2: 0 < t & t < z by A1,XREAL_1:7;
-    take t;
-    thus thesis by A2;
+A1: x < z;
+  per cases by XXREAL_0:14;
+  suppose x in REAL & z in REAL;
+    hence thesis by A1,XREAL_1:7;
+  end;
+  suppose x = +infty or z = -infty;
+    hence thesis by A1,XXREAL_0:4,6;
   end;
   suppose
-A3: x = +infty;
-    consider z being real number such that
-A4: 0 < z by XREAL_1:3;
-    take z;
-    thus thesis by A3,A4,XXREAL_0:4;
+A2: z = +infty;
+    per cases by A1,A2,XXREAL_0:14;
+    suppose x = -infty;
+      hence thesis by A2;
+    end;
+    suppose x in REAL;
+      then reconsider x1 = x as real number;
+      take x1+1;
+A3:   x1+1 in REAL by XREAL_0:def 1;
+      x1+0 < x1+1 by XREAL_1:10;
+      hence thesis by A2,A3,XXREAL_0:9;
+    end;
+  end;
+  suppose
+A2: x = -infty;
+    per cases by A1,A2,XXREAL_0:14;
+    suppose z = +infty;
+      hence thesis by A2;
+    end;
+    suppose z in REAL;
+      then reconsider z1 = z as real number;
+      take z1-1;
+A3:   z1-1 in REAL by XREAL_0:def 1;
+      z1-1 < z1-0 by XREAL_1:12;
+      hence thesis by A2,A3,XXREAL_0:12;
+    end;
   end;
 end;
 
@@ -137,10 +156,11 @@ definition
   let x,y;
   func x + y -> ext-real number means
   :Def2:
-  ex a,b being complex number st x
-= a & y = b & it = a + b if x is real & y is real, it = +infty if x = +infty &
-  y <> -infty or y = +infty & x <> -infty, it = -infty if x = -infty & y <>
-  +infty or y = -infty & x <> +infty otherwise it = 0;
+  ex a,b being complex number st x = a & y = b & it = a + b
+  if x is real & y is real,
+  it = +infty if x = +infty & y <> -infty or y = +infty & x <> -infty,
+  it = -infty if x = -infty & y <> +infty or y = -infty & x <> +infty
+  otherwise it = 0;
   existence
   proof
     thus x is real & y is real implies ex c being ext-real number, a, b being
@@ -163,15 +183,14 @@ definition
   let x;
   func -x -> ext-real number means
   :Def3:
-  ex a being complex number st x = a &
-  it = -a if x is real, it = -infty if x = +infty otherwise it = +infty;
+  ex a being complex number st x = a & it = -a if x is real,
+  it = -infty if x = +infty otherwise it = +infty;
   existence
   proof
     thus x is real implies ex c being ext-real number, a being complex number
     st x = a & c = -a
     proof
-      assume
-      x is real;
+      assume x is real;
       then reconsider a = x as real number;
       take -a, a;
       thus thesis;
@@ -794,18 +813,18 @@ proof
 end;
 
 theorem
-  0<= y & y < +infty implies z = z + y - y
+  0 <= y & y < +infty implies z = z + y - y
 proof
-  assume
-  0 <= y & y < +infty;
+  assume 0 <= y & y < +infty;
   then y in REAL by XXREAL_0:14;
   hence thesis by Th22;
 end;
 
 theorem Th30:
   not (x = +infty & y = -infty) & not (x = -infty & y = +infty) &
-not ( y = +infty & z = -infty or y = -infty & z = +infty ) & not ( x = +infty &
-  z = -infty or x = -infty & z = +infty ) implies x + y + z = x + (y + z)
+  not ( y = +infty & z = -infty or y = -infty & z = +infty ) &
+  not ( x = +infty & z = -infty or x = -infty & z = +infty ) implies
+  x + y + z = x + (y + z)
 proof
   assume
 A1: ( not (x = +infty & y = -infty or x = -infty & y = +infty))& not ( y
@@ -2310,14 +2329,10 @@ proof
 A1: not ( x=+infty & y=+infty or x=-infty & y=-infty or y = +infty & z =
   -infty or y = -infty & z = +infty ) and
 A2: x - y <= z;
-  thus y <> -infty
-  proof
     assume
 A3: y = -infty;
     then x - y = +infty by A1,Th14;
     hence contradiction by A1,A2,A3,XXREAL_0:4;
-  end;
-  thus thesis;
 end;
 
 theorem
@@ -2328,14 +2343,10 @@ proof
 A1: not(x=-infty & y=-infty) and
 A2: not(y = -infty & z = +infty) and
 A3: x <= z + y;
-  thus y <> -infty
-  proof
     assume
 A4: y = -infty;
     then z + y = -infty by A2,Def2;
     hence contradiction by A1,A3,A4,XXREAL_0:6;
-  end;
-  thus thesis;
 end;
 
 theorem
@@ -2487,11 +2498,13 @@ definition
   let x,y be ext-real number;
   func x * y -> ext-real number means
   :Def5:
-  ex a,b being complex number st x
-  = a & y = b & it = a * b if x is real & y is real, it = +infty if (x is not
-real or y is not real) & (x is positive & y is positive or x is negative & y is
-negative), it = -infty if (x is not real or y is not real) & (x is positive & y
-  is negative or x is negative & y is positive) otherwise it = 0;
+  ex a,b being complex number st x = a & y = b & it = a * b
+    if x is real & y is real,
+  it = +infty if (x is not real or y is not real) &
+    (x is positive & y is positive or x is negative & y is negative),
+  it = -infty if (x is not real or y is not real) &
+    (x is positive & y is negative or x is negative & y is positive)
+  otherwise it = 0;
   existence
   proof
     thus x is real & y is real implies ex c being ext-real number, a, b being
@@ -2520,15 +2533,14 @@ definition
   let x be ext-real number;
   func x" -> ext-real number means
   :Def6:
-  ex a being complex number st x = a &
-  it = a" if x is real otherwise it = 0;
+  ex a being complex number st x = a & it = a" if x is real
+  otherwise it = 0;
   existence
   proof
     thus x is real implies ex c being ext-real number, a being complex number
     st x = a & c = a"
     proof
-      assume
-      x is real;
+      assume x is real;
       then reconsider a = x as real number;
       take a", a;
       thus thesis;

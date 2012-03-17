@@ -2468,9 +2468,10 @@ A4:   Relocated(p,k) c= t;
 A5:   p c= s by FUNCT_4:26;
       then ProgramPart s halts_on s by A3,AMI_1:def 26;
       then consider u being Element of NAT such that
-A6:   CurInstr(ProgramPart Comput(ProgramPart(s),s,u),Comput(ProgramPart(s),s,u
-)) = halt SCM R
+A6:   CurInstr(ProgramPart s,Comput(ProgramPart(s),s,u)) = halt SCM R
 by AMI_1:146;
+TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,u)
+by AMI_1:144;
       take u;
      IC Comput(ProgramPart(t),t,u) in NAT;
     hence IC Comput(ProgramPart(t),t,u) in dom ProgramPart t by AMI_1:143;
@@ -2479,7 +2480,7 @@ by AMI_1:146;
       CurInstr(ProgramPart Comput(ProgramPart(t),t,u),Comput(ProgramPart(t),t,u
 ))
        = IncAddr(halt SCM R, k) by A1,A2,A4,A5,A6
-,Th35
+,Th35,TX
         .= halt SCM R by AMISTD_2:29;
       hence thesis by AMI_1:145;
     end;
@@ -2491,9 +2492,10 @@ A7: Relocated (p,k) is halting;
 A8: Relocated (p,k) c= t +* Relocated (p,k) by FUNCT_4:26;
   then ProgramPart s halts_on s by A7,AMI_1:def 26;
   then consider u being Element of NAT such that
-A9: CurInstr(ProgramPart Comput(ProgramPart(s),s,u),Comput(ProgramPart(s),s,u))
-= halt SCM R
+A9: CurInstr(ProgramPart s,Comput(ProgramPart(s),s,u)) = halt SCM R
 by AMI_1:146;
+TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,u)
+by AMI_1:144;
   reconsider s3 = t +* DataPart s as State of SCM R;
   assume
 A10: p c= t;
@@ -2504,7 +2506,7 @@ A10: p c= t;
   then IncAddr(CurInstr(ProgramPart Comput(ProgramPart(t),t,u),Comput(
 ProgramPart(t),t,u)), k)
    = halt SCM R by A1,A2,A10,A8,A9
-,Th35;
+,Th35,TX;
   then CurInstr(ProgramPart Comput(ProgramPart(t),t,u),Comput(ProgramPart(t),t,
 u)) = halt SCM R
   by AMISTD_2:35;
@@ -3438,8 +3440,9 @@ end;
 
 theorem Th41:
   R is non trivial implies for p being halting autonomic
-  FinPartState of SCM R st IC SCM R in dom p holds DataPart Result p = DataPart
-  Result Relocated(p,k)
+  FinPartState of SCM R st IC SCM R in dom p holds DataPart Result(ProgramPart(
+p),p) = DataPart
+  Result(ProgramPart(Relocated(p,k)),Relocated(p,k))
 proof
 A1: Data-Locations SCM R = SCM-Data-Loc by SCMRING2:31;
   assume
@@ -3451,31 +3454,38 @@ A4: Relocated(p,k) is halting & Relocated(p,k) is autonomic by A2,A3,Th36,Th40;
 A5: p c= s by PBOOLE:156;
   ProgramPart s halts_on s by A5,AMI_1:def 26;
   then consider j1 being Element of NAT such that
-A6: Result(s) = Comput(ProgramPart(s),s,j1) and
-A7: CurInstr(ProgramPart Result s,Result s) = halt SCM R by AMI_1:def 22;
+A6: Result(ProgramPart(s),s) = Comput(ProgramPart(s),s,j1) and
+A7: CurInstr(ProgramPart (s),Result(ProgramPart(s),s)) =
+halt SCM R by AMI_1:def 22;
   consider t being State of SCM R such that
 A8: Relocated(p,k) c= t by PBOOLE:156;
   reconsider s3 = s +* DataPart t as State of SCM R;
 A9: s3 = s3;
 Y:  (ProgramPart Comput(ProgramPart(t),t,j1))/.IC Comput(ProgramPart(t),t,j1)
 = Comput(ProgramPart(t),t,j1).IC Comput(ProgramPart(t),t,j1) by AMI_1:150;
+TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,j1)
+by AMI_1:144;
   t.(IC ( Comput(ProgramPart(t),t,j1)))
    = CurInstr(ProgramPart Comput(ProgramPart(t),t,j1),Comput(ProgramPart(t),t,
 j1))
    by AMI_1:54,Y
-    .= IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s),s,j1),Comput(
-ProgramPart(s),s,j1)), k)
-    by A2,A3,A5,A8,A9,Th35
-    .= halt SCM R by A6,A7,AMISTD_2:29;
+    .= IncAddr(CurInstr(ProgramPart s,Comput(ProgramPart(s),s,j1)), k)
+    by A2,A3,A5,A8,A9,Th35,TX
+    .= halt SCM R by A6,A7,AMISTD_2:29,TX;
   then
-A10: Result t = Comput(ProgramPart(t),t,j1) by AMI_1:56;
-  thus DataPart(Result(p)) = DataPart((Result s) | dom p) by A5,AMI_1:def 28
-    .= (Result s) | (dom p /\ SCM-Data-Loc) by A1,RELAT_1:100
-    .= (Result s) | dom DataPart p by A1,RELAT_1:90
-    .= (Result t) | dom DataPart Relocated(p,k) by A2,A3,A5,A6,A8,A9,A10,Th35
-    .= (Result t) | (dom Relocated(p,k) /\ SCM-Data-Loc) by A1,RELAT_1:90
-    .= DataPart ((Result t) | dom Relocated(p,k)) by A1,RELAT_1:100
-    .= DataPart (Result(Relocated(p,k))) by A8,A4,AMI_1:def 28;
+A10: Result(ProgramPart(t),t) = Comput(ProgramPart(t),t,j1) by AMI_1:56;
+  thus DataPart(Result(ProgramPart(p),p)) = DataPart((Result(ProgramPart(s),s))
+| dom p) by A5,AMI_1:def 28
+    .= (Result(ProgramPart(s),s)) | (dom p /\ SCM-Data-Loc) by A1,RELAT_1:100
+    .= (Result(ProgramPart(s),s)) | dom DataPart p by A1,RELAT_1:90
+    .= (Result(ProgramPart(t),t)) | dom DataPart Relocated(p,k) by A2,A3,A5,A6,
+A8,A9,A10,Th35
+    .= (Result(ProgramPart(t),t)) | (dom Relocated(p,k) /\ SCM-Data-Loc) by A1,
+RELAT_1:90
+    .= DataPart ((Result(ProgramPart(t),t)) | dom Relocated(p,k)) by A1,RELAT_1
+:100
+    .= DataPart (Result(ProgramPart(Relocated(p,k)),Relocated(p,k))) by A8,A4,
+AMI_1:def 28;
 end;
 
 theorem
@@ -3499,17 +3509,20 @@ A5:   x in dom F;
       then consider s1 being FinPartState of SCM R such that
 A6:   x = s1 and
 A7:   p +* s1 is pre-program of SCM R and
-A8:   F.s1 c= Result(p +* s1) by A4,AMI_1:def 29;
+A8:   F.s1 c= Result(ProgramPart(p +* s1),p +* s1) by A4,AMI_1:def 29;
       dom F c= FinPartSt SCM R by RELAT_1:def 18;
       then reconsider s = x as FinPartState of SCM R by A5,AMI_1:125;
       reconsider s as data-only FinPartState of SCM R by A3,A5,AMI_1:def 52;
+X:    Relocated(p +* s,k) = Relocated(p,k) +* s by A2,AMISTD_2:78;
       dom(p +* s) = dom p \/ dom s by FUNCT_4:def 1;
       then
 A9:   IC SCM R in dom(p +* s) by A2,XBOOLE_0:def 3;
       then
-A10:  DataPart(Result(p +* s1)) = DataPart(Result(Relocated(p +* s,k)))
+A10:  DataPart(Result(ProgramPart(p +* s1),p +* s1)) = DataPart(Result(
+ProgramPart(Relocated(p +* s,k)),Relocated(p +* s,k)))
       by A1,A6,A7,Th41
-        .= DataPart(Result(Relocated(p,k) +* s)) by A2,AMISTD_2:78;
+        .= DataPart(Result(ProgramPart(Relocated(p,k) +* s),Relocated(p,k) +* s
+)) by X;
       reconsider Fs1 = F.s1 as FinPartState of SCM R by A8;
       take s;
       thus x=s;
@@ -3517,8 +3530,10 @@ A10:  DataPart(Result(p +* s1)) = DataPart(Result(Relocated(p +* s,k)))
       hence Relocated(p,k) +* s is pre-program of SCM R by A1,A6,A7,A9,Th36
 ,Th40;
 A11:  Fs1 is data-only by A3,A5,A6,AMI_1:def 52;
-      then F.s1 c= DataPart(Result(p +* s1)) by A8,AMI_1:107;
-      hence F.s c= Result(Relocated(p,k) +* s) by A6,A11,A10,AMI_1:107;
+      then F.s1 c= DataPart(Result(ProgramPart(p +* s1),p +* s1)) by A8,AMI_1:
+107;
+      hence F.s c= Result(ProgramPart(Relocated(p,k) +* s),Relocated(p,k) +* s)
+by A6,A11,A10,AMI_1:107;
     end;
   end;
   assume
@@ -3529,7 +3544,8 @@ A13: x in dom F;
   then consider s1 being FinPartState of SCM R such that
 A14: x = s1 and
 A15: Relocated (p,k) +* s1 is pre-program of SCM R and
-A16: F.s1 c= Result (Relocated (p,k) +* s1) by A12,AMI_1:def 29;
+A16: F.s1 c= Result(ProgramPart(Relocated (p,k) +* s1),Relocated (p,k) +* s1)
+by A12,AMI_1:def 29;
   dom F c= FinPartSt SCM R by RELAT_1:def 18;
   then reconsider s = x as FinPartState of SCM R by A13,AMI_1:125;
   reconsider s as data-only FinPartState of SCM R by A3,A13,AMI_1:def 52;
@@ -3541,15 +3557,19 @@ A18: Relocated(p,k) +* s = Relocated((p +* s),k) by A2,AMISTD_2:78;
 A19: p +* s is autonomic by A1,A14,A15,A17,Th40;
   then
 A20: p +* s is halting by A1,A14,A15,A18,A17,Th36;
-A21: DataPart(Result(Relocated(p,k) +* s1)) = DataPart(Result(Relocated(p +*
-  s,k))) by A2,A14,AMISTD_2:78
-    .= DataPart(Result(p +* s)) by A1,A17,A19,A20,Th41;
+X:    Relocated(p +* s,k) = Relocated(p,k) +* s by A2,AMISTD_2:78;
+A21: DataPart(Result(ProgramPart(Relocated(p,k) +* s1),Relocated(p,k) +* s1)) =
+DataPart(Result(ProgramPart(Relocated(p +*
+  s,k)),Relocated(p +*
+  s,k))) by A14,X
+    .= DataPart(Result(ProgramPart(p +* s),p +* s)) by A1,A17,A19,A20,Th41;
   take s;
   thus x=s;
   thus p +* s is pre-program of SCM R by A1,A14,A15,A18,A17,A19,Th36;
   reconsider Fs1 = F.s1 as FinPartState of SCM R by A16;
 A22: Fs1 is data-only by A3,A13,A14,AMI_1:def 52;
-  then F.s1 c= DataPart(Result(Relocated(p,k) +* s1)) by A16,AMI_1:107;
+  then F.s1 c= DataPart(Result(ProgramPart(Relocated(p,k) +* s1),Relocated(p,k)
++* s1)) by A16,AMI_1:107;
   hence thesis by A14,A22,A21,AMI_1:107;
 end;
 

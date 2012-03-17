@@ -1450,7 +1450,9 @@ The results are shown and clickable in the Compilation buffer."
 
 
 (defun mizar-grep-abs-full-items (exp gab)
-"Grep MML abstracts for regexp EXP, using ';' as record separator.
+"Grep MML abstracts for regexp EXP, using ';' as record separator,
+merging each such record into one line, so that .* and .+ regexps
+work acroos multiple lines.
 If GAB is non-nil, uses the MMLQuery abstracts and '::' as separator
 instead.
 You need to have perl installed and executable for this.
@@ -1506,7 +1508,7 @@ the file positions."
  (concat 
   " '$/=\";\"; " 
   "while ($f=shift) {open(IN,$f);while (<IN>) "
-  "{ if(/placeholder/) {s/^\\n+//; print \"\\n\\n$_\"}} "
+  "{ s/\\n/;;;/g; if(/placeholder/) {s/;;;/\\n/g; s/^\\n+//; print \"\\n\\n$_\"}} "
   "close(IN)}' ")
  "A Perl program for grepping whole items that end with ';'
 in Mizar abstracts.  File names and line numbers are not printed.")
@@ -1515,7 +1517,7 @@ in Mizar abstracts.  File names and line numbers are not printed.")
  (concat 
   " '$/=\"::\"; " 
   "while ($f=shift) {open(IN,$f);while (<IN>) "
-  "{ if(/placeholder/) {s/\\n*(::)?$//; print \"\\n\\n::$_\"}} "
+  "{ s/\\n/;;;/g; if(/placeholder/) {s/;;;/\\n/g; s/\\n*(::)?$//; print \"\\n\\n::$_\"}} "
   "close(IN)}' ")
  "A Perl program for grepping whole items that end with '::'
 in MMLQuery abstracts. File names and line numbers are not printed.")
@@ -5550,6 +5552,170 @@ file suffix to use."
 		(file-name-sans-extension
 		 (buffer-file-name)))))
       (browse-url (concat ar4mizar-server ar4mizar-cgi "?Formula=" (query-handle-chars-cgi (buffer-string)) "&Name=" aname))))
+
+(defun mizar-post-to-ar4mizar-new ()
+"Sent the current Mizar buffer to the `ar4mizar-server' for processing"
+  (interactive)
+;  (url-auth-user-prompt  ar4mizar-server "")
+  (http-post-simple  
+   (concat ar4mizar-server ar4mizar-cgi)
+   (list 
+    (cons "ProblemSource" "Formula")
+    (cons "Formula" (buffer-string)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;; Borrowed from http-post-simple.el (not to have the file as dependency)
+
+
+(defun http-post-simple (url fields &optional charset)
+  "Send FIELDS to URL as an HTTP POST request, returning the response
+and response headers.
+FIELDS is an alist, eg ((field-name . \"value\")); all values
+need to be strings, and they are encoded using CHARSET,
+which defaults to 'utf-8"
+  (or (and (require 'url nil t) (require 'url-http  nil t))
+      (error "Your Emacs lacks the url and url-http libraries, please upgrade"))
+  (http-post-simple-internal
+   url
+   (http-post-encode-fields fields charset)
+   charset
+   `(("Content-Type"
+      .
+      ,(http-post-content-type
+        "application/x-www-form-urlencoded"
+        charset)))))
+
+(defun http-post-simple-multipart (url fields files &optional charset)
+  "Send FIELDS and FILES to URL as a multipart HTTP POST, returning the
+response and response headers.
+FIELDS is an alist, as for `http-post-simple', FILES is an a list of
+\(fieldname \"filename\" \"file MIME type\" \"file data\")*"
+(let ((boundary (http-post-multipart-boundary)))
+  (http-post-simple-internal
+   url
+   (http-post-encode-multipart-data fields files charset)
+   charset
+   `(("Content-Type"
+      .
+      ,(http-post-content-type
+        (format "multipart/form-data; boundary=%S" boundary)
+        charset))))))
+
+(defun http-post-content-type (content-type &optional charset)
+  (if charset
+      (format "%s; charset=%s" content-type (http-post-charset-name charset))
+      content-type))
+
+(defun http-post-charset-name (charset)
+  (symbol-name charset))
+
+;; based on `http-url-encode' from the from http-get package
+;; http://savannah.nongnu.org/projects/http-emacs
+(defun http-post-encode-string (str content-type)
+  "URL encode STR using CONTENT-TYPE as the coding system."
+  (apply 'concat
+	 (mapcar (lambda (c)
+		   (if (or (and (>= c ?a) (<= c ?z))
+			   (and (>= c ?A) (<= c ?Z))
+			   (and (>= c ?0) (<= c ?9)))
+		       (string c)
+		       (format "%%%02x" c)))
+		 (encode-coding-string str content-type))))
+
+
+(defun http-post-encode-fields (fields &optional charset)
+  "Encode FIELDS using `http-post-encode-string', where
+FIELDS is an alist of \(
+	\(field-name-as-symbol . \"field value as string\"\) |
+	\(field-name \"value1\" \"value2\" ...\)
+	\)*
+
+CHARSET defaults to 'utf-8"
+  (let ((charset (or charset 'utf-8)))
+    (mapconcat #'identity
+	       (mapcar '(lambda (field)
+			 (concat (symbol-name (car field))
+			  "="
+			  (http-post-encode-string (cdr field) charset)))
+		       (mapcan '(lambda (field)
+				 (if (atom (cdr field)) (list field)
+				     ;; unpack the list
+				     (mapcar '(lambda (value)
+					       `(,(car field) . ,value))
+					     (cdr field))))
+			       fields))
+	       "&")))
+
+
+(defun http-post-simple-internal (url data charset extra-headers)
+  (let ((url-request-method        "POST")
+	(url-request-data          data)
+	(url-request-extra-headers extra-headers)
+        (url-mime-charset-string   (http-post-charset-name charset)))
+    (let (header
+	  data
+	  status)
+      (with-current-buffer
+	  (url-retrieve-synchronously url)
+	;; status
+	(setq status url-http-response-status)
+	;; return the header and the data separately
+	(goto-char (point-min))
+	(if (search-forward-regexp "^$" nil t)
+	    (setq header (buffer-substring (point-min) (point))
+		  data   (buffer-substring (1+ (point)) (point-max)))
+	    ;; unexpected situation, return the whole buffer
+	    (setq data (buffer-string))))
+      (values data header status))))
+
+(defun http-post-multipart-boundary ()
+  "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+
+(defun http-post-bound-field (&rest parts)
+  (let ((boundary (format "--%s" (http-post-multipart-boundary))))
+    (http-post-join-lines  boundary parts)))
+
+(defun http-post-encode-multipart-data (fields files charset)
+  "Return FIELDS and FILES encoded for use as the data for a multipart HTTP POST request"
+  (http-post-join-lines
+   (mapcar '(lambda (field)
+	     (http-post-bound-field
+	      (format "Content-Disposition: form-data; name=%S" (symbol-name (car field)))
+	      ""
+	      (cdr field)))
+	   fields)
+   (mapcan '(lambda (file)
+	     (destructuring-bind (fieldname filename mime-type data) file
+	       (http-post-bound-field
+		(format "Content-Disposition: form-data; name=%S; filename=%S" fieldname filename)
+		(format "Content-type: %s" (http-post-content-type mime-type charset))
+		""
+		data)))
+	   files)
+   (format "--%s--" (http-post-multipart-boundary))))
+
+(defun http-post-join-lines (&rest bits)
+  (let ((sep "\r\n"))
+    (mapconcat (lambda (bit)
+		 (if (listp bit)
+		     (apply 'http-post-join-lines bit)
+		     bit))
+	       bits sep)))
+
+(defun http-post-finesse-code-100 ()
+  "Transforms response code 100 into 200, to avoid errors when the
+server sends code 100 in response to a POST request."
+  (defadvice url-http-parse-response (after url-http-parse-response-100 activate)
+    "Turns any HTTP 100 response code to 200, to avoid getting an error."
+    (declare (special url-http-response-status
+                      url-request-method))
+    (when (and (= 100               url-http-response-status)
+               (string-equal "POST" url-request-method)
+               (string-equal "1.1"  url-http-version))
+      (setf url-http-response-status 200))))
+
+
+;;;;;;;;;;;;;;;;;;;;;  End of http-post-simple.el
 
 
 

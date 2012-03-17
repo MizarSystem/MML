@@ -7,21 +7,22 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, AMI_1, SCMPDS_2, SCMFSA_7, CARD_1, FUNCOP_1,
-      RELAT_1, FINSET_1, FUNCT_1, CAT_1, NAT_1, ARYTM_3, XBOOLE_0, TARSKI,
+      RELAT_1, FUNCT_1, CAT_1, NAT_1, ARYTM_3, XBOOLE_0, TARSKI,
       VALUED_1, SCMNORM, FSM_1, INT_1, SCMFSA6A, FUNCT_4, GRAPHSP, AMI_3,
       FUNCT_7, AMI_2, STRUCT_0, SCMPDS_1, COMPLEX1, XXREAL_0, ARYTM_1,
       TURING_1, AMISTD_2, SCMFSA6B, MSUALG_1, CIRCUIT2, GLIB_000, SCMPDS_4,
-      ORDINAL1, PARTFUN1;
+      ORDINAL1, PARTFUN1, AFINSQ_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_4, FUNCT_7, INT_1, NAT_1, FINSET_1, INT_2,
+      RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1,
+      FUNCT_4, FUNCT_7, INT_1, NAT_1, INT_2,
       XXREAL_0, STRUCT_0, AMI_1, SCMNORM, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2,
       SCMPDS_3;
  constructors WELLORD2, XXREAL_0, NAT_1, INT_2, AMI_5, SCMPDS_1, SCMPDS_3,
       DOMAIN_1, SCMNORM, AFINSQ_1, RELSET_1, PRE_POLY, PBOOLE;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, SCMPDS_2, AMI_2,
-      SCMNORM, FINSET_1, CARD_1, VALUED_1, FUNCT_4, RELAT_1, PRE_POLY;
+      SCMNORM, FINSET_1, CARD_1, VALUED_1, FUNCT_4, RELAT_1, PRE_POLY,
+      AFINSQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, AMI_1, AMI_3, FUNCT_7, XBOOLE_0, SCMPDS_2, FUNCOP_1,
       NAT_1, SCMNORM, AFINSQ_1, RELAT_1;
@@ -35,26 +36,17 @@ begin :: Definition of a program block and its basic properties
 
 reserve l, m, n for Element of NAT,
   i,j,k for Instruction of SCMPDS,
-  I,J,K for
-  Program of SCMPDS;
+  I,J,K for Program of SCMPDS;
 
 definition
   let i;
-  func Load i -> Program of SCMPDS equals
-  ( 0).--> i;
+  func Load i -> preProgram of SCMPDS equals
+    <%i%>;
   coherence
   proof
-    set I = ( 0).--> i;
-A1: dom I = { 0} by FUNCOP_1:19;
-    reconsider I as finite Function;
-    reconsider I as FinPartState of SCMPDS;
-    I is initial
-    proof
-      let m,n be Nat;
-      assume
-      n in dom I & m < n;
-      hence thesis by A1,TARSKI:def 1;
-    end;
+    set I = <%i%>;
+    I = 0 .--> i;
+    then I is FinPartState of SCMPDS;
     hence thesis;
   end;
   correctness;
@@ -62,60 +54,11 @@ end;
 
 registration
   let i;
-  cluster Load i -> non empty;
+  cluster Load i -> non empty initial;
   coherence;
 end;
 
-theorem Th1:
-  for P being Program of SCMPDS, n being Nat holds n < card P iff n
-  in dom P
-proof
-  deffunc U(Element of NAT) = $1;
-  let P be Program of SCMPDS, n be Nat;
-  set A = { m : U(m) in dom P};
-A1: now
-    let x be set;
-A2: dom P c= NAT by RELAT_1:def 18;
-    assume
-    x in dom P;
-    then reconsider l=x as Element of NAT by A2;
-    reconsider n = l as Element of NAT;
-    take n;
-    thus x = U(n);
-  end;
-A3: for n,m st U(n) = U(m) holds n = m;
-A4: dom P,A are_equipotent from FUNCT_7:sch 3(A1,A3);
-  defpred X[Element of NAT] means U($1) in dom P;
-A5: card n = n by CARD_1:def 5;
-  set A = { m : X[m] };
-A6: A is Subset of NAT from DOMAIN_1:sch 7;
-  now
-    let n,m such that
-A7: n in A and
-A8: m < n;
-    ex l being Element of NAT st l = n & l in dom P by A7;
-    then m in dom P by A8,SCMNORM:def 1;
-    hence m in A;
-  end;
-  then reconsider A as Cardinal by A6,FUNCT_7:22;
-A9: card A = A by CARD_1:def 5;
-  hereby
-    assume
-    n < card P;
-    then card n in card card P by NAT_1:42;
-    then n in card dom P by A5,CARD_1:104;
-    then n in card A by A4,CARD_1:21;
-    then ex m st m = n & m in dom P by A9;
-    hence n in dom P;
-  end;
-A10: n in NAT by ORDINAL1:def 13;
-  assume
-  n in dom P;
-  then n in card A by A9,A10;
-  then n in card dom P by A4,CARD_1:21;
-  then card n in card card P by A5,CARD_1:104;
-  hence thesis by NAT_1:42;
-end;
+canceled;
 
 theorem Th2:
   dom I misses dom Shift(J,card I)
@@ -129,7 +72,7 @@ A3: x in { l+card I: l in dom J } by A1,XBOOLE_0:3;
   consider l such that
 A4: x = l+card I and
   l in dom J by A3;
-  l+card I < card I by A2,A4,Th1;
+  l+card I < card I by A2,A4,AFINSQ_1:70;
   hence contradiction by NAT_1:11;
 end;
 
@@ -1085,17 +1028,7 @@ FUNCT_4:14
     .=  0 by FUNCOP_1:87;
 end;
 
-theorem Th30:
-  for I being Program of SCMPDS holds not IC SCMPDS in dom I
-proof
-  let I be Program of SCMPDS;
-  assume
-A1: IC SCMPDS in dom I;
-  dom I c= NAT by RELAT_1:def 18;
-  then reconsider l=IC SCMPDS as Element of NAT by A1;
-  l = IC SCMPDS;
-  hence contradiction by AMI_1:48;
-end;
+canceled;
 
 theorem Th31:
   for I being Program of SCMPDS, a being Int_position holds not a
@@ -1181,7 +1114,7 @@ A9:   x in dom I;
 A10:  x = IC SCMPDS;
       then
 A11:  x in dom Initialized J by Th7;
-A12:  not x in dom I by A10,Th30;
+A12:  not x in dom I by A10,AMI_1:48;
       thus (Initialized I).x =  0 by A10,Th29
         .= (Initialized J).x by A10,Th29
         .= s.x by A2,A11,GRFUNC_1:8
@@ -1266,7 +1199,7 @@ A3:   dom P = dom I \/ D by FUNCT_4:def 1;
       per cases by A1,A3,XBOOLE_0:def 3;
       suppose
         n in dom I;
-        then m in dom I by A2,SCMNORM:def 1;
+        then m in dom I by A2,AFINSQ_1:def 13;
         hence thesis by A3,XBOOLE_0:def 3;
       end;
       suppose
@@ -1278,7 +1211,7 @@ A5:     l in dom J;
           per cases;
           case
             m < card I;
-            then m in dom I by Th1;
+            then m in dom I by AFINSQ_1:70;
             hence thesis by A3,XBOOLE_0:def 3;
           end;
           case
@@ -1287,7 +1220,7 @@ A5:     l in dom J;
 A6:         m = card I + l1 by NAT_1:10;
             reconsider l1 as Element of NAT by ORDINAL1:def 13;
             l1 < l by A2,A4,A6,XREAL_1:8;
-            then l1 in dom J by A5,SCMNORM:def 1;
+            then l1 in dom J by A5,AFINSQ_1:def 13;
             hence m in D by A6;
           end;
         end;
@@ -1312,7 +1245,7 @@ A1: l in dom I;
     then consider m such that
 A2: l = m+card I and
     m in dom J;
-    m + card I < card I by A1,A2,Th1;
+    m + card I < card I by A1,A2,AFINSQ_1:70;
     hence contradiction by NAT_1:11;
   end;
   hence thesis by FUNCT_4:12;
@@ -1379,7 +1312,7 @@ A3: x in dom Initialized (I ';' J);
     per cases by A3,Th28;
     suppose
 A4:   x in dom (I ';' J);
-      then x <> IC SCMPDS by Th30;
+      then x <> IC SCMPDS by AMI_1:48;
       then not x in {IC SCMPDS} by TARSKI:def 1;
       then
 A5:   not x in dom Start-At( 0,SCMPDS) by FUNCOP_1:19;
@@ -1388,7 +1321,7 @@ A5:   not x in dom Start-At( 0,SCMPDS) by FUNCOP_1:19;
     end;
     suppose
 A6:   x = IC SCMPDS;
-      then not x in dom (I ';' J) by Th30;
+      then not x in dom (I ';' J) by AMI_1:48;
       hence (Initialized I+*(I ';' J)).x = (Initialized I).x by FUNCT_4:12
         .=  0 by A6,Th29
         .= (Initialized (I ';' J)).x by A6,Th29;
@@ -1606,7 +1539,7 @@ end;
 definition
   let I be Program of SCMPDS, s be State of SCMPDS;
   func IExec(I,s) -> State of SCMPDS equals
-  Result(s+*Initialized stop(I)) +*
+  Result(ProgramPart(s+*Initialized stop(I)),s+*Initialized stop(I)) +*
   s|NAT;
   coherence;
 end;
@@ -1767,8 +1700,9 @@ by AMI_1:144;
   end;
   then
 A13: for n st X[n] holds X[n+1];
-  let n;
-  assume IC Comput(ProgramPart(s1),s1,n) in dom ProgramPart s1;
+  let nn be Nat;
+   reconsider n=nn as Element of NAT by ORDINAL1:def 13;
+  assume IC Comput(ProgramPart(s1),s1,nn) in dom ProgramPart s1;
 A14: X[0] by AMI_1:13;
 A15: for n holds X[n] from NAT_1:sch 1(A14,A13);
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,n))/.IC Comput(ProgramPart(s1),s1,n)
@@ -1898,10 +1832,10 @@ proof
   assume
   not IC s in dom I;
   then
-A1: m >= card I by Th1;
+A1: m >= card I by AFINSQ_1:70;
   m+1 >= m by NAT_1:11;
   then m+1 >= card I by A1,XXREAL_0:2;
-  hence thesis by Th1;
+  hence thesis by AFINSQ_1:70;
 end;
 
 registration
@@ -1983,7 +1917,7 @@ theorem Th75:
 proof
   card stop I = card I + card Stop SCMPDS by Th45
     .= card I + 1 by SCMNORM:3;
-  hence thesis by Th1;
+  hence thesis by AFINSQ_1:70;
 end;
 
 begin :: Shiftability of program blocks and instructions
